@@ -68,12 +68,13 @@ export const proService = {
         return response.data;
     },
 
-    publishContent: async (platform: 'x' | 'telegram' | 'linkedin', content: string, image_path?: string, generation_id?: number) => {
+    publishContent: async (platform: 'x' | 'telegram' | 'linkedin', content: string, image_path?: string, generation_id?: number, channel_id?: string) => {
         const response = await apiClient.post('/api/pro/post', {
             platform,
             content,
             image_path,
-            generation_id
+            generation_id,
+            ...(channel_id ? { channel_id } : {})
         });
         return response.data;
     },

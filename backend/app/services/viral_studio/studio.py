@@ -324,11 +324,11 @@ class ViralMarketingStudio:
         os.makedirs(save_dir, exist_ok=True)
         return os.path.join(save_dir, filename)
 
-    async def post_to_social(self, partner, platform, content, image_path=None, generation_id=None, session=None) -> dict:
+    async def post_to_social(self, partner, platform, content, image_path=None, generation_id=None, channel_id=None, session=None) -> dict:
         platform = platform.lower().strip()
         res = {"status": "failed"}
         if platform == "x": res = await adapters.post_to_x(partner, content, image_path)
-        elif platform == "telegram": res = await adapters.post_to_telegram(partner, content, image_path)
+        elif platform == "telegram": res = await adapters.post_to_telegram(partner, content, image_path, channel_id_override=channel_id)
         elif platform == "linkedin": res = await adapters.post_to_linkedin(partner, content, image_path)
         
         if res.get("status") == "success" and session:

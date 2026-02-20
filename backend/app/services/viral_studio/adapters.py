@@ -60,11 +60,16 @@ async def post_to_x(partner: Partner, content: str, image_path: str | None) -> d
         logger.error(f"❌ X Posting failed: {e}")
         return {"error": f"X API error: {e!s}"}
 
-async def post_to_telegram(partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
+async def post_to_telegram(partner: Partner, content: str, image_path: str | None, channel_id_override: str | None = None) -> dict[str, Any]:
     if not partner.telegram_channel_id:
         return {"error": "Telegram Channel ID missing. Please configure it in API Setup."}
     
-    channels = _prepare_telegram_channels(partner.telegram_channel_id)
+    # PRO+: If user specified a particular channel, post only to that one
+    if channel_id_override and channel_id_override.strip():
+        channels = [channel_id_override.strip()]
+    else:
+        channels = _prepare_telegram_channels(partner.telegram_channel_id)
+    
     if not channels:
         return {"error": "No valid Telegram channels found."}
 

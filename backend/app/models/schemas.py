@@ -166,6 +166,7 @@ class SocialPostRequest(BaseModel):
     content: str
     image_path: str | None = None
     generation_id: int | None = None
+    channel_id: str | None = None  # PRO+: override which TG channel to post to
     
     # #comment: Standardized for audit.
     class Config:

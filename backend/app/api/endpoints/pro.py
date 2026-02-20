@@ -316,6 +316,7 @@ async def publish_content(
         content=payload.content,
         image_path=payload.image_path,
         generation_id=payload.generation_id,
+        channel_id=payload.channel_id,  # ← PRO+ channel override
         session=session
     )
     

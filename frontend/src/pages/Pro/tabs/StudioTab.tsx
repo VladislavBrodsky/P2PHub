@@ -61,6 +61,7 @@ export const StudioTab = ({
     const [showShareModal, setShowShareModal] = useState(false);
     const [isSharingSystem, setIsSharingSystem] = useState(false);
     const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin')[]>([]);
+    const [selectedTgChannel, setSelectedTgChannel] = useState<string>(''); // for multi-channel TG select
 
     // Personal Link State
     const [usePersonalLink, setUsePersonalLink] = useState(false);
@@ -354,8 +355,9 @@ export const StudioTab = ({
         try {
             const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
             const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
-
-            await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id);
+            // Pass specific TG channel if user chose one
+            const channelOverride = platform === 'telegram' && selectedTgChannel ? selectedTgChannel : undefined;
+            await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id, channelOverride);
             setPublishedPlatforms(prev => [...prev, platform]);
             notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
         } catch (error: any) {
@@ -371,13 +373,13 @@ export const StudioTab = ({
         impact('heavy');
 
         const results: { success: string[], fail: string[] } = { success: [], fail: [] };
-
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
         const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
 
         for (const platform of selectedPublishPlatforms) {
             try {
-                await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id);
+                const channelOverride = platform === 'telegram' && selectedTgChannel ? selectedTgChannel : undefined;
+                await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id, channelOverride);
                 results.success.push(platform);
             } catch (error) {
                 results.fail.push(platform);
@@ -388,7 +390,7 @@ export const StudioTab = ({
             setPublishedPlatforms(prev => [...prev, ...results.success]);
             notification({
                 title: t('pro_dashboard.notifications.success'),
-                text: `Successfully published to: ${results.success.join(', ').toUpperCase()}`,
+                text: `Synced to: ${results.success.join(', ').toUpperCase()}`,
                 type: 'success'
             });
         }
@@ -396,7 +398,7 @@ export const StudioTab = ({
         if (results.fail.length > 0) {
             notification({
                 title: t('pro_dashboard.notifications.publish_error'),
-                text: `Failed to publish to: ${results.fail.join(', ').toUpperCase()}`,
+                text: `Failed: ${results.fail.join(', ').toUpperCase()}`,
                 type: 'error'
             });
         }
@@ -1063,6 +1065,57 @@ export const StudioTab = ({
                                             );
                                         })}
                                     </div>
+
+                                    {/* TG Channel Picker — shown when Telegram is selected and multiple channels exist */}
+                                    {(() => {
+                                        const tgSetup = status?.setup;
+                                        const mainCh = tgSetup?.telegram_channel_id;
+                                        const extraChs = tgSetup?.telegram_channels || [];
+                                        const allChs: string[] = mainCh
+                                            ? [mainCh, ...extraChs.filter((c: string) => c && c !== mainCh)]
+                                            : extraChs.filter((c: string) => c);
+                                        const hasTgSelected = selectedPublishPlatforms.includes('telegram') || (!status?.is_pro_plus && status?.has_telegram_setup);
+                                        if (allChs.length <= 1 || !hasTgSelected) return null;
+
+                                        return (
+                                            <AnimatePresence>
+                                                <motion.div
+                                                    key="tg-channel-picker"
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: 'auto' }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="mt-1 p-3 bg-sky-500/5 border border-sky-500/20 rounded-2xl space-y-2">
+                                                        <div className="flex items-center gap-2 px-1">
+                                                            <Send size={10} className="text-sky-500" />
+                                                            <span className="text-[9px] font-black uppercase tracking-widest text-sky-600 dark:text-sky-400">Post to Channel</span>
+                                                        </div>
+                                                        <div className="grid gap-1.5">
+                                                            {allChs.map((ch: string) => {
+                                                                const isActive = selectedTgChannel === ch || (!selectedTgChannel && allChs[0] === ch);
+                                                                return (
+                                                                    <button
+                                                                        key={ch}
+                                                                        onClick={() => { setSelectedTgChannel(isActive ? '' : ch); selection(); }}
+                                                                        className={`w-full px-3 py-2 rounded-xl border text-left flex items-center justify-between transition-all ${isActive
+                                                                            ? 'bg-sky-500 border-sky-500 text-white shadow-md shadow-sky-500/20'
+                                                                            : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-sky-500/40'}`}
+                                                                    >
+                                                                        <span className="text-[10px] font-black font-mono truncate">{ch}</span>
+                                                                        {isActive && <CheckCircle2 size={14} className="text-white shrink-0 ml-2" />}
+                                                                    </button>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-1">
+                                                            {allChs.length} channels configured — select target
+                                                        </p>
+                                                    </div>
+                                                </motion.div>
+                                            </AnimatePresence>
+                                        );
+                                    })()}
                                 </div>
 
                                 {status?.is_pro_plus && selectedPublishPlatforms.length > 0 && !isPublishing && (

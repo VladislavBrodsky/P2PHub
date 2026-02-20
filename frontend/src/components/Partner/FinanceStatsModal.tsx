@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
-    X, Clock, Calendar,
+    X, Clock, Calendar, ChevronDown,
     ArrowUpRight, ArrowDownRight, Activity, DollarSign
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
@@ -19,6 +19,8 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
     const { selection } = useHaptic();
     const [stats, setStats] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);
+    const [selectedMonthIdx, setSelectedMonthIdx] = React.useState(0);
+    const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
     React.useEffect(() => {
         let interval: ReturnType<typeof setInterval>;
@@ -273,100 +275,158 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     )}
                                 </div>
 
-                                {/* ── Monthly History ── */}
+                                {/* ── Monthly History with Dropdown ── */}
                                 <div className="space-y-3 pb-2">
-                                    <div className="flex items-center gap-2 px-0.5">
-                                        <div className="w-5 h-5 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
-                                            <Calendar className="w-3 h-3" />
+                                    <div className="flex items-center justify-between px-0.5">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-5 h-5 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
+                                                <Calendar className="w-3 h-3" />
+                                            </div>
+                                            <h4 className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
+                                                {t('partner_dashboard.finance_stats.monthly_summary', 'Performance History')}
+                                            </h4>
                                         </div>
-                                        <h4 className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
-                                            {t('partner_dashboard.finance_stats.monthly_summary', 'Performance History')}
-                                        </h4>
                                     </div>
 
-                                    <div className="grid grid-cols-1 gap-2.5">
-                                        {(stats.monthly_history ?? []).map((m: any, idx: number) => {
-                                            const isActive = idx === 0;
-                                            return (
-                                                <div
-                                                    key={idx}
-                                                    className={`relative p-3.5 rounded-2xl border transition-all duration-200 overflow-hidden ${isActive
-                                                        ? 'bg-indigo-50/70 dark:bg-indigo-500/[0.08] border-indigo-200/60 dark:border-indigo-500/25 shadow-sm'
-                                                        : 'bg-white/40 dark:bg-white/2 border-slate-200/60 dark:border-white/5 opacity-75 hover:opacity-100 hover:bg-white/80 dark:hover:bg-white/[0.04]'
-                                                        }`}
-                                                >
-                                                    {isActive && (
-                                                        <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-400/10 blur-2xl -mr-6 -mt-6 pointer-events-none" />
+                                    {/* Month Dropdown Selector */}
+                                    {(stats.monthly_history ?? []).length > 0 && (
+                                        <div className="relative">
+                                            <button
+                                                onClick={() => { selection(); setDropdownOpen(o => !o); }}
+                                                className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] hover:bg-slate-50 dark:hover:bg-white/[0.07] transition-all active:scale-[0.98]"
+                                            >
+                                                <div className="flex items-center gap-2.5">
+                                                    <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                        {stats.monthly_history[selectedMonthIdx]?.month}
+                                                    </span>
+                                                    {selectedMonthIdx === 0 && (
+                                                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                                                            <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
+                                                            <span className="text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase">
+                                                                {t('partner_dashboard.finance_stats.current', 'Current')}
+                                                            </span>
+                                                        </div>
                                                     )}
-                                                    <div className="flex items-center justify-between mb-3 relative z-10">
-                                                        <span className={`text-[10px] font-black uppercase tracking-tight ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-700 dark:text-slate-300'}`}>
-                                                            {m.month}
+                                                </div>
+                                                <motion.div
+                                                    animate={{ rotate: dropdownOpen ? 180 : 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                                                </motion.div>
+                                            </button>
+
+                                            {/* Dropdown Options */}
+                                            {dropdownOpen && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -8, scaleY: 0.9 }}
+                                                    animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                                                    exit={{ opacity: 0, y: -8, scaleY: 0.9 }}
+                                                    transition={{ duration: 0.15 }}
+                                                    style={{ transformOrigin: 'top' }}
+                                                    className="absolute top-full mt-1.5 left-0 right-0 z-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden"
+                                                >
+                                                    {(stats.monthly_history ?? []).map((m: any, idx: number) => (
+                                                        <button
+                                                            key={idx}
+                                                            onClick={() => { selection(); setSelectedMonthIdx(idx); setDropdownOpen(false); }}
+                                                            className={`w-full flex items-center justify-between px-4 py-3 text-left transition-colors ${idx === selectedMonthIdx
+                                                                    ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
+                                                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
+                                                                } ${idx > 0 ? 'border-t border-slate-100 dark:border-white/5' : ''}`}
+                                                        >
+                                                            <span className="text-[11px] font-black uppercase tracking-tight">{m.month}</span>
+                                                            {idx === 0 && (
+                                                                <span className="text-[7px] font-black text-indigo-500 uppercase tracking-wider">● {t('partner_dashboard.finance_stats.current', 'Current')}</span>
+                                                            )}
+                                                        </button>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Selected Month Detail Card */}
+                                    {(stats.monthly_history ?? []).length > 0 && (() => {
+                                        const m = stats.monthly_history[selectedMonthIdx];
+                                        const isActive = selectedMonthIdx === 0;
+                                        const netUSDT = m.USDT.income - m.USDT.outcome;
+                                        const netTON = m.TON.income - m.TON.outcome;
+                                        return (
+                                            <motion.div
+                                                key={selectedMonthIdx}
+                                                initial={{ opacity: 0, y: 8 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.2 }}
+                                                className={`relative p-4 rounded-2xl border overflow-hidden ${isActive
+                                                        ? 'bg-indigo-50/60 dark:bg-indigo-500/[0.07] border-indigo-200/60 dark:border-indigo-500/25'
+                                                        : 'bg-white/50 dark:bg-white/[0.03] border-slate-200/60 dark:border-white/[0.06]'
+                                                    }`}
+                                            >
+                                                {isActive && (
+                                                    <div className="absolute top-0 right-0 w-28 h-28 bg-indigo-400/10 blur-2xl -mr-8 -mt-8 pointer-events-none" />
+                                                )}
+
+                                                {/* Net Summary row */}
+                                                <div className="flex items-center justify-between mb-4 relative z-10">
+                                                    <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Net Balance</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className={`text-[11px] font-black tabular-nums ${netUSDT >= 0 ? 'text-emerald-500' : 'text-red-400'
+                                                            }`}>
+                                                            {netUSDT >= 0 ? '+' : ''}{netUSDT.toFixed(2)} USDT
                                                         </span>
-                                                        {isActive && (
-                                                            <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
-                                                                <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
-                                                                <span className="text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase">
-                                                                    {t('partner_dashboard.finance_stats.current', 'Current')}
-                                                                </span>
-                                                            </div>
-                                                        )}
+                                                        <span className={`text-[11px] font-black tabular-nums ${netTON >= 0 ? 'text-blue-500' : 'text-red-400'
+                                                            }`}>
+                                                            {netTON >= 0 ? '+' : ''}{netTON.toFixed(2)} TON
+                                                        </span>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-2 relative z-10">
-                                                        {/* USDT */}
-                                                        <div className={`p-2.5 rounded-xl border ${isActive ? 'bg-white/70 dark:bg-black/20 border-indigo-100 dark:border-indigo-500/10' : 'bg-white/50 dark:bg-black/20 border-slate-100 dark:border-white/5'}`}>
-                                                            <div className="flex items-center gap-1 mb-2 opacity-60">
-                                                                <DollarSign className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
-                                                                <span className="text-[7.5px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">USDT</span>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-2.5 relative z-10">
+                                                    {/* USDT */}
+                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/[0.06] space-y-2">
+                                                        <div className="flex items-center gap-1.5 opacity-70">
+                                                            <DollarSign className="w-3 h-3 text-emerald-500" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">USDT</span>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
+                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'
+                                                                    }`}>+${m.USDT.income.toFixed(2)}</span>
                                                             </div>
-                                                            <div className="flex flex-col gap-1">
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-[7.5px] font-bold text-slate-400 dark:text-slate-500 uppercase">
-                                                                        {t('partner_dashboard.finance_stats.inflow_short', 'In')}
-                                                                    </span>
-                                                                    <span className={`text-[10px] font-black tabular-nums ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'}`}>
-                                                                        +${m.USDT.income.toFixed(2)}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-[7.5px] font-bold text-slate-400 dark:text-slate-500 uppercase">
-                                                                        {t('partner_dashboard.finance_stats.outflow_short', 'Out')}
-                                                                    </span>
-                                                                    <span className={`text-[10px] font-black tabular-nums ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
-                                                                        -${m.USDT.outcome.toFixed(2)}
-                                                                    </span>
-                                                                </div>
+                                                            <div className="h-px bg-slate-200 dark:bg-white/5" />
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
+                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
+                                                                    }`}>-${m.USDT.outcome.toFixed(2)}</span>
                                                             </div>
                                                         </div>
-                                                        {/* TON */}
-                                                        <div className={`p-2.5 rounded-xl border ${isActive ? 'bg-white/70 dark:bg-black/20 border-indigo-100 dark:border-indigo-500/10' : 'bg-white/50 dark:bg-black/20 border-slate-100 dark:border-white/5'}`}>
-                                                            <div className="flex items-center gap-1 mb-2 opacity-60">
-                                                                <Activity className="w-2.5 h-2.5 text-blue-600 dark:text-blue-400" />
-                                                                <span className="text-[7.5px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">TON</span>
+                                                    </div>
+                                                    {/* TON */}
+                                                    <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/[0.06] space-y-2">
+                                                        <div className="flex items-center gap-1.5 opacity-70">
+                                                            <Activity className="w-3 h-3 text-indigo-500" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest text-indigo-600 dark:text-indigo-400">TON</span>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
+                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'
+                                                                    }`}>+{m.TON.income.toFixed(2)}</span>
                                                             </div>
-                                                            <div className="flex flex-col gap-1">
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-[7.5px] font-bold text-slate-400 dark:text-slate-500 uppercase">
-                                                                        {t('partner_dashboard.finance_stats.inflow_short', 'In')}
-                                                                    </span>
-                                                                    <span className={`text-[10px] font-black tabular-nums ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'}`}>
-                                                                        +{m.TON.income.toFixed(2)}
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-[7.5px] font-bold text-slate-400 dark:text-slate-500 uppercase">
-                                                                        {t('partner_dashboard.finance_stats.outflow_short', 'Out')}
-                                                                    </span>
-                                                                    <span className={`text-[10px] font-black tabular-nums ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'}`}>
-                                                                        -{m.TON.outcome.toFixed(2)}
-                                                                    </span>
-                                                                </div>
+                                                            <div className="h-px bg-slate-200 dark:bg-white/5" />
+                                                            <div className="flex items-center justify-between">
+                                                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
+                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
+                                                                    }`}>-{m.TON.outcome.toFixed(2)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            );
-                                        })}
-                                    </div>
+                                            </motion.div>
+                                        );
+                                    })()}
                                 </div>
                             </>
                         ) : (
