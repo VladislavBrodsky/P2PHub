@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, Globe } from 'lucide-react';
+import { User, Globe, Network } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
@@ -35,11 +35,11 @@ export const ReferralGraph = () => {
         return () => clearInterval(timer);
     }, []);
 
-    // Atomic Orbital Configuration
+    // Viral Network Atomic Orbital Configuration
     const atomicOrbits = useMemo(() => [
-        { id: 'alpha', radius: 110, duration: 12, color: 'border-blue-500/40', rx: 70, rz: 0, nodes: 4 },
-        { id: 'beta', radius: 150, duration: 18, color: 'border-emerald-500/30', rx: 70, rz: 120, nodes: 6 },
-        { id: 'gamma', radius: 190, duration: 24, color: 'border-indigo-500/20', rx: 70, rz: 240, nodes: 8 },
+        { id: 'alpha', radius: 110, duration: 12, color: 'border-emerald-500/50', rx: 70, rz: 0, nodes: 4 },
+        { id: 'beta', radius: 150, duration: 18, color: 'border-teal-400/40', rx: 70, rz: 120, nodes: 6 },
+        { id: 'gamma', radius: 190, duration: 24, color: 'border-green-400/30', rx: 70, rz: 240, nodes: 8 },
     ], []);
 
     // Income Pops Configuration (Fractal Dividends with USDT)
@@ -53,15 +53,28 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[400px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-500 shadow-xl perspective-1000",
-            "bg-linear-to-b from-blue-50/50 to-indigo-50/30 border-blue-500/10",
-            "dark:bg-[#020617] dark:border-white/5"
+            "relative w-full h-[400px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700 perspective-1000",
+            "bg-linear-to-b from-emerald-50/50 to-teal-50/30 border-emerald-500/20",
+            "dark:bg-[#020805] dark:border-emerald-500/20",
+            "shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)] dark:shadow-[inset_0_0_80px_rgba(16,185,129,0.05),0_0_40px_-10px_rgba(16,185,129,0.2)]",
+            "group" // For hover states if needed
         )}>
-            {/* 1. Starfield / Global Context */}
+            {/* 1. Viral Network Sub-Grid Backdrop */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.05)_1px,transparent_1px)] bg-size-[30px_30px] mask-[radial-gradient(ellipse_at_center,white,transparent_80%)] pointer-events-none" />
+
+            {/* Core Radar Sweep Effect */}
+            <motion.div
+                className="absolute text-emerald-500/10 pointer-events-none"
+                style={{ width: '800px', height: '800px', top: '50%', left: '50%', marginTop: '-400px', marginLeft: '-400px', background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.2) 100%)', borderRadius: '50%' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Ambient Starfield Glow */}
             <div className={clsx(
                 "absolute inset-0 transition-opacity duration-700 pointer-events-none",
-                "bg-[radial-gradient(circle_at_center,var(--color-blue-500)_0%,transparent_70%)]",
-                "opacity-10 dark:opacity-5"
+                "bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.15)_0%,transparent_70%)]",
+                "opacity-100"
             )} />
 
             <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
@@ -69,7 +82,7 @@ export const ReferralGraph = () => {
                     animate={{ rotate: 360 }}
                     transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
                 >
-                    <Globe className="w-[600px] h-[600px] text-blue-500 dark:text-blue-500/30" strokeWidth={0.2} />
+                    <Globe className="w-[600px] h-[600px] text-emerald-500 dark:text-emerald-500/40 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" strokeWidth={0.2} />
                 </motion.div>
             </div>
 
@@ -102,12 +115,12 @@ export const ReferralGraph = () => {
                                     key={j}
                                     initial={{ scale: 0, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
-                                    className="absolute top-1/2 left-1/2 w-3 h-3 -ml-1.5 -mt-1.5 rounded-full flex items-center justify-center bg-white shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                                    className="absolute top-1/2 left-1/2 w-3 h-3 -ml-1.5 -mt-1.5 rounded-full flex items-center justify-center bg-white shadow-[0_0_15px_rgba(16,185,129,0.8)]"
                                     style={{
                                         transform: `rotate(${(360 / orbit.nodes) * j}deg) translate(${orbit.radius * 0.9}px) rotate(-${(360 / orbit.nodes) * j}deg)`
                                     }}
                                 >
-                                    <div className="absolute inset-0 bg-blue-400 rounded-full animate-ping opacity-30" />
+                                    <div className="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-60 mix-blend-screen" />
                                 </motion.div>
                             );
                         })}
@@ -139,7 +152,7 @@ export const ReferralGraph = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", bounce: 0.5, duration: 1 }}
-                    className="relative w-24 h-24 rounded-full p-[3px] bg-linear-to-tr from-blue-600 via-emerald-500 to-indigo-600 shadow-2xl"
+                    className="relative w-24 h-24 rounded-full p-[3px] bg-linear-to-tr from-emerald-600 via-teal-400 to-green-600 shadow-[0_0_30px_rgba(16,185,129,0.5)]"
                 >
                     <div className="w-full h-full rounded-full overflow-hidden border-2 border-white dark:border-[#020617] bg-slate-900 relative">
                         {user && user.photo_url ? (
@@ -190,9 +203,9 @@ export const ReferralGraph = () => {
                             repeatDelay: 2
                         }}
                         className={clsx(
-                            "absolute z-30 flex items-center gap-2 px-2.5 py-1.5 rounded-xl backdrop-blur-2xl border shadow-xl transition-colors duration-500",
-                            "bg-white/80 border-blue-500/20",
-                            "dark:bg-black/40 dark:border-white/10",
+                            "absolute z-30 flex items-center gap-2 px-2.5 py-1.5 rounded-xl backdrop-blur-2xl border transition-colors duration-500 shadow-[0_10px_30px_-10px_rgba(16,185,129,0.4)]",
+                            "bg-white/90 border-emerald-500/30",
+                            "dark:bg-black/60 dark:border-emerald-500/20",
                             pop.style
                         )}
                     >
@@ -216,24 +229,24 @@ export const ReferralGraph = () => {
                     animate={{ y: 0, opacity: 1 }}
                     className="relative w-full max-w-[280px]"
                 >
-                    <div className="absolute inset-0 bg-linear-to-r from-blue-600/20 to-emerald-600/20 blur-2xl opacity-40" />
+                    <div className="absolute inset-0 bg-linear-to-r from-emerald-600/30 to-teal-500/20 blur-2xl opacity-60 dark:opacity-40 animate-pulse" />
                     <div className={clsx(
-                        "relative px-4 py-3 backdrop-blur-2xl border rounded-2xl flex flex-col items-center gap-0.5 shadow-premium transition-colors duration-500",
-                        "bg-white/70 border-blue-500/10",
-                        "dark:bg-slate-900/50 dark:border-white/5"
+                        "relative px-5 py-4 backdrop-blur-2xl border rounded-2xl flex flex-col items-center gap-1 transition-colors duration-500",
+                        "bg-white/80 border-emerald-500/20 shadow-[0_10px_20px_-5px_rgba(16,185,129,0.15)]",
+                        "dark:bg-[#020a06]/80 dark:border-emerald-500/30 dark:shadow-[0_0_30px_-5px_rgba(16,185,129,0.4)]"
                     )}>
-                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-emerald-400/80">
                             {t('income.network.yield')}
                         </span>
-                        <div className="flex items-baseline gap-1">
-                            <span className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white">
+                        <div className="flex items-baseline gap-1 mt-1">
+                            <span className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                                 ${count.toLocaleString()}
                             </span>
-                            <span className="text-sm font-black text-emerald-500 italic">.00</span>
+                            <span className="text-sm font-black text-emerald-500">.00</span>
                         </div>
-                        <div className="w-full h-1 rounded-full mt-1.5 overflow-hidden bg-slate-200 dark:bg-white/5">
+                        <div className="w-full h-1.5 rounded-full mt-3 overflow-hidden bg-slate-200 dark:bg-emerald-950/50 shadow-inner block relative">
                             <motion.div
-                                className="h-full bg-linear-to-r from-blue-500 to-emerald-500"
+                                className="h-full bg-linear-to-r from-emerald-500 via-teal-400 to-emerald-500 absolute top-0 left-0 w-full"
                                 initial={{ width: "0%" }}
                                 animate={{ width: "100%" }}
                                 transition={{ duration: 5, ease: "easeOut" }}

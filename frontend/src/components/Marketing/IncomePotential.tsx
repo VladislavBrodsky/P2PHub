@@ -4,6 +4,7 @@ import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCirc
 import { useState, useMemo } from 'react';
 import { ReferralGraph } from './ReferralGraph';
 import { useTranslation, Trans } from 'react-i18next';
+import clsx from 'clsx';
 
 type CalculatorMode = 'profit' | 'inaction';
 
@@ -86,8 +87,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                {/* Dual Mode Calculator */}
-                <div className="p-6 rounded-[2.5rem] bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 space-y-6 relative z-10 backdrop-blur-md transition-all duration-500">
+                {/* Dual Mode Calculator / Unlocked Network Status */}
+                <div className={clsx(
+                    "p-6 rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border space-y-6",
+                    !isStrategyUnlocked
+                        ? "bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
+                        : "bg-white/40 dark:bg-[#020805]/80 border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)]"
+                )}>
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}

@@ -34,18 +34,18 @@ FORMATTING_MASTERY: Final[str] = """
 1. **BOLD TEXT** syntax: **text**
    - Use for: Key statistics, power words, CTAs, warnings, benefits
    - Limit: 4-6 instances per post maximum
-   - Examples: **WARNING**, **3X faster**, **Join 10,000+ members**
+   - Examples: **The Architecture**, **100% Autonomy**, **Join the Network**
 
 2. *ITALIC TEXT* syntax: _text_
    - Use for: Subtle emphasis, insider whispers, personal asides
    - Limit: 2-3 instances per post
-   - Examples: _This changed everything_, _not many people know this_
+   - Examples: _This changed everything_, _we built this quietly_
 
 3. **HYPERLINKS** syntax: [Anchor Text](URL)
    - PRIMARY CTA: Must appear in final paragraph with action-oriented anchor
    - SECONDARY (optional): Can appear mid-body for educational value
    - NEVER use bare URLs — always wrap in markdown
-   - Examples: [Get Your Card Now](link), [See Proof](link), [Join Free](link)
+   - Examples: [Join the Network](link), [Review the Data](link), [Access the System](link)
 
 4. **STRUCTURE:**
    - Hook: 1-2 lines, <15 words first sentence

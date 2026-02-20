@@ -46,6 +46,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
     const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" }), [rotationIndex, t]);
     const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" }), [rotationIndex, t]);
 
+    const isProPlus = (user?.subscription_plan || "").includes('PLUS');
+
     return (
         <motion.div
             className="flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative"
@@ -74,13 +76,13 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         {user?.is_pro ? (
                             <motion.button
                                 onClick={() => setActiveTab?.('pro')}
-                                className="inline-flex items-center justify-center rounded-full border border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20 active:scale-95 transition-all outline-none"
+                                className={`inline-flex items-center justify-center rounded-full border px-6 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
                                 animate={{
                                     scale: [1, 1.05, 1],
                                 }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                                <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
                                 </p>
                             </motion.button>

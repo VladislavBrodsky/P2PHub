@@ -131,10 +131,10 @@ class AudienceProfile:
                 "power_words": ["convert", "scale", "ROI", "margin", "optimize", "funnel"]
             },
             "hooks": [
-                "How this card increased my affiliate margins by {percentage}%",
-                "The payment infrastructure top affiliates are switching to",
-                "{Number} ways to cut {percentage}% from your payout costs",
-                "I tested {number} payment methods. Only one scaled past ${amount}/month."
+                "I was looking at my margin leakage last quarter, and it was brutal. Until I switched the architecture.",
+                "The payment infrastructure that the top 1% of our network quietly uses. Let's talk about it.",
+                "Most people are still losing 5% on payout friction. We completely eliminated it.",
+                "I tested every payment rail out there. Only one actually scaled without holding my liquidity hostage."
             ],
             "visual_base": "A charismatic marketing visionary in a sun-drenched, high-ceiling urban loft. Modern casual-luxury attire, holding a sleek titanium smartphone. The background is a blurred tapestry of a vibrant, thriving metropolis.",
             "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Payout Protocol"],
@@ -172,10 +172,10 @@ class AudienceProfile:
                 "power_words": ["team", "empire", "legacy", "duplicate", "residual", "exponential"]
             },
             "hooks": [
-                "How I built a {size} team in {timeframe} (the tool they never told you about)",
-                "The payment system that tripled my team retention",
-                "Why top leaders are migrating to crypto-based compensation",
-                "From {starting point} to {achievement}: The infrastructure that changed everything"
+                "You can't build a massive network on fragile infrastructure. Here is what we changed.",
+                "Retention used to be our biggest bottleneck. Then we upgraded the financial base.",
+                "Why the strongest leaders in my circle are migrating their entire structure to sovereign rails.",
+                "From a scattered team to a synchronized global architecture. Here is the exact blueprint."
             ],
             "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Captured in a high-level strategy session on a private luxury terrace overlooking a metropolitan financial district at twilight. Deep shadows, warm highlights, and an aura of visionary command. Shot on Leica M11.",
             "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architecture (Video)"],
@@ -253,10 +253,10 @@ class AudienceProfile:
                 "power_words": ["hustle", "grind", "stack", "escape", "future", "retire early"]
             },
             "hooks": [
-                "How Gen-Z is leading the Digital Gold Rush (and building wealth together)",
-                "The {tool} that empowered me to build my own future while in school",
-                "The new era of finance is here, and we're leading the charge",
-                "From student to {amount}/month: My journey in the Global Financial Shift"
+                "My peers are taking on debt to buy time. I bought the infrastructure to buy my freedom.",
+                "They tell you to wait your turn. The network told me to build my own.",
+                "The new financial reality is already here. We are just the first ones to realize it.",
+                "I didn't want a side hustle. I wanted absolute sovereign territory. Here is how it started."
             ],
             "visual_base": "An ambitious Gen-Z visionary in premium streetwear-luxe. Collaborating in a vibrant, futuristic innovation hub where neon data-streams merge with brilliant natural light. High-energy, high-status, and unapologetically future-focused.",
             "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independent Income Setup"],
@@ -736,21 +736,21 @@ class ViralFormulas:
     """Proven viral content patterns."""
     
     HOOK_TEMPLATES = {
-        "stat_shock": "{Shocking number}% of {audience} are {missing out on/wasting/ignoring} {opportunity}",
-        "secret_reveal": "The {industry} secret that {authority figure} don't want you to know about {topic}",
-        "transformation": "From {pain point} to {desired state} in {timeframe}: My {tool} story",
-        "contrarian": "Why {common belief} is actually {wrong/costing you/outdated}",
-        "insider": "{Number} {insider group} are quietly using {tool} to {achieve result}",
-        "question": "What if {provocative scenario}? (This {tool} makes it possible)",
-        "personal": "I {struggled with struggle}. Then I discovered {solution}. Here's what happened..."
+        "stat_shock": "I was looking at the data on {topic}, and {audience} are quietly losing their edge because of this...",
+        "secret_reveal": "There’s a shift happening in {industry} that most people won't notice until 2027.",
+        "transformation": "It took me {timeframe} to get out of the {pain point} trap. The turning point was understanding {tool}.",
+        "contrarian": "I stopped believing in {common belief} when I realized it was built to keep us stuck. Here is what I do instead.",
+        "insider": "My private network has been quietly deploying {tool} to {achieve result}. Let me show you the architecture.",
+        "question": "If you had absolute autonomy over your {provocative scenario}, what would you build next?",
+        "personal": "A few months ago, I was dealing with {struggle}. I didn't want a quick fix, I wanted a systemic solution. And I found it."
     }
     
     CTA_FORMULAS = {
-        "scarcity": "⚡ **[Action] Now** — Only {number} {thing} left | Limited time: {deadline}",
-        "social_proof": "🚀 **Join {number}+ {audience}** who are already {benefit} → [Hyperlink]",
-        "risk_reversal": "✅ **Try It Risk-Free** | {guarantee} | [Start Here](link)",
-        "exclusivity": "💎 **Elite Access** — Not for everyone. Are you ready? → [Apply](link)",
-        "urgency": "⏰ **{Benefit} Before {deadline}** or miss out on {lost opportunity} [Act Now](link)"
+        "scarcity": "⚡ **[Join the Network]({link})** — The window for this specific architecture won't stay open.",
+        "social_proof": "🚀 **[Join the Network]({link})** — We are building something unstoppable.",
+        "risk_reversal": "✅ **[Join the Network]({link})** | Step into absolute financial autonomy.",
+        "exclusivity": "💎 **[Join the Network]({link})** — An elite circle reserved for visionaries.",
+        "urgency": "⏰ **[Join the Network]({link})** — The Global Shift is happening. Choose your side."
     }
 
 

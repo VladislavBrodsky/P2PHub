@@ -446,8 +446,18 @@
   border: 2px solid #6366f1;
   border-radius: inherit;
   animation: pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
-}.vibing-emerald-animated {
+}
+
+.vibing-emerald-animated {
   background: linear-gradient(-45deg, #10b981, #34d399, #059669, #10b981);
   background-size: 300% 300%;
   animation: vibing-gradient 4s ease-in-out infinite;
+}
+
+.vibing-yellow-animated {
+  background: linear-gradient(135deg, #FFD700 0%, #F59E0B 25%, #FBBF24 50%, #F59E0B 75%, #D97706 100%);
+  background-size: 300% 300%;
+  animation: vibing-gradient 4s ease-in-out infinite;
+  color: #0A1000;
+  font-weight: 800;
 }
