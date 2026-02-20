@@ -20,7 +20,7 @@ def build_viral_audience_intel(target_audience: str, post_type: str, language: s
         "dna": NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
     }
 
-def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices, resonance_data=None) -> str:
+def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices, resonance_data=None, story_history=None) -> str:
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     language_dna = intel["dna"]
@@ -63,6 +63,22 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     if best_practices and 'universal_rules' in best_practices:
         universal_rules_str = "\n".join(['- ' + rule for rule in best_practices['universal_rules'][:8]])
 
+    story_context = ""
+    chapter_rule_system = "DO NOT write 'Chapter X' anywhere in the output."
+    if story_history is not None:
+        chapter_rule_system = "Use 'Episode X' or 'Chapter X' natively in your output. Maintain narrative continuity."
+        story_context += "**EMPATHETIC (STORY) - LONG STORY PROTOCOL:**\n"
+        story_context += "Create a viral, engaging, episodic 'Long Story'.\n"
+        story_context += "Themes to weave in: Global Financial Transformation, Web3 Finance, Crypto Cards, Borderless Payments, $1 per Minute strategy, Viral Community Growth, Growth Hacks, x100 Viral Growth with AI Marketing Studio and Automated Content Generation 24/7.\n"
+        if story_history:
+            story_context += "PREVIOUS EPISODES SUMMARY:\n"
+            for ep in story_history[-3:]:
+                story_context += f"- Ep {ep.get('Episode')}: {ep.get('Title')} ({ep.get('Summary')})\n"
+            next_ep = len(story_history) + 1
+            story_context += f"\nNow, write **Episode {next_ep}**.\n"
+        else:
+            story_context += "\nNow, write **Episode 1** to hook the audience.\n"
+
     return f"""{CMO_PERSONA}
 
 {psycho_context}
@@ -89,7 +105,7 @@ Referral Link (MUST INCLUDE): {ref_link}
 **CRITICAL INSTRUCTION: NO SPLITTING & CAPTION LIMIT.**
 Generate the entire content (title, body, CTA, hashtags) as a single coherent narrative. DO NOT split the message.
 The TOTAL length of the 'body' MUST be under 950 characters to fit perfectly in a Telegram photo caption.
-DO NOT write 'Chapter X' anywhere in the output. Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique: be valuable/educational, while subtly positioning Pintopay as the 'secret weapon' or 'smart money move').
+{chapter_rule_system} Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique: be valuable/educational, while subtly positioning Pintopay as the 'secret weapon' or 'smart money move').
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
@@ -105,7 +121,7 @@ Write as a high-status NATIVE {language} leader. Every word must feel earned and
 
 """
 
-def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel) -> str:
+def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel, story_history=None) -> str:
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     hook_examples = audience_intel.get("hooks", []) if audience_intel else []
@@ -142,7 +158,7 @@ Referral Link: {ref_link}
 2. **PERSONAL VOICE:** Write as if you are sending a note to a trusted partner. Use "I discovered...", "We are building...", "This is why I moved...".
 3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact.
 4. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
-5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.
+{("5. **STORY CONTINUITY:** Make an attractive template for this story. Continue the episodes seamlessly with strong hooks." if story_history is not None else "5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.")}
 
 **VIRAL & SEO CALIBRATION:**
 1. **HASHTAGS (STRICT LIMIT 2-4 UNIQUE):** Choose exactly 2-4 UNIQUE hashtags. Write them on one line separated by spaces (e.g., #Pintopay #Crypto #Wealth). DO NOT repeat them. List to pick from: {', '.join(all_potential_hashtags)}.
@@ -151,6 +167,7 @@ Referral Link: {ref_link}
 **STORYTELLING CONTEXT:**
 Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
 Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
+{story_context if story_history is not None else ''}
 
 **CONTENT REQUIREMENTS (2026 HUMANIZED PROTOCOL):**
 1. **KEYWORD INTELLIGENCE:** Integrate high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.

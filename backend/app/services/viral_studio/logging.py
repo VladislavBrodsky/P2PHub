@@ -137,4 +137,62 @@ class ViralLogger:
         except Exception as e:
             logger.error(f"❌ ViralLogger: Failed to log RSS: {e}")
 
+    async def get_user_story_history(self, partner_id: int) -> list[dict]:
+        if not self.gs_client:
+            return []
+            
+        try:
+            sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
+            loop = asyncio.get_event_loop()
+            
+            def get_story_sheet_sync():
+                spreadsheet = self.gs_client.open_by_key(sheet_id)
+                try:
+                    return spreadsheet.worksheet("Story Episodes")
+                except:
+                    return spreadsheet.add_worksheet(title="Story Episodes", rows="1000", cols="6")
+
+            sheet = await loop.run_in_executor(None, get_story_sheet_sync)
+            
+            if sheet:
+                def get_all_records():
+                    return sheet.get_all_records(expected_headers=["PartnerID", "Episode", "Title", "Summary", "Date"])
+                
+                try:
+                    records = await loop.run_in_executor(None, get_all_records)
+                    user_records = [r for r in records if str(r.get("PartnerID", "")) == str(partner_id)]
+                    return user_records
+                except Exception as parse_e:
+                    logger.warning(f"Story sheet empty or missing headers: {parse_e}")
+                    # Initialize headers if empty
+                    await loop.run_in_executor(None, lambda: sheet.append_row(["PartnerID", "Episode", "Title", "Summary", "Date"]))
+                    return []
+        except Exception as e:
+            logger.error(f"❌ ViralLogger: Failed to get story history: {e}")
+        return []
+
+    async def append_user_story_history(self, partner_id: int, episode_num: int, title: str, summary: str):
+        if not self.gs_client:
+            return
+
+        try:
+            sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
+            loop = asyncio.get_event_loop()
+            
+            def get_story_sheet_sync():
+                spreadsheet = self.gs_client.open_by_key(sheet_id)
+                try:
+                    return spreadsheet.worksheet("Story Episodes")
+                except:
+                    return spreadsheet.add_worksheet(title="Story Episodes", rows="1000", cols="6")
+
+            sheet = await loop.run_in_executor(None, get_story_sheet_sync)
+            
+            if sheet:
+                now_str = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
+                row = [str(partner_id), episode_num, title, summary[:1000], now_str]
+                await loop.run_in_executor(None, lambda: sheet.append_row(row))
+        except Exception as e:
+            logger.error(f"❌ ViralLogger: Failed to append story history: {e}")
+
 viral_logger = ViralLogger()

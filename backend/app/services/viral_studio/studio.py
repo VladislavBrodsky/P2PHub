@@ -123,9 +123,18 @@ class ViralMarketingStudio:
             except Exception as e:
                 logger.warning(f"Resonance sync failed: {e}")
 
+        # Build Story History if in Story Mode
+        is_story_mode = tone_of_voice and ("empath" in tone_of_voice.lower() or "story" in tone_of_voice.lower())
+        story_history = None
+        if is_story_mode:
+            try:
+                story_history = await viral_log.viral_logger.get_user_story_history(partner.id)
+            except Exception as e:
+                logger.warning(f"Failed to fetch story history: {e}")
+
         # Prepare Prompts
-        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data)
-        user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel)
+        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)
+        user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history)
         
         # 🚀 TURBO EXECUTION V6.0 (10-15s Target)
         # We eliminate the secondary AI roundtrip for image prompt engineering.
@@ -215,6 +224,14 @@ class ViralMarketingStudio:
             "text_model": getattr(self, "_last_used_text_model", "unknown"),
         }
 
+        # Save the new episode to Google Sheets if in story mode
+        if is_story_mode and output["status"] == "success":
+            try:
+                ep_num = (len(story_history) + 1) if story_history is not None else 1
+                # Run in background to avoid blocking return
+                asyncio.create_task(viral_log.viral_logger.append_user_story_history(partner.id, ep_num, output["title"], output["body"]))
+            except Exception as e:
+                logger.warning(f"Failed to append story history: {e}")
 
         # DB Tracking
         if session:
