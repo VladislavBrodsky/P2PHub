@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
     CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, ArrowRight, X,
-    Zap, Users, Link as LinkIcon, Info
+    Zap, Users, Link as LinkIcon, Info, Network, Lock, Blocks
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
@@ -922,7 +922,16 @@ export const StudioTab = ({
                     </div>
 
                     {/* Action Area */}
-                    <div className="space-y-3 pb-4">
+                    <div className="space-y-3 pb-4 relative">
+                        {status?.is_pro_plus && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="absolute -top-3 right-0 bg-emerald-500 text-white text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg z-10 border border-white/20"
+                            >
+                                <Blocks size={8} /> Omni-Channel Enabled
+                            </motion.div>
+                        )}
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 onClick={() => { selection(); setShowPublishModal(true); }}
