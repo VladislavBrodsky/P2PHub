@@ -22,6 +22,8 @@ from app.models.partner import Partner, ViralGeneration
 from . import adapters, constants, prompts
 from . import logging as viral_log
 
+background_tasks = set()
+
 logger = logging.getLogger(__name__)
 
 class ViralMarketingStudio:
@@ -230,7 +232,9 @@ class ViralMarketingStudio:
             try:
                 ep_num = (len(story_history) + 1) if story_history is not None else 1
                 # Run in background to avoid blocking return
-                asyncio.create_task(viral_log.viral_logger.append_user_story_history(partner.id, ep_num, output["title"], output["body"]))
+                _task = asyncio.create_task(viral_log.viral_logger.append_user_story_history(partner.id, ep_num, output["title"], output["body"]))
+                background_tasks.add(_task)
+                _task.add_done_callback(background_tasks.discard)
             except Exception as e:
                 logger.warning(f"Failed to append story history: {e}")
 

@@ -137,6 +137,10 @@ class ViralAnalyticsService:
         gen_stmt = select(func.count(ViralGeneration.id)).where(ViralGeneration.partner_id == partner_id)
         total_gens = (await session.exec(gen_stmt)).first() or 0
         
+        # Fetch partner for channel lookup
+        from app.models.partner import Partner
+        partner = await session.get(Partner, partner_id)
+        
         # 2. Total Posts & Aggregated Metrics
         posts_stmt = select(SocialPost).where(SocialPost.partner_id == partner_id)
         posts = (await session.exec(posts_stmt)).all()
