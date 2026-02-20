@@ -34,6 +34,8 @@ class ViralMarketingStudio:
         self.genai_client = None
         self._last_working_imagen_model = 'imagen-3.0-generate-001'
         self._init_clients()
+        # Local short-term cache for rapid re-generations
+        self._intel_cache = {}
 
     def _init_clients(self):
         if settings.OPENAI_API_KEY:
@@ -49,6 +51,30 @@ class ViralMarketingStudio:
 
     def get_capabilities(self) -> dict[str, bool]:
         return {"text_generation": bool(self.openai_client), "image_generation": bool(self.genai_client)}
+
+    async def _get_cached_intel(self, target_audience: str, post_type: str, language: str) -> dict[str, Any]:
+        """
+        Retrieves audience intelligence from cache or builds it.
+        #comment Phase 4: Token Optimization & Prompt Caching.
+        """
+        cache_key = f"intel:{target_audience}:{post_type}:{language}"
+        
+        # 1. Local Memory Cache (0ms)
+        if cache_key in self._intel_cache:
+            return self._intel_cache[cache_key]
+            
+        # 2. Redis Cache (RRC-1)
+        from app.services.redis_service import redis_service
+        cached = await redis_service.get_json(f"viral_studio:{cache_key}")
+        if cached:
+            self._intel_cache[cache_key] = cached
+            return cached
+            
+        # 3. Compute & Store
+        intel = prompts.build_viral_audience_intel(target_audience, post_type, language)
+        await redis_service.set_json(f"viral_studio:{cache_key}", intel, expire=86400) # 24h
+        self._intel_cache[cache_key] = intel
+        return intel
 
     async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
         if not partner.is_pro: return False
@@ -81,7 +107,12 @@ class ViralMarketingStudio:
             else:
                 ref_link = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
         
-        intel = prompts.build_viral_audience_intel(target_audience, post_type, language)
+        intel = await self._get_cached_intel(target_audience, post_type, language)
+        
+        # Scaling Tier Intelligence: Determine Model based on Partner Tier
+        is_pro_plus = (partner.subscription_plan == "PRO_PLUS_MONTHLY")
+        # Elite users gets flagship models (GPT-4o), regular PRO gets ultra-fast efficient models (Llama-3-70B/GPT-4o-mini)
+        primary_model = "gpt-4o" if is_pro_plus else "gpt-4o-mini"
         
         # Sync with Predictive Resonance Engine
         resonance_data = None
@@ -104,7 +135,7 @@ class ViralMarketingStudio:
         # We prioritize quality by waiting for the text content first, 
         # then using it to calibrate the elite image prompt for maximum relevance.
 
-        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt)
+        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt, model_override=primary_model)
 
         if not res_json or "error" in res_json: 
             return res_json or {"error": "Generation failed", "status": "failed"}
@@ -209,11 +240,17 @@ class ViralMarketingStudio:
 
         return output
 
-    async def _get_text_content(self, system_prompt: str, user_prompt: str, fast_mode: bool = False) -> tuple[dict | None, int]:
+    async def _get_text_content(self, system_prompt: str, user_prompt: str, fast_mode: bool = False, model_override: str | None = None) -> tuple[dict | None, int]:
         # PRIORITY: OpenAI Flagship Tier (Top-notch text generation as requested)
         if self.openai_client:
-            # For fast_mode (like internal prompt engineering), we go straight to mini
-            models = ["gpt-4o-mini"] if fast_mode else ["gpt-4o", "gpt-4o-mini"]
+            # Model selection logic: Override > FastMode > PlanDefault
+            if model_override:
+                models = [model_override, "gpt-4o-mini"]
+            elif fast_mode: 
+                models = ["gpt-4o-mini"]
+            else:
+                models = ["gpt-4o", "gpt-4o-mini"]
+                
             for model_name in models:
                 try:
                     res = await self.openai_client.chat.completions.create(

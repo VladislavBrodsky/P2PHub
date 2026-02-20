@@ -164,7 +164,8 @@ class NotificationService:
 
         try:
             # 0. Check if user blocked the bot (Redis-cached check)
-            if await rate_limit_service.is_blocked(int(chat_id)):
+            # MISSION-CRITICAL: High priority messages (Security/Payments) bypass the "paused" setting.
+            if priority != "high" and await rate_limit_service.is_blocked(int(chat_id)):
                 logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id} (notifications paused)")
                 return
 

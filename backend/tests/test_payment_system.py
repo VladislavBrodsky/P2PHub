@@ -147,18 +147,24 @@ async def test_commission_compression_and_precision(session, create_referral_cha
     await session.commit()
     
     # Distribute PRO Commissions ($39)
-    # Map (Empire): L1=10%, L2=5%, L3=4%, L4=3%...
+    # Map (Empire): L1=30%, L2=10%, L3=3%, L4=1%...
     await distribute_pro_commissions(session, u5_buyer.id, 39.0)
+    await session.commit()
     
     await session.refresh(u4_pro)
     await session.refresh(u3_free)
     await session.refresh(u2_pro)
     await session.refresh(u1_root)
     
-    assert u4_pro.balance == 3.90
-    assert u3_free.balance == round(39.0 * 0.05, 4)
-    assert u2_pro.balance == round(39.0 * 0.04, 4)
-    assert u1_root.balance == round(39.0 * 0.03, 4)
+    # Exact values for $39 base:
+    # L1: 39 * 0.3 = 11.7
+    # L2: 39 * 0.1 = 3.9
+    # L3: 39 * 0.03 = 1.17
+    # L4: 39 * 0.01 = 0.39
+    assert u4_pro.balance == 11.7
+    assert u3_free.balance == 3.9
+    assert u2_pro.balance == 1.17
+    assert u1_root.balance == 0.39
 
 @pytest.mark.asyncio
 async def test_commission_skip_logic_beyond_l3(session, create_referral_chain):
@@ -195,6 +201,7 @@ async def test_commission_skip_logic_beyond_l3(session, create_referral_chain):
     await session.commit()
     
     await distribute_pro_commissions(session, buyer.id, 39.0)
+    await session.commit()
     
     await session.refresh(l1) # L1 (Qualified)
     await session.refresh(l2) # L2 (Qualified)
@@ -204,7 +211,7 @@ async def test_commission_skip_logic_beyond_l3(session, create_referral_chain):
     assert l1.balance > 0
     assert l2.balance > 0
     assert l3.balance > 0
-    assert root.balance == round(39.0 * 0.03, 4)
+    assert root.balance == 0.39
 
 @pytest.mark.asyncio
 async def test_audit_logs_creation(session, create_test_partner):

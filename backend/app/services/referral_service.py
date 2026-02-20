@@ -307,14 +307,20 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
     ancestors_at_dist = list(reversed(lineage_ids))
     balance_cache: dict[int, float] = {}
+    xp_cache: dict[int, float] = {}
     all_recipients_for_cache = list(ancestor_map.values())
     if company_account:
         all_recipients_for_cache.append(company_account)
+        
     for p in all_recipients_for_cache:
         try:
             balance_cache[p.id] = float(p.balance)
         except Exception:
             balance_cache[p.id] = 0.0
+        try:
+            xp_cache[p.id] = float(p.xp)
+        except Exception:
+            xp_cache[p.id] = 0.0
 
     earnings_to_add = []
     deferred_notifications = []
@@ -390,10 +396,15 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             recipient.total_earned_usdt = Partner.total_earned_usdt + commission
             
             # --- XP COMMISSION FOR ACTIVE REFERRAL ---
+            # #comment Phase 2 Scaling: Use xp_cache to allow the same recipient (e.g. Admin) 
+            # to receive multiple commission slices in one purchase without BinaryExpression errors.
+            from app.services.audit_service import audit_service
             xp_gain = _calculate_referral_xp(comm_level, recipient)
-            xp_before = float(recipient.xp)
-            recipient.xp = Partner.xp + xp_gain
+            xp_before = xp_cache.get(recipient.id, 0.0)
             xp_after = xp_before + xp_gain
+            xp_cache[recipient.id] = xp_after
+
+            recipient.xp = Partner.xp + xp_gain
             
             session.add(recipient)
             
