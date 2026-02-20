@@ -71,17 +71,32 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <div className="text-center space-y-10 px-2 flex flex-col items-center">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
-                        <motion.div
-                            className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
-                            animate={{
-                                scale: [1, 1.05, 1],
-                            }}
-                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                                {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
-                            </p>
-                        </motion.div>
+                        {user?.is_pro ? (
+                            <motion.button
+                                onClick={() => setActiveTab?.('pro')}
+                                className="inline-flex items-center justify-center rounded-full border border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20 active:scale-95 transition-all outline-none"
+                                animate={{
+                                    scale: [1, 1.05, 1],
+                                }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                                    {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
+                                </p>
+                            </motion.button>
+                        ) : (
+                            <motion.div
+                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
+                                animate={{
+                                    scale: [1, 1.05, 1],
+                                }}
+                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
+                                    {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
+                                </p>
+                            </motion.div>
+                        )}
 
                         {user?.is_admin && user?.username !== 'uslincoln' && (
                             <motion.button

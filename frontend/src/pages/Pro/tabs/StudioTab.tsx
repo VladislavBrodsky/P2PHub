@@ -450,11 +450,13 @@ export const StudioTab = ({
                             {/* Strategy Selection */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.strategy_label')}
+                                instruction={i18n.language === 'ru' ? 'Выберите стратегию для вашего поста.' : 'Select the strategy for your post.'}
                                 value={postType}
                                 onChange={(val) => setPostType(val)}
                                 options={defaultPostTypes.map(pt => ({
                                     id: pt.id,
-                                    label: i18n.language === 'ru' ? pt.ru : pt.en
+                                    label: i18n.language === 'ru' ? pt.ru : pt.en,
+                                    description: i18n.language === 'ru' ? pt.desc_ru : pt.desc_en
                                 }))}
                                 placeholder={t('pro_dashboard.studio.strategy_placeholder')}
                                 color="indigo"
@@ -467,6 +469,7 @@ export const StudioTab = ({
                             {/* Target Audience */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.target_label')}
+                                instruction={i18n.language === 'ru' ? 'Выберите целевую аудиторию, к которой обращаетесь.' : 'Select the target audience you are addressing.'}
                                 value={audience}
                                 onChange={(val) => setAudience(val)}
                                 options={defaultAudiences
@@ -481,7 +484,8 @@ export const StudioTab = ({
                                     })
                                     .map(a => ({
                                         id: a.id,
-                                        label: i18n.language === 'ru' ? a.ru : a.en
+                                        label: i18n.language === 'ru' ? a.ru : a.en,
+                                        description: i18n.language === 'ru' ? a.desc_ru : a.desc_en
                                     }))}
                                 placeholder={t('pro_dashboard.studio.target_placeholder')}
                                 color="purple"
@@ -601,11 +605,13 @@ export const StudioTab = ({
                             {/* Tone of Voice */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
+                                instruction={i18n.language === 'ru' ? 'Настройте тон и эмоцию генерации.' : 'Adjust the tone and emotion of the generation.'}
                                 value={tone}
                                 onChange={(val) => setTone(val)}
                                 options={defaultTones.map(t => ({
                                     id: t.id,
-                                    label: i18n.language === 'ru' ? t.ru : t.en
+                                    label: i18n.language === 'ru' ? t.ru : t.en,
+                                    description: i18n.language === 'ru' ? t.desc_ru : t.desc_en
                                 }))}
                                 placeholder={t('pro_dashboard.studio.tone_placeholder')}
                                 color="amber"
@@ -618,11 +624,13 @@ export const StudioTab = ({
                             {/* Output Language */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.language_label')}
+                                instruction={i18n.language === 'ru' ? 'Язык, на котором будет написан контент.' : 'The language in which the content will be written.'}
                                 value={language}
                                 onChange={(val) => setLanguage(val)}
                                 options={defaultLanguages.map(l => ({
                                     id: l.id,
-                                    label: l.label
+                                    label: l.label,
+                                    description: l.description
                                 }))}
                                 placeholder="Select Language"
                                 color="emerald"

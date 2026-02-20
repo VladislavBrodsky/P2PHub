@@ -7,6 +7,7 @@ import { useHaptic } from '../../../hooks/useHaptic';
 interface Option {
     id: string;
     label: string;
+    description?: string;
 }
 
 interface PremiumSelectProps {
@@ -20,6 +21,7 @@ interface PremiumSelectProps {
     onToggle: () => void;
     onClose?: () => void;
     indexStr: string;
+    instruction?: string;
 }
 
 export const PremiumSelect = ({
@@ -32,7 +34,8 @@ export const PremiumSelect = ({
     isOpen,
     onToggle,
     onClose,
-    indexStr
+    indexStr,
+    instruction
 }: PremiumSelectProps) => {
     const { selection } = useHaptic();
     const triggerRef = useRef<HTMLButtonElement>(null);
@@ -131,10 +134,15 @@ export const PremiumSelect = ({
 
     return (
         <div className="space-y-1.5">
-            <div className="flex items-center justify-between px-1">
+            <div className="flex flex-col px-1 pb-1">
                 <label className={`text-[9px] font-black uppercase tracking-widest ${theme.text}`}>
                     {indexStr}. {label}
                 </label>
+                {instruction && (
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug pr-4">
+                        {instruction}
+                    </p>
+                )}
             </div>
 
             <button
@@ -192,9 +200,16 @@ export const PremiumSelect = ({
                                                 }
                                             `}
                                         >
-                                            <span className="text-[12px] sm:text-[13px] font-bold">
-                                                {option.label}
-                                            </span>
+                                            <div className="flex flex-col text-left mr-2">
+                                                <span className="text-[12px] sm:text-[13px] font-bold">
+                                                    {option.label}
+                                                </span>
+                                                {option.description && (
+                                                    <span className={`text-[10px] mt-0.5 leading-snug ${isSelected ? 'text-indigo-600/70 dark:text-indigo-400/70' : 'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300'}`}>
+                                                        {option.description}
+                                                    </span>
+                                                )}
+                                            </div>
                                             {isSelected && (
                                                 <Check className={`w-4 h-4 ${theme.text}`} />
                                             )}
