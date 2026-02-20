@@ -100,35 +100,36 @@ class ViralMarketingStudio:
         # We eliminate the secondary AI roundtrip for image prompt engineering.
         # Instead, we use a high-fidelity static builder and prioritize 'Fast' AI models.
 
-        async def get_text():
-            return await self._get_text_content(system_prompt, user_prompt)
+        # 🚀 TURBO EXECUTION V7.0 (Content-Aware Calibration)
+        # We prioritize quality by waiting for the text content first, 
+        # then using it to calibrate the elite image prompt for maximum relevance.
 
-        async def get_image():
-            # Use elite static builder (Zero Latency)
-            refined_prompt = prompts.build_viral_image_prompt(intel, "")
-            # Force 'Fast' priority in the image generation method
-            return refined_prompt, await self._generate_image(refined_prompt, partner.id, turbo_mode=True)
+        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt)
 
-        # TRIGGER CONCURRENT FLOW
-        text_task = asyncio.create_task(get_text())
-        image_task = asyncio.create_task(get_image())
+        if not res_json or "error" in res_json: 
+            return res_json or {"error": "Generation failed", "status": "failed"}
         
-        (res_json, tokens_openai), (image_prompt, image_url) = await asyncio.gather(text_task, image_task)
+        # Use elite static builder with actual content awareness
+        body_for_image = res_json.get("title", "") + " " + (res_json.get("body") or res_json.get("text") or "")
+        image_prompt = prompts.build_viral_image_prompt(intel, body_for_image)
+        
+        # Generate image based on the specific post theme
+        image_url = await self._generate_image(image_prompt, partner.id, turbo_mode=True)
 
-        if not res_json or "error" in res_json: return res_json or {"error": "Generation failed", "status": "failed"}
 
-        # Use 'body' or 'text' from response (consistency fix)
+        # Consistency fix for text fields
         body_text = res_json.get("text") or res_json.get("body") or ""
         
         # Safety fallback for ref_link placeholder
         if "{ref_link}" in body_text:
             body_text = body_text.replace("{ref_link}", ref_link)
+
             
         # CTA LINK REINFORCER...
         has_proper_link = f"({ref_link})" in body_text and "[" in body_text
         if not has_proper_link:
             # Language aware fallback
-            cta_fallback = "Занимайте свое преимущество здесь" if language == "Russian" else "Secure Your Advantage Here"
+            cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
             
             lines = body_text.split("\n")
             cta_fixed = False
@@ -142,9 +143,16 @@ class ViralMarketingStudio:
                     cta_fixed = True
                     break
             if not cta_fixed: 
-                body_text = body_text.strip() + f"\n\n👉 **[{cta_fallback}]({ref_link})**"
+                body_text = body_text.strip() + f"\n\n**[{cta_fallback}]({ref_link})**"
             else: 
                 body_text = "\n".join(lines)
+
+        # Append hashtags strictly (ensuring they are in the body)
+        hashtags_list = res_json.get("hashtags", [])
+        if hashtags_list:
+            hashtag_str = " ".join(hashtags_list)
+            if hashtag_str not in body_text:
+                body_text = body_text.strip() + f"\n\n{hashtag_str}"
 
         duration = (datetime.now() - start_time).total_seconds()
         
@@ -152,7 +160,7 @@ class ViralMarketingStudio:
             "title": res_json.get("title", "Viral Insight"),
             "text": body_text,
             "body": body_text,
-            "hashtags": res_json.get("hashtags", []),
+            "hashtags": hashtags_list,
             "image_prompt": image_prompt,
             "image_url": image_url,
             "status": "success",
@@ -161,6 +169,7 @@ class ViralMarketingStudio:
             "image_model": getattr(self, "_last_used_image_model", "unknown"),
             "text_model": getattr(self, "_last_used_text_model", "unknown"),
         }
+
 
         # DB Tracking
         if session:

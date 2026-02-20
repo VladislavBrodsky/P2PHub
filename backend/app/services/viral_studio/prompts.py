@@ -28,6 +28,10 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     strategy_context = _build_strategy_context(post_type, category_strategy)
     lang_context = _build_language_context(language, language_dna)
     
+    # Platform-specific and Language-specific calibration
+    cta_text = "Присоединиться к сети" if language == "Russian" else "Join the Network"
+    hashtags = "#СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute" if language == "Russian" else "#GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy"
+
     resonance_context = ""
     if resonance_data and "top_resonance_segments" in resonance_data:
         recs = resonance_data["top_resonance_segments"][:2]
@@ -60,23 +64,26 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
 {universal_rules_str}
 
 **YOUR TASK:**
-Write in {language} for {target_audience} using the {post_type} strategy.
+Write a HUMANIZED, NATIVE-level post in {language} for {target_audience} using the {post_type} strategy.
 Persona Tone: {tone.upper()}
-Product: Pintopay Crypto Card + Partner Network
+Product: Partner Center (Центр Партнеров) + Sovereign Ecosystem
 Referral Link (MUST INCLUDE): {ref_link}
+
+**CRITICAL INSTRUCTION: NO SPLITTING & CAPTION LIMIT.**
+Generate the entire content (title, chapter, body, CTA, hashtags) as a single coherent narrative. DO NOT split the message.
+The TOTAL length of the 'body' MUST be under 950 characters to fit perfectly in a Telegram photo caption.
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
-Even if the provided 'inspiration', 'keywords', or 'hooks' are in English, you MUST translate them naturally into {language}. 
-DO NOT leave any English words in the final generation. Write as a high-status NATIVE {language} speaker.
+Write as a high-status NATIVE {language} leader. Every word must feel earned and authentic. Be human, be real.
 
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
-  "body": "**Chapter X: [Title]**\\n\\n[THE ALPHA HOOK]\\n\\n[Value/Strategy Context]\\n\\n[LEAD MAGNET OFFER: Offer a blueprint/setup for a comment]\\n\\n**[Action Oriented CTA]({ref_link})**",
-  "hashtags": ["#Sovereignty", "#Fintech", "#DeFi", "#ExitStrategy"],
-  "image_description": "Elite Leica M11 prompt following the SPECIFICATION."
+  "body": "**Chapter X: [Title]**\\n\\n[HUMANIZED ALPHA HOOK]\\n\\n[The 'Field Note' Insight - 3-5 short rhythmic paragraphs]\\n\\n**[{cta_text}]({ref_link})**",
+  "hashtags": {list(set(hashtags.split()))}
 }}
+
 """
 
 def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel) -> str:
@@ -89,42 +96,37 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     
     hook_inspo = "\n".join(['- ' + hook for hook in hook_examples[:2]])
 
+    mandatory_hashtags = "#СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute" if language == "Russian" else "#GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy"
+
     return f"""
-EXECUTE CMO AGENT MODE.
+EXECUTE GLOBAL PARTNER ARCHITECT MODE.
 
 Target: {target_audience}
 Category: {post_type}
 Style/Tone: {tone.upper()}
-Language: {language} (write as NATIVE speaker)
+Language: {language} (write as NATIVE HUMAN speaker)
 Referral Link: {ref_link}
+
+**HUMANIZATION PROTOCOL (CRITICAL):**
+1. **NO AI CLICHES:** Avoid "In the rapidly evolving world...", "Unlock your potential...", or "Here's the secret...".
+2. **PERSONAL VOICE:** Write as if you are sending a note to a trusted partner. Use "I discovered...", "We are building...", "This is why I moved...".
+3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact.
+4. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
+
+**MANDATORY HASHTAGS:**
+{mandatory_hashtags}
 
 **STORYTELLING CONTEXT:**
 Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
 Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
-Available Episodes: {category_strategy.get('storytelling', {}).get('episodes', [])}
 
-**HOOK INSPIRATION (adapt, don't copy):**
-{hook_inspo}
-
-**CONTENT REQUIREMENTS (2026 VIRAL PROTOCOL):**
-1. **KEYWORD INTELLIGENCE:** Integrate these high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.
+**CONTENT REQUIREMENTS (2026 HUMANIZED PROTOCOL):**
+1. **KEYWORD INTELLIGENCE:** Integrate high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.
 2. **SALES BETWEEN THE LINES:** Master subtle persuasion. Do not pitch. Create a desire for the 'identity' of a {target_audience} leader.
-3. **EMPATHY & EMOTION:** Start by mirroring the audience's deep internal monologue. Make them feel 'seen'.
-4. **ENGAGEMENT ARCHITECTURE:** End or pivot with a provocative question or a call to 'Signal' for an asset to drive comments/interaction. **CHOOSE ONE LEAD MAGNET TO TEASE:** {', '.join(audience_intel.get('lead_magnets', []))}.
-5. **SEO VIRALITY & COMPLETELY UNIQUE VOICE (CRITICAL!!):** Optimize the title and structure for high algorithm resonance. DO NOT USE GENERIC TEMPLATES. Ensure the generation is 100% unique for this EXACT combination: Audience=[{target_audience}] + Strategy=[{post_type}] + Tone=[{tone.upper()}].
-6. **EPISODIC NARRATIVE:** Start with "**Chapter [X]: [High-Status Title]**".
-7. **CTA SUPREMACY:** The final line MUST be exactly the markdown link: **[Compelling Action Text Here]({ref_link})**.
-8. **BANNED:** No direct sales speak. No generic cliches. No exclamation marks.
-
-**VISUAL DIRECTION (for context):**
-The generated image will feature: {visual_base} {visual_scene}. 
-Style: Professional DSLR, 35mm f/2.8, 4K rendering. Ensure the copy resonates with this premium, authentic aesthetic.
-
-**IMAGE SPECIFICATION (CRITICAL):**
-Generate a prompt for a professional DSLR shot (35mm lens, f/2.8).
-Subject: {visual_base}
-Setting: {visual_scene}
-Note: Absolutely NO neon, NO screens, NO cash. Focus on realistic skin tones, natural lighting, and a 'Quiet Luxury' atmosphere. Subject must look like a real leader in a real setting.
+3. **EMOTION:** Start by mirroring the audience's deep internal monologue.
+4. **ENGAGEMENT architecture:** End with a provocative thought or a "Signal Request".
+5. **CTA:** The final line MUST be: **[Join the Network]({ref_link})** (or the {language} equivalent).
+6. **CHARACTERS:** Keep the entire response under 950 characters.
 
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
@@ -136,15 +138,22 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
     audience_desc = audience_intel.get("visual_base", "An authoritative and sophisticated individual of undeniable status.")
     scene_desc = category_strategy.get("visual_scene", "navigating a moment of high-stakes breakthrough in a private, ultra-modern setting.")
 
+    # Extract core theme from content if provided
+    theme_context = ""
+    if post_content:
+        # Use a short snippet to guide the AI without over-complicating
+        clean_content = post_content.replace("\n", " ")[:250]
+        theme_context = f"CONTEXTUAL THEME: {clean_content}\n"
+
     return (
         f"{IMAGE_RULES}\n\n"
-        f"CONTEXTUAL SYNERGY: The image must visually represent the core emotion of this content: \"{post_content[:200]}\"\n"
-        f"SCENE SETUP: {audience_desc} {scene_desc}. \n"
-        f"EMOTION: Professional focus, calm authority, or visionary breakthrough. \n"
-        f"LIGHTING: Natural ambient lighting with subtle professional rim light. \n"
-        f"BRANDING/TEXT: If any title/text is visible on background elements (like a premium dossier), it must be in the 'Onest' font style and 100% grammatically correct. \n"
-        f"SPECS: Photorealistic 4K, realistic shadows, authentic materials and textures."
+        f"SCENE SETUP: {audience_desc} {scene_desc} \n"
+        f"{theme_context}"
+        f"EMOTION: Professional focus, calm authority, and visionary breakthrough. \n"
+        f"LIGHTING: Masterful cinematic lighting. \n"
+        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes, rich textures, award-winning photography."
     )
+
 
 def _build_audience_context(target_audience: str, audience_intel: dict) -> str:
     if not audience_intel:

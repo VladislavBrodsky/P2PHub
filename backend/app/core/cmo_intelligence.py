@@ -57,7 +57,7 @@ class AudienceProfile:
                 "Sovereign Velocity: The standard for 2026 capital execution.",
                 "Your asymmetric alpha isn't in the chart; it's in the infrastructure."
             ],
-            "visual_base": "A world-class Crypto Strategist, mid-30s, embodying 'Quiet Luxury'. Captured in a desaturated, high-contrast private office with subtle holographic data ambient glow. Shot on Leica M11.",
+            "visual_base": "An elite Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blazer. Captured in a moody, high-contrast private executive suite with a panoramic view of a foggy financial district. Atmosphere is thick with focus and strategic power. Shot on Leica M11, 35mm f/1.4.",
             "cta_style": "Stealth, authoritative, high-stakes"
         },
         
@@ -97,7 +97,7 @@ class AudienceProfile:
                 "Lifestyle Arbitrage: The hidden math of the modern sovereign.",
                 "Chapter 7: Why your current bank is anchoring your global potential."
             ],
-            "visual_base": "A high-status 'Global Sovereign' in a first-class private lounge, 35mm f/2.8 lens. Natural light, sophisticated neutral tones, expensive silence. Embodying the ultimate freedom lifestyle.",
+            "visual_base": "A high-status 'Global Sovereign' in the ultra-private lounge of a first-class aviation hub. Natural golden-hour light streaming through architectural windows, illuminating sophisticated neutral textures (cashmere, brushed aluminum). Expensive silence and absolute freedom.",
             "cta_style": "Inspirational, high-status"
         },
         
@@ -136,7 +136,7 @@ class AudienceProfile:
                 "{Number} ways to cut {percentage}% from your payout costs",
                 "I tested {number} payment methods. Only one scaled past ${amount}/month."
             ],
-            "visual_base": "A charismatic marketing entrepreneur, energetic presence, modern casual luxury attire, holding a high-end smartphone in a sun-drenched urban loft.",
+            "visual_base": "A charismatic marketing visionary in a sun-drenched, high-ceiling urban loft. Modern casual-luxury attire, holding a sleek titanium smartphone. The background is a blurred tapestry of a vibrant, thriving metropolis.",
             "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Payout Protocol"],
             "cta_style": "ROI-focused, A/B tested language"
         },
@@ -177,7 +177,7 @@ class AudienceProfile:
                 "Why top leaders are migrating to crypto-based compensation",
                 "From {starting point} to {achievement}: The infrastructure that changed everything"
             ],
-            "visual_base": "An elite FinTech Partnership leader and community architect, possessing magnetic visionary energy. Captured in a high-stakes strategy session on a luxury terrace overlooking a metropolitan financial district. Shot on Leica M11, desaturated tones, realistic lighting.",
+            "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Captured in a high-level strategy session on a private luxury terrace overlooking a metropolitan financial district at twilight. Deep shadows, warm highlights, and an aura of visionary command. Shot on Leica M11.",
             "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architecture (Video)"],
             "cta_style": "Vision-driven, team-focused"
         },
@@ -218,7 +218,7 @@ class AudienceProfile:
                 "How to build a financial fortress for your children while staying present.",
                 "Chapter 3: The transition from domestic stability to financial sovereignty."
             ],
-            "visual_base": "An elegant, successful 'Legacy Architect' parent in a sun-drenched, high-end minimalist kitchen or reading nook. Soft lighting, expensive textures, a sense of profound peace and control. Shot on Leica M11.",
+            "visual_base": "A sophisticated 'Legacy Architect' parent in a serene, sun-drenched minimalist estate. Soft, ethereal lighting hitting expensive organic textures (linen, oak, marble). A moment of profound peace, control, and generational success. Shot on Leica M11.",
             "lead_magnets": ["The Family Sovereign Trust Setup", "Generational Yield: A Legacy Masterclass", "The 15-Minute Passive Abundance Guide"],
             "cta_style": "Graceful, empowering, trust-focused"
         },
@@ -258,7 +258,7 @@ class AudienceProfile:
                 "The new era of finance is here, and we're leading the charge",
                 "From student to {amount}/month: My journey in the Global Financial Shift"
             ],
-            "visual_base": "An ambitious Gen-Z visionary, premium modern attire, collaborating with peers in a vibrant, futuristic innovation hub filled with light and energy.",
+            "visual_base": "An ambitious Gen-Z visionary in premium streetwear-luxe. Collaborating in a vibrant, futuristic innovation hub where neon data-streams merge with brilliant natural light. High-energy, high-status, and unapologetically future-focused.",
             "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independent Income Setup"],
             "cta_style": "Visionary, inclusive, community-proof"
         },
@@ -299,7 +299,7 @@ class AudienceProfile:
                 "Why strategic autonomy is the ultimate 2026 career luxury.",
                 "Chapter 5: The blueprint for your high-status second act."
             ],
-            "visual_base": "A serene former executive, dressed in premium weekend-luxe (Cashmere, silk), enjoying an expensive silence in a Mediterranean garden. Shot on Leica M11. Natural golden-hour light.",
+            "visual_base": "A serene former executive in premium weekend-luxe (cashmere and silk). Enjoying a moment of absolute autonomy in a lush Mediterranean garden at the peak of the golden hour. A sense of ultimate liberation and quiet wealth. Shot on Leica M11.",
             "lead_magnets": ["The 18-Month Sovereign Exit Blueprint", "Identity Decoupling: The Boardroom to Freedom Guide", "Corporate Escape: The Liquidity Bridge Protocol"],
             "cta_style": "Strategic, empowering, elite"
         },
@@ -339,7 +339,7 @@ class AudienceProfile:
                 "The 100x Growth Blueprint: Turning geometric networking into a global standard.",
                 "Universal Abundance: The leadership strategy for the Digital Gold Rush."
             ],
-            "visual_base": "A world-class Global Network Architect and Community Leader, embodying the ultimate 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment of high-level partnership inside a sleek, futuristic aviation hub or a private Mediterranean lounge.",
+            "visual_base": "A world-class Global Network Architect embodying the 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment inside a sleek, futuristic private terminal. Atmosphere is international, elite, and expanding.",
             "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach Guide"],
             "cta_style": "High-status, visionary, collaborative"
         },
@@ -368,7 +368,7 @@ class AudienceProfile:
                 "Geometric cashflow: Why the new elite don't trade hours for dollars.",
                 "Chapter 2: The architecture of an autonomous wealth machine."
             ],
-            "visual_base": "A world-class 'Liquidity Sovereign' relaxed in a high-end minimalist setting, embodying effortless authority. Natural light hitting expensive textures (linen, stone). Shot on Leica M11.",
+            "visual_base": "A world-class 'Liquidity Sovereign' relaxed in a high-end minimalist setting. Natural light casting soft shadows on rich textures (linen, stone, silk). Embodying effortless authority and the spirit of 'Sleep-Velocity' wealth. Shot on Leica M11.",
             "lead_magnets": ["The Autonomous Yield Protocol", "Geometric Cashflow: The 2026 Architecture", "Quiet Wealth: The 1-Click Setup"],
             "cta_style": "Effortless, logical, high-value"
         },
@@ -483,7 +483,7 @@ class ContentCategory:
                 "italic": ["Subtle urgency phrases", "timestamps"],
                 "hyperlink": ["Product link", "Waitlist", "Early access"]
             },
-            "visual_scene": "celebrating a major product breakthrough, holding a sleek matte-black Pintopay crypto card with gold laser-etched details."
+            "visual_scene": "In a moment of profound success, holding the matte-black, laser-etched Pintopay card. Warm lighting catches the metallic details, reflecting a new era of financial power."
         },
         
         "fomo": {
@@ -505,7 +505,7 @@ class ContentCategory:
                 "italic": ["Whispers of insider info"],
                 "hyperlink": ["Join now", "Secure spot", "Limited access"]
             },
-            "visual_scene": "experiencing an intense 'don't miss out' moment, looking at a screen with rapid upward growth curves, dramatic cinematic side-lighting."
+            "visual_scene": "Observing a surge of geometric growth on a minimalist display. Cinematic side-lighting and a sense of high-stakes urgency and strategic realization."
         },
         
         "authority": {
@@ -527,7 +527,7 @@ class ContentCategory:
                 "italic": ["Industry myths", "common assumptions"],
                 "hyperlink": ["Case study", "Whitepaper", "Proof"]
             },
-            "visual_scene": "sharing elite financial insights, poised and knowledgeable, surrounded by holographic-style clean digital data on glass screens."
+            "visual_scene": "Sharing elite insights within a sophisticated digital sanctuary. Surrounded by clean, architectural data-visualizations reflecting intellectual mastery and calm authority."
         },
         
         "lifestyle": {
@@ -549,7 +549,7 @@ class ContentCategory:
                 "italic": ["Personal reflections", "quotes"],
                 "hyperlink": ["Start your journey", "See how", "Transform now"]
             },
-            "visual_scene": "enjoying the rewards of decentralization, a sunset view from a luxury car interior or private marina, symbols of ultimate freedom."
+            "visual_scene": "Embodying modern freedom; a sunset reflection on the polished surfaces of a luxury environment, signifying a life decoupled from traditional constraints."
         },
         
         "income": {
@@ -571,7 +571,7 @@ class ContentCategory:
                 "italic": ["Disclaimers", "personal journey"],
                 "hyperlink": ["See my results", "Start earning", "Join network"]
             },
-            "visual_scene": "viewing a notification on a premium smartphone showing a large successful USDT deposit from P2PHub system."
+            "visual_scene": "A subtle, high-status notification on a premium device. The background is a blurred, sun-drenched sanctuary of success and quiet abundance."
         },
         
         "network": {
@@ -593,7 +593,7 @@ class ContentCategory:
                 "italic": ["Visionary statements"],
                 "hyperlink": ["Build your network", "Join movement", "Partner program"]
             },
-            "visual_scene": "surrounded by a high-energy collaborative team in a modern premium co-working space, high-fives and shared success energy."
+            "visual_scene": "Inside a world-class architectural co-working space. An atmosphere of shared elite achievement and magnetic network energy."
         },
         
         "tutorial": {
@@ -615,7 +615,7 @@ class ContentCategory:
                 "italic": ["Pro tips", "warnings"],
                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
             },
-            "visual_scene": "explaining a simple 1-click wealth protocol on a user-friendly mobile app, pointing at a clear 'Activate' button on the screen."
+            "visual_scene": "Effortlessly navigating a sleek, 1-click wealth protocol on a high-end interface. The aesthetic is clean, fast, and empowering."
         },
         
         "partners_cards": {
@@ -648,7 +648,7 @@ class ContentCategory:
                 "italic": ["Chapter 1: The Escape", "Total control of your money"],
                 "hyperlink": ["Order Your Elite Card", "Get Early Access", "Secure My Card"]
             },
-            "visual_scene": "A close-up of a matte black, laser-etched Pintopay card being used at a high-end luxury boutique or a private airport lounge, glowing with an 'authorized' neon pulse."
+            "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catches the intricate etchings and the 'authorized' status pulse."
         },
         "partners_network": {
             "name": "Empire Scaling (Network Focus)",
@@ -680,7 +680,7 @@ class ContentCategory:
                 "italic": ["Episode 1: The Architecture", "Grow while you sleep"],
                 "hyperlink": ["Build My Empire", "Join Elite Partners", "Scale My Network"]
             },
-            "visual_scene": "A futuristic operations center where a partner is watching a 3D hologram of their global network expanding in real-time, nodes connecting across continents in a web of golden light."
+            "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a minimalist, cinematic representation of global geometric scale."
         }
     }
 
