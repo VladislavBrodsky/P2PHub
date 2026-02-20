@@ -688,7 +688,7 @@
             "id": "psy6",
             "trigger": "IDENTITY",
             "title": "The Us vs. Them",
-            "desc": "Create a common enemy (Banks/Fees). 'They tax your sweat. We own our protocol.'",
+            "desc": "Create a common enemy (Banks/Fees). 'They tax your sweat. We own our system.'",
             "action": "Post a 'Declare Independence' manifesto."
           },
           {
@@ -815,7 +815,7 @@
         "Lifetime Access Forever",
         "All Elite AI Models",
         "Multi-Platform Broadcast",
-        "VIP Growth Protocols"
+        "VIP Growth Strategies"
       ],
       "secure_slot_btn": "SECURE MY SLOT NOW",
       "buy_pro_btn": "BUY PRO",
@@ -839,7 +839,7 @@
       "then_verify": "VERIFY SIGNAL",
       "paste_tx_hash": "PASTE YOUR TRANSACTION HASH",
       "verify_transaction": "INITIALIZE VERIFICATION",
-      "trc20_warning": "USE TRC20 PROTOCOL ONLY",
+      "trc20_warning": "USE TRC20 NETWORK ONLY",
       "transfer_exact": "TRANSFER EXACTLY ${{amount}} USDT",
       "extend_membership": "EXTEND / UPGRADE PLAN"
     },
@@ -867,7 +867,7 @@
       "q5": "What is the Network Income Engine?",
       "a5": "It's our multi-level passive income system. When anyone in your downline makes a card transaction, you earn a commission automatically. PRO unlocks 9 levels deep, PRO+ unlocks all 20 levels — meaning 20x more passive income reach.",
       "q6": "How much faster will my team grow with PRO?",
-      "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence protocols and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
+      "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence systems and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
       "q7": "Can I upgrade from PRO to PRO+ later?",
       "a7": "Yes. You can upgrade at any time from inside the app. Your existing PRO period is credited toward the PRO+ upgrade price. Upgrading sooner means more passive income earned while the price is still at the current level.",
       "view_faq_center": "VIEW FULL FAQ CENTER"
