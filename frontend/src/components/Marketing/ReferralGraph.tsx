@@ -21,6 +21,12 @@ export const ReferralGraph = () => {
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
 
+    const partnersCount = useMemo(() => {
+        const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
+        const pseudoRandom = Math.abs(Math.sin(seed * 12345));
+        return Math.floor(pseudoRandom * (765 - 333 + 1)) + 333;
+    }, []);
+
     // Optimized counter animation for income - reduced frequency
     useEffect(() => {
         const interval = setInterval(() => {
@@ -396,22 +402,22 @@ export const ReferralGraph = () => {
                                     </div>
 
                                     <div className="space-y-2 sm:space-y-3 px-2">
-                                        <h3 className="text-2xl sm:text-3xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
+                                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
                                             {t('viral_funnel.cta')}
                                         </h3>
-                                        <p className="text-[9px] sm:text-[11px] font-black text-emerald-500 uppercase tracking-[0.3em]">
-                                            92% OF ELITE USERS ACTIVATE NOW
+                                        <p className="text-[8px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] sm:tracking-[0.3em]">
+                                            {t('viral_funnel.elite_users')}
                                         </p>
                                     </div>
 
                                     <div className="w-full space-y-3 sm:space-y-4">
                                         <button
                                             onClick={handleUpgrade}
-                                            className="w-full h-14 sm:h-16 vibing-emerald-animated rounded-[2rem] text-white font-black text-xs sm:text-sm uppercase tracking-[0.2em] shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group"
+                                            className="w-full h-12 sm:h-14 vibing-emerald-animated rounded-[2rem] text-white font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group px-2"
                                         >
                                             <div className="flex items-center justify-center gap-2 sm:gap-3">
                                                 <span>{t('viral_funnel.cta')}</span>
-                                                <Zap className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-125 transition-transform" />
+                                                <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-125 transition-transform" />
                                             </div>
                                         </button>
 
@@ -428,11 +434,16 @@ export const ReferralGraph = () => {
                                         <div className="flex items-center gap-3 text-left">
                                             <div className="flex -space-x-2">
                                                 {[1, 2, 3].map(i => (
-                                                    <div key={i} className="w-6 h-6 rounded-full border border-white dark:border-black bg-slate-200 dark:bg-slate-800" />
+                                                    <img
+                                                        key={i}
+                                                        src={`https://api.dicebear.com/7.x/notionists/svg?seed=${partnersCount + i * 7}`}
+                                                        alt="Partner avatar"
+                                                        className="w-8 h-8 rounded-full border-2 border-slate-100 dark:border-[#020617] bg-white dark:bg-slate-800"
+                                                    />
                                                 ))}
                                             </div>
-                                            <p className="text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-tight">
-                                                12,402+ PARTNERS DEPLOYED<br />AUTONOMOUS NODES TODAY
+                                            <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-tight tracking-wider">
+                                                {t('viral_funnel.deployed_partners', { count: partnersCount })}
                                             </p>
                                         </div>
                                     </div>

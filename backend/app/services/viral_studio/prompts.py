@@ -176,7 +176,7 @@ Referral Link: {ref_link}
    - Split text into 3-5 distinct short paragraphs (1-3 sentences maximum per paragraph) with double line breaks for mobile readability.
    - 🚫 ABSOLUTELY NO weird markdown asterisks (e.g., *Passive Income System* or *Sovereign Abundance*) around random words. Keep the text naturally clean.
    - 🎯 EMOJIS: Place emojis ONLY at the beginning of a paragraph or sentence. NEVER at the end of a sentence or paragraph. Use 1-2 maximum.
-2. **HASHTAGS:** Strict limit of 2-4 UNIQUE hashtags in one line. Do not put them in the body text or use them inline.
+2. **HASHTAGS:** Strict limit of 2-4 UNIQUE hashtags in one line. Do not put them in the body text or use them inline. ALL hashtags MUST be translated into {language} (e.g. if Russian, use Russian text in the hashtag, not English).
 3. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords: {', '.join(seo_keywords)}.
 
 **STORYTELLING CONTEXT:**
