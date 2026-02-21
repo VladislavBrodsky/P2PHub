@@ -321,27 +321,58 @@ export default function SubscriptionPage() {
                             <h1 className={`text-[42px] font-black tracking-tighter leading-none mb-3 italic uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
                                 {isProPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('common.pro_active', 'PRO Active')}
                             </h1>
-                            <p className="text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed opacity-80 max-w-[280px] mx-auto">
-                                {t('subscription.upgrade.desc', 'Lifetime access is available for a limited time. Pricing may switch to annual subscriptions after this period.')}
-                            </p>
+                            <div className="flex flex-col items-center gap-1.5">
+                                <p className="text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-tight opacity-90 max-w-[280px] mx-auto">
+                                    {t('subscription.upgrade.desc', 'Lifetime access is closing forever. Pricing will switch to annual subscriptions next week.')}
+                                </p>
+                                <div className="flex items-center gap-1.5 text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse">
+                                    <Clock size={12} strokeWidth={3} />
+                                    {t('subscription.upgrade.final_call', 'FINAL WINDOW OPEN')}
+                                </div>
+                            </div>
                         </div>
 
-                        {/* Performance Stats Bar */}
+                        {/* Intensive FOMO Stats Board */}
                         {proStats && (
-                            <div className="w-full max-w-[280px] p-4 bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-2xl shadow-inner-sm">
-                                <div className="flex items-center justify-between text-[10px] font-bold text-slate-400 dark:text-white/30 uppercase tracking-widest mb-3">
-                                    <span className="flex items-center gap-1.5">
-                                        <Target size={12} className="text-indigo-500" />
-                                        {t('subscription.upgrade.lifetime_slots', 'LIFETIME SLOTS REMAINING')}
-                                    </span>
-                                    <span className="text-slate-900 dark:text-white font-black tabular-nums">{proStats.sold} / {proStats.total}</span>
+                            <div className="w-full max-w-[300px] p-5 bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-premium relative overflow-hidden group">
+                                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-rose-500/5 pointer-events-none" />
+
+                                <div className="flex items-center justify-between mb-4 relative z-10">
+                                    <div className="flex flex-col items-start">
+                                        <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.2em]">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                                            {t('subscription.upgrade.live_demand', 'LIVE DEMAND')}
+                                        </div>
+                                        <div className="text-[14px] font-black text-slate-900 dark:text-white tracking-tighter mt-0.5">
+                                            {t('subscription.upgrade.lifetime_slots', 'LIFETIME SLOTS')}
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-[18px] font-black text-slate-900 dark:text-white tabular-nums leading-none">
+                                            {proStats.total - proStats.sold}
+                                            <span className="text-[10px] text-slate-400 dark:text-white/30 ml-1 font-bold">LEFT</span>
+                                        </div>
+                                        <div className="text-[8px] font-black text-rose-500 uppercase tracking-widest mt-1 animate-pulse">
+                                            {t('subscription.upgrade.selling_fast', 'SELLING FAST')}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="h-2 bg-slate-100 dark:bg-black/40 rounded-full overflow-hidden p-px">
+
+                                <div className="relative h-3 bg-slate-100 dark:bg-black/60 rounded-full overflow-hidden p-[2px] shadow-inner-sm border border-slate-200/50 dark:border-white/5">
                                     <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }}
-                                        className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 rounded-full shadow-[0_0_12px_rgba(99,102,241,0.5)]"
-                                    />
+                                        transition={{ duration: 1.5, ease: "easeOut" }}
+                                        className="h-full bg-linear-to-r from-indigo-600 via-fuchsia-600 to-orange-500 rounded-full relative"
+                                    >
+                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent w-full h-full animate-shimmer-slide" />
+                                    </motion.div>
+                                </div>
+
+                                <div className="mt-4 flex items-center justify-center gap-4 text-[8px] font-black text-slate-400 dark:text-white/20 uppercase tracking-[0.3em] relative z-10">
+                                    <span className="flex items-center gap-1"><div className="w-1 h-1 rounded-full bg-indigo-500" /> V.1.8.12</span>
+                                    <span className="flex items-center gap-1"><div className="w-1 h-1 rounded-full bg-indigo-500" /> ENCRYPTED</span>
+                                    <span className="flex items-center gap-1"><div className="w-1 h-1 rounded-full bg-indigo-500" /> GLOBALLY SYNCED</span>
                                 </div>
                             </div>
                         )}
