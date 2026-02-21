@@ -846,7 +846,8 @@
   "open_wallet_app": "OPEN SYSTEM WALLET",
   "then_verify": "VERIFY SIGNAL",
   "paste_tx_hash": "PASTE YOUR TRANSACTION HASH",
-  "verify_transaction": "INITIALIZE VERIFICATION",
+  "final_instruction": "IMPORTANT: After sending payment, you MUST paste your transaction hash below and click 'I PAID' to verify.",
+  "verify_transaction": "I PAID",
   "trc20_warning": "USE TRC20 NETWORK ONLY",
   "transfer_exact": "TRANSFER EXACTLY ${{amount}} USDT",
   "extend_membership": "EXTEND / UPGRADE PLAN"

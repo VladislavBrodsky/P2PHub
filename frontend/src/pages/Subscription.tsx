@@ -642,12 +642,14 @@ export default function SubscriptionPage() {
                                         <div className="flex items-center gap-1.5 mt-0.5">
                                             <span className="text-[10px] font-black text-slate-300 dark:text-white/10 transition-all duration-500">{inactiveValue}</span>
                                             <div className="w-px h-3 bg-slate-200 dark:bg-white/10" />
-                                            <span className={`text-[16px] font-black transition-all duration-500 flex items-center gap-1 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]'}`}>
-                                                {activeValue}
+                                            <div className="flex items-center gap-1">
+                                                <span className={`text-[16px] font-black transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]'}`}>
+                                                    {activeValue}
+                                                </span>
                                                 {selectedPlan === 'PRO_PLUS' && (
-                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1 rounded-xs animate-pulse tracking-tighter">TURBO</span>
+                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1 tracking-tighter rounded-xs animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.4)]">TURBO</span>
                                                 )}
-                                            </span>
+                                            </div>
                                         </div>
                                     </button>
                                 );
