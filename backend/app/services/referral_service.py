@@ -165,11 +165,21 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 reference_id=f"ref_xp_{partner.id}_{referrer.id}"
             ))
 
-            # Log Audit
+            # Log Audit — XP Award
             await audit_service.log_xp_award(
                 session=session, partner_id=referrer.id, new_user_id=partner.id,
                 xp_amount=xp_gain, level=level, is_pro=referrer.is_pro,
                 xp_before=xp_before, xp_after=xp_after
+            )
+            
+            # Log Audit — Referral Chain (creates immutable event ledger entry per level)
+            await audit_service.log_referral_signup(
+                session=session,
+                new_partner_id=partner.id,
+                new_partner_tg=partner.username or str(partner.telegram_id),
+                referrer_id=referrer.id,
+                referrer_tg=referrer.username or str(referrer.telegram_id),
+                level=level
             )
 
             try:

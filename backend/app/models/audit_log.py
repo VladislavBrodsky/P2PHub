@@ -12,6 +12,11 @@ class ActionType(str, Enum):
     COMMISSION = "COMMISSION"
     PENALTY = "PENALTY"
     MISC = "MISC"
+    # Extended event types for full audit trail
+    NOTIFICATION = "NOTIFICATION"   # Every notification send attempt
+    XP_AWARD = "XP_AWARD"           # Every XP transaction
+    REFERRAL = "REFERRAL"           # Every referral signup event
+    RECONCILIATION = "RECONCILIATION" # Discrepancy flags from reconciler
 
 
 class AuditLog(SQLModel, table=True):

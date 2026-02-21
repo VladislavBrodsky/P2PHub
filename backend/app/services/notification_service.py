@@ -151,14 +151,13 @@ class NotificationService:
 
         try:
             # 0. Check if user blocked the bot (Redis-cached check)
-            # MISSION-CRITICAL: High priority messages (Security/Payments) bypass the "paused" setting.
             if priority != "high" and await rate_limit_service.is_blocked(str(chat_id)):
-                logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id} (notifications paused)")
+                logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id}")
                 return
 
             # High-performance Deduplication Check
             if not bypass_dedup and await rate_limit_service.is_duplicate(str(chat_id), text, salt=salt):
-                logger.info(f"🚫 [DEDUP] Skipping duplicate message for {chat_id} (salt: {salt})")
+                logger.info(f"🚫 [DEDUP] Skipping duplicate for {chat_id} (salt: {salt})")
                 return
 
             payload = NotificationPayload(
@@ -171,9 +170,9 @@ class NotificationService:
             )
             
             await send_telegram_task.kiq(payload.model_dump())
-            logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id} (prio: {priority})")
+            logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id} (prio: {priority}, salt: {salt})")
             
-            # #comment Phase 2: Visibility. Log 'enqueued' status to DB so Admin can see the queue state.
+            # Structured event ledger: every notification is recorded with salt/event_type
             try:
                 from app.services.audit_service import audit_service
                 from app.models.partner import engine
@@ -181,12 +180,13 @@ class NotificationService:
                 from sqlmodel.ext.asyncio.session import AsyncSession
                 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
                 async with async_session() as session:
-                    await audit_service.log_event(
+                    await audit_service.log_notification(
                         session=session,
-                        entity_type="notification",
-                        entity_id=str(chat_id),
-                        action="enqueued",
-                        details={"prio": priority, "p_mode": parse_mode, "text_preview": text[:100]}
+                        chat_id=str(chat_id),
+                        event_type=salt or "unknown",
+                        status="enqueued",
+                        priority=priority,
+                        salt=salt
                     )
                     await session.commit()
             except Exception as ae:

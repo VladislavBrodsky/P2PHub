@@ -361,3 +361,228 @@ async def audit_tree_endpoint(
     """
     from app.services.maintenance_service import check_tree_integrity
     return await check_tree_integrity(session)
+
+# ──────────────────────────────────────────────────────────────────────────────
+# EVENT LEDGER ENDPOINTS — Emergency Audit & Cross-Check Tools
+# ──────────────────────────────────────────────────────────────────────────────
+
+@router.get("/ledger/events")
+async def get_event_ledger(
+    action_type: str | None = None,
+    partner_id: int | None = None,
+    entity_id: str | None = None,
+    action: str | None = None,
+    limit: int = 100,
+    offset: int = 0,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Query the full event ledger. Supports filtering by action type, partner, and action name.
+    
+    Use this for emergency cross-checking:
+    - action_type=COMMISSION → all commission events
+    - action_type=XP_AWARD → all XP events
+    - action_type=NOTIFICATION → all notification dispatch attempts
+    - action_type=REFERRAL → all referral signup events
+    - action_type=PAYMENT → all payment events
+    - action_type=RECONCILIATION → all flagged discrepancies
+    """
+    from sqlmodel import select
+    from app.models.audit_log import ActionType, AuditLog
+    stmt = select(AuditLog)
+
+    if action_type:
+        try:
+            stmt = stmt.where(AuditLog.action_type == ActionType(action_type.upper()))
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid action_type. Valid: {[e.value for e in ActionType]}")
+    if partner_id:
+        stmt = stmt.where(AuditLog.partner_id == partner_id)
+    if entity_id:
+        stmt = stmt.where(AuditLog.entity_id == entity_id)
+    if action:
+        stmt = stmt.where(AuditLog.action.contains(action))
+
+    stmt = stmt.order_by(AuditLog.created_at.desc()).offset(offset).limit(min(limit, 500))
+    result = await session.exec(stmt)
+    events = result.all()
+
+    return [
+        {
+            "id": e.id,
+            "partner_id": e.partner_id,
+            "action_type": e.action_type,
+            "action": e.action,
+            "description": e.description,
+            "entity_type": e.entity_type,
+            "entity_id": e.entity_id,
+            "details": e.details,
+            "created_at": e.created_at.isoformat() if e.created_at else None
+        }
+        for e in events
+    ]
+
+
+@router.get("/ledger/notifications/{chat_id}")
+async def get_notification_history(
+    chat_id: str,
+    limit: int = 50,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Returns all notification ledger entries for a specific Telegram chat_id.
+    Use this to answer: 'Was @user notified about their commission from yesterday?'
+    """
+    from sqlmodel import select
+    from app.models.audit_log import ActionType, AuditLog
+    stmt = (
+        select(AuditLog)
+        .where(AuditLog.action_type == ActionType.NOTIFICATION)
+        .where(AuditLog.entity_id == chat_id)
+        .order_by(AuditLog.created_at.desc())
+        .limit(min(limit, 200))
+    )
+    result = await session.exec(stmt)
+    events = result.all()
+
+    return {
+        "chat_id": chat_id,
+        "total": len(events),
+        "events": [
+            {
+                "id": e.id,
+                "action": e.action,
+                "description": e.description,
+                "event_type": (e.details or {}).get("event_type"),
+                "priority": (e.details or {}).get("priority"),
+                "salt": (e.details or {}).get("salt"),
+                "error": (e.details or {}).get("error"),
+                "created_at": e.created_at.isoformat() if e.created_at else None
+            }
+            for e in events
+        ]
+    }
+
+
+@router.get("/ledger/partner/{partner_id}/timeline")
+async def get_partner_event_timeline(
+    partner_id: int,
+    limit: int = 200,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Full event timeline for a partner — all commissions, XP awards, referrals,
+    notifications, and payments in chronological order.
+    The ultimate emergency tool for investigating any user's history.
+    """
+    from sqlmodel import select
+    from app.models.audit_log import AuditLog
+    stmt = (
+        select(AuditLog)
+        .where(AuditLog.partner_id == partner_id)
+        .order_by(AuditLog.created_at.desc())
+        .limit(min(limit, 500))
+    )
+    result = await session.exec(stmt)
+    events = result.all()
+
+    # Group by type for quick summary
+    summary: dict[str, int] = {}
+    for e in events:
+        key = e.action_type or "MISC"
+        summary[key] = summary.get(key, 0) + 1
+
+    return {
+        "partner_id": partner_id,
+        "total_events": len(events),
+        "summary": summary,
+        "timeline": [
+            {
+                "id": e.id,
+                "action_type": e.action_type,
+                "action": e.action,
+                "description": e.description,
+                "details": e.details,
+                "created_at": e.created_at.isoformat() if e.created_at else None
+            }
+            for e in events
+        ]
+    }
+
+
+@router.post("/ledger/reconcile")
+async def run_live_reconciliation(
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Live cross-check: compares DB XP/balance vs sum of all logged transactions.
+    Flags and logs any discrepancies to the RECONCILIATION ledger.
+    This is the emergency double-check system for all distributions.
+    """
+    from sqlalchemy import func
+    from sqlmodel import select
+    from app.models.audit_log import ActionType, AuditLog
+    from app.models.partner import Earning, Partner, XPTransaction
+    from app.services.audit_service import audit_service
+
+    result = await session.exec(select(Partner.id, Partner.telegram_id, Partner.xp, Partner.balance))
+    partners = result.all()
+
+    xp_sums_result = await session.exec(
+        select(XPTransaction.partner_id, func.sum(XPTransaction.amount).label("total"))
+        .group_by(XPTransaction.partner_id)
+    )
+    xp_sums = {row.partner_id: float(row.total or 0) for row in xp_sums_result.all()}
+
+    bal_sums_result = await session.exec(
+        select(Earning.partner_id, func.sum(Earning.amount).label("total"))
+        .where(Earning.currency == "USDT")
+        .group_by(Earning.partner_id)
+    )
+    bal_sums = {row.partner_id: float(row.total or 0) for row in bal_sums_result.all()}
+
+    flags = []
+    for p_id, p_tg_id, p_xp, p_balance in partners:
+        xp_sum = xp_sums.get(p_id, 0.0)
+        bal_sum = bal_sums.get(p_id, 0.0)
+        xp_diff = float(p_xp) - xp_sum
+        bal_diff = float(p_balance) - bal_sum
+
+        if abs(xp_diff) > 0.01:
+            await audit_service.log_reconciliation_flag(
+                session=session,
+                partner_id=p_id,
+                flag_type="XP_MISMATCH",
+                expected=xp_sum,
+                actual=float(p_xp),
+                diff=xp_diff,
+                context={"telegram_id": str(p_tg_id)}
+            )
+            flags.append({"type": "XP_MISMATCH", "partner_id": p_id, "telegram_id": str(p_tg_id), "diff": round(xp_diff, 4)})
+
+        if abs(bal_diff) > 0.01:
+            await audit_service.log_reconciliation_flag(
+                session=session,
+                partner_id=p_id,
+                flag_type="BALANCE_MISMATCH",
+                expected=bal_sum,
+                actual=float(p_balance),
+                diff=bal_diff,
+                context={"telegram_id": str(p_tg_id)}
+            )
+            flags.append({"type": "BALANCE_MISMATCH", "partner_id": p_id, "telegram_id": str(p_tg_id), "diff": round(bal_diff, 4)})
+
+    if flags:
+        await session.commit()
+
+    return {
+        "status": "anomalous" if flags else "healthy",
+        "total_checked": len(partners),
+        "discrepancies_found": len(flags),
+        "flags": flags[:100]
+    }
+

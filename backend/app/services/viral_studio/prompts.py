@@ -1,3 +1,4 @@
+import random
 from typing import Any
 
 from app.core.cmo_intelligence import (
@@ -190,12 +191,44 @@ Do not worry about X (Twitter) limits for this synthesis—the system will handl
 RETURN ONLY VALID JSON.
 """
 
+# Gender pools for diverse image generation
+_GENDER_VARIANTS = [
+    {
+        "label": "man",
+        "subject": "a self-assured, high-status man",
+        "descriptors": "sharp jawline, calm confidence, well-groomed",
+    },
+    {
+        "label": "woman",
+        "subject": "a poised, high-status woman",
+        "descriptors": "elegant features, radiant confidence, effortlessly stylish",
+    },
+]
+
+
 def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
     audience_intel = intel.get("audience", {})
     category_strategy = intel.get("strategy", {})
-    
-    audience_desc = audience_intel.get("visual_base", "An authoritative and sophisticated individual of undeniable status.")
-    scene_desc = category_strategy.get("visual_scene", "navigating a moment of high-stakes breakthrough in a private, ultra-modern setting.")
+
+    audience_desc = audience_intel.get(
+        "visual_base",
+        "An authoritative and sophisticated individual of undeniable status.",
+    )
+    scene_desc = category_strategy.get(
+        "visual_scene",
+        "navigating a moment of high-stakes breakthrough in a private, ultra-modern setting.",
+    )
+
+    # ── Gender diversity injection ─────────────────────────────────────────────
+    # Randomly pick between a man and an attractive woman so the generated images
+    # are diverse across sessions instead of always defaulting to a male subject.
+    gender = random.choice(_GENDER_VARIANTS)
+    gender_directive = (
+        f"SUBJECT GENDER (MANDATORY): The central human subject MUST be {gender['subject']} "
+        f"({gender['descriptors']}). This is a strict requirement — do not substitute "
+        f"with the opposite gender or a group of people."
+    )
+    # ──────────────────────────────────────────────────────────────────────────
 
     # Extract core theme from content if provided
     theme_context = ""
@@ -206,6 +239,7 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
 
     return (
         f"{IMAGE_RULES}\n\n"
+        f"{gender_directive}\n"
         f"SCENE SETUP: {audience_desc} {scene_desc} \n"
         f"{theme_context}"
         f"EMOTION: Deep empathy, authenticity, and high-status human resonance. The image must feel like a soul-to-soul transmission, not just a professional shot. \n"

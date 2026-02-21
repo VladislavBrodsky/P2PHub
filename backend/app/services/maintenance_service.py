@@ -500,3 +500,104 @@ async def cleanup_notification_retries():
             logger.info(f"✅ Cleaned up {count} stale failed notification retries.")
         else:
             logger.info("✅ No stale failed notifications found.")
+
+@broker.task(task_name="nightly_reconciliation_task", schedule=[{"cron": "0 1 * * *"}])  # 1 AM daily
+async def nightly_reconciliation_task():
+    """
+    Nightly automated event ledger reconciliation.
+    Cross-checks every partner's XP and USDT balance against the sum of all
+    XPTransaction and Earning records. Flags and logs any discrepancy via
+    audit_service.log_reconciliation_flag(), and alerts admins if critical.
+    
+    This is the emergency double-check system — an alternative source of truth
+    to verify that commissions, XP, and distributions have been accurately applied.
+    """
+    from sqlalchemy import func
+    from sqlalchemy.orm import sessionmaker
+
+    from app.models.audit_log import ActionType
+    from app.models.partner import Earning, Partner, XPTransaction, engine
+    from app.services.audit_service import audit_service
+    from app.services.notification_service import notification_service
+    from sqlmodel import select
+    from sqlmodel.ext.asyncio.session import AsyncSession
+
+    logger.info("🔍 Nightly Reconciliation Task: Starting...")
+
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    async with async_session() as session:
+        # Load all partners with their current values
+        result = await session.exec(select(Partner.id, Partner.telegram_id, Partner.xp, Partner.balance))
+        partners = result.all()
+
+        # Compute sums from XPTransaction
+        xp_sums_result = await session.exec(
+            select(XPTransaction.partner_id, func.sum(XPTransaction.amount).label("total"))
+            .group_by(XPTransaction.partner_id)
+        )
+        xp_sums = {row.partner_id: float(row.total or 0) for row in xp_sums_result.all()}
+
+        # Compute sums from Earning (USDT only)
+        bal_sums_result = await session.exec(
+            select(Earning.partner_id, func.sum(Earning.amount).label("total"))
+            .where(Earning.currency == "USDT")
+            .group_by(Earning.partner_id)
+        )
+        bal_sums = {row.partner_id: float(row.total or 0) for row in bal_sums_result.all()}
+
+        flag_count = 0
+        for p_id, p_tg_id, p_xp, p_balance in partners:
+            xp_sum = xp_sums.get(p_id, 0.0)
+            bal_sum = bal_sums.get(p_id, 0.0)
+            xp_diff = float(p_xp) - xp_sum
+            bal_diff = float(p_balance) - bal_sum
+
+            if abs(xp_diff) > 0.01:
+                await audit_service.log_reconciliation_flag(
+                    session=session,
+                    partner_id=p_id,
+                    flag_type="XP_MISMATCH",
+                    expected=xp_sum,
+                    actual=float(p_xp),
+                    diff=xp_diff,
+                    context={"telegram_id": str(p_tg_id)}
+                )
+                flag_count += 1
+
+            if abs(bal_diff) > 0.01:
+                await audit_service.log_reconciliation_flag(
+                    session=session,
+                    partner_id=p_id,
+                    flag_type="BALANCE_MISMATCH",
+                    expected=bal_sum,
+                    actual=float(p_balance),
+                    diff=bal_diff,
+                    context={"telegram_id": str(p_tg_id)}
+                )
+                flag_count += 1
+
+        if flag_count > 0:
+            await session.commit()
+            logger.warning(f"⚠️ Reconciliation: {flag_count} discrepancies found and logged.")
+
+            # Alert admins if flags encountered
+            if flag_count >= 5:
+                alert = (
+                    f"⚠️ <b>NIGHTLY RECONCILIATION ALERT</b>\n\n"
+                    f"Found <b>{flag_count}</b> discrepancies in XP/USDT balances.\n\n"
+                    f"Check Admin Panel → Ledger → Reconciliation for details.\n"
+                    f"Run <code>POST /admin/ledger/reconcile</code> for live data."
+                )
+                for admin_id in settings.ADMIN_USER_IDS:
+                    try:
+                        await notification_service.send_critical(
+                            chat_id=str(admin_id),
+                            text=alert,
+                            parse_mode="HTML",
+                            bypass_dedup=True
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to alert admin {admin_id}: {e}")
+        else:
+            logger.info(f"✅ Nightly Reconciliation: All {len(partners)} partners healthy. No discrepancies.")
+
