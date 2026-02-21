@@ -50,11 +50,13 @@ async def post_to_x(partner: Partner, content: str, image_path: str | None) -> d
         tweet_id = response.data.get("id")
         logger.info(f"✅ X Posting Successful: Tweet ID {tweet_id}")
         
+        # Try to get user handle if possible (usually we know it from partner)
         return {
             "status": "success", 
             "platform": "x", 
             "msg": f"Successfully posted to X! Tweet ID: {tweet_id}",
-            "tweet_id": tweet_id
+            "tweet_id": tweet_id,
+            "channel_name": f"X: {partner.username or 'User'}"
         }
     except Exception as e:
         logger.error(f"❌ X Posting failed: {e}")
@@ -93,12 +95,15 @@ async def post_to_telegram(partner: Partner, content: str, image_path: str | Non
     # Parallel Execution for PRO+ Speed
     sent_msg_ids = await asyncio.gather(*tasks)
 
-    for i, msg_id in enumerate(sent_msg_ids):
+    for i, res_data in enumerate(sent_msg_ids):
         channel_id = channels[i]
-        if msg_id:
+        if res_data:
             success_count += 1
-            message_ids.append(f"{channel_id}:{msg_id}")
-            results.append(f"✅ {channel_id}")
+            msg_id = res_data if isinstance(res_data, (int, str)) else res_data.get("message_id")
+            chat_name = res_data.get("chat_name") if isinstance(res_data, dict) else channel_id
+            
+            message_ids.append(f"{channel_id}:{msg_id}:{chat_name}")
+            results.append(f"✅ {chat_name}")
         else:
             results.append(f"❌ {channel_id}")
 
@@ -156,7 +161,8 @@ async def _send_telegram_photo(channel_id: str, image_path: str, content: str) -
         # Telegram photo caption limit is 1024.
         if len(content) <= 1024:
             msg = await bot.send_photo(chat_id=channel_id, photo=photo, caption=content, parse_mode="HTML")
-            return msg.message_id
+            chat_name = msg.chat.title or msg.chat.username or channel_id
+            return {"message_id": msg.message_id, "chat_name": chat_name}
         else:
             # Smart truncation to avoid breaking HTML tags
             safe_cut = content[:1000]
@@ -172,8 +178,9 @@ async def _send_telegram_photo(channel_id: str, image_path: str, content: str) -
                 # Clean stray closing tags if we cut weirdly, or just send raw text.
                 clean_remainder = re.sub(r'</?(b|i|a)[^>]*>', '', remaining)
                 await bot.send_message(chat_id=channel_id, text=clean_remainder[:4096])
-                
-            return msg.message_id
+            
+            chat_name = msg.chat.title or msg.chat.username or channel_id
+            return {"message_id": msg.message_id, "chat_name": chat_name}
 
     except Exception as e:
         logger.error(f"Failed to post photo to {channel_id}: {e}")
@@ -183,7 +190,8 @@ async def _send_telegram_message(channel_id: str, content: str) -> int | None:
     from bot import bot
     try:
         msg = await bot.send_message(chat_id=channel_id, text=content[:4096], parse_mode="HTML")
-        return msg.message_id
+        chat_name = msg.chat.title or msg.chat.username or channel_id
+        return {"message_id": msg.message_id, "chat_name": chat_name}
     except Exception as e:
         logger.error(f"Failed to post message to {channel_id}: {e}")
         return None

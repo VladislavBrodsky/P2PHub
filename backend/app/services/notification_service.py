@@ -172,31 +172,55 @@ class NotificationService:
             
             await send_telegram_task.kiq(payload.model_dump())
             logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id} (prio: {priority})")
+            
+            # #comment Phase 2: Visibility. Log 'enqueued' status to DB so Admin can see the queue state.
+            try:
+                from app.services.audit_service import audit_service
+                from app.models.partner import engine
+                from sqlalchemy.orm import sessionmaker
+                from sqlmodel.ext.asyncio.session import AsyncSession
+                async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                async with async_session() as session:
+                    await audit_service.log_event(
+                        session=session,
+                        entity_type="notification",
+                        entity_id=str(chat_id),
+                        action="enqueued",
+                        details={"prio": priority, "p_mode": parse_mode, "text_preview": text[:100]}
+                    )
+                    await session.commit()
+            except Exception as ae:
+                logger.warning(f"Failed to log notification enqueue: {ae}")
+
         except Exception as e:
             logger.error(f"❌ Enqueue Failed for {chat_id}: {e}")
             
             # Record in DB if broker fails
-            from sqlalchemy.orm import sessionmaker
-            from sqlmodel.ext.asyncio.session import AsyncSession
+            try:
+                from sqlalchemy.orm import sessionmaker
+                from sqlmodel.ext.asyncio.session import AsyncSession
 
-            from app.models.notification_retry import NotificationRetry
-            from app.models.partner import engine
+                from app.models.notification_retry import NotificationRetry
+                from app.models.partner import engine
+                
+                async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                async with async_session() as session:
+                    retry_item = NotificationRetry(
+                        chat_id=int(chat_id),
+                        text=text,
+                        parse_mode=parse_mode,
+                        buttons=buttons,
+                        last_error=f"Queue Error: {str(e)[:100]}",
+                        status="pending"
+                    )
+                    session.add(retry_item)
+                    await session.commit()
+                    retry_item_id = retry_item.id
+            except Exception as de:
+                logger.error(f"Failed to save retry record: {de}")
+                retry_item_id = None
             
-            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-            async with async_session() as session:
-                retry_item = NotificationRetry(
-                    chat_id=int(chat_id),
-                    text=text,
-                    parse_mode=parse_mode,
-                    buttons=buttons,
-                    last_error=f"Queue Error: {str(e)[:100]}",
-                    status="pending"
-                )
-                session.add(retry_item)
-                await session.commit()
-                retry_item_id = retry_item.id
-            
-            # Emergency direct send fallback - pass ID to update it if successful
+            # Emergency direct send fallback
             await self._fallback_send(chat_id, text, parse_mode, buttons, retry_item_id=retry_item_id)
 
     async def _fallback_send(self, chat_id, text, parse_mode, buttons, retry_item_id: int | None = None):
@@ -235,6 +259,25 @@ class NotificationService:
                         await session.commit()
                 except Exception as fe:
                     logger.error(f"💥 Fallback failed for {chat_id}: {fe}")
+                    
+                    try:
+                        from sqlalchemy.orm import sessionmaker
+                        from sqlmodel.ext.asyncio.session import AsyncSession
+                        from app.models.partner import engine
+                        from app.services.audit_service import audit_service
+                        
+                        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+                        async with async_session() as session:
+                            await audit_service.log_event(
+                                session=session,
+                                entity_type="notification",
+                                entity_id=str(chat_id),
+                                action="fallback_error",
+                                details={"error": str(fe)[:200], "prio": "emergency"}
+                            )
+                            await session.commit()
+                    except Exception:
+                        pass
 
             task = asyncio.create_task(wrap_send())
             self._background_tasks.add(task)
@@ -363,10 +406,14 @@ async def notify_admin_payment_task(
             return
             
         safe_username = f"@{partner.username}" if partner.username else "No Username"
-        admin_targets = ["537873096"] 
+        admin_targets = [] 
         for a_id in settings.ADMIN_USER_IDS:
             if str(a_id) not in admin_targets:
                 admin_targets.append(str(a_id))
+        
+        # Fallback if settings are empty
+        if not admin_targets:
+            admin_targets = ["716720099"]
         
         # Fetch admin partners to respect their language preference
         stmt_admins = select(Partner).where(Partner.telegram_id.in_(admin_targets))

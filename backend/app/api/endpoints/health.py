@@ -150,10 +150,22 @@ async def notifications_health_check(
         res_err = await session.execute(stmt_err)
         last_error = res_err.scalar()
 
+        # 4. Check Redis TaskIQ Queue Depth
+        from app.services.redis_service import redis_service
+        # TaskIQ with Redis ListQueueBroker usually uses this key
+        # We can also check for other keys to see if workers are alive
+        queue_len = 0
+        try:
+            # ListQueueBroker default list key is 'taskiq_tasks'
+            queue_len = await redis_service.client.llen("taskiq_tasks")
+        except Exception:
+            pass
+
         return {
-            "status": "healthy" if stuck_count < 10 else "congested",
+            "status": "healthy" if stuck_count < 10 and queue_len < 50 else "congested",
             "counts": counts,
             "stuck_pending_10m": stuck_count,
+            "redis_queue_depth": queue_len,
             "last_error_sample": last_error,
             "server_time": now.isoformat()
         }

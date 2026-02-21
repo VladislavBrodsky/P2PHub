@@ -598,10 +598,10 @@ export const AdminPage = () => {
                                         </div>
                                         <div className="space-y-1 pl-3">
                                             <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                                                <Timer size={8} /> Stuck
+                                                <Database size={8} /> Queued
                                             </div>
-                                            <div className={`text-lg font-black font-mono tracking-tighter ${notificationsHealth.stuck_pending_10m > 0 ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`}>
-                                                {notificationsHealth.stuck_pending_10m || 0}
+                                            <div className={`text-lg font-black font-mono tracking-tighter ${notificationsHealth.redis_queue_depth > 0 ? 'text-indigo-400' : 'text-slate-400'}`}>
+                                                {notificationsHealth.redis_queue_depth || 0}
                                             </div>
                                         </div>
                                     </div>

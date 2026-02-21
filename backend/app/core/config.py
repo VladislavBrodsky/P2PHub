@@ -106,6 +106,7 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = Field(default="", validation_alias="OPENAI_API_KEY")
     GOOGLE_API_KEY: str = Field(default="", validation_alias="GOOGLE_API_KEY")
     GOOGLE_SERVICE_ACCOUNT_JSON: str = Field(default="{}", validation_alias="GOOGLE_SERVICE_ACCOUNT_JSON")
+    TWITTER_BEARER_TOKEN: str = Field(default="", validation_alias="TWITTER_BEARER_TOKEN")
 
     # --- SENTRY ---
     SENTRY_DSN: str | None = Field(default=None, validation_alias="SENTRY_DSN")

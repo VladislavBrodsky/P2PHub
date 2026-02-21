@@ -138,5 +138,10 @@ export const proService = {
             tone_of_voice: tone
         });
         return response.data;
+    },
+
+    refreshPostMetrics: async (post_id: number) => {
+        const response = await apiClient.post(`/api/pro/analytics/post/${post_id}/refresh`);
+        return response.data;
     }
 };

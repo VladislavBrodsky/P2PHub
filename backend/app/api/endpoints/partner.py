@@ -1087,7 +1087,8 @@ async def claim_task_reward(
         amount=effective_xp,
         description=f"Task Reward: {task_id}",
         type="TASK_XP",
-        currency="XP"
+        currency="XP",
+        reference_id=f"task_{partner.id}_{task_id}"
     )
     session.add(task_earning)
 

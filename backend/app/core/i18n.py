@@ -1,16 +1,16 @@
 MESSAGES = {
     "en": {
         "welcome": (
-            "💎 **Welcome, {name}!**\n\n"
+            "💎 *Welcome, {name}!*\n\n"
             "🔥 *Transition from consumer to architect.*\n\n"
-            "You are officially a **Core Partner**! You are early 🚀\n\n"
+            "You are officially a *Core Partner*! You are early 🚀\n\n"
             "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\n"
             "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
-            "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
-            "👇 **Tap below to start your journey**"
+            "🔗 *Your Personal Gateway:*\n`{referral_link}`\n\n"
+            "👇 *Tap below to start your journey*"
         ),
         "welcome_back": (
-            "👋 **Welcome Back, {name}!**\n\n"
+            "👋 *Welcome Back, {name}!*\n\n"
             "Your network efficiency remains stable. Review your latest growth and rewards in the Partner App below!\n\n"
             "🚀 Let's achieve the next milestone today."
         ),
@@ -88,16 +88,17 @@ MESSAGES = {
         "commission_received": (
             "💰 *REWARD PROCESSED!* (Level {level})\n\n"
             "You have received `${amount} USDT`! 💸\n"
-            "Partner **{from_user}** in your network (Level {level}) has upgraded to PRO.\n\n"
+            "Partner *{from_user}* in your network (Level {level}) has upgraded to PRO.\n\n"
             "🌟 *Network Efficiency:* Your infrastructure is generating value 24/7. This is the foundation of your professional growth! 📈"
         ),
         "referral_upgrade_announcement": (
-            "⚡ **SYSTEM NOTIFICATION: STRUCTURAL UPGRADE** ⚡\n\n"
+            "⚡ *SYSTEM NOTIFICATION: STRUCTURAL UPGRADE* ⚡\n\n"
             "An upgrade occurred in your elite structure! 🏰\n\n"
-            "👤 **Partner:** {buyer_name}\n"
-            "📈 **Depth:** Level {level}\n"
-            "💎 **New Tier:** {plan_name}\n\n"
-            "As a **PRO+ Leader**, you are receiving active rewards from this structural growth. Your empire continues to scale! 🚀"
+            "👤 *Partner:* {buyer_name}\n"
+            "📈 *Depth:* Level {level}\n"
+            "💎 *New Tier:* {plan_name}\n"
+            "💰 *Reward:* `${amount} USDT`\n\n"
+            "As a *PRO+ Leader*, you are receiving active rewards from this structural growth. Your empire continues to scale! 🚀"
         ),
         "viral_share_caption": (
             "🛑 EVOLVE BEYOND TRADITIONAL BANKING! \n"
@@ -105,22 +106,22 @@ MESSAGES = {
         ),
         "pro_fomo_missed": (
             "🚀 *Potential Detected!* (Level {level})\n\n"
-            "A new member has joined your deep network, but your advanced rewards are currently **UNCLAIMED** 🔒.\n\n"
+            "A new member has joined your deep network, but your advanced rewards are currently *UNCLAIMED* 🔒.\n\n"
             "👑 *Upgrade to PRO to:* \n"
-            "• Unlock **20 Levels** of strategic rewards\n"
+            "• Unlock *20 Levels* of strategic rewards\n"
             "• Secure USDT from PRO upgrades in your community\n"
-            "• Activate **Fast XP** acceleration\n\n"
+            "• Activate *Fast XP* acceleration\n\n"
             "Don't leave potential unclaimed. Secure your future growth today! 🏰"
         ),
         "commission_fomo_missed": (
             "⚠️ *UNCLAIMED REWARD!* ⚠️\n\n"
-            "You have missed a **${amount} USDT** reward from Level {level}!\n\n"
+            "You have missed a *${amount} USDT* reward from Level {level}!\n\n"
             "An upgrade occurred in your network, but your current plan does not include levels at this depth.\n\n"
             "🚀 *Upgrade to {target_plan}* now to optimize your reward structure and unlock the full potential of your ecosystem! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP BOOST UNLOCKED!* ⚡️\n\n"
-            "Congratulations on your upgrade! You've been awarded **+{xp} XP** to accelerate your ranking.\n\n"
+            "Congratulations on your upgrade! You've been awarded *+{xp} XP* to accelerate your ranking.\n\n"
             "You are now closer to the *Platinum Metal Card*! 🏆"
         ),
         "btn_upgrade": "👑 Upgrade Plan",
@@ -224,16 +225,16 @@ MESSAGES = {
     },
     "ru": {
         "welcome": (
-            "💎 **Добро пожаловать, {name}!**\n\n"
+            "💎 *Добро пожаловать, {name}!*\n\n"
             "🔥 *Путь от пользователя к архитектору экосистемы.*\n\n"
-            "Вы официально — **Ключевой Партнер**! Вы в числе первых 🚀\n\n"
+            "Вы официально — *Ключевой Партнер*! Вы в числе первых 🚀\n\n"
             "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие наблюдают, вы уже строите свое суверенное наследие.\n\n"
             "💰 *Зарабатывайте XP. Растите влияние. Создавайте стратегические активы.*\n\n"
-            "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
-            "👇 **Нажмите ниже, чтобы начать путь**"
+            "🔗 *Ваш персональный вход:*\n`{referral_link}`\n\n"
+            "👇 *Нажмите ниже, чтобы начать путь*"
         ),
         "welcome_back": (
-            "👋 **С возвращением, {name}!**\n\n"
+            "👋 *С возвращением, {name}!*\n\n"
             "Узлы вашей сети функционируют стабильно. Проверьте новые вехи и показатели вашей структуры в приложении!\n\n"
             "🚀 Время достичь новых стратегических вершин."
         ),
@@ -311,16 +312,17 @@ MESSAGES = {
         "commission_received": (
             "💰 *ВОЗНАГРАЖДЕНИЕ ОБРАБОТАНО!* (Уровень {level})\n\n"
             "Вы получили `${amount} USDT`! 💸\n"
-            "Партнер **{from_user}** из вашей сети (Уровень {level}) перешел на статус PRO.\n\n"
+            "Партнер *{from_user}* из вашей сети (Уровень {level}) перешел на статус PRO.\n\n"
             "🌟 *Эффективность Инфраструктуры:* Ваша сеть генерирует ценность 24/7. Это основа вашего профессионального роста! 📈"
         ),
         "referral_upgrade_announcement": (
-            "⚡ **СИСТЕМНОЕ УВЕДОМЛЕНИЕ: СТРУКТУРНЫЙ АПГРЕЙД** ⚡\n\n"
+            "⚡ *СИСТЕМНОЕ УВЕДОМЛЕНИЕ: СТРУКТУРНЫЙ АПГРЕЙД* ⚡\n\n"
             "В вашей элитной структуре произошел апгрейд! 🏰\n\n"
-            "👤 **Партнер:** {buyer_name}\n"
-            "📈 **Глубина:** Уровень {level}\n"
-            "💎 **Новый Уровень:** {plan_name}\n\n"
-            "Как **PRO+ Лидер**, вы получаете активные вознаграждения от этого структурного роста. Ваша империя продолжает масштабироваться! 🚀"
+            "👤 *Партнер:* {buyer_name}\n"
+            "📈 *Глубина:* Уровень {level}\n"
+            "💎 *Новый Уровень:* {plan_name}\n"
+            "💰 *Вознаграждение:* `${amount} USDT`\n\n"
+            "Как *PRO+ Лидер*, вы получаете активные вознаграждения от этого структурного роста. Ваша империя продолжает масштабироваться! 🚀"
         ),
         "viral_share_caption": (
             "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
@@ -328,22 +330,22 @@ MESSAGES = {
         ),
         "pro_fomo_missed": (
             "🚀 *Обнаружен потенциал роста!* (Уровень {level})\n\n"
-            "Новый участник присоединился к вашей сети, но ваши расширенные награды сейчас **НЕ АКТИВИРОВАНЫ** 🔒.\n\n"
+            "Новый участник присоединился к вашей сети, но ваши расширенные награды сейчас *НЕ АКТИВИРОВАНЫ* 🔒.\n\n"
             "👑 *Перейдите на PRO/PRO+, чтобы:* \n"
-            "• Открыть **все 20 уровней** стратегических наград\n"
+            "• Открыть *все 20 уровней* стратегических наград\n"
             "• Получать USDT с PRO-апгрейдов в вашем сообществе\n"
-            "• Активировать ускорение **Fast XP**\n\n"
+            "• Активировать ускорение *Fast XP*\n\n"
             "Обеспечьте свой будущий рост уже сегодня! 🏰"
         ),
         "commission_fomo_missed": (
             "⚠️ *НЕДОСТУПНОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
-            "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+            "Вы упустили вознаграждение в размере *${amount} USDT* с {level}-го уровня!\n\n"
             "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
             "🚀 *Обновитесь до {target_plan}* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"
-            "Поздравляем с апгрейдом! Вам начислено **+{xp} XP** для ускорения вашего ранга.\n\n"
+            "Поздравляем с апгрейдом! Вам начислено *+{xp} XP* для ускорения вашего ранга.\n\n"
             "Вы стали ещё ближе к легендарной *Платиновой Карте*! 🏆"
         ),
         "btn_upgrade": "👑 Повысить План",

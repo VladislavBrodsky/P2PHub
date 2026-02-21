@@ -481,13 +481,47 @@ class ViralMarketingStudio:
             from app.models.partner import SocialPost
             try:
                 ids = res.get("message_ids", [])
+                chan_name = res.get("channel_name") # For X/LinkedIn
                 if platform == "x" and res.get("tweet_id"): ids = [str(res["tweet_id"])]
-                for ext_id in ids:
+                
+                for item in ids:
                     chan = None
-                    if platform == "telegram" and ":" in ext_id: chan, ext_id = ext_id.split(":", 1)
-                    session.add(SocialPost(generation_id=generation_id, partner_id=partner.id, platform=platform, 
-                                         external_id=str(ext_id), channel_id=chan or partner.telegram_channel_id))
+                    cname = chan_name
+                    ext_id = item
+                    
+                    if platform == "telegram" and ":" in str(item):
+                        parts = str(item).split(":")
+                        if len(parts) >= 3:
+                            chan, ext_id, cname = parts[0], parts[1], ":".join(parts[2:])
+                        elif len(parts) == 2:
+                            chan, ext_id = parts[0], parts[1]
+
+                    post = SocialPost(
+                        generation_id=generation_id, 
+                        partner_id=partner.id, 
+                        platform=platform, 
+                        external_id=str(ext_id), 
+                        channel_id=chan or partner.telegram_channel_id,
+                        channel_name=cname
+                    )
+                    session.add(post)
+                
                 await session.commit()
+                
+                # After commit, trigger refresh for these posts in background
+                try:
+                    from app.services.viral_analytics_service import viral_analytics
+                    async def delayed_refresh():
+                        await asyncio.sleep(5) # 5s delay
+                        from app.models.partner import async_session_maker
+                        async with async_session_maker() as new_session:
+                            await viral_analytics.update_all_post_metrics(new_session)
+                    
+                    _task = asyncio.create_task(delayed_refresh())
+                    background_tasks.add(_task)
+                    _task.add_done_callback(background_tasks.discard)
+                except Exception: pass
+
             except Exception as e: logger.error(f"Social Tracking Fail: {e}")
         return res
 

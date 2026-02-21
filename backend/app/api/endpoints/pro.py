@@ -523,3 +523,24 @@ async def get_predictive_resonance(
     
     insights = await viral_analytics.get_predictive_insights(partner.id, session)
     return insights
+
+@router.post("/analytics/post/{post_id}/refresh")
+async def refresh_post_metrics(
+    post_id: int,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    # Verify owner
+    stmt = select(SocialPost).where(SocialPost.id == post_id, SocialPost.partner_id == partner.id)
+    post = (await session.exec(stmt)).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+        
+    await viral_analytics.refresh_post_metrics(post_id, session)
+    
+    # Return updated stats
+    stats = await viral_analytics.get_partner_stats(partner.id, session)
+    return stats

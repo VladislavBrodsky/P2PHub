@@ -161,7 +161,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 amount=xp_gain,
                 description=f"Referral Reward: {new_partner_name} (L{level})",
                 type="REFERRAL_XP",
-                currency="XP"
+                currency="XP",
+                reference_id=f"ref_xp_{partner.id}_{referrer.id}"
             ))
 
             # Log Audit
@@ -260,7 +261,7 @@ async def _finalize_referral_logic(deferred_tasks: list):
         await asyncio.gather(*deferred_tasks, return_exceptions=True)
 
 @async_retry(max_attempts=3, base_delay=1.0)
-async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float, plan_type: str | None = None):
+async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float, plan_type: str | None = None, transaction_id: int | None = None):
     """
     Distributes commissions for PRO ($39) or PRO+ ($69) subscription purchase.
     Implements DYNAMIC COMPRESSION: If an intermediary is not PRO, the commission 
@@ -269,6 +270,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     partner = await session.get(Partner, partner_id)
     if not partner or not partner.referrer_id:
         return
+
+    # Deterministic Reference Prefix (Ensures Idempotency per Transaction)
+    ref_prefix = f"t{transaction_id}" if transaction_id else f"p{partner.id}"
 
     # Determine Model: PRO ($39) or PRO+ ($69)
     # Use plan_type if provided, else fallback to amount-based detection
@@ -296,7 +300,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # If a partner is not qualified for their expected level, we skip them and 
     # look for the next person in the lineage who is.
     
-    stmt_admin = select(Partner).where(Partner.telegram_id == "537873096")
+    # MISSION-CRITICAL: Ensure company account is resolved correctly from config
+    admin_id_to_fetch = settings.ADMIN_USER_IDS[0] if settings.ADMIN_USER_IDS else "716720099"
+    stmt_admin = select(Partner).where(Partner.telegram_id == admin_id_to_fetch)
     res_admin = await session.exec(stmt_admin)
     company_account = res_admin.first()
 
@@ -379,7 +385,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         deferred_notifications.append(notification_service.send_critical(
                             chat_id=int(referrer.telegram_id), text=fomo_msg,
                             buttons=[[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]],
-                            salt=f"comm_fomo_l{comm_level}_{partner.id}"
+                            salt=f"comm_fomo_{ref_prefix}_l{comm_level}"
                         ))
             
             # If no more qualified partners in lineage, commission leaks to Company
@@ -430,7 +436,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 type="COMMISSION",
                 level=comm_level,
                 currency="USDT",
-                reference_id=f"upg_{partner.id}_{comm_level}"
+                reference_id=f"upg_{ref_prefix}_{comm_level}"
             ))
             
             # Record XP Earning & Transaction for History
@@ -439,7 +445,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 amount=xp_gain,
                 description=f"Active Referral: {buyer_name} (L{comm_level})",
                 type="REFERRAL_XP",
-                currency="XP"
+                currency="XP",
+                reference_id=f"upg_xp_earning_{ref_prefix}_{comm_level}"
             ))
             
             from app.models.partner import XPTransaction
@@ -447,7 +454,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 partner_id=recipient.id, amount=xp_gain,
                 type="ACTIVE_REFERRAL",
                 description=f"Active Referral XP (L{comm_level})",
-                reference_id=f"upg_xp_{partner.id}_{comm_level}"
+                reference_id=f"upg_xp_{ref_prefix}_{comm_level}"
             ))
 
             # Skip individual notifications now as they are aggregated below
@@ -502,22 +509,27 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     
                     if rcpt.is_pro_plus:
                         # Elite Notification for PRO+ Leaders
+                        # #comment Phase 2: Increased transparency. Include the USDT reward amount in the elite notification.
                         msg = get_msg(
                             lang, "referral_upgrade_announcement", 
-                            buyer_name=buyer_name, level=rt["levels"][0], plan_name=plan_name
+                            buyer_name=buyer_name, level=rt["levels"][0], 
+                            plan_name=plan_name, amount=round(rt["amount"], 2)
                         )
                     else:
                         # Standard Notification for PRO members
                         if len(rt["levels"]) > 1:
-                            msg = f"💰 **Multiple Commissions Received!**\n\nTotal: **{round(rt['amount'], 2)} USDT** from **{buyer_name}**."
+                            msg = f"💰 *Multiple Commissions Received!*\n\nTotal: *{round(rt['amount'], 2)} USDT* from *{buyer_name}*."
                         else:
                             msg = get_msg(lang, "commission_received", amount=round(rt["amount"], 2), level=rt["levels"][0], from_user=buyer_name)
                     
-                    deferred_notifications.append(notification_service.send_standard(
-                        chat_id=int(rcpt.telegram_id), text=msg,
-                        buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]],
-                        salt=f"upg_agg_{partner.id}"
-                    ))
+                    # Force notification for Admin even if not 'qualified' per standard logic (Leakage monitoring)
+                    is_admin_recipient = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS
+                    if rt["qualified"] or is_admin_recipient:
+                        deferred_notifications.append(notification_service.send_standard(
+                            chat_id=int(rcpt.telegram_id), text=msg,
+                            buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]],
+                            salt=f"upg_agg_{partner.id}"
+                        ))
                 except Exception as e:
                     logger.error(f"Notification error for {r_id}: {e}")
 

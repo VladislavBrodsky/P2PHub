@@ -157,6 +157,7 @@ class SocialPost(SQLModel, table=True):
     platform: str = Field(index=True) # "x", "telegram", "linkedin"
     external_id: str = Field(index=True) 
     channel_id: str | None = None
+    channel_name: str | None = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
     last_metric_check: datetime | None = None
 
@@ -229,7 +230,7 @@ if "sqlite" not in database_url:
         "pool_size": 10,       # Reduced from 15 to stay safer within Railway connection limits
         "max_overflow": 10,
         "pool_timeout": 30,
-        "pool_recycle": 120,   # Reduced from 300 to 120. Faster recycling prevents "Connection reset by peer" from cloud firewalls.
+        "pool_recycle": 60,   # Further reduced to 60 to prevent "Connection reset by peer" on Railway.
     })
 
 try:

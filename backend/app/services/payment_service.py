@@ -132,7 +132,7 @@ class PaymentService:
             level="info"
         )
         # 1. Check if TX already processed (Global Uniqueness per hash)
-        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash)
+        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash).with_for_update()
         res = await session.exec(stmt)
         existing = res.first()
         if existing and existing.status == "completed":
@@ -154,7 +154,7 @@ class PaymentService:
             PartnerTransaction.created_at >= ten_mins_ago
         ).order_by(PartnerTransaction.created_at.desc())
 
-        res_session = await session.exec(stmt_session)
+        res_session = await session.exec(stmt_session.with_for_update())
         active_session = res_session.first()
 
         if not active_session:
@@ -242,7 +242,8 @@ class PaymentService:
             # If state is transient, it might be None, so we fallback to partner.id (which won't be expired yet if it's new)
             p_id = state.identity[0] if state and state.identity else partner.id
             
-            fresh_partner = await session.get(Partner, p_id)
+            from sqlalchemy.orm import selectinload
+            fresh_partner = await session.get(Partner, p_id, with_for_update=True)
             if fresh_partner:
                 partner = fresh_partner
                 
@@ -404,7 +405,11 @@ class PaymentService:
 
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
             from app.services.referral_service import distribute_pro_commissions
-            await distribute_pro_commissions(session, partner.id, amount, plan_type=partner.subscription_plan)
+            await distribute_pro_commissions(
+                session, partner.id, amount, 
+                plan_type=partner.subscription_plan,
+                transaction_id=transaction.id
+            )
             
             # 3.1 Trigger "Network Catalyst" milestone for direct referrer (L1)
             # This fires the first time ANY of their direct referrals upgrades to PRO.
@@ -521,10 +526,10 @@ class PaymentService:
             # Notify management (@uslincoln) about the successful high-value purchase.
             try:
                 username_display = f"@{partner.username}" if partner.username else "No Username"
-                admin_id = "537873096" # @uslincoln
+                admin_id = settings.ADMIN_USER_IDS[0] if settings.ADMIN_USER_IDS else "716720099" # @uslincoln
                 
                 # Try to fetch admin language
-                stmt_admin = select(Partner).where(Partner.telegram_id == admin_id)
+                stmt_admin = select(Partner).where(Partner.telegram_id == str(admin_id))
                 res_admin = await session.exec(stmt_admin)
                 admin_partner = res_admin.first()
                 admin_lang = admin_partner.language_code if admin_partner else "en"
