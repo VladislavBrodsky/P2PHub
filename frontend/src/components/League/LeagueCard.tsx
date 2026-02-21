@@ -82,18 +82,18 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
 
             <div className="relative z-10">
-                <div className="flex items-center gap-5">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-inner">
-                        <Icon className={`h-8 w-8 ${config.textColor}`} />
+                <div className="flex items-center gap-3 sm:gap-5">
+                    <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-inner">
+                        <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${config.textColor}`} />
                     </div>
-                    <div>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 leading-none block">
+                    <div className="flex-1 min-w-0">
+                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-3xl font-black tracking-tighter ${config.textColor} mt-1 drop-shadow-sm`}>{config.name}</h2>
+                        <h2 className={`text-[22px] sm:text-3xl font-black tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap truncate`}>{config.name}</h2>
                     </div>
                     {(subscription_plan || '').includes('PLUS') && (
-                        <div className="ml-auto">
+                        <div className="ml-auto shrink-0 pl-2">
                             <ProPlusBadge size="lg" />
                         </div>
                     )}
