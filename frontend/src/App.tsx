@@ -28,7 +28,7 @@ import { useUser } from './context/UserContext';
 import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
-import { useRealtimeAlerts } from './hooks/useRealtimeAlerts';
+
 const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 import { useConfig } from './context/ConfigContext';
 import { FeatureErrorBoundary } from './components/FeatureErrorBoundary';
@@ -53,7 +53,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     // #comment: Removed unused showOnboarding state in AppContent as it is managed in the parent App component
     const { isLoading: isUserLoading } = useUser();
     const { updateProgress } = useStartupProgress();
-    useRealtimeAlerts();
+
 
     // Signal completion when both user and config are ready
     useEffect(() => {
