@@ -357,11 +357,11 @@ export const ReferralGraph = () => {
                                     </div>
 
                                     <div className="space-y-3 sm:space-y-4 px-2">
-                                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md leading-tight">
+                                        <h3 className="text-lg sm:text-xl font-black uppercase tracking-tighter text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md leading-tight">
                                             {funnelStages[funnelStep].title}
                                         </h3>
                                         <div className="w-10 sm:w-12 h-1 bg-emerald-500 mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-                                        <p className="text-[10px] sm:text-[13px] font-bold text-slate-600 dark:text-white/70 uppercase tracking-[0.25em] sm:tracking-widest leading-relaxed px-2 sm:px-4">
+                                        <p className="text-[9px] sm:text-[11px] font-bold text-slate-600 dark:text-white/70 uppercase tracking-[0.2em] sm:tracking-widest leading-relaxed px-2 sm:px-4">
                                             {funnelStages[funnelStep].desc}
                                         </p>
                                     </div>
@@ -374,7 +374,7 @@ export const ReferralGraph = () => {
                                         </div>
                                         <button
                                             onClick={nextStep}
-                                            className="w-full h-12 sm:h-14 vibing-blue-animated rounded-full flex items-center justify-center gap-2 sm:gap-3 text-white font-black text-xs sm:text-sm uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-transform"
+                                            className="w-full h-12 sm:h-14 vibing-blue-animated rounded-full flex items-center justify-center gap-2 sm:gap-3 text-white font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-transform"
                                         >
                                             <span>{t('blog.navigation.next')}</span>
                                             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -402,7 +402,7 @@ export const ReferralGraph = () => {
                                     </div>
 
                                     <div className="space-y-2 sm:space-y-3 px-2">
-                                        <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
+                                        <h3 className="text-lg sm:text-xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
                                             {t('viral_funnel.cta')}
                                         </h3>
                                         <p className="text-[8px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] sm:tracking-[0.3em]">
@@ -413,7 +413,7 @@ export const ReferralGraph = () => {
                                     <div className="w-full space-y-3 sm:space-y-4">
                                         <button
                                             onClick={handleUpgrade}
-                                            className="w-full h-12 sm:h-14 vibing-emerald-animated rounded-[2rem] text-white font-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group px-2"
+                                            className="w-full h-12 sm:h-14 vibing-emerald-animated rounded-[2rem] text-white font-black text-[9px] sm:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group px-2"
                                         >
                                             <div className="flex items-center justify-center gap-2 sm:gap-3">
                                                 <span>{t('viral_funnel.cta')}</span>
