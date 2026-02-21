@@ -117,10 +117,10 @@ Write as a high-status NATIVE {language} CMO. Every word must feel earned, authe
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
-  "body": "**[Strategic Title]**\\n\\n**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
+  "body": "**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
 "hashtags": "#Tag1 #Tag2 #Tag3" 
 }}
-(Choose exactly 2-4 unique hashtags. Output them ONLY in the 'hashtags' field. DO NOT include them in the 'body' string. This is a strict formatting rule.)
+(Choose exactly 2-4 unique hashtags. Output them ONLY in the 'hashtags' field. DO NOT include them in the 'body' string. This is a strict formatting rule to avoid duplication.)
 
 """
 
@@ -178,10 +178,10 @@ Referral Link: {ref_link}
 5. **NATIVE FLUENCY:** Use business idioms and cultural nuances specific to {language}.
 
 **STRUCTURE & FORMATTING:**
-- Title & Hook: **Bold**
+- Hook: **Bold**
 - Paragraphs: 3-5 short, sharp blocks with double line breaks.
 - CTA: Final line MUST be exactly: **[{cta_fallback}]({ref_link})**
-- Hashtags: 2-4 unique tags in {language} at the very end.
+- Hashtags: 2-4 unique tags. DO NOT include them in the body text. ONLY in the hashtags field.
 
 **LENGTH PROTOCOL:**
 Write a deep, meaningful transmission. Target length: 700-1000 characters. 

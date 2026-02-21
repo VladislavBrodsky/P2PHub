@@ -188,13 +188,41 @@ class ViralMarketingStudio:
         if "{ref_link}" in body_text:
             body_text = body_text.replace("{ref_link}", ref_link)
 
-            
-        # CTA LINK REINFORCER...
+        # 🛡️ DEDUPLICATION GUARD (Titles & Hashtags)
+        title_text = res_json.get("title", "").strip().replace("**", "")
+        body_lines = body_text.strip().split("\n")
+        
+        # 1. Remove redundant title from body if present
+        if body_lines:
+            first_line = body_lines[0].strip().replace("**", "")
+            # Check for direct match or substring match (e.g. AI adds title as 1st line)
+            if first_line.lower() == title_text.lower() or (len(first_line) > 5 and first_line.lower() in title_text.lower()):
+                body_lines.pop(0)
+                # Pop empty lines after title
+                while body_lines and not body_lines[0].strip():
+                    body_lines.pop(0)
+        
+        # 2. Deep Hashtag Scrubbing
+        # We strip hashtags from the END and from the BODY to ensure zero duplication
+        clean_body_lines = []
+        for line in body_lines:
+            # Check if line's logic is JUST hashtags
+            words = line.split()
+            if words and all(w.startswith("#") for w in words):
+                continue
+            # Remove inline hashtags from the end of sentences if they exist
+            # (Though usually they are on their own lines)
+            clean_body_lines.append(line)
+        
+        body_text = "\n".join(clean_body_lines).strip()
+
+        # ----------------------------------------------------------------------------------
+        # CTA LINK REINFORCER... (existing logic continues with clean body)
+        # ----------------------------------------------------------------------------------
+        
         has_proper_link = f"({ref_link})" in body_text and "[" in body_text
         if not has_proper_link:
-            # Language aware fallback
             cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
-            
             lines = body_text.split("\n")
             cta_fixed = False
             for i in range(len(lines)-1, -1, -1):
@@ -211,23 +239,23 @@ class ViralMarketingStudio:
             else: 
                 body_text = "\n".join(lines)
 
-        # 🛡️ HASHTAG GUARDIAN V2 (Deduplication & Formatting)
+        # 🛡️ HASHTAG GUARDIAN FINAL (Canonical Append)
         hashtags_list = res_json.get("hashtags", [])
         if isinstance(hashtags_list, str):
             hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
         
-        # Ensure limit of 2-4
         if len(hashtags_list) > 4: hashtags_list = hashtags_list[:4]
         
-        # Clean body_text of any existing hashtags at the end to prevent duplicates
-        # We look for lines starting with # at the end of the post
-        body_lines = body_text.strip().split("\n")
-        while body_lines and any(word.startswith("#") for word in body_lines[-1].split()):
-            body_lines.pop()
+        # Re-ensure body is clean of hash lines at the very end again 
+        final_lines = body_text.strip().split("\n")
+        while final_lines and any(word.startswith("#") for word in final_lines[-1].split()):
+            final_lines.pop()
         
-        body_text = "\n".join(body_lines).strip()
+        body_text = "\n".join(final_lines).strip()
         
         if hashtags_list:
+            # Ensure hashtags have #
+            hashtags_list = [h if h.startswith("#") else f"#{h}" for h in hashtags_list]
             hashtag_str = " ".join(hashtags_list)
             body_text += f"\n\n{hashtag_str}"
         

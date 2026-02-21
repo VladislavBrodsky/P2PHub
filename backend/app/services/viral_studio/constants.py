@@ -82,16 +82,21 @@ FORMATTING_MASTERY: Final[str] = """
 
 5. **EMOJIS:** Use 2-4 strategically based on audience (crypto: 💎🚀, nomads: 🌍✈️, etc.)
 
-6. **PARAGRAPHS:** Double line breaks (empty line) between paragraphs for readability.
+7. **HASHTAGS:** DO NOT include hashtags in the message 'body'. Instead, only provide them in the 'hashtags' field of the JSON. They will be appended automatically by the system.
+    - If you include hashtags in the 'body', you have FAILED the task.
 
-7. **HASHTAGS:** DO NOT include hashtags in the message 'body'. Instead, only provide them in the 'hashtags' field of the JSON. They will be appended automatically.
+8. **TITLES:** DO NOT include the post title inside the 'body' text. The title should ONLY exist in the 'title' field of the JSON.
+    - The 'body' must start immediately with the Hook.
+    - NEVER repeat the title as the first line of the body.
+
+9. **ZERO REDUNDANCY:** Do not repeat content between fields. Title is title, body is body, hashtags are hashtags.
 
 **NO MISTAKES ALLOWED:**
-- Check every ** is properly closed
-- Check every _ is properly closed
-- Check every hyperlink follows [text](url) format
+- Check every ** is properly closed.
+- Check every hyperlink follows [text](url) format.
 - NO HASHTAGS in the body text.
-- No orphaned markdown symbols
+- NO TITLE in the body text.
+- No orphaned markdown symbols.
 """
 
 TEXT_RULES: Final[str] = """
