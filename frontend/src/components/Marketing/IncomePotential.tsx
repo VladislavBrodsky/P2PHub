@@ -371,6 +371,22 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <p className="mt-4 text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
                             {t('income.cta.unlocked')}
                         </p>
+
+                        <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
+                            <div className="flex items-center justify-center gap-4">
+                                <div className="flex -space-x-2">
+                                    {[1, 2, 3, 4].map(i => (
+                                        <div key={i} className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
+                                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 42}`} alt="user" />
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="text-left">
+                                    <div className="text-[10px] font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
+                                    <div className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </motion.div>

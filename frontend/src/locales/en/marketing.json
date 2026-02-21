@@ -12,7 +12,7 @@
       "projector": "Income Projector",
       "active_partners": "Active Partners",
       "monthly_income": "Estimated Monthly Income",
-      "unlock_btn": "ACTIVATE $1 PROTOCOL"
+      "unlock_btn": "GET $1/MIN PLAN"
     },
     "inaction": {
       "projector": "Daily Missed Opportunities",
@@ -407,5 +407,16 @@
     "partners_suffix": "Partners",
     "xp_info": "You earn XP from every active partner in your 20-level matrix.",
     "send_viral": "Send Premium Viral Card"
+  },
+  "viral_funnel": {
+    "step1_title": "MANUAL LIMIT REACHED",
+    "step1_desc": "Your manual growth has peaked. Human effort cannot sustain this velocity. You've reached the ceiling of linear scaling.",
+    "step2_title": "NEURAL ANALYSIS ACTIVE",
+    "step2_desc": "The 1% don't recruit. They synchronize. While you sleep, AI Studio generates resonance, autonomous bots handle objections, and Omni-Sync broadcasts your legacy.",
+    "step3_title": "DEPLOY AI MULTIPLIER",
+    "step3_desc": "Scale your efforts x100. Transform 1 partner into 100 automated nodes. Your team becomes a self-replicating system of autonomous value.",
+    "step4_title": "ELITE SCARCITY",
+    "step4_desc": "92% of top-tier users upgrade to PRO within 24 hours. Only a few Lifetime Elite slots remain for this build. Stop trading time for money.",
+    "cta": "ACTIVATE AUTONOMOUS GROWTH"
   }
 }
