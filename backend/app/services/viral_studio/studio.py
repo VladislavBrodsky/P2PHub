@@ -67,15 +67,22 @@ class ViralMarketingStudio:
             return self._intel_cache[cache_key]
             
         # 2. Redis Cache (RRC-1)
-        from app.services.redis_service import redis_service
-        cached = await redis_service.get_json(f"viral_studio:{cache_key}")
-        if cached:
-            self._intel_cache[cache_key] = cached
-            return cached
+        try:
+            from app.services.redis_service import redis_service
+            cached = await redis_service.get_json(f"viral_studio:{cache_key}")
+            if cached:
+                self._intel_cache[cache_key] = cached
+                return cached
+        except Exception as e:
+            logger.debug(f"Redis cache miss/error: {e}")
             
         # 3. Compute & Store
         intel = prompts.build_viral_audience_intel(target_audience, post_type, language)
-        await redis_service.set_json(f"viral_studio:{cache_key}", intel, expire=86400) # 24h
+        try:
+            from app.services.redis_service import redis_service
+            await redis_service.set_json(f"viral_studio:{cache_key}", intel, expire=86400) # 24h
+        except Exception:
+            pass
         self._intel_cache[cache_key] = intel
         return intel
 
@@ -334,27 +341,46 @@ class ViralMarketingStudio:
         
         # 2. Emergency Alternative: OpenAI DALL-E 3
         if self.openai_client:
+            model_name = "dall-e-3"
+            img_url = None
             try:
-                model_name = "dall-e-3"
-                res = await self.openai_client.images.generate(model=model_name, prompt=prompt, n=1)
+                # Truncate prompt to 4000 chars for Dall-E 3 limit
+                safe_prompt = prompt[:4000]
+                res = await self.openai_client.images.generate(model=model_name, prompt=safe_prompt, n=1)
                 img_url = res.data[0].url
                 self._last_used_image_model = model_name
-                # Persistent local copy
-                filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
-                save_path = self._get_save_path(filename)
-                async with httpx.AsyncClient() as client:
-                    img_res = await client.get(img_url)
-                    if img_res.status_code == 200:
-                        with open(save_path, 'wb') as f: f.write(img_res.content)
-                        return f"/generated_media/{filename}"
-                return img_url
             except Exception as e:
-                logger.error(f"DALL-E 3 failed: {e}")
+                logger.error(f"DALL-E 3 failed: {e}. Trying DALL-E 2 with safe prompt.")
+                try:
+                    # Fallback to dall-e-2 and absolute safe prompt if safety or length issue
+                    model_name = "dall-e-2"
+                    generic_prompt = "A high-quality, abstract digital artwork with deep energetic colors, premium aesthetic."
+                    res = await self.openai_client.images.generate(model=model_name, prompt=generic_prompt, n=1)
+                    img_url = res.data[0].url
+                    self._last_used_image_model = model_name
+                except Exception as e2:
+                    logger.error(f"DALL-E 2 fallback failed: {e2}")
+
+            if img_url:
+                try:
+                    filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
+                    save_path = self._get_save_path(filename)
+                    async with httpx.AsyncClient() as client:
+                        img_res = await client.get(img_url)
+                        if img_res.status_code == 200:
+                            with open(save_path, 'wb') as f: f.write(img_res.content)
+                            return f"/generated_media/{filename}"
+                except Exception as e:
+                    logger.error(f"Failed to locally cache DALL-E image: {e}")
+                
+                # If local cache fails, return the external URL
+                return img_url
         
         if not self.openai_client and not self.genai_client:
             logger.error("🛑 CRITICAL: No Image AI client initialized. Check API keys.")
             
-        return None
+        logger.warning("⚠️ All AI image generators failed (billing or safety). Using high-quality fallback image.")
+        return "/images/2026-02-05_03.35.03.webp"
 
     async def _try_imagen(self, model: str, prompt: str, partner_id: int) -> tuple[bool, str | None]:
         """Attempt to generate an image using a specific Google model."""

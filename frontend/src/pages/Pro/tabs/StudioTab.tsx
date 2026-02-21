@@ -907,7 +907,9 @@ export const StudioTab = ({
                                         <img
                                             src={
                                                 glitchImageSrc
-                                                    ? glitchImageSrc
+                                                    ? (glitchImageSrc.startsWith('http') || glitchImageSrc.startsWith('data:')
+                                                        ? glitchImageSrc
+                                                        : `${getApiUrl().replace(/\/api$/, '')}${glitchImageSrc}`)
                                                     : (generatedResult.image_url.startsWith('http')
                                                         ? generatedResult.image_url
                                                         : `${getApiUrl().replace(/\/api$/, '')}${generatedResult.image_url}`)
