@@ -389,35 +389,7 @@ export default function SubscriptionPage() {
                         )}
                     </AnimatePresence>
 
-                    {/* ── DEADLINE STICKY HEADER ── */}
-                    <div className="mb-4 mt-2">
-                        <div className="rounded-[2.5rem] overflow-hidden p-3 bg-slate-900 dark:bg-black border border-indigo-500/30 flex items-center justify-between relative group shadow-[0_0_20px_rgba(79,70,229,0.2)]">
-                            <div className="absolute inset-0 bg-linear-to-r from-indigo-950 via-slate-900 to-indigo-950 opacity-100" />
-                            <div className="circuit-decor opacity-20" />
-                            <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
 
-                            <div className="relative z-10 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
-                                    <Clock size={16} className="animate-pulse" />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">LIFETIME ACCESS OFFER</span>
-                                    <span className="text-[10px] font-black text-white/90 uppercase tracking-tighter leading-tight">CLOSING PERMANENTLY</span>
-                                </div>
-                            </div>
-
-                            <div className="relative z-10 flex items-center gap-1 font-mono">
-                                {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
-                                    <React.Fragment key={i}>
-                                        <div className="bg-white/95 text-slate-900 rounded px-1.5 py-1 text-xs font-black min-w-[24px] text-center shadow-sm">
-                                            {val.toString().padStart(2, '0')}
-                                        </div>
-                                        {i < 2 && <span className="text-[10px] font-black text-white animate-pulse">:</span>}
-                                    </React.Fragment>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
 
                     {/* ── HERO / STATUS BOARD ─────────────────────────── */}
                     <div className="relative px-6 pt-8 pb-10 text-center flex flex-col items-center">
@@ -562,6 +534,36 @@ export default function SubscriptionPage() {
                                     {isStandardPro ? t('subscription.upgrade.upgrade_label', 'ONE-TIME') : t('subscription.upgrade.lifetime_label', 'FOREVER')}
                                 </span>
                             </button>
+                        </div>
+                    </div>
+
+                    {/* ── DEADLINE STICKY HEADER ── */}
+                    <div className="mb-6 mt-2 px-1">
+                        <div className="rounded-[2rem] overflow-hidden p-3 bg-slate-900 dark:bg-black border border-indigo-500/30 flex items-center justify-between relative group shadow-[0_0_20px_rgba(79,70,229,0.2)]">
+                            <div className="absolute inset-0 bg-linear-to-r from-indigo-950 via-slate-900 to-indigo-950 opacity-100" />
+                            <div className="circuit-decor opacity-20" />
+                            <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
+
+                            <div className="relative z-10 flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
+                                    <Clock size={16} className="animate-pulse" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">LIFETIME ACCESS OFFER</span>
+                                    <span className="text-[10px] font-black text-white/90 uppercase tracking-tighter leading-tight">CLOSING PERMANENTLY</span>
+                                </div>
+                            </div>
+
+                            <div className="relative z-10 flex items-center gap-1 font-mono">
+                                {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="bg-white/95 text-slate-900 rounded px-1.5 py-1 text-xs font-black min-w-[24px] text-center shadow-sm">
+                                            {val.toString().padStart(2, '0')}
+                                        </div>
+                                        {i < 2 && <span className="text-[10px] font-black text-white animate-pulse">:</span>}
+                                    </React.Fragment>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
