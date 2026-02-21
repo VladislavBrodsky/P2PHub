@@ -427,7 +427,7 @@ export const ProDashboard = () => {
             className="w-full bg-(--color-bg-app) text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-2 pb-12"
         >
             <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 pb-24 min-h-screen">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-4 pb-16 min-h-[80vh]">
                 {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2 sm:gap-3">
@@ -463,7 +463,7 @@ export const ProDashboard = () => {
                     </button>
                 </div>
 
-                <div className="flex p-1 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-4 mx-auto max-w-[420px] w-full">
+                <div className="flex p-0.5 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-3 mx-auto max-w-[420px] w-full">
                     {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
@@ -517,7 +517,7 @@ export const ProDashboard = () => {
                     })}
                 </div>
 
-                <div className="relative min-h-[60vh] mt-4">
+                <div className="relative min-h-[40vh] mt-3">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
