@@ -435,11 +435,7 @@ export default function SubscriptionPage() {
 
 
 
-                        {/* Hero Titles - Compacted & Centered - No Italics */}
-                        <div className="max-w-[400px] mx-auto mb-5 px-2">
-                            <h1 className={`text-[28px] sm:text-[36px] font-black tracking-tighter leading-[1.1] mb-2 uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
-                                {isProPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('common.pro_active', 'PRO Active')}
-                            </h1>                        </div>
+
 
                         {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
                         {proStats && (
@@ -819,17 +815,7 @@ export default function SubscriptionPage() {
                             {!paymentMethod ? (
                                 <div className="space-y-8 relative z-10">
                                     <div className="text-center">
-                                        <motion.div
-                                            className="inline-flex items-center gap-2 px-6 py-2 rounded-2xl vibing-crystal-purple-animated mb-6 shadow-premium relative overflow-hidden group/badge"
-                                            animate={{ boxShadow: ["0 0 10px rgba(168,85,247,0.2)", "0 0 25px rgba(168,85,247,0.5)", "0 0 10px rgba(168,85,247,0.2)"] }}
-                                            transition={{ duration: 3, repeat: Infinity }}
-                                        >
-                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-300" />
-                                            <Shield size={12} className="text-white relative z-10" />
-                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.15em] relative z-10">
-                                                {t('subscription.upgrade.secure_encryption_active')}
-                                            </span>
-                                        </motion.div>
+
 
                                         <div className="flex flex-col items-center gap-0.5 mb-5">
                                             <div className="flex items-baseline gap-1">
