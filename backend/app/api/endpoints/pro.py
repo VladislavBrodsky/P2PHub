@@ -210,6 +210,8 @@ async def setup_social_api(
             partner.telegram_channel_id = None
 
     if payload.linkedin_access_token: partner.linkedin_access_token = payload.linkedin_access_token
+    if payload.pinterest_access_token: partner.pinterest_access_token = payload.pinterest_access_token
+    if payload.threads_access_token: partner.threads_access_token = payload.threads_access_token
     
     session.add(partner)
     await session.commit()

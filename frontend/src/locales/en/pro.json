@@ -20,18 +20,26 @@
       "viral_reach": "Viral Reach",
       "success_rate": "Success Rate",
       "resonance": {
-        "title": "Performance Forecast",
-        "status": "AI Algorithm Analysis",
-        "confidence": "AI Confidence: {{percent}}%",
-        "action_btn": "Suggest Best Action"
+        "title": "Predictive Resonance",
+        "status": "ENGINE CALIBRATED",
+        "confidence": "CONFIDENCE: {{percent}}%",
+        "action_btn": "SYNTHESIZE CONTENT",
+        "gathering_data": "GATHERING DATA...",
+        "needs_more_posts": "NEEDS {{count}} POSTS",
+        "insufficient_data": "Insufficient Data",
+        "insufficient_data_desc": "Publish {{count}} more high-quality posts to calibrate the AI properly.",
+        "goto_studio": "GOTO STUDIO TO PUBLISH"
       },
       "raw_data": {
-        "title": "Detailed Statistics",
-        "source": "Platform",
-        "reach": "Reach",
-        "engagement": "Engagement",
-        "viral": "Virality",
-        "empty": "No posts yet."
+        "title": "Historical Intelligence",
+        "source": "NETWORK NODE",
+        "reach": "REACH",
+        "engagement": "RESO %",
+        "empty": "NO DATA SYNCED YET",
+        "syncing": "Syncing",
+        "sync_all": "Sync All",
+        "last_sync": "Sync",
+        "access_restricted": "Neural Engine Access Restricted"
       },
       "locked_plus": {
         "title": "PRO+ ANALYTICS",

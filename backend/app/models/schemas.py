@@ -119,6 +119,16 @@ class PartnerResponse(PartnerBase):
 
     @computed_field
     @property
+    def has_pinterest_setup(self) -> bool:
+        return getattr(self, "pinterest_access_token", None) is not None
+
+    @computed_field
+    @property
+    def has_threads_setup(self) -> bool:
+        return getattr(self, "threads_access_token", None) is not None
+
+    @computed_field
+    @property
     def total_earned(self) -> float:
         return getattr(self, "total_earned_usdt", 0.0)
 
@@ -142,7 +152,9 @@ class PROSetupRequest(BaseModel):
     x_access_token_secret: str | None = None
     telegram_channel_id: str | None = None
     telegram_channels: list[str] | None = None
-    linkedin_access_token: str | None = None
+    linkedin_access_token: str | None = Field(default=None)
+    pinterest_access_token: str | None = Field(default=None)
+    threads_access_token: str | None = Field(default=None)
     
     # #comment: Standardized for audit.
     class Config:

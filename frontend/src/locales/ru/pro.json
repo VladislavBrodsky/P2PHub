@@ -26,18 +26,27 @@
       "viral_reach": "Охват аудитории",
       "success_rate": "Успешность",
       "resonance": {
-        "title": "Прогноз результативности",
-        "status": "Анализ алгоритмов",
-        "confidence": "Уверенность ИИ: {{percent}}%",
-        "action_btn": "Предложить лучшее действие"
+        "title": "Прогноз резонанса",
+        "status": "ДВИЖОК ОПТИМИЗИРОВАН",
+        "confidence": "УВЕРЕННОСТЬ: {{percent}}%",
+        "action_btn": "СИНТЕЗИРОВАТЬ КОНТЕНТ",
+        "gathering_data": "СБОР ДАННЫХ...",
+        "needs_more_posts": "НУЖНО {{count}} ПОСТОВ",
+        "insufficient_data": "Недостаточно данных",
+        "insufficient_data_desc": "Опубликуйте еще {{count}} качественных постов для калибровки ИИ.",
+        "goto_studio": "ПЕРЕЙДИТЕ В СТУДИЮ"
       },
       "raw_data": {
-        "title": "Детальная статистика",
-        "source": "Платформа",
-        "reach": "Охват",
-        "engagement": "Вовлеченность",
+        "title": "История активности",
+        "source": "УЗЕЛ СЕТИ",
+        "reach": "ОХВАТ",
+        "engagement": "РЕЗОНАНС %",
         "viral": "Виральность",
-        "empty": "Постов еще нет."
+        "empty": "ДАННЫЕ ЕЩЕ НЕ СИНХРОНИЗИРОВАНЫ",
+        "syncing": "Синхронизация",
+        "sync_all": "Синхронизировать все",
+        "last_sync": "Синхр",
+        "access_restricted": "Доступ к Neural Engine ограничен"
       },
       "locked_plus": {
         "title": "PRO+ АНАЛИТИКА",
