@@ -108,8 +108,8 @@ export const ProDashboard = () => {
 
             setShowAuditModal(true);
             showNotification({
-                title: force ? 'Viral Research Complete' : 'Global Sync Complete',
-                message: force ? 'Fresh intelligence acquired (-3 Tokens).' : 'Market intelligence dossier updated.',
+                title: force ? t('pro_dashboard.notifications.audit_force_success_title') : t('pro_dashboard.notifications.audit_success_title'),
+                message: force ? t('pro_dashboard.notifications.audit_force_success_msg') : t('pro_dashboard.notifications.audit_success_msg'),
                 type: 'success'
             });
             hapticNotification('success');
@@ -145,8 +145,8 @@ export const ProDashboard = () => {
 
             hapticNotification('success');
             showNotification({
-                title: 'Module Complete',
-                message: `XP Earned! Tokens updated.`,
+                title: t('pro_dashboard.notifications.module_complete_title'),
+                message: t('pro_dashboard.notifications.module_complete_msg'),
                 type: 'success'
             });
         } catch (error: any) {

@@ -71,7 +71,7 @@ export const ToolsTab = ({
                                     </div>
                                 </div>
                                 <div className="px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 shrink-0">
-                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Active</span>
+                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('pro_dashboard.node_active')}</span>
                                 </div>
                             </div>
                         </div>
@@ -114,7 +114,7 @@ export const ToolsTab = ({
                                     </div>
                                 </div>
                                 <div className="px-2.5 py-1 bg-amber-500/10 rounded-full border border-amber-500/20 shrink-0">
-                                    <span className="text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">Active</span>
+                                    <span className="text-[8px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">{t('pro_dashboard.node_active')}</span>
                                 </div>
                             </div>
                         </div>

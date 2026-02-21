@@ -4,6 +4,7 @@
     "title_tools": "Professional Tools",
     "title_growth": "Growth Strategy",
     "status_online": "System online",
+    "node_active": "ACTIVE",
     "tab_studio": "Studio",
     "tab_tools": "Tools",
     "tab_growth": "Growth",
@@ -283,6 +284,10 @@
       "platform_not_configured": "NOT CONFIGURED",
       "platform_success": "PUBLISHED SUCCESSFULLY",
       "platform_tap": "TAP TO PUBLISH",
+      "platform_selected": "SELECTED FOR OMNI-SYNC",
+      "platform_tap_select": "TAP TO SELECT",
+      "omni_publish_btn": "OMNI-SYNC PUBLISH ({{count}})",
+      "processing": "Processing...",
       "create_another_btn": "CREATE ANOTHER POST",
       "footer": "Pintopay Global Sync • 2026"
     },
@@ -302,7 +307,13 @@
       "published": "Published",
       "published_text": "Synchronized with {{platform}}.",
       "publish_error": "Publish Error",
-      "publish_failed": "Failed to publish."
+      "publish_failed": "Failed to publish.",
+      "audit_success_title": "Global Sync Complete",
+      "audit_force_success_title": "Viral Research Complete",
+      "audit_success_msg": "Market intelligence dossier updated.",
+      "audit_force_success_msg": "Fresh intelligence acquired (-3 Tokens).",
+      "module_complete_title": "Module Complete",
+      "module_complete_msg": "XP Earned! Tokens updated."
     },
     "tools": {
       "headline": {
@@ -348,9 +359,16 @@
       }
     },
     "academy": {
-      "title": "Knowledge Base",
-      "desc": "Learn effective social media growth strategies. These materials will help you attract partners consistently and sustainably.",
-      "understand_btn": "Start Learning",
+      "title": "Intelligence Hub",
+      "desc": "Elite knowledge stack for social domination.",
+      "sync_status": "Synchronization Status",
+      "deployed": "DEPLOYED",
+      "min_read": "MIN READ",
+      "access_granted": "Access granted upon synchronization.",
+      "claim_xp": "CLAIM XP REWARD",
+      "sync_node": "SYNC NODE",
+      "insufficient_tokens_plus": "Earn more tokens or upgrade to PRO+",
+      "understand_btn": "Start Training",
       "read_time": "{{time}} min read",
       "protocol_rank": "Course Rating: 98.4%",
       "rank_name": "EXPERT",

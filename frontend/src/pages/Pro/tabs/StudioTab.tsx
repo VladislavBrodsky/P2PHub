@@ -1236,7 +1236,7 @@ export const StudioTab = ({
                                                                     )}
                                                                 </div>
                                                                 <span className="block text-[8px] font-black uppercase tracking-tighter opacity-60">
-                                                                    {isPublished ? t('pro_dashboard.publish.platform_success') : (isProPlus ? (isSelected ? 'SELECTED FOR OMNI-SYNC' : 'TAP TO SELECT') : t('pro_dashboard.publish.platform_tap'))}
+                                                                    {isPublished ? t('pro_dashboard.publish.platform_success') : (isProPlus ? (isSelected ? t('pro_dashboard.publish.platform_selected') : t('pro_dashboard.publish.platform_tap_select')) : t('pro_dashboard.publish.platform_tap'))}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -1319,7 +1319,7 @@ export const StudioTab = ({
                                                 className="w-full h-13 vibing-crystal-purple-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-purple-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                             >
                                                 <Zap size={16} className="group-hover:scale-125 transition-transform" />
-                                                OMNI-SYNC PUBLISH ({selectedPublishPlatforms.length})
+                                                {t('pro_dashboard.publish.omni_publish_btn', { count: selectedPublishPlatforms.length })}
                                             </button>
                                         </motion.div>
                                     )}
@@ -1327,7 +1327,7 @@ export const StudioTab = ({
                                     {isPublishing && (
                                         <div className="flex items-center justify-center gap-2 pt-1">
                                             <Loader2 className="animate-spin text-purple-500" size={16} />
-                                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-purple-400">Processing...</span>
+                                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-purple-400">{t('pro_dashboard.publish.processing')}</span>
                                         </div>
                                     )}
 

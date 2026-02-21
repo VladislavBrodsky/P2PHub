@@ -3,6 +3,7 @@
     "title_tools": "Профессиональные инструменты",
     "title_growth": "Стратегия роста",
     "status_online": "Система активна",
+    "node_active": "АКТИВЕН",
     "tab_studio": "Студия",
     "tab_tools": "Инструменты",
     "tab_growth": "Рост",
@@ -282,6 +283,10 @@
       "platform_not_configured": "НЕ НАСТРОЕНО",
       "platform_success": "УСПЕШНО ОПУБЛИКОВАНО",
       "platform_tap": "НАЖМИТЕ ДЛЯ ПУБЛИКАЦИИ",
+      "platform_selected": "ВЫБРАНО ДЛЯ OMNI-SYNC",
+      "platform_tap_select": "НАЖМИТЕ ДЛЯ ВЫБОРА",
+      "omni_publish_btn": "OMNI-SYNC ПУБЛИКАЦИЯ ({{count}})",
+      "processing": "Обработка...",
       "create_another_btn": "СОЗДАТЬ ЕЩЕ ПОСТ",
       "footer": "P2PHub Global Sync • 2026"
     },
@@ -301,7 +306,13 @@
       "published": "Опубликовано",
       "published_text": "Синхронизировано с {{platform}}.",
       "publish_error": "Ошибка публикации",
-      "publish_failed": "Не удалось опубликовать."
+      "publish_failed": "Не удалось опубликовать.",
+      "audit_success_title": "Глобальная синхронизация завершена",
+      "audit_force_success_title": "Виральное исследование завершено",
+      "audit_success_msg": "Досье рыночной разведки обновлено.",
+      "audit_force_success_msg": "Получены свежие данные (-3 Токена).",
+      "module_complete_title": "Модуль завершен",
+      "module_complete_msg": "XP получены! Токены обновлены."
     },
     "tools": {
       "headline": {
@@ -347,8 +358,15 @@
       }
     },
     "academy": {
-      "title": "База Знаний",
-      "desc": "Изучите эффективные стратегии роста в соцсетях. Эти материалы помогут вам привлекать партнеров системно и стабильно.",
+      "title": "Узел Разведки",
+      "desc": "Элитный стек знаний для доминирования в соцсетях.",
+      "sync_status": "Статус синхронизации",
+      "deployed": "РАЗВЕРНУТО",
+      "min_read": "МИН ЧТЕНИЯ",
+      "access_granted": "Доступ предоставлен после синхронизации.",
+      "claim_xp": "ПОЛУЧИТЬ XP НАГРАДУ",
+      "sync_node": "СИНХРОНИЗИРОВАТЬ УЗЕЛ",
+      "insufficient_tokens_plus": "Заработайте токены или перейдите на PRO+",
       "understand_btn": "Начать Обучение",
       "read_time": "{{time}} мин",
       "protocol_rank": "Рейтинг курса: 98.4%",

@@ -56,8 +56,21 @@ class SubscriptionService:
         res_expired = await session.exec(stmt_expired)
         for partner in res_expired.all():
             partner.is_pro = False
+            last_plan = partner.subscription_plan or "PRO"
             partner.subscription_plan = None
             session.add(partner)
+            
+            # Log Audit — Membership Expired
+            from app.services.audit_service import audit_service
+            await audit_service.log_payment(
+                session=session,
+                partner_id=partner.id,
+                transaction_id=0, # Fixed virtual ID for expiration events
+                amount=0.0,
+                currency="USD",
+                plan=last_plan,
+                status="expired"
+            )
             
             # Invalidate Redis Cache to ensure UI reflects the change immediately
             from app.services.redis_service import redis_service

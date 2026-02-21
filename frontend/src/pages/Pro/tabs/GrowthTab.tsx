@@ -138,9 +138,9 @@ export const GrowthTab = ({
                         return (
                             <div className="flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">Synchronization Status</span>
+                                    <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.sync_status')}</span>
                                     <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
-                                        {progress}% DEPLOYED
+                                        {progress}% {t('pro_dashboard.academy.deployed')}
                                     </span>
                                 </div>
 
@@ -217,7 +217,7 @@ export const GrowthTab = ({
                                     <div className="flex items-center justify-between mb-5">
                                         <div className="flex items-center gap-3">
                                             <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
-                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} MIN READ</span>
+                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.min_read')}</span>
                                         </div>
                                         {mockProgress === 100 && (
                                             <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
@@ -437,7 +437,7 @@ export const GrowthTab = ({
                                                                             </p>
                                                                         ) : (
                                                                             <p className="text-sm font-bold text-slate-400 italic">
-                                                                                Access granted upon synchronization.
+                                                                                {t('pro_dashboard.academy.access_granted')}
                                                                             </p>
                                                                         )}
                                                                     </div>
@@ -457,7 +457,7 @@ export const GrowthTab = ({
                                                                             <Loader2 className="w-5 h-5 animate-spin" />
                                                                         ) : (
                                                                             <>
-                                                                                <span>{!isPaid ? "CLAIM XP REWARD" : `SYNC NODE (-${Math.abs(cost)} TOKENS)`}</span>
+                                                                                <span>{!isPaid ? t('pro_dashboard.academy.claim_xp') : `${t('pro_dashboard.academy.sync_node')} (-${Math.abs(cost)} TOKENS)`}</span>
                                                                                 <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse" />
                                                                                 <span className="opacity-60">+{xpReward} XP</span>
                                                                             </>
@@ -478,7 +478,7 @@ export const GrowthTab = ({
                                                                         {!canAffordTokens ? "INSUFFICIENT TOKENS" : "INSUFFICIENT XP SCORE"}
                                                                     </h6>
                                                                     <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">
-                                                                        {xpCost > academyScore ? `REQUIRES ${xpCost} XP (YOU HAVE ${academyScore})` : "Earn more tokens or upgrade to PRO+"}
+                                                                        {xpCost > academyScore ? `REQUIRES ${xpCost} XP (YOU HAVE ${academyScore})` : t('pro_dashboard.academy.insufficient_tokens_plus')}
                                                                     </p>
                                                                 </div>
                                                                 {!status?.is_pro_plus && (

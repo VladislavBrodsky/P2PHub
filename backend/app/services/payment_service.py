@@ -184,39 +184,31 @@ class PaymentService:
                 transaction_id=active_session.id
             )
             
-            from app.models.audit_log import ActionType
             from app.services.audit_service import audit_service
-            await audit_service.log_event(
+            await audit_service.log_payment(
                 session=session,
                 partner_id=partner.id,
-                action_type=ActionType.PAYMENT,
-                description=f"TON Payment Verified: {active_session.amount} USD",
-                entity_type="transaction",
-                entity_id=tx_hash,
-                action="ton_verification_success",
-                actor_id=str(partner.telegram_id),
-                details={"amount": active_session.amount}
+                transaction_id=active_session.id,
+                amount=active_session.amount,
+                currency="TON",
+                plan=partner.subscription_plan or "PRO",
+                status="verified",
+                tx_hash=tx_hash
             )
             
             return True
 
         # If it failed but session is still valid, we keep it pending.
-        # If we wanted to cancel it explicitly on failure, we could,
-        # but the 10-min check handles it.
-        
-        # #comment: Audit failure
-        from app.models.audit_log import ActionType
         from app.services.audit_service import audit_service
-        await audit_service.log_event(
+        await audit_service.log_payment(
             session=session,
             partner_id=partner.id,
-            action_type=ActionType.PENALTY,
-            description="TON Payment Verification Failed",
-            entity_type="transaction",
-            entity_id=tx_hash,
-            action="ton_verification_failed",
-            actor_id=str(partner.telegram_id),
-            details={"error": "Invalid Hash or Amount mismatch"}
+            transaction_id=active_session.id,
+            amount=active_session.amount,
+            currency="TON",
+            plan="PRO",
+            status="failed",
+            tx_hash=tx_hash
         )
 
         return False
