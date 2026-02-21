@@ -1600,7 +1600,7 @@ export const AdminPage = () => {
                                                             {p.username ? `@${p.username}` : `${p.first_name || 'Partner'}`}
                                                         </div>
                                                         <div className="text-[9px] font-bold text-slate-500 uppercase">
-                                                            ID: {p.telegram_id} · {p.level} Lvl
+                                                            ID: {p.telegram_id} {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && `· ${p.level} Lvl`}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1846,10 +1846,12 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/5 dark:border-white/5">
-                                            <div className="text-center">
-                                                <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
-                                                <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.level}</div>
-                                            </div>
+                                            {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && (
+                                                <div className="text-center">
+                                                    <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
+                                                    <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.level}</div>
+                                                </div>
+                                            )}
                                             <div className="text-center">
                                                 <div className="text-[8px] text-slate-500 font-black uppercase">Network</div>
                                                 <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.referral_count}</div>
@@ -1920,7 +1922,9 @@ export const AdminPage = () => {
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
                                             <div className="text-[10px] font-black text-slate-500 uppercase">Account Rank</div>
-                                            <div className="text-xl font-black text-blue-500">Level {partnerDetails.level}</div>
+                                            <div className="text-xl font-black text-blue-500">
+                                                {(partnerDetails.is_pro && (partnerDetails.subscription_plan || "").includes('PLUS')) ? 'PRO+' : `Level ${partnerDetails.level}`}
+                                            </div>
                                             <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
                                         </div>
                                         <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
