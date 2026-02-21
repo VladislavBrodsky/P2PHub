@@ -28,7 +28,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     return (
         <div className={`relative overflow-visible pt-6 ${className}`}>
             {/* Premium Background Glow */}
-            <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
+            {/* Premium Background Glow - Disabled for compact variant to avoid glitches in menu */}
+            {variant !== 'compact' && (
+                <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
+            )}
 
             {/* Vibing Purple Crown for PRO Users - Outside container to avoid clipping */}
             {user?.is_pro && (
@@ -57,13 +60,13 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
             <div className={`
-                relative rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) shadow-premium-lg group
-                ${variant === 'compact' ? 'gap-4' : ''}
+                relative rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) group
+                ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : ''}
             `}>
                 <div className="flex items-center gap-5 p-4 rounded-[inherit] overflow-hidden">
-                    {/* PRO+ Vibing Animated Border */}
-                    {isProPlus && (
+                    {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
+                    {isProPlus && variant !== 'compact' && (
                         <motion.div
                             animate={{
                                 opacity: [0.3, 0.7, 0.3],
