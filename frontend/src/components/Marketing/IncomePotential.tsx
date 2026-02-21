@@ -149,7 +149,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <button
                                                 onClick={() => {
                                                     handleUnlock();
-                                                    onNavigateToPartner?.();
                                                 }}
                                                 className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden"
                                             >
