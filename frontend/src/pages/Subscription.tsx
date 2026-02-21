@@ -586,11 +586,11 @@ export default function SubscriptionPage() {
                         <div className="flex items-center justify-between mb-3 px-3">
                             <div className="flex items-center gap-2">
                                 <div className="w-1 h-3 bg-blue-600 rounded-full" />
-                                <h3 className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-500 dark:text-white/40">
+                                <h3 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
                                     {t('subscription.comparison.title', 'Key Differences')}
                                 </h3>
                             </div>
-                            <div className="text-[7px] font-black text-blue-500/60 uppercase tracking-widest animate-pulse">
+                            <div className="text-[9px] font-black text-blue-500/80 uppercase tracking-widest animate-pulse">
                                 TAP TO EXPLORE
                             </div>
                         </div>
@@ -607,23 +607,23 @@ export default function SubscriptionPage() {
                                     <button
                                         key={idx}
                                         onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                        className="vibing-premium-panel bg-white/40 dark:bg-white/5 border-slate-200/50 dark:border-white/5 rounded-[1.5rem] p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-sm active:scale-95 text-center"
+                                        className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.5rem] p-3 flex flex-col items-center gap-2 relative overflow-hidden group transition-all shadow-md active:scale-95 text-center"
                                     >
                                         <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
-                                        <div className={`w-8 h-8 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12`}>
-                                            <item.icon size={14} strokeWidth={2.5} />
+                                        <div className={`w-9 h-9 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 shadow-sm`}>
+                                            <item.icon size={16} strokeWidth={2.5} />
                                         </div>
-                                        <span className="text-[8px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.2em]">{item.label}</span>
+                                        <span className="text-[9px] font-black text-slate-500 dark:text-white/50 uppercase tracking-[0.2em]">{item.label}</span>
 
-                                        <div className="flex items-center gap-1.5 mt-0.5">
-                                            <span className="text-[10px] font-black text-slate-300 dark:text-white/10 transition-all duration-500">{inactiveValue}</span>
-                                            <div className="w-px h-3 bg-slate-200 dark:bg-white/10" />
-                                            <div className="flex items-center gap-1">
-                                                <span className={`text-[16px] font-black transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]'}`}>
+                                        <div className="flex items-center gap-2 mt-0.5">
+                                            <span className="text-[11px] font-black text-slate-400 dark:text-white/20 transition-all duration-500">{inactiveValue}</span>
+                                            <div className="w-[1.5px] h-3.5 bg-slate-200 dark:bg-white/10 rounded-full" />
+                                            <div className="flex items-center gap-1.5">
+                                                <span className={`text-[18px] font-black transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'vibing-yellow-text drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]'}`}>
                                                     {activeValue}
                                                 </span>
                                                 {selectedPlan === 'PRO_PLUS' && (
-                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1 tracking-tighter rounded-xs animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.4)]">TURBO</span>
+                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1.5 py-0.5 tracking-tighter rounded-xs animate-pulse shadow-[0_4px_10px_rgba(244,63,94,0.4)]">TURBO</span>
                                                 )}
                                             </div>
                                         </div>
