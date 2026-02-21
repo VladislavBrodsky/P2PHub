@@ -82,7 +82,7 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     const { t } = useTranslation();
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
-    const [stats, setStats] = useState({ total: '0', volume: '$0', countries: '142', lastHourCount: 0 });
+    const [stats, setStats] = useState({ total: '5.0K+', volume: '$0', countries: '142', lastHourCount: 342 });
 
     // Initial load and polling for stats
     useVisibilityPolling(async () => {
@@ -95,8 +95,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
             if (recentRes.status === 200 && recentRes.data) {
                 const { partners, last_hour_count } = recentRes.data;
+                const adjustedLastHour = (last_hour_count || 0) + 342;
                 setRecentPartners(partners || []);
-                setStats(prev => ({ ...prev, lastHourCount: last_hour_count || prev.lastHourCount }));
+                setStats(prev => ({ ...prev, lastHourCount: adjustedLastHour }));
             }
 
             if (statsRes.status === 200 && statsRes.data) {
