@@ -33,7 +33,7 @@ export const EarnHeader = () => {
             />
 
             {/* Card body */}
-            <div className="relative rounded-[1.95rem] bg-[var(--color-bg-glass)] backdrop-blur-3xl overflow-hidden border border-[var(--color-border-glass)]">
+            <div className="relative rounded-[1.95rem] bg-(--color-bg-glass) backdrop-blur-3xl overflow-hidden border border-(--color-border-glass)">
 
                 {/* ── Ambient glows ── */}
                 <div
@@ -103,7 +103,7 @@ export const EarnHeader = () => {
 
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-[var(--color-text-primary)] opacity-40 leading-none">
+                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-(--color-text-primary) opacity-40 leading-none">
                                     {t('earn_header.level')}
                                 </span>
                                 <motion.span
@@ -111,7 +111,7 @@ export const EarnHeader = () => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-[2.1rem] font-black text-[var(--color-text-primary)] leading-none tracking-tight"
+                                    className="text-[2.1rem] font-black text-(--color-text-primary) leading-none tracking-tight"
                                 >
                                     {level}
                                 </motion.span>
@@ -145,14 +145,14 @@ export const EarnHeader = () => {
 
                         {/* XP Progress header row */}
                         <div className="flex items-baseline justify-between px-0.5">
-                            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-[var(--color-text-primary)] opacity-40 leading-none">
+                            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-xs font-black text-[var(--color-text-primary)] transition-colors tabular-nums"
+                                className="text-xs font-black text-(--color-text-primary) transition-colors tabular-nums"
                             >
                                 {progress.current.toLocaleString()} <span className="opacity-30">/</span> {progress.total.toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
@@ -198,19 +198,19 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-2xl p-4 border bg-[var(--input-bg)] border-[var(--input-border)]"
+                                className="relative overflow-hidden rounded-2xl p-4 border bg-(--input-bg) border-(--input-border)"
                             >
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-6 h-6 rounded-lg flex items-center justify-center"
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
                                         <Users className="w-3.5 h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-[var(--color-text-primary)] opacity-40">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40">
                                         {t('earn_header.partners')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1.5">
-                                    <span className="text-2xl font-black text-[var(--color-text-primary)] leading-none tabular-nums">
+                                    <span className="text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
                                     <TrendingUp className="w-4 h-4 text-amber-500/60 mb-0.5" />
@@ -225,19 +225,19 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-2xl p-4 border bg-[var(--input-bg)] border-[var(--input-border)]"
+                                className="relative overflow-hidden rounded-2xl p-4 border bg-(--input-bg) border-(--input-border)"
                             >
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-6 h-6 rounded-lg flex items-center justify-center"
                                         style={{ background: `${badgeColor}22` }}>
                                         <Zap className="w-3.5 h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-[var(--color-text-primary)] opacity-40">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40">
                                         {t('earn_header.total_xp')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1.5">
-                                    <span className="text-2xl font-black leading-none tabular-nums text-[var(--color-text-primary)]">
+                                    <span className="text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
                                         {xp.toLocaleString()}
                                     </span>
                                     <span className="text-[10px] font-black uppercase mb-0.5"

@@ -49,17 +49,17 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         style={{ overscrollBehavior: 'none' }}
                     >
                         {/* Header */}
-                        <div className="p-6 pb-4 border-b border-white/10 bg-slate-900/80 backdrop-blur-md sticky top-0 z-10">
+                        <div className="p-6 pb-4 border-b border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md sticky top-0 z-10">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+                                <h2 className="text-xl font-black text-(--color-text-primary) tracking-tight flex items-center gap-2">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     {t('referral.brief.title')}
                                 </h2>
                                 <button
                                     onClick={onClose}
-                                    className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+                                    className="w-8 h-8 rounded-full bg-(--color-text-primary)/5 hover:bg-(--color-text-primary)/10 flex items-center justify-center transition-colors"
                                 >
-                                    <X className="w-4 h-4 text-slate-400" />
+                                    <X className="w-4 h-4 text-(--color-text-primary)/40" />
                                 </button>
                             </div>
                         </div>
