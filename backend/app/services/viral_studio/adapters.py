@@ -80,20 +80,27 @@ async def post_to_telegram(partner: Partner, content: str, image_path: str | Non
     
     full_image_path = _resolve_image_path(image_path) if image_path else None
     
+    success_count = 0
+    tasks = []
+    
     if full_image_path and os.path.exists(full_image_path):
         for channel_id in channels:
-            msg_id = await _send_telegram_photo(channel_id, full_image_path, formatted_content)
-            if msg_id:
-                success_count += 1
-                message_ids.append(f"{channel_id}:{msg_id}")
-            results.append(f"{'✅' if msg_id else '❌'} {channel_id}")
+            tasks.append(_send_telegram_photo(channel_id, full_image_path, formatted_content))
     else:
         for channel_id in channels:
-            msg_id = await _send_telegram_message(channel_id, formatted_content)
-            if msg_id:
-                success_count += 1
-                message_ids.append(f"{channel_id}:{msg_id}")
-            results.append(f"{'✅' if msg_id else '❌'} {channel_id}")
+            tasks.append(_send_telegram_message(channel_id, formatted_content))
+
+    # Parallel Execution for PRO+ Speed
+    sent_msg_ids = await asyncio.gather(*tasks)
+
+    for i, msg_id in enumerate(sent_msg_ids):
+        channel_id = channels[i]
+        if msg_id:
+            success_count += 1
+            message_ids.append(f"{channel_id}:{msg_id}")
+            results.append(f"✅ {channel_id}")
+        else:
+            results.append(f"❌ {channel_id}")
 
     if success_count == 0:
         return {"error": "Failed to publish to any Telegram channels. Ensure Bot is Admin.", "details": results}
