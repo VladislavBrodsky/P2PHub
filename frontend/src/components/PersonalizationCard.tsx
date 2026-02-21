@@ -30,6 +30,31 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             {/* Premium Background Glow */}
             <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
 
+            {/* Vibing Purple Crown for PRO Users - Outside container to avoid clipping */}
+            {user?.is_pro && (
+                <motion.div
+                    initial={{ rotate: -15, y: 0 }}
+                    animate={{
+                        rotate: [-15, 15, -15],
+                        y: [-2, 2, -2],
+                        scale: [1, 1.1, 1]
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    // Adjusted positioning to be relative to the card border
+                    className={`absolute -top-1 -left-1 z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''}`}
+                >
+                    <Crown
+                        size={variant === 'compact' ? 24 : 30}
+                        className="text-fuchsia-500 fill-fuchsia-500/10"
+                        strokeWidth={2.5}
+                    />
+                </motion.div>
+            )}
+
             {/* #comment: Unified padding (p-2.5 px-4) with other dashboard cards for vertical rhythm consistency */}
             <div className={`
                 flex items-center gap-5 p-4 rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) shadow-premium relative overflow-hidden group
@@ -55,29 +80,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 {/* Left: Avatar & Rank Badge Column */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">
-                        {/* Vibing Gold Crown for PRO Users - Moved outside overflow-hidden container to fix glitch */}
-                        {user?.is_pro && (
-                            <motion.div
-                                initial={{ rotate: -15, y: 0 }}
-                                animate={{
-                                    rotate: [-15, 15, -15],
-                                    y: [-2, 2, -2],
-                                    scale: [1, 1.1, 1]
-                                }}
-                                transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                                className={`absolute -top-3.5 -left-3.5 z-50 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)] ${isProPlus ? 'brightness-125' : ''}`}
-                            >
-                                <Crown
-                                    size={variant === 'compact' ? 26 : 32}
-                                    className="text-amber-400 fill-amber-400/20"
-                                    strokeWidth={3}
-                                />
-                            </motion.div>
-                        )}
+
 
                         <motion.div
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
