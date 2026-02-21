@@ -190,8 +190,7 @@ Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
 3. **EMOTION:** Start by mirroring the audience's deep internal monologue or pain point.
 4. **ENGAGEMENT architecture:** End with a provocative thought, FOMO, or a "Signal Request".
 5. **CTA:** The final line MUST be: **[{cta_fallback}]({ref_link})**
-6. **CHARACTERS:** Keep the entire body under 950 characters.
-
+6. **TOTAL LENGTH LIMIT (ABSOLUTE CRITICAL):** Keep the ENTIRE body text under **700 characters**. Telegram's strict limit is 1024 characters, and you MUST always write at least 20% fewer characters than the absolute limit to account for spacing, emojis, and link structures. If you exceed 750 characters, the system will fail. Count your characters and keep it short, punchy, and dense.
 RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
 """
 

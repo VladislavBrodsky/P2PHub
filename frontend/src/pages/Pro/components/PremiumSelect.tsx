@@ -175,7 +175,7 @@ export const PremiumSelect = ({
                             exit={{ opacity: 0, y: -8, scale: 0.98 }}
                             transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
                             style={dropdownStyle}
-                            className="bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-y-auto overscroll-contain z-9999"
+                            className="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-xl sm:rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-2xl overflow-y-auto overscroll-contain z-9999"
                         >
                             <div className="p-1.5 space-y-0.5">
                                 {options.map((option) => {
@@ -194,18 +194,18 @@ export const PremiumSelect = ({
                                                 }
                                             }}
                                             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left group/item
-                                                ${isSelected
+                                                        ${isSelected
                                                     ? theme.active
-                                                    : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                                    : `hover:bg-${color}-50 dark:hover:bg-${color}-500/10 text-slate-600 dark:text-slate-400 hover:${theme.text}`
                                                 }
-                                            `}
+                                                    `}
                                         >
                                             <div className="flex flex-col text-left mr-2">
-                                                <span className="text-[12px] sm:text-[13px] font-bold">
+                                                <span className={`text-[12px] sm:text-[13px] font-bold transition-colors ${isSelected ? theme.text : `group-hover/item:${theme.text}`}`}>
                                                     {option.label}
                                                 </span>
                                                 {option.description && (
-                                                    <span className={`text-[10px] mt-0.5 leading-snug ${isSelected ? 'text-indigo-600/70 dark:text-indigo-400/70' : 'text-slate-500 dark:text-slate-400 group-hover/item:text-slate-600 dark:group-hover/item:text-slate-300'}`}>
+                                                    <span className={`text-[10px] mt-0.5 leading-snug transition-colors ${isSelected ? `text-${color}-600/70 dark:text-${color}-400/70` : `text-slate-500 dark:text-slate-400 group-hover/item:text-${color}-600/70 dark:group-hover/item:text-${color}-400/70`}`}>
                                                         {option.description}
                                                     </span>
                                                 )}
