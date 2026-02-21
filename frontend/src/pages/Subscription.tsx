@@ -250,7 +250,7 @@ export default function SubscriptionPage() {
         { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
         { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
+        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
         { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'intel', icon: Target, label: t('subscription.benefits.growth_intel'), desc: t('subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
     ];
@@ -258,15 +258,10 @@ export default function SubscriptionPage() {
     const proPlusBenefits = [
         { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_plus'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_plus'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-purple-500/10 dark:bg-purple-500/20' },
-        { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'omni', icon: InfinityIcon, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
+        { id: 'omni', icon: InfinityIcon, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc') + " " + t('subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
         { id: 'priority', icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'analytics', icon: BarChart2, label: t('subscription.benefits.content_analytics'), desc: t('subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
         { id: 'empire', icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-        { id: 'channels', icon: Send, label: t('subscription.benefits.tg_multi_channel', '5 Telegram Channels'), desc: t('subscription.benefits.tg_multi_channel_desc', 'Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard.'), color: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10 dark:bg-sky-500/20' },
-        { id: 'broadcast', icon: Radio, label: t('subscription.benefits.multi_broadcast', 'Multi-Channel Broadcasting'), desc: t('subscription.benefits.multi_broadcast_desc', 'Schedule and blast posts across all your connected channels in one click — maximum reach, zero effort.'), color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-500/10 dark:bg-violet-500/20' },
-        { id: 'analytics', icon: BarChart2, label: t('subscription.benefits.content_analytics', 'Content Performance Analytics'), desc: t('subscription.benefits.content_analytics_desc', 'Track reach, engagement, and conversion rates for every post across all channels with real-time insights.'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
     ];
 
     const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
@@ -359,37 +354,37 @@ export default function SubscriptionPage() {
                         />
 
                         {/* Toggle */}
-                        <div className="relative bg-slate-100/80 dark:bg-black/20 p-1.5 rounded-[2rem] flex gap-1.5 border border-slate-200/60 dark:border-white/8 shadow-inner backdrop-blur-xl">
+                        <div className="relative bg-slate-100/30 dark:bg-black/40 p-1 rounded-[2.2rem] flex gap-1 border border-slate-200/50 dark:border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.1)] backdrop-blur-2xl">
                             <div
-                                className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[1.5rem] ${selectedPlan === 'PRO'
-                                    ? 'left-1.5 w-[calc(50%-0.375rem)] bg-white dark:bg-white/10 border border-slate-200 dark:border-white/10 shadow-md'
-                                    : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] bg-linear-to-r from-indigo-500 via-purple-500 to-fuchsia-500 shadow-[0_8px_20px_-4px_rgba(99,102,241,0.5)] border border-white/20'
+                                className={`absolute inset-y-1 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[1.8rem] ${selectedPlan === 'PRO'
+                                    ? 'left-1 w-[calc(50%-0.25rem)] bg-white dark:bg-white/10 border border-slate-200/80 dark:border-white/10 shadow-[0_8px_20px_-4px_rgba(0,0,0,0.1)]'
+                                    : 'left-[calc(50%+0.25rem)] w-[calc(50%-0.25rem)] bg-linear-to-r from-blue-600 via-indigo-600 to-violet-600 shadow-[0_10px_25px_-5px_rgba(37,99,235,0.4)] border border-white/20'
                                     }`}
                             />
                             <button
                                 onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                                className={`relative flex-1 py-3.5 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO' ? 'text-slate-800 dark:text-white' : 'text-slate-400 dark:text-white/30'}`}
+                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
                             >
-                                <span className="text-[9px] font-black tracking-[0.15em] uppercase opacity-70">{t('subscription.upgrade.pro_title')}</span>
+                                <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-60 mb-1">{t('subscription.upgrade.pro_title')}</span>
                                 <div className="flex items-baseline gap-0.5">
-                                    <span className="text-sm font-bold opacity-50">$</span>
-                                    <span className="text-[2rem] font-black tracking-tighter leading-none">39</span>
+                                    <span className="text-[12px] font-bold opacity-40">$</span>
+                                    <span className="text-3xl font-black tracking-tighter leading-none">39</span>
                                 </div>
-                                <span className="text-[8px] font-black opacity-50 uppercase tracking-widest">{t('subscription.upgrade.monthly_label')}</span>
+                                <span className="text-[8px] font-black opacity-40 uppercase tracking-widest mt-1">{t('subscription.upgrade.monthly_label')}</span>
                             </button>
                             <button
                                 onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                                className={`relative flex-1 py-3.5 flex flex-col items-center gap-0.5 z-10 transition-colors duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400 dark:text-white/30'}`}
+                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
                             >
-                                <span className="text-[9px] font-black tracking-[0.15em] uppercase opacity-90">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
+                                <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-80 mb-1">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
                                 <div className="flex items-baseline gap-0.5">
-                                    <span className="text-sm font-bold opacity-60">$</span>
-                                    <span className="text-[2rem] font-black tracking-tighter leading-none">{isStandardPro ? upgradePrice : proPlusPrice}</span>
+                                    <span className="text-[12px] font-bold opacity-60">$</span>
+                                    <span className="text-3xl font-black tracking-tighter leading-none">{isStandardPro ? upgradePrice : proPlusPrice}</span>
                                 </div>
-                                <span className="text-[8px] font-black opacity-80 uppercase tracking-widest">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME' : t('subscription.upgrade.lifetime_label')}</span>
+                                <span className="text-[8px] font-black opacity-80 uppercase tracking-widest mt-1">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME' : t('subscription.upgrade.lifetime_label')}</span>
                                 {selectedPlan !== 'PRO_PLUS' && (
-                                    <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-amber-400 to-orange-500 text-[8px] font-black text-white rounded-full border border-slate-200 dark:border-slate-800 shadow-md animate-bounce">
-                                        🔥 20X
+                                    <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-orange-500 to-rose-600 text-[8px] font-black text-white rounded-full border border-white/20 shadow-lg animate-bounce">
+                                        BEST VALUE
                                     </div>
                                 )}
                             </button>
@@ -398,48 +393,49 @@ export default function SubscriptionPage() {
 
                     {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
                     <div className="mb-10 px-1">
-                        <div className="flex items-center gap-2 mb-4 px-2">
-                            <div className="w-1 h-4 bg-blue-500 rounded-full" />
-                            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-white/40">
-                                {t('subscription.comparison.title', 'Key Differences')}
-                            </h3>
+                        <div className="flex items-center justify-between mb-5 px-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-1.5 h-4 bg-blue-600 rounded-full" />
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.15em] text-slate-800 dark:text-white/60">
+                                    {t('subscription.comparison.title', 'Key Differences')}
+                                </h3>
+                            </div>
+                            <div className="flex gap-2 text-[8px] font-black uppercase tracking-widest opacity-40">
+                                <span>Pro</span>
+                                <span className="text-blue-500">vs</span>
+                                <span>Elite</span>
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-3 gap-3">
                             {[
                                 { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                                 { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10' },
-                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-sky-500', bg: 'bg-sky-500/10' },
+                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10' },
                             ].map((item, idx) => (
-                                <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-[1.5rem] p-4 flex flex-col items-center gap-2 relative overflow-hidden group hover:bg-slate-100/80 dark:hover:bg-white/5 transition-colors shadow-sm">
-                                    <div className={`w-10 h-10 rounded-[1rem] ${item.bg} ${item.color} flex items-center justify-center mb-1 group-hover:scale-110 transition-transform`}>
+                                <div key={idx} className="bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/5 rounded-2xl p-4 flex flex-col items-center gap-2 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-white/10 transition-all shadow-sm">
+                                    <div className={`w-9 h-9 rounded-xl ${item.bg} ${item.color} flex items-center justify-center mb-1 group-hover:scale-110 transition-transform shadow-inner`}>
                                         <item.icon size={16} />
                                     </div>
                                     <span className="text-[9px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest">{item.label}</span>
 
                                     <div className="flex items-center gap-2.5 mt-1">
+                                        <span className="text-[13px] font-black text-slate-900 dark:text-white/60">{item.pro}</span>
+                                        <div className="w-px h-4 bg-slate-200 dark:bg-white/10" />
                                         <div className="flex flex-col items-center">
-                                            <span className="text-[12px] font-black text-slate-900 dark:text-white/60">{item.pro}</span>
-                                            <span className="text-[6px] font-black text-slate-400 dark:text-white/20 uppercase">PRO</span>
-                                        </div>
-                                        <div className="w-px h-6 bg-slate-100 dark:bg-white/10" />
-                                        <div className="flex flex-col items-center">
-                                            <span className={`text-[15px] font-black ${selectedPlan === 'PRO_PLUS' ? 'text-yellow-600' : 'text-slate-900 dark:text-white'}`}>{item.plus}</span>
-                                            <span className={`text-[6px] font-black uppercase ${selectedPlan === 'PRO_PLUS' ? 'text-yellow-600/60' : 'text-slate-400 dark:text-white/20'}`}>PRO+</span>
+                                            <span className={`text-[17px] font-black ${selectedPlan === 'PRO_PLUS' ? 'text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]' : 'text-slate-900 dark:text-white'}`}>{item.plus}</span>
                                         </div>
                                     </div>
 
                                     {selectedPlan === 'PRO_PLUS' && (
                                         <motion.div
-                                            layoutId={`glow-${idx}`}
-                                            className="absolute inset-0 bg-yellow-500/5 pointer-events-none"
+                                            layoutId={`glow-comp-${idx}`}
+                                            className="absolute inset-0 bg-blue-500/5 pointer-events-none"
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                         />
                                     )}
-                                    {selectedPlan === 'PRO_PLUS' && (
-                                        <div className="absolute inset-0 border-2 border-yellow-500/30 rounded-[1.5rem] pointer-events-none" />
-                                    )}
+                                    <div className={`absolute top-0 right-0 w-8 h-8 bg-(--color-primary) opacity-0 group-hover:opacity-10 blur-xl transition-opacity pointer-events-none`} />
                                 </div>
                             ))}
                         </div>
@@ -518,38 +514,36 @@ export default function SubscriptionPage() {
                             </div>
 
                             {/* Benefits list */}
-                            <div className="space-y-3">
+                            <div className="grid grid-cols-1 gap-2.5">
                                 {currentBenefits.map((b, i) => {
                                     const isExpanded = expandedBenefit === b.id;
                                     return (
                                         <motion.div
                                             key={b.id}
-                                            initial={{ opacity: 0, x: -10 }}
-                                            animate={{ opacity: 1, x: 0 }}
-                                            transition={{ delay: i * 0.04 }}
-                                            className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-[1.5rem] overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50"
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: i * 0.05 }}
+                                            className="relative group focus-within:ring-2 focus-within:ring-blue-500/50 rounded-2xl transition-all"
                                         >
                                             <button
                                                 onClick={() => {
                                                     selection();
                                                     setExpandedBenefit(isExpanded ? null : b.id);
                                                 }}
-                                                className="w-full text-left"
+                                                className={`w-full text-left rounded-2xl border transition-all duration-300 ${isExpanded ? 'bg-white dark:bg-white/10 border-blue-500/30 shadow-lg' : 'bg-white/40 dark:bg-black/20 border-slate-200/60 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10'}`}
                                             >
-                                                <div className="p-5 flex items-center justify-between w-full">
-                                                    <div className="flex items-center gap-3.5 flex-1 pr-4">
-                                                        <div className={`w-10 h-10 rounded-[1rem] ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color}`}>
-                                                            <b.icon size={18} />
+                                                <div className="px-4 py-3.5 flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-9 h-9 rounded-xl ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color} group-hover:scale-110 transition-transform`}>
+                                                            <b.icon size={16} />
                                                         </div>
-                                                        <div className="flex flex-col min-w-0">
-                                                            <span className={`text-[10px] font-black uppercase tracking-[0.1em] ${b.color}`}>{b.label}</span>
-                                                        </div>
+                                                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-700 dark:text-white/90">{b.label}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-3 shrink-0">
-                                                        <Check size={14} className="text-emerald-500" strokeWidth={3} />
+                                                    <div className="flex items-center gap-2">
+                                                        <Check size={12} className="text-emerald-500 opacity-60" strokeWidth={4} />
                                                         <ChevronDown
-                                                            size={16}
-                                                            className={`text-slate-400 dark:text-white/20 transition-transform duration-300 block ${isExpanded ? 'rotate-180 text-blue-500' : ''}`}
+                                                            size={14}
+                                                            className={`text-slate-400 dark:text-white/20 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-blue-500' : ''}`}
                                                         />
                                                     </div>
                                                 </div>
@@ -560,12 +554,14 @@ export default function SubscriptionPage() {
                                                         initial={{ height: 0, opacity: 0 }}
                                                         animate={{ height: 'auto', opacity: 1 }}
                                                         exit={{ height: 0, opacity: 0 }}
-                                                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                        transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
                                                     >
-                                                        <div className="px-5 pb-5 pt-0 ml-[3.25rem]">
-                                                            <p className="text-[11px] font-medium text-slate-600 dark:text-white/60 leading-relaxed border-t border-slate-200/50 dark:border-white/10 pt-3">
-                                                                {b.desc}
-                                                            </p>
+                                                        <div className="px-4 pb-4 pt-0">
+                                                            <div className="pl-12 pr-4 py-3 border-t border-slate-100 dark:border-white/5">
+                                                                <p className="text-[11px] font-medium text-slate-500 dark:text-white/50 leading-relaxed italic">
+                                                                    {b.desc}
+                                                                </p>
+                                                            </div>
                                                         </div>
                                                     </motion.div>
                                                 )}

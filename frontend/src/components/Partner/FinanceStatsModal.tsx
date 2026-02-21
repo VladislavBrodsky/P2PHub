@@ -4,8 +4,24 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import {
     X, Clock, Calendar, ChevronDown,
-    ArrowUpRight, ArrowDownRight, Activity, DollarSign
+    ArrowUpRight, ArrowDownRight, Activity
 } from 'lucide-react';
+
+// ── Inline USDT (Tether) logo ─────────────────────────────────────────────
+const USDTLogo = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg className={className} style={style} viewBox="0 0 339.43 295.27" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M62.15 1.45L1.64 119.12a4.41 4.41 0 00.87 5.2l166.26 169.63a4.44 4.44 0 006.3 0L341.34 124.32a4.41 4.41 0 00.87-5.2L281.28 1.45a4.43 4.43 0 00-3.96-1.45H66.11a4.43 4.43 0 00-3.96 1.45z" />
+        <path fill="white" d="M191.19 144.8v-.06c-1.31.09-8.07.5-23.15.5-12.02 0-20.52-.37-23.48-.5v.06c-46.25-2.04-80.67-10.09-80.67-19.78s34.42-17.74 80.67-19.8v31.49c3 .22 11.72.73 23.68.73 14.38 0 21.59-.59 22.95-.73v-31.47c46.16 2.06 80.49 10.1 80.49 19.78s-34.3 17.74-80.49 19.78zm0-42.8V69.7h64.32V23.09H83.88V69.7h64.32v32.29c-52.33 2.39-91.65 12.75-91.65 25.19s39.32 22.79 91.65 25.18v90.06h42.99v-90.1c52.2-2.38 91.41-12.73 91.41-25.16 0-12.41-39.21-22.77-91.41-25.16z" />
+    </svg>
+);
+
+// ── Inline TON (The Open Network) logo ────────────────────────────────────
+const TONLogo = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg className={className} style={style} viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+        <path d="M28 0C12.536 0 0 12.536 0 28s12.536 28 28 28 28-12.536 28-28S43.464 0 28 0z" />
+        <path fill="white" d="M37.83 15.83H18.17a2.42 2.42 0 00-2.04 3.72L27.05 39.3a1.12 1.12 0 001.9 0L39.87 19.55a2.42 2.42 0 00-2.04-3.72zm-12.27 15.5l-5.61-9.72h7.43l-1.82 9.72zm1.9.24l1.89-10.1h1.3l1.89 10.1-1.94 3.17-3.14-3.17zm6.51-.24l-1.82-9.72h7.43l-5.61 9.72z" />
+    </svg>
+);
 import { apiClient } from '../../api/client';
 import { useHaptic } from '../../hooks/useHaptic';
 
@@ -123,7 +139,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             className="absolute top-3 right-3 pointer-events-none"
                                             style={{ color: '#10b981', opacity: 0.35, filter: 'drop-shadow(0 0 15px rgba(16,185,129,0.4))' }}
                                         >
-                                            <DollarSign className="w-16 h-16" stroke="#10b981" strokeWidth={2.5} />
+                                            <USDTLogo className="w-16 h-16" />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
@@ -132,7 +148,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 className="w-6 h-6 rounded-lg flex items-center justify-center ring-1"
                                                 style={{ background: 'rgba(16,185,129,0.18)', color: '#10b981' }}
                                             >
-                                                <DollarSign className="w-3.5 h-3.5" style={{ color: '#10b981' }} />
+                                                <USDTLogo className="w-3.5 h-3.5" />
                                             </motion.div>
                                             <span className="text-[9.5px] font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                                                 {t('partner_dashboard.finance_stats.usdt_stats', 'USDT Analytics')}
@@ -180,7 +196,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             className="absolute top-3 right-3 pointer-events-none"
                                             style={{ color: '#3b82f6', filter: 'drop-shadow(0 0 15px rgba(59,130,246,0.4))' }}
                                         >
-                                            <Activity className="w-16 h-16" stroke="#3b82f6" strokeWidth={2.5} />
+                                            <TONLogo className="w-16 h-16" />
                                         </motion.div>
                                         <div className="flex items-center gap-2 mb-3">
                                             <motion.div
@@ -189,7 +205,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 className="w-6 h-6 rounded-lg flex items-center justify-center ring-1"
                                                 style={{ background: 'rgba(59,130,246,0.18)', color: '#3b82f6' }}
                                             >
-                                                <Activity className="w-3.5 h-3.5" style={{ color: '#3b82f6' }} />
+                                                <TONLogo className="w-3.5 h-3.5" />
                                             </motion.div>
                                             <span className="text-[9.5px] font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">
                                                 {t('partner_dashboard.finance_stats.ton_stats', 'TON Analytics')}
@@ -422,7 +438,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     {/* USDT */}
                                                     <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
-                                                            <DollarSign className="w-3 h-3 text-emerald-500" />
+                                                            <USDTLogo className="w-3 h-3 text-emerald-500" />
                                                             <span className="text-[8px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">USDT</span>
                                                         </div>
                                                         <div className="space-y-1.5">
@@ -442,7 +458,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     {/* TON */}
                                                     <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
-                                                            <Activity className="w-3 h-3 text-blue-500" />
+                                                            <TONLogo className="w-3 h-3 text-blue-500" />
                                                             <span className="text-[8px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">TON</span>
                                                         </div>
                                                         <div className="space-y-1.5">
