@@ -52,6 +52,22 @@
       "tone_label": "Tone of Voice",
       "tone_instruction": "Adjust the tone and emotion of the generation.",
       "tone_placeholder": "Select tone",
+      "tones": {
+        "provocative": "Provocative (Hype)",
+        "authoritative": "Authoritative (Expert)",
+        "empathetic": "Empathetic (Story)",
+        "cynical": "Sarcastic (Filter)",
+        "minimalist": "Minimalist (Elite)",
+        "aggressive": "Aggressive (Sales)"
+      },
+      "tones_desc": {
+        "provocative": "Loud, attention-grabbing, highly viral",
+        "authoritative": "Serious, data-driven, trust-building",
+        "empathetic": "Relatable, emotional, community-focused",
+        "cynical": "Edgy, calls out the bullshit in the market",
+        "minimalist": "Short, clean, high-status signaling",
+        "aggressive": "Direct calls to action, high pressure"
+      },
       "language_label": "Language",
       "language_instruction": "The language in which the content will be written.",
       "initiate_btn": "ACTIVATE AI GENERATOR",
@@ -73,7 +89,21 @@
         "income": "Financial Insights",
         "network": "Community Scaling",
         "tutorial": "Web3 Intelligence",
-        "partners": "For Partners"
+        "partners": "For Partners",
+        "partners_cards": "Card Specialist",
+        "partners_network": "Empire Builder"
+      },
+      "post_types_desc": {
+        "launch": "Introduce new features and create anticipation",
+        "fomo": "Create urgency and fear of missing out",
+        "authority": "Build trust with deep industry knowledge",
+        "lifestyle": "Showcase success and freedom",
+        "income": "Share concrete earnings to drive interest",
+        "network": "Celebrate community and team expansion",
+        "tutorial": "Educational content on crypto concepts",
+        "partners": "General partner growth strategies",
+        "partners_cards": "Focus on selling physical/virtual cards",
+        "partners_network": "Focus on massive downline growth"
       },
       "audiences": {
         "traders": "Crypto Professionals",
@@ -88,6 +118,20 @@
         "automation_kings": "Systems Specialists",
         "empire_builders": "Global Networkers",
         "partners": "Strategic Earners"
+      },
+      "audiences_desc": {
+        "traders": "Focused on ROI, charts, and alpha",
+        "nomads": "Freedom-seekers looking for location independence",
+        "affiliates": "Performance marketers hunting for pure conversion",
+        "builders": "Team builders looking for strong systems",
+        "parents": "Looking for flexible supplementary income",
+        "hustlers": "Young, ambitious and risk-tolerant",
+        "burnouts": "Desperate to escape the 9-to-5 rat race",
+        "passive_seekers": "Want systems that work while they sleep",
+        "growth_masters": "Obsessed with scalability and automation",
+        "automation_kings": "Looking for hands-off compounding methods",
+        "empire_builders": "Want to dominate their local or global markets",
+        "partners": "Looking for inside edges and premium yields"
       },
       "share_modal": {
         "title": "Publish",
