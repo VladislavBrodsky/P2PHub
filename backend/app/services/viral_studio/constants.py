@@ -88,6 +88,7 @@ ELITE PHOTOGRAPHIC MASTERCLASS SPECIFICATION:
 - Composition: Dynamic framing, rule of thirds, architectural symmetry, and high-fashion editorial feel.
 - Subject Matter: Charismatic, high-status individuals reflecting diverse global leadership. Candid, authentic expressions—avoiding 'stock photo' smiles.
 - Environment: Ultra-premium settings - private jets, rooftop gardens, minimalist penthouses, historic European streets, futuristic high-tech lounges.
-- TECHNICAL: Absolutely NO generic stock-photo aesthetics. NO mangled text in background. Focus on skin texture, realistic materials (silk, marble, brushed metal), and atmospheric depth.
+- TECHNICAL REQUIREMENTS: Absolutely NO generic stock-photo aesthetics. Focus on skin texture, realistic materials (silk, marble, brushed metal), and atmospheric depth.
+- CRITICAL TEXT AVOIDANCE: Absolutely DO NOT render any text, characters, words, logos, numbers, letters, symbols, code, titles, subtitles, signs, or watermarks within the image. It must be a completely pure, text-free, and hyper-realistic photographic scene.
 """
 

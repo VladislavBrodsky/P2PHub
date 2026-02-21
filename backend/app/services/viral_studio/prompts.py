@@ -215,7 +215,8 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
         f"{theme_context}"
         f"EMOTION: Professional focus, calm authority, and visionary breakthrough. \n"
         f"LIGHTING: Masterful cinematic lighting. \n"
-        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes, rich textures, award-winning photography."
+        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes, rich textures, award-winning photography.\n"
+        f"CRITICAL: DO NOT render any text, words, letters, logos, or titles in the image. The image must be completely TEXT-FREE."
     )
 
 

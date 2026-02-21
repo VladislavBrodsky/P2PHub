@@ -315,18 +315,16 @@ class ViralMarketingStudio:
     async def _generate_image(self, prompt: str, partner_id: int, is_pro_plus: bool = False) -> str | None:
         """Sequential image generation using priority models and rich fallbacks."""
         if is_pro_plus:
-            # PRO+ : Always most powerful primary, top performing/latest fallbacks
             model_sequence = [
-                ("google", "imagen-4.0-generate-001"), # Primary: Gemini 3 Pro (imagen-4.0 the most performing model)
-                ("google", "imagen-3.0-generate-001"), # Top performing alternative
-                ("openai", "dall-e-3")                 # Most powerful fallback
+                ("openai", "dall-e-3"),                 # Primary: OpenAI DALL-E 3 (Highest quality, funded)
+                ("google", "imagen-4.0-generate-001"),  # Quality fallback
+                ("google", "imagen-3.0-generate-001"),  # Alternative fallback
             ]
         else:
-            # PRO  : Gemini 3 Pro primary, powerful + efficient fallbacks without glitches
             model_sequence = [
-                ("google", "imagen-4.0-generate-001"),      # Primary: Gemini 3 Pro (imagen-4.0)
-                ("openai", "dall-e-3"),                     # Powerful fallback
-                ("google", "imagen-3.0-fast-generate-001")  # Modern and efficient fallback
+                ("openai", "dall-e-3"),                     # Primary: OpenAI DALL-E 3
+                ("google", "imagen-4.0-generate-001"),      # Quality fallback
+                ("google", "imagen-3.0-fast-generate-001")  # Fast fallback
             ]
 
         for provider, model_name in model_sequence:
