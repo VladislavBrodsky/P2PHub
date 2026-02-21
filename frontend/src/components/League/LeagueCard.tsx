@@ -118,10 +118,10 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                 </div>
 
                 {league === 'platinum' && (
-                    <div className="mt-8 flex items-center gap-3 rounded-[1.25rem] bg-black/30 p-4 backdrop-blur-md border border-white/10 shadow-lg group overflow-hidden relative">
+                    <div className="mt-6 flex items-center gap-2 rounded-2xl bg-black/30 py-2.5 px-3.5 backdrop-blur-md border border-white/10 shadow-lg group overflow-hidden relative">
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <Zap className="h-5 w-5 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
-                        <span className="text-[11px] font-black uppercase tracking-widest text-white">
+                        <Zap className="h-4 w-4 shrink-0 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white whitespace-nowrap">
                             Competing for TOP 10 rewards
                         </span>
                     </div>
