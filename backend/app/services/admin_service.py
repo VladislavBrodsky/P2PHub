@@ -679,17 +679,29 @@ class AdminService:
             feed = []
             for log, partner in rows:
                 action_val = str(log.action_type.value) if hasattr(log.action_type, 'value') else str(log.action_type)
+                
+                # Dynamic Categorization for 'MISC' or unset types
+                if action_val == "MISC" and log.action:
+                    if "fallback" in log.action:
+                        action_val = "SYSTEM"
+                    elif "admin" in log.action:
+                        action_val = "SYSTEM"
+                    elif "fix" in log.action:
+                        action_val = "SYSTEM"
+
                 feed.append({
                     "id": log.id,
+                    "partner_id": partner.id if partner else None,
                     "action_type": action_val,
                     "action": log.action,
-                    "description": log.description,
+                    "description": log.description or log.action or "System Event",
                     "details": log.details,
                     "created_at": log.created_at.isoformat(),
                     "username": partner.username if partner else None,
                     "telegram_id": partner.telegram_id if partner else "system",
                     "partner_level": partner.level if partner else None,
                     "partner_is_pro": partner.is_pro if partner else False,
+                    "partner_photo": partner.photo_url if partner else None
                 })
             return feed
 

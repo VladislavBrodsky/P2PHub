@@ -4,7 +4,7 @@ import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
     Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
-    Activity, Database, Layers, Bell, Eye
+    Activity, Database, Layers, Bell, Eye, Send, ShieldAlert, Timer, CreditCard, Cpu
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -139,6 +139,8 @@ export const AdminPage = () => {
     const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir'>('kpis');
     const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
     const [palantirFeed, setPalantirFeed] = useState<any[]>([]);
+    const [notificationsHealth, setNotificationsHealth] = useState<any>(null);
+    const [isPalantirPolling, setIsPalantirPolling] = useState(false);
     const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
     const [partnerDetails, setPartnerDetails] = useState<any | null>(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
@@ -258,12 +260,24 @@ export const AdminPage = () => {
         }
     };
 
-    const fetchPalantirFeed = async () => {
+    const fetchPalantirFeed = async (showLoading = false) => {
+        if (showLoading) setIsRefreshing(true);
         try {
             const res = await apiClient.get('/api/admin/palantir-feed');
             setPalantirFeed(res.data);
         } catch (err) {
             console.error('Failed to fetch palantir feed:', err);
+        } finally {
+            if (showLoading) setIsRefreshing(false);
+        }
+    };
+
+    const fetchNotificationsHealth = async () => {
+        try {
+            const res = await apiClient.get('/api/notifications-health');
+            setNotificationsHealth(res.data);
+        } catch (err) {
+            console.error('Failed to fetch notifications health:', err);
         }
     };
 
@@ -327,11 +341,25 @@ export const AdminPage = () => {
     }, []);
 
     useEffect(() => {
+        let interval: any;
         if (viewMode === 'maintenance') {
             fetchNotifStats();
         } else if (viewMode === 'palantir') {
-            fetchPalantirFeed();
+            fetchPalantirFeed(true);
+            fetchNotificationsHealth();
+            // Enable polling for Palantir
+            setIsPalantirPolling(true);
+            interval = setInterval(() => {
+                fetchPalantirFeed();
+                fetchNotificationsHealth();
+            }, 8000); // 8-second God-Mode heart-beat
+        } else {
+            setIsPalantirPolling(false);
         }
+
+        return () => {
+            if (interval) clearInterval(interval);
+        };
     }, [viewMode]);
 
     const handleApprove = async (txId: number) => {
@@ -463,55 +491,161 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
-                        <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-3">
-                            <Eye className="text-indigo-500 shrink-0 mt-0.5" size={16} />
-                            <div>
-                                <h3 className="text-xs font-black text-indigo-500 uppercase tracking-widest">God-Mode Palantir Feed</h3>
-                                <p className="text-[10px] text-slate-500 font-medium mt-1">
-                                    Raw, unfiltered real-time matrix feed of system events. Watch user acquisitions, global notifications, commissions, and system audits happen instantly across the network.
-                                </p>
+                        {/* Palantir Header & Health Integration (God-Mode Overlay) */}
+                        <div className="space-y-4">
+                            <div className="p-5 rounded-3xl glass-panel-premium border border-indigo-500/20 shadow-2xl shadow-indigo-500/10 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                                    <Eye size={120} />
+                                </div>
+                                <div className="flex items-center justify-between mb-4 relative z-10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center relative">
+                                            <Eye className="text-indigo-500" size={20} />
+                                            {isPalantirPolling && (
+                                                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
+                                                God-Mode Palantir
+                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-black animate-pulse">LIVE</span>
+                                            </h3>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Active Matrix Feed · Real-time Observability</p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => fetchPalantirFeed(true)}
+                                        className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all border border-white/5"
+                                    >
+                                        <RefreshCw size={16} className={isRefreshing ? 'animate-spin text-indigo-500' : 'text-slate-500'} />
+                                    </button>
+                                </div>
+
+                                {/* Health Micro-Panel (Integrated Deliverability Monitoring) */}
+                                {notificationsHealth && (
+                                    <div className="grid grid-cols-3 gap-2 py-3 border-t border-indigo-500/10 relative z-10">
+                                        <div className="space-y-1">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                                <Send size={8} /> Sent
+                                            </div>
+                                            <div className="text-lg font-black text-emerald-500 font-mono tracking-tighter">
+                                                {notificationsHealth.counts?.sent || 0}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1 border-x border-indigo-500/10 px-3">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                                <ShieldAlert size={8} /> Failed
+                                            </div>
+                                            <div className="text-lg font-black text-rose-500 font-mono tracking-tighter">
+                                                {notificationsHealth.counts?.failed || 0}
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1 pl-3">
+                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                                <Timer size={8} /> Stuck
+                                            </div>
+                                            <div className={`text-lg font-black font-mono tracking-tighter ${notificationsHealth.stuck_pending_10m > 0 ? 'text-amber-500 animate-pulse' : 'text-slate-400'}`}>
+                                                {notificationsHealth.stuck_pending_10m || 0}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div className="space-y-2">
+                        {/* Audit Feed List */}
+                        <div className="space-y-2 relative">
+                            {/* Vertical Line Connector (Matrix Feel) */}
+                            <div className="absolute left-[24px] top-6 bottom-6 w-px bg-linear-to-b from-indigo-500/20 via-indigo-500/40 to-indigo-500/20 hidden sm:block"></div>
+
                             {palantirFeed.length === 0 ? (
-                                <div className="p-12 text-center text-slate-500 font-black uppercase text-[10px] tracking-widest glass-panel-premium rounded-3xl border border-black/5 dark:border-white/5">
-                                    No Events Captured Yet
+                                <div className="p-16 text-center space-y-4 glass-panel-premium rounded-[3rem] border border-black/5 dark:border-white/5">
+                                    <div className="w-16 h-16 rounded-full bg-slate-500/5 flex items-center justify-center mx-auto border border-white/5">
+                                        <Activity size={32} className="text-slate-500 opacity-20" />
+                                    </div>
+                                    <div className="text-slate-500 font-black uppercase text-[10px] tracking-[0.2em]">Matrix Offline — No Events Captured</div>
                                 </div>
                             ) : (
                                 palantirFeed.map(log => (
-                                    <div key={log.id} className="p-3 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-start gap-3 group hover:border-indigo-500/30 transition-all">
-                                        <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 overflow-hidden relative">
-                                            {log.action_type === 'UPGRADE' || log.action_type === 'PAYMENT' ? (
-                                                <Zap size={16} className="text-amber-500" />
-                                            ) : log.action_type === 'COMMISSION' ? (
-                                                <Wallet size={16} className="text-emerald-500" />
-                                            ) : log.action_type === 'SYSTEM' ? (
-                                                <Activity size={16} className="text-blue-500" />
-                                            ) : (
-                                                <Eye size={16} className="text-indigo-500" />
-                                            )}
+                                    <div
+                                        key={log.id}
+                                        className="p-4 rounded-[1.75rem] glass-panel-premium border border-black/5 dark:border-white/5 flex items-start gap-4 group hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 relative z-10"
+                                    >
+                                        {/* Action Icon Component */}
+                                        <div className={`w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center border border-black/5 dark:border-white/5 shadow-inner relative overflow-hidden
+                                            ${log.action_type === 'UPGRADE' ? 'bg-amber-500/10 text-amber-500' :
+                                                log.action_type === 'PAYMENT' ? 'bg-blue-500/10 text-blue-500' :
+                                                    log.action_type === 'COMMISSION' ? 'bg-emerald-500/10 text-emerald-500' :
+                                                        log.action_type === 'PENALTY' ? 'bg-rose-500/10 text-rose-500' :
+                                                            'bg-slate-500/10 text-slate-500'}`}
+                                        >
+                                            <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-50"></div>
+                                            {log.action_type === 'UPGRADE' ? <Zap size={20} /> :
+                                                log.action_type === 'PAYMENT' ? <CreditCard size={20} /> :
+                                                    log.action_type === 'COMMISSION' ? <Wallet size={20} /> :
+                                                        log.action_type === 'PENALTY' ? <ShieldAlert size={20} /> :
+                                                            log.action_type === 'SYSTEM' ? <Cpu size={20} /> :
+                                                                <Eye size={20} />}
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex sm:items-center flex-col sm:flex-row justify-between gap-1 mb-1">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[10px] font-black uppercase text-indigo-500 tracking-widest">
+
+                                        <div className="flex-1 min-w-0 space-y-1">
+                                            <div className="flex items-center justify-between gap-2">
+                                                <div className="flex items-center gap-2 overflow-hidden">
+                                                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-lg
+                                                        ${log.action_type === 'UPGRADE' ? 'bg-amber-500/10 text-amber-500' :
+                                                            log.action_type === 'PAYMENT' ? 'bg-blue-500/10 text-blue-500' :
+                                                                log.action_type === 'COMMISSION' ? 'bg-emerald-500/10 text-emerald-500' :
+                                                                    log.action_type === 'PENALTY' ? 'bg-rose-500/10 text-rose-500' :
+                                                                        'bg-slate-500/10 text-slate-500'}`}
+                                                    >
                                                         {log.action_type}
                                                     </span>
-                                                    <span className="text-[9px] text-slate-500 font-bold uppercase truncate">
-                                                        {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? `User ${log.telegram_id}` : 'System Process'}
+                                                    <span className="text-[11px] font-black text-slate-900 dark:text-slate-100 truncate flex items-center gap-1.5">
+                                                        {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? log.telegram_id : <span className="text-slate-400 font-medium">CORE</span>}
+                                                        {log.partner_is_pro && (
+                                                            <div className="w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                                                                <Zap size={8} className="text-white fill-white" />
+                                                            </div>
+                                                        )}
                                                     </span>
-                                                    {log.partner_is_pro && (
-                                                        <span className="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-widest">PRO</span>
-                                                    )}
                                                 </div>
-                                                <div className="text-[9px] text-slate-500 font-bold uppercase whitespace-nowrap">
-                                                    {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                <div className="text-[10px] font-mono text-slate-400 font-bold whitespace-nowrap bg-black/5 dark:bg-white/5 p-1 rounded-md border border-white/5">
+                                                    {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
                                                 </div>
                                             </div>
-                                            <p className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
-                                                {log.description || log.action}
-                                            </p>
+                                            <div className="flex items-center justify-between gap-2">
+                                                <p className="text-xs font-bold text-slate-600 dark:text-slate-300 leading-tight">
+                                                    {log.description || log.action}
+                                                </p>
+                                                {log.partner_id && (
+                                                    <button
+                                                        onClick={() => setSelectedPartnerId(log.partner_id)}
+                                                        className="shrink-0 p-1.5 rounded-lg bg-indigo-500/5 hover:bg-indigo-500/10 text-indigo-500 transition-colors"
+                                                        title="View Profile"
+                                                    >
+                                                        <Search size={12} />
+                                                    </button>
+                                                )}
+                                            </div>
+
+                                            {/* Technical Details Reveal */}
+                                            {log.details && Object.keys(log.details).length > 0 && (
+                                                <div className="mt-3 bg-black/20 rounded-xl border border-white/5 p-3 overflow-hidden">
+                                                    <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                                                        {Object.entries(log.details).slice(0, 4).map(([key, val]) => (
+                                                            <div key={key} className="flex flex-col gap-0.5">
+                                                                <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">{key.replace(/_/g, ' ')}</span>
+                                                                <span className="text-[10px] font-mono text-indigo-400 font-bold truncate">
+                                                                    {typeof val === 'object' ? JSON.stringify(val) : String(val)}
+                                                                </span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 ))
