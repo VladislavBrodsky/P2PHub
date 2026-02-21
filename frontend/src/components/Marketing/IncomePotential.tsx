@@ -89,7 +89,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[3.5rem] bg-white dark:bg-(--color-bg-app) text-slate-900 dark:text-white p-6 md:p-10 space-y-10 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-[3rem] bg-white dark:bg-(--color-bg-app) text-slate-900 dark:text-white p-5 md:p-8 space-y-6 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />
@@ -110,7 +110,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </span>
                     </motion.div>
 
-                    <h3 className="text-4xl font-black tracking-tight leading-none max-w-[280px] mx-auto">
+                    <h3 className="text-3xl font-black tracking-tight leading-none max-w-[280px] mx-auto">
                         {t('income.title')} <br />
                         <span className="text-blue-500 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400 dark:text-animate-shimmer">{t('income.title_highlight')}</span>
                     </h3>
@@ -126,7 +126,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </div>
 
                 {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
-                <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-5 space-y-4 shadow-[0_20px_50px_-15px_rgba(16,185,129,0.2)]">
+                <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-4 space-y-2 shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)]">
                     {/* Ambient glow */}
                     <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
                     <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
@@ -580,11 +580,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
                             <div className="flex items-center justify-center gap-4">
                                 <div className="flex -space-x-2">
-                                    {[1, 2, 3, 4].map(i => (
-                                        <div key={i} className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden">
-                                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i + 42}`} alt="user" />
-                                        </div>
-                                    ))}
+                                    {[1, 2, 3, 4].map(i => {
+                                        const gender = i % 2 === 0 ? 'men' : 'women';
+                                        return (
+                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
+                                                <img src={`https://randomuser.me/api/portraits/${gender}/${i + 20}.jpg`} alt="user" className="w-full h-full object-cover" />
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 <div className="text-left">
                                     <div className="text-[10px] font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>

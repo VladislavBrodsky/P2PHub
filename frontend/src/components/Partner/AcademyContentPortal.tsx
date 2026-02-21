@@ -131,7 +131,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             <span className="text-xs font-black text-white leading-none">{user?.level || 1}</span>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-black text-slate-900 dark:text-white leading-none">{user?.xp || 0}</span>
+                            <span className="text-[9px] font-black text-slate-900 dark:text-white leading-none">{Math.floor(user?.xp || 0)}</span>
                             <span className="text-[6.5px] font-black text-green-500 uppercase tracking-widest">XP</span>
                         </div>
                     </div>
