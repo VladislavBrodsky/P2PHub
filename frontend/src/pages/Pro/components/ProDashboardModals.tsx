@@ -246,10 +246,10 @@ export const ProDashboardModals = ({
 
                             {/* Sub-tab Switcher: PRO / PRO+ */}
                             <div className="px-5 pt-4 pb-1">
-                                <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-2xl border border-slate-200/60 dark:border-white/8 relative">
+                                <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-3xl border border-slate-200/60 dark:border-white/8 relative">
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro'); }}
-                                        className={`relative py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
+                                        className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
                                             ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
@@ -258,14 +258,14 @@ export const ProDashboardModals = ({
                                     </button>
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro_plus'); }}
-                                        className={`relative py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
+                                        className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
                                             ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
                                         <Sparkles size={11} className={setupTab === 'pro_plus' ? 'text-emerald-500' : 'opacity-40'} />
                                         PRO+ ELITE
                                         {!status?.is_pro_plus && (
-                                            <span className="ml-0.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm flex-shrink-0">
+                                            <span className="ml-0.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shrink-0">
                                                 <Lock size={7} className="text-white" />
                                             </span>
                                         )}
@@ -285,7 +285,7 @@ export const ProDashboardModals = ({
                                         className="space-y-4"
                                     >
                                         {/* Platform Switcher */}
-                                        <div className="flex gap-1.5 p-1 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200/70 dark:border-white/8">
+                                        <div className="flex gap-1.5 p-1 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/70 dark:border-white/8">
                                             {[
                                                 { id: 'tg', label: 'Telegram', color: 'sky' },
                                                 { id: 'x', label: 'X (Twitter)', color: 'indigo' },
@@ -293,7 +293,7 @@ export const ProDashboardModals = ({
                                                 <button
                                                     key={id}
                                                     onClick={() => { selection(); setActiveProPlatform(id as any); }}
-                                                    className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${activeProPlatform === id
+                                                    className={`flex-1 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeProPlatform === id
                                                         ? `bg-white dark:bg-white/10 shadow-sm text-${color}-500`
                                                         : 'text-slate-400'}`}
                                                 >
@@ -306,7 +306,7 @@ export const ProDashboardModals = ({
                                         {activeProPlatform === 'tg' && (
                                             <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                 <div className="flex items-center gap-3 p-4 bg-sky-500/5 rounded-2xl border border-sky-500/15">
-                                                    <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 flex-shrink-0">
+                                                    <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 shrink-0">
                                                         <Send size={18} className="-ml-0.5" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
@@ -336,7 +336,7 @@ export const ProDashboardModals = ({
                                         {activeProPlatform === 'x' && (
                                             <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                 <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
-                                                    <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 flex-shrink-0">
+                                                    <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
                                                         <Network size={18} />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
@@ -379,14 +379,14 @@ export const ProDashboardModals = ({
                                     >
                                         {!status?.is_pro_plus ? (
                                             /* ── Upgrade Preview Card ── */
-                                            <div className="relative overflow-hidden p-5 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center text-center gap-4">
+                                            <div className="relative overflow-hidden p-5 bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center text-center gap-4">
                                                 {/* Icon */}
                                                 <motion.div
                                                     animate={{ scale: [1, 1.04, 1] }}
                                                     transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
                                                     className="relative mt-1"
                                                 >
-                                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/25">
+                                                    <div className="w-16 h-16 rounded-3xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/25">
                                                         <Sparkles size={30} />
                                                     </div>
                                                     <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-md">
@@ -413,7 +413,7 @@ export const ProDashboardModals = ({
                                                         { icon: Sparkles, label: 'Ultra AI', detail: 'Advanced Models' }
                                                     ].map((feat, i) => (
                                                         <div key={i} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-white/80 dark:border-white/10 flex items-center gap-2">
-                                                            <feat.icon size={13} className="text-emerald-500 flex-shrink-0" />
+                                                            <feat.icon size={13} className="text-emerald-500 shrink-0" />
                                                             <div className="text-left min-w-0">
                                                                 <p className="text-[9px] font-black text-slate-900 dark:text-white uppercase leading-none truncate">{feat.label}</p>
                                                                 <p className="text-[7.5px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{feat.detail}</p>
@@ -430,7 +430,7 @@ export const ProDashboardModals = ({
                                                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                                         setShowSetup(false);
                                                     }}
-                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                                    className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                                 >
                                                     <Zap size={14} />
                                                     CLAIM PRO+ STATUS
@@ -440,7 +440,7 @@ export const ProDashboardModals = ({
                                             /* ── PRO+ Full Controls ── */
                                             <div className="space-y-4">
                                                 {/* Platform Switcher */}
-                                                <div className="flex gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-xl border border-emerald-500/10">
+                                                <div className="flex gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
                                                     {[
                                                         { id: 'multi_tg', label: 'Multi-TG', icon: Send },
                                                         { id: 'linkedin', label: 'LinkedIn', icon: Network },
@@ -449,7 +449,7 @@ export const ProDashboardModals = ({
                                                         <button
                                                             key={tab.id}
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
-                                                            className={`flex-1 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
+                                                            className={`flex-1 py-2 rounded-2xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
                                                         >
                                                             <tab.icon size={9} />
                                                             {tab.label}
@@ -461,7 +461,7 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'multi_tg' && (
                                                     <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
-                                                            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                                            <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
                                                                 <Send size={18} className="-ml-0.5" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
@@ -471,7 +471,7 @@ export const ProDashboardModals = ({
                                                             <button
                                                                 onClick={handleTestTG}
                                                                 disabled={isTesting}
-                                                                className="px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 flex-shrink-0"
+                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 shrink-0"
                                                             >
                                                                 {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
                                                                 Test
@@ -511,7 +511,7 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'linkedin' && (
                                                     <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
-                                                            <div className="w-10 h-10 rounded-xl bg-indigo-700 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                                            <div className="w-10 h-10 rounded-2xl bg-indigo-700 flex items-center justify-center text-white shadow-md shrink-0">
                                                                 <Network size={18} />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
@@ -548,7 +548,7 @@ export const ProDashboardModals = ({
                                                                 { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3' },
                                                                 { id: 'fb', name: 'Facebook', status: 'Planning', progress: 'w-1/4' }
                                                             ].map((p) => (
-                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/10 space-y-2">
+                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2">
                                                                     <div className="flex justify-between items-center gap-1">
                                                                         <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
                                                                         <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap flex-shrink-0">{p.status}</div>
@@ -573,7 +573,7 @@ export const ProDashboardModals = ({
                                     <button
                                         onClick={handleSaveSetup}
                                         disabled={isSaving}
-                                        className="w-full h-13 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
+                                        className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                     >
                                         {isSaving ? (
                                             <><Loader2 className="animate-spin" size={16} /> SYNCHRONIZING...</>
