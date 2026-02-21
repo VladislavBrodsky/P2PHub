@@ -568,7 +568,7 @@ export const StudioTab = ({
                             {/* Strategy Selection */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.strategy_label')}
-                                instruction={i18n.language === 'ru' ? 'Выберите стратегию для вашего поста.' : 'Select the strategy for your post.'}
+                                instruction={t('pro_dashboard.studio.strategy_instruction')}
                                 value={postType}
                                 onChange={(val) => setPostType(val)}
                                 options={defaultPostTypes.map(pt => ({
@@ -587,7 +587,7 @@ export const StudioTab = ({
                             {/* Target Audience */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.target_label')}
-                                instruction={i18n.language === 'ru' ? 'Выберите целевую аудиторию, к которой обращаетесь.' : 'Select the target audience you are addressing.'}
+                                instruction={t('pro_dashboard.studio.target_instruction')}
                                 value={audience}
                                 onChange={(val) => setAudience(val)}
                                 options={defaultAudiences
@@ -723,7 +723,7 @@ export const StudioTab = ({
                             {/* Tone of Voice */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
-                                instruction={i18n.language === 'ru' ? 'Настройте тон и эмоцию генерации.' : 'Adjust the tone and emotion of the generation.'}
+                                instruction={t('pro_dashboard.studio.tone_instruction')}
                                 value={tone}
                                 onChange={(val) => setTone(val)}
                                 options={defaultTones.map(t => ({
@@ -742,7 +742,7 @@ export const StudioTab = ({
                             {/* Output Language */}
                             <PremiumSelect
                                 label={t('pro_dashboard.studio.language_label')}
-                                instruction={i18n.language === 'ru' ? 'Язык, на котором будет написан контент.' : 'The language in which the content will be written.'}
+                                instruction={t('pro_dashboard.studio.language_instruction')}
                                 value={language}
                                 onChange={(val) => setLanguage(val)}
                                 options={defaultLanguages.map(l => ({
