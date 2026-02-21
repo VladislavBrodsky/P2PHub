@@ -16,6 +16,7 @@ import { TopPartnersList } from '../Community/TopPartnersList';
 import { ProWelcomeCard } from './ProWelcomeCard';
 import { FinanceStatsModal } from './FinanceStatsModal';
 import { useUI } from '../../context/UIContext';
+import { USDTLogo, TONLogo } from '../ui/CryptoIcons';
 
 export const PartnerDashboard = () => {
     const { t } = useTranslation();
@@ -564,7 +565,13 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                             >
                                 <div className="flex items-center gap-2">
                                     <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
-                                        {React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })}
+                                        {item.currency === 'TON' ? (
+                                            <TONLogo className="w-3.5 h-3.5" />
+                                        ) : item.currency === 'USDT' || item.type === 'COMMISSION' || item.type === 'PRO_COMMISSION' ? (
+                                            <USDTLogo className="w-3.5 h-3.5" />
+                                        ) : (
+                                            React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })
+                                        )}
                                     </div>
                                     <div className='flex flex-col'>
                                         <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
