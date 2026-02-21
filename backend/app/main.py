@@ -73,8 +73,12 @@ async def lifespan(app: FastAPI):
     from app.models.partner import create_db_and_tables
     from app.services.warmup_service import warmup_redis
     
-    # #comment: Always ensure DB tables exist. safe to run from multiple workers.
-    await create_db_and_tables()
+    # #comment: Ensure DB tables exist. Handled by migrations in production, 
+    # but kept here as a safety net for development and initial setups.
+    try:
+        await create_db_and_tables()
+    except Exception as e:
+        logger.warning(f"⚠️ create_db_and_tables encountered an issue: {e}. Continuing assuming migrations handled it.")
 
     # #comment: Distributed Startup Tasks (Offloaded to Workers)
     # Using TaskIQ ensures these heavy operations don't block web worker startup

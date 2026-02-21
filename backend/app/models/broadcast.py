@@ -2,7 +2,7 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Optional
 
-from sqlalchemy import JSON, Column
+from sqlalchemy import Column, Enum as SaEnum
 from sqlmodel import Field, SQLModel
 
 
@@ -27,9 +27,13 @@ class Broadcast(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     admin_id: str = Field(index=True)
     message_text: str
-    audience_type: AudienceFilter = Field(default=AudienceFilter.ALL)
+    audience_type: AudienceFilter = Field(
+        sa_column=Column(SaEnum(AudienceFilter, native_enum=False), default=AudienceFilter.ALL)
+    )
     
-    status: BroadcastStatus = Field(default=BroadcastStatus.PENDING, index=True)
+    status: BroadcastStatus = Field(
+        sa_column=Column(SaEnum(BroadcastStatus, native_enum=False), default=BroadcastStatus.PENDING, index=True)
+    )
     
     total_targets: int = Field(default=0)
     sent_count: int = Field(default=0)
