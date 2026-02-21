@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
     Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
     Activity, Database, Layers, Bell, Eye, Send, ShieldAlert, Timer, CreditCard, Cpu,
-    Megaphone, UserPlus, Filter, PlayCircle, StopCircle, Trash2
+    Megaphone, UserPlus, Filter, PlayCircle, StopCircle, Trash2,
+    BookOpen, GitBranch, CheckSquare, AlertOctagon, Radio
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -137,7 +138,7 @@ export const AdminPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir' | 'nexus'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir' | 'nexus' | 'ledger'>('kpis');
     const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
     const [palantirFeed, setPalantirFeed] = useState<any[]>([]);
     const [notificationsHealth, setNotificationsHealth] = useState<any>(null);
@@ -161,6 +162,16 @@ export const AdminPage = () => {
     const [treeAudit, setTreeAudit] = useState<{ status: string; anomaly_count: number; total_checked: number } | null>(null);
     const [isEconomyAuditing, setIsEconomyAuditing] = useState(false);
     const [isTreeAuditing, setIsTreeAuditing] = useState(false);
+
+    // Event Ledger
+    const [ledgerEvents, setLedgerEvents] = useState<any[]>([]);
+    const [ledgerFilter, setLedgerFilter] = useState<string>('ALL');
+    const [ledgerPartnerId, setLedgerPartnerId] = useState<string>('');
+    const [ledgerChatId, setLedgerChatId] = useState<string>('');
+    const [ledgerNotifHistory, setLedgerNotifHistory] = useState<any | null>(null);
+    const [isLedgerLoading, setIsLedgerLoading] = useState(false);
+    const [isReconciling, setIsReconciling] = useState(false);
+    const [reconcileResult, setReconcileResult] = useState<any | null>(null);
 
     const fetchData = async (silent = false, forceRefresh = false) => {
         if (!silent) setIsLoading(true);
@@ -362,9 +373,55 @@ export const AdminPage = () => {
         }
     };
 
+    const fetchLedgerEvents = useCallback(async () => {
+        setIsLedgerLoading(true);
+        try {
+            const params = new URLSearchParams({ limit: '100' });
+            if (ledgerFilter !== 'ALL') params.set('action_type', ledgerFilter);
+            if (ledgerPartnerId.trim()) params.set('partner_id', ledgerPartnerId.trim());
+            const res = await apiClient.get(`/api/admin/ledger/events?${params}`);
+            setLedgerEvents(res.data);
+        } catch (err) {
+            console.error('Ledger fetch failed:', err);
+        } finally {
+            setIsLedgerLoading(false);
+        }
+    }, [ledgerFilter, ledgerPartnerId]);
+
+    const fetchNotifHistoryForUser = async () => {
+        if (!ledgerChatId.trim()) return;
+        setIsLedgerLoading(true);
+        try {
+            const res = await apiClient.get(`/api/admin/ledger/notifications/${ledgerChatId.trim()}`);
+            setLedgerNotifHistory(res.data);
+        } catch (err) {
+            console.error('Notif history fetch failed:', err);
+        } finally {
+            setIsLedgerLoading(false);
+        }
+    };
+
+    const handleLiveReconcile = async () => {
+        setIsReconciling(true);
+        setReconcileResult(null);
+        try {
+            const res = await apiClient.post('/api/admin/ledger/reconcile');
+            setReconcileResult(res.data);
+        } catch (err: any) {
+            alert('Reconcile failed: ' + (err.response?.data?.detail || 'Unknown error'));
+        } finally {
+            setIsReconciling(false);
+        }
+    };
+
     useEffect(() => {
         if (viewMode === 'network') fetchNetworkStats();
+        if (viewMode === 'ledger') fetchLedgerEvents();
     }, [viewMode]);
+
+    useEffect(() => {
+        if (viewMode === 'ledger') fetchLedgerEvents();
+    }, [ledgerFilter, ledgerPartnerId]);
 
     const handleRecalculate = async () => {
         if (!confirm('This will recalculate all referral counts and lineage. Continue?')) return;
@@ -511,7 +568,7 @@ export const AdminPage = () => {
 
             {/* Navigation Tabs */}
             <div className="flex gap-1 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl overflow-x-auto scrollbar-none">
-                {(['kpis', 'financials', 'payments', 'network', 'search', 'maintenance', 'palantir', 'nexus'] as const).map((mode) => (
+                {(['kpis', 'financials', 'payments', 'network', 'search', 'maintenance', 'palantir', 'nexus', 'ledger'] as const).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
@@ -525,6 +582,7 @@ export const AdminPage = () => {
                         {mode === 'network' ? <Layers size={12} /> : null}
                         {mode === 'palantir' ? <Eye size={12} className={viewMode === 'palantir' ? 'text-indigo-500' : ''} /> : null}
                         {mode === 'nexus' ? <Megaphone size={12} className={viewMode === 'nexus' ? 'text-orange-500' : ''} /> : null}
+                        {mode === 'ledger' ? <BookOpen size={12} className={viewMode === 'ledger' ? 'text-emerald-500' : ''} /> : null}
                         {mode}
                         {mode === 'payments' && transactions.length > 0 && (
                             <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px]">
@@ -1992,6 +2050,203 @@ export const AdminPage = () => {
                     </div>
                 )}
             </AnimatePresence>
+
+            {/* ─── EVENT LEDGER TAB ─────────────────────────────────── */}
+            <AnimatePresence mode="wait">
+                {viewMode === 'ledger' && (() => {
+                    const EVENT_TYPES = ['ALL', 'COMMISSION', 'XP_AWARD', 'NOTIFICATION', 'REFERRAL', 'PAYMENT', 'RECONCILIATION', 'SYSTEM', 'MISC'];
+                    const typeConfig: Record<string, { color: string; bg: string; icon: React.ReactNode }> = {
+                        COMMISSION: { color: 'text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20', icon: <Wallet size={11} /> },
+                        XP_AWARD: { color: 'text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20', icon: <Zap size={11} /> },
+                        NOTIFICATION: { color: 'text-violet-400', bg: 'bg-violet-500/10 border-violet-500/20', icon: <Bell size={11} /> },
+                        REFERRAL: { color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20', icon: <GitBranch size={11} /> },
+                        PAYMENT: { color: 'text-green-400', bg: 'bg-green-500/10 border-green-500/20', icon: <CreditCard size={11} /> },
+                        RECONCILIATION: { color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20', icon: <AlertOctagon size={11} /> },
+                        SYSTEM: { color: 'text-slate-400', bg: 'bg-slate-500/10 border-slate-500/20', icon: <Cpu size={11} /> },
+                        MISC: { color: 'text-slate-500', bg: 'bg-slate-800/30 border-slate-700/20', icon: <Database size={11} /> },
+                    };
+                    const getType = (t: string) => typeConfig[t] || typeConfig['MISC'];
+                    const fmt = (dt: string) => dt ? new Date(dt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '—';
+
+                    return (
+                        <motion.div key="ledger" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-5">
+                            {/* Header */}
+                            <div className="p-5 rounded-3xl bg-slate-900/80 border border-emerald-500/20 shadow-2xl shadow-emerald-500/5 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none"><BookOpen size={100} /></div>
+                                <div className="flex items-center justify-between relative z-10">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                                            <BookOpen className="text-emerald-400" size={20} />
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-black text-white">System Event Ledger</div>
+                                            <div className="text-[10px] text-slate-500 font-medium">Immutable audit trail · {ledgerEvents.length} events loaded</div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={fetchLedgerEvents}
+                                        className={`w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${isLedgerLoading ? 'animate-spin' : ''}`}
+                                    >
+                                        <RefreshCw size={15} className="text-emerald-400" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Filters Row */}
+                            <div className="space-y-3">
+                                <div className="flex gap-1.5 flex-wrap">
+                                    {EVENT_TYPES.map(t => (
+                                        <button
+                                            key={t}
+                                            onClick={() => { setLedgerFilter(t); setLedgerNotifHistory(null); }}
+                                            className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${ledgerFilter === t
+                                                ? (t === 'ALL' ? 'bg-white/10 border-white/20 text-white' : `${getType(t).bg} ${getType(t).color}`)
+                                                : 'bg-transparent border-white/5 text-slate-500 hover:border-white/10'}`}
+                                        >
+                                            {t !== 'ALL' && <span className="mr-1">{getType(t).icon}</span>}
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={ledgerPartnerId}
+                                        onChange={e => setLedgerPartnerId(e.target.value)}
+                                        placeholder="Filter by Partner ID (optional)"
+                                        className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/40"
+                                    />
+                                    <button onClick={fetchLedgerEvents} className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-black">
+                                        <Filter size={14} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Event Feed */}
+                            <div className="rounded-3xl bg-slate-900/60 border border-white/5 overflow-hidden">
+                                <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Latest Events</span>
+                                    {isLedgerLoading && <span className="text-[9px] text-emerald-400 animate-pulse">Loading…</span>}
+                                </div>
+                                <div className="divide-y divide-white/5 max-h-[480px] overflow-y-auto">
+                                    {ledgerEvents.length === 0 && !isLedgerLoading && (
+                                        <div className="p-8 text-center text-slate-600 text-xs">No events found for this filter.</div>
+                                    )}
+                                    {ledgerEvents.map(ev => {
+                                        const cfg = getType(ev.action_type || 'MISC');
+                                        return (
+                                            <div key={ev.id} className="px-4 py-3 hover:bg-white/3 transition-colors group">
+                                                <div className="flex items-start gap-3">
+                                                    <div className={`mt-0.5 px-2 py-1 rounded-lg border text-[9px] font-black uppercase tracking-widest flex items-center gap-1 shrink-0 ${cfg.bg} ${cfg.color}`}>
+                                                        {cfg.icon}{ev.action_type || 'MISC'}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="text-[11px] font-semibold text-white/90 truncate">{ev.description || ev.action}</div>
+                                                        <div className="flex items-center gap-2 mt-0.5">
+                                                            {ev.partner_id && <span className="text-[9px] text-slate-600">P#{ev.partner_id}</span>}
+                                                            {ev.entity_id && <span className="text-[9px] text-slate-600">→ {ev.entity_id}</span>}
+                                                            <span className="text-[9px] text-slate-700 ml-auto shrink-0">{fmt(ev.created_at)}</span>
+                                                        </div>
+                                                        {ev.details && Object.keys(ev.details).length > 0 && (
+                                                            <div className="mt-1.5 hidden group-hover:flex flex-wrap gap-1.5">
+                                                                {Object.entries(ev.details).filter(([_, v]) => v != null && v !== '').slice(0, 6).map(([k, v]) => (
+                                                                    <span key={k} className="px-1.5 py-0.5 rounded-md bg-white/5 text-[9px] text-slate-400">
+                                                                        <span className="text-slate-600">{k}:</span> {String(v).slice(0, 30)}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Notification History Lookup */}
+                            <div className="p-5 rounded-3xl bg-slate-900/60 border border-violet-500/20 space-y-3">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Bell size={14} className="text-violet-400" />
+                                    <span className="text-[11px] font-black text-white uppercase tracking-widest">Notification History by Chat ID</span>
+                                </div>
+                                <p className="text-[10px] text-slate-500">Use to verify: "Was user X notified about event Y?"</p>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={ledgerChatId}
+                                        onChange={e => setLedgerChatId(e.target.value)}
+                                        placeholder="Telegram Chat ID (e.g. 716720099)"
+                                        className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-violet-500/40"
+                                    />
+                                    <button onClick={fetchNotifHistoryForUser} disabled={isLedgerLoading}
+                                        className="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-black flex items-center gap-1.5 hover:bg-violet-500/20 transition-all">
+                                        <Search size={13} /> Look Up
+                                    </button>
+                                </div>
+                                {ledgerNotifHistory && (
+                                    <div className="space-y-2 mt-1">
+                                        <div className="text-[10px] text-slate-500 font-medium">{ledgerNotifHistory.total} notifications found for {ledgerNotifHistory.chat_id}</div>
+                                        <div className="rounded-2xl overflow-hidden border border-white/5 divide-y divide-white/5 max-h-64 overflow-y-auto">
+                                            {ledgerNotifHistory.events?.map((ev: any) => (
+                                                <div key={ev.id} className="px-3 py-2 flex items-start justify-between gap-2 hover:bg-white/3">
+                                                    <div>
+                                                        <div className="text-[10px] font-semibold text-white/80">{ev.event_type || ev.action}</div>
+                                                        <div className="text-[9px] text-slate-600">{ev.salt} · {ev.priority}</div>
+                                                    </div>
+                                                    <div className="flex flex-col items-end gap-1 shrink-0">
+                                                        <span className={`px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase ${ev.action?.includes('enqueued') ? 'bg-emerald-500/10 text-emerald-400' : ev.action?.includes('failed') ? 'bg-red-500/10 text-red-400' : 'bg-slate-500/10 text-slate-400'}`}>
+                                                            {ev.action?.replace('notification_', '') || '—'}
+                                                        </span>
+                                                        <span className="text-[9px] text-slate-700">{fmt(ev.created_at)}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Live Reconciliation */}
+                            <div className="p-5 rounded-3xl bg-slate-900/60 border border-red-500/20 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <AlertOctagon size={14} className="text-red-400" />
+                                        <span className="text-[11px] font-black text-white uppercase tracking-widest">Live Reconciliation Check</span>
+                                    </div>
+                                    <button onClick={handleLiveReconcile} disabled={isReconciling}
+                                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isReconciling ? 'bg-red-500/5 text-red-400 animate-pulse' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}>
+                                        {isReconciling ? <><Radio size={12} className="animate-spin" /> Running…</> : <><CheckSquare size={12} /> Run Check</>}
+                                    </button>
+                                </div>
+                                <p className="text-[10px] text-slate-500">Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches.</p>
+                                {reconcileResult && (
+                                    <div className="space-y-2 mt-1">
+                                        <div className={`flex items-center gap-2 text-xs font-black ${reconcileResult.status === 'healthy' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                            {reconcileResult.status === 'healthy' ? <CheckCircle size={14} /> : <AlertTriangle size={14} />}
+                                            {reconcileResult.status === 'healthy' ? `✅ All ${reconcileResult.total_checked} partners healthy — No discrepancies` : `⚠️ ${reconcileResult.discrepancies_found} discrepancies found across ${reconcileResult.total_checked} partners`}
+                                        </div>
+                                        {reconcileResult.flags?.length > 0 && (
+                                            <div className="rounded-2xl overflow-hidden border border-red-500/10 divide-y divide-white/5 max-h-64 overflow-y-auto">
+                                                {reconcileResult.flags.map((f: any, i: number) => (
+                                                    <div key={i} className="px-3 py-2 flex items-center justify-between gap-2 hover:bg-white/3">
+                                                        <div>
+                                                            <span className="text-[9px] font-black text-red-400 uppercase">{f.type}</span>
+                                                            <span className="text-[9px] text-slate-500 ml-2">P#{f.partner_id} · {f.telegram_id}</span>
+                                                        </div>
+                                                        <span className={`text-[10px] font-black ${f.diff > 0 ? 'text-amber-400' : 'text-red-400'}`}>{f.diff > 0 ? '+' : ''}{f.diff}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    );
+                })()}
+            </AnimatePresence>
+
         </div >
     );
 };
