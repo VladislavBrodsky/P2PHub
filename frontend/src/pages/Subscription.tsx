@@ -183,11 +183,11 @@ export default function SubscriptionPage() {
                         </div>
                     </motion.div>
 
-                    <h1 className="text-[38px] font-extrabold mb-2 tracking-tighter text-white drop-shadow-md leading-[0.9]">
+                    <h1 className="text-[38px] font-extrabold mb-4 tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px]">
                         {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
                     </h1>
 
-                    <p className="text-slate-300 font-bold text-[10px] uppercase tracking-[0.2em] max-w-[280px] mb-12 opacity-80 leading-relaxed">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium max-w-[280px] mx-auto leading-relaxed mb-12">
                         {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
                     </p>
 
@@ -209,9 +209,9 @@ export default function SubscriptionPage() {
 
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                            className={`w-full h-16 rounded-[2rem] font-black text-white text-[12px] uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-2 transition-all active:scale-95 border ${isPlus ? 'bg-yellow-400 hover:bg-yellow-300 text-black border-yellow-400/50 shadow-[0_0_25px_rgba(255,215,0,0.4)]' : 'bg-blue-600 hover:bg-blue-500 border-blue-400/30 shadow-[0_0_20px_rgba(0,102,255,0.3)]'}`}
+                            className={`w-full h-14 rounded-full font-black text-[13px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
-                            <Trophy size={18} />
+                            <Trophy size={16} />
                             {t('subscription.pro_active.command_center', 'COMMAND CENTER')}
                         </button>
 
@@ -223,7 +223,7 @@ export default function SubscriptionPage() {
                                     setShowPaymentOptionsForPro(true);
                                     scrollToPayment();
                                 }}
-                                className="w-full h-16 bg-black/40 backdrop-blur-xl border border-yellow-500/50 hover:border-yellow-400 hover:bg-yellow-900/40 text-yellow-400 rounded-[2rem] font-black text-[12px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all active:scale-95 shadow-[0_15px_30px_-5px_rgba(99,102,241,0.2)]"
+                                className="w-full h-14 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-black text-[13px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-3"
                             >
                                 <Sparkles size={16} fill="currentColor" />
                                 {t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE')}
@@ -317,9 +317,11 @@ export default function SubscriptionPage() {
                             </div>
 
                             {/* Title */}
-                            <div className="space-y-1 mt-1">
-                                <h1 className="text-[2.6rem] font-black text-transparent bg-clip-text bg-linear-to-r from-indigo-500 to-purple-600 italic tracking-tighter uppercase leading-none">{t('common.pro_active')}</h1>
-                                <p className="text-slate-500 dark:text-white/40 text-[10px] font-bold max-w-[260px] mx-auto uppercase tracking-[0.12em] leading-relaxed">
+                            <div className="space-y-4 mt-2">
+                                <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto">
+                                    {t('common.pro_active')}
+                                </h1>
+                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px] mx-auto leading-relaxed">
                                     {t('subscription.upgrade.desc')}
                                 </p>
                             </div>
@@ -345,21 +347,12 @@ export default function SubscriptionPage() {
 
                     {/* ── PLAN SELECTOR ─────────────── */}
                     <div className="flex flex-col gap-3 mb-5 border-t border-slate-100/80 dark:border-white/5 pt-5">
-                        <div className="text-center space-y-2">
-                            <motion.div
-                                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/5 px-3 py-1"
-                                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
-                            >
-                                <Sparkles size={11} className="text-indigo-500 dark:text-indigo-400" />
-                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600 dark:text-indigo-300">{t('subscription.upgrade.badge')}</span>
-                            </motion.div>
-                            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                                {t('subscription.upgrade.dominate_network')}
-                            </h2>
-                            <p className="text-slate-400 dark:text-white/40 text-[11px] font-semibold max-w-xs mx-auto leading-snug">
-                                {t('subscription.upgrade.subheadline')}
-                            </p>
-                        </div>
+                        <SectionHeader
+                            badge={t('subscription.upgrade.badge')}
+                            title={t('subscription.upgrade.dominate_network')}
+                            description={t('subscription.upgrade.subheadline')}
+                            className="mb-2"
+                        />
 
                         {/* Toggle */}
                         <div className="relative bg-slate-100/80 dark:bg-black/20 p-1.5 rounded-[2rem] flex gap-1.5 border border-slate-200/60 dark:border-white/8 shadow-inner backdrop-blur-xl">
@@ -458,19 +451,18 @@ export default function SubscriptionPage() {
                                 const el = document.getElementById('currency-selector-anchor');
                                 el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }}
-                            className={`w-full h-[4.5rem] rounded-[2rem] font-black text-white text-[13px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 relative overflow-hidden group transition-all hover:scale-[1.02] active:scale-95 ${selectedPlan === 'PRO'
-                                ? 'bg-blue-600 border border-blue-400/30 shadow-[0_0_20px_rgba(0,102,255,0.3)]'
-                                : 'bg-yellow-400 text-black border border-yellow-400/50 shadow-[0_0_25px_rgba(255,215,0,0.4)]'
+                            className={`group relative w-full flex items-center justify-center gap-2 h-14 px-8 rounded-full font-black text-[13px] tracking-widest uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
+                                ? 'vibing-blue-animated text-white shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)]'
+                                : 'vibing-yellow-animated text-[#0a1000] shadow-[0_15px_30px_-5px_rgba(255,215,0,0.3)]'
                                 }`}
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                            <Lock size={18} className="group-hover:scale-110 transition-transform relative z-10" />
+                            <Lock size={16} className="group-hover:scale-110 transition-transform relative z-10" />
                             <span className="relative z-10">
                                 {selectedPlan === 'PRO'
                                     ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
                                     : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
                             </span>
-                            <div className="w-1.5 h-1.5 rounded-full bg-white opacity-40 group-hover:scale-150 transition-transform relative z-10" />
                         </motion.button>
 
                         <div id="currency-selector-anchor" className="mt-4">
@@ -682,7 +674,7 @@ export default function SubscriptionPage() {
                                                     <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
                                                     <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                                 </div>
-                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-50`}>
+                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-14 rounded-full font-black text-[13px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                                 </button>
                                             </div>
@@ -697,7 +689,7 @@ export default function SubscriptionPage() {
                                                     <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
                                                     <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500/50 outline-none transition-colors" />
                                                 </div>
-                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-16 ${selectedPlan === 'PRO' ? 'bg-blue-600 hover:bg-blue-500' : 'bg-yellow-400 hover:bg-yellow-300 text-black'} rounded-[2rem] font-black text-[11px] uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(0,102,255,0.3)] active:scale-95 transition-all hover:scale-[1.02] disabled:opacity-40`}>
+                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-14 rounded-full font-black text-[13px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-40 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
                                                 </button>
                                             </div>
