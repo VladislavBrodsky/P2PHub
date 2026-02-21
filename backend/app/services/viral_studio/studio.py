@@ -146,25 +146,23 @@ class ViralMarketingStudio:
         system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)
         user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history)
         
-        # 🚀 TURBO EXECUTION V6.0 (10-15s Target)
-        # We eliminate the secondary AI roundtrip for image prompt engineering.
-        # Instead, we use a high-fidelity static builder and prioritize 'Fast' AI models.
-
-        # 🚀 TURBO EXECUTION V7.0 (Content-Aware Calibration)
-        # We prioritize quality by waiting for the text content first, 
-        # then using it to calibrate the elite image prompt for maximum relevance.
-
-        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
+        # ⚡ PRO+ TURBO CONCURRENCY V1.0
+        # For maximum speed, we generate text and a high-fidelity strategy-aware image simultaneously.
+        # CMO Insight: The "Vibe" (Image) is defined by the Strategy/Audience, which we already have in intel.
+        
+        baseline_image_prompt = prompts.build_viral_image_prompt(intel, "") # Vibe-based baseline
+        
+        # Fire both engines in parallel
+        text_task = self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
+        image_task = self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus)
+        
+        (res_json, tokens_openai), image_url = await asyncio.gather(text_task, image_task)
 
         if not res_json or "error" in res_json: 
             return res_json or {"error": "Generation failed", "status": "failed"}
         
-        # Use elite static builder with actual content awareness
-        body_for_image = res_json.get("title", "") + " " + (res_json.get("body") or res_json.get("text") or "")
-        image_prompt = prompts.build_viral_image_prompt(intel, body_for_image)
-        
-        # Generate image based on the specific post theme
-        image_url = await self._generate_image(image_prompt, partner.id, is_pro_plus=is_pro_plus)
+        # Final image prompt recorded for logging (even if generated in parallel)
+        image_prompt = baseline_image_prompt
 
 
         # Consistency fix for text fields
