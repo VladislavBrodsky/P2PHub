@@ -468,34 +468,36 @@ export const AdminPage = () => {
     return (
         <div className="p-4 safe-pb space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+            <div className="relative flex flex-col items-center justify-center py-4 space-y-2 text-center">
+                {/* Main Refresh Button (Data Only) - Positioned at the top right to keep it out of the central focus */}
+                <div className="absolute right-4 top-1/2 -translate-y-1/2">
                     <button
-                        onClick={() => window.location.reload()}
-                        className="p-2 rounded-xl bg-slate-100 dark:bg-white/5 active:scale-95 transition-all"
+                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
+                        className={`p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 ${isRefreshing ? 'animate-spin' : ''}`}
+                        title="Refresh Data"
                     >
-                        <RefreshCw size={18} className="text-slate-500" />
+                        <RefreshCw size={18} className="text-blue-400" />
                     </button>
-                    <div>
-                        <h1 className="text-xl font-black flex items-center gap-2">
-                            <ShieldCheck className="text-blue-500" size={20} />
-                            Advanced Admin Command Center
-                        </h1>
-                        <div className="flex items-center gap-2">
-                            <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Performance control</p>
-                            <span className={`w-1.5 h-1.5 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`} />
-                            <span className="text-[8px] font-black uppercase text-slate-400">
-                                {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Action Required'}
+                </div>
+
+                <div className="flex flex-col items-center">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-2 border border-blue-500/20 shadow-lg shadow-blue-500/5">
+                        <ShieldCheck className="text-blue-500" size={24} />
+                    </div>
+                    <h1 className="text-2xl font-black tracking-tight text-white">
+                        Advanced Admin Command Center
+                    </h1>
+
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Performance control</p>
+                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                            <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
+                            <span className="text-[9px] font-black uppercase text-slate-300">
+                                {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
                             </span>
                         </div>
                     </div>
                 </div>
-                <button
-                    onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
-                    className={`p-2 rounded-xl bg-slate-100 dark:bg-white/5 transition-all ${isRefreshing ? 'animate-spin' : ''}`}
-                >
-                    <RefreshCw size={20} className="text-slate-600 dark:text-slate-400" />
-                </button>
             </div>
 
             {error && (
