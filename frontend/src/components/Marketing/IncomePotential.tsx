@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
 import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ReferralGraph } from './ReferralGraph';
 import { useTranslation, Trans } from 'react-i18next';
 import clsx from 'clsx';
@@ -29,6 +29,23 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const [selectedLevel, setSelectedLevel] = useState(JOB_LEVELS[2]); // Default to Professional
     const [hoursWorked, setHoursWorked] = useState(8);
     const [isStrategyUnlocked, setIsStrategyUnlocked] = useState(false);
+    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+
+    const viralMessagesRaw = t('income.network.viral_messages', { returnObjects: true });
+    const viralMessages = useMemo(() =>
+        Array.isArray(viralMessagesRaw) ? viralMessagesRaw : [t('income.network.desc')],
+        [viralMessagesRaw, t]
+    );
+
+    useEffect(() => {
+        if (!isStrategyUnlocked) return;
+
+        const interval = setInterval(() => {
+            setCurrentMessageIndex((prev) => (prev + 1) % viralMessages.length);
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [isStrategyUnlocked, viralMessages.length]);
 
     const handleUnlock = () => {
         setIsStrategyUnlocked(true);
@@ -255,10 +272,19 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                             <ReferralGraph />
 
-                            <div className="text-center space-y-2">
-                                <p className="text-xs text-slate-500 dark:text-slate-400">
-                                    {t('income.network.desc')}
-                                </p>
+                            <div className="text-center h-12 flex items-center justify-center">
+                                <AnimatePresence mode="wait">
+                                    <motion.p
+                                        key={currentMessageIndex}
+                                        initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                                        exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                                        transition={{ duration: 0.5, ease: "easeOut" }}
+                                        className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
+                                    >
+                                        {viralMessages[currentMessageIndex]}
+                                    </motion.p>
+                                </AnimatePresence>
                             </div>
                         </motion.div>
                     )}

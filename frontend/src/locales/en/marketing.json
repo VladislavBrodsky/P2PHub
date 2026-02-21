@@ -31,6 +31,12 @@
     "network": {
       "title": "Viral Network Effect",
       "desc": "When you build a network, your income decouples from time.",
+      "viral_messages": [
+        "When you build a network, your income decouples from time.",
+        "Invite 2 people and give them the tools to invite 2 more.",
+        "Your team will grow exponentially every day.",
+        "This is the power of Community Growth Hacking."
+      ],
       "close": "CLOSE",
       "core": "Viral Network Core",
       "received": "RECEIVED",
