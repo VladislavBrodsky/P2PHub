@@ -468,28 +468,19 @@ export const AdminPage = () => {
     return (
         <div className="p-4 safe-pb space-y-6">
             {/* Header */}
-            <div className="relative flex flex-col items-center justify-center py-4 space-y-2 text-center">
-                {/* Main Refresh Button (Data Only) - Positioned at the top right to keep it out of the central focus */}
-                <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                    <button
-                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
-                        className={`p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 ${isRefreshing ? 'animate-spin' : ''}`}
-                        title="Refresh Data"
-                    >
-                        <RefreshCw size={18} className="text-blue-400" />
-                    </button>
-                </div>
+            <div className="grid grid-cols-[3rem_1fr_3rem] items-start w-full py-4 gap-4">
+                <div /> {/* Left Spacer to maintain center */}
 
-                <div className="flex flex-col items-center">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-2 border border-blue-500/20 shadow-lg shadow-blue-500/5">
+                <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-1 border border-blue-500/20 shadow-lg shadow-blue-500/5">
                         <ShieldCheck className="text-blue-500" size={24} />
                     </div>
-                    <h1 className="text-2xl font-black tracking-tight text-white">
+                    <h1 className="text-2xl font-black tracking-tight text-white leading-tight">
                         Advanced Admin Command Center
                     </h1>
 
-                    <div className="flex items-center gap-2 mt-1">
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em]">Performance control</p>
+                    <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
+                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
                         <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
                             <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
                             <span className="text-[9px] font-black uppercase text-slate-300">
@@ -497,6 +488,16 @@ export const AdminPage = () => {
                             </span>
                         </div>
                     </div>
+                </div>
+
+                <div className="flex justify-end pt-1">
+                    <button
+                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
+                        className={`p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 ${isRefreshing ? 'animate-spin' : ''}`}
+                        title="Refresh Data"
+                    >
+                        <RefreshCw size={18} className="text-blue-400" />
+                    </button>
                 </div>
             </div>
 
