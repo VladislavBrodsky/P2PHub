@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
-import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock } from 'lucide-react';
-import { useState, useMemo, useEffect } from 'react';
+import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock, Flame, ChevronRight, Zap } from 'lucide-react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { ReferralGraph } from './ReferralGraph';
 import { useTranslation, Trans } from 'react-i18next';
 import clsx from 'clsx';
@@ -30,6 +30,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const [hoursWorked, setHoursWorked] = useState(8);
     const [isStrategyUnlocked, setIsStrategyUnlocked] = useState(false);
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+    const [liveCount, setLiveCount] = useState(() => Math.floor(Math.random() * 40) + 18);
+    const [slotsLeft] = useState(() => Math.floor(Math.random() * 7) + 3);
+    const [mathVisible, setMathVisible] = useState(false);
+    const mathRef = useRef<HTMLDivElement>(null);
 
     const viralMessagesRaw = t('income.network.viral_messages', { returnObjects: true });
     const viralMessages = useMemo(() =>
@@ -37,13 +41,30 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
         [viralMessagesRaw, t]
     );
 
+    // Tick the live count every 8-14 seconds
+    useEffect(() => {
+        const bump = () => setLiveCount(prev => prev + Math.floor(Math.random() * 3) + 1);
+        const id = setInterval(bump, 8000 + Math.random() * 6000);
+        return () => clearInterval(id);
+    }, []);
+
+    // Intersection observer → trigger math row animation
+    useEffect(() => {
+        const el = mathRef.current;
+        if (!el) return;
+        const obs = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) setMathVisible(true); },
+            { threshold: 0.2 }
+        );
+        obs.observe(el);
+        return () => obs.disconnect();
+    }, []);
+
     useEffect(() => {
         if (!isStrategyUnlocked) return;
-
         const interval = setInterval(() => {
             setCurrentMessageIndex((prev) => (prev + 1) % viralMessages.length);
         }, 2000);
-
         return () => clearInterval(interval);
     }, [isStrategyUnlocked, viralMessages.length]);
 
@@ -104,7 +125,158 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                {/* Dual Mode Calculator / Unlocked Network Status */}
+                {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
+                <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-gradient-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-5 space-y-4 shadow-[0_20px_50px_-15px_rgba(16,185,129,0.2)]">
+                    {/* Ambient glow */}
+                    <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
+                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
+
+                    {/* Header */}
+                    <div className="relative flex items-center justify-between">
+                        <div>
+                            <div className="flex items-center gap-1.5 mb-0.5">
+                                <Zap className="w-3 h-3 text-emerald-400" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.22em] text-emerald-400">
+                                    {t('income.math.subheading')}
+                                </span>
+                            </div>
+                            <h4 className="text-base font-black text-white leading-tight">
+                                {t('income.math.heading')}
+                            </h4>
+                        </div>
+                        {/* Pulsing live dot */}
+                        <div className="flex items-center gap-1.5 shrink-0 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                            </span>
+                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
+                        </div>
+                    </div>
+
+                    {/* THE MATH ROWS */}
+                    {([
+                        { key: 'per_min', amount: '$1', period: '/min', highlight: false, delay: 0 },
+                        { key: 'per_hour', amount: '$60', period: '/hr', highlight: false, delay: 0.08 },
+                        { key: 'per_day', amount: '$1,440', period: '/day', highlight: false, delay: 0.16 },
+                        { key: 'per_month', amount: '$43,200', period: '/month', highlight: true, delay: 0.24 },
+                        { key: 'per_year', amount: '$518,400', period: '/year', highlight: false, delay: 0.32 },
+                    ] as const).map(({ key, amount, period, highlight, delay }, idx, arr) => (
+                        <motion.div
+                            key={key}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={mathVisible ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.5, delay, ease: 'circOut' }}
+                            className={clsx(
+                                'relative flex items-center justify-between rounded-2xl px-4 py-3 border transition-all',
+                                highlight
+                                    ? 'bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+                                    : 'bg-white/5 border-white/8'
+                            )}
+                        >
+                            {/* Left: row label */}
+                            <div className="flex items-center gap-2">
+                                {highlight && (
+                                    <Flame className="w-4 h-4 text-emerald-400 shrink-0" />
+                                )}
+                                {!highlight && (
+                                    <ChevronRight className="w-3.5 h-3.5 text-white/30 shrink-0" />
+                                )}
+                                <span className={clsx(
+                                    'text-xs font-bold',
+                                    highlight ? 'text-emerald-300' : 'text-white/60'
+                                )}>
+                                    {t(`income.math.${key}`)}
+                                </span>
+                            </div>
+
+                            {/* Right: big number */}
+                            <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={mathVisible ? { scale: 1, opacity: 1 } : {}}
+                                transition={{ duration: 0.4, delay: delay + 0.15, type: 'spring', stiffness: 200 }}
+                                className={clsx(
+                                    'font-black tabular-nums',
+                                    highlight
+                                        ? 'text-2xl text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]'
+                                        : 'text-lg text-white/80'
+                                )}
+                            >
+                                {amount}
+                                <span className={clsx('ml-0.5 text-[10px] font-bold', highlight ? 'text-emerald-500' : 'text-white/30')}>{period}</span>
+                            </motion.div>
+
+                            {/* "STAR" badge on highlighted row */}
+                            {highlight && (
+                                <div className="absolute -top-px -right-px bg-emerald-500 text-[7px] font-black uppercase tracking-wider text-white px-2 py-0.5 rounded-tr-2xl rounded-bl-xl">
+                                    TARGET
+                                </div>
+                            )}
+                        </motion.div>
+                    ))}
+
+                    {/* Formula note */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={mathVisible ? { opacity: 1 } : {}}
+                        transition={{ delay: 0.5 }}
+                        className="text-center"
+                    >
+                        <span className="text-[10px] text-white/30 font-mono">{t('income.math.formula_note')}</span>
+                    </motion.div>
+
+                    {/* FOMO red bar */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={mathVisible ? { opacity: 1, y: 0 } : {}}
+                        transition={{ delay: 0.55 }}
+                        className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25"
+                    >
+                        <span className="relative flex h-2.5 w-2.5 mt-0.5 shrink-0">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
+                        </span>
+                        <p className="text-[11px] font-bold text-rose-300 leading-snug">
+                            {t('income.math.fomo_line')}
+                        </p>
+                    </motion.div>
+
+                    {/* Live social proof */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={mathVisible ? { opacity: 1 } : {}}
+                        transition={{ delay: 0.65 }}
+                        className="flex items-center justify-between text-[10px]"
+                    >
+                        <div className="flex items-center gap-1.5">
+                            <div className="flex -space-x-1.5">
+                                {[...Array(5)].map((_, i) => (
+                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-slate-900 bg-gradient-to-br from-emerald-400 to-blue-500 overflow-hidden" />
+                                ))}
+                            </div>
+                            <span className="text-white/50 font-medium">
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={liveCount}
+                                        initial={{ y: -8, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        exit={{ y: 8, opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="inline-block font-black text-white"
+                                    >
+                                        {liveCount.toLocaleString()}
+                                    </motion.span>
+                                </AnimatePresence>
+                                {' '}{t('income.math.people_joining')}
+                            </span>
+                        </div>
+                        <div className="bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black px-2 py-0.5 rounded-lg whitespace-nowrap">
+                            {slotsLeft} {t('income.math.spots_left')}
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* Dual Mode Calculator / Unlocked Network Status */
                 <div className={clsx(
                     "p-6 rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border space-y-6",
                     !isStrategyUnlocked

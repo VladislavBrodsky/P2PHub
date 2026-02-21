@@ -59,6 +59,20 @@
       "beta": "Limited slots available",
       "lead": "LEAD THE MARKET",
       "unlocked": "Strategy Unlocked • Access Granted"
+    },
+    "math": {
+      "heading": "The Simple Math Behind $43,200/Month",
+      "subheading": "The $1/Minute Strategy — Proven & Transparent",
+      "per_min": "$1 per minute",
+      "per_hour": "$60 per hour",
+      "per_day": "$1,440 per day",
+      "per_month": "$43,200 per month",
+      "per_year": "$518,400 per year",
+      "formula_note": "1 min × 60 × 24 × 30 = 43,200",
+      "fomo_line": "Every minute you're NOT in this — someone else is earning $1 in your place.",
+      "people_joining": "people joined the $1/min strategy in the last hour",
+      "spots_left": "Elite slots left today",
+      "cta_urgency": "CLAIM YOUR SLOT NOW"
     }
   },
   "income_details": {
@@ -111,6 +125,7 @@
       "future": "Future"
     },
     "latest": "Latest Intel",
+    "latest_count": "{{count}} Latest Reports",
     "view_all": "View All",
     "by": "By",
     "posts": {

@@ -290,7 +290,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         </div>
                                     </div>
                                     <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
-                                        {total} {t('blog.latest')} {t('blog.navigation.intelligence_reports')}
+                                        {t('blog.latest_count', { count: total })}
                                     </p>
                                 </div>
                             </div>
