@@ -31,7 +31,7 @@ export default function CommunityPage() {
     }, []);
 
     return (
-        <div className="flex flex-col min-h-screen px-4 pb-32 relative bg-(--color-bg-app) transition-colors duration-300">
+        <div className="flex flex-col min-h-screen px-4 pb-32 relative transition-colors duration-300">
 
 
 

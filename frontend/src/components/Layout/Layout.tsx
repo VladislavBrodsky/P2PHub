@@ -79,7 +79,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 id="main-scroll-root"
-                className={`flex-1 overflow-x-hidden relative z-10 bg-(--color-bg-app)
+                className={`flex-1 overflow-x-hidden relative z-10
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}
