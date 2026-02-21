@@ -69,10 +69,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }}
-                                className={`absolute -top-3 -left-3 z-30 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)] ${isProPlus ? 'brightness-125' : ''}`}
+                                className={`absolute -top-3.5 -left-3.5 z-50 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)] ${isProPlus ? 'brightness-125' : ''}`}
                             >
                                 <Crown
-                                    size={variant === 'compact' ? 24 : 28}
+                                    size={variant === 'compact' ? 26 : 32}
                                     className="text-amber-400 fill-amber-400/20"
                                     strokeWidth={3}
                                 />
@@ -123,9 +123,11 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             )}
                         </motion.div>
 
-                        <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-app) z-20`}>
-                            <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
-                        </div>
+                        {!isProPlus && (
+                            <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-app) z-20`}>
+                                <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
+                            </div>
+                        )}
 
                         {isProPlus && (
                             <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-40 transform scale-110">
