@@ -672,14 +672,14 @@ export default function SubscriptionPage() {
                                             className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                         >
                                             <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH TON</span>
+                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                         </button>
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
                                             className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                         >
                                             <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH USDT</span>
+                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
                                         </button>
                                     </div>
                                 </motion.div>
