@@ -285,15 +285,26 @@ async def generate_content(
     session.add(partner)
     await session.commit()
     
-    result = await viral_studio.generate_viral_content(
-        partner=partner,
-        post_type=payload.post_type,
-        target_audience=payload.target_audience,
-        language=payload.language,
-        tone_of_voice=payload.tone_of_voice,
-        referral_link=payload.referral_link,
-        session=session
-    )
+    try:
+        result = await viral_studio.generate_viral_content(
+            partner=partner,
+            post_type=payload.post_type,
+            target_audience=payload.target_audience,
+            language=payload.language,
+            tone_of_voice=payload.tone_of_voice,
+            referral_link=payload.referral_link,
+            session=session
+        )
+    except Exception as e:
+        logger.error(f"🚨 CRITICAL ERROR in Viral Generation for Partner {partner.id}: {e}")
+        # Emergency Refund
+        partner.pro_tokens += 2
+        session.add(partner)
+        await session.commit()
+        raise HTTPException(
+            status_code=500,
+            detail=f"[STUDIO_CRASH] The synthesis engine encountered a critical internal error: {str(e)}"
+        )
     
     if result.get("status") != "success":
         # Refund tokens on error
