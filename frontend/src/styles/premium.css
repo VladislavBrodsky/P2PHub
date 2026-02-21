@@ -313,20 +313,19 @@
 
 /* === NEW VIBING PREMIUM UI === */
 .vibing-premium-panel {
-  @apply relative overflow-hidden rounded-[2.5rem] border border-slate-200 dark:border-white/10 backdrop-blur-3xl transition-all duration-500;
+  @apply relative overflow-hidden rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 backdrop-blur-3xl transition-all duration-500;
   background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05), inset 0 0 20px rgba(99, 102, 241, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
 }
 
 .dark .vibing-premium-panel {
   background: rgba(15, 23, 42, 0.9);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
 .vibing-premium-panel::before {
   content: "";
-  @apply absolute -inset-full bg-linear-to-br from-indigo-500/10 via-fuchsia-500/10 to-indigo-500/10 dark:from-indigo-500/20 dark:via-fuchsia-500/20 dark:to-indigo-500/20 opacity-30 blur-[100px] pointer-events-none;
-  animation: liquid 15s linear infinite;
+  @apply absolute inset-0 bg-linear-to-br from-indigo-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-indigo-500/10 dark:via-fuchsia-500/10 dark:to-indigo-500/10 opacity-30 pointer-events-none;
 }
 
 .holographic-card {

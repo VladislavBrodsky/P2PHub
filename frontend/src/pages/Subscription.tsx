@@ -349,7 +349,7 @@ export default function SubscriptionPage() {
                 <div className="w-10" />
             </div>
 
-            <div className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-(--color-bg-app) border border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-8px_rgba(99,102,241,0.15)] mb-5">
+            <div className="relative overflow-hidden rounded-[1.5rem] bg-white dark:bg-(--color-bg-app) border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
                 <div className="relative z-10 w-full p-4">
                     {/* Background Depth Orbs */}
                     <div className="absolute top-0 -left-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
@@ -381,7 +381,7 @@ export default function SubscriptionPage() {
 
                         {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
                         {proStats && (
-                            <div className="w-full max-w-[320px] p-4 bg-white dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-premium relative overflow-hidden group mx-auto">
+                            <div className="w-full max-w-[320px] p-4 bg-white dark:bg-black/40 border border-slate-200/60 dark:border-white/10 rounded-[1.25rem] shadow-sm relative overflow-hidden group mx-auto">
                                 <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-rose-500/5 pointer-events-none" />
 
                                 <div className="flex flex-row items-center justify-between gap-4 mb-3 relative z-10 px-1">
@@ -509,7 +509,7 @@ export default function SubscriptionPage() {
 
                     {/* ── DEADLINE STICKY HEADER ── */}
                     <div className="mb-4 mt-1 px-1">
-                        <div className="rounded-[2.5rem] overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/50 flex items-center justify-between relative group shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)]">
+                        <div className="rounded-[1.25rem] overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/30 flex items-center justify-between relative group shadow-sm">
                             <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                             <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
@@ -562,7 +562,7 @@ export default function SubscriptionPage() {
                                     <button
                                         key={idx}
                                         onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                        className="vibing-premium-panel bg-white/40 dark:bg-white/5 border-slate-200/50 dark:border-white/5 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-sm active:scale-95 text-center"
+                                        className="vibing-premium-panel bg-white/40 dark:bg-white/5 border-slate-200/50 dark:border-white/5 rounded-[1.5rem] p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-sm active:scale-95 text-center"
                                     >
                                         <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
                                         <div className={`w-8 h-8 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12`}>
