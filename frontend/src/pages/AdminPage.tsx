@@ -469,33 +469,35 @@ export const AdminPage = () => {
         <div className="p-4 safe-pb space-y-6">
             {/* Header */}
             <div className="flex flex-col items-center justify-center w-full py-6 space-y-4 text-center">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-full">
                     <div className="w-14 h-14 rounded-3xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-lg shadow-blue-500/5">
                         <ShieldCheck className="text-blue-500" size={28} />
                     </div>
-
-                    <button
-                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
-                        className={`w-14 h-14 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}
-                        title="Refresh Data"
-                    >
-                        <RefreshCw size={24} className="text-blue-400" />
-                    </button>
                 </div>
 
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-black tracking-tight text-white leading-tight">
+                <div className="space-y-4">
+                    <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
                         Advanced Admin Command Center
                     </h1>
 
-                    <div className="flex items-center justify-center gap-2 pt-1">
-                        <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                            <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
-                            <span className="text-[9px] font-black uppercase text-slate-300">
-                                {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
-                            </span>
+                    <div className="flex flex-col items-center justify-center gap-4 pt-1">
+                        <div className="flex items-center gap-2">
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
+                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                                <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
+                                <span className="text-[9px] font-black uppercase text-slate-500 dark:text-slate-300">
+                                    {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
+                                </span>
+                            </div>
                         </div>
+
+                        <button
+                            onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
+                            className={`w-14 h-14 rounded-3xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/5 dark:shadow-black/20 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}
+                            title="Refresh Data"
+                        >
+                            <RefreshCw size={24} className="text-blue-500 dark:text-blue-400" />
+                        </button>
                     </div>
                 </div>
             </div>
