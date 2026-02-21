@@ -332,7 +332,7 @@ async def generate_content(
 
 @router.post("/regenerate-hashtags")
 async def regenerate_hashtags(
-    payload: GenerateContentRequest,
+    payload: ViralGenerateRequest,
     partner: Partner = Depends(get_current_partner)
 ):
     if not partner.is_pro:
