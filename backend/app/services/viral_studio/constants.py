@@ -132,15 +132,27 @@ Use FRESH, audience-specific language that feels authentic.
 """
 
 IMAGE_RULES: Final[str] = """
-ULTRA-REALISTIC CINEMATIC IMAGE SPECIFICATION:
-- Photography Style: Professional DSLR shot, 35mm lens, f/2.8 aperture, natural lighting with subtle rim light
-- Quality: 4K resolution, photorealistic rendering, film grain texture, cinematic color grading
-- Composition: Rule of thirds, balanced depth of field, professional framing
-- Subject Matter: Real people in authentic settings (modern offices, luxury co-working spaces, rooftop cafes, premium lifestyle)
-- Environment: Contemporary 2025-2026 aesthetics - sleek minimalism, natural materials, warm ambient lighting
-- Brand Vibe: Success, financial freedom, digital nomad lifestyle, crypto/fintech elegance
-- STRICT EXCLUSIONS: No cartoons, no CGI characters, no futuristic sci-fi elements, no flying cars, no neon cyberpunk, no unrealistic poses
-- Technical Requirements: Sharp focus on subject, natural skin tones, realistic shadows and highlights, authentic materials and textures
+ULTRA-REALISTIC PHOTOGRAPHIC SPECIFICATION (2026 ELITE CMO STANDARD):
+
+**1. ARCHITECTURAL PHOTOGRAPHY RULES:**
+- NEVER use DALL-E or any model that produces "AI-typical" glossy, plastic, or over-saturated textures.
+- Photography Style: Raw, candid DSLR shot (Leica M11 or Sony A7R V energy). 
+- Lens: 35mm or 50mm prime focus, f/1.4 - f/2.8 for natural, creamy bokeh (shallow depth of field).
+- Lighting: Authentic natural light (Golden Hour, moody interior ambient, or professional rim light). NO artificial neon glows.
+- Quality: 8K hyper-realism, cinematic color grading (analog film stock vibes like Kodak Portra 400).
+
+**2. SUBJECT & COMPOSITION:**
+- Authentic Humans: Skin must have real texture, pores, and natural imperfections. Eyes must be sharp with natural reflections.
+- Environment: High-status, real-world locations (Private executive suites, Lisbon rooftop cafes, Dubai crypto hubs, minimalistic Swiss coworking).
+- Mood: Minimalist mastery. The image should feel like a high-end luxury editorial (Vogue Business / Monocle style).
+
+**3. STRICT EXCLUSIONS:**
+- **STRICTLY FORBIDDEN:** No DALL-E-style glossy textures. No "cartoonish" or "plastic" faces.
+- No sci-fi, no cyberpunk, no floating coins, no neon lines, no 3D renders.
+- No stereotypical "stock photo" smiles.
+
+**4. TECHNICAL GOAL:**
+- The image must be indistinguishable from a professional photograph taken by a high-end lifestyle photographer.
 """
 
 
