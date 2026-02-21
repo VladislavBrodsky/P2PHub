@@ -1,22 +1,20 @@
 import asyncio
+import os
+import sys
+
+# Bootstrap
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import scripts._bootstrap  # noqa
 
 from sqlmodel import select
+from app.models.partner import Partner, async_session_maker
 
-from app.models.partner import Partner, get_session
-
-
-async def check_admins():
-    async for session in get_session():
-        # Check by Telegram IDs we found
-        ids = ["716720099", "537873096"]
-        for tid in ids:
-            stmt = select(Partner).where(Partner.telegram_id == tid)
-            res = await session.exec(stmt)
-            p = res.first()
-            if p:
-                print(f"TG ID {tid}: Username=@{p.username}, ID={p.id}, Referral Code={p.referral_code}")
-            else:
-                print(f"TG ID {tid}: NOT FOUND in database")
+async def check():
+    async with async_session_maker() as session:
+        stmt = select(Partner).where(Partner.telegram_id.in_(['716720099', '537873096']))
+        res = await session.exec(stmt)
+        for p in res.all():
+            print(f"User: @{p.username} (ID: {p.id}, TG: {p.telegram_id})")
 
 if __name__ == "__main__":
-    asyncio.run(check_admins())
+    asyncio.run(check())

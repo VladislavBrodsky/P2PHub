@@ -91,6 +91,14 @@ MESSAGES = {
             "Partner **{from_user}** in your network (Level {level}) has upgraded to PRO.\n\n"
             "🌟 *Network Efficiency:* Your infrastructure is generating value 24/7. This is the foundation of your professional growth! 📈"
         ),
+        "referral_upgrade_announcement": (
+            "⚡ **SYSTEM NOTIFICATION: STRUCTURAL UPGRADE** ⚡\n\n"
+            "An upgrade occurred in your elite structure! 🏰\n\n"
+            "👤 **Partner:** {buyer_name}\n"
+            "📈 **Depth:** Level {level}\n"
+            "💎 **New Tier:** {plan_name}\n\n"
+            "As a **PRO+ Leader**, you are receiving active rewards from this structural growth. Your empire continues to scale! 🚀"
+        ),
         "viral_share_caption": (
             "🛑 EVOLVE BEYOND TRADITIONAL BANKING! \n"
             "Join the Global Partner Network and achieve financial sovereignty. $1 Every Minute"
@@ -305,6 +313,14 @@ MESSAGES = {
             "Вы получили `${amount} USDT`! 💸\n"
             "Партнер **{from_user}** из вашей сети (Уровень {level}) перешел на статус PRO.\n\n"
             "🌟 *Эффективность Инфраструктуры:* Ваша сеть генерирует ценность 24/7. Это основа вашего профессионального роста! 📈"
+        ),
+        "referral_upgrade_announcement": (
+            "⚡ **СИСТЕМНОЕ УВЕДОМЛЕНИЕ: СТРУКТУРНЫЙ АПГРЕЙД** ⚡\n\n"
+            "В вашей элитной структуре произошел апгрейд! 🏰\n\n"
+            "👤 **Партнер:** {buyer_name}\n"
+            "📈 **Глубина:** Уровень {level}\n"
+            "💎 **Новый Уровень:** {plan_name}\n\n"
+            "Как **PRO+ Лидер**, вы получаете активные вознаграждения от этого структурного роста. Ваша империя продолжает масштабироваться! 🚀"
         ),
         "viral_share_caption": (
             "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"

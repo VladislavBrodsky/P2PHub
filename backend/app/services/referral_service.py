@@ -496,10 +496,22 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             if rt["qualified"]:
                 try:
                     lang = rcpt.language_code or "en"
-                    if len(rt["levels"]) > 1:
-                        msg = f"💰 **Multiple Commissions Received!**\n\nTotal: **{round(rt['amount'], 2)} USDT** from **{buyer_name}**."
+                    
+                    # Determine Plan Name for notification
+                    plan_name = "PRO+" if is_pro_plus_purchase else "PRO"
+                    
+                    if rcpt.is_pro_plus:
+                        # Elite Notification for PRO+ Leaders
+                        msg = get_msg(
+                            lang, "referral_upgrade_announcement", 
+                            buyer_name=buyer_name, level=rt["levels"][0], plan_name=plan_name
+                        )
                     else:
-                        msg = get_msg(lang, "commission_received", amount=round(rt["amount"], 2), level=rt["levels"][0], from_user=buyer_name)
+                        # Standard Notification for PRO members
+                        if len(rt["levels"]) > 1:
+                            msg = f"💰 **Multiple Commissions Received!**\n\nTotal: **{round(rt['amount'], 2)} USDT** from **{buyer_name}**."
+                        else:
+                            msg = get_msg(lang, "commission_received", amount=round(rt["amount"], 2), level=rt["levels"][0], from_user=buyer_name)
                     
                     deferred_notifications.append(notification_service.send_standard(
                         chat_id=int(rcpt.telegram_id), text=msg,

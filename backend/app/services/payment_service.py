@@ -411,7 +411,10 @@ class PaymentService:
             if partner.referrer_id:
                 try:
                     from sqlmodel import select as sql_select
-                    referrer_stmt = sql_select(Partner).where(Partner.id == partner.referrer_id)
+                    from sqlalchemy.orm import selectinload
+                    referrer_stmt = sql_select(Partner).where(Partner.id == partner.referrer_id).options(
+                        selectinload(Partner.completed_task_records)
+                    )
                     referrer_res = await session.exec(referrer_stmt)
                     referrer_partner = referrer_res.first()
                     

@@ -60,7 +60,8 @@ class AuditService:
         is_pro: bool = False,
         xp_before: int = 0,
         xp_after: int = 0,
-        buyer_id: int | None = None # Sometimes passed by referral_service
+        buyer_id: int | None = None, # Sometimes passed by referral_service
+        details: dict | None = None
     ):
         """Logs an XP award event."""
         # #comment Phase 3 mapped metrics
@@ -79,7 +80,8 @@ class AuditService:
                 "level": level,
                 "is_pro": is_pro,
                 "xp_before": xp_before,
-                "xp_after": xp_after
+                "xp_after": xp_after,
+                **(details or {})
             }
         )
 
@@ -91,7 +93,8 @@ class AuditService:
         amount: float,
         level: int,
         balance_before: float,
-        balance_after: float
+        balance_after: float,
+        details: dict | None = None
     ):
         """Logs a commission award event."""
         await self.log_event(
@@ -107,7 +110,8 @@ class AuditService:
                 "amount": amount,
                 "level": level,
                 "balance_before": balance_before,
-                "balance_after": balance_after
+                "balance_after": balance_after,
+                **(details or {})
             }
         )
 
