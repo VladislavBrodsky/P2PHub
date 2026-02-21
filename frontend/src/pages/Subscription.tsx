@@ -116,14 +116,14 @@ export default function SubscriptionPage() {
     useEffect(() => {
         const scroller = document.getElementById('main-scroll-root');
         if (scroller) {
-            if (infoModal || status !== 'idle' || isSelectingCurrency) {
+            if (infoModal || status !== 'idle') {
                 scroller.style.overflow = 'hidden';
             } else {
                 scroller.style.overflow = 'auto';
             }
         }
         return () => { if (scroller) scroller.style.overflow = 'auto'; };
-    }, [infoModal, status, isSelectingCurrency]);
+    }, [infoModal, status]);
 
     // Handle Auto-Upgrade/Purchase Flow from other parts of the app
     useEffect(() => {
