@@ -17,7 +17,12 @@ const USDTLogo = ({ className, style }: { className?: string; style?: React.CSSP
 // ── Inline TON (The Open Network) logo (Optimized from Orbit) ───────────────
 const TONLogo = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
     <svg className={className} style={style} viewBox="0 0 56 56" fill="currentColor">
-        <path d="M37.6,15.6H18.4c-3.5,0-5.7,3.8-4,6.9l11.8,20.5c0.8,1.3,2.7,1.3,3.5,0l11.8-20.5 C43.3,19.4,41.1,15.6,37.6,15.6L37.6,15.6z M26.3,36.8l-2.6-5l-6.2-11.1c-0.4-0.7,0.1-1.6,1-1.6h7.8L26.3,36.8L26.3,36.8z M38.5,20.7l-6.2,11.1l-2.6,5V19.1h7.8C38.4,19.1,38.9,20,38.5,20.7z" />
+        {/* Main Body Facet */}
+        <path d="M37.6,15.6H18.4c-3.5,0-5.7,3.8-4,6.9l11.8,20.5c0.8,1.3,2.7,1.3,3.5,0l11.8-20.5C43.3,19.4,41.1,15.6,37.6,15.6z" />
+        {/* Shine Facet 1 */}
+        <path d="M26.3,36.8l-2.6-5l-6.2-11.1c-0.4-0.7,0.1-1.6,1-1.6h7.8L26.3,36.8L26.3,36.8z" fill="white" fillOpacity="0.3" />
+        {/* Shine Facet 2 */}
+        <path d="M38.5,20.7l-6.2,11.1l-2.6,5V19.1h7.8C38.4,19.1,38.9,20,38.5,20.7z" fill="white" fillOpacity="0.3" />
     </svg>
 );
 import { apiClient } from '../../api/client';
@@ -265,12 +270,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         className="flex items-center justify-between p-3.5 bg-white dark:bg-white/3 border border-slate-200/70 dark:border-white/6 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/6 transition-colors"
                                                     >
                                                         <div className="flex items-center gap-3">
-                                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isIncome
-                                                                ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
-                                                                : 'bg-slate-200 dark:bg-white/5 text-slate-400 ring-1 ring-slate-300 dark:ring-white/10'}`}>
-                                                                {isIncome
-                                                                    ? <ArrowUpRight className="w-3.5 h-3.5" />
-                                                                    : <ArrowDownRight className="w-3.5 h-3.5" />
+                                                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${item.currency === 'TON'
+                                                                ? 'bg-blue-500/10 text-blue-500 ring-1 ring-blue-500/20'
+                                                                : 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
+                                                                }`}>
+                                                                {item.currency === 'TON'
+                                                                    ? <TONLogo className="w-4 h-4" />
+                                                                    : <USDTLogo className="w-4 h-4" />
                                                                 }
                                                             </div>
                                                             <div className="flex flex-col min-w-0">
