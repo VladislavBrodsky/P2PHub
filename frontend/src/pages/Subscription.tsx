@@ -35,7 +35,7 @@ export default function SubscriptionPage() {
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
     const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any; color: string } | null>(null);
     const [isSelectingCurrency, setIsSelectingCurrency] = useState(false);
-    const [liveActivity, setLiveActivity] = useState<{ name: string; action: string; time: string } | null>(null);
+
     const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
     const [showFlashSale, setShowFlashSale] = useState(false);
     const [slotsLeft, setSlotsLeft] = useState(7);
@@ -87,23 +87,7 @@ export default function SubscriptionPage() {
         return () => clearInterval(interval);
     }, [sessionData, t]);
 
-    // Simulated Live Activity FOMO
-    useEffect(() => {
-        const names = ['Alex M.', 'Sarah K.', 'Dmitry V.', 'Elena S.', 'Marcus P.', 'Chen L.', 'Sophie T.', 'Ivan R.'];
-        const actions = ['just upgraded to PRO+', 'secured Lifetime Access', 'joined the Elite tier', 'activated Multi-Node Sync'];
 
-        const tick = () => {
-            const name = names[Math.floor(Math.random() * names.length)];
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            setLiveActivity({ name, action, time: 'Just now' });
-
-            setTimeout(() => setLiveActivity(null), 4000);
-            setTimeout(tick, 8000 + Math.random() * 10000);
-        };
-
-        const timer = setTimeout(tick, 3000);
-        return () => clearTimeout(timer);
-    }, []);
 
     // Unified FOMO Effects
     useEffect(() => {
@@ -345,28 +329,7 @@ export default function SubscriptionPage() {
                     <div className="absolute top-0 -left-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
                     <div className="absolute bottom-0 -right-20 w-64 h-64 bg-fuchsia-500/10 blur-[100px] pointer-events-none" />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
-                    {/* ── LIVE ACTIVITY BANNER (FOMO) ── */}
-                    <AnimatePresence>
-                        {liveActivity && (
-                            <motion.div
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                className="absolute top-2 left-1/2 -translateX-1/2 z-50 w-[calc(100%-2rem)] max-w-xs"
-                                style={{ left: '50%', transform: 'translateX(-50%)' }}
-                            >
-                                <div className="bg-slate-900/90 dark:bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-4 py-1.5 flex items-center justify-between shadow-2xl">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[9px] font-black text-white uppercase tracking-wider">
-                                            <span className="text-blue-400">{liveActivity.name}</span> {liveActivity.action}
-                                        </span>
-                                    </div>
-                                    <span className="text-[7px] font-black text-white/40 uppercase">{liveActivity.time}</span>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+
 
                     {/* ── FLASH SALE BANNER ── */}
                     <AnimatePresence>
@@ -402,7 +365,7 @@ export default function SubscriptionPage() {
 
                     {/* ── DEADLINE STICKY HEADER ── */}
                     <div className="mb-4 mt-2">
-                        <div className="vibing-premium-panel p-3 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 border-indigo-500/30 flex items-center justify-between overflow-hidden relative group">
+                        <div className="rounded-[2.5rem] overflow-hidden p-3 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 border-indigo-500/30 flex items-center justify-between relative group">
                             <div className="circuit-decor opacity-20" />
                             <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
 
@@ -443,27 +406,13 @@ export default function SubscriptionPage() {
                             <div className="absolute inset-0 bg-indigo-500/30 blur-2xl animate-pulse scale-150 z-0" />
                         </div>
 
-                        {/* Centered Status Badges - Separated & Stacked */}
-                        <div className="flex flex-col items-center gap-2 mb-6 w-full">
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/20 shadow-sm">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600/90 dark:text-emerald-400">
-                                    {t('subscription.upgrade.secure_encryption_active', 'SECURE GATEWAY')}
-                                </span>
-                            </div>
 
-                        </div>
 
                         {/* Hero Titles - Compacted & Centered - No Italics */}
                         <div className="max-w-[400px] mx-auto mb-5 px-2">
                             <h1 className={`text-[28px] sm:text-[36px] font-black tracking-tighter leading-[1.1] mb-2 uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
                                 {isProPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('common.pro_active', 'PRO Active')}
-                            </h1>
-                            <p className="text-[12px] sm:text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-tight opacity-70 max-w-[280px] mx-auto">
-                                {t('subscription.upgrade.desc', 'Lifetime access is closing forever. Pricing will switch to annual next week.')}
-                            </p>
-
-                        </div>
+                            </h1>                        </div>
 
                         {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
                         {proStats && (
