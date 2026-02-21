@@ -376,12 +376,18 @@ export default function SubscriptionPage() {
                                 onClick={() => { selection(); setSelectedPlan('PRO'); }}
                                 className={`relative flex-1 py-6 flex flex-col items-center gap-1 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
-                                <span className="text-[10px] font-black tracking-[0.2em] uppercase text-slate-500 dark:text-white/60 mb-2">{t('subscription.upgrade.pro_title', 'PRO ACCESS')}</span>
+                                <span className={`text-[10px] font-black tracking-[0.2em] uppercase mb-2 ${selectedPlan === 'PRO' ? 'text-slate-500 dark:text-white/70' : 'text-slate-400 dark:text-white/40'}`}>
+                                    {t('subscription.upgrade.pro_title', 'PRO ACCESS')}
+                                </span>
                                 <div className="flex items-baseline gap-1">
-                                    <span className="text-[18px] font-bold opacity-30">$</span>
-                                    <span className="text-[38px] font-black tracking-tighter leading-none text-slate-900 dark:text-white">39</span>
+                                    <span className={`text-[18px] font-bold ${selectedPlan === 'PRO' ? 'text-slate-400/50' : 'text-slate-400/30'}`}>$</span>
+                                    <span className={`text-[38px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                        39
+                                    </span>
                                 </div>
-                                <span className="text-[9px] font-black opacity-40 uppercase tracking-[0.15em] mt-2">{t('subscription.upgrade.monthly_label', '30 DAYS')}</span>
+                                <span className={`text-[9px] font-black uppercase tracking-[0.15em] mt-2 ${selectedPlan === 'PRO' ? 'text-slate-400/80 dark:text-white/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                    {t('subscription.upgrade.monthly_label', '30 DAYS')}
+                                </span>
                             </button>
 
                             {/* PRO+ Card Action */}
@@ -389,12 +395,18 @@ export default function SubscriptionPage() {
                                 onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
                                 className={`relative flex-1 py-6 flex flex-col items-center gap-1 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
-                                <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/80 mb-2">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE') : t('subscription.upgrade.pro_plus_title', 'PRO+ ACCESS')}</span>
+                                <span className={`text-[10px] font-black tracking-[0.2em] uppercase mb-2 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
+                                    {isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE') : t('subscription.upgrade.pro_plus_title', 'PRO+ ACCESS')}
+                                </span>
                                 <div className="flex items-baseline gap-1">
-                                    <span className="text-[18px] font-bold text-white/50">$</span>
-                                    <span className="text-[38px] font-black tracking-tighter leading-none text-white">{isStandardPro ? upgradePrice : proPlusPrice}</span>
+                                    <span className={`text-[18px] font-bold ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/30'}`}>$</span>
+                                    <span className={`text-[38px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                        {isStandardPro ? upgradePrice : proPlusPrice}
+                                    </span>
                                 </div>
-                                <span className="text-[9px] font-black text-white/60 uppercase tracking-[0.15em] mt-2">{isStandardPro ? t('subscription.upgrade.upgrade_label', 'ONE-TIME') : t('subscription.upgrade.lifetime_label', 'FOREVER')}</span>
+                                <span className={`text-[9px] font-black uppercase tracking-[0.15em] mt-2 ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                    {isStandardPro ? t('subscription.upgrade.upgrade_label', 'ONE-TIME') : t('subscription.upgrade.lifetime_label', 'FOREVER')}
+                                </span>
 
                                 {selectedPlan !== 'PRO_PLUS' && (
                                     <div className="absolute -top-3 -right-2 px-3 py-1 bg-linear-to-r from-orange-500 to-rose-600 text-[9px] font-black text-white rounded-full border border-white/30 shadow-2xl animate-pulse">
