@@ -376,7 +376,7 @@ export default function SubscriptionPage() {
                                 animate={{ height: 'auto', opacity: 1 }}
                                 className="mb-4 overflow-hidden"
                             >
-                                <div className="vibing-premium-panel bg-linear-to-r from-red-600 to-amber-500 p-4 relative group">
+                                <div className="rounded-[2.5rem] overflow-hidden bg-linear-to-r from-red-600 to-amber-500 p-4 relative group">
                                     <div className="absolute inset-x-0 bottom-0 h-1/2 bg-white/10 -translate-y-[200%] group-hover:translate-y-0 transition-transform duration-500" />
                                     <div className="relative z-10 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
@@ -451,12 +451,7 @@ export default function SubscriptionPage() {
                                     {t('subscription.upgrade.secure_encryption_active', 'SECURE GATEWAY')}
                                 </span>
                             </div>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/5 border border-orange-500/20 shadow-sm">
-                                <Flame size={12} className="text-orange-500 animate-pulse" />
-                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-600/90 dark:text-orange-400">
-                                    {t('subscription.upgrade.limited_offer', 'LIMITED OFFER')}
-                                </span>
-                            </div>
+
                         </div>
 
                         {/* Hero Titles - Compacted & Centered - No Italics */}
@@ -467,10 +462,7 @@ export default function SubscriptionPage() {
                             <p className="text-[12px] sm:text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-tight opacity-70 max-w-[280px] mx-auto">
                                 {t('subscription.upgrade.desc', 'Lifetime access is closing forever. Pricing will switch to annual next week.')}
                             </p>
-                            <div className="flex items-center justify-center gap-1.5 text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse mt-3">
-                                <Clock size={12} strokeWidth={3} />
-                                {t('subscription.upgrade.final_call', 'FINAL WINDOW OPEN')}
-                            </div>
+
                         </div>
 
                         {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
