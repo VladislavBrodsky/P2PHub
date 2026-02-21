@@ -70,7 +70,7 @@ export const StudioTab = ({
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isSharingSystem, setIsSharingSystem] = useState(false);
-    const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin')[]>([]);
+    const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin' | 'threads' | 'pinterest')[]>([]);
     const [selectedTgChannel, setSelectedTgChannel] = useState<string>(''); // for multi-channel TG select
     const [isRegeneratingHashtags, setIsRegeneratingHashtags] = useState(false);
 
@@ -1171,15 +1171,40 @@ export const StudioTab = ({
                                         </p>
 
                                         <div className="grid gap-2">
-                                            {(['x', 'telegram', 'linkedin'] as const).map((platform) => {
-                                                const isSelected = selectedPublishPlatforms.includes(platform);
+                                            {(status?.is_pro_plus
+                                                ? (['x', 'telegram', 'linkedin', 'threads', 'pinterest'] as const)
+                                                : (['x', 'telegram', 'linkedin'] as const)
+                                            ).map((platform) => {
+                                                const isSelected = selectedPublishPlatforms.includes(platform as any);
                                                 const isPublished = publishedPlatforms.includes(platform);
                                                 const isProPlus = status?.is_pro_plus;
+
+                                                const getIcon = () => {
+                                                    switch (platform) {
+                                                        case 'x': return <Network size={16} />;
+                                                        case 'telegram': return <Send size={16} className="-ml-0.5" />;
+                                                        case 'linkedin': return <Users size={16} />;
+                                                        case 'threads': return <Share size={16} />;
+                                                        case 'pinterest': return <ImageIcon size={16} />;
+                                                        default: return <Blocks size={16} />;
+                                                    }
+                                                };
+
+                                                const getLabel = () => {
+                                                    switch (platform) {
+                                                        case 'x': return 'Network X';
+                                                        case 'telegram': return 'Telegram';
+                                                        case 'linkedin': return 'LinkedIn';
+                                                        case 'threads': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_t');
+                                                        case 'pinterest': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_p');
+                                                        default: return (platform as string).toUpperCase();
+                                                    }
+                                                };
 
                                                 return (
                                                     <button
                                                         key={platform}
-                                                        onClick={() => isProPlus ? togglePublishPlatform(platform) : handlePublishToPlatform(platform)}
+                                                        onClick={() => isProPlus ? togglePublishPlatform(platform as any) : handlePublishToPlatform(platform as any)}
                                                         disabled={isPublishing || isPublished}
                                                         className={`w-full h-14 rounded-2xl border transition-all flex items-center justify-between px-4 group relative overflow-hidden ${isPublished
                                                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
@@ -1199,12 +1224,12 @@ export const StudioTab = ({
                                                         <div className="flex items-center gap-3 relative z-10">
                                                             <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${isPublished ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : isSelected ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 group-hover:scale-110'
                                                                 }`}>
-                                                                {platform === 'x' ? <Network size={16} /> : platform === 'telegram' ? <Send size={16} className="-ml-0.5" /> : <Users size={16} />}
+                                                                {getIcon()}
                                                             </div>
                                                             <div className="text-left min-w-0">
                                                                 <div className="flex items-center gap-2">
                                                                     <span className="block text-[11px] font-black uppercase tracking-widest leading-none mb-1 truncate">
-                                                                        {platform === 'x' ? 'Network X' : platform === 'telegram' ? 'Telegram' : 'LinkedIn'}
+                                                                        {getLabel()}
                                                                     </span>
                                                                     {!isProPlus && platform !== 'telegram' && (
                                                                         <Lock size={10} className="text-slate-400" />

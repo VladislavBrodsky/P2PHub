@@ -536,6 +536,51 @@ export default function SubscriptionPage() {
                         </div>
                     </div>
 
+                    {/* ── PROFIT MATH SECTION ── */}
+                    <div className="mb-6 px-1">
+                        <div className="relative overflow-hidden rounded-[2rem] bg-slate-900 border border-emerald-500/20 p-5 space-y-4 shadow-xl">
+                            {/* Ambient glow */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
+
+                            <div className="relative flex items-center justify-between border-b border-white/5 pb-3">
+                                <div>
+                                    <div className="flex items-center gap-1.5 mb-0.5">
+                                        <Zap className="w-3 h-3 text-emerald-400" />
+                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-400 opacity-80">
+                                            {t('income.math.subheading')}
+                                        </span>
+                                    </div>
+                                    <h4 className="text-[13px] font-black text-white leading-tight">
+                                        {t('income.math.heading')}
+                                    </h4>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-[18px] font-black text-emerald-400 tracking-tighter">$43,200</div>
+                                    <div className="text-[8px] font-black text-emerald-500/60 uppercase tracking-widest -mt-1">{t('income.math.per_month')}</div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                                    <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mb-1">{t('income.math.per_day')}</div>
+                                    <div className="text-[15px] font-black text-white tracking-tighter">$1,440</div>
+                                </div>
+                                <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                                    <div className="text-[8px] font-black text-white/30 uppercase tracking-[0.2em] mb-1">{t('income.math.per_year')}</div>
+                                    <div className="text-[15px] font-black text-white tracking-tighter">$518,400</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between text-[9px]">
+                                <span className="text-white/30 font-bold italic">{t('income.math.formula_note')}</span>
+                                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/20">
+                                    <Flame className="w-2.5 h-2.5 text-rose-500 animate-pulse" />
+                                    <span className="text-[8px] font-black text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
                     <div className="mb-6 px-1">
                         <div className="flex items-center justify-between mb-3 px-3">

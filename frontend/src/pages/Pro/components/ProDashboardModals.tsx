@@ -537,24 +537,27 @@ export const ProDashboardModals = ({
                                                 {/* Omni-Sync */}
                                                 {activePlusPlatform === 'omni' && (
                                                     <motion.div key="plus-omni" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="p-4 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center">
-                                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">Omni-Channel Sync</h4>
-                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto">Neural broadcasting across all major Web2 & Web3 social stacks.</p>
+                                                        <div className="p-4 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center relative overflow-hidden">
+                                                            <div className="absolute top-0 right-0 p-2 opacity-10">
+                                                                <Blocks size={40} />
+                                                            </div>
+                                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1 relative z-10">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
+                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto relative z-10">{t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}</p>
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {[
-                                                                { id: 'threads', name: 'Threads', status: 'Active Beta', progress: 'w-2/3' },
-                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon', progress: 'w-1/2' },
-                                                                { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3' },
-                                                                { id: 'fb', name: 'Facebook', status: 'Planning', progress: 'w-1/4' }
+                                                                { id: 'threads', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_t'), status: 'Active', progress: 'w-full', color: 'bg-emerald-500' },
+                                                                { id: 'pinterest', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_p'), status: 'Active', progress: 'w-full', color: 'bg-emerald-500' },
+                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon', progress: 'w-1/3', color: 'bg-amber-500/40' },
+                                                                { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3', color: 'bg-indigo-500/40' }
                                                             ].map((p) => (
                                                                 <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2">
                                                                     <div className="flex justify-between items-center gap-1">
                                                                         <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
-                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0">{p.status}</div>
+                                                                        <div className={`px-1.5 py-0.5 rounded-md ${p.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-slate-500/10 text-slate-400'} text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0`}>{p.status}</div>
                                                                     </div>
                                                                     <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                                                        <div className={`h-full bg-emerald-400/50 rounded-full ${p.progress}`} />
+                                                                        <div className={`h-full ${p.color} rounded-full ${p.progress}`} />
                                                                     </div>
                                                                 </div>
                                                             ))}

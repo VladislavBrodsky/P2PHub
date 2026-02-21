@@ -126,7 +126,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </div>
 
                 {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
-                <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-gradient-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-5 space-y-4 shadow-[0_20px_50px_-15px_rgba(16,185,129,0.2)]">
+                <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2.5rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-5 space-y-4 shadow-[0_20px_50px_-15px_rgba(16,185,129,0.2)]">
                     {/* Ambient glow */}
                     <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
                     <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
@@ -190,23 +190,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </span>
                             </div>
 
-                            {/* Right: big number */}
-                            <motion.div
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={mathVisible ? { scale: 1, opacity: 1 } : {}}
-                                transition={{ duration: 0.4, delay: delay + 0.15, type: 'spring', stiffness: 200 }}
-                                className={clsx(
-                                    'font-black tabular-nums',
-                                    highlight
-                                        ? 'text-2xl text-emerald-400 drop-shadow-[0_0_12px_rgba(16,185,129,0.5)]'
-                                        : 'text-lg text-white/80'
-                                )}
-                            >
-                                {amount}
-                                <span className={clsx('ml-0.5 text-[10px] font-bold', highlight ? 'text-emerald-500' : 'text-white/30')}>{period}</span>
-                            </motion.div>
-
-                            {/* "STAR" badge on highlighted row */}
                             {highlight && (
                                 <div className="absolute -top-px -right-px bg-emerald-500 text-[7px] font-black uppercase tracking-wider text-white px-2 py-0.5 rounded-tr-2xl rounded-bl-xl">
                                     TARGET
@@ -251,7 +234,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <div className="flex items-center gap-1.5">
                             <div className="flex -space-x-1.5">
                                 {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-slate-900 bg-gradient-to-br from-emerald-400 to-blue-500 overflow-hidden" />
+                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-slate-900 bg-linear-to-br from-emerald-400 to-blue-500 overflow-hidden" />
                                 ))}
                             </div>
                             <span className="text-white/50 font-medium">
@@ -270,13 +253,28 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 {' '}{t('income.math.people_joining')}
                             </span>
                         </div>
-                        <div className="bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black px-2 py-0.5 rounded-lg whitespace-nowrap">
-                            {slotsLeft} {t('income.math.spots_left')}
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                                localStorage.setItem('auto_purchase_pro', 'true');
+                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                onNavigateToPartner?.();
+                            }}
+                            className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-black px-4 py-1.5 rounded-xl text-[10px] tracking-widest flex items-center gap-2 shadow-[0_10px_20px_-10px_rgba(245,158,11,0.5)] transition-all animate-pulse"
+                        >
+                            {t('income.math.cta_urgency')}
+                            <ArrowRight className="w-3.5 h-3.5" />
+                        </motion.button>
+                        <div className="flex flex-col items-end">
+                            <div className="bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black px-2 py-0.5 rounded-lg whitespace-nowrap text-[9px]">
+                                {slotsLeft} {t('income.math.spots_left')}
+                            </div>
                         </div>
                     </motion.div>
                 </div>
 
-                {/* Dual Mode Calculator / Unlocked Network Status */
+                {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
                     "p-6 rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border space-y-6",
                     !isStrategyUnlocked
@@ -543,7 +541,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-black text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
                         >
                             <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
-                                {t('income.cta.join')}
+                                {t('income.math.cta_urgency')}
                                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
                             </span>
                             {/* Glass overlay */}

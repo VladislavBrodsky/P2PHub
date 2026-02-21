@@ -476,6 +476,8 @@ class ViralMarketingStudio:
         if platform == "x": res = await adapters.post_to_x(partner, content, image_path)
         elif platform == "telegram": res = await adapters.post_to_telegram(partner, content, image_path, channel_id_override=channel_id)
         elif platform == "linkedin": res = await adapters.post_to_linkedin(partner, content, image_path)
+        elif platform == "pinterest": res = await adapters.post_to_pinterest(partner, content, image_path)
+        elif platform == "threads": res = await adapters.post_to_threads(partner, content, image_path)
         
         if res.get("status") == "success" and session:
             from app.models.partner import SocialPost

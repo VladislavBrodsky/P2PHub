@@ -268,7 +268,9 @@
         "upgrade_pro_plus_cta": "UNLOCK PRO+ SLOTS",
         "unlock_social_nodes": "UNLOCK SOCIAL NODES",
         "more_platforms": "Enhanced Social Reach",
-        "more_platforms_desc": "Expand your presence to Mastodon, BlueSky, and Threads via PRO+.",
+        "more_platforms_desc": "Expand your presence across the global matrix (PRO+).",
+        "more_platforms_p": "Pinterest Node",
+        "more_platforms_t": "Threads (Meta) Node",
         "coming_soon": "COMING SOON"
       }
     },

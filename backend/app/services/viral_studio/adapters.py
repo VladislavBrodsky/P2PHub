@@ -121,7 +121,13 @@ async def post_to_telegram(partner: Partner, content: str, image_path: str | Non
 async def post_to_linkedin(partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
     if not partner.linkedin_access_token:
         return {"error": "LinkedIn API not configured. Upgrade to ELITE integration required."}
-    return {"status": "success", "platform": "linkedin", "msg": "Syndicated to LinkedIn Network (PRO Simulation)"}
+    return {"status": "success", "platform": "linkedin", "msg": "Syndicated to LinkedIn Network (PRO Simulation)", "channel_name": "LinkedIn Elite"}
+
+async def post_to_pinterest(partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
+    return {"status": "success", "platform": "pinterest", "msg": "Broadcasted to Pinterest Global (PRO Simulation)", "channel_name": "Pinterest Node"}
+
+async def post_to_threads(partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
+    return {"status": "success", "platform": "threads", "msg": "Published to Threads (Meta) Ecosystem (PRO Simulation)", "channel_name": "Threads/Meta Node"}
 
 def _prepare_telegram_channels(channel_id_str: str) -> list[str]:
     channels = []

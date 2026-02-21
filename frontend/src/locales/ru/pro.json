@@ -267,7 +267,9 @@
         "upgrade_pro_plus_cta": "УВЕЛИЧИТЬ ЛИМИТ КАНАЛОВ",
         "unlock_social_nodes": "ПОДКЛЮЧИТЬ СОЦСЕТИ",
         "more_platforms": "Дополнительные Платформы",
-        "more_platforms_desc": "Публикуйте в Mastodon, BlueSky и Threads с тарифом PRO+.",
+        "more_platforms_desc": "Расширьте свое присутствие в глобальной матрице (PRO+).",
+        "more_platforms_p": "Pinterest Узел",
+        "more_platforms_t": "Threads (Meta) Узел",
         "coming_soon": "СКОРО"
       }
     },
