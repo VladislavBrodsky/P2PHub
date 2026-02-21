@@ -336,7 +336,7 @@ class AdminService:
         net_profit = total_revenue - total_comm
         
         # Theoretical target sum based on config (should be 56%)
-        theoretical_payout = round(sum(settings.COMMISSION_MAP_EMPIRE.values()) * 100, 1)
+        theoretical_payout = round(sum(settings.COMMISSION_MAP_GROWTH_STRATEGY.values()) * 100, 1)
 
         return {
             "total_revenue": round(total_revenue, 2), 
@@ -519,7 +519,7 @@ class AdminService:
 
     async def get_global_network_stats(self) -> dict[str, int]:
         """
-        Returns count of partners at each level 1-9 globally.
+        Returns count of partners at each level 1-20 globally.
         CORRECTION: Now correctly uses 'depth' (referral generation) instead of XP level.
         """
         async for session in get_session():

@@ -148,6 +148,12 @@ export const AdminPage = () => {
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
 
+    // Maintenance Audits
+    const [economyAudit, setEconomyAudit] = useState<{ status: string; discrepancies_found: number; total_checked: number } | null>(null);
+    const [treeAudit, setTreeAudit] = useState<{ status: string; anomaly_count: number; total_checked: number } | null>(null);
+    const [isEconomyAuditing, setIsEconomyAuditing] = useState(false);
+    const [isTreeAuditing, setIsTreeAuditing] = useState(false);
+
     const fetchData = async (silent = false, forceRefresh = false) => {
         if (!silent) setIsLoading(true);
         setError(null);
@@ -251,6 +257,43 @@ export const AdminPage = () => {
         }
     };
 
+    /**
+     * Executes the Economy Integrity Audit.
+     * Triggers a backend check that compares actual XP & USDT balances against 
+     * a calculated sum of expected earnings/transactions over the lifetime of the partner.
+     * Flags anomalies instantly for manual system intervention.
+     */
+    const handleEconomyAudit = async () => {
+        setIsEconomyAuditing(true);
+        try {
+            const res = await apiClient.post('/api/admin/maintenance/audit-economy');
+            setEconomyAudit(res.data);
+            alert(`Economy Audit Complete: ${res.data.discrepancies_found} discrepancies found.`);
+        } catch (err: any) {
+            alert('Failed to run economy audit: ' + (err.response?.data?.detail || 'Unknown error'));
+        } finally {
+            setIsEconomyAuditing(false);
+        }
+    };
+
+    /**
+     * Executes the Network Tree Integrity Audit.
+     * Runs a topological scan on the materialized path structures to ensure 'depth' 
+     * exactly matches the structural level inferred by 'path'. Extremely fast.
+     */
+    const handleTreeAudit = async () => {
+        setIsTreeAuditing(true);
+        try {
+            const res = await apiClient.post('/api/admin/maintenance/audit-tree');
+            setTreeAudit(res.data);
+            alert(`Tree Audit Complete: ${res.data.anomaly_count} anomalies found.`);
+        } catch (err: any) {
+            alert('Failed to run tree audit: ' + (err.response?.data?.detail || 'Unknown error'));
+        } finally {
+            setIsTreeAuditing(false);
+        }
+    };
+
     useEffect(() => {
         if (viewMode === 'network') fetchNetworkStats();
     }, [viewMode]);
@@ -348,7 +391,7 @@ export const AdminPage = () => {
                     <div>
                         <h1 className="text-xl font-black flex items-center gap-2">
                             <ShieldCheck className="text-blue-500" size={20} />
-                            Master Hub
+                            Advanced Admin Command Center
                         </h1>
                         <div className="flex items-center gap-2">
                             <p className="text-slate-500 dark:text-slate-400 text-[10px] font-bold uppercase tracking-wider">Performance control</p>
@@ -407,6 +450,14 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
+                        <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
+                            <Activity className="text-blue-500 shrink-0 mt-0.5" size={16} />
+                            <div>
+                                <h3 className="text-xs font-black text-blue-500 uppercase tracking-widest">Command Center KPIs</h3>
+                                <p className="text-[10px] text-slate-500 font-medium mt-1">Real-time overview of primary growth, retention, and engagement metrics. Use these indicators to assess platform health, user adoption speed, and viral intelligence (K-Factor).</p>
+                            </div>
+                        </div>
+
                         {/* Overall Stats Main Card */}
                         <div className="p-6 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-700 text-white space-y-6 shadow-2xl shadow-blue-500/20 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
@@ -725,6 +776,14 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
+                        <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-start gap-3">
+                            <Wallet className="text-emerald-500 shrink-0 mt-0.5" size={16} />
+                            <div>
+                                <h3 className="text-xs font-black text-emerald-500 uppercase tracking-widest">Financial Intelligence</h3>
+                                <p className="text-[10px] text-slate-500 font-medium mt-1">Deep dive into gross revenue, net profit margin, and exact distribution logic across the 20-level commission array. Monitor fiat (USDT) vs crypto (TON) asset inflow.</p>
+                            </div>
+                        </div>
+
                         {/* Total Clear Income */}
                         <div className="p-6 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 space-y-6 relative overflow-hidden">
                             <div className="absolute top-0 right-0 p-8 opacity-5 dark:opacity-10 pointer-events-none text-slate-900 dark:text-white">
@@ -851,7 +910,7 @@ export const AdminPage = () => {
                         {/* Commissions Breakdown */}
                         <div className="space-y-3">
                             <div className="flex items-center justify-between px-1">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">9-Level Comission Split</h2>
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">20-Level Comission Split</h2>
                                 <PieChart size={14} className="text-slate-500" />
                             </div>
                             <div className="space-y-2">
@@ -880,17 +939,12 @@ export const AdminPage = () => {
                         className="space-y-4"
                     >
                         {/* Manual Review Guidelines */}
-                        <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 space-y-2">
-                            <div className="flex items-center gap-2 text-blue-500 font-bold text-xs uppercase tracking-widest">
-                                <ShieldCheck size={14} />
-                                Manual Review Guidelines
+                        <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-start gap-3">
+                            <ShieldCheck className="text-amber-500 shrink-0 mt-0.5" size={16} />
+                            <div className="flex-1 space-y-2">
+                                <h3 className="text-xs font-black text-amber-500 uppercase tracking-widest">Manual TX Verification Hub</h3>
+                                <p className="text-[10px] text-slate-500 font-medium leading-relaxed">Cross-reference decentralized network transactions (TON/TRON). Approval automatically distributes the 20-level commissions to upper referrers. Rejection dispatches a Telegram notice to the user. Ensure the Amount and Destination Wallet match before confirming.</p>
                             </div>
-                            <ul className="text-[10px] text-slate-500 space-y-1 font-medium list-disc list-inside">
-                                <li>Verify the <span className="text-slate-700 dark:text-slate-300 font-bold">TX Hash</span> on the blockchain explorer.</li>
-                                <li>Ensure the <span className="text-slate-700 dark:text-slate-300 font-bold">Amount</span> matches the PRO subscription price.</li>
-                                <li>Check if the <span className="text-slate-700 dark:text-slate-300 font-bold">Destination Address</span> belongs to the P2PHub system.</li>
-                                <li>Approve only after absolute confirmation; rejection notifies the user.</li>
-                            </ul>
                         </div>
 
                         <div className="flex items-center justify-between px-1">
@@ -999,13 +1053,21 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
+                        <div className="p-4 rounded-2xl bg-violet-500/5 border border-violet-500/10 flex items-start gap-3">
+                            <Layers className="text-violet-500 shrink-0 mt-0.5" size={16} />
+                            <div>
+                                <h3 className="text-xs font-black text-violet-500 uppercase tracking-widest">Network Matrix Topography</h3>
+                                <p className="text-[10px] text-slate-500 font-medium mt-1">Visualize and inspect the exact dimensional shape of the 20-generation lineage matrix. Drill into any generation depth to audit individual partner structures.</p>
+                            </div>
+                        </div>
+
                         {/* Tree Distribution Grid */}
                         <div className="space-y-3">
                             <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1 flex items-center gap-2">
                                 <Layers size={14} /> Network Generation Tree
                             </h2>
                             <div className="grid grid-cols-3 gap-2">
-                                {Array.from({ length: 9 }).map((_, i) => {
+                                {Array.from({ length: 20 }).map((_, i) => {
                                     const depth = i + 1;
                                     const count = networkStats?.[depth.toString()] || 0;
                                     const isSelected = selectedNetworkDepth === depth;
@@ -1125,7 +1187,7 @@ export const AdminPage = () => {
                                         Data Consistency Fix
                                     </div>
                                     <p className="text-[10px] text-slate-500 font-medium">
-                                        Recalculates all referral counts, 9-level lineage paths, and caches depth for every partner.
+                                        Recalculates all referral counts, 20-level lineage paths, and caches depth for every partner.
                                         Optimized batch execution.
                                     </p>
                                     <button
@@ -1157,12 +1219,80 @@ export const AdminPage = () => {
 
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-widest">
+                                            <ShieldCheck size={14} />
+                                            Economy Integrity Audit
+                                        </div>
+                                        <div className="text-[9px] font-bold text-slate-500">
+                                            {economyAudit ? (economyAudit.status === 'healthy' ? <span className="text-emerald-500">HEALTHY</span> : <span className="text-red-500">ANOMALIES</span>) : 'NOT RUN'}
+                                        </div>
+                                    </div>
+                                    {economyAudit && (
+                                        <div className="grid grid-cols-2 gap-2 pb-2">
+                                            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
+                                                <div className="text-[7px] text-slate-500 font-black uppercase">Checked</div>
+                                                <div className="text-xs font-black text-slate-900 dark:text-slate-100">{economyAudit.total_checked}</div>
+                                            </div>
+                                            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
+                                                <div className="text-[7px] text-slate-500 font-black uppercase">Discrepancies</div>
+                                                <div className={`text-xs font-black ${economyAudit.discrepancies_found === 0 ? 'text-emerald-500' : 'text-red-500'}`}>{economyAudit.discrepancies_found}</div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <p className="text-[10px] text-slate-500 font-medium">
+                                        Verifies economic integrity by checking if current XP and USDT Balance match the sum of their transactions/earnings.
+                                    </p>
+                                    <button
+                                        onClick={handleEconomyAudit}
+                                        disabled={isEconomyAuditing}
+                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+                                    >
+                                        {isEconomyAuditing ? 'Auditing Economy...' : 'Run Economy Audit'}
+                                    </button>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-2 text-violet-500 font-bold text-[10px] uppercase tracking-widest">
+                                            <Layers size={14} />
+                                            Network Tree Integrity Audit
+                                        </div>
+                                        <div className="text-[9px] font-bold text-slate-500">
+                                            {treeAudit ? (treeAudit.status === 'healthy' ? <span className="text-emerald-500">HEALTHY</span> : <span className="text-red-500">ANOMALIES</span>) : 'NOT RUN'}
+                                        </div>
+                                    </div>
+                                    {treeAudit && (
+                                        <div className="grid grid-cols-2 gap-2 pb-2">
+                                            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
+                                                <div className="text-[7px] text-slate-500 font-black uppercase">Checked</div>
+                                                <div className="text-xs font-black text-slate-900 dark:text-slate-100">{treeAudit.total_checked}</div>
+                                            </div>
+                                            <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
+                                                <div className="text-[7px] text-slate-500 font-black uppercase">Anomalies</div>
+                                                <div className={`text-xs font-black ${treeAudit.anomaly_count === 0 ? 'text-emerald-500' : 'text-red-500'}`}>{treeAudit.anomaly_count}</div>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <p className="text-[10px] text-slate-500 font-medium">
+                                        Validates the integrity of the materialized path and depth for the entire 20-level network matrix.
+                                    </p>
+                                    <button
+                                        onClick={handleTreeAudit}
+                                        disabled={isTreeAuditing}
+                                        className="w-full py-3 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-violet-500/20"
+                                    >
+                                        {isTreeAuditing ? 'Auditing Network...' : 'Run Tree Integrity Audit'}
+                                    </button>
+                                </div>
+
+                                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
+                                    <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-2 text-emerald-500 font-bold text-[10px] uppercase tracking-widest">
                                             <Bell size={14} />
                                             Notification System
                                         </div>
                                         <div className="text-[9px] font-bold text-slate-500">
-                                            {notifStats ? `${notifStats.pending} PENDING` : 'Checking...'}
+                                            {notifStats ? ((notifStats.pending > 10 || notifStats.failed > 50) ? <span className="text-amber-500">CONGESTED</span> : <span className="text-emerald-500">HEALTHY</span>) : 'Checking...'}
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-3 gap-2">
@@ -1203,8 +1333,16 @@ export const AdminPage = () => {
                         exit={{ opacity: 0, y: -10 }}
                         className="space-y-6"
                     >
+                        <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-3 mb-6">
+                            <Search className="text-indigo-500 shrink-0 mt-0.5" size={16} />
+                            <div>
+                                <h3 className="text-xs font-black text-indigo-500 uppercase tracking-widest">Global Partner Database</h3>
+                                <p className="text-[10px] text-slate-500 font-medium mt-1">Look up and analyze the dossier of any partner traversing the system. Used for manual support requests or direct metric mutation (adjusting XP/PRO status).</p>
+                            </div>
+                        </div>
+
                         <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Partner Search</h2>
+                            <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Search Engine Target</h2>
                             <form onSubmit={handleSearch} className="relative">
                                 <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                                 <input

@@ -282,3 +282,32 @@ async def retry_notifications(
     from app.services.notification_service import notification_service
     await notification_service.process_retries()
     return {"status": "success"}
+
+@router.post("/maintenance/audit-economy")
+async def audit_economy_endpoint(
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Trigger an economy integrity audit manually from the Advanced Admin Command Center.
+    This calculates the exact sum of XP and USDT based on transaction logs and earnings
+    to ensure the current User.xp and User.balance values match exactly and have not 
+    been mutated incorrectly or exploited. Returns detailed counts of checked partners
+    and any discrepancies found.
+    """
+    from app.services.maintenance_service import run_economy_audit
+    return await run_economy_audit(session)
+
+@router.post("/maintenance/audit-tree")
+async def audit_tree_endpoint(
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Trigger a network tree integrity audit manually from the Advanced Admin Command Center.
+    This inspects the entire 20-level hierarchy and validates the materialized path structure
+    against the cached depth value. It quickly finds anomalies where users might be at
+    incorrect structural levels.
+    """
+    from app.services.maintenance_service import check_tree_integrity
+    return await check_tree_integrity(session)
