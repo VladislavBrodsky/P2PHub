@@ -34,7 +34,9 @@
       "close": "CLOSE",
       "core": "Viral Network Core",
       "received": "RECEIVED",
-      "yield": "Estimated Network Yield"
+      "yield": "Estimated Network Yield",
+      "viral_notification_title": "YOUR NETWORK IS GAINING MOMENTUM",
+      "viral_notification_msg": "You have new active partners in your network. Your passive income is growing."
     },
     "stats": {
       "global_target": "Global Target",
@@ -201,31 +203,6 @@
         "excerpt": "We have discussed the mathematics of scale, the physics of networks, and the high-speed liquidity of the card. Now, we must discuss the **Purpose**. What are you actually building? Are you just try...",
         "category": "Vision"
       },
-      "29": {
-        "title": "The AI Multiplier: Using Automation to Outperform Entire Marketing Teams",
-        "excerpt": "In the 20th century, if you wanted to scale a business, you had to hire people. You needed a secretary, a salesman, and a marketing assistant. In the 21st century, you need**Leverage**. specifically, you need the**AI Multiplier**provided by the Pintopay Viral Studios.",
-        "category": "Global Trends"
-      },
-      "30": {
-        "title": "Legacy of the Sovereign Individual: Building Wealth That Lasts Generations",
-        "excerpt": "Wealth is not just about the numbers in your wallet today. It is about the**Sovereignty of your family tomorrow**. Most wealth is destroyed within three generations because it is built on fragile, centralized systems. To build true legacy wealth, you must move your capital onto the**Sovereign Grid**.",
-        "category": "Sovereign Mindset"
-      },
-      "31": {
-        "title": "Financial Sovereignty vs Traditional Banking: The Shift of Power",
-        "excerpt": "For decades, the traditional banking system has held a monopoly on your economic life. They decide if you can send money, how much it costs, and how long it takes. This is **Centralized Control**. But the world is changing. The rise of decentralised finance (DeFi) has created a power shift toward individual freedom.",
-        "category": "Success Blueprints"
-      },
-      "32": {
-        "title": "The Rise of the Crypto Card: Evolution of Spending Power",
-        "excerpt": "For the first decade of its existence, crypto was mostly a \"Buy and Hold\" asset. To actually use it for your daily life, you had to jump through dozens of hoops. The**Crypto Card era**, led by Pintopay, has changed this forever. We have transformed Bitcoin and Stablecoins from \"Digital Gold\" you keep in a vault into**High-Velocity Currency**you carry in your pocket.",
-        "category": "Problem & Solution"
-      },
-      "33": {
-        "title": "The Great Migration: Capital Moving to the Blockchain",
-        "excerpt": "Look at the global macro charts. Real estate is stagnant in many regions. Bonds are failing to keep up with inflation. Traditional stock markets are increasingly volatile. Meanwhile, the volume of assets on-chain is exploding. This isn't just a bull market; it's a**Value Migration**.",
-        "category": "Global Trends"
-      },
       "20": {
         "title": "The 2026 Financial Shift: How CBDCs Impact Your Digital Autonomy",
         "excerpt": "As we move toward the middle of the decade, a seismic shift is occurring in the halls of central banks. Governments are preparing for the rollout of**Central Bank Digital Currencies (CBDCs)**. While they will market this as \"convenience\" and \"efficiency,\" it is essential to understand the structural changes involved. This is a significant transition in global finance, and strategic preparation is key.",
@@ -270,6 +247,31 @@
         "title": "Sovereignty vs Security: The Tradeoff That Defines Your Future",
         "excerpt": "In the old economy, you were offered a deal: \"Give us your control (and your data), and we will give you**Security**. \" The bank \"guards\" your money. The government \"backs\" your currency. But as we have seen in recent years, this security is an illusion. When the system fails, your \"safety\" is the first thing that evaporates.",
         "category": "Viral Marketing"
+      },
+      "29": {
+        "title": "The AI Multiplier: Using Automation to Outperform Entire Marketing Teams",
+        "excerpt": "In the 20th century, if you wanted to scale a business, you had to hire people. You needed a secretary, a salesman, and a marketing assistant. In the 21st century, you need**Leverage**. specifically, you need the**AI Multiplier**provided by the Pintopay Viral Studios.",
+        "category": "Global Trends"
+      },
+      "30": {
+        "title": "Legacy of the Sovereign Individual: Building Wealth That Lasts Generations",
+        "excerpt": "Wealth is not just about the numbers in your wallet today. It is about the**Sovereignty of your family tomorrow**. Most wealth is destroyed within three generations because it is built on fragile, centralized systems. To build true legacy wealth, you must move your capital onto the**Sovereign Grid**.",
+        "category": "Sovereign Mindset"
+      },
+      "31": {
+        "title": "Financial Sovereignty vs Traditional Banking: The Shift of Power",
+        "excerpt": "For decades, the traditional banking system has held a monopoly on your economic life. They decide if you can send money, how much it costs, and how long it takes. This is **Centralized Control**. But the world is changing. The rise of decentralised finance (DeFi) has created a power shift toward individual freedom.",
+        "category": "Success Blueprints"
+      },
+      "32": {
+        "title": "The Rise of the Crypto Card: Evolution of Spending Power",
+        "excerpt": "For the first decade of its existence, crypto was mostly a \"Buy and Hold\" asset. To actually use it for your daily life, you had to jump through dozens of hoops. The**Crypto Card era**, led by Pintopay, has changed this forever. We have transformed Bitcoin and Stablecoins from \"Digital Gold\" you keep in a vault into**High-Velocity Currency**you carry in your pocket.",
+        "category": "Problem & Solution"
+      },
+      "33": {
+        "title": "The Great Migration: Capital Moving to the Blockchain",
+        "excerpt": "Look at the global macro charts. Real estate is stagnant in many regions. Bonds are failing to keep up with inflation. Traditional stock markets are increasingly volatile. Meanwhile, the volume of assets on-chain is exploding. This isn't just a bull market; it's a**Value Migration**.",
+        "category": "Global Trends"
       },
       "34": {
         "title": "Code is Law: Why Smart Contracts are Fairer than Humans",
