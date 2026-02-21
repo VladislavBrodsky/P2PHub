@@ -246,7 +246,7 @@ export const ProDashboardModals = ({
 
                             {/* Sub Tabs Selection - Integrated PRO/PRO+ Flow */}
                             <div className="mx-auto w-[90%] mt-6">
-                                <div className="grid grid-cols-2 p-1.5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-200 dark:border-white/5 relative overflow-hidden backdrop-blur-xl">
+                                <div className="grid grid-cols-2 p-1.5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-200 dark:border-white/5 relative backdrop-blur-xl">
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro'); }}
                                         className={`py-2.5 rounded-2.5xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'pro'
@@ -551,7 +551,7 @@ export const ProDashboardModals = ({
                             </div>
 
                             {/* Sticky Footer */}
-                            <div className="p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
+                            <div className="p-6 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
                                 {setupTab === 'pro' || status?.is_pro_plus ? (
                                     <button
                                         onClick={handleSaveSetup}
@@ -570,9 +570,7 @@ export const ProDashboardModals = ({
                                         )}
                                     </button>
                                 ) : null}
-                                <p className="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] text-center mt-5">
-                                    {t('pro_dashboard.publish.footer', 'P2PHUB PROTOCOL • V2.5 • SECURE SYNC')}
-                                </p>
+
                             </div>
                         </motion.div>
                     </motion.div>
