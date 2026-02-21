@@ -28,6 +28,7 @@ import { useUser } from './context/UserContext';
 import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
+import { PulseBanner } from './components/ui/PulseBanner';
 
 const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 import { useConfig } from './context/ConfigContext';
@@ -396,6 +397,7 @@ function App() {
             </AnimatePresence>
 
             <div className={!isComplete ? 'hidden' : 'block h-full'}>
+                <PulseBanner />
                 <NotificationOverlay />
                 <LazyMotion features={domAnimation}>
                     <AnimatePresence mode="wait">

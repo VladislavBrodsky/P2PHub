@@ -13,9 +13,11 @@ from app.models.schemas import (
     SocialPostRequest,
     ViralGenerateRequest,
     ViralGenerateResponse,
+    GrowthMetrics,
 )
 from app.services.viral_analytics_service import viral_analytics
 from app.services.viral_studio import viral_studio
+from app.services.analytics_service import get_referral_tree_stats, get_network_growth_metrics
 from bot import bot
 
 logger = logging.getLogger(__name__)
@@ -106,6 +108,71 @@ async def get_pro_stats(
         "total": int(setting_total.value) if setting_total else 300
     }
 
+class GrowthAdviceRequest(BaseModel):
+    language: str = "en"
+
+@router.post("/growth-advice")
+async def get_growth_advice(
+    payload: GrowthAdviceRequest,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    PRO EXCELLENCE: Generates personalized network growth advice using AI 
+    analyzing real-time network metrics and tree density.
+    """
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required for AI Growth Strategist")
+
+    # Audit for tokens - High-stakes advice costs 5 tokens
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=5)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens (5 tokens required for Elite Strategy)")
+
+    # 1. Fetch deep metrics
+    tree_stats = await get_referral_tree_stats(session, partner.id)
+    growth_7d = await get_network_growth_metrics(session, partner.id, '7D')
+    
+    # 2. Build contextual prompt
+    prompt = f"""
+    Analyze the following Partner Network metrics and provide 3-4 actionable 'Growth Hacks' or strategic advice for the next 30 days.
+    
+    Current State:
+    - Level: {partner.level}
+    - XP: {partner.xp}
+    - Total Network Size: {sum(tree_stats.values())}
+    - Level 1 (Direct): {tree_stats.get('1', 0)}
+    - Level 2 (Indirect): {tree_stats.get('2', 0)}
+    - Total Earned: {partner.total_earned_usdt} USDT
+    - 7D Growth: {growth_7d['growth_pct']}% (+{growth_7d['current_count']} members)
+    
+    Constraints:
+    - Language: {payload.language}
+    - Tone: Visionary, Authoritative, High-Status (Elite CMO).
+    - Format: 3-4 concise points with a summary.
+    """
+    
+    try:
+        # Use the flagship model for strategy
+        advice_json, _ = await viral_studio._get_text_content(
+            "You are the Lead Growth Architect for Pintopay. Your goal is to turn PRO members into network whales.",
+            prompt,
+            is_pro_plus=True
+        )
+        
+        # Deduct tokens only on success
+        partner.pro_tokens -= 5
+        session.add(partner)
+        await session.commit()
+        
+        return {
+            "advice": advice_json.get("text") or advice_json.get("body") or str(advice_json),
+            "tokens_remaining": partner.pro_tokens
+        }
+    except Exception as e:
+        logger.error(f"Growth advice synthesis failed: {e}")
+        raise HTTPException(status_code=500, detail="Elite synthesis engine failure. Try again in 5 minutes.")
+
 # Academy Config: Cost (negative) or Reward (positive)
 ACADEMY_RULES = {
     "m1": {"tokens": 1, "xp_reward": 500},
@@ -122,50 +189,66 @@ async def complete_academy_stage(
     partner: Partner = Depends(get_current_partner),
     session: AsyncSession = Depends(get_session)
 ):
+    """
+    Handles completion of Academy stages. 
+    Stages can be numeric (1-100) or slug-based (m1, m2...).
+    """
     import json
-    completed = json.loads(partner.completed_stages)
+    completed = json.loads(partner.completed_stages or "[]")
     
-    if stage_id in completed:
+    # Handle both string slugs and numeric IDs
+    stage_key = stage_id
+    if stage_id.isdigit():
+        stage_key = int(stage_id)
+
+    if stage_key in completed:
         return {"status": "already_completed", "academy_score": partner.academy_score}
 
-    rules = ACADEMY_RULES.get(stage_id, {"tokens": 0, "xp_reward": 100})
-    token_change = rules["tokens"]
-    xp_cost = rules.get("xp_cost", 0)
-    xp_reward = rules.get("xp_reward", 100)
+    # Dynamic Reward Strategy for the 100-Stage Vertical Roadmap
+    # Default reward escalates with stage progression
+    xp_reward = 100
+    try:
+        s_id = int(stage_id)
+        # Base reward follows a curve: 100 + (id * 10) + (if id > 50, extra bonus)
+        xp_reward = 100 + (s_id * 10)
+        if s_id > 20: xp_reward += 500
+        if s_id > 50: xp_reward += 2000
+        if s_id == 100: xp_reward = 100000 # Fanocracy Ascension
+    except ValueError:
+        # Fallback for slug-based legacy stages
+        xp_reward = 500
 
-    # Check if user has enough tokens (if cost is involved)
-    if token_change < 0 and partner.pro_tokens < abs(token_change):
-         raise HTTPException(
-            status_code=402, 
-            detail=f"Insufficient tokens. This module requires {abs(token_change)} tokens."
-        )
-    
-    # Check if user has enough XP (if cost is involved)
-    if xp_cost > 0 and partner.academy_score < xp_cost:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Insufficient Academy Score. This module requires {xp_cost} XP to unlock."
-        )
+    # Verification: Some stages require a "Mission Task" result
+    # For now, we trust the frontend 'Mark as Accomplished' but log it for future audit
+    from app.services.audit_service import audit_service
+    await audit_service.log_event(
+        session=session,
+        partner_id=partner.id,
+        action_type="XP_AWARD",
+        description=f"Academy Stage {stage_id} Completed",
+        entity_type="academy",
+        entity_id=stage_id,
+        action="stage_complete",
+        details={"xp_reward": xp_reward}
+    )
 
     # Apply changes
-    completed.append(stage_id)
+    completed.append(stage_key)
     partner.completed_stages = json.dumps(completed)
     
-    # Deduct XP cost before adding reward
-    partner.academy_score -= xp_cost
+    # Update Academy Score and Global XP
     partner.academy_score += xp_reward
-    partner.pro_tokens += token_change
+    partner.xp += xp_reward
     
     session.add(partner)
     await session.commit()
+    await session.refresh(partner)
     
     return {
         "status": "success", 
         "academy_score": partner.academy_score, 
-        "tokens_remaining": partner.pro_tokens,
-        "token_change": token_change,
         "xp_reward": xp_reward,
-        "xp_cost": xp_cost
+        "new_xp": partner.xp
     }
 
 @router.post("/setup")

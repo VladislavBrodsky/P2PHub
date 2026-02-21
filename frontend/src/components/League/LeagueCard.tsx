@@ -114,7 +114,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                         <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
-                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{score.toLocaleString()}</p>
+                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{Math.floor(score).toLocaleString()}</p>
                     </div>
                     <div className="min-w-0">
                         <p className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">

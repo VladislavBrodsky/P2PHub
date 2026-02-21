@@ -281,6 +281,42 @@
           }
         ]
       },
+      "pinterest_manual": {
+        "title": "Pinterest Visual Sync",
+        "subtitle": "Global Creative Node",
+        "steps": [
+          {
+            "title": "Step 1: Pinterest Developers",
+            "desc": "Log in to the [Pinterest Developer Portal](https://developers.pinterest.com/) and create a new application."
+          },
+          {
+            "title": "Step 2: App Permissions",
+            "desc": "Go to 'Apps' > 'Click your App' > 'Tokens'. Ensure you have `pins:read` and `pins:write` scopes enabled."
+          },
+          {
+            "title": "Step 3: Generate Token",
+            "desc": "Click 'Generate Token'. Copy the resulting string and paste it into our Pinterest field."
+          }
+        ]
+      },
+      "threads_manual": {
+        "title": "Threads Viral Sync",
+        "subtitle": "Meta Ecosystem Access",
+        "steps": [
+          {
+            "title": "Step 1: Meta for Developers",
+            "desc": "Access [Meta for Developers](https://developers.facebook.com/) and create a 'Threads' type application."
+          },
+          {
+            "title": "Step 2: Threads API Setup",
+            "desc": "Configure the 'Threads API' product. Add your Threads account as a 'Tester' in the App Dashboard."
+          },
+          {
+            "title": "Step 3: Access Token",
+            "desc": "Follow the 'User Token' flow in the Threads API documentation to generate a long-lived access token. Paste it here to sync."
+          }
+        ]
+      },
       "linkedin": {
         "title": "LinkedIn Authority",
         "desc": "High-trust B2B professional reach.",
@@ -290,10 +326,16 @@
         "dev_portal_desc": "Obtained via <1>LinkedIn Developers</1>. Request 'Share on LinkedIn' scope."
       },
       "pinterest": {
-        "placeholder": "Pinterest Access Token"
+        "title": "Pinterest Visual",
+        "desc": "High-engagement visual content node.",
+        "placeholder": "Pinterest Access Token",
+        "guide": "Guide"
       },
       "threads": {
-        "placeholder": "Threads API Token"
+        "title": "Threads Meta",
+        "desc": "Direct access to Meta's newest viral node.",
+        "placeholder": "Threads API Token",
+        "guide": "Guide"
       },
       "tg_sync_multi": {
         "title": "Telegram Multi-Sync",

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { LiquidCounter } from '../utils/LiquidCounter';
+import { ACADEMY_STAGES, getCategoryColor } from '../../../data/academyData';
 
 interface GrowthTabProps {
     status: PROStatus | null;
@@ -277,48 +278,42 @@ export const GrowthTab = ({
 
                 <div className="space-y-4 relative z-10">
                     {(() => {
-                        const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
-                        const modulesList = Array.isArray(modules) ? modules : [];
-
-
-
-                        return modulesList.map((module: any, i: number) => {
-                            const isCompleted = completedStages.includes(module.id);
-                            const isLoading = isCompletingStage === module.id;
-                            const isExpanded = expandedModuleId === module.id;
-                            const cost = module.tokens || 0;
-                            const xpCost = module.xp_cost || 0;
-                            const xpReward = module.points || 0;
-
-                            const userTokens = status?.pro_tokens || 0;
-                            const canAffordTokens = cost >= 0 || userTokens >= Math.abs(cost);
-                            const canAffordXP = academyScore >= xpCost;
-                            const isPaid = cost < 0 || xpCost > 0;
-                            const isLocked = !isCompleted && (!canAffordTokens || !canAffordXP);
+                        return ACADEMY_STAGES.map((stage: any, i: number) => {
+                            const stageIdStr = String(stage.id);
+                            const isCompleted = completedStages.includes(String(stage.id));
+                            const isLoading = isCompletingStage === stageIdStr;
+                            const isExpanded = expandedModuleId === stageIdStr;
+                            const isLocked = stage.isPro && !status?.is_pro;
+                            const CategoryIcon = stage.icon;
 
                             const toggleExpand = () => {
+                                if (isLocked) {
+                                    impact('heavy');
+                                    setShowSetup(true);
+                                    return;
+                                }
                                 selection();
                                 impact('light');
-                                setExpandedModuleId(isExpanded ? null : module.id);
+                                setExpandedModuleId(isExpanded ? null : String(stage.id));
                             };
 
                             return (
                                 <motion.div
-                                    key={module.id || i}
+                                    key={stage.id}
                                     initial={{ opacity: 0, x: -10 }}
                                     whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: i * 0.05 }}
+                                    viewport={{ once: true, margin: "-10px" }}
+                                    transition={{ delay: 0.05 }}
                                     className="pl-12 sm:pl-16 relative group"
                                 >
-                                    {/* Timeline Node - Re-engineered for perfect alignment */}
+                                    {/* Timeline Node */}
                                     <div className={`absolute left-0 top-[18px] w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 z-20 border-2 ${isCompleted
                                         ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                                         : isLocked
                                             ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
                                             : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
                                         }`}>
-                                        <span className="font-black text-xs italic">{i + 1}</span>
+                                        <span className="font-black text-xs italic">{stage.id}</span>
                                         {!isCompleted && !isLocked && (
                                             <motion.div
                                                 className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
@@ -334,55 +329,51 @@ export const GrowthTab = ({
                                         : isCompleted
                                             ? 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-80'
                                             : isLocked
-                                                ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5'
+                                                ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5 grayscale pointer-events-none'
                                                 : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-sm'
                                         }`}>
 
-                                        {/* Header - Clickable */}
+                                        {/* Header */}
                                         <div
                                             onClick={toggleExpand}
                                             className="px-5 py-4 sm:px-7 sm:py-5 flex items-center justify-between cursor-pointer gap-4"
                                         >
                                             <div className="flex flex-col gap-2.5 min-w-0">
                                                 <div className="flex items-center gap-3 flex-wrap">
-                                                    <span className={`px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.15em] ${module.diff === 'hard' ? 'bg-red-500 text-white dark:bg-red-500/20 dark:text-red-400' :
-                                                        module.diff === 'medium' ? 'bg-amber-500 text-white dark:bg-amber-500/20 dark:text-amber-400' :
-                                                            'bg-emerald-500 text-white dark:bg-emerald-500/20 dark:text-emerald-400'
-                                                        }`}>
-                                                        {t(`pro_dashboard.academy.protocols.difficulty_levels.${module.diff}`).split(' ')[0]}
-                                                    </span>
+                                                    <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[9px] font-black uppercase tracking-[0.15em] ${getCategoryColor(stage.category)}`}>
+                                                        <CategoryIcon size={10} />
+                                                        {stage.category}
+                                                    </div>
                                                     <h4 className={`text-sm sm:text-base font-black uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
-                                                        {module.title}
+                                                        {stage.title}
                                                     </h4>
                                                 </div>
                                                 {!isExpanded && (
                                                     <div className="flex items-center gap-3 opacity-60">
-                                                        <div className={`w-1 h-1 rounded-full ${isCompleted ? 'bg-emerald-500' : 'bg-indigo-500'}`} />
                                                         <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
-                                                            {module.hook}
+                                                            {stage.description}
                                                         </span>
                                                     </div>
                                                 )}
                                             </div>
 
                                             <div className="flex items-center gap-3 shrink-0">
-                                                <div className="hidden sm:flex items-center gap-3 mr-2">
-                                                    {isCompleted ? (
-                                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
-                                                    ) : (
-                                                        <div className="flex items-center gap-2">
-                                                            {cost < 0 && <span className="text-[10px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">{cost} T</span>}
-                                                            {xpCost > 0 && <span className="text-[10px] font-black text-red-500 bg-red-500/10 px-2 py-1 rounded-md">-{xpCost} XP</span>}
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                {isCompleted ? (
+                                                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
+                                                ) : isLocked ? (
+                                                    <Lock size={14} className="text-slate-400" />
+                                                ) : (
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-[10px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
+                                                    </div>
+                                                )}
                                                 <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
                                             </div>
                                         </div>
 
-                                        {/* Content */}
+                                        {/* Content Module */}
                                         <AnimatePresence>
-                                            {isExpanded && (
+                                            {isExpanded && !isLocked && (
                                                 <motion.div
                                                     initial={{ height: 0, opacity: 0 }}
                                                     animate={{ height: "auto", opacity: 1 }}
@@ -390,106 +381,30 @@ export const GrowthTab = ({
                                                     transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
                                                 >
                                                     <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
-                                                        {/* Module Intel Badge */}
-                                                        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5">
-                                                            <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-                                                            <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{module.hook}</span>
+                                                        <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                            <div className="flex items-center gap-2 mb-4">
+                                                                <CategoryIcon size={16} className="text-indigo-500" />
+                                                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
+                                                            </div>
+                                                            {stage.content || stage.description}
                                                         </div>
 
-                                                        {/* Content Reveal */}
-                                                        {(isPaid && !isCompleted) ? (
-                                                            <div className="relative overflow-hidden rounded-[1.5rem] bg-slate-100/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 p-5 flex items-center gap-4 group/locked_module">
-                                                                <div className="absolute inset-0 bg-linear-to-r from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover/locked_module:opacity-100 transition-opacity duration-500" />
-                                                                <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-white/5 shrink-0 shadow-sm relative z-10 group-hover/locked_module:scale-105 transition-transform duration-500">
-                                                                    <Lock className="w-5 h-5 text-indigo-500" />
-                                                                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-indigo-500 rounded-full border-2 border-slate-50 dark:border-slate-900 shadow-xs" />
-                                                                </div>
-                                                                <div className="flex-1 min-w-0 relative z-10">
-                                                                    <h5 className="text-[11px] font-black uppercase tracking-widest leading-none mb-1 text-indigo-600 dark:text-indigo-400 truncate">
-                                                                        {t('pro_dashboard.academy.node_capabilities')}
-                                                                    </h5>
-                                                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">
-                                                                        {t('pro_dashboard.academy.psych_strategies.unlock_desc').split('.')[0]}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="prose prose-sm dark:prose-invert max-w-none">
-                                                                <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                                                                    {renderMarkdown(module.content)}
-                                                                </div>
-                                                            </div>
-                                                        )}
-
-                                                        {/* Interactive Action Area */}
-                                                        {!isCompleted && !isLocked && (
-                                                            <div className="relative p-6 sm:p-8 rounded-[32px] border bg-linear-to-br from-indigo-50/50 to-white dark:from-indigo-950/20 dark:to-slate-900 border-indigo-500/20 shadow-xl shadow-indigo-500/5 overflow-hidden group/task-card">
-                                                                <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/10 blur-[60px] -mr-24 -mt-24 pointer-events-none" />
-                                                                <div className="relative z-10 flex flex-col gap-6">
-                                                                    <div className="space-y-2">
-                                                                        <div className="flex items-center gap-2">
-                                                                            <Terminal size={14} className="text-indigo-500" />
-                                                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-500">Protocol Directive</span>
-                                                                        </div>
-                                                                        {!isPaid ? (
-                                                                            <p className="text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight leading-snug">
-                                                                                {module.task}
-                                                                            </p>
-                                                                        ) : (
-                                                                            <p className="text-sm font-bold text-slate-400 italic">
-                                                                                {t('pro_dashboard.academy.access_granted')}
-                                                                            </p>
-                                                                        )}
-                                                                    </div>
-
-                                                                    {module.link && !isPaid && (
-                                                                        <a href={module.link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-fit px-5 py-2.5 rounded-xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest hover:scale-[1.02] transition-transform shadow-sm">
-                                                                            {module.cta || 'Initiate Sync'} <ArrowRight size={14} />
-                                                                        </a>
-                                                                    )}
-
-                                                                    <button
-                                                                        onClick={() => handleCompleteAcademyStage(module.id)}
-                                                                        disabled={isLoading}
-                                                                        className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl relative overflow-hidden group/action flex items-center justify-center gap-3 active:scale-95 transition-all"
-                                                                    >
-                                                                        {isLoading ? (
-                                                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                                                        ) : (
-                                                                            <>
-                                                                                <span>{!isPaid ? t('pro_dashboard.academy.claim_xp') : `${t('pro_dashboard.academy.sync_node')} (-${Math.abs(cost)} TOKENS)`}</span>
-                                                                                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 animate-pulse" />
-                                                                                <span className="opacity-60">+{xpReward} XP</span>
-                                                                            </>
-                                                                        )}
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        )}
-
-                                                        {/* Locked Policy Area */}
-                                                        {isLocked && !isCompleted && (
-                                                            <div className="p-6 bg-slate-50 dark:bg-black/30 rounded-[32px] border border-slate-200 dark:border-white/10 text-center space-y-3">
-                                                                <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto border border-slate-200 dark:border-white/10 text-slate-400">
-                                                                    <Info size={24} />
-                                                                </div>
-                                                                <div className="space-y-1">
-                                                                    <h6 className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                                                                        {!canAffordTokens ? "INSUFFICIENT TOKENS" : "INSUFFICIENT XP SCORE"}
-                                                                    </h6>
-                                                                    <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tight">
-                                                                        {xpCost > academyScore ? `REQUIRES ${xpCost} XP (YOU HAVE ${academyScore})` : t('pro_dashboard.academy.insufficient_tokens_plus')}
-                                                                    </p>
-                                                                </div>
-                                                                {!status?.is_pro_plus && (
-                                                                    <button
-                                                                        onClick={(e) => { e.stopPropagation(); selection(); setShowSetup(true); }}
-                                                                        className="text-[10px] font-black text-indigo-500 hover:text-indigo-400 uppercase tracking-widest mt-2 underline"
-                                                                    >
-                                                                        {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
-                                                                    </button>
+                                                        {!isCompleted && (
+                                                            <button
+                                                                onClick={() => handleCompleteAcademyStage(String(stage.id))}
+                                                                disabled={isLoading}
+                                                                className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all"
+                                                            >
+                                                                {isLoading ? (
+                                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                                ) : (
+                                                                    <>
+                                                                        <span>MARK AS ACCOMPLISHED</span>
+                                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                                        <span className="opacity-60">+{stage.rewardXp} XP</span>
+                                                                    </>
                                                                 )}
-                                                            </div>
+                                                            </button>
                                                         )}
                                                     </div>
                                                 </motion.div>
@@ -498,7 +413,6 @@ export const GrowthTab = ({
                                     </div>
                                 </motion.div>
                             );
-
                         });
                     })()}
                 </div>

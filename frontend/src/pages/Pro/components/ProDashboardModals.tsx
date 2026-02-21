@@ -11,6 +11,8 @@ import { useNotificationStore } from '../../../store/useNotificationStore';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { GrowthStrategistModal } from './GrowthStrategistModal';
+
 interface ProModalsProps {
     showAuditModal: boolean;
     setShowAuditModal: (show: boolean) => void;
@@ -34,6 +36,8 @@ interface ProModalsProps {
     setShowBioModal?: (show: boolean) => void;
     handleGenerateBio?: (bio: string) => Promise<string | undefined>;
     isGeneratingBio?: boolean;
+    showGrowthModal?: boolean;
+    setShowGrowthModal?: (show: boolean) => void;
 }
 
 export const ProDashboardModals = ({
@@ -58,7 +62,9 @@ export const ProDashboardModals = ({
     showBioModal,
     setShowBioModal,
     handleGenerateBio,
-    isGeneratingBio
+    isGeneratingBio,
+    showGrowthModal,
+    setShowGrowthModal
 }: ProModalsProps) => {
     const { t } = useTranslation();
     const { showNotification } = useNotificationStore();
@@ -66,7 +72,7 @@ export const ProDashboardModals = ({
     // Setup Local State
     const [setupTab, setSetupTab] = useState<'pro' | 'pro_plus'>(status?.is_pro_plus ? 'pro_plus' : 'pro');
     const [activeProPlatform, setActiveProPlatform] = useState<'x' | 'tg'>('tg');
-    const [activePlusPlatform, setActivePlusPlatform] = useState<'multi_tg' | 'linkedin' | 'omni'>('multi_tg');
+    const [activePlusPlatform, setActivePlusPlatform] = useState<'tg' | 'x' | 'linkedin' | 'pinterest' | 'threads'>('tg');
     const [isSaving, setIsSaving] = useState(false);
 
     // Headline Local State
@@ -251,33 +257,35 @@ export const ProDashboardModals = ({
                             </div>
 
                             {/* Sub-tab Switcher: PRO / PRO+ */}
-                            <div className="px-5 pt-4 pb-1">
-                                <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-3xl border border-slate-200/60 dark:border-white/8 relative">
-                                    <button
-                                        onClick={() => { selection(); setSetupTab('pro'); }}
-                                        className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
-                                            ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
-                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                                    >
-                                        <Zap size={11} className={setupTab === 'pro' ? 'text-indigo-500' : 'opacity-40'} />
-                                        PRO
-                                    </button>
-                                    <button
-                                        onClick={() => { selection(); setSetupTab('pro_plus'); }}
-                                        className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
-                                            ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/10'
-                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                                    >
-                                        <Sparkles size={11} className={setupTab === 'pro_plus' ? 'text-emerald-500' : 'opacity-40'} />
-                                        PRO+ ELITE
-                                        {!status?.is_pro_plus && (
-                                            <span className="ml-0.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shrink-0">
-                                                <Lock size={7} className="text-white" />
-                                            </span>
-                                        )}
-                                    </button>
+                            {!status?.is_pro_plus && (
+                                <div className="px-5 pt-4 pb-1">
+                                    <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-3xl border border-slate-200/60 dark:border-white/8 relative">
+                                        <button
+                                            onClick={() => { selection(); setSetupTab('pro'); }}
+                                            className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
+                                                ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
+                                                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                                        >
+                                            <Zap size={11} className={setupTab === 'pro' ? 'text-indigo-500' : 'opacity-40'} />
+                                            PRO
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); setSetupTab('pro_plus'); }}
+                                            className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
+                                                ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/10'
+                                                : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                                        >
+                                            <Sparkles size={11} className={setupTab === 'pro_plus' ? 'text-emerald-500' : 'opacity-40'} />
+                                            PRO+ ELITE
+                                            {!status?.is_pro_plus && (
+                                                <span className="ml-0.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shrink-0">
+                                                    <Lock size={7} className="text-white" />
+                                                </span>
+                                            )}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Scrollable Body */}
                             <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-4">
@@ -448,16 +456,18 @@ export const ProDashboardModals = ({
                                             /* ── PRO+ Full Controls ── */
                                             <div className="space-y-4">
                                                 {/* Platform Switcher */}
-                                                <div className="flex gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
+                                                <div className="flex flex-wrap gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
                                                     {[
-                                                        { id: 'multi_tg', label: 'Multi-TG', icon: Send },
+                                                        { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg') || 'Telegram', icon: Send },
+                                                        { id: 'x', label: 'X (Twitter)', icon: Network },
                                                         { id: 'linkedin', label: 'LinkedIn', icon: Network },
-                                                        { id: 'omni', label: 'Omni', icon: Blocks }
+                                                        { id: 'pinterest', label: 'Pinterest', icon: Blocks },
+                                                        { id: 'threads', label: 'Threads', icon: Blocks }
                                                     ].map((tab) => (
                                                         <button
                                                             key={tab.id}
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
-                                                            className={`flex-1 py-2 rounded-2xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
+                                                            className={`flex-1 min-w-[70px] py-1.5 rounded-2xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
                                                         >
                                                             <tab.icon size={9} />
                                                             {tab.label}
@@ -466,7 +476,7 @@ export const ProDashboardModals = ({
                                                 </div>
 
                                                 {/* Multi-TG */}
-                                                {activePlusPlatform === 'multi_tg' && (
+                                                {activePlusPlatform === 'tg' && (
                                                     <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
@@ -515,6 +525,41 @@ export const ProDashboardModals = ({
                                                     </motion.div>
                                                 )}
 
+                                                {/* X (Twitter) PRO+ */}
+                                                {activePlusPlatform === 'x' && (
+                                                    <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                                            <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
+                                                                <Network size={18} />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-impact viral distribution node.</p>
+                                                            </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            {[
+                                                                { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
+                                                                { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
+                                                                { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
+                                                                { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
+                                                            ].map((field, i) => (
+                                                                <div key={i} className="space-y-1">
+                                                                    <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
+                                                                    <input
+                                                                        type={field.type || 'text'}
+                                                                        value={field.value}
+                                                                        onChange={(e) => field.setter(e.target.value)}
+                                                                        className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                                        placeholder={field.placeholder}
+                                                                    />
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+
                                                 {/* LinkedIn */}
                                                 {activePlusPlatform === 'linkedin' && (
                                                     <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
@@ -546,60 +591,60 @@ export const ProDashboardModals = ({
                                                     </motion.div>
                                                 )}
 
-                                                {/* Omni-Sync */}
-                                                {activePlusPlatform === 'omni' && (
-                                                    <motion.div key="plus-omni" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="p-4 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center relative overflow-hidden">
-                                                            <div className="absolute top-0 right-0 p-2 opacity-10">
-                                                                <Blocks size={40} />
+                                                {/* Pinterest */}
+                                                {activePlusPlatform === 'pinterest' && (
+                                                    <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-rose-500/5 rounded-2xl border border-rose-500/15">
+                                                            <div className="w-10 h-10 rounded-2xl bg-rose-600 flex items-center justify-center text-white shadow-md shrink-0">
+                                                                <Blocks size={18} />
                                                             </div>
-                                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1 relative z-10">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
-                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto relative z-10">{t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}</p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.pinterest.desc')}</p>
+                                                            </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_pinterest'); }} className="text-[8px] text-rose-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.pinterest.guide')}</button>
                                                         </div>
-                                                        <div className="grid grid-cols-2 gap-2">
-                                                            {[
-                                                                { id: 'pinterest', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_p'), icon: Blocks, token: pinterestToken, setToken: setPinterestToken, placeholder: t('pro_dashboard.setup.pinterest.placeholder') },
-                                                                { id: 'threads', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_t'), icon: Blocks, token: threadsToken, setToken: setThreadsToken, placeholder: t('pro_dashboard.setup.threads.placeholder') },
-                                                            ].map((p) => (
-                                                                <div key={p.id} className="p-4 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-3">
-                                                                    <div className="flex justify-between items-center">
-                                                                        <div className="flex items-center gap-2">
-                                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{p.name}</span>
-                                                                            <div className={`w-1.5 h-1.5 rounded-full ${p.token ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'} shrink-0`} />
-                                                                        </div>
-                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[7px] font-black uppercase tracking-widest whitespace-nowrap">ACTIVE</div>
-                                                                    </div>
-                                                                    <div className="relative">
-                                                                        <input
-                                                                            type="password"
-                                                                            value={p.token}
-                                                                            onChange={(e) => p.setToken(e.target.value)}
-                                                                            placeholder={p.placeholder}
-                                                                            className="w-full h-9 bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-white/5 rounded-lg px-3 text-[9px] font-mono outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/5 dark:text-white transition-all"
-                                                                        />
-                                                                        {p.token && (
-                                                                            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[14px] text-emerald-500">
-                                                                                <CheckCircle2 size={12} />
-                                                                            </div>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            ))}
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.pinterest.placeholder')}</label>
+                                                            <textarea
+                                                                value={pinterestToken}
+                                                                onChange={(e) => setPinterestToken(e.target.value)}
+                                                                placeholder={t('pro_dashboard.setup.pinterest.placeholder')}
+                                                                rows={3}
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-black">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
+                                                            </p>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
 
-                                                            {[
-                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon', progress: 'w-1/3', color: 'bg-amber-500/40' },
-                                                                { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3', color: 'bg-indigo-500/40' }
-                                                            ].map((p) => (
-                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2 opacity-60 grayscale-[0.5]">
-                                                                    <div className="flex justify-between items-center gap-1">
-                                                                        <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
-                                                                        <div className="px-1.5 py-0.5 rounded-md bg-slate-500/10 text-slate-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0">{p.status}</div>
-                                                                    </div>
-                                                                    <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                                                        <div className={`h-full ${p.color} rounded-full ${p.progress}`} />
-                                                                    </div>
-                                                                </div>
-                                                            ))}
+                                                {/* Threads */}
+                                                {activePlusPlatform === 'threads' && (
+                                                    <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
+                                                            <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
+                                                                <Sparkles size={18} />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.threads.desc')}</p>
+                                                            </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_threads'); }} className="text-[8px] text-emerald-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.threads.guide')}</button>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.threads.placeholder')}</label>
+                                                            <textarea
+                                                                value={threadsToken}
+                                                                onChange={(e) => setThreadsToken(e.target.value)}
+                                                                placeholder={t('pro_dashboard.setup.threads.placeholder')}
+                                                                rows={3}
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-black">Meta for Developers</a>. Require Threads API product activation.
+                                                            </p>
                                                         </div>
                                                     </motion.div>
                                                 )}
@@ -960,12 +1005,14 @@ export const ProDashboardModals = ({
                             </div>
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6 relative z-10">
-                                {showManual === 'studio' || showManual === 'setup_x' || showManual === 'setup_tg' || showManual === 'setup_linkedin' ? (
+                                {['studio', 'setup_x', 'setup_tg', 'setup_linkedin', 'setup_pinterest', 'setup_threads'].includes(showManual || '') ? (
                                     (() => {
                                         const key = showManual === 'studio' ? 'pro_dashboard.academy.studio_manual.steps' :
                                             showManual === 'setup_x' ? 'pro_dashboard.setup.x_manual.steps' :
                                                 showManual === 'setup_tg' ? 'pro_dashboard.setup.tg_manual.steps' :
-                                                    'pro_dashboard.setup.linkedin_manual.steps';
+                                                    showManual === 'setup_linkedin' ? 'pro_dashboard.setup.linkedin_manual.steps' :
+                                                        showManual === 'setup_pinterest' ? 'pro_dashboard.setup.pinterest_manual.steps' :
+                                                            'pro_dashboard.setup.threads_manual.steps';
                                         const steps = t(key, { returnObjects: true });
                                         if (Array.isArray(steps)) {
                                             return steps.map((step: any, i: number) => (
@@ -1281,6 +1328,11 @@ export const ProDashboardModals = ({
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <GrowthStrategistModal
+                isOpen={!!showGrowthModal}
+                onClose={() => setShowGrowthModal?.(false)}
+            />
         </>
     );
 };

@@ -228,7 +228,7 @@ export default function LeaderboardPage() {
 
                             <div className="flex flex-col items-end gap-0.5 relative z-10">
                                 <span className="text-xs font-black text-slate-900 dark:text-white font-mono tracking-tighter">
-                                    {user.xp.toLocaleString()}
+                                    {Math.floor(user.xp).toLocaleString()}
                                 </span>
                                 <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/80 leading-none">
                                     {t('leaderboard.xp')}

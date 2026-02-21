@@ -603,7 +603,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                     )}
                                     <div className="flex items-center gap-1">
                                         <span className={`font-black ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
-                                            {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? (item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
+                                            {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                                         </span>
                                         <span className={`text-[7.5px] font-black ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                                             {item.currency}

@@ -101,6 +101,75 @@ async def get_network_activity(
 
     return activity
 
+
+@router.get("/pulse")
+async def get_network_pulse(
+    limit: int = 20,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Returns an anonymized feed of high-value system events (upgrades, commissions, referrals)
+    for the 'Pulse of the Network' UI component.
+    """
+    from app.models.audit_log import ActionType, AuditLog
+
+    cache_key = "partners:pulse_v1"
+    try:
+        cached = await redis_service.get_json(cache_key)
+        if cached:
+            return cached
+    except Exception as e:
+        logger.warning(f"Pulse cache read failed: {e}")
+
+    # Fetch relevant high-impact events
+    # We filter by action_type to avoid flooding with low-value logs (like NOTIFICATION)
+    stmt = (
+        select(AuditLog, Partner.first_name, Partner.last_name)
+        .join(Partner, AuditLog.partner_id == Partner.id, isouter=True)
+        .where(AuditLog.action_type.in_([
+            ActionType.UPGRADE, 
+            ActionType.COMMISSION, 
+            ActionType.REFERRAL,
+            ActionType.PAYMENT
+        ]))
+        .order_by(AuditLog.created_at.desc())
+        .limit(limit)
+    )
+    result = await session.exec(stmt)
+    rows = result.all()
+
+    pulse = []
+    for log, first_name, last_name in rows:
+        # Anonymize: "Vitaliy B." or "Anonymous"
+        name = "System"
+        if first_name:
+            initial = f" {last_name[0]}." if last_name else ""
+            name = f"{first_name}{initial}"
+        
+        # Map logical type for frontend icon selection
+        pulse_type = "info"
+        if log.action_type == ActionType.UPGRADE: pulse_type = "upgrade"
+        elif log.action_type == ActionType.COMMISSION: pulse_type = "earning"
+        elif log.action_type == ActionType.REFERRAL: pulse_type = "signup"
+        elif log.action_type == ActionType.PAYMENT: pulse_type = "payment"
+
+        pulse.append({
+            "id": log.id,
+            "type": pulse_type,
+            "name": name,
+            "description": log.description,
+            "timestamp": log.created_at.isoformat(),
+            "details": log.details
+        })
+
+    try:
+        # Short TTL for 'live' feeling: 15s
+        await redis_service.set_json(cache_key, pulse, expire=15)
+    except Exception as e:
+        logger.warning(f"Pulse cache write failed: {e}")
+
+    return pulse
+
 @router.get("/me", response_model=PartnerResponse)
 async def get_my_profile(
     background_tasks: BackgroundTasks,

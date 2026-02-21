@@ -260,24 +260,60 @@
         ]
       },
       "linkedin_manual": {
-        "title": "Синхронизация Авторитета LinkedIn",
-        "subtitle": "Доступ Профессионального Узла",
+        "title": "Синхронизация LinkedIn",
+        "subtitle": "Доступ к проф. узлу",
         "steps": [
           {
-            "title": "Шаг 1: Аккаунт Рабозработчика",
-            "desc": "Перейдите на [Портал Разработчиков LinkedIn](https://www.linkedin.com/developers/) и создайте новое приложение с названием 'P2PHub Elite'."
+            "title": "Шаг 1: Аккаунт разработчика",
+            "desc": "Перейдите в [LinkedIn Developer Portal](https://www.linkedin.com/developers/) и создайте новое приложение 'P2PHub Elite'."
           },
           {
-            "title": "Шаг 2: Запрос Продуктов",
-            "desc": "В настройках приложения перейдите в 'Products' и запросите доступ к 'Share on LinkedIn' и 'Sign In with LinkedIn'. Обычно они одобряются мгновенно."
+            "title": "Шаг 2: Запрос продукта",
+            "desc": "В настройках приложения перейдите в 'Products' и запросите доступ к 'Share on LinkedIn' и 'Sign In with LinkedIn'. Обычно одобряется мгновенно."
           },
           {
-            "title": "Шаг 3: Генерация Токена",
-            "desc": "Перейдите на вкладку 'Auth'. Используйте [Инструмент генерации токенов](https://www.linkedin.com/developers/tools/oauth/token-generator), чтобы выбрать свое приложение и запрошенные права."
+            "title": "Шаг 3: Генерация токена",
+            "desc": "Перейдите на вкладку 'Auth'. Используйте [Token Generator Tool](https://www.linkedin.com/developers/tools/oauth/token-generator), выберите приложение и нужные разрешения."
           },
           {
-            "title": "Шаг 4: Подключение",
-            "desc": "Скопируйте 'Access Token' (длинная строка) и вставьте его в поле LinkedIn Node в окне [PRO+ Setup]."
+            "title": "Шаг 4: Привязка",
+            "desc": "Скопируйте 'Access Token' (длинная строка) и вставьте его в поле LinkedIn в окне настройки [PRO+ Setup]."
+          }
+        ]
+      },
+      "pinterest_manual": {
+        "title": "Визуальная синхронизация Pinterest",
+        "subtitle": "Глобальный креативный узел",
+        "steps": [
+          {
+            "title": "Шаг 1: Pinterest для разработчиков",
+            "desc": "Войдите на [Pinterest Developer Portal](https://developers.pinterest.com/) и создайте новое приложение."
+          },
+          {
+            "title": "Шаг 2: Разрешения приложений",
+            "desc": "Перейдите в 'Apps' > 'Click your App' > 'Tokens'. Убедитесь, что разрешения `pins:read` и `pins:write` включены."
+          },
+          {
+            "title": "Шаг 3: Генерировать токен",
+            "desc": "Нажмите 'Generate Token'. Скопируйте полученную строку и вставьте ее в поле Pinterest."
+          }
+        ]
+      },
+      "threads_manual": {
+        "title": "Виральная синхронизация Threads",
+        "subtitle": "Доступ к экосистеме Meta",
+        "steps": [
+          {
+            "title": "Шаг 1: Meta для разработчиков",
+            "desc": "Перейдите на сайт [Meta for Developers](https://developers.facebook.com/) и создайте приложение типа 'Threads'."
+          },
+          {
+            "title": "Шаг 2: Настройка Threads API",
+            "desc": "Настройте продукт 'Threads API'. Добавьте свой аккаунт Threads в качестве 'Тестировщика' в панели управления приложением."
+          },
+          {
+            "title": "Шаг 3: Токен доступа",
+            "desc": "Следуйте потоку 'User Token' в документации Threads API, чтобы создать долгосрочный токен доступа. Вставьте его сюда для синхронизации."
           }
         ]
       },
@@ -290,10 +326,16 @@
         "dev_portal_desc": "Получено через <1>LinkedIn Developers</1>. Требуется разрешение 'Share on LinkedIn'."
       },
       "pinterest": {
-        "placeholder": "Токен доступа Pinterest"
+        "title": "Pinterest Визуал",
+        "desc": "Узел визуального контента с высоким вовлечением.",
+        "placeholder": "Токен доступа Pinterest",
+        "guide": "Гайд"
       },
       "threads": {
-        "placeholder": "API токен Threads"
+        "title": "Threads Meta",
+        "desc": "Прямой доступ к новейшему виральному узлу Meta.",
+        "placeholder": "API токен Threads",
+        "guide": "Гайд"
       },
       "tg_sync_multi": {
         "title": "Мульти-синхронизация Telegram",

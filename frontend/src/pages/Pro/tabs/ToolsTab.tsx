@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import {
-    Zap, Flame, Search, ChevronRight, Compass, Loader2, Info, Sparkles
+    Zap, Flame, Search, ChevronRight, Compass, Loader2, Info, Sparkles, Brain
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../utils/renderMarkdown';
@@ -15,6 +15,7 @@ interface ToolsTabProps {
     setShowHeadlineModal: (show: boolean) => void;
     setShowBioModal: (show: boolean) => void;
     setShowAuditModal: (show: boolean) => void;
+    setShowGrowthModal?: (show: boolean) => void;
     marketAudit: any;
     selection: () => void;
 }
@@ -28,6 +29,7 @@ export const ToolsTab = ({
     setShowHeadlineModal,
     setShowBioModal,
     setShowAuditModal,
+    setShowGrowthModal,
     marketAudit,
     selection
 }: ToolsTabProps) => {
@@ -88,7 +90,6 @@ export const ToolsTab = ({
                         </button>
                     </motion.div>
 
-                    {/* Bio Generator */}
                     <motion.div
                         whileHover={{ y: -3 }}
                         className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
@@ -127,6 +128,35 @@ export const ToolsTab = ({
                             className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[8.5px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-500/20 shrink-0 relative z-20 shadow-premium-sm"
                         >
                             {t('pro_dashboard.tools.bio.btn')}
+                            <ChevronRight size={10} />
+                        </button>
+                    </motion.div>
+
+                    {/* AI Growth Strategist */}
+                    <motion.div
+                        whileHover={{ y: -3 }}
+                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-blue-500/20 group relative flex flex-col shadow-xl h-full"
+                    >
+                        <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                        <div className="flex items-center justify-between mb-5">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-all duration-500 shadow-sm shrink-0">
+                                <Brain size={18} />
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="px-2.5 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
+                                    <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">NETWORK ANALYTICS</span>
+                                </span>
+                            </div>
+                        </div>
+                        <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">Growth Strategist</h3>
+                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                            Personalized neural advice to scale your network depth.
+                        </p>
+                        <button
+                            onClick={() => { selection(); setShowGrowthModal?.(true); }}
+                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-black text-[8.5px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-blue-500/20 shrink-0 relative z-20 shadow-premium-sm"
+                        >
+                            Analyze Network
                             <ChevronRight size={10} />
                         </button>
                     </motion.div>

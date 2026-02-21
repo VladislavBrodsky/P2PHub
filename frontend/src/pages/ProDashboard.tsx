@@ -53,6 +53,7 @@ export const ProDashboard = () => {
     const [isFixingHeadline, setIsFixingHeadline] = useState(false);
     const [showBioModal, setShowBioModal] = useState(false);
     const [isGeneratingBio, setIsGeneratingBio] = useState(false);
+    const [showGrowthModal, setShowGrowthModal] = useState(false);
 
     // Studio Sub-step (needed for MainButton orchestration)
     const [studioStep, setStudioStep] = useState(1);
@@ -586,6 +587,7 @@ export const ProDashboard = () => {
                                         setShowHeadlineModal={setShowHeadlineModal}
                                         setShowBioModal={setShowBioModal}
                                         setShowAuditModal={setShowAuditModal}
+                                        setShowGrowthModal={setShowGrowthModal}
                                         marketAudit={marketAudit}
                                         selection={selection}
                                     />
@@ -641,6 +643,8 @@ export const ProDashboard = () => {
                 setShowBioModal={setShowBioModal}
                 handleGenerateBio={handleGenerateBio}
                 isGeneratingBio={isGeneratingBio}
+                showGrowthModal={showGrowthModal}
+                setShowGrowthModal={setShowGrowthModal}
             />
         </div>
     );

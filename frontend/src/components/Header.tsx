@@ -82,7 +82,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         <div className="h-3 w-px bg-(--color-border-glass)" />
                         <div className="flex items-center gap-1.5">
                             <span className="text-[12px] font-black text-(--color-text-primary) leading-none tabular-nums">
-                                {user?.xp ?? 0}
+                                {Math.floor(user?.xp ?? 0)}
                             </span>
                             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 animate-pulse">XP</span>
                         </div>

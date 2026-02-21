@@ -229,48 +229,59 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         initial={{ opacity: 0 }}
                         animate={mathVisible ? { opacity: 1 } : {}}
                         transition={{ delay: 0.65 }}
-                        className="flex items-center justify-between text-[10px]"
+                        className="flex flex-col gap-4"
                     >
-                        <div className="flex items-center gap-1.5">
-                            <div className="flex -space-x-1.5">
-                                {[...Array(5)].map((_, i) => (
-                                    <div key={i} className="w-5 h-5 rounded-full border-2 border-slate-900 bg-linear-to-br from-emerald-400 to-blue-500 overflow-hidden" />
-                                ))}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="flex -space-x-2">
+                                    {[10, 25, 42, 18, 55].map((seed, i) => (
+                                        <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                            <img
+                                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
+                                                alt="Partner"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex flex-col">
+                                    <div className="flex items-center gap-1">
+                                        <AnimatePresence mode="wait">
+                                            <motion.span
+                                                key={liveCount}
+                                                initial={{ y: -8, opacity: 0 }}
+                                                animate={{ y: 0, opacity: 1 }}
+                                                exit={{ y: 8, opacity: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                className="text-sm font-black text-white leading-none"
+                                            >
+                                                {liveCount.toLocaleString()}
+                                            </motion.span>
+                                        </AnimatePresence>
+                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">{t('income.math.people_joining').split(' ')[0]}</span>
+                                    </div>
+                                    <span className="text-[9px] font-black text-white/40 uppercase tracking-[0.1em]">{t('income.math.people_joining').split(' ').slice(1).join(' ')}</span>
+                                </div>
                             </div>
-                            <span className="text-white/50 font-medium">
-                                <AnimatePresence mode="wait">
-                                    <motion.span
-                                        key={liveCount}
-                                        initial={{ y: -8, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: 8, opacity: 0 }}
-                                        transition={{ duration: 0.3 }}
-                                        className="inline-block font-black text-white"
-                                    >
-                                        {liveCount.toLocaleString()}
-                                    </motion.span>
-                                </AnimatePresence>
-                                {' '}{t('income.math.people_joining')}
-                            </span>
+
+                            <div className="bg-amber-500/10 border border-amber-500/30 text-amber-500 font-black px-2.5 py-1 rounded-xl whitespace-nowrap text-[10px] tracking-tight shadow-[0_0_15px_rgba(245,158,11,0.1)]">
+                                {slotsLeft} {t('income.math.spots_left')}
+                            </div>
                         </div>
+
                         <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             onClick={() => {
                                 localStorage.setItem('auto_purchase_pro', 'true');
                                 setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                 onNavigateToPartner?.();
                             }}
-                            className="bg-amber-500 hover:bg-amber-400 text-slate-900 font-black px-4 py-1.5 rounded-xl text-[10px] tracking-widest flex items-center gap-2 shadow-[0_10px_20px_-10px_rgba(245,158,11,0.5)] transition-all animate-pulse"
+                            className="w-full bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-12 rounded-2xl text-[11px] tracking-[0.1em] flex items-center justify-center gap-2 shadow-xl shadow-amber-500/20 transition-all uppercase"
                         >
                             {t('income.math.cta_urgency')}
-                            <ArrowRight className="w-3.5 h-3.5" />
+                            <ArrowRight className="w-4 h-4" />
                         </motion.button>
-                        <div className="flex flex-col items-end">
-                            <div className="bg-amber-500/15 border border-amber-500/30 text-amber-400 font-black px-2 py-0.5 rounded-lg whitespace-nowrap text-[9px]">
-                                {slotsLeft} {t('income.math.spots_left')}
-                            </div>
-                        </div>
                     </motion.div>
                 </div>
 
