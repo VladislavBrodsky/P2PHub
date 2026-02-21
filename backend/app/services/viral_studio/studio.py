@@ -287,17 +287,20 @@ class ViralMarketingStudio:
     async def _get_text_content(self, system_prompt: str, user_prompt: str, is_pro_plus: bool = False) -> tuple[dict | None, int]:
         # Define model sequence based on tier
         if is_pro_plus:
-            # Primary: Fastest flagship models. Fallback: Most powerful / Experimental
-            openai_models = ["gpt-4o", "gpt-4o-mini", "o1-preview"]
-            google_models = ["gemini-1.5-pro", "gemini-2.0-flash-exp"] 
+            # ELITE STACK: Priority on high-intelligence 'Flash' for speed, then flagship logic
+            combined_sequence = [
+                ("google", "gemini-2.0-flash"),      # Peak speed + Peak intelligence
+                ("openai", "gpt-4o"),               # Gold standard conversation
+                ("google", "gemini-1.5-pro"),       # Deep reasoning fallback
+                ("openai", "gpt-4o-mini"),          # Ultra-fast fallback
+            ]
         else:
-            # Strictly efficient models
-            openai_models = ["gpt-4o-mini", "gpt-4o"]
-            google_models = ["gemini-1.5-flash", "gemini-2.0-flash-exp"]
-            
-        combined_sequence = []
-        for m in openai_models: combined_sequence.append(("openai", m))
-        for m in google_models: combined_sequence.append(("google", m))
+            # EFFICIENCY STACK: Maximizing ROI per token
+            combined_sequence = [
+                ("google", "gemini-1.5-flash"), 
+                ("openai", "gpt-4o-mini"),
+                ("google", "gemini-2.0-flash-exp"),
+            ]
             
         for provider, model_name in combined_sequence:
             try:
@@ -317,7 +320,7 @@ class ViralMarketingStudio:
                             messages=messages,
                             **kwargs
                         ),
-                        timeout=20.0 # Shorter per-model timeout
+                        timeout=20.0 
                     )
                     self._last_used_text_model = model_name
                     content = res.choices[0].message.content
@@ -337,7 +340,7 @@ class ViralMarketingStudio:
                                 temperature=0.7
                             )
                         ),
-                        timeout=15.0 # Google is usually faster than DALL-E/GPT-4 for JSON
+                        timeout=15.0 
                     )
                     self._last_used_text_model = model_name
                     content = res.text
