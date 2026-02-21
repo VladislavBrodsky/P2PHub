@@ -11,6 +11,7 @@ class LeaderboardPartner(BaseModel):
     xp: float
     level: int
     referral_count: int = 0
+    subscription_plan: str | None = None
     
     # #comment: Standardized for audit. Allows ORM objects in hydration.
     class Config:

@@ -4,6 +4,7 @@ import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress, getRankGradient } from '../utils/ranking';
+import { ProPlusBadge } from './ui/ProPlusBadge';
 
 interface PersonalizationCardProps {
     className?: string;
@@ -21,16 +22,36 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
         xp: 0
     };
 
-    const currentRank = getRank(stats.level || 1);
+    const isProPlus = (user?.subscription_plan || '').includes('PLUS');
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     return (
         <div className={`relative ${className}`}>
             {/* Premium Background Glow */}
-            <div className="absolute top-1/2 left-10 -translate-y-1/2 w-32 h-32 bg-brand-blue/10 blur-[60px] rounded-full -z-10" />
+            <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-500/20 shadow-[0_0_80px_rgba(59,130,246,0.3)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
 
             {/* #comment: Unified padding (p-2.5 px-4) with other dashboard cards for vertical rhythm consistency */}
-            <div className={`flex items-center gap-5 p-4 rounded-[2rem] bg-(--color-bg-glass) backdrop-blur-md border border-(--color-border-glass) shadow-premium ${variant === 'compact' ? 'p-2.5 px-4 gap-4' : ''}`}>
+            <div className={`
+                flex items-center gap-5 p-4 rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) shadow-premium relative overflow-hidden group
+                ${variant === 'compact' ? 'p-3 px-5 gap-4' : ''}
+                ${isProPlus ? 'ring-1 ring-blue-500/30' : ''}
+            `}>
+                {/* PRO+ Vibing Animated Border */}
+                {isProPlus && (
+                    <motion.div
+                        animate={{
+                            opacity: [0.3, 0.6, 0.3],
+                            scale: [1, 1.02, 1]
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        className="absolute inset-0 bg-linear-to-tr from-blue-500/10 via-transparent to-cyan-500/10 pointer-events-none"
+                    />
+                )}
+
                 {/* Left: Avatar & Rank Badge Column */}
                 <div className="flex flex-col items-center gap-2 shrink-0">
                     <div className="relative">
@@ -48,7 +69,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     repeat: Infinity,
                                     ease: "easeInOut"
                                 }}
-                                className="absolute -top-3 -left-3 z-30 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)]"
+                                className={`absolute -top-3 -left-3 z-30 drop-shadow-[0_4px_12px_rgba(245,158,11,0.6)] ${isProPlus ? 'brightness-125' : ''}`}
                             >
                                 <Crown
                                     size={variant === 'compact' ? 24 : 28}
@@ -60,7 +81,12 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                         <motion.div
                             whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
-                            className={`${variant === 'compact' ? 'h-14 w-14 rounded-xl' : 'h-16 w-16 rounded-2xl'} overflow-hidden border-2 border-(--color-border-glass) bg-(--color-bg-app) shadow-premium transition-all duration-300 relative will-change-transform z-10`}
+                            className={`
+                                ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-[1.5rem]'} 
+                                overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
+                                ${isProPlus ? 'border-blue-400/50 ring-2 ring-blue-500/20' : 'border-(--color-border-glass)'}
+                                bg-(--color-bg-app) 
+                            `}
                         >
                             {/* Skeleton/Placeholder while loading */}
                             {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
@@ -74,7 +100,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 <img
                                     src={user.photo_url}
                                     alt={`${user.first_name || 'Partner'}'s avatar`}
-                                    className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                    className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-105' : ''}`}
                                     onLoad={() => setImageLoaded(true)}
                                     loading="eager"
                                     fetchPriority="high"
@@ -101,6 +127,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
                         </div>
                     </div>
+
+                    {isProPlus && (
+                        <ProPlusBadge size="sm" className="mt-0.5" />
+                    )}
                 </div>
 
                 {/* Right: Stats Vertical Stack */}

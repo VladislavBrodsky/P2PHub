@@ -15,6 +15,7 @@ class PartnerBase(BaseModel):
     photo_file_id: str | None = None
     language_code: str | None = None
     notifications_paused: bool = False
+    subscription_plan: str | None = None
 
     model_config = {"from_attributes": True}
 
@@ -242,6 +243,7 @@ class PartnerTopResponse(BaseModel):
     xp: float
     referrals_count: int
     rank: str
+    subscription_plan: str | None = None
 
 class OrbitMemberResponse(BaseModel):
     id: int

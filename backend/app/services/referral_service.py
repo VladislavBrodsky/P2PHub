@@ -122,7 +122,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         elif level <= 9:
             qualified = referrer.is_pro
         else:
-            qualified = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
+            qualified = referrer.is_pro_plus
 
         if not qualified:
             # Send FOMO notification for rewards beyond current plan capability
@@ -348,7 +348,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 if not referrer: continue
                 
                 # Qualification Check
-                is_ref_pro_plus = (referrer.subscription_plan == "PRO_PLUS_MONTHLY")
+                is_ref_pro_plus = referrer.is_pro_plus
                 is_ref_pro = referrer.is_pro or (referrer.subscription_plan == "PRO_MONTHLY")
                 
                 qualified = False
@@ -372,7 +372,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     if referrer.id not in notified_fomo:
                         notified_fomo.add(referrer.id)
                         lang = referrer.language_code or "en"
-                        fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level)
+                        
+                        target_plan = "PRO+" if comm_level > 9 else "PRO"
+                        fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level, target_plan=target_plan)
                         btn_text = get_msg(lang, "btn_upgrade")
                         deferred_notifications.append(notification_service.send_critical(
                             chat_id=int(referrer.telegram_id), text=fomo_msg,

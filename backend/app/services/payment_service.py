@@ -503,7 +503,9 @@ class PaymentService:
             # 4.2 Viral Congrats Message (Instruction to user to share)
             ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
             viral_intro = get_msg(lang, "viralkit_intro")
-            viral_msg = get_msg(lang, "pro_viral_announcement", referral_link=ref_link)
+            
+            viral_key = "pro_plus_viral_announcement" if is_plus else "pro_viral_announcement"
+            viral_msg = get_msg(lang, viral_key, referral_link=ref_link)
             # We send it to them so they can forward/copy it
             await notification_service.send_low_prio(
                 chat_id=int(partner.telegram_id),

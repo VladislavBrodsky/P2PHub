@@ -415,7 +415,8 @@ async def get_top_partners(
             "photo_url": safe_photo_url,
             "xp": p.xp,
             "referrals_count": display_refs,
-            "rank": get_rank(p.xp)
+            "rank": get_rank(p.xp),
+            "subscription_plan": p.subscription_plan
         })
 
     # Background Cache Warming for photos
@@ -1199,8 +1200,13 @@ async def complete_academy_stage(
             # Stage 20 is 1050 XP. Stage 21 should start at 1150 XP.
             xp_reward = 1150 + (stage_id - 21) * 100
             
-        # Apply PRO multiplier (5x)
-        effective_xp = xp_reward * 5 if partner.is_pro else xp_reward
+        # Apply PRO multipliers (PRO: 5x, PRO+: 10x)
+        if partner.is_pro_plus:
+            effective_xp = xp_reward * 10
+        elif partner.is_pro:
+            effective_xp = xp_reward * 5
+        else:
+            effective_xp = xp_reward
         xp_before = partner.xp
         
         # #comment: Explicit Atomic XP Increment using SQLAlchemy update() 

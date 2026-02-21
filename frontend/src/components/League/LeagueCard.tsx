@@ -2,6 +2,7 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Shield, Zap, Star, Flame } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { ProPlusBadge } from '../ui/ProPlusBadge';
 
 export type LeagueTier = 'wooden' | 'silver' | 'metal' | 'gold' | 'platinum';
 
@@ -10,6 +11,7 @@ interface LeagueCardProps {
     rank: number;
     score: number;
     referrals: number;
+    subscription_plan?: string;
 }
 
 const useLeagueConfig = () => {
@@ -59,7 +61,7 @@ const useLeagueConfig = () => {
     };
 };
 
-export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, referrals }) => {
+export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, referrals, subscription_plan }) => {
     const { t } = useTranslation();
     const LEAGUE_CONFIG = useLeagueConfig();
     const config = LEAGUE_CONFIG[league];
@@ -90,6 +92,11 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                         </span>
                         <h2 className={`text-3xl font-black tracking-tighter ${config.textColor} mt-1 drop-shadow-sm`}>{config.name}</h2>
                     </div>
+                    {(subscription_plan || '').includes('PLUS') && (
+                        <div className="ml-auto">
+                            <ProPlusBadge size="lg" />
+                        </div>
+                    )}
                 </div>
 
                 <p className={`mt-5 text-[13px] font-bold ${config.textColor} text-white/90 leading-relaxed max-w-[95%] italic`}>

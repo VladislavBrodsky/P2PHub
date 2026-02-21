@@ -4,6 +4,7 @@ import { TrendingUp, Users, Crown, ChevronDown, ChevronUp, User } from 'lucide-r
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
+import { ProPlusBadge } from '../ui/ProPlusBadge';
 
 export const TopPartnersList = () => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
@@ -95,6 +96,11 @@ export const TopPartnersList = () => {
                                             'bg-orange-400'
                                         }`}>
                                         <Crown className="w-3 h-3 text-white" />
+                                    </div>
+                                )}
+                                {(partner.subscription_plan || '').includes('PLUS') && (
+                                    <div className="absolute -bottom-1.5 -left-1.5 z-20">
+                                        <ProPlusBadge size="sm" />
                                     </div>
                                 )}
                             </div>

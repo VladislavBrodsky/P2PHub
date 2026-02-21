@@ -12,6 +12,8 @@ import { useState } from 'react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 import { Trophy, Shield, Star, Crown, User } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
+import { ProPlusBadge } from '../components/ui/ProPlusBadge';
+import { useUser } from '../context/UserContext';
 
 interface LeaderboardUser {
     id: number;
@@ -22,6 +24,7 @@ interface LeaderboardUser {
     photo_url?: string;
     photo_file_id?: string;
     referral_count: number;
+    subscription_plan?: string;
 }
 
 interface UserStats {
@@ -36,6 +39,7 @@ export default function LeaderboardPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showAll, setShowAll] = useState(false);
     const [timeframe, setTimeframe] = useState<'all' | 'monthly' | 'weekly'>('all');
+    const { user: currentUser } = useUser();
     const { selection } = useHaptic();
 
     const { data: leaderboard = [], isLoading: isLeaderboardLoading } = useQuery<LeaderboardUser[]>({
@@ -128,6 +132,7 @@ export default function LeaderboardPage() {
                         rank={userStats.rank}
                         score={userStats.xp}
                         referrals={userStats.referrals}
+                        subscription_plan={currentUser?.subscription_plan || undefined}
                     />
                 </div>
             )}
@@ -174,6 +179,11 @@ export default function LeaderboardPage() {
                                         <div className="absolute -top-1 -right-1">
                                             <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20" />
                                             <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
+                                        </div>
+                                    )}
+                                    {(user.subscription_plan || '').includes('PLUS') && (
+                                        <div className="absolute -bottom-1 -left-1 z-20">
+                                            <ProPlusBadge size="sm" />
                                         </div>
                                     )}
                                 </div>

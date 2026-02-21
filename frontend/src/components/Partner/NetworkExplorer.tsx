@@ -13,6 +13,7 @@ import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
 import { ShareSheet } from '../ShareSheet';
+import { ProPlusBadge } from '../ui/ProPlusBadge';
 
 interface NetworkMember {
     id: number;
@@ -24,6 +25,7 @@ interface NetworkMember {
     photo_url: string;
     photo_file_id?: string;
     created_at: string;
+    subscription_plan?: string;
 }
 
 interface NetworkExplorerProps {
@@ -483,6 +485,11 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                         {member.xp > 1000 && (
                                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900">
                                                 <Award className="w-2 h-2 text-white" />
+                                            </div>
+                                        )}
+                                        {(member.subscription_plan || '').includes('PLUS') && (
+                                            <div className="absolute -bottom-1 -left-1 z-20">
+                                                <ProPlusBadge size="sm" />
                                             </div>
                                         )}
                                     </div>

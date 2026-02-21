@@ -78,6 +78,13 @@ MESSAGES = {
             "Don't stay on the sidelines while we build the future of payments. 🚀\n\n"
             "🔗 *Join my structure now:* {referral_link}"
         ),
+        "pro_plus_viral_announcement": (
+            "🚀 *THE EMPIRE HAS ARRIVED!* 🚀\n\n"
+            "I just upgraded to *PRO+ ELITE* status on Pintopay! 👑\n\n"
+            "I've unlocked the *Maximum Multiplier* (x100 performance), VIP AI Priority, and full 20-level revenue sync. This is not just a plan, it's a structural advantage. 🏰\n\n"
+            "Ready to build at the highest level? My structure is open for architects. 💎\n\n"
+            "🔗 *Secure your spot under me:* {referral_link}"
+        ),
         "commission_received": (
             "💰 *REWARD PROCESSED!* (Level {level})\n\n"
             "You have received `${amount} USDT`! 💸\n"
@@ -101,7 +108,7 @@ MESSAGES = {
             "⚠️ *UNCLAIMED REWARD!* ⚠️\n\n"
             "You have missed a **${amount} USDT** reward from Level {level}!\n\n"
             "An upgrade occurred in your network, but your current plan does not include levels at this depth.\n\n"
-            "🚀 *Upgrade to PRO/PRO+* now to optimize your reward structure and unlock the full potential of your ecosystem! 💸"
+            "🚀 *Upgrade to {target_plan}* now to optimize your reward structure and unlock the full potential of your ecosystem! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP BOOST UNLOCKED!* ⚡️\n\n"
@@ -286,6 +293,13 @@ MESSAGES = {
             "Не оставайся в стороне, пока мы строим будущее платежей. 🚀\n\n"
             "🔗 *Присоединяйся к моей структуре:* {referral_link}"
         ),
+        "pro_plus_viral_announcement": (
+            "🚀 *ИМПЕРИЯ ПРИБЫЛА!* 🚀\n\n"
+            "Я только что перешел на статус *PRO+ ELITE* в Pintopay! 👑\n\n"
+            "Я разблокировал *Максимальный Множитель* (x100 перформанс), VIP AI приоритет и полную синхронизацию дохода на 20 уровней. Это не просто план, это структурное преимущество. 🏰\n\n"
+            "Готов строить на высшем уровне? Моя структура открыта для архитекторов. 💎\n\n"
+            "🔗 *Займи свое место под моим началом:* {referral_link}"
+        ),
         "commission_received": (
             "💰 *ВОЗНАГРАЖДЕНИЕ ОБРАБОТАНО!* (Уровень {level})\n\n"
             "Вы получили `${amount} USDT`! 💸\n"
@@ -306,10 +320,10 @@ MESSAGES = {
             "Обеспечьте свой будущий рост уже сегодня! 🏰"
         ),
         "commission_fomo_missed": (
-            "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+            "⚠️ *НЕДОСТУПНОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
             "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
             "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
-            "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! 💸"
+            "🚀 *Обновитесь до {target_plan}* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! 💸"
         ),
         "upgrade_xp_bonus": (
             "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"

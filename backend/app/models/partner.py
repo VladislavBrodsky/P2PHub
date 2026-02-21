@@ -52,7 +52,7 @@ class Partner(SQLModel, table=True):
     
     @property
     def is_pro_plus(self) -> bool:
-        return self.subscription_plan == "PRO_PLUS_MONTHLY"
+        return (self.subscription_plan or "").startswith("PRO_PLUS")
     
     # PRO Content Generation Tokens
     pro_tokens: int = Field(default=500)

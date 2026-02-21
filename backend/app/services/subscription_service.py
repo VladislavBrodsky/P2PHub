@@ -56,6 +56,7 @@ class SubscriptionService:
         res_expired = await session.exec(stmt_expired)
         for partner in res_expired.all():
             partner.is_pro = False
+            partner.subscription_plan = None
             session.add(partner)
             
             # Invalidate Redis Cache to ensure UI reflects the change immediately
