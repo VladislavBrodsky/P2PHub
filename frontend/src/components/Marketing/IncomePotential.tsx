@@ -74,12 +74,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const estimatedMonthlyRaw = activePartners * 45;
     const estimatedMonthly = estimatedMonthlyRaw.toLocaleString();
 
-    // Trigger math section once target is hit AND plan is unlocked
+    // Trigger math section once plan is unlocked
     useEffect(() => {
-        if (isStrategyUnlocked && estimatedMonthlyRaw >= 43200 && !showMathSection) {
+        if (isStrategyUnlocked && !showMathSection) {
             setShowMathSection(true);
         }
-    }, [isStrategyUnlocked, estimatedMonthlyRaw, showMathSection]);
+    }, [isStrategyUnlocked, showMathSection]);
 
     const handleUnlock = () => {
         setIsStrategyUnlocked(true);
@@ -135,180 +135,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
-                <AnimatePresence>
-                    {showMathSection && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, height: 'auto', scale: 1 }}
-                            exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-                            className="overflow-hidden"
-                        >
-                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-4 space-y-2 shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
-                                {/* Ambient glow */}
-                                <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
-                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
-
-                                {/* Header: Structured and Centered */}
-                                <div className="relative flex flex-col items-center text-center pt-2 mb-4">
-                                    {/* Pulsing live dot - Floating Absolute */}
-                                    <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                                        <span className="relative flex h-1.5 w-1.5">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-                                        </span>
-                                        <span className="text-[8px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
-                                    </div>
-
-                                    <div className="max-w-[85%] space-y-1.5">
-                                        <div className="flex items-center justify-center gap-1.5">
-                                            <Zap className="w-3 h-3 text-emerald-400 animate-pulse shrink-0" />
-                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-400 leading-tight">
-                                                {t('income.math.subheading')}
-                                            </span>
-                                        </div>
-                                        <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
-                                            {t('income.math.heading')}
-                                        </h4>
-                                    </div>
-                                </div>
-
-                                {/* THE MATH ROWS */}
-                                {([
-                                    { key: 'per_min', amount: '$1', period: '/min', highlight: false, delay: 0 },
-                                    { key: 'per_hour', amount: '$60', period: '/hr', highlight: false, delay: 0.08 },
-                                    { key: 'per_day', amount: '$1,440', period: '/day', highlight: false, delay: 0.16 },
-                                    { key: 'per_month', amount: '$43,200', period: '/month', highlight: true, delay: 0.24 },
-                                    { key: 'per_year', amount: '$518,400', period: '/year', highlight: false, delay: 0.32 },
-                                ] as const).map(({ key, amount, period, highlight, delay }, idx, arr) => (
-                                    <motion.div
-                                        key={key}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={mathVisible ? { opacity: 1, x: 0 } : {}}
-                                        transition={{ duration: 0.5, delay, ease: 'circOut' }}
-                                        className={clsx(
-                                            'relative flex items-center justify-between rounded-xl px-3 py-2 border transition-all',
-                                            highlight
-                                                ? 'bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
-                                                : 'bg-white/5 border-white/8'
-                                        )}
-                                    >
-                                        {/* Left: row label */}
-                                        <div className="flex items-center gap-2">
-                                            {highlight ? (
-                                                <Flame className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                                            ) : (
-                                                <ChevronRight className="w-3 h-3 text-white/20 shrink-0" />
-                                            )}
-                                            <span className={clsx(
-                                                'text-[11px] font-bold',
-                                                highlight ? 'text-emerald-300' : 'text-white/50'
-                                            )}>
-                                                {t(`income.math.${key}`)}
-                                            </span>
-                                        </div>
-
-                                        {highlight && (
-                                            <div className="absolute -top-px -right-px bg-emerald-500 text-[6px] font-black uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
-                                                TARGET
-                                            </div>
-                                        )}
-                                    </motion.div>
-                                ))}
-
-                                {/* Formula note */}
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={mathVisible ? { opacity: 1 } : {}}
-                                    transition={{ delay: 0.5 }}
-                                    className="text-center -mt-1"
-                                >
-                                    <span className="text-[9px] text-white/20 font-mono">{t('income.math.formula_note')}</span>
-                                </motion.div>
-
-                                {/* FOMO red bar */}
-                                <motion.div
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={mathVisible ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ delay: 0.55 }}
-                                    className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25"
-                                >
-                                    <span className="relative flex h-2.5 w-2.5 mt-0.5 shrink-0">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
-                                    </span>
-                                    <p className="text-[11px] font-bold text-rose-300 leading-snug">
-                                        {t('income.math.fomo_line')}
-                                    </p>
-                                </motion.div>
-
-                                {/* Live social proof */}
-                                <div className="pt-1.5 flex flex-col gap-3">
-                                    <div className="flex items-center justify-between bg-white/5 rounded-2xl px-3 py-2 border border-white/5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex -space-x-2">
-                                                {[
-                                                    "https://randomuser.me/api/portraits/women/44.jpg",
-                                                    "https://randomuser.me/api/portraits/women/68.jpg",
-                                                    "https://randomuser.me/api/portraits/women/65.jpg"
-                                                ].map((imgUrl, i) => (
-                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
-                                                        <img
-                                                            src={imgUrl}
-                                                            alt="Partner"
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-1">
-                                                    <AnimatePresence mode="wait">
-                                                        <motion.span
-                                                            key={liveCount}
-                                                            initial={{ y: -5, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            exit={{ y: 5, opacity: 0 }}
-                                                            transition={{ duration: 0.2 }}
-                                                            className="text-xs font-black text-white leading-none"
-                                                        >
-                                                            {liveCount.toLocaleString()}
-                                                        </motion.span>
-                                                    </AnimatePresence>
-                                                    <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">online</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col items-end">
-                                            <div className="flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">
-                                                <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                                <span className="text-amber-500 font-black text-[9px] tracking-tight">
-                                                    {slotsLeft} {t('income.math.spots_left').split(' ')[0]}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <motion.button
-                                        whileHover={{ scale: 1.01 }}
-                                        whileTap={{ scale: 0.99 }}
-                                        onClick={() => {
-                                            localStorage.setItem('auto_purchase_pro', 'true');
-                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                            onNavigateToPartner?.();
-                                        }}
-                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-10 rounded-xl text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
-                                    >
-                                        {t('income.math.cta_urgency')}
-                                        <ArrowRight className="w-3.5 h-3.5" />
-                                    </motion.button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
 
                 {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
@@ -495,6 +321,181 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </motion.div>
                     )}
                 </div>
+
+                {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
+                <AnimatePresence>
+                    {showMathSection && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                            exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+                            className="overflow-hidden"
+                        >
+                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-4 space-y-2 shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
+                                {/* Ambient glow */}
+                                <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
+                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
+
+                                {/* Header: Structured and Centered */}
+                                <div className="relative flex flex-col items-center text-center pt-2 mb-4">
+                                    {/* Pulsing live dot - Floating Absolute */}
+                                    <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                        <span className="relative flex h-1.5 w-1.5">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                                        </span>
+                                        <span className="text-[8px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
+                                    </div>
+
+                                    <div className="max-w-[85%] space-y-1.5">
+                                        <div className="flex items-center justify-center gap-1.5">
+                                            <Zap className="w-3 h-3 text-emerald-400 animate-pulse shrink-0" />
+                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-400 leading-tight">
+                                                {t('income.math.subheading')}
+                                            </span>
+                                        </div>
+                                        <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
+                                            {t('income.math.heading')}
+                                        </h4>
+                                    </div>
+                                </div>
+
+                                {/* THE MATH ROWS */}
+                                {([
+                                    { key: 'per_min', amount: '$1', period: '/min', highlight: false, delay: 0 },
+                                    { key: 'per_hour', amount: '$60', period: '/hr', highlight: false, delay: 0.08 },
+                                    { key: 'per_day', amount: '$1,440', period: '/day', highlight: false, delay: 0.16 },
+                                    { key: 'per_month', amount: '$43,200', period: '/month', highlight: true, delay: 0.24 },
+                                    { key: 'per_year', amount: '$518,400', period: '/year', highlight: false, delay: 0.32 },
+                                ] as const).map(({ key, amount, period, highlight, delay }, idx, arr) => (
+                                    <motion.div
+                                        key={key}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={mathVisible ? { opacity: 1, x: 0 } : {}}
+                                        transition={{ duration: 0.5, delay, ease: 'circOut' }}
+                                        className={clsx(
+                                            'relative flex items-center justify-between rounded-xl px-3 py-2 border transition-all',
+                                            highlight
+                                                ? 'bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
+                                                : 'bg-white/5 border-white/8'
+                                        )}
+                                    >
+                                        {/* Left: row label */}
+                                        <div className="flex items-center gap-2">
+                                            {highlight ? (
+                                                <Flame className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                            ) : (
+                                                <ChevronRight className="w-3 h-3 text-white/20 shrink-0" />
+                                            )}
+                                            <span className={clsx(
+                                                'text-[11px] font-bold',
+                                                highlight ? 'text-emerald-300' : 'text-white/50'
+                                            )}>
+                                                {t(`income.math.${key}`)}
+                                            </span>
+                                        </div>
+
+                                        {highlight && (
+                                            <div className="absolute -top-px -right-px bg-emerald-500 text-[6px] font-black uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
+                                                TARGET
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                ))}
+
+                                {/* Formula note */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={mathVisible ? { opacity: 1 } : {}}
+                                    transition={{ delay: 0.5 }}
+                                    className="text-center -mt-1"
+                                >
+                                    <span className="text-[9px] text-white/20 font-mono">{t('income.math.formula_note')}</span>
+                                </motion.div>
+
+                                {/* FOMO red bar */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={mathVisible ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ delay: 0.55 }}
+                                    className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25"
+                                >
+                                    <span className="relative flex h-2.5 w-2.5 mt-0.5 shrink-0">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
+                                    </span>
+                                    <p className="text-[11px] font-bold text-rose-300 leading-snug">
+                                        {t('income.math.fomo_line')}
+                                    </p>
+                                </motion.div>
+
+                                {/* Live social proof */}
+                                <div className="pt-1.5 flex flex-col gap-3">
+                                    <div className="flex items-center justify-between bg-white/5 rounded-2xl px-3 py-2 border border-white/5">
+                                        <div className="flex items-center gap-3">
+                                            <div className="flex -space-x-2">
+                                                {[
+                                                    "https://randomuser.me/api/portraits/women/44.jpg",
+                                                    "https://randomuser.me/api/portraits/women/68.jpg",
+                                                    "https://randomuser.me/api/portraits/women/65.jpg"
+                                                ].map((imgUrl, i) => (
+                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                                        <img
+                                                            src={imgUrl}
+                                                            alt="Partner"
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-1">
+                                                    <AnimatePresence mode="wait">
+                                                        <motion.span
+                                                            key={liveCount}
+                                                            initial={{ y: -5, opacity: 0 }}
+                                                            animate={{ y: 0, opacity: 1 }}
+                                                            exit={{ y: 5, opacity: 0 }}
+                                                            transition={{ duration: 0.2 }}
+                                                            className="text-xs font-black text-white leading-none"
+                                                        >
+                                                            {liveCount.toLocaleString()}
+                                                        </motion.span>
+                                                    </AnimatePresence>
+                                                    <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">online</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex flex-col items-end">
+                                            <div className="flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">
+                                                <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
+                                                <span className="text-amber-500 font-black text-[9px] tracking-tight">
+                                                    {slotsLeft} {t('income.math.spots_left').split(' ')[0]}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.01 }}
+                                        whileTap={{ scale: 0.99 }}
+                                        onClick={() => {
+                                            localStorage.setItem('auto_purchase_pro', 'true');
+                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                            onNavigateToPartner?.();
+                                        }}
+                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-10 rounded-xl text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
+                                    >
+                                        {t('income.math.cta_urgency')}
+                                        <ArrowRight className="w-3.5 h-3.5" />
+                                    </motion.button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 <div className="grid grid-cols-2 gap-3 relative z-10">
                     <div className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-3 group transition-all hover:bg-blue-500/5 relative overflow-hidden shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(59,130,246,0.3)]">
