@@ -223,10 +223,10 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-50/50 dark:bg-white/5">
-                                        <th className="pl-6 pr-3 py-3 text-[8px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.source')}</th>
-                                        <th className="px-3 py-3 text-[8px] font-black text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.reach')}</th>
-                                        <th className="px-3 py-3 text-[8px] font-black text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.engagement')}</th>
-                                        <th className="pl-3 pr-6 py-3 text-[8px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
+                                        <th className="pl-4 sm:pl-6 pr-1 sm:pr-3 py-3 text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.source')}</th>
+                                        <th className="px-1 sm:px-3 py-3 text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.reach')}</th>
+                                        <th className="px-1 sm:px-3 py-3 text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.engagement')}</th>
+                                        <th className="pl-1 pr-4 sm:pr-6 py-3 text-[7px] sm:text-[8px] font-black text-slate-400 uppercase tracking-widest text-right"></th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-slate-100 dark:divide-white/5">
@@ -244,21 +244,21 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
 
                                         return (
                                             <tr key={i} className="group relative hover:bg-slate-50/80 dark:hover:bg-white/5 transition-all duration-300">
-                                                <td className="pl-6 pr-3 py-3.5">
-                                                    <div className="flex items-center gap-2.5">
-                                                        <div className={`w-8 h-8 rounded-xl ${platformColor} border flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-all duration-500`}>
-                                                            <PlatformIcon size={12} />
+                                                <td className="pl-4 sm:pl-6 pr-1 sm:pr-3 py-3">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl ${platformColor} border flex items-center justify-center text-white shadow-sm shrink-0`}>
+                                                            <PlatformIcon size={12} className="scale-75 sm:scale-100" />
                                                         </div>
                                                         <div className="flex flex-col min-w-0">
-                                                            <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[140px]">
+                                                            <span className="text-[10px] sm:text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[80px] sm:max-w-[140px]">
                                                                 {post.channel_name || post.platform}
                                                             </span>
                                                             <div className="flex items-center gap-1">
-                                                                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">
+                                                                <span className="text-[7px] sm:text-[8px] font-bold text-slate-400 uppercase tracking-tighter truncate">
                                                                     {post.platform} • {new Date(post.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                                                 </span>
                                                                 {post.last_check && (
-                                                                    <span className="text-[7px] font-bold text-indigo-500/50 uppercase">
+                                                                    <span className="text-[6px] sm:text-[7px] font-bold text-indigo-500/50 uppercase hidden sm:block">
                                                                         • Sync {new Date(post.last_check).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                                                                     </span>
                                                                 )}
@@ -266,47 +266,47 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-3.5 text-center">
+                                                <td className="px-1 sm:px-3 py-3 text-center">
                                                     <div className="inline-flex flex-col">
-                                                        <span className="text-[13px] font-black text-slate-800 dark:text-white tabular-nums leading-none mb-0.5">{post.views.toLocaleString()}</span>
-                                                        <span className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">Reach</span>
+                                                        <span className="text-[11px] sm:text-[13px] font-black text-slate-800 dark:text-white tabular-nums leading-none mb-0.5">{post.views.toLocaleString()}</span>
+                                                        <span className="text-[6px] sm:text-[7px] font-bold text-slate-400 uppercase tracking-widest">Reach</span>
                                                     </div>
                                                 </td>
-                                                <td className="px-3 py-3.5 text-center">
-                                                    <div className="flex flex-col items-center gap-1.5">
-                                                        <div className="flex items-center gap-2">
+                                                <td className="px-1 sm:px-3 py-3 text-center">
+                                                    <div className="flex flex-col items-center gap-1 sm:gap-1.5">
+                                                        <div className="flex items-center gap-1 sm:gap-2">
                                                             <div className="flex items-center gap-0.5">
-                                                                <ThumbsUp size={8} className="text-emerald-500" />
-                                                                <span className="text-[10px] font-black text-emerald-500 tabular-nums">{post.likes}</span>
+                                                                <ThumbsUp size={8} className="text-emerald-500 shrink-0" />
+                                                                <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 tabular-nums">{post.likes}</span>
                                                             </div>
                                                             <div className="flex items-center gap-0.5">
-                                                                <Share2 size={8} className="text-purple-500" />
-                                                                <span className="text-[10px] font-black text-purple-500 tabular-nums">{post.reposts}</span>
+                                                                <Share2 size={8} className="text-purple-500 shrink-0" />
+                                                                <span className="text-[9px] sm:text-[10px] font-black text-purple-500 tabular-nums">{post.reposts}</span>
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <div className="w-12 h-1 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
+                                                        <div className="flex items-center gap-1.5 sm:gap-2">
+                                                            <div className="hidden sm:block w-12 h-1 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden shrink-0">
                                                                 <motion.div
                                                                     initial={{ width: 0 }}
                                                                     animate={{ width: `${Math.min(((post.likes + post.reposts) / (Math.max(1, post.views))) * 1000, 100)}%` }}
                                                                     className="h-full vibing-blue-animated"
                                                                 />
                                                             </div>
-                                                            <div className={`px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-1 ${scoreColor}`}>
+                                                            <div className={`px-1 sm:px-1.5 py-0.5 rounded sm:rounded-md bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center gap-0.5 sm:gap-1 shrink-0 ${scoreColor}`}>
                                                                 <Zap size={6} className={score > 50 ? 'animate-pulse' : ''} />
-                                                                <span className="text-[8px] font-black tabular-nums">{score}%</span>
+                                                                <span className="text-[7px] sm:text-[8px] font-black tabular-nums">{score}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td className="pl-3 pr-6 py-3.5 text-right">
-                                                    <div className="flex items-center justify-end gap-1.5">
+                                                <td className="pl-1 pr-4 sm:pr-6 py-3 text-right">
+                                                    <div className="flex items-center justify-end gap-1 sm:gap-1.5">
                                                         <button
                                                             onClick={() => handleRefreshPost(post.id)}
                                                             disabled={refreshingPost === post.id}
-                                                            className={`w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all active:scale-90 flex items-center justify-center ${refreshingPost === post.id ? 'animate-spin text-indigo-500' : ''}`}
+                                                            className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center shrink-0 ${refreshingPost === post.id ? 'animate-spin text-indigo-500' : ''}`}
                                                         >
-                                                            <Zap size={12} />
+                                                            <Zap size={10} className="sm:w-3 sm:h-3" />
                                                         </button>
                                                         {post.link ? (
                                                             <a
@@ -314,13 +314,13 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                                                 target="_blank"
                                                                 rel="noopener noreferrer"
                                                                 onClick={() => impact('light')}
-                                                                className="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-white dark:bg-indigo-500/10 border border-slate-200 dark:border-indigo-500/30 text-slate-400 hover:text-indigo-500 hover:shadow-lg hover:shadow-indigo-500/10 transition-all active:scale-90"
+                                                                className="inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-white dark:bg-indigo-500/10 border border-slate-200 dark:border-indigo-500/30 text-slate-400 hover:text-indigo-500 hover:shadow-lg transition-all shrink-0"
                                                             >
-                                                                <Eye size={14} />
+                                                                <Eye size={10} className="sm:w-[14px] sm:h-[14px]" />
                                                             </a>
                                                         ) : (
-                                                            <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 flex items-center justify-center opacity-40">
-                                                                <X size={12} />
+                                                            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 flex items-center justify-center opacity-40 shrink-0">
+                                                                <X size={10} className="sm:w-3 sm:h-3" />
                                                             </div>
                                                         )}
                                                     </div>
