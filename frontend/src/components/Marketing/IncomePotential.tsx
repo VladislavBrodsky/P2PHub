@@ -131,26 +131,27 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
                     <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
 
-                    {/* Header */}
-                    <div className="relative flex items-center justify-between mb-1">
-                        <div>
-                            <div className="flex items-center gap-1 mb-0.5">
-                                <Zap className="w-2.5 h-2.5 text-emerald-400" />
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-400">
+                    {/* Header: Structured and Centered */}
+                    <div className="relative flex flex-col items-center text-center pt-2 mb-4">
+                        {/* Pulsing live dot - Floating Absolute */}
+                        <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                            <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                            </span>
+                            <span className="text-[8px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
+                        </div>
+
+                        <div className="max-w-[85%] space-y-1.5">
+                            <div className="flex items-center justify-center gap-1.5">
+                                <Zap className="w-3 h-3 text-emerald-400 animate-pulse shrink-0" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-400 leading-tight">
                                     {t('income.math.subheading')}
                                 </span>
                             </div>
-                            <h4 className="text-sm font-black text-white leading-tight">
+                            <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
                                 {t('income.math.heading')}
                             </h4>
-                        </div>
-                        {/* Pulsing live dot */}
-                        <div className="flex items-center gap-1.5 shrink-0 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-1">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                            </span>
-                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
                         </div>
                     </div>
 
