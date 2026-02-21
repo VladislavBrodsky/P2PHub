@@ -25,7 +25,7 @@ class RateLimitService:
             self._redis = await from_url(settings.REDIS_URL, decode_responses=True)
         return self._redis
 
-    async def is_allowed(self, chat_id: int, priority: str = "medium") -> bool:
+    async def is_allowed(self, chat_id: int | str, priority: str = "medium") -> bool:
         """
         Checks if we can send a message right now.
         Implements a sliding window check.
@@ -81,7 +81,7 @@ class RateLimitService:
             await asyncio.sleep(0.1 if priority == "high" else 0.5)
         return False
 
-    async def is_duplicate(self, chat_id: int, text: str, salt: str = "") -> bool:
+    async def is_duplicate(self, chat_id: int | str, text: str, salt: str = "") -> bool:
         """
         Prevents identical messages to the same user within a short window (60s).
         Normalization ensures that messages with minor differences (emojis, formatting) 
@@ -108,7 +108,7 @@ class RateLimitService:
             logger.warning(f"Duplicate check failed (Redis error), allowing: {e}")
             return False
 
-    async def is_blocked(self, chat_id: int) -> bool:
+    async def is_blocked(self, chat_id: int | str) -> bool:
         """Checks if a user has blocked the bot or has notifications paused (cached in Redis)."""
         try:
             redis = await self.get_redis()
@@ -116,7 +116,7 @@ class RateLimitService:
         except Exception:
             return False # Assume not blocked if check fails
 
-    async def mark_user_blocked(self, chat_id: int, duration: int = 86400):
+    async def mark_user_blocked(self, chat_id: int | str, duration: int = 86400):
         """Marks a user as blocked/paused in Redis (default 24h)."""
         try:
             redis = await self.get_redis()
@@ -124,7 +124,7 @@ class RateLimitService:
         except Exception:
             pass
 
-    async def unmark_user_blocked(self, chat_id: int):
+    async def unmark_user_blocked(self, chat_id: int | str):
         """Removes the blocked/paused status from Redis."""
         try:
             redis = await self.get_redis()

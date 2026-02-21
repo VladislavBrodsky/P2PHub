@@ -132,7 +132,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 btn_text = get_msg(lang, "btn_upgrade")
                 buttons = [[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
                 await notification_service.send_critical(
-                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons,
+                    chat_id=str(referrer.telegram_id), text=fomo_msg, buttons=buttons,
                     salt=f"pro_fomo_{level}_{partner.id}"
                 )
             
@@ -242,19 +242,20 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
         except Exception as e:
             logger.warning(f"Redis invalidation failed (one-off): {e}")
 
-def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name: str, chain: list, salt: str = ""):
+def _prepare_referral_notification(referrer: Partner, level: int, xp: float, name: str, chain: list, salt: str = ""):
     chain_text = " ← ".join([*chain, name])
     chain.append(format_partner_name(referrer))
     lang = referrer.language_code or "en"
+    clean_xp = int(xp) if xp.is_integer() else round(xp, 2)
     buttons = [[
         {"text": get_msg(lang, "btn_view_network"), "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
         {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
     ]]
-    if level == 1: msg = get_msg(lang, "referral_l1_congrats", name=name, xp=xp)
-    elif level == 2: msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=xp)
-    else: msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=xp)
+    if level == 1: msg = get_msg(lang, "referral_l1_congrats", name=name, xp=clean_xp)
+    elif level == 2: msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=clean_xp)
+    else: msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=clean_xp)
     
-    return notification_service.send_low_prio(chat_id=int(referrer.telegram_id), text=msg, buttons=buttons, salt=salt)
+    return notification_service.send_low_prio(chat_id=str(referrer.telegram_id), text=msg, buttons=buttons, salt=salt)
 
 async def _finalize_referral_logic(deferred_tasks: list):
     if deferred_tasks:
@@ -383,7 +384,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level, target_plan=target_plan)
                         btn_text = get_msg(lang, "btn_upgrade")
                         deferred_notifications.append(notification_service.send_critical(
-                            chat_id=int(referrer.telegram_id), text=fomo_msg,
+                            chat_id=str(referrer.telegram_id), text=fomo_msg,
                             buttons=[[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]],
                             salt=f"comm_fomo_{ref_prefix}_l{comm_level}"
                         ))
@@ -424,42 +425,6 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             session.add(recipient)
             
-            description = f"{'PRO+' if is_pro_plus_purchase else 'PRO'} Commission (L{comm_level})"
-            if not found_qualified_partner:
-                skipped_info = f" (Skipped {first_skipped_partner.telegram_id})" if first_skipped_partner else f" (from {partner.telegram_id})"
-                description = f"Missed Tree Revenue: Compression Leakage (L{comm_level}{skipped_info})"
-                
-            earnings_to_add.append(Earning(
-                partner_id=recipient.id,
-                amount=commission,
-                description=description,
-                type="COMMISSION",
-                level=comm_level,
-                currency="USDT",
-                reference_id=f"upg_{ref_prefix}_{comm_level}"
-            ))
-            
-            # Record XP Earning & Transaction for History
-            earnings_to_add.append(Earning(
-                partner_id=recipient.id,
-                amount=xp_gain,
-                description=f"Active Referral: {buyer_name} (L{comm_level})",
-                type="REFERRAL_XP",
-                currency="XP",
-                reference_id=f"upg_xp_earning_{ref_prefix}_{comm_level}"
-            ))
-            
-            from app.models.partner import XPTransaction
-            session.add(XPTransaction(
-                partner_id=recipient.id, amount=xp_gain,
-                type="ACTIVE_REFERRAL",
-                description=f"Active Referral XP (L{comm_level})",
-                reference_id=f"upg_xp_{ref_prefix}_{comm_level}"
-            ))
-
-            # Skip individual notifications now as they are aggregated below
-            pass
-
         # --- Aggregated Side Effects Post-Loop ---
         for r_id, rt in recipient_totals.items():
             rcpt = ancestor_map.get(r_id) or company_account
@@ -469,6 +434,46 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             xp_before = xp_after - rt["xp"]
             balance_after = balance_cache.get(r_id, 0.0)
             balance_before = balance_after - rt["amount"]
+
+            plan_name = "PRO+" if is_pro_plus_purchase else "PRO"
+            is_admin = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS
+            
+            if is_admin:
+                desc = f"Global Network Revenue (L{rt['levels'][0]}{'-L'+str(rt['levels'][-1]) if len(rt['levels']) > 1 else ''})"
+            elif len(rt["levels"]) > 1:
+                desc = f"{plan_name} Aggregated Commission (L{rt['levels'][0]}-L{rt['levels'][-1]})"
+            else:
+                desc = f"{plan_name} Commission (L{rt['levels'][0]})"
+                if not rt["qualified"]:
+                    desc = f"Missed Tree Revenue: Compression Leakage (L{rt['levels'][0]})"
+
+            earnings_to_add.append(Earning(
+                partner_id=r_id,
+                amount=round(rt["amount"], 4),
+                description=desc,
+                type="COMMISSION",
+                level=rt["levels"][0],
+                currency="USDT",
+                reference_id=f"upg_agg_{ref_prefix}_{r_id}"
+            ))
+
+            earnings_to_add.append(Earning(
+                partner_id=r_id,
+                amount=round(rt["xp"], 2),
+                description=f"Active Referral: {buyer_name} (L{rt['levels'][0]}{'-L'+str(rt['levels'][-1]) if len(rt['levels']) > 1 else ''})",
+                type="REFERRAL_XP",
+                currency="XP",
+                reference_id=f"upg_xp_earning_agg_{ref_prefix}_{r_id}"
+            ))
+
+            from app.models.partner import XPTransaction
+            session.add(XPTransaction(
+                partner_id=r_id, 
+                amount=round(rt["xp"], 2),
+                type="ACTIVE_REFERRAL",
+                description=f"Active Referral XP (L{rt['levels'][0]}{'-L'+str(rt['levels'][-1]) if len(rt['levels']) > 1 else ''})",
+                reference_id=f"upg_xp_agg_{ref_prefix}_{r_id}"
+            ))
 
             try:
                 await audit_service.log_commission(
@@ -526,7 +531,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     is_admin_recipient = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS
                     if rt["qualified"] or is_admin_recipient:
                         deferred_notifications.append(notification_service.send_standard(
-                            chat_id=int(rcpt.telegram_id), text=msg,
+                            chat_id=str(rcpt.telegram_id), text=msg,
                             buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]],
                             salt=f"upg_agg_{partner.id}"
                         ))

@@ -80,7 +80,7 @@ async def monitor_notification_health():
             for admin_id in settings.ADMIN_USER_IDS:
                 # Use bypass_dedup=True for system alerts to ensure they arrive
                 try:
-                    await notification_service.send_critical(chat_id=int(admin_id), text=alert_msg, bypass_dedup=True)
+                    await notification_service.send_critical(chat_id=str(admin_id), text=alert_msg, bypass_dedup=True)
                 except Exception as e:
                     logger.error(f"Failed to send health alert to admin {admin_id}: {e}")
         else:

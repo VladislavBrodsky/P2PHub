@@ -59,7 +59,7 @@ async def send_telegram_task(payload_dict: dict):
         reply_markup = notification_service._build_keyboard(payload.buttons) if payload.buttons else None
         
         await bot.send_message(
-            chat_id=payload.chat_id, 
+            chat_id=int(payload.chat_id),  # aiogram requires int; payload stores as str
             text=payload.text, 
             parse_mode=payload.parse_mode, 
             reply_markup=reply_markup
@@ -105,7 +105,7 @@ async def send_telegram_task(payload_dict: dict):
                     session.add(user)
                     await session.commit()
                     # Cache in Redis for fast skipping in enqueue_notification
-                    await rate_limit_service.mark_user_blocked(int(payload.chat_id))
+                    await rate_limit_service.mark_user_blocked(str(payload.chat_id))
         except Exception as ue:
             logger.error(f"Failed to pause notifications for {payload.chat_id}: {ue}")
         return True # Handled, don't retry
@@ -152,17 +152,17 @@ class NotificationService:
         try:
             # 0. Check if user blocked the bot (Redis-cached check)
             # MISSION-CRITICAL: High priority messages (Security/Payments) bypass the "paused" setting.
-            if priority != "high" and await rate_limit_service.is_blocked(int(chat_id)):
+            if priority != "high" and await rate_limit_service.is_blocked(str(chat_id)):
                 logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id} (notifications paused)")
                 return
 
             # High-performance Deduplication Check
-            if not bypass_dedup and await rate_limit_service.is_duplicate(int(chat_id), text, salt=salt):
+            if not bypass_dedup and await rate_limit_service.is_duplicate(str(chat_id), text, salt=salt):
                 logger.info(f"🚫 [DEDUP] Skipping duplicate message for {chat_id} (salt: {salt})")
                 return
 
             payload = NotificationPayload(
-                chat_id=int(chat_id),
+                chat_id=str(chat_id),
                 text=text,
                 parse_mode=parse_mode,
                 buttons=buttons,
@@ -206,7 +206,7 @@ class NotificationService:
                 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
                 async with async_session() as session:
                     retry_item = NotificationRetry(
-                        chat_id=int(chat_id),
+                        chat_id=str(chat_id),
                         text=text,
                         parse_mode=parse_mode,
                         buttons=buttons,
@@ -231,7 +231,7 @@ class NotificationService:
             
             async def wrap_send():
                 try:
-                    await bot.send_message(chat_id=chat_id, text=text, parse_mode=parse_mode, reply_markup=reply_markup)
+                    await bot.send_message(chat_id=int(chat_id), text=text, parse_mode=parse_mode, reply_markup=reply_markup)
                     # Add audit log for fallback success so we know what happened
                     from sqlalchemy.orm import sessionmaker
                     from sqlmodel.ext.asyncio.session import AsyncSession
@@ -279,9 +279,9 @@ class NotificationService:
                     except Exception:
                         pass
 
-            task = asyncio.create_task(wrap_send())
-            self._background_tasks.add(task)
-            task.add_done_callback(self._background_tasks.discard)
+            # Await wrap_send directly to ensure delivery instead of using a background task
+            # that might be cancelled if the main process exits (e.g., during tests)
+            await wrap_send()
             
         except Exception as fe:
             logger.error(f"💥 Total notification failure for {chat_id}: {fe}")
@@ -319,7 +319,7 @@ class NotificationService:
 
                 try:
                     reply_markup = self._build_keyboard(item.buttons) if item.buttons else None
-                    await bot.send_message(chat_id=item.chat_id, text=item.text, parse_mode=item.parse_mode, reply_markup=reply_markup)
+                    await bot.send_message(chat_id=int(item.chat_id), text=item.text, parse_mode=item.parse_mode, reply_markup=reply_markup)
                     item.status = "sent"
                     item.last_error = None # Clear error on success
                 except TelegramForbiddenError:
@@ -334,7 +334,7 @@ class NotificationService:
                         if usr:
                             usr.notifications_paused = True
                             session.add(usr)
-                        await rate_limit_service.mark_user_blocked(int(item.chat_id))
+                        await rate_limit_service.mark_user_blocked(str(item.chat_id))
                     except Exception as ue:
                         logger.error(f"Failed to sync block for {item.chat_id}: {ue}")
                 except Exception as e:
@@ -366,17 +366,17 @@ class NotificationService:
         await self.send_standard(chat_id=chat_id, text=text)
 
     # High-performance priority wrappers
-    async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True, parse_mode: str = "Markdown", salt: str = ""):
+    async def send_critical(self, chat_id: int | str, text: str, buttons: list | None = None, bypass_dedup: bool = True, parse_mode: str = "Markdown", salt: str = ""):
         """Mission-critical messages (Security, Payments). Bypasses dedup by default."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup, salt=salt)
+        await self.enqueue_notification(str(chat_id), text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup, salt=salt)
 
-    async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
+    async def send_standard(self, chat_id: int | str, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
         """Standard interaction messages (Referrals)."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup, salt=salt)
+        await self.enqueue_notification(str(chat_id), text, parse_mode=parse_mode, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup, salt=salt)
 
-    async def send_low_prio(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
+    async def send_low_prio(self, chat_id: int | str, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
         """Background messages (XP, Social tips)."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="low", bypass_dedup=bypass_dedup, salt=salt)
+        await self.enqueue_notification(str(chat_id), text, parse_mode=parse_mode, buttons=buttons, priority="low", bypass_dedup=bypass_dedup, salt=salt)
 
 notification_service = NotificationService()
 
@@ -440,6 +440,6 @@ async def notify_admin_payment_task(
                 )
                 
                 # Admin alerts are HIGH priority — send with HTML parse mode to avoid Markdown entity errors
-                await notification_service.send_critical(chat_id=int(chat_id), text=msg, parse_mode="HTML")
+                await notification_service.send_critical(chat_id=str(chat_id), text=msg, parse_mode="HTML")
             except Exception as e:
                 logger.error(f"Failed to enqueue admin notify: {e}")

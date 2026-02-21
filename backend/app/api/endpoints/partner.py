@@ -901,9 +901,9 @@ async def update_notifications(
         # Sync with Rate Limit Service cache (Redis)
         from app.services.rate_limit_service import rate_limit_service
         if payload.notifications_paused:
-            await rate_limit_service.mark_user_blocked(int(tg_id))
+            await rate_limit_service.mark_user_blocked(str(tg_id))
         else:
-            await rate_limit_service.clear_user_blocked(int(tg_id))
+            await rate_limit_service.unmark_user_blocked(str(tg_id))
 
     return {"status": "ok", "notifications_paused": payload.notifications_paused}
 
@@ -1138,7 +1138,7 @@ async def claim_task_reward(
         # #comment: Ensure the notification reflects the ACTUAL XP awarded (including PRO multipliers) 
         # to satisfy elite users and provide immediate positive reinforcement.
         msg = get_msg(lang, "task_completed", reward=int(effective_xp))
-        await notification_service.send_low_prio(chat_id=int(tg_id), text=msg)
+        await notification_service.send_low_prio(chat_id=str(tg_id), text=msg)
     except Exception as e:
         sentry_sdk.capture_exception(e)
         logger.error(f"Failed to send task notification: {e}")

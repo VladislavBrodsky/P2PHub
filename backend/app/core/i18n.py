@@ -35,22 +35,22 @@ MESSAGES = {
             "📊 *Network Path:*\n"
             "{referral_chain}\n\n"
             "💰 *Recognition:* `+{xp} XP` awarded.\n"
-            "🏰 Your global influence is reaching new depths! 🌍"
+            "🏆 Your global influence is reaching new depths!"
         ),
         "level_up": (
-            "🏆 *Milestone Achieved!* 🏆\n\n"
+            "🏆 *Milestone Achieved!*\n\n"
             "You have reached *Level {level}*!\n\n"
-            "Continue your development to unlock advanced tiers and optimize your rewards! 🚀"
+            "🚀 Continue your development to unlock advanced tiers and optimize your rewards!"
         ),
         "level_up_multi": (
-            "🏆 *MAJOR PROGRESS!* 🏆\n\n"
-            "You have rapidly ascended from Level {old_level} to *Level {new_level}*! 🚀\n\n"
-            "Your network efficiency is unmatched. Advanced rewards have been optimized for your new rank! ✨"
+            "🏆 *MAJOR PROGRESS!*\n\n"
+            "🚀 You have rapidly ascended from Level {old_level} to *Level {new_level}*!\n\n"
+            "✨ Your network efficiency is unmatched. Advanced rewards have been optimized for your new rank!"
         ),
         "task_completed": (
             "✅ *Task Completed!*\n\n"
             "You earned *+{reward} XP*.\n"
-            "Your journey to the top continues! 🌟"
+            "🌟 Your journey to the top continues!"
         ),
         "share_text": "🚀 Join me on Pintopay and earn $1 per minute! Join the revolution in decentralized payments. 💎",
         "pro_welcome": (
@@ -87,18 +87,18 @@ MESSAGES = {
         ),
         "commission_received": (
             "💰 *REWARD PROCESSED!* (Level {level})\n\n"
-            "You have received `${amount} USDT`! 💸\n"
+            "💸 You have received `${amount} USDT`!\n"
             "Partner *{from_user}* in your network (Level {level}) has upgraded to PRO.\n\n"
-            "🌟 *Network Efficiency:* Your infrastructure is generating value 24/7. This is the foundation of your professional growth! 📈"
+            "🌟 *Network Efficiency:* Your infrastructure is generating value 24/7. This is the foundation of your professional growth!"
         ),
         "referral_upgrade_announcement": (
-            "⚡ *SYSTEM NOTIFICATION: STRUCTURAL UPGRADE* ⚡\n\n"
-            "An upgrade occurred in your elite structure! 🏰\n\n"
+            "⚡ *SYSTEM NOTIFICATION: STRUCTURAL UPGRADE*\n\n"
+            "🔥 An upgrade occurred in your elite structure!\n\n"
             "👤 *Partner:* {buyer_name}\n"
             "📈 *Depth:* Level {level}\n"
             "💎 *New Tier:* {plan_name}\n"
             "💰 *Reward:* `${amount} USDT`\n\n"
-            "As a *PRO+ Leader*, you are receiving active rewards from this structural growth. Your empire continues to scale! 🚀"
+            "🚀 As a *PRO+ Leader*, you are receiving active rewards from this structural growth. Your empire continues to scale!"
         ),
         "viral_share_caption": (
             "🛑 EVOLVE BEYOND TRADITIONAL BANKING! \n"
@@ -259,22 +259,22 @@ MESSAGES = {
             "📊 *Цепочка соединений:*\n"
             "{referral_chain}\n\n"
             "💰 *Признание:* `+{xp} XP` зачислено.\n"
-            "🏰 Ваше глобальное влияние достигло новой глубины! 🌍"
+            "🏆 Ваше глобальное влияние достигло новой глубины!"
         ),
         "level_up": (
-            "🏆 *Новая Веха Достигнута!* 🏆\n\n"
+            "🏆 *Новая Веха Достигнута!*\n\n"
             "Вы достигли *Уровня {level}*!\n\n"
-            "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+            "🚀 Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды!"
         ),
         "level_up_multi": (
-            "🏆 *СТРЕМИТЕЛЬНЫЙ ПРОГРЕСС!* 🏆\n\n"
-            "Вы совершили рывок с уровня {old_level} до *Уровня {new_level}*! 🚀\n\n"
-            "Эффективность вашей сети впечатляет. Все награды адаптированы под ваш новый высокий ранг! ✨"
+            "🏆 *СТРЕМИТЕЛЬНЫЙ ПРОГРЕСС!*\n\n"
+            "🚀 Вы совершили рывок с уровня {old_level} до *Уровня {new_level}*!\n\n"
+            "✨ Эффективность вашей сети впечатляет. Все награды адаптированы под ваш новый высокий ранг!"
         ),
         "task_completed": (
             "✅ *Задание выполнено!*\n\n"
             "Вы получили *+{reward} XP*.\n"
-            "Ваш путь к вершине продолжается! 🌟"
+            "🌟 Ваш путь к вершине продолжается!"
         ),
         "share_text": "🚀 Присоединяйся ко мне в Pintopay и зарабатывай $1 в минуту! Стань частью революции децентрализованных платежей. 💎",
         "pro_welcome": (
@@ -311,18 +311,18 @@ MESSAGES = {
         ),
         "commission_received": (
             "💰 *ВОЗНАГРАЖДЕНИЕ ОБРАБОТАНО!* (Уровень {level})\n\n"
-            "Вы получили `${amount} USDT`! 💸\n"
+            "💸 Вы получили `${amount} USDT`!\n"
             "Партнер *{from_user}* из вашей сети (Уровень {level}) перешел на статус PRO.\n\n"
-            "🌟 *Эффективность Инфраструктуры:* Ваша сеть генерирует ценность 24/7. Это основа вашего профессионального роста! 📈"
+            "🌟 *Эффективность Инфраструктуры:* Ваша сеть генерирует ценность 24/7. Это основа вашего профессионального роста!"
         ),
         "referral_upgrade_announcement": (
-            "⚡ *СИСТЕМНОЕ УВЕДОМЛЕНИЕ: СТРУКТУРНЫЙ АПГРЕЙД* ⚡\n\n"
-            "В вашей элитной структуре произошел апгрейд! 🏰\n\n"
+            "⚡ *СИСТЕМНОЕ УВЕДОМЛЕНИЕ: СТРУКТУРНЫЙ АПГРЕЙД*\n\n"
+            "🔥 В вашей элитной структуре произошел апгрейд!\n\n"
             "👤 *Партнер:* {buyer_name}\n"
             "📈 *Глубина:* Уровень {level}\n"
             "💎 *Новый Уровень:* {plan_name}\n"
             "💰 *Вознаграждение:* `${amount} USDT`\n\n"
-            "Как *PRO+ Лидер*, вы получаете активные вознаграждения от этого структурного роста. Ваша империя продолжает масштабироваться! 🚀"
+            "🚀 Как *PRO+ Лидер*, вы получаете активные вознаграждения от этого структурного роста. Ваша империя продолжает масштабироваться!"
         ),
         "viral_share_caption": (
             "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"

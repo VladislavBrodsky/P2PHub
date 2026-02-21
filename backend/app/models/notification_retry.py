@@ -7,7 +7,7 @@ from sqlmodel import JSON, Column, Field, SQLModel
 
 class NotificationRetry(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    chat_id: int = Field(index=True)
+    chat_id: str = Field(index=True)
     text: str
     parse_mode: str | None = "Markdown"
     buttons: list | None = Field(default=None, sa_column=Column(JSON))

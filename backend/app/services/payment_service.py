@@ -477,7 +477,7 @@ class PaymentService:
             xp_msg = get_msg(lang, "upgrade_xp_bonus", xp=int(upgrade_xp))
             
             await notification_service.send_standard(
-                chat_id=int(partner.telegram_id),
+                chat_id=str(partner.telegram_id),
                 text=f"{welcome_msg}\n\n{xp_msg}",
                 salt=f"pro_welcome_{partner.id}"
             )
@@ -517,7 +517,7 @@ class PaymentService:
             viral_msg = get_msg(lang, viral_key, referral_link=ref_link)
             # We send it to them so they can forward/copy it
             await notification_service.send_low_prio(
-                chat_id=int(partner.telegram_id),
+                chat_id=str(partner.telegram_id),
                 text=f"{viral_intro}\n{viral_msg}",
                 salt=f"pro_viral_{partner.id}"
             )
@@ -552,7 +552,7 @@ class PaymentService:
                 )
                 
                 await notification_service.send_critical(
-                    chat_id=int(admin_id),
+                    chat_id=str(admin_id),
                     text=admin_notify_msg,
                     parse_mode="HTML",
                     salt=f"adm_upg_{partner.id}_{transaction.id}"

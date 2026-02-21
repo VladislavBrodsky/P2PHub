@@ -1,0 +1,14 @@
+INFO:app.core.config:✅ Environment variables loaded (if missing) from: /Users/grandmaestro/Documents/P2PHub/backend/p2p_config.env
+INFO:app.core.config:✨ Settings loaded. Bot verified: 8245884329...yTYk
+INFO:app.core.config:⚙️ Configuration verified in 0.0005s
+🔔 Notifications Today (10):
+- 2026-02-21 02:16:53.383734 | Target: 283561463 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 245}
+- 2026-02-21 02:16:54.461691 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 270}
+- 2026-02-21 02:16:59.217139 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 263}
+- 2026-02-21 02:16:59.445847 | Target: 283561463 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 238}
+- 2026-02-21 02:17:07.154887 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 244}
+- 2026-02-21 02:17:07.457103 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 136}
+- 2026-02-21 02:17:14.358071 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 225}
+- 2026-02-21 02:17:14.553177 | Target: 1202998960 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 238}
+- 2026-02-21 02:17:19.641724 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 246}
+- 2026-02-21 08:26:36.072904 | Target: 716720099 | Action: fallback_success | Details: {'prio': 'emergency', 'text_len': 150}

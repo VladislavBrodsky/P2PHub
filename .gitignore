@@ -70,3 +70,4 @@ frontend/public_deprecated/
 frontend/dist_backup_*/
 frontend/local_npm_cache/
 frontend/build.log
+backend/p2p_config.env

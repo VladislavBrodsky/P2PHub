@@ -81,7 +81,7 @@ class SubscriptionService:
             {"text": get_msg(lang, "btn_extend_sub"), "web_app": {"url": settings.FRONTEND_URL}},
             {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.send_standard(int(partner.telegram_id), full_text, buttons=buttons)
+        await notification_service.send_standard(str(partner.telegram_id), full_text, buttons=buttons)
 
     async def send_expired_notification(self, partner: Partner):
         lang = partner.language_code or "en"
@@ -93,7 +93,7 @@ class SubscriptionService:
             {"text": get_msg(lang, "btn_reactivate_sub"), "web_app": {"url": settings.FRONTEND_URL}},
             {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
         ]]
-        await notification_service.send_critical(int(partner.telegram_id), full_text, buttons=buttons)
+        await notification_service.send_critical(str(partner.telegram_id), full_text, buttons=buttons)
 
     async def run_checker_task(self):
         """
