@@ -955,7 +955,7 @@ export const StudioTab = ({
                                 </div>
 
                                 {/* Image Actions Overlay */}
-                                <div className="absolute inset-x-0 bottom-0 z-10 opacity-0 group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/60 to-transparent p-4 translate-y-2 group-hover/img:translate-y-0">
+                                <div className="absolute inset-x-0 bottom-0 z-10 opacity-100 lg:opacity-0 lg:group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/60 to-transparent p-4 translate-y-0 lg:translate-y-2 lg:group-hover/img:translate-y-0">
                                     <div className="flex items-center justify-end gap-2.5">
                                         <button
                                             onClick={() => { selection(); handleSaveImageToDevice(); }}
