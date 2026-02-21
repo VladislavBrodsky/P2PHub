@@ -343,7 +343,7 @@ export default function ReferralPage() {
                                 <div className="relative h-48 sm:h-52 shrink-0">
                                     <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
                                     <img
-                                        src={`${getApiUrl()}/images/2026-01-12%2021.13.02.jpg`}
+                                        src={`${getApiUrl()}/images/v3_referral_promo.jpg`}
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="w-full h-full object-cover"
                                     />
@@ -416,7 +416,7 @@ export default function ReferralPage() {
                                     <div className="text-center pb-2">
                                         <p className="text-[10px] text-slate-400 font-medium">
                                             <Trans i18nKey="referral.modal.boost_desc">
-                                                Each referral boosts your XP and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">Physical Platinum Card</span>.
+                                                Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>.
                                             </Trans>
                                         </p>
                                     </div>
