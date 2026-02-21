@@ -72,6 +72,7 @@ export const StudioTab = ({
     const [isSharingSystem, setIsSharingSystem] = useState(false);
     const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin')[]>([]);
     const [selectedTgChannel, setSelectedTgChannel] = useState<string>(''); // for multi-channel TG select
+    const [isRegeneratingHashtags, setIsRegeneratingHashtags] = useState(false);
 
     // Personal Link State
     const [usePersonalLink, setUsePersonalLink] = useState(false);
@@ -219,6 +220,34 @@ export const StudioTab = ({
             setIsGenerating(false);
         }
     }, [postType, audience, language, tone, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
+
+    const handleRegenerateHashtags = async () => {
+        if (!generatedResult || isRegeneratingHashtags) return;
+        setIsRegeneratingHashtags(true);
+        impact('light');
+        try {
+            const res = await proService.regenerateHashtags(postType, audience, language, tone);
+            const updatedResult = { ...generatedResult, hashtags: res.hashtags };
+            setGeneratedResult(updatedResult);
+
+            // Update history too
+            if (historyIndex >= 0) {
+                const newHistory = [...history];
+                newHistory[historyIndex] = updatedResult;
+                setHistory(newHistory);
+            }
+
+            notification({
+                title: t('pro_dashboard.notifications.success'),
+                text: t('pro_dashboard.studio.hashtags_refreshed', 'Viral hashtags optimized'),
+                type: 'success'
+            });
+        } catch (error) {
+            notification({ title: 'Error', text: 'Hashtag refresh failed', type: 'error' });
+        } finally {
+            setIsRegeneratingHashtags(false);
+        }
+    };
 
     const handleUpdatePersonalLink = async (link: string) => {
         if (!status?.is_pro) return;
@@ -1033,12 +1062,22 @@ export const StudioTab = ({
                                     </div>
                                 </div>
 
-                                <div className="flex flex-wrap gap-2">
-                                    {generatedResult.hashtags?.map((tag: string, i: number) => (
-                                        <span key={i} className="px-3 py-1 rounded-full bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/10 text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">
-                                            #{tag.replace(/^#/, '')}
-                                        </span>
-                                    ))}
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex flex-wrap gap-2">
+                                        {generatedResult.hashtags?.map((tag: string, i: number) => (
+                                            <span key={i} className="px-3 py-1 rounded-full bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/10 text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">
+                                                #{tag.replace(/^#/, '')}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <button
+                                        onClick={() => { selection(); handleRegenerateHashtags(); }}
+                                        disabled={isRegeneratingHashtags}
+                                        className="shrink-0 p-2 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-purple-500 transition-all active:scale-90"
+                                        title="Regenerate Hashtags"
+                                    >
+                                        <RefreshCw size={12} className={isRegeneratingHashtags ? "animate-spin" : ""} />
+                                    </button>
                                 </div>
                             </div>
                         </div>

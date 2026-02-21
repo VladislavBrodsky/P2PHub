@@ -125,8 +125,18 @@ export const proService = {
         return response.data;
     },
 
-    getPredictiveResonance: async () => {
+    async getPredictiveResonance() {
         const response = await apiClient.get('/api/pro/analytics/resonance');
+        return response.data;
+    },
+
+    regenerateHashtags: async (post_type: string, target_audience: string, language: string, tone?: string): Promise<{ hashtags: string[] }> => {
+        const response = await apiClient.post('/api/pro/regenerate-hashtags', {
+            post_type,
+            target_audience,
+            language,
+            tone_of_voice: tone
+        });
         return response.data;
     }
 };

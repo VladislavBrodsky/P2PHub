@@ -330,6 +330,23 @@ async def generate_content(
         "tokens_remaining": partner.pro_tokens
     }
 
+@router.post("/regenerate-hashtags")
+async def regenerate_hashtags(
+    payload: GenerateContentRequest,
+    partner: Partner = Depends(get_current_partner)
+):
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    hashtags = await viral_studio.generate_hashtags(
+        target_audience=payload.target_audience,
+        post_type=payload.post_type,
+        language=payload.language,
+        tone=payload.tone_of_voice or "professional"
+    )
+    
+    return {"hashtags": hashtags}
+
 @router.post("/post")
 async def publish_content(
     payload: SocialPostRequest,

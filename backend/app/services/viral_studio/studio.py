@@ -239,25 +239,22 @@ class ViralMarketingStudio:
             else: 
                 body_text = "\n".join(lines)
 
-        # 🛡️ HASHTAG GUARDIAN FINAL (Canonical Append)
+        # 🛡️ HASHTAG GUARDIAN FINAL (Internal Metadata Only)
         hashtags_list = res_json.get("hashtags", [])
         if isinstance(hashtags_list, str):
             hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
         
         if len(hashtags_list) > 4: hashtags_list = hashtags_list[:4]
         
-        # Re-ensure body is clean of hash lines at the very end again 
+        # Ensure body is clean of hash lines at the very end
         final_lines = body_text.strip().split("\n")
         while final_lines and any(word.startswith("#") for word in final_lines[-1].split()):
             final_lines.pop()
         
         body_text = "\n".join(final_lines).strip()
         
-        if hashtags_list:
-            # Ensure hashtags have #
-            hashtags_list = [h if h.startswith("#") else f"#{h}" for h in hashtags_list]
-            hashtag_str = " ".join(hashtags_list)
-            body_text += f"\n\n{hashtag_str}"
+        # DO NOT append hashtags to body_text anymore. 
+        # They will be returned in the 'hashtags' field for the UI to handle.
         
         duration = (datetime.now() - start_time).total_seconds()
         
@@ -557,9 +554,31 @@ class ViralMarketingStudio:
             return res.choices[0].message.content.strip()
         except Exception: return bio
 
-    async def fetch_trends(self) -> list[dict]:
-        prompt = "Identify 3 top trending crypto narratives for 2026. Format as JSON list."
-        res, _ = await self._get_text_content("Strategy Trends Expert", prompt)
-        return res if isinstance(res, list) else []
+    async def generate_hashtags(self, target_audience: str, post_type: str, language: str, tone: str) -> list[str]:
+        """Regenerate exactly 4 high-resonance hashtags based on chosen parameters."""
+        prompt = f"""
+        ACT AS ELITE CMO. GENERATE EXACTLY 4 HIGH-RESONANCE VIRAL HASHTAGS FOR:
+        Audience: {target_audience}
+        Strategy: {post_type}
+        Language: {language}
+        Tone: {tone}
+
+        RULES:
+        1. Always in {language}.
+        2. Mix high-status keywords with viral triggers.
+        3. NO SPACES.
+        4. RETURN ONLY A JSON LIST OF STRINGS.
+        """
+        try:
+            res, _ = await self._get_text_content("Hashtag Strategist", prompt, is_pro_plus=True)
+            if isinstance(res, list): return [h if h.startswith("#") else f"#{h}" for h in res[:4]]
+            if isinstance(res, dict) and "hashtags" in res:
+                h_val = res["hashtags"]
+                if isinstance(h_val, list): return [h if h.startswith("#") else f"#{h}" for h in h_val[:4]]
+                if isinstance(h_val, str): return [h.strip() for h in h_val.replace(',', ' ').split() if h.strip()][:4]
+        except Exception as e:
+            logger.error(f"Hashtag regeneration failed: {e}")
+        
+        return ["#PintopayPRO", "#FinancialFreedom", "#ViralGrowth", f"#{target_audience}"]
 
 viral_studio = ViralMarketingStudio()
