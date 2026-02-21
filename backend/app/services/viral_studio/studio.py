@@ -274,11 +274,11 @@ class ViralMarketingStudio:
         if is_pro_plus:
             # Most powerful primary, top performing/latest fallback
             openai_models = ["gpt-4o", "gpt-4-turbo"] 
-            google_models = ["gemini-1.5-pro-latest", "gemini-2.0-flash"]
+            google_models = ["gemini-pro-latest", "gemini-2.5-pro", "gemini-3-pro-preview"]
         else:
             # Most powerful primary, efficient/modern fallbacks
             openai_models = ["gpt-4o", "gpt-4o-mini"]
-            google_models = ["gemini-2.0-flash"]
+            google_models = ["gemini-2.5-flash", "gemini-2.0-flash"]
             
         combined_sequence = []
         for m in openai_models:
@@ -317,14 +317,14 @@ class ViralMarketingStudio:
         if is_pro_plus:
             # PRO+ : Always most powerful primary, top performing/latest fallbacks
             model_sequence = [
-                ("google", "imagen-3.0-generate-001"), # Gemini 3 Pro (Nano Banana)
-                ("google", "imagen-4.0-generate-001"), # Latest/Top performing
+                ("google", "imagen-4.0-generate-001"), # Primary: Gemini 3 Pro (imagen-4.0 the most performing model)
+                ("google", "imagen-3.0-generate-001"), # Top performing alternative
                 ("openai", "dall-e-3")                 # Most powerful fallback
             ]
         else:
             # PRO  : Gemini 3 Pro primary, powerful + efficient fallbacks without glitches
             model_sequence = [
-                ("google", "imagen-3.0-generate-001"),      # Gemini 3 Pro (Nano Banana)
+                ("google", "imagen-4.0-generate-001"),      # Primary: Gemini 3 Pro (imagen-4.0)
                 ("openai", "dall-e-3"),                     # Powerful fallback
                 ("google", "imagen-3.0-fast-generate-001")  # Modern and efficient fallback
             ]
