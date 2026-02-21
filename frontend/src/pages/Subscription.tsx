@@ -1084,7 +1084,7 @@ export default function SubscriptionPage() {
                                         {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
                                         {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
                                         <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">
-                                            {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
+                                            {status === 'pending' ? 'VERIFYING...' : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? 'YOU ARE PRO+ NOW!' : 'WELCOME TO PRO') : 'SUBMITTED'}
                                         </h2>
                                         <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
                                             {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}

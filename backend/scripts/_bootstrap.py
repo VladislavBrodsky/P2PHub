@@ -82,7 +82,7 @@ def _mock_broker():
         # Also patch taskiq_task.kiq so existing @broker.task functions don't enqueue
         import app.services.notification_service as notif_module
 
-        async def _silent_enqueue(chat_id, text, parse_mode="Markdown", buttons=None):
+        async def _silent_enqueue(chat_id, text, parse_mode="Markdown", buttons=None, **kwargs):
             logger.info(f"[MOCK NOTIF] Skipped notification to {chat_id}: {str(text)[:60]}...")
 
         notif_module.notification_service.enqueue_notification = _silent_enqueue

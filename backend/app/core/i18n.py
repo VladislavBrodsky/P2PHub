@@ -62,6 +62,15 @@ MESSAGES = {
             "• *Network Leadership:* You are now a recognized leader. Drive your community's growth and optimize your long-term rewards.\n\n"
             "✨ *Your marketing influence is now significantly enhanced.* Build your sovereign legacy! 🏰"
         ),
+        "pro_plus_welcome": (
+            "👑 *WELCOME TO THE PRO+ EMPIRE!* 👑\n\n"
+            "You are PRO+ now! You have just unlocked the *Ultimate Infrastructure* of the Pintopay Partner Network!\n\n"
+            "🚀 *Key Strategic Advantages:*\n"
+            "• *20-Level Network:* You now earn from every participant in your structure down to Level 20. The maximum scaling potential!\n"
+            "• *X3 Fast XP & Priority AI:* Your professional progression is hyper-accelerated with our best tools.\n"
+            "• *Omni-Channel Sync & VIP Access:* Seamless multi-network management to dominate the market.\n\n"
+            "✨ *Your marketing influence is unstoppable.* Build your sovereign legacy! 🏰"
+        ),
         "pro_viral_announcement": (
             "🔥 *MEGA ANNOUNCEMENT!* 🔥\n\n"
             "I just went *PRO* on Pintopay Partner Network! 💎\n\n"
@@ -260,6 +269,15 @@ MESSAGES = {
             "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
             "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
             "✨ *Ваши маркетинговые усилия стали в 10 раз сильнее.* Идите и стройте свою империю! 🏰"
+        ),
+        "pro_plus_welcome": (
+            "👑 *ДОБРО ПОЖАЛОВАТЬ В ИМПЕРИЮ PRO+!* 👑\n\n"
+            "Теперь вы PRO+! Вы только что открыли *Ультимативную Инфраструктуру* партнерской сети Pintopay!\n\n"
+            "🚀 *Стратегические преимущества:*\n"
+            "• *Сеть 20 уровней:* Максимальный масштаб монетизации с каждого участника!\n"
+            "• *X3 Быстрый XP & Priority AI:* Ваш рост турбирован лучшими инструментами сети.\n"
+            "• *Омни-канальность & VIP:* Бесшовное управление для доминирования на рынке.\n\n"
+            "✨ *Ваше влияние неудержимо.* Стройте свою империю! 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *МЕГА АНОНС!* 🔥\n\n"

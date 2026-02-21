@@ -461,7 +461,11 @@ class PaymentService:
             lang = partner.language_code or "en"
 
             # 4.1 Welcome Message & XP Notice
-            welcome_msg = get_msg(lang, "pro_welcome")
+            # 4.1 Welcome Message & XP Notice
+            if is_plus:
+                welcome_msg = get_msg(lang, "pro_plus_welcome")
+            else:
+                welcome_msg = get_msg(lang, "pro_welcome")
             xp_msg = get_msg(lang, "upgrade_xp_bonus", xp=int(upgrade_xp))
             
             await notification_service.send_standard(
