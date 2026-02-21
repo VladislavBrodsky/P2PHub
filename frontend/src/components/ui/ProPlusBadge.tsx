@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 
 interface ProPlusBadgeProps {
     className?: string;
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size = 'md' }) => {
     const sizeClasses = {
+        xs: 'px-1.5 py-0.5 text-[7px] gap-0 rounded-[4px] border-[0.5px]',
         sm: 'px-2 py-0.5 text-[8px] gap-0.5 rounded-lg border-[1px]',
         md: 'px-3 py-1 text-[10px] gap-1 rounded-xl border-[1.5px]',
         lg: 'px-4 py-1.5 text-[12px] gap-1.5 rounded-2xl border-[2px]'

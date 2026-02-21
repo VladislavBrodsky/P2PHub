@@ -99,8 +99,8 @@ export const TopPartnersList = () => {
                                     </div>
                                 )}
                                 {(partner.subscription_plan || '').includes('PLUS') && (
-                                    <div className="absolute -bottom-1.5 -left-1.5 z-20">
-                                        <ProPlusBadge size="sm" />
+                                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                                        <ProPlusBadge size="xs" />
                                     </div>
                                 )}
                             </div>

@@ -137,7 +137,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             )}
 
                             {isProPlus && (
-                                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-40 transform scale-110">
+                                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-40 transform">
                                     <ProPlusBadge size="sm" className="shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
                                 </div>
                             )}
