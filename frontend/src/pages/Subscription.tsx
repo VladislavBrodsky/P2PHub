@@ -607,25 +607,37 @@ export default function SubscriptionPage() {
                                     <button
                                         key={idx}
                                         onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                        className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.5rem] p-3 flex flex-col items-center gap-2 relative overflow-hidden group transition-all shadow-md active:scale-95 text-center"
+                                        className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.5rem] p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-md hover:shadow-lg active:scale-95 text-center"
                                     >
                                         <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
-                                        <div className={`w-9 h-9 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 shadow-sm`}>
+
+                                        <AnimatePresence>
+                                            {selectedPlan === 'PRO_PLUS' && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, scale: 0.5 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.5 }}
+                                                    className="absolute top-2 right-2.5 z-10"
+                                                >
+                                                    <span className="text-[6px] font-black bg-linear-to-r from-rose-500 to-pink-500 text-white px-1.5 py-0.5 tracking-widest rounded-full shadow-[0_2px_8px_rgba(244,63,94,0.5)] uppercase flex items-center gap-0.5">
+                                                        <Zap size={6} className="fill-white animate-pulse" />
+                                                        TURBO
+                                                    </span>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+                                        <div className={`w-9 h-9 mt-1 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 shadow-sm`}>
                                             <item.icon size={16} strokeWidth={2.5} />
                                         </div>
-                                        <span className="text-[9px] font-black text-slate-500 dark:text-white/50 uppercase tracking-[0.2em]">{item.label}</span>
+                                        <span className="text-[9px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">{item.label}</span>
 
-                                        <div className="flex items-center gap-2 mt-0.5">
-                                            <span className="text-[11px] font-black text-slate-400 dark:text-white/20 transition-all duration-500">{inactiveValue}</span>
-                                            <div className="w-[1.5px] h-3.5 bg-slate-200 dark:bg-white/10 rounded-full" />
-                                            <div className="flex items-center gap-1.5">
-                                                <span className={`text-[18px] font-black transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'vibing-yellow-text drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]'}`}>
-                                                    {activeValue}
-                                                </span>
-                                                {selectedPlan === 'PRO_PLUS' && (
-                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1.5 py-0.5 tracking-tighter rounded-xs animate-pulse shadow-[0_4px_10px_rgba(244,63,94,0.4)]">TURBO</span>
-                                                )}
-                                            </div>
+                                        <div className="flex items-center justify-center gap-2 mt-0.5 w-full">
+                                            <span className="text-[12px] font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-6 text-right">{inactiveValue}</span>
+                                            <div className="w-[1.5px] h-3.5 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
+                                            <span className={`text-[18px] font-black tracking-tighter transition-all duration-500 w-8 text-left ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'vibing-yellow-text drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]'}`}>
+                                                {activeValue}
+                                            </span>
                                         </div>
                                     </button>
                                 );
