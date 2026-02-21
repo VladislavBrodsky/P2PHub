@@ -152,6 +152,22 @@ export const StudioTab = ({
         return () => clearInterval(interval);
     }, [isGenerating]);
 
+    // --- Publishing State Management ---
+    // Reset status if content is regenerated (text/photo)
+    useEffect(() => {
+        setPublishedPlatforms([]);
+    }, [generatedResult]);
+
+    // Auto-refresh publish buttons after 10s of a successful post
+    useEffect(() => {
+        if (publishedPlatforms.length > 0) {
+            const timer = setTimeout(() => {
+                setPublishedPlatforms([]);
+            }, 10000);
+            return () => clearTimeout(timer);
+        }
+    }, [publishedPlatforms]);
+
     const handleGenerate = useCallback(async () => {
         if (!postType || !audience) {
             notification({ title: 'Error', text: 'Select strategy and target', type: 'error' });
