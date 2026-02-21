@@ -247,7 +247,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </div>
                                 <button
                                     onClick={() => setIsStrategyUnlocked(false)}
-                                    className="text-[10px] font-bold text-slate-400 hover:text-white"
+                                    className="text-[10px] font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 >
                                     {t('income.network.close')}
                                 </button>

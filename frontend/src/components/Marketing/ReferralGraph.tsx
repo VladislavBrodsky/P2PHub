@@ -107,7 +107,8 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[480px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700 perspective-1000",
+            "relative w-full h-[480px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700",
+            !showFunnel && "perspective-1000",
             "bg-linear-to-b from-emerald-50/50 to-teal-50/30 border-emerald-500/20",
             "dark:bg-(--color-bg-app) dark:border-emerald-500/20",
             "shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)] dark:shadow-[inset_0_0_80px_rgba(16,185,129,0.05),0_0_40px_-10px_rgba(16,185,129,0.2)]",
@@ -323,7 +324,7 @@ export const ReferralGraph = () => {
                         key="funnel"
                         initial={{ opacity: 0, y: 20, scale: 1.1 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-black/60 backdrop-blur-2xl text-center"
+                        className="absolute inset-0 z-50 flex flex-col items-center justify-center p-8 bg-white/90 dark:bg-[#020617]/90 rounded-[2.5rem] backdrop-blur-2xl text-center shadow-[inset_0_0_50px_rgba(0,0,0,0.05)] dark:shadow-none"
                     >
                         <div className="absolute inset-0 overflow-hidden pointer-events-none">
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] animate-pulse" />
@@ -339,19 +340,20 @@ export const ReferralGraph = () => {
                                     className="w-full max-w-sm flex flex-col items-center gap-6"
                                 >
                                     <div className={clsx(
-                                        "w-24 h-24 rounded-[2rem] flex items-center justify-center bg-linear-to-br border shadow-2xl backdrop-blur-xl animate-float",
+                                        "w-24 h-24 rounded-[3rem] flex items-center justify-center bg-linear-to-br border shadow-xl animate-float transition-all",
                                         funnelStages[funnelStep].color,
-                                        funnelStages[funnelStep].borderColor
+                                        funnelStages[funnelStep].borderColor,
+                                        "dark:bg-opacity-20"
                                     )}>
                                         {funnelStages[funnelStep].icon}
                                     </div>
 
                                     <div className="space-y-4">
-                                        <h3 className="text-2xl font-black uppercase tracking-tighter text-white drop-shadow-md">
+                                        <h3 className="text-2xl font-black uppercase tracking-tighter text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md">
                                             {funnelStages[funnelStep].title}
                                         </h3>
-                                        <div className="w-12 h-1 bg-emerald-500 mx-auto rounded-full" />
-                                        <p className="text-[13px] font-bold text-white/70 uppercase tracking-widest leading-relaxed px-4">
+                                        <div className="w-12 h-1 bg-emerald-500 mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                                        <p className="text-[13px] font-bold text-slate-600 dark:text-white/70 uppercase tracking-widest leading-relaxed px-4">
                                             {funnelStages[funnelStep].desc}
                                         </p>
                                     </div>
@@ -359,7 +361,7 @@ export const ReferralGraph = () => {
                                     <div className="flex flex-col gap-3 w-full mt-4">
                                         <div className="flex justify-center gap-1.5 mb-2">
                                             {funnelStages.map((_, i) => (
-                                                <div key={i} className={clsx("h-1 rounded-full transition-all duration-300", i === funnelStep ? "w-8 bg-emerald-500" : "w-2 bg-white/20")} />
+                                                <div key={i} className={clsx("h-1 rounded-full transition-all duration-300", i === funnelStep ? "w-8 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" : "w-2 bg-slate-300 dark:bg-white/20")} />
                                             ))}
                                         </div>
                                         <button
@@ -371,7 +373,7 @@ export const ReferralGraph = () => {
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
-                                            className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] hover:text-white transition-colors mt-2"
+                                            className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.3em] hover:text-slate-600 dark:hover:text-white transition-colors mt-2"
                                         >
                                             {t('income.network.close')}
                                         </button>
@@ -386,13 +388,13 @@ export const ReferralGraph = () => {
                                 >
                                     <div className="relative">
                                         <div className="absolute inset-0 bg-emerald-500 blur-2xl opacity-40 animate-pulse" />
-                                        <div className="w-24 h-24 rounded-[2.5rem] bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10">
-                                            <Sparkles className="w-12 h-12 text-emerald-400" />
+                                        <div className="w-24 h-24 rounded-[2.5rem] bg-white dark:bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10 shadow-xl">
+                                            <Sparkles className="w-12 h-12 text-emerald-500 dark:text-emerald-400" />
                                         </div>
                                     </div>
 
                                     <div className="space-y-3">
-                                        <h3 className="text-3xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-400 via-white to-emerald-400 animate-text-shimmer">
+                                        <h3 className="text-3xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer">
                                             {t('viral_funnel.cta')}
                                         </h3>
                                         <p className="text-[11px] font-black text-emerald-500 uppercase tracking-[0.3em]">
@@ -413,21 +415,21 @@ export const ReferralGraph = () => {
 
                                         <button
                                             onClick={() => { setShowFunnel(false); setFunnelStep(0); }}
-                                            className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] hover:text-white transition-colors"
+                                            className="text-[10px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.3em] hover:text-slate-600 dark:hover:text-white transition-colors"
                                         >
                                             {t('income.network.close')}
                                         </button>
                                     </div>
 
                                     {/* Small Social Proof Footer */}
-                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                                    <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md">
                                         <div className="flex items-center gap-3 text-left">
                                             <div className="flex -space-x-2">
                                                 {[1, 2, 3].map(i => (
-                                                    <div key={i} className="w-6 h-6 rounded-full border border-black bg-slate-800" />
+                                                    <div key={i} className="w-6 h-6 rounded-full border border-white dark:border-black bg-slate-200 dark:bg-slate-800" />
                                                 ))}
                                             </div>
-                                            <p className="text-[8px] font-bold text-white/50 uppercase leading-tight">
+                                            <p className="text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-tight">
                                                 12,402+ PARTNERS DEPLOYED<br />AUTONOMOUS NODES TODAY
                                             </p>
                                         </div>
