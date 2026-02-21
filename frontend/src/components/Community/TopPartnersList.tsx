@@ -91,7 +91,7 @@ export const TopPartnersList = () => {
                                     ) : null}
                                 </div>
                                 {index < 3 && (
-                                    <div className={`absolute -top-1.5 -right-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
+                                    <div className={`absolute -top-1.5 -left-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
                                         index === 1 ? 'bg-slate-400' :
                                             'bg-orange-400'
                                         }`}>
