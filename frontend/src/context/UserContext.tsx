@@ -24,6 +24,7 @@ interface User {
     is_admin: boolean;
     pro_expires_at: string | null;
     subscription_plan: string | null;
+    is_pro_plus: boolean;
     total_network_size: number;
     pro_notification_seen: boolean;
     last_checkin_at: string | null;
@@ -177,6 +178,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         subscription_plan: null,
                         total_network_size: 0,
                         pro_notification_seen: false,
+                        is_pro_plus: false,
                         last_checkin_at: null,
                         checkin_streak: 0,
                         notifications_paused: false
@@ -214,6 +216,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         subscription_plan: "DEV_PRO",
                         total_network_size: 25,
                         pro_notification_seen: false,
+                        is_pro_plus: true,
                         last_checkin_at: new Date().toISOString(),
                         checkin_streak: 5,
                         notifications_paused: false

@@ -22,33 +22,33 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
         xp: 0
     };
 
-    const isProPlus = (user?.subscription_plan || '').includes('PLUS');
+    const isProPlus = user?.is_pro_plus || (user?.subscription_plan || '').toLowerCase().includes('plus');
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     return (
         <div className={`relative ${className}`}>
             {/* Premium Background Glow */}
-            <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-500/20 shadow-[0_0_80px_rgba(59,130,246,0.3)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
+            <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
 
             {/* #comment: Unified padding (p-2.5 px-4) with other dashboard cards for vertical rhythm consistency */}
             <div className={`
                 flex items-center gap-5 p-4 rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) shadow-premium relative overflow-hidden group
                 ${variant === 'compact' ? 'p-3 px-5 gap-4' : ''}
-                ${isProPlus ? 'ring-1 ring-blue-500/30' : ''}
+                ${isProPlus ? 'ring-2 ring-blue-400/20' : ''}
             `}>
                 {/* PRO+ Vibing Animated Border */}
                 {isProPlus && (
                     <motion.div
                         animate={{
-                            opacity: [0.3, 0.6, 0.3],
-                            scale: [1, 1.02, 1]
+                            opacity: [0.3, 0.7, 0.3],
+                            scale: [1, 1.05, 1]
                         }}
                         transition={{
-                            duration: 4,
+                            duration: 3,
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}
-                        className="absolute inset-0 bg-linear-to-tr from-blue-500/10 via-transparent to-cyan-500/10 pointer-events-none"
+                        className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-transparent to-cyan-400/20 pointer-events-none"
                     />
                 )}
 
@@ -84,7 +84,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             className={`
                                 ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-[1.5rem]'} 
                                 overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
-                                ${isProPlus ? 'border-blue-400/50 ring-2 ring-blue-500/20' : 'border-(--color-border-glass)'}
+                                ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : 'border-(--color-border-glass)'}
                                 bg-(--color-bg-app) 
                             `}
                         >
@@ -100,7 +100,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 <img
                                     src={user.photo_url}
                                     alt={`${user.first_name || 'Partner'}'s avatar`}
-                                    className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-105' : ''}`}
+                                    className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-110' : ''}`}
                                     onLoad={() => setImageLoaded(true)}
                                     loading="eager"
                                     fetchPriority="high"
@@ -126,11 +126,13 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-app) z-20`}>
                             <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
                         </div>
-                    </div>
 
-                    {isProPlus && (
-                        <ProPlusBadge size="sm" className="mt-0.5" />
-                    )}
+                        {isProPlus && (
+                            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-40 transform scale-110">
+                                <ProPlusBadge size="sm" className="shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Right: Stats Vertical Stack */}

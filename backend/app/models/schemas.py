@@ -129,6 +129,12 @@ class PartnerResponse(PartnerBase):
             return self._network_size_real
         return getattr(self, "referral_count", 0)
 
+    @computed_field
+    @property
+    def is_pro_plus(self) -> bool:
+        plan = getattr(self, "subscription_plan", "") or ""
+        return "PLUS" in plan.upper()
+
 class PROSetupRequest(BaseModel):
     x_api_key: str | None = None
     x_api_secret: str | None = None

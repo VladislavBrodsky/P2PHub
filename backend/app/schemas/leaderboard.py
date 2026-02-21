@@ -12,6 +12,11 @@ class LeaderboardPartner(BaseModel):
     level: int
     referral_count: int = 0
     subscription_plan: str | None = None
+
+    @property
+    def is_pro_plus(self) -> bool:
+        plan = self.subscription_plan or ""
+        return "PLUS" in plan.upper()
     
     # #comment: Standardized for audit. Allows ORM objects in hydration.
     class Config:

@@ -1200,11 +1200,11 @@ async def complete_academy_stage(
             # Stage 20 is 1050 XP. Stage 21 should start at 1150 XP.
             xp_reward = 1150 + (stage_id - 21) * 100
             
-        # Apply PRO multipliers (PRO: 5x, PRO+: 10x)
+        # Apply PRO multipliers (PRO: 1.5x, PRO+: 3x)
         if partner.is_pro_plus:
-            effective_xp = xp_reward * 10
+            effective_xp = xp_reward * settings.PRO_PLUS_XP_MULTIPLIER
         elif partner.is_pro:
-            effective_xp = xp_reward * 5
+            effective_xp = xp_reward * settings.PRO_XP_MULTIPLIER
         else:
             effective_xp = xp_reward
         xp_before = partner.xp
