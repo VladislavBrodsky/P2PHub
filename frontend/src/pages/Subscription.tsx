@@ -37,7 +37,7 @@ export default function SubscriptionPage() {
     const [isSelectingCurrency, setIsSelectingCurrency] = useState(false);
 
     const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
-    const [showFlashSale, setShowFlashSale] = useState(false);
+
     const [slotsLeft, setSlotsLeft] = useState(7);
 
     const isPro = user?.is_pro;
@@ -91,7 +91,7 @@ export default function SubscriptionPage() {
 
     // Unified FOMO Effects
     useEffect(() => {
-        const flashTimer = setTimeout(() => setShowFlashSale(true), 1500);
+
         const slotTimer = setInterval(() => {
             setSlotsLeft(prev => prev > 3 ? prev - (Math.random() > 0.8 ? 1 : 0) : prev);
         }, 15000);
@@ -106,7 +106,7 @@ export default function SubscriptionPage() {
             });
         }, 1000);
         return () => {
-            clearTimeout(flashTimer);
+
             clearInterval(slotTimer);
             clearInterval(deadTimer);
         };
@@ -357,37 +357,7 @@ export default function SubscriptionPage() {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
 
 
-                    {/* ── FLASH SALE BANNER ── */}
-                    <AnimatePresence>
-                        {showFlashSale && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                className="mb-4 overflow-hidden"
-                            >
-                                <div className="rounded-[2.5rem] overflow-hidden bg-linear-to-r from-red-600 to-amber-500 p-4 relative group">
-                                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-white/10 -translate-y-[200%] group-hover:translate-y-0 transition-transform duration-500" />
-                                    <div className="relative z-10 flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white scale-110">
-                                                <Zap size={20} fill="currentColor" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-[14px] font-black text-white uppercase tracking-tighter leading-none">Flash Sale: -20% OFF</span>
-                                                <span className="text-[9px] font-bold text-white/80 uppercase">Ending soon • {slotsLeft} slots remaining</span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => setShowFlashSale(false)}
-                                            className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:text-white"
-                                        >
-                                            <X size={14} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+
 
 
 
