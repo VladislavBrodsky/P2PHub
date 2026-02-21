@@ -770,9 +770,11 @@ export const StudioTab = ({
                                 {t('pro_dashboard.studio.initiate_btn')}
                                 <ChevronRight size={14} />
                             </button>
+
                             <p className="text-[9px] font-black text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
-                                Powered by Claude 3.5 & Flux PRO
+                                POWERED BY <a href="https://t.me/web3adopters" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 transition-colors">@web3adopters</a>
                             </p>
+
                         </div>
                     </div>
                 </motion.div>
@@ -1045,6 +1047,10 @@ export const StudioTab = ({
                             <Undo2 size={14} />
                             {t('pro_dashboard.studio.generate_new_btn', 'Generate New Post')}
                         </button>
+
+                        <p className="text-[9px] font-black text-slate-400 text-center mt-6 uppercase tracking-widest opacity-40">
+                            POWERED BY <a href="https://t.me/web3adopters" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 transition-colors">@web3adopters</a>
+                        </p>
                     </div>
                 </motion.div>
             )}
