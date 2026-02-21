@@ -300,18 +300,18 @@ export default function SubscriptionPage() {
                             <div className="absolute inset-0 bg-indigo-500/30 blur-2xl animate-pulse scale-150 z-0" />
                         </div>
 
-                        {/* Integrated Status Pills */}
-                        <div className="flex items-center justify-center gap-3 mb-6">
-                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/20 shadow-sm">
-                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
-                                    {t('subscription.upgrade.secure_encryption_active', 'SECURE CONNECTION')}
+                        {/* Integrated Status Pills - Compact Single Line */}
+                        <div className="flex items-center justify-center gap-2 mb-6">
+                            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/20 whitespace-nowrap">
+                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-600/80 dark:text-emerald-400/80">
+                                    {t('subscription.upgrade.secure_encryption_active', 'SECURE GATEWAY')}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/5 dark:bg-orange-500/10 border border-orange-500/20 shadow-sm">
-                                <Flame size={12} className="text-orange-500" />
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-orange-600 dark:text-orange-400">
-                                    {t('subscription.upgrade.limited_offer')}
+                            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-500/5 border border-orange-500/20 whitespace-nowrap">
+                                <Flame size={10} className="text-orange-500/70" />
+                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-orange-600/80 dark:text-orange-400/80">
+                                    {t('subscription.upgrade.limited_offer', 'LIMITED OFFER')}
                                 </span>
                             </div>
                         </div>
@@ -348,17 +348,23 @@ export default function SubscriptionPage() {
                     </div>
 
                     {/* ── PLAN SELECTION BLOCK ─────────────────────────── */}
-                    <div className="relative px-4 pb-12 border-t border-slate-100 dark:border-white/5 pt-12">
-                        <div className="text-center mb-10">
-                            <div className="flex items-center justify-center gap-2 mb-4">
-                                <div className="w-2 h-2 rounded-full bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.8)]" />
-                                <span className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
-                            </div>
-                            <h2 className="text-[42px] font-black tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center mb-5 uppercase italic drop-shadow-sm">
+                    <div className="relative px-4 pb-10 border-t border-slate-100 dark:border-white/5 pt-10">
+                        <div className="text-center mb-8">
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                className="inline-flex items-center justify-center gap-2 mb-3 px-3 py-1 bg-blue-500/5 border border-blue-500/10 rounded-full"
+                            >
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)] animate-pulse" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
+                            </motion.div>
+
+                            <h2 className="text-[26px] font-black tracking-tight text-slate-900 dark:text-white leading-none text-center mb-4 uppercase italic drop-shadow-sm whitespace-nowrap overflow-hidden text-ellipsis">
                                 {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
                             </h2>
-                            <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[340px] mx-auto">
-                                {t('subscription.upgrade.subheadline', 'Choose your plan. PRO members grow their network and income faster.')}
+
+                            <p className="text-[13px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed max-w-[300px] mx-auto opacity-70">
+                                {t('subscription.upgrade.subheadline', 'Choose your plan. PRO members grow their network faster.')}
                             </p>
                         </div>
 
