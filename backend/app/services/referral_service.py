@@ -413,37 +413,33 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             rt["levels"].append(comm_level)
             if found_qualified_partner: rt["qualified"] = True
 
-            # Award commission
-            balance_before = balance_cache.get(recipient.id, 0.0)
-            balance_after = round(balance_before + commission, 4)
-            balance_cache[recipient.id] = balance_after
-            
-            recipient.balance = Partner.balance + commission
-            recipient.total_earned_usdt = Partner.total_earned_usdt + commission
+            # Award commission state tracking
+            balance_cache[recipient.id] = round(balance_cache.get(recipient.id, 0.0) + commission, 4)
             
             # --- XP COMMISSION FOR ACTIVE REFERRAL ---
-            # #comment Phase 2 Scaling: Use xp_cache to allow the same recipient (e.g. Admin) 
-            # to receive multiple commission slices in one purchase without BinaryExpression errors.
-            from app.services.audit_service import audit_service
+            # #comment Phase 3: Aggregating XP gain to update only once per unique recipient.
             xp_gain = _calculate_referral_xp(comm_level, recipient)
-            xp_before = xp_cache.get(recipient.id, 0.0)
-            xp_after = xp_before + xp_gain
-            xp_cache[recipient.id] = xp_after
+            xp_cache[recipient.id] = round(xp_cache.get(recipient.id, 0.0) + xp_gain, 4)
             rt["xp"] += xp_gain 
-
-            recipient.xp = Partner.xp + xp_gain
-            
-            session.add(recipient)
             
         # --- Aggregated Side Effects Post-Loop ---
         for r_id, rt in recipient_totals.items():
-            rcpt = ancestor_map.get(r_id) or company_account
+            rcpt = ancestor_map.get(r_id) or (company_account if company_account and r_id == company_account.id else None)
             if not rcpt: continue
             
+            # #comment Phase 3: Single atomic update per unique recipient to avoid BinaryExpression overwrites.
+            # This ensures that if a recipient receives multiple slices (e.g. Admin or Company fallback),
+            # all of them are correctly summed into the database fields.
+            rcpt.balance = Partner.balance + rt["amount"]
+            rcpt.total_earned_usdt = Partner.total_earned_usdt + rt["amount"]
+            rcpt.xp = Partner.xp + rt["xp"]
+            session.add(rcpt)
+
             xp_after = xp_cache.get(r_id, 0.0)
             xp_before = xp_after - rt["xp"]
             balance_after = balance_cache.get(r_id, 0.0)
             balance_before = balance_after - rt["amount"]
+            from app.services.audit_service import audit_service
 
             plan_name = "PRO+" if is_pro_plus_purchase else "PRO"
             is_admin = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS

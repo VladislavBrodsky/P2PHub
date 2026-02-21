@@ -444,8 +444,12 @@ class PaymentService:
                 except Exception as e:
                     logger.error(f"Network Catalyst trigger failed for referrer {partner.referrer_id}: {e}")
 
-            # Commit everything atomically
-            await session.commit()
+            # Stage Invalidate Cache (Immediate UI Feedback after commit)
+            async def _after_commit():
+                try:
+                    await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+                except Exception as e:
+                    logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 
             # 4. Invalidate Cache (Immediate UI Feedback)
             try:
@@ -551,6 +555,12 @@ class PaymentService:
                 )
             except Exception as e:
                 logger.error(f"Failed to notify admin about successful purchase: {e}")
+
+            # Commit everything atomically
+            await session.commit()
+            
+            # Post-commit side effects
+            await _after_commit()
 
             logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
             return True
