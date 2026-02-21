@@ -226,10 +226,10 @@ engine_args = {
 
 if "sqlite" not in database_url:
     engine_args.update({
-        "pool_size": 15,
+        "pool_size": 10,       # Reduced from 15 to stay safer within Railway connection limits
         "max_overflow": 10,
         "pool_timeout": 30,
-        "pool_recycle": 300, # Recycle connections every 5 minutes to prevent stale/dropped connections by cloud firewalls
+        "pool_recycle": 120,   # Reduced from 300 to 120. Faster recycling prevents "Connection reset by peer" from cloud firewalls.
     })
 
 try:

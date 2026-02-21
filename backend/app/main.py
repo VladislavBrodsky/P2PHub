@@ -73,12 +73,9 @@ async def lifespan(app: FastAPI):
     from app.models.partner import create_db_and_tables
     from app.services.warmup_service import warmup_redis
     
-    # #comment: Ensure DB tables exist. Handled by migrations in production, 
-    # but kept here as a safety net for development and initial setups.
-    try:
-        await create_db_and_tables()
-    except Exception as e:
-        logger.warning(f"⚠️ create_db_and_tables encountered an issue: {e}. Continuing assuming migrations handled it.")
+    # #comment: Migrations are handled by Alembic in start.sh.
+    # We no longer call create_db_and_tables() here to prevent noisy "relation already exists"
+    # errors in PostgreSQL logs during worker startup.
 
     # #comment: Distributed Startup Tasks (Offloaded to Workers)
     # Using TaskIQ ensures these heavy operations don't block web worker startup
