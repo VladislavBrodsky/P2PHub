@@ -84,21 +84,28 @@ class RateLimitService:
     async def is_duplicate(self, chat_id: int, text: str, salt: str = "") -> bool:
         """
         Prevents identical messages to the same user within a short window (60s).
-        Crucial for preventing bot-spam during high-concurrency referral bursts.
+        Normalization ensures that messages with minor differences (emojis, formatting) 
+        are correctly identified as duplicates.
         """
         import hashlib
+        import re
         try:
             redis = await self.get_redis()
             
-            # Create a light hash of the message content
-            content_hash = hashlib.md5(f"{text}{salt}".encode()).hexdigest()
+            # 1. Normalize text: remove emojis, punctuation, and extra whitespace to catch "similar" messages
+            # We keep only alphanumeric characters and basic spaces for the hash
+            normalized_text = re.sub(r'[^\w\s]', '', text)
+            normalized_text = " ".join(normalized_text.split()).lower()
+            
+            # 2. Create a content hash (Salt allows distinguishing different *types* of messages)
+            content_hash = hashlib.md5(f"{normalized_text}{salt}".encode()).hexdigest()
             dup_key = f"notif_dup:{chat_id}:{content_hash}"
             
             # Attempt to set the key, if it exists (set=False), it's a duplicate
             is_new = await redis.set(dup_key, "1", ex=60, nx=True)
             return not is_new
         except Exception as e:
-            logger.warning(f"Duplicate check failed (Redis error), assuming not duplicate: {e}")
+            logger.warning(f"Duplicate check failed (Redis error), allowing: {e}")
             return False
 
     async def is_blocked(self, chat_id: int) -> bool:

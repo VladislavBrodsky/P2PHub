@@ -96,18 +96,6 @@ async def approve_payment(
     )
 
     if success:
-        # Notify the User
-        try:
-            lang = partner.language_code or "en"
-            user_msg = get_msg(lang, "pro_welcome")
-            await notification_service.send_standard(
-                chat_id=partner.telegram_id,
-                text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}",
-                salt=f"pay_appr_{transaction.id}"
-            )
-        except Exception as e:
-            logger.error(f"[DEBUG] User approval notification failed: {e}")
-
         return {"status": "success", "message": f"Payment {transaction.id} approved for {partner.telegram_id}"}
 
     else:

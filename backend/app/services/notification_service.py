@@ -112,22 +112,7 @@ async def send_telegram_task(payload_dict: dict):
     except Exception as e:
         logger.error(f"💥 Dispatch Error: {e}")
         sentry_sdk.capture_exception(e)
-        
-        # Move to DB for persistence only on real errors
-        from app.models.notification_retry import NotificationRetry
-        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-        async with async_session() as session:
-            retry_item = NotificationRetry(
-                chat_id=payload.chat_id,
-                text=payload.text,
-                parse_mode=payload.parse_mode,
-                buttons=payload.model_dump(exclude_none=True).get("buttons"),
-                last_error=f"Runtime Error: {str(e)[:100]}",
-                status="pending"
-            )
-            session.add(retry_item)
-            await session.commit()
-        return False
+        return False # Let TaskIQ retry (up to 5 times)
 
 class NotificationService:
     def __init__(self):
