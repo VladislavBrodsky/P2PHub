@@ -74,7 +74,7 @@ export const MilestonePath = () => {
                 <div className="h-px w-full bg-linear-to-r from-slate-200 dark:from-white/10 to-transparent" />
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
                 {items.map((item) => {
                     const isUnlocked = currentLevel >= item.level;
                     const isLocked = !isUnlocked;
@@ -97,7 +97,7 @@ export const MilestonePath = () => {
                             whileHover={isUnlocked ? { y: -6, scale: 1.03 } : {}}
                             whileTap={{ scale: 0.96 }}
                             className={`
-                                relative flex flex-col items-center p-4 rounded-[26px] border transition-all duration-500 cursor-pointer overflow-hidden group
+                                relative flex flex-col items-center p-2.5 sm:p-4 rounded-[20px] sm:rounded-[26px] border transition-all duration-500 cursor-pointer overflow-hidden group
                                 ${isUnlocked
                                     ? 'bg-white dark:bg-slate-900/90 border-slate-100 dark:border-white/10 shadow-[0_12px_24px_-8px_rgba(0,0,0,0.08)] dark:shadow-[0_24px_48px_-12px_rgba(0,0,0,0.4)]'
                                     : 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-60'}
@@ -120,41 +120,41 @@ export const MilestonePath = () => {
 
                             {/* Status Indicator Dot with Glow */}
                             {isUnlocked && (
-                                <div className="absolute top-4 right-4 z-20">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
+                                <div className="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-20">
+                                    <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
                                     <div className="absolute inset-0 bg-emerald-400 blur-[2px] animate-pulse rounded-full" />
                                 </div>
                             )}
 
                             <div className={`
-                                relative w-12 h-12 rounded-[18px] flex items-center justify-center mb-3 border shadow-xs transition-all duration-700
+                                relative w-10 h-10 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-[18px] flex items-center justify-center mb-2 sm:mb-3 border shadow-xs transition-all duration-700
                                 ${iconBgClass}
                                 ${isUnlocked ? 'group-hover:shadow-[0_8px_20px_-4px_rgba(99,102,241,0.2)]' : ''}
                             `}>
                                 <motion.div
                                     animate={isUnlocked ? { y: [0, -2, 0] } : {}}
                                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                    className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-110 drop-shadow-md` : 'scale-90 text-slate-400 dark:text-slate-600'}`}
+                                    className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-105 sm:scale-110 drop-shadow-md` : 'scale-90 text-slate-400 dark:text-slate-600'}`}
                                 >
                                     {isUnlocked ? (
-                                        <item.icon className="w-6 h-6" strokeWidth={2.5} />
+                                        <item.icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
                                     ) : (
-                                        <Lock className="w-5 h-5" />
+                                        <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                                     )}
                                 </motion.div>
 
                                 {isUnlocked && (
-                                    <div className="absolute inset-0 rounded-[18px] bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                    <div className="absolute inset-0 rounded-[14px] sm:rounded-[18px] bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 )}
                             </div>
 
-                            <div className="text-center space-y-1 relative z-10 w-full">
-                                <span className={`text-[8px] font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
+                            <div className="text-center space-y-0.5 sm:space-y-1 relative z-10 w-full">
+                                <span className={`text-[7px] sm:text-[8px] font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {t('common.lvl')} {item.level}
                                 </span>
-                                <h5 className={`text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <h5 className={`text-[10px] sm:text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (
-                                        <span className="opacity-40 italic tracking-widest text-[10px]">LOCKED</span>
+                                        <span className="opacity-40 italic tracking-widest text-[9px] sm:text-[10px]">LOCKED</span>
                                     ) : (
                                         t(item.reward, { level: item.level })
                                     )}
@@ -235,7 +235,9 @@ export const MilestonePath = () => {
                             viewport={{ once: true }}
                             className="relative mt-10 mb-12 overflow-hidden rounded-[2.5rem] bg-linear-to-br from-blue-600 via-indigo-600 to-purple-700 p-px shadow-2xl shadow-blue-500/20 group mx-1"
                         >
-                            <div className="relative flex flex-col items-center p-7 sm:p-8 text-center bg-white/5 backdrop-blur-3xl rounded-[2.45rem]">
+                            <div className="relative flex flex-col items-center p-7 sm:p-8 text-center bg-white/5 backdrop-blur-3xl rounded-[2.45rem] overflow-hidden">
+                                <div className="circuit-decor opacity-20" />
+                                <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
                                 {/* Vibing Background Elements */}
                                 <motion.div
                                     animate={{

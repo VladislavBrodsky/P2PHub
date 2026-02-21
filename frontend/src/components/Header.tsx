@@ -59,24 +59,32 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <motion.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 relative overflow-hidden group"
                         aria-label="User stats"
                     >
+                        {/* Shimmer effect on hover/animate */}
+                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-(--color-text-secondary) dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 opacity-70">{t('common.lvl')}</span>
                             <span className="text-sm font-black text-(--color-text-primary) leading-none">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
-                                <Crown size={12} className="text-amber-500 fill-amber-500/20" />
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                    <Crown size={12} className="text-amber-500 fill-amber-500/20" />
+                                </motion.div>
                             )}
                         </div>
                         <div className="h-3 w-px bg-(--color-border-glass)" />
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-black text-(--color-text-primary) leading-none">
+                            <span className="text-[12px] font-black text-(--color-text-primary) leading-none tabular-nums">
                                 {user?.xp ?? 0}
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
+                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 animate-pulse">XP</span>
                         </div>
                     </motion.button>
                 </div>

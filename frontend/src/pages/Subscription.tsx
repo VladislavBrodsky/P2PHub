@@ -5,7 +5,7 @@ import {
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
     Flame, Brain, Rocket, Network, Star, Lock, Infinity as InfinityIcon, Target, TrendingUp, Bot,
-    Send, BarChart2, Radio
+    Send, BarChart2, Radio, X, Fingerprint
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -32,8 +32,12 @@ export default function SubscriptionPage() {
     const [expandedBenefit, setExpandedBenefit] = useState<string | null>(null);
     const [proStats, setProStats] = useState<{ sold: number; total: number } | null>(null);
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
-    const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any } | null>(null);
+    const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any; color: string } | null>(null);
     const [isSelectingCurrency, setIsSelectingCurrency] = useState(false);
+    const [liveActivity, setLiveActivity] = useState<{ name: string; action: string; time: string } | null>(null);
+    const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
+    const [showFlashSale, setShowFlashSale] = useState(false);
+    const [slotsLeft, setSlotsLeft] = useState(7);
 
     const isPro = user?.is_pro;
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
@@ -81,6 +85,60 @@ export default function SubscriptionPage() {
         }, 1000);
         return () => clearInterval(interval);
     }, [sessionData, t]);
+
+    // Simulated Live Activity FOMO
+    useEffect(() => {
+        const names = ['Alex M.', 'Sarah K.', 'Dmitry V.', 'Elena S.', 'Marcus P.', 'Chen L.', 'Sophie T.', 'Ivan R.'];
+        const actions = ['just upgraded to PRO+', 'secured Lifetime Access', 'joined the Elite tier', 'activated Multi-Node Sync'];
+
+        const tick = () => {
+            const name = names[Math.floor(Math.random() * names.length)];
+            const action = actions[Math.floor(Math.random() * actions.length)];
+            setLiveActivity({ name, action, time: 'Just now' });
+
+            setTimeout(() => setLiveActivity(null), 4000);
+            setTimeout(tick, 8000 + Math.random() * 10000);
+        };
+
+        const timer = setTimeout(tick, 3000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    // Unified FOMO Effects
+    useEffect(() => {
+        const flashTimer = setTimeout(() => setShowFlashSale(true), 1500);
+        const slotTimer = setInterval(() => {
+            setSlotsLeft(prev => prev > 3 ? prev - (Math.random() > 0.8 ? 1 : 0) : prev);
+        }, 15000);
+        const deadTimer = setInterval(() => {
+            setDeadLine(prev => {
+                let { h, m, s } = prev;
+                s--;
+                if (s < 0) { s = 59; m--; }
+                if (m < 0) { m = 59; h--; }
+                if (h < 0) { h = 23; }
+                return { h, m, s };
+            });
+        }, 1000);
+        return () => {
+            clearTimeout(flashTimer);
+            clearInterval(slotTimer);
+            clearInterval(deadTimer);
+        };
+    }, []);
+
+    // Scroll locking for modals
+    useEffect(() => {
+        const scroller = document.getElementById('main-scroll-root');
+        if (scroller) {
+            if (infoModal || status !== 'idle' || isSelectingCurrency) {
+                scroller.style.overflow = 'hidden';
+            } else {
+                scroller.style.overflow = 'auto';
+            }
+        }
+        return () => { if (scroller) scroller.style.overflow = 'auto'; };
+    }, [infoModal, status, isSelectingCurrency]);
 
     // Handle Auto-Upgrade/Purchase Flow from other parts of the app
     useEffect(() => {
@@ -281,10 +339,94 @@ export default function SubscriptionPage() {
     return (
         <div className="flex flex-col px-3 pb-24 pt-0 max-w-lg mx-auto overflow-x-hidden">
             <div className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-(--color-bg-app) border border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-8px_rgba(99,102,241,0.15)] mb-5">
-                {/* Background Glows */}
-                <div className="absolute -top-16 -right-16 w-48 h-48 bg-indigo-500/10 blur-[60px] pointer-events-none animate-pulse" />
-                <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-purple-500/8 blur-[60px] pointer-events-none" />
                 <div className="relative z-10 w-full p-4">
+                    {/* Background Depth Orbs */}
+                    <div className="absolute top-0 -left-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
+                    <div className="absolute bottom-0 -right-20 w-64 h-64 bg-fuchsia-500/10 blur-[100px] pointer-events-none" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
+                    {/* ── LIVE ACTIVITY BANNER (FOMO) ── */}
+                    <AnimatePresence>
+                        {liveActivity && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                className="absolute top-2 left-1/2 -translateX-1/2 z-50 w-[calc(100%-2rem)] max-w-xs"
+                                style={{ left: '50%', transform: 'translateX(-50%)' }}
+                            >
+                                <div className="bg-slate-900/90 dark:bg-white/10 backdrop-blur-xl border border-white/10 rounded-full px-4 py-1.5 flex items-center justify-between shadow-2xl">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[9px] font-black text-white uppercase tracking-wider">
+                                            <span className="text-blue-400">{liveActivity.name}</span> {liveActivity.action}
+                                        </span>
+                                    </div>
+                                    <span className="text-[7px] font-black text-white/40 uppercase">{liveActivity.time}</span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── FLASH SALE BANNER ── */}
+                    <AnimatePresence>
+                        {showFlashSale && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                className="mb-4 overflow-hidden"
+                            >
+                                <div className="vibing-premium-panel bg-linear-to-r from-red-600 to-amber-500 p-4 relative group">
+                                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-white/10 -translate-y-[200%] group-hover:translate-y-0 transition-transform duration-500" />
+                                    <div className="relative z-10 flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white scale-110">
+                                                <Zap size={20} fill="currentColor" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-[14px] font-black text-white uppercase tracking-tighter leading-none">Flash Sale: -20% OFF</span>
+                                                <span className="text-[9px] font-bold text-white/80 uppercase">Ending soon • {slotsLeft} slots remaining</span>
+                                            </div>
+                                        </div>
+                                        <button
+                                            onClick={() => setShowFlashSale(false)}
+                                            className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:text-white"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── DEADLINE STICKY HEADER ── */}
+                    <div className="mb-4 mt-2">
+                        <div className="vibing-premium-panel p-3 bg-linear-to-r from-slate-900 via-indigo-950 to-slate-900 border-indigo-500/30 flex items-center justify-between overflow-hidden relative group">
+                            <div className="circuit-decor opacity-20" />
+                            <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
+
+                            <div className="relative z-10 flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-500">
+                                    <Clock size={16} className="animate-pulse" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest">LIFETIME ACCESS OFFER</span>
+                                    <span className="text-[10px] font-black text-white uppercase tracking-tighter">CLOSING PERMANENTLY</span>
+                                </div>
+                            </div>
+
+                            <div className="relative z-10 flex items-center gap-1 font-mono text-white">
+                                {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="bg-white/10 rounded px-1.5 py-1 text-xs font-black min-w-[24px] text-center">
+                                            {val.toString().padStart(2, '0')}
+                                        </div>
+                                        {i < 2 && <span className="text-[10px] font-black animate-pulse">:</span>}
+                                    </React.Fragment>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
 
                     {/* ── HERO / STATUS BOARD ─────────────────────────── */}
                     <div className="relative px-6 pt-8 pb-10 text-center flex flex-col items-center">
@@ -433,6 +575,20 @@ export default function SubscriptionPage() {
                                 onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
                                 className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
+                                <AnimatePresence>
+                                    {selectedPlan === 'PRO_PLUS' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                                            exit={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
+                                            className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-[7px] sm:text-[8px] font-black rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
+                                        >
+                                            <Zap size={10} className="fill-white animate-pulse" />
+                                            {t('subscription.upgrade.viral_badge', 'x100 FASTER')}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
                                 <span className={`text-[8px] font-black tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
                                     {isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE') : t('subscription.upgrade.pro_plus_title', 'PRO+ ACCESS')}
                                 </span>
@@ -465,18 +621,19 @@ export default function SubscriptionPage() {
 
                         <div className="grid grid-cols-3 gap-2 px-2">
                             {[
-                                { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('subscription.benefits.network_levels_desc_plus') },
-                                { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('subscription.benefits.tokens_desc_plus') },
-                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('subscription.benefits.tg_multi_channel_desc') },
+                                { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('subscription.benefits.network_levels_desc_plus'), accent: 'emerald' },
+                                { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('subscription.benefits.tokens_desc_plus'), accent: 'amber' },
+                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('subscription.benefits.tg_multi_channel_desc'), accent: 'blue' },
                             ].map((item, idx) => {
                                 const activeValue = selectedPlan === 'PRO' ? item.pro : item.plus;
                                 const inactiveValue = selectedPlan === 'PRO' ? item.plus : item.pro;
                                 return (
                                     <button
                                         key={idx}
-                                        onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon }); }}
-                                        className="bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group hover:bg-white/10 transition-all shadow-sm active:scale-95 text-center"
+                                        onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
+                                        className="vibing-premium-panel bg-white/40 dark:bg-white/5 border-slate-200/50 dark:border-white/5 rounded-2xl p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-sm active:scale-95 text-center"
                                     >
+                                        <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
                                         <div className={`w-8 h-8 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12`}>
                                             <item.icon size={14} strokeWidth={2.5} />
                                         </div>
@@ -485,8 +642,11 @@ export default function SubscriptionPage() {
                                         <div className="flex items-center gap-1.5 mt-0.5">
                                             <span className="text-[10px] font-black text-slate-300 dark:text-white/10 transition-all duration-500">{inactiveValue}</span>
                                             <div className="w-px h-3 bg-slate-200 dark:bg-white/10" />
-                                            <span className={`text-[16px] font-black transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]'}`}>
+                                            <span className={`text-[16px] font-black transition-all duration-500 flex items-center gap-1 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_12px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_12px_rgba(234,179,8,0.4)]'}`}>
                                                 {activeValue}
+                                                {selectedPlan === 'PRO_PLUS' && (
+                                                    <span className="text-[7px] font-black bg-rose-500 text-white px-1 rounded-xs animate-pulse tracking-tighter">TURBO</span>
+                                                )}
                                             </span>
                                         </div>
                                     </button>
@@ -770,19 +930,82 @@ export default function SubscriptionPage() {
                                                 </button>
                                             </div>
                                         ) : (
-                                            <div className="space-y-4">
-                                                <div onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }} className="p-4 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl text-center cursor-pointer group hover:border-emerald-500/50 transition-colors">
-                                                    <p className="text-[8px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-widest">{t('subscription.upgrade.tap_to_copy')}</p>
-                                                    <code className="text-[9px] font-mono text-slate-800 dark:text-white/80 block bg-slate-200/50 dark:bg-black/40 p-2 rounded-lg mb-2 break-all">{adminUsdt}</code>
-                                                    <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase group-hover:animate-pulse">CLICK TO COPY</span>
+                                            <div className="space-y-5">
+                                                {/* STEP 1: COPY ADDRESS */}
+                                                <div className="relative group">
+                                                    <div className="absolute -left-3 top-0 bottom-0 w-1 bg-emerald-500 rounded-full opacity-50" />
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg">1</div>
+                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.copy_address', 'Send USDT (TRC-20)')}</span>
+                                                        </div>
+                                                        <div
+                                                            onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
+                                                            className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
+                                                        >
+                                                            <p className="text-[7px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
+                                                            <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
+                                                                <code className="text-[10px] font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
+                                                                <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
+                                                                    <Share2 size={14} />
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">CLICK TO COPY</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
-                                                    <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500/50 outline-none transition-colors" />
+
+                                                {/* STEP 2: PASTE HASH */}
+                                                <div className="relative group">
+                                                    <div className="absolute -left-3 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-50" />
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg">2</div>
+                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION HASH')}</span>
+                                                        </div>
+                                                        <div className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-5 shadow-sm">
+                                                            <div className="relative mb-3">
+                                                                <input
+                                                                    value={manualHash}
+                                                                    onChange={(e) => setManualHash(e.target.value)}
+                                                                    placeholder="0x..."
+                                                                    className="w-full h-12 bg-white dark:bg-black/40 border-2 border-slate-200 dark:border-white/10 rounded-2xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500 outline-none transition-all shadow-inner"
+                                                                />
+                                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+                                                                    <Fingerprint size={16} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center gap-2 px-2">
+                                                                <HelpCircle size={10} className="text-slate-400 shrink-0" />
+                                                                <p className="text-[8px] text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
+                                                                    {t('subscription.upgrade.hash_help', 'Copy the TxID from your wallet transaction history.')}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-12 rounded-full font-black text-[12px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-40 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
-                                                    {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
+
+                                                <button
+                                                    onClick={handleManualSubmit}
+                                                    disabled={isLoading || !manualHash}
+                                                    className={`w-full h-14 rounded-[1.5rem] font-black text-[13px] uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
+                                                >
+                                                    <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000" />
+                                                    <div className="flex items-center justify-center gap-3">
+                                                        {isLoading ? <Loader2 className="animate-spin" /> : (
+                                                            <>
+                                                                <Rocket size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                                                <span>{t('subscription.upgrade.verify_transaction', 'INITIALIZE VERIFICATION')}</span>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </button>
+
+                                                {/* HELP SECTION */}
+                                                <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
+                                                    <p className="text-[8px] font-black text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">Stuck or Need Help?</p>
+                                                    <p className="text-[9px] text-slate-500 dark:text-white/40 font-medium">Verification normally takes 1-5 minutes after one block confirmation.</p>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -858,17 +1081,22 @@ export default function SubscriptionPage() {
                         {(status !== 'idle' || infoModal) && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl">
                                 {infoModal ? (
-                                    <div className="bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 p-7 w-full max-w-sm rounded-[2.5rem] text-center relative overflow-hidden shadow-2xl">
-                                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                                    <div className="vibing-premium-panel p-8 w-full max-w-sm rounded-[3rem] text-center relative overflow-hidden shadow-2xl border-white/20">
+                                        <div className="circuit-decor opacity-30" />
+                                        <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
+                                        <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] rounded-full opacity-20 -mr-20 -mt-20 ${infoModal.color === 'emerald' ? 'bg-emerald-500' : infoModal.color === 'amber' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+
                                         <div className="relative z-10">
-                                            <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-600 dark:text-blue-400 mx-auto mb-5 shadow-inner">
-                                                <infoModal.icon size={32} />
+                                            <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
+                                                <infoModal.icon size={36} className="text-white drop-shadow-md" />
                                             </div>
-                                            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-3 tracking-tight">{infoModal.title}</h3>
-                                            <p className="text-[12px] text-slate-500 dark:text-white/50 uppercase font-bold tracking-widest leading-relaxed mb-8">{infoModal.desc}</p>
+                                            <h3 className={`text-[28px] font-black uppercase mb-4 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
+                                            <div className="px-2">
+                                                <p className="text-[13px] text-slate-600 dark:text-white/70 uppercase font-black tracking-widest leading-relaxed mb-10 overflow-y-auto max-h-[120px] scrollbar-hide">{infoModal.desc}</p>
+                                            </div>
                                             <button
                                                 onClick={() => { selection(); setInfoModal(null); }}
-                                                className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-black text-[12px] uppercase tracking-widest transition-all active:scale-95 shadow-lg"
+                                                className={`w-full h-14 rounded-full font-black text-[13px] uppercase tracking-[0.2em] transition-all active:scale-95 shadow-2xl border border-white/10 ${infoModal.color === 'emerald' ? 'vibing-emerald-animated text-white' : infoModal.color === 'amber' ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                                             >
                                                 {t('common.close', 'CLOSE')}
                                             </button>

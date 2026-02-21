@@ -58,8 +58,8 @@ export const EarnHeader = () => {
 
                     {/* ────────── LEFT: Radial Ring + Rank Badge ────────── */}
                     <div className="flex flex-col items-center shrink-0 gap-2">
-                        {/* Ring */}
-                        <div className="relative w-[96px] h-[96px]">
+                        {/* Ring - Responsive size */}
+                        <div className="relative w-[80px] h-[80px] sm:w-[96px] sm:h-[96px]">
                             <svg
                                 className="absolute inset-0 w-full h-full -rotate-90"
                                 viewBox="0 0 100 100"
@@ -103,7 +103,7 @@ export const EarnHeader = () => {
 
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-(--color-text-primary) opacity-40 leading-none">
+                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-(--color-text-primary) opacity-40 leading-none mb-0.5">
                                     {t('earn_header.level')}
                                 </span>
                                 <motion.span
@@ -111,7 +111,7 @@ export const EarnHeader = () => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-[2.1rem] font-black text-(--color-text-primary) leading-none tracking-tight"
+                                    className="text-2xl sm:text-[2.1rem] font-black text-(--color-text-primary) leading-none tracking-tight"
                                 >
                                     {level}
                                 </motion.span>
@@ -123,7 +123,7 @@ export const EarnHeader = () => {
                             initial={{ opacity: 0, y: 4 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="relative px-3 py-[4px] rounded-full overflow-hidden shadow-lg"
+                            className="relative px-2.5 py-1 sm:px-3 sm:py-[4px] rounded-full overflow-hidden shadow-lg"
                             style={{
                                 background: `linear-gradient(135deg, ${badgeColor}dd, ${badgeColor}99)`,
                                 boxShadow: `0 0 14px ${badgeColor}60`,
@@ -132,8 +132,8 @@ export const EarnHeader = () => {
                             {/* Shine overlay */}
                             <div className="absolute inset-0 bg-linear-to-r from-white/20 via-white/5 to-transparent pointer-events-none" />
                             <div className="relative flex items-center gap-1">
-                                <Trophy className="w-2.5 h-2.5 text-white/90" />
-                                <span className="text-[7.5px] font-black uppercase tracking-[0.14em] text-white/95">
+                                <Trophy className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/90" />
+                                <span className="text-[7px] sm:text-[7.5px] font-black uppercase tracking-[0.12em] sm:tracking-[0.14em] text-white/95 whitespace-nowrap">
                                     {t(`ranks.${rank.name}`)}
                                 </span>
                             </div>
@@ -141,25 +141,25 @@ export const EarnHeader = () => {
                     </div>
 
                     {/* ────────── RIGHT: XP bar + stats ────────── */}
-                    <div className="flex-1 flex flex-col gap-2.5 min-w-0">
+                    <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 min-w-0">
 
                         {/* XP Progress header row */}
-                        <div className="flex items-baseline justify-between px-0.5">
-                            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none">
+                        <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0">
+                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-xs font-black text-(--color-text-primary) transition-colors tabular-nums"
+                                className="text-[10px] sm:text-xs font-black text-(--color-text-primary) transition-colors tabular-nums"
                             >
                                 {progress.current.toLocaleString()} <span className="opacity-30">/</span> {progress.total.toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
                         </div>
 
                         {/* Progress bar */}
-                        <div className="relative h-3 w-full rounded-full overflow-hidden"
+                        <div className="relative h-2.5 sm:h-3 w-full rounded-full overflow-hidden"
                             style={{ background: 'var(--divider)' }}>
                             {/* Glow under bar */}
                             <motion.div
@@ -192,31 +192,31 @@ export const EarnHeader = () => {
                         </div>
 
                         {/* Stats grid */}
-                        <div className="grid grid-cols-2 gap-3">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
                             {/* Partners */}
                             <motion.div
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-2xl p-4 border bg-(--input-bg) border-(--input-border)"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[64px] sm:min-h-[80px]"
                             >
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-6 h-6 rounded-lg flex items-center justify-center"
+                                <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
-                                        <Users className="w-3.5 h-3.5 text-amber-400" />
+                                        <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40">
+                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-tight truncate">
                                         {t('earn_header.partners')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1.5">
-                                    <span className="text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
+                                <div className="flex items-baseline gap-1 sm:gap-1.5">
+                                    <span className="text-lg sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
-                                    <TrendingUp className="w-4 h-4 text-amber-500/60 mb-0.5" />
+                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500/60 mb-0.5" />
                                 </div>
                                 {/* Corner glow */}
-                                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-full blur-xl opacity-20"
+                                <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
                                     style={{ background: '#fbbf24' }} />
                             </motion.div>
 
@@ -225,26 +225,26 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-2xl p-4 border bg-(--input-bg) border-(--input-border)"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[64px] sm:min-h-[80px]"
                             >
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-6 h-6 rounded-lg flex items-center justify-center"
+                                <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
+                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
                                         style={{ background: `${badgeColor}22` }}>
-                                        <Zap className="w-3.5 h-3.5" style={{ color: badgeColor }} />
+                                        <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-(--color-text-primary) opacity-40">
+                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-tight truncate">
                                         {t('earn_header.total_xp')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1.5">
-                                    <span className="text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
+                                <div className="flex items-baseline gap-1 sm:gap-1.5">
+                                    <span className="text-lg sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
                                         {xp.toLocaleString()}
                                     </span>
-                                    <span className="text-[10px] font-black uppercase mb-0.5"
+                                    <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5"
                                         style={{ color: `${badgeColor}cc` }}>xp</span>
                                 </div>
                                 {/* Corner glow */}
-                                <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-full blur-xl opacity-20"
+                                <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
                                     style={{ background: badgeColor }} />
                             </motion.div>
                         </div>

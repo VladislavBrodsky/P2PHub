@@ -64,7 +64,9 @@ export const ProDashboardModals = ({
     const { showNotification } = useNotificationStore();
 
     // Setup Local State
-    const [setupTab, setSetupTab] = useState<'x' | 'tg' | 'omni'>('tg');
+    const [setupTab, setSetupTab] = useState<'pro' | 'pro_plus'>(status?.is_pro_plus ? 'pro_plus' : 'pro');
+    const [activeProPlatform, setActiveProPlatform] = useState<'x' | 'tg'>('tg');
+    const [activePlusPlatform, setActivePlusPlatform] = useState<'multi_tg' | 'linkedin' | 'omni'>('multi_tg');
     const [isSaving, setIsSaving] = useState(false);
 
     // Headline Local State
@@ -81,6 +83,7 @@ export const ProDashboardModals = ({
     const [xAccToken, setXAccToken] = useState('');
     const [xAccSecret, setXAccSecret] = useState('');
     const [tgChannels, setTgChannels] = useState<string[]>(['']);
+    const [linkedinToken, setLinkedinToken] = useState('');
     const [tgTestResults, setTgTestResults] = useState<Record<string, string>>({});
     const [isTesting, setIsTesting] = useState(false);
 
@@ -91,6 +94,7 @@ export const ProDashboardModals = ({
             setXApiSecret(status.setup.x_api_secret || '');
             setXAccToken(status.setup.x_access_token || '');
             setXAccSecret(status.setup.x_access_token_secret || '');
+            setLinkedinToken(status.setup.linkedin_access_token || '');
 
             const main = status.setup.telegram_channel_id;
             const others = status.setup.telegram_channels || [];
@@ -109,7 +113,8 @@ export const ProDashboardModals = ({
                 x_access_token: xAccToken,
                 x_access_token_secret: xAccSecret,
                 telegram_channel_id: tgChannels[0],
-                telegram_channels: tgChannels.slice(1).filter(ch => ch.trim() !== '')
+                telegram_channels: tgChannels.slice(1).filter(ch => ch.trim() !== ''),
+                linkedin_access_token: linkedinToken
             });
             showNotification({
                 title: t('pro_dashboard.setup.save_success_title'),
@@ -239,309 +244,171 @@ export const ProDashboardModals = ({
                                 </button>
                             </div>
 
-                            {/* Sub Tabs Selection */}
-                            <div className="mx-auto max-w-[90%] mt-5">
-                                <div className="flex p-0.5 bg-slate-100 dark:bg-black/60 rounded-full border border-slate-200 dark:border-white/5 relative overflow-hidden">
+                            {/* Sub Tabs Selection - Integrated PRO/PRO+ Flow */}
+                            <div className="mx-auto w-[90%] mt-6">
+                                <div className="grid grid-cols-2 p-1.5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-200 dark:border-white/5 relative overflow-hidden backdrop-blur-xl">
                                     <button
-                                        onClick={() => { selection(); setSetupTab('x'); }}
-                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.12em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'x'
-                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/5'
+                                        onClick={() => { selection(); setSetupTab('pro'); }}
+                                        className={`py-2.5 rounded-2.5xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'pro'
+                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-xl shadow-indigo-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Network size={11} className={setupTab === 'x' ? 'text-indigo-500' : 'opacity-40'} />
-                                        {t('pro_dashboard.setup.x_broadcast')}
+                                        <Zap size={11} className={setupTab === 'pro' ? 'text-indigo-500' : 'opacity-40'} />
+                                        PRO PROTOCOL
                                     </button>
                                     <button
-                                        onClick={() => { selection(); setSetupTab('tg'); }}
-                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.12em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'tg'
-                                            ? 'bg-white dark:bg-white/10 text-sky-600 dark:text-white shadow-lg shadow-sky-500/5'
+                                        onClick={() => { selection(); setSetupTab('pro_plus'); }}
+                                        className={`py-2.5 rounded-2.5xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'pro_plus'
+                                            ? 'bg-white dark:bg-white/10 text-emerald-600 dark:text-white shadow-xl shadow-emerald-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Send size={11} className={setupTab === 'tg' ? 'text-sky-500' : 'opacity-40'} />
-                                        {t('pro_dashboard.setup.tg_sync')}
-                                    </button>
-                                    <button
-                                        onClick={() => { selection(); setSetupTab('omni'); }}
-                                        className={`flex-1 py-2 rounded-full text-[8px] font-black uppercase tracking-[0.15em] transition-all duration-300 flex items-center justify-center gap-1.5 relative z-10 ${setupTab === 'omni'
-                                            ? 'bg-white dark:bg-white/10 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/5'
-                                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-                                    >
-                                        <Blocks size={11} className={setupTab === 'omni' ? 'text-emerald-500' : 'opacity-40'} />
-                                        {t('pro_dashboard.setup.omni_sync')}
+                                        <Sparkles size={11} className={setupTab === 'pro_plus' ? 'text-emerald-500' : 'opacity-40'} />
+                                        PRO+ ELITE
                                         {!status?.is_pro_plus && (
-                                            <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-amber-500 border border-white dark:border-slate-900 flex items-center justify-center">
-                                                <Lock size={5} className="text-white" />
+                                            <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-lg">
+                                                <Lock size={7} className="text-white" />
                                             </div>
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Body */}
-                            <div className="flex-1 overflow-y-auto no-scrollbar p-5 sm:p-6 space-y-4">
-                                {setupTab === 'x' && (
+                            {/* Body Section */}
+                            <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6">
+                                {setupTab === 'pro' && (
                                     <motion.div
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-4"
+                                        className="space-y-6"
                                     >
-                                        <div className="p-5 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-3xl border border-indigo-500/10 flex flex-col items-center text-center gap-3 group transition-all">
-                                            <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shrink-0 shadow-xl shadow-indigo-600/20 group-hover:scale-110 transition-transform">
-                                                <Network size={22} />
-                                            </div>
-                                            <div className="space-y-1">
-                                                <h4 className="text-[11px] font-black text-indigo-900 dark:text-indigo-300 uppercase tracking-[0.2em]">Direct API Protocol</h4>
-                                                <p className="text-[9px] font-medium text-indigo-700/70 dark:text-indigo-400/70 leading-relaxed max-w-[240px] mx-auto">
-                                                    Enter your X Developer keys to enable autonomous posting on your profile.
-                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="block mx-auto mt-1.5 text-indigo-600 dark:text-indigo-400 underline font-black hover:text-indigo-500 italic">View Connection Guide</button>
-                                                </p>
-                                            </div>
+                                        {/* Platform Switcher for PRO */}
+                                        <div className="flex gap-2 p-1 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5">
+                                            <button
+                                                onClick={() => { selection(); setActiveProPlatform('tg'); }}
+                                                className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${activeProPlatform === 'tg' ? 'bg-white dark:bg-white/10 shadow-sm text-sky-500 dark:text-white' : 'text-slate-400'}`}
+                                            >
+                                                Telegram (Single)
+                                            </button>
+                                            <button
+                                                onClick={() => { selection(); setActiveProPlatform('x'); }}
+                                                className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${activeProPlatform === 'x' ? 'bg-white dark:bg-white/10 shadow-sm text-indigo-500 dark:text-white' : 'text-slate-400'}`}
+                                            >
+                                                X (Twitter)
+                                            </button>
                                         </div>
 
-                                        <div className="space-y-2.5 pt-1">
-                                            {[
-                                                { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key', type: 'text' },
-                                                { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
-                                                { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token', type: 'text' },
-                                                { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
-                                            ].map((field, i) => (
-                                                <div key={i} className="space-y-1">
-                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest pl-1">{field.label}</label>
+                                        {activeProPlatform === 'tg' ? (
+                                            <div className="space-y-5">
+                                                <div className="flex flex-col items-center text-center p-6 bg-sky-500/5 rounded-3xl border border-sky-500/10 gap-3">
+                                                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+                                                        <Send size={24} className="-ml-0.5" />
+                                                    </div>
+                                                    <div className="space-y-1">
+                                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Telegram Primary Node</h4>
+                                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[280px]">Standard PRO enables 1 active broadcasting channel. Upgrade to PRO+ for 5x sync.</p>
+                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="mt-2 text-[10px] text-sky-500 font-bold underline italic">View Step-by-Step Guide</button>
+                                                    </div>
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.channel_id')}</label>
                                                     <input
-                                                        type={field.type}
-                                                        value={field.value}
-                                                        onChange={(e) => field.setter(e.target.value)}
-                                                        className="w-full h-11 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl px-4 text-[11px] font-mono focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10 shadow-sm"
-                                                        placeholder={field.placeholder}
+                                                        type="text"
+                                                        value={tgChannels[0] || ''}
+                                                        onChange={(e) => {
+                                                            const newChannels = [...tgChannels];
+                                                            newChannels[0] = e.target.value;
+                                                            setTgChannels(newChannels);
+                                                        }}
+                                                        className="w-full h-12 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl px-4 text-[11px] font-mono focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10"
+                                                        placeholder="@your_channel_username"
                                                     />
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </motion.div>
-                                )}
-
-                                {setupTab === 'tg' && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="space-y-4"
-                                    >
-                                        <div className="relative group overflow-hidden rounded-[2rem] p-0.5">
-                                            <div className="absolute inset-0 bg-linear-to-br from-sky-400 via-indigo-500 to-purple-600 opacity-20 group-hover:opacity-30 transition-opacity" />
-                                            <div className="relative bg-white/5 dark:bg-slate-900/40 backdrop-blur-xl p-6 rounded-[2.5rem] border border-slate-200 dark:border-white/5 transition-all flex flex-col items-center text-center">
-                                                <div className="flex flex-col items-center gap-4">
-                                                    <div className="relative">
-                                                        <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-sky-400 to-sky-600 flex items-center justify-center text-white shadow-2xl shadow-sky-500/40">
-                                                            <Send size={28} className="-ml-1" />
-                                                        </div>
-                                                        <div className="absolute -bottom-1.5 -right-1.5 w-7 h-7 rounded-xl bg-indigo-600 border-[3px] border-white dark:border-slate-900 flex items-center justify-center text-white shadow-xl">
-                                                            <Network size={12} />
-                                                        </div>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-5">
+                                                <div className="flex flex-col items-center text-center p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 gap-3">
+                                                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
+                                                        <Network size={24} />
                                                     </div>
-                                                    <div className="flex flex-col items-center min-w-0">
-                                                        <div className="mb-2">
-                                                            <span className={`text-[7px] font-black px-2 py-0.5 rounded-md uppercase tracking-[0.15em] ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500 border border-indigo-500/20' : 'bg-amber-500/10 text-amber-500 border border-amber-500/20'}`}>
-                                                                {status?.is_pro_plus ? 'ELITE+ NODE' : 'STD NODE'}
-                                                            </span>
-                                                        </div>
-                                                        <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-[0.08em] leading-tight mb-1">{t('pro_dashboard.setup.tg_sync_multi.title')}</h4>
-                                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed max-w-[240px]">
-                                                            {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.desc_plus') : t('pro_dashboard.setup.tg_sync_multi.desc_pro')}
-                                                        </p>
-                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="mt-3 text-[9px] text-sky-600 dark:text-sky-400 underline font-black hover:text-sky-500 transition-colors italic">{t('pro_dashboard.setup.tg_manual.title')}</button>
+                                                    <div className="space-y-1">
+                                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">X Global Broadcast</h4>
+                                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[280px]">Autonomous API integration for persistent profile presence.</p>
+                                                        <button onClick={() => { selection(); setShowManual('setup_x'); }} className="mt-2 text-[10px] text-indigo-500 font-bold underline italic">API Connection Instructions</button>
                                                     </div>
                                                 </div>
-                                                {!status?.is_pro_plus && (
-                                                    <button
-                                                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' })); }}
-                                                        className="w-full mt-5 py-3.5 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative overflow-hidden"
-                                                    >
-                                                        <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-shimmer" />
-                                                        <Lock size={12} className="transition-transform" />
-                                                        {t('pro_dashboard.setup.tg_sync_multi.upgrade_pro_plus_cta')}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-3">
-                                            <div className="flex items-center justify-between px-1">
-                                                <div className="flex items-center gap-1.5">
-                                                    <div className="w-1 h-1 rounded-full bg-sky-500 animate-pulse" />
-                                                    <label className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('pro_dashboard.setup.channel_id')}</label>
-                                                </div>
-                                                {status?.is_pro_plus && (
-                                                    <button
-                                                        onClick={handleTestTG}
-                                                        disabled={isTesting || tgChannels.every(c => !c)}
-                                                        className="px-2.5 py-1 rounded-lg bg-sky-500/5 hover:bg-sky-500/10 text-[8px] font-black text-sky-600 dark:text-sky-400 uppercase tracking-widest transition-all flex items-center gap-1.5 disabled:opacity-50 ring-1 ring-sky-500/10"
-                                                    >
-                                                        {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
-                                                        Test All
-                                                    </button>
-                                                )}
-                                            </div>
-
-                                            <div className="grid grid-cols-1 gap-2">
-                                                {[0, 1, 2, 3, 4].map((idx) => {
-                                                    const isLocked = idx > 0 && !status?.is_pro_plus;
-                                                    const channelValue = tgChannels[idx] || '';
-                                                    const placeholder = isLocked ? 'LOCKED — PRO+ REQUIRED' : '@your_channel_username';
-                                                    const testResult = tgTestResults[channelValue.trim()];
-
-                                                    return (
-                                                        <div key={idx} className="relative group/input">
-                                                            <div className="flex gap-2">
-                                                                <div className="flex-1 relative">
-                                                                    <input
-                                                                        type="text"
-                                                                        value={isLocked ? '' : channelValue}
-                                                                        disabled={isLocked}
-                                                                        onChange={(e) => {
-                                                                            if (isLocked) return;
-                                                                            const newChannels = [...tgChannels];
-                                                                            while (newChannels.length <= idx) newChannels.push('');
-                                                                            newChannels[idx] = e.target.value;
-                                                                            setTgChannels(newChannels);
-                                                                        }}
-                                                                        onClick={() => {
-                                                                            if (isLocked) {
-                                                                                selection();
-                                                                                showNotification({
-                                                                                    title: 'Slot Locked',
-                                                                                    message: 'Standard PRO is limited to 1 channel. Upgrade to PRO+ for up to 5.',
-                                                                                    type: 'warning'
-                                                                                });
-                                                                            }
-                                                                        }}
-                                                                        className={`w-full h-12 bg-white dark:bg-black/20 border rounded-2xl px-4 text-[11px] font-mono outline-hidden transition-all
-                                                                            ${isLocked
-                                                                                ? 'border-slate-100 dark:border-white/5 opacity-50 cursor-pointer placeholder:text-slate-400 dark:placeholder:text-white/20 bg-slate-50 dark:bg-black/10'
-                                                                                : testResult === 'active'
-                                                                                    ? 'border-emerald-500/50 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/5 text-slate-900 dark:text-white'
-                                                                                    : testResult === 'error'
-                                                                                        ? 'border-rose-500/50 focus:border-rose-500 focus:ring-4 focus:ring-rose-500/5 text-slate-900 dark:text-white'
-                                                                                        : 'border-slate-200 dark:border-white/10 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10'}`}
-                                                                        placeholder={placeholder}
-                                                                    />
-
-                                                                    {!isLocked && testResult && (
-                                                                        <motion.div
-                                                                            initial={{ opacity: 0, x: -10 }}
-                                                                            animate={{ opacity: 1, x: 0 }}
-                                                                            className={`absolute left-3 -top-2 px-1.5 py-0.5 rounded-md text-[6px] font-black uppercase tracking-widest flex items-center gap-1 shadow-lg border z-10 ${testResult === 'active'
-                                                                                ? 'bg-emerald-500 border-emerald-400/50 text-white'
-                                                                                : 'bg-rose-500 border-rose-400/50 text-white'}`}
-                                                                        >
-                                                                            {testResult === 'active' ? <CheckCircle2 size={7} /> : <AlertCircle size={7} />}
-                                                                            {testResult === 'active' ? t('pro_dashboard.setup.tg_sync_multi.active') : t('pro_dashboard.setup.tg_sync_multi.error')}
-                                                                        </motion.div>
-                                                                    )}
-
-                                                                    {isLocked && (
-                                                                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600">
-                                                                            <Lock size={13} />
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-
-                                                                {!isLocked && channelValue.trim() && (
-                                                                    <div className="flex flex-col gap-1">
-                                                                        {/* Individual test button */}
-                                                                        <button
-                                                                            onClick={async () => {
-                                                                                selection();
-                                                                                setIsTesting(true);
-                                                                                try {
-                                                                                    const res = await proService.testIntegration('telegram');
-                                                                                    if (res.details) {
-                                                                                        const updates: Record<string, string> = {};
-                                                                                        (res.details as string[]).forEach((d: string) => {
-                                                                                            const st = d.startsWith('✅') ? 'active' : 'error';
-                                                                                            const ch = d.substring(2).trim();
-                                                                                            updates[ch] = st;
-                                                                                        });
-                                                                                        setTgTestResults(prev => ({ ...prev, ...updates }));
-                                                                                    }
-                                                                                } catch (e) {
-                                                                                    setTgTestResults(prev => ({ ...prev, [channelValue.trim()]: 'error' }));
-                                                                                } finally {
-                                                                                    setIsTesting(false);
-                                                                                }
-                                                                            }}
-                                                                            disabled={isTesting}
-                                                                            className="h-12 px-3 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/20 rounded-2xl text-sky-600 dark:text-sky-400 transition-all flex items-center gap-1 disabled:opacity-40"
-                                                                            title="Test this channel"
-                                                                        >
-                                                                            {isTesting ? <Loader2 size={13} className="animate-spin" /> : <Zap size={13} />}
-                                                                        </button>
-                                                                        {/* Remove button */}
-                                                                        {idx > 0 && (
-                                                                            <button
-                                                                                onClick={() => {
-                                                                                    selection();
-                                                                                    const newChannels = tgChannels.filter((_, i) => i !== idx);
-                                                                                    setTgChannels(newChannels);
-                                                                                }}
-                                                                                className="h-5 px-3 text-slate-400 hover:text-rose-500 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 rounded-xl transition-all flex items-center gap-1"
-                                                                            >
-                                                                                <Trash2 size={11} />
-                                                                            </button>
-                                                                        )}
-                                                                    </div>
-                                                                )}
+                                                <div className="space-y-3">
+                                                    {[
+                                                        { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
+                                                        { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
+                                                        { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
+                                                        { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
+                                                    ].map((field, i) => (
+                                                        <div key={i} className="space-y-1">
+                                                            <div className="flex justify-between px-1">
+                                                                <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{field.label}</label>
                                                             </div>
+                                                            <input
+                                                                type={field.type || 'text'}
+                                                                value={field.value}
+                                                                onChange={(e) => field.setter(e.target.value)}
+                                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl px-4 text-[10px] font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-200"
+                                                                placeholder={field.placeholder}
+                                                            />
                                                         </div>
-                                                    );
-                                                })}
-
-                                                {!status?.is_pro_plus && (
-                                                    <button
-                                                        onClick={() => {
-                                                            selection();
-                                                            localStorage.setItem('auto_upgrade_pro_plus', 'true');
-                                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
-                                                            setShowSetup(false);
-                                                        }}
-                                                        className="mt-1 w-full py-2.5 border border-dashed border-indigo-400/40 rounded-xl flex items-center justify-center gap-2 text-[8px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest hover:bg-indigo-500/5 transition-all"
-                                                    >
-                                                        <Zap size={10} />
-                                                        Unlock All 5 Slots — Upgrade to PRO+
-                                                    </button>
-                                                )}
+                                                    ))}
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </motion.div>
                                 )}
 
-                                {setupTab === 'omni' && (
+                                {setupTab === 'pro_plus' && (
                                     <motion.div
                                         initial={{ opacity: 0, x: 20 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-4"
+                                        className="space-y-6"
                                     >
                                         {!status?.is_pro_plus ? (
-                                            <div className="flex flex-col items-center justify-center py-4 px-2 text-center space-y-4">
+                                            <div className="relative group overflow-hidden p-8 bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-[2.5rem] border border-emerald-500/20 shadow-2xl flex flex-col items-center text-center gap-6">
+                                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl" />
                                                 <motion.div
                                                     animate={{
-                                                        boxShadow: ["0 0 0px rgba(16, 185, 129, 0)", "0 0 40px rgba(16, 185, 129, 0.2)", "0 0 0px rgba(16, 185, 129, 0)"]
+                                                        scale: [1, 1.05, 1],
+                                                        rotate: [0, 2, 0, -2, 0]
                                                     }}
-                                                    transition={{ duration: 3, repeat: Infinity }}
-                                                    className="w-20 h-20 rounded-[1.75rem] bg-emerald-500/10 flex items-center justify-center text-emerald-500 border border-emerald-500/20 shadow-xl relative"
+                                                    transition={{ duration: 6, repeat: Infinity }}
+                                                    className="w-24 h-24 rounded-3xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-2xl shadow-emerald-500/30 relative"
                                                 >
-                                                    <Blocks size={40} />
-                                                    <div className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-amber-500 flex items-center justify-center border-[3px] border-white dark:border-slate-900 shadow-xl">
-                                                        <Lock size={12} className="text-white" />
+                                                    <Sparkles size={48} />
+                                                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-amber-500 border-4 border-white dark:border-slate-900 flex items-center justify-center text-white shadow-lg">
+                                                        <Lock size={14} />
                                                     </div>
                                                 </motion.div>
 
-                                                <div className="space-y-1.5">
-                                                    <h4 className="text-[17px] font-black text-slate-900 dark:text-white uppercase tracking-tighter italic leading-tight">
-                                                        Omni-Channel <span className="text-emerald-500">Protocol</span>
+                                                <div className="space-y-2 relative z-10">
+                                                    <h4 className="text-[20px] font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                                        Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                     </h4>
-                                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto leading-relaxed opacity-80">
-                                                        Unlock multi-platform broadcasting. Post to 5+ networks simultaneously with neural sync.
+                                                    <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto leading-relaxed">
+                                                        Upgrade to PRO+ to unlock the complete neural broadcasting stack.
                                                     </p>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-3 w-full relative z-10">
+                                                    {[
+                                                        { icon: Send, label: '5x TG Channels', detail: 'Mass Sync' },
+                                                        { icon: Blocks, label: 'Omni-Channel', detail: '7+ Networks' },
+                                                        { icon: Network, label: 'LinkedIn', detail: 'Authority Node' },
+                                                        { icon: Sparkles, label: 'Ultra AI', detail: 'Advanced Models' }
+                                                    ].map((feat, i) => (
+                                                        <div key={i} className="p-3 bg-white/50 dark:bg-white/5 rounded-2xl border border-white dark:border-white/10 flex items-center gap-2.5">
+                                                            <feat.icon size={14} className="text-emerald-500" />
+                                                            <div className="text-left">
+                                                                <p className="text-[8px] font-black text-slate-900 dark:text-white uppercase leading-none mb-0.5">{feat.label}</p>
+                                                                <p className="text-[7px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{feat.detail}</p>
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                                 </div>
 
                                                 <button
@@ -551,72 +418,160 @@ export const ProDashboardModals = ({
                                                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                                         setShowSetup(false);
                                                     }}
-                                                    className="w-full max-w-[260px] py-3 bg-linear-to-r from-emerald-500 to-teal-600 text-white rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group relative overflow-hidden"
+                                                    className="w-full py-4 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2.5xl text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative overflow-hidden group/upgrade"
                                                 >
-                                                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:animate-shimmer" />
-                                                    <Zap size={15} className="group-hover:animate-pulse relative z-10" />
-                                                    <span className="relative z-10">Upgrade to PRO+ Empire</span>
+                                                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/upgrade:animate-shimmer" />
+                                                    <Zap size={16} className="group-hover/upgrade:animate-pulse" />
+                                                    CLAIM PRO+ STATUS
                                                 </button>
-
-                                                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest opacity-60">
-                                                    Requires Active PRO+ Clearance
-                                                </p>
                                             </div>
                                         ) : (
-                                            <>
-                                                <div className="p-6 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-[2rem] border border-emerald-500/10 flex flex-col items-center text-center gap-4 group transition-all">
-                                                    <div className="w-14 h-14 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shrink-0 shadow-xl shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-                                                        <Blocks size={28} />
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                        <h4 className="text-[14px] font-black text-emerald-900 dark:text-emerald-300 uppercase tracking-[0.2em]">{t('pro_dashboard.setup.tg_sync_multi.more_platforms')}</h4>
-                                                        <p className="text-[10px] font-medium text-emerald-700/70 dark:text-emerald-400/70 leading-relaxed max-w-[280px] mx-auto">
-                                                            {t('pro_dashboard.setup.tg_sync_multi.more_platforms_desc')}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-3 pb-4">
-                                                    {['Threads', 'Pinterest', 'Instagram', 'Facebook', 'Discord'].map((platform) => (
-                                                        <div key={platform} className="relative group/social overflow-hidden">
-                                                            <div className="p-4 rounded-2xl border flex flex-col gap-2 transition-all bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 hover:border-emerald-500/30">
-                                                                <div className="flex items-center justify-between">
-                                                                    <span className="text-[10px] font-bold text-slate-900 dark:text-slate-300">{platform}</span>
-                                                                    <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[6px] font-black uppercase tracking-widest">{t('pro_dashboard.setup.tg_sync_multi.coming_soon')}</div>
-                                                                </div>
-                                                                <div className="h-1 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden">
-                                                                    <div className="h-full bg-emerald-500/20 w-1/3" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                            <div className="space-y-6">
+                                                {/* Platform Switcher for PRO+ */}
+                                                <div className="flex gap-2 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
+                                                    {[
+                                                        { id: 'multi_tg', label: 'Multi-TG', icon: Send },
+                                                        { id: 'linkedin', label: 'LinkedIn', icon: Network },
+                                                        { id: 'omni', label: 'Omni-Sync', icon: Blocks }
+                                                    ].map((tab) => (
+                                                        <button
+                                                            key={tab.id}
+                                                            onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
+                                                            className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
+                                                        >
+                                                            <tab.icon size={10} />
+                                                            {tab.label}
+                                                        </button>
                                                     ))}
                                                 </div>
-                                            </>
+
+                                                {activePlusPlatform === 'multi_tg' && (
+                                                    <div className="space-y-5">
+                                                        <div className="p-5 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 flex items-center gap-4">
+                                                            <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg">
+                                                                <Send size={24} className="-ml-0.5" />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Multi-Channel Sync</h4>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400">Broadcasting to up to 5 channels simultaneously. <button onClick={() => setShowManual('setup_tg')} className="font-bold underline text-emerald-600">Guide</button></p>
+                                                            </div>
+                                                            <button
+                                                                onClick={handleTestTG}
+                                                                disabled={isTesting}
+                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                                                            >
+                                                                {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
+                                                                Test
+                                                            </button>
+                                                        </div>
+                                                        <div className="grid grid-cols-1 gap-2.5">
+                                                            {[0, 1, 2, 3, 4].map((idx) => {
+                                                                const val = tgChannels[idx] || '';
+                                                                const testSt = tgTestResults[val.trim()];
+                                                                return (
+                                                                    <div key={idx} className="relative group/input">
+                                                                        <input
+                                                                            type="text"
+                                                                            value={val}
+                                                                            onChange={(e) => {
+                                                                                const nch = [...tgChannels];
+                                                                                while (nch.length <= idx) nch.push('');
+                                                                                nch[idx] = e.target.value;
+                                                                                setTgChannels(nch);
+                                                                            }}
+                                                                            placeholder={`@channel_node_${idx + 1}`}
+                                                                            className={`w-full h-11 bg-white dark:bg-black/20 border rounded-2xl px-4 text-[10px] font-mono transition-all ${testSt === 'active' ? 'border-emerald-500' : 'border-slate-200 dark:border-white/10 dark:text-white'}`}
+                                                                        />
+                                                                        {testSt && (
+                                                                            <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-[7px] font-black uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                                                {testSt === 'active' ? '● Live' : '● Error'}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {activePlusPlatform === 'linkedin' && (
+                                                    <div className="space-y-5">
+                                                        <div className="p-5 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 flex items-center gap-4">
+                                                            <div className="w-12 h-12 rounded-2xl bg-indigo-700 flex items-center justify-center text-white shadow-lg">
+                                                                <Network size={24} />
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">LinkedIn Authority</h4>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 italic">Sync your [professional identity](https://linkedin.com) for high-trust B2B reach.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Access Token / OAuth String</label>
+                                                            <textarea
+                                                                value={linkedinToken}
+                                                                onChange={(e) => setLinkedinToken(e.target.value)}
+                                                                placeholder="Paste LinkedIn Access Token"
+                                                                className="w-full h-24 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-[10px] font-mono focus:border-indigo-500 outline-hidden dark:text-white resize-none"
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 italic leading-relaxed px-1">Obtained via [LinkedIn Developers](https://www.linkedin.com/developers/). Use 'Share on LinkedIn' and 'Read Member Profile' scopes.</p>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {activePlusPlatform === 'omni' && (
+                                                    <div className="space-y-5">
+                                                        <div className="p-5 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-3xl border border-emerald-500/20 text-center space-y-2">
+                                                            <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Omni-Channel Sync</h4>
+                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto">Neural broadcasting across all major Web2 and Web3 social stacks.</p>
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-3">
+                                                            {[
+                                                                { id: 'threads', name: 'Threads', status: 'Active Beta' },
+                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon' },
+                                                                { id: 'discord', name: 'Discord', status: 'Experimental' },
+                                                                { id: 'fb', name: 'Facebook', status: 'Planning' }
+                                                            ].map((p) => (
+                                                                <div key={p.id} className="p-4 bg-white/50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex flex-col gap-1.5 group hover:border-emerald-500/30 transition-all">
+                                                                    <div className="flex justify-between items-center">
+                                                                        <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{p.name}</span>
+                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[6px] font-black uppercase tracking-widest">{p.status}</div>
+                                                                    </div>
+                                                                    <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                                                                        <div className={`h-full bg-emerald-500/30 ${p.status === 'Planning' ? 'w-1/4' : 'w-2/3'}`} />
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
                                         )}
                                     </motion.div>
                                 )}
                             </div>
 
                             {/* Sticky Footer */}
-                            <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
-                                <button
-                                    onClick={handleSaveSetup}
-                                    disabled={isSaving}
-                                    className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white rounded-[1.25rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale group"
-                                >
-                                    {isSaving ? (
-                                        <>
-                                            <Loader2 className="animate-spin" size={18} />
-                                            {t('pro_dashboard.tools.trends.scanning')}...
-                                        </>
-                                    ) : (
-                                        <>
-                                            {t('pro_dashboard.setup.save_btn')} <CheckCircle2 size={16} className="group-hover:scale-110 transition-transform" />
-                                        </>
-                                    )}
-                                </button>
-                                <p className="text-[8px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em] text-center mt-4">
-                                    P2PHUB PROTOCOL • V2.2 • SECURE SYNC
+                            <div className="p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
+                                {setupTab === 'pro' || status?.is_pro_plus ? (
+                                    <button
+                                        onClick={handleSaveSetup}
+                                        disabled={isSaving}
+                                        className="w-full h-14 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 group"
+                                    >
+                                        {isSaving ? (
+                                            <>
+                                                <Loader2 className="animate-spin" size={20} />
+                                                SYNCHRONIZING...
+                                            </>
+                                        ) : (
+                                            <>
+                                                DEPLOY CONFIGURATION <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                            </>
+                                        )}
+                                    </button>
+                                ) : null}
+                                <p className="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.4em] text-center mt-5">
+                                    {t('pro_dashboard.publish.footer', 'P2PHUB PROTOCOL • V2.5 • SECURE SYNC')}
                                 </p>
                             </div>
                         </motion.div>
@@ -970,7 +925,7 @@ export const ProDashboardModals = ({
                                                     </div>
                                                     <div className="space-y-1.5 pt-1">
                                                         <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
-                                                        <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{step.desc}</p>
+                                                        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{renderMarkdown(step.desc, true)}</div>
                                                     </div>
                                                 </div>
                                             ));

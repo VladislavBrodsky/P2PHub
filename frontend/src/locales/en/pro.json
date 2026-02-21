@@ -132,27 +132,23 @@
         "steps": [
           {
             "title": "Step 1: Open X Developer Portal",
-            "desc": "Go to developer.x.com and log in. Click on 'Products' and select 'Twitter API v2' (Free or Basic tier is perfect)."
+            "desc": "Access your [X Developer Dashboard](https://developer.x.com/en/portal/dashboard). Log in and select 'Products' > 'Twitter API v2'."
           },
           {
             "title": "Step 2: Create a Project",
-            "desc": "Click 'Create Project' and give it a name like 'Pintopay Studio'. Then create an 'App' inside the project."
+            "desc": "Click 'Create Project' and name it 'P2PHub Studio'. Then create an 'App' inside this project to generate your credentials."
           },
           {
             "title": "Step 3: App Permissions",
-            "desc": "Go to App Settings > User Authentication. Select 'OAuth 1.0a'. Change permissions from 'Read Only' to 'Read and Write'. For Website/Callback URL, just use: https://t.me/pintopay_probot"
+            "desc": "Crucial: Go to App Settings > User Authentication. Choose 'OAuth 1.0a'. Enable 'Read and Write' permissions. Set Callback URL to: `https://t.me/pintopay_probot`"
           },
           {
-            "title": "Step 4: Get Your 4 Keys",
-            "desc": "Go to 'Keys and Tokens' tab. Regenerate 'Consumer Keys' and 'Access Tokens'. Copy all 4 codes: API Key, API Secret, Access Token, and Access Secret."
+            "title": "Step 4: Extract Credentials",
+            "desc": "In the 'Keys and Tokens' tab, regenerate 'Consumer Keys' and 'Access Tokens'. Copy all 4: API Key, API Secret, Access Token, and Token Secret."
           },
           {
-            "title": "Step 5: Link to P2PHub",
-            "desc": "Paste these 4 codes in the API Setup window here and click 'SAVE SETTINGS'. You're now ready to broadcast to X!"
-          },
-          {
-            "title": "Step 6: Limitless Content (Pro Tip)",
-            "desc": "X limits 'Free' accounts to very short posts. To publish powerful long-form AI insights (300+ chars), we strongly recommend X Premium. This also unlocks the 'Basic' API tier, ensuring maximum performance for your viral machine."
+            "title": "Step 5: Direct Integration",
+            "desc": "Paste these 4 codes in the [PRO Setup] window and click SAVE. Your profile is now synced with our neural engine."
           }
         ]
       },
@@ -161,20 +157,20 @@
         "subtitle": "Step-by-step Connection",
         "steps": [
           {
-            "title": "Step 1: Create a channel",
-            "desc": "Click 'New Channel' in Telegram. Give it a bold name and upload an avatar."
+            "title": "Step 1: Create Your Hub",
+            "desc": "Open [Telegram](https://t.me) and create a New Channel. This will be your primary broadcasting node."
           },
           {
-            "title": "Step 2: Add Assistant Bot",
-            "desc": "Go to Channel Settings > Administrators > Add Admin. Search for @{{bot_username}} and add it."
+            "title": "Step 2: Authorize Assistant",
+            "desc": "Add [@{{bot_username}}](https://t.me/{{bot_username}}) as an Administrator in your channel settings."
           },
           {
-            "title": "Step 3: Grant Permissions",
-            "desc": "When adding the bot, ensure 'Post Messages' is enabled. This allows the bot to broadcast your content."
+            "title": "Step 3: Grant Broadcast Power",
+            "desc": "Ensure the 'Post Messages' permission is toggled ON. This allows the AI bridge to send content."
           },
           {
-            "title": "Step 4: Link to P2PHub",
-            "desc": "Copy your channel's public link (e.g., @mycoolchannel) and paste it into the API Setup window here. Save and you're set!"
+            "title": "Step 4: Link Verification",
+            "desc": "Copy your channel's public handle (e.g., @mychannel) and paste it into the Telegram Node field below."
           }
         ]
       },
@@ -739,7 +735,7 @@
     },
     "plan_headline": "WHAT YOU UNLOCK",
     "plan_desc_pro": "Your competitive advantage starts now. PRO gives you the AI content tools, 9-level passive income, and everything to grow your team ×10 faster than free members.",
-    "plan_desc_plus": "The complete growth toolkit. PRO+ is for serious network builders who want 20-level deep passive income, advanced AI features, and seamless multi-platform publishing.",
+    "plan_desc_plus": "The ultimate viral growth engine. PRO+ accelerates your network expansion x100 with 20-level deep rewards, elite AI models, and total multi-platform dominance.",
     "benefits": {
       "ai_studio": "AI CONTENT STUDIO",
       "ai_studio_desc_pro": "Deploy your personal AI content assistant 24/7. Generate professional posts, magnetic hooks, and high-conversion copy in seconds. 250 tokens/month — enough to post daily across your network.",
@@ -796,6 +792,7 @@
       "pro_title": "PRO ACCESS",
       "pro_plus_title": "PRO+ ACCESS",
       "pro_plus_upgrade_title": "UPGRADE TO PRO+",
+      "viral_badge": "x100 FASTER",
       "best_badge": "TOP CHOICE",
       "upgrade_label": "ONE-TIME UPGRADE",
       "lifetime_pro": "LIFETIME ALPHA STATUS",

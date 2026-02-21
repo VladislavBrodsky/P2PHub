@@ -91,7 +91,7 @@ export const GrowthTab = ({
 
                         <div className="flex flex-col gap-1.5 pt-1">
                             <div className="flex items-center gap-2">
-                                <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                <h3 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
                                     {t('pro_dashboard.academy.protocols.title').split(' ')[0]} <span className="text-indigo-500">{t('pro_dashboard.academy.protocols.title').split(' ').slice(1).join(' ')}</span>
                                 </h3>
                             </div>
@@ -119,7 +119,7 @@ export const GrowthTab = ({
                         </p>
                         <div className="relative group/score">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
-                            <div className="text-4xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
+                            <div className="text-3xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
                                 <span className="text-[10px] text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-0.5 font-bold">XP</span>
                             </div>
