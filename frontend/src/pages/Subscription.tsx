@@ -300,31 +300,31 @@ export default function SubscriptionPage() {
                             <div className="absolute inset-0 bg-indigo-500/30 blur-2xl animate-pulse scale-150 z-0" />
                         </div>
 
-                        {/* Integrated Status Pills - Compact Single Line */}
-                        <div className="flex items-center justify-center gap-2 mb-6">
-                            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/20 whitespace-nowrap">
-                                <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-600/80 dark:text-emerald-400/80">
+                        {/* Centered Status Badges - Separated & Stacked */}
+                        <div className="flex flex-col items-center gap-2 mb-6 w-full">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/20 shadow-sm">
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600/90 dark:text-emerald-400">
                                     {t('subscription.upgrade.secure_encryption_active', 'SECURE GATEWAY')}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-500/5 border border-orange-500/20 whitespace-nowrap">
-                                <Flame size={10} className="text-orange-500/70" />
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-orange-600/80 dark:text-orange-400/80">
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-500/5 border border-orange-500/20 shadow-sm">
+                                <Flame size={12} className="text-orange-500 animate-pulse" />
+                                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-orange-600/90 dark:text-orange-400">
                                     {t('subscription.upgrade.limited_offer', 'LIMITED OFFER')}
                                 </span>
                             </div>
                         </div>
 
-                        {/* Hero Titles - Compacted & Centered */}
-                        <div className="max-w-[400px] mx-auto mb-5">
-                            <h1 className={`text-[28px] sm:text-[32px] font-black tracking-tighter leading-none mb-2 italic uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
+                        {/* Hero Titles - Compacted & Centered - No Italics */}
+                        <div className="max-w-[400px] mx-auto mb-5 px-2">
+                            <h1 className={`text-[28px] sm:text-[36px] font-black tracking-tighter leading-[1.1] mb-2 uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
                                 {isProPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('common.pro_active', 'PRO Active')}
                             </h1>
-                            <p className="text-[11px] sm:text-[12px] text-slate-500 dark:text-slate-400 font-bold leading-tight opacity-70 max-w-[260px] mx-auto">
+                            <p className="text-[12px] sm:text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-tight opacity-70 max-w-[280px] mx-auto">
                                 {t('subscription.upgrade.desc', 'Lifetime access is closing forever. Pricing will switch to annual next week.')}
                             </p>
-                            <div className="flex items-center gap-1.5 text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse">
+                            <div className="flex items-center justify-center gap-1.5 text-[10px] font-black text-rose-500 uppercase tracking-widest animate-pulse mt-3">
                                 <Clock size={12} strokeWidth={3} />
                                 {t('subscription.upgrade.final_call', 'FINAL WINDOW OPEN')}
                             </div>
@@ -391,11 +391,11 @@ export default function SubscriptionPage() {
                                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
                             </motion.div>
 
-                            <h2 className="text-[20px] font-black tracking-tight text-slate-900 dark:text-white leading-none text-center mb-3 uppercase italic">
+                            <h2 className="text-[20px] sm:text-[24px] font-black tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
                                 {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
                             </h2>
 
-                            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-tight max-w-[260px] mx-auto opacity-70">
+                            <p className="text-[11px] sm:text-[12px] text-slate-500 dark:text-slate-400 font-bold leading-tight max-w-[260px] mx-auto opacity-70">
                                 {t('subscription.upgrade.subheadline', 'Choose your plan. PRO members grow their network faster.')}
                             </p>
                         </div>
@@ -851,7 +851,7 @@ export default function SubscriptionPage() {
                         </div>
                     </section>
 
-                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.4-ELITE</div>
+                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.15-ELITE</div>
 
                     {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
                     <AnimatePresence>
@@ -893,5 +893,6 @@ export default function SubscriptionPage() {
                     </AnimatePresence>
                 </div>
             </div>
-            );
+        </div>
+    );
 }

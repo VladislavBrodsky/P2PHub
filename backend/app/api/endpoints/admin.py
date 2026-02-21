@@ -13,6 +13,8 @@ from app.services.admin_service import admin_service
 from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
+from app.services.broadcast_service import broadcast_service
+from app.schemas.broadcast import BroadcastCreate, BroadcastRead
 
 logger = logging.getLogger(__name__)
 
@@ -280,9 +282,57 @@ async def get_palantir_feed(
     admin: dict = Depends(get_current_admin)
 ):
     """
-    Returns the real-time raw system event feed for God-Mode Master tracking.
+    Returns the real-time system event feed.
     """
     return await admin_service.get_palantir_feed(limit=limit)
+
+# --- Mass Messaging (Broadcast) Endpoints ---
+
+@router.post("/broadcasts", response_model=BroadcastRead)
+async def create_broadcast(
+    data: BroadcastCreate,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Creates and triggers a mass messaging campaign.
+    """
+    return await broadcast_service.create_broadcast(
+        admin_id=str(admin.get("id")),
+        message_text=data.message_text,
+        audience_type=data.audience_type
+    )
+
+@router.get("/broadcasts/active", response_model=list[BroadcastRead])
+async def get_active_broadcasts(
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns currently running broadcasts.
+    """
+    return await broadcast_service.get_active_broadcasts()
+
+@router.get("/broadcasts/history", response_model=list[BroadcastRead])
+async def get_broadcast_history(
+    limit: int = 20,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns past mass message campaigns.
+    """
+    return await broadcast_service.get_broadcast_history(limit=limit)
+
+@router.post("/broadcasts/{broadcast_id}/cancel")
+async def cancel_broadcast(
+    broadcast_id: int,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Cancels a running broadcast.
+    """
+    success = await broadcast_service.cancel_broadcast(broadcast_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Broadcast not found or not cancellable")
+    return {"status": "cancelled"}
 
 @router.post("/maintenance/retry-notifications")
 async def retry_notifications(

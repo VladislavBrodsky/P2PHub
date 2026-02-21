@@ -4,7 +4,8 @@ import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
     Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
-    Activity, Database, Layers, Bell, Eye, Send, ShieldAlert, Timer, CreditCard, Cpu
+    Activity, Database, Layers, Bell, Eye, Send, ShieldAlert, Timer, CreditCard, Cpu,
+    Megaphone, UserPlus, Filter, PlayCircle, StopCircle, Trash2
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -136,7 +137,7 @@ export const AdminPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir' | 'nexus'>('kpis');
     const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
     const [palantirFeed, setPalantirFeed] = useState<any[]>([]);
     const [notificationsHealth, setNotificationsHealth] = useState<any>(null);
@@ -144,6 +145,10 @@ export const AdminPage = () => {
     const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
     const [partnerDetails, setPartnerDetails] = useState<any | null>(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
+    const [broadcasts, setBroadcasts] = useState<any[]>([]);
+    const [activeBroadcasts, setActiveBroadcasts] = useState<any[]>([]);
+    const [broadcastForm, setBroadcastForm] = useState({ text: '', audience: 'all' });
+    const [isBroadcasting, setIsBroadcasting] = useState(false);
     const [networkStats, setNetworkStats] = useState<Record<string, number> | null>(null);
     const [networkMembers, setNetworkMembers] = useState<any[]>([]);
     const [selectedNetworkDepth, setSelectedNetworkDepth] = useState<number | null>(null);
@@ -281,6 +286,45 @@ export const AdminPage = () => {
         }
     };
 
+    const fetchBroadcasts = async () => {
+        try {
+            const [history, active] = await Promise.all([
+                apiClient.get('/api/admin/broadcasts/history'),
+                apiClient.get('/api/admin/broadcasts/active')
+            ]);
+            setBroadcasts(history.data);
+            setActiveBroadcasts(active.data);
+        } catch (err) {
+            console.error('Failed to fetch broadcasts:', err);
+        }
+    };
+
+    const handleCreateBroadcast = async () => {
+        if (!broadcastForm.text.trim()) return;
+        setIsBroadcasting(true);
+        try {
+            await apiClient.post('/api/admin/broadcasts', {
+                message_text: broadcastForm.text,
+                audience_type: broadcastForm.audience
+            });
+            setBroadcastForm({ text: '', audience: 'all' });
+            fetchBroadcasts();
+        } catch (err) {
+            console.error('Failed to create broadcast:', err);
+        } finally {
+            setIsBroadcasting(false);
+        }
+    };
+
+    const handleCancelBroadcast = async (id: number) => {
+        try {
+            await apiClient.post(`/api/admin/broadcasts/${id}/cancel`);
+            fetchBroadcasts();
+        } catch (err) {
+            console.error('Failed to cancel broadcast:', err);
+        }
+    };
+
     /**
      * Executes the Economy Integrity Audit.
      * Triggers a backend check that compares actual XP & USDT balances against 
@@ -353,6 +397,10 @@ export const AdminPage = () => {
                 fetchPalantirFeed();
                 fetchNotificationsHealth();
             }, 8000); // 8-second God-Mode heart-beat
+        } else if (viewMode === 'nexus') {
+            fetchBroadcasts();
+            interval = setInterval(fetchBroadcasts, 3000); // Fast 3s polling for progress bars
+            setIsPalantirPolling(false);
         } else {
             setIsPalantirPolling(false);
         }
