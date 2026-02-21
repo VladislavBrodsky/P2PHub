@@ -433,14 +433,19 @@ export const ReferralGraph = () => {
                                     <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md">
                                         <div className="flex items-center gap-3 text-left">
                                             <div className="flex -space-x-2">
-                                                {[1, 2, 3].map(i => (
-                                                    <img
-                                                        key={i}
-                                                        src={`https://api.dicebear.com/7.x/notionists/svg?seed=${partnersCount + i * 7}`}
-                                                        alt="Partner avatar"
-                                                        className="w-8 h-8 rounded-full border-2 border-slate-100 dark:border-[#020617] bg-white dark:bg-slate-800"
-                                                    />
-                                                ))}
+                                                {[1, 2, 3].map(i => {
+                                                    // Generating an index between 1 and 99 based on count and position for pseudo-random real faces
+                                                    const faceIndex = (partnersCount + i * 17) % 99 + 1;
+                                                    const gender = i % 2 === 0 ? 'men' : 'women';
+                                                    return (
+                                                        <img
+                                                            key={i}
+                                                            src={`https://randomuser.me/api/portraits/${gender}/${faceIndex}.jpg`}
+                                                            alt="Partner avatar"
+                                                            className="w-8 h-8 rounded-full border-2 object-cover border-slate-100 dark:border-[#020617] bg-white dark:bg-slate-800"
+                                                        />
+                                                    );
+                                                })}
                                             </div>
                                             <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-tight tracking-wider">
                                                 {t('viral_funnel.deployed_partners', { count: partnersCount })}
