@@ -52,22 +52,49 @@ async def main():
             print(f"Found {len(fake_users)} fake users to delete.")
             for user in fake_users:
                 print(f"Deleting {user.username} (ID: {user.id})")
+                # Handle circular dependency and child records
+                user.last_transaction_id = None
+                session.add(user)
+                await session.flush()
+                
+                # Delete child records
+                from app.models.partner import Earning, PartnerTask, XPTransaction, ViralGeneration, SocialPost
+                from app.models.transaction import PartnerTransaction
+                
+                await session.execute(delete(PartnerTransaction).where(PartnerTransaction.partner_id == user.id))
+                await session.execute(delete(XPTransaction).where(XPTransaction.partner_id == user.id))
+                await session.execute(delete(Earning).where(Earning.partner_id == user.id))
+                await session.execute(delete(PartnerTask).where(PartnerTask.partner_id == user.id))
+                await session.execute(delete(ViralGeneration).where(ViralGeneration.partner_id == user.id))
+                await session.execute(delete(SocialPost).where(SocialPost.partner_id == user.id))
+
                 await session.delete(user)
 
             # Delete users with name 'Test' and no photo
-            stmt2 = select(Partner).where(Partner.first_name == "Test").where(Partner.photo_url is None)
+            stmt2 = select(Partner).where(Partner.first_name == "Test").where(Partner.photo_url == None)
             result2 = await session.exec(stmt2)
             test_users = result2.all()
 
             print(f"Found {len(test_users)} test users to delete.")
             for user in test_users:
                 print(f"Deleting Test user (ID: {user.id})")
+                # Handle circular dependency and child records
+                user.last_transaction_id = None
+                session.add(user)
+                await session.flush()
+                
+                await session.execute(delete(PartnerTransaction).where(PartnerTransaction.partner_id == user.id))
+                await session.execute(delete(XPTransaction).where(XPTransaction.partner_id == user.id))
+                await session.execute(delete(Earning).where(Earning.partner_id == user.id))
+                await session.execute(delete(PartnerTask).where(PartnerTask.partner_id == user.id))
+                
                 await session.delete(user)
 
             await session.commit()
             print("Cleanup complete.")
 
     except Exception as e:
+        await session.rollback()
         print(f"Error: {e}")
 
 if __name__ == "__main__":

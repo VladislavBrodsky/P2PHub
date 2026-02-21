@@ -34,6 +34,7 @@ async def audit_admin_stats():
 
         # 2. Simulate User & PRO+ Purchase
         # Create a dummy user
+        import secrets
         test_user = Partner(
             telegram_id="999999999",
             username="audit_test_user",
@@ -42,7 +43,8 @@ async def audit_admin_stats():
             is_pro=False,
             level=1,
             xp=0,
-            balance=0.0
+            balance=0.0,
+            referral_code=f"AUDIT-{secrets.token_hex(3).upper()}"
         )
         session.add(test_user)
         await session.commit()
@@ -64,6 +66,7 @@ async def audit_admin_stats():
         # Update User Status to PRO_LIFETIME (which triggers the slot counter logic)
         test_user.is_pro = True
         test_user.subscription_plan = "PRO_LIFETIME"
+        test_user.last_transaction_id = test_tx.id # Explicitly set to test FK constraint
         session.add(test_user)
         
         await session.commit()
@@ -93,6 +96,11 @@ async def audit_admin_stats():
 
         # 5. Cleanup
         logger.info("Cleaning up test data...")
+        # Nullify last_transaction_id first to break the circular dependency
+        test_user.last_transaction_id = None
+        session.add(test_user)
+        await session.commit()
+
         await session.delete(test_tx)
         await session.delete(test_user)
         

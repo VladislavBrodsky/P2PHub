@@ -13,6 +13,7 @@ from app.models import (
     Partner,
     PartnerBlogLike,
     PartnerTransaction,
+    Broadcast,
 )
 
 # this is the Alembic Config object, which provides

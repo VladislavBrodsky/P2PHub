@@ -265,10 +265,22 @@ async def cleanup_stale_transactions():
         to_delete = (await session.exec(count_stmt)).one() or 0
         
         if to_delete > 0:
+            # #comment: Break circular dependency before deletion.
+            # If any partner has one of these stale transactions as their 'last_transaction_id',
+            # the DELETE will fail without this step.
+            nullify_stmt = text(
+                "UPDATE partner SET last_transaction_id = NULL "
+                "WHERE last_transaction_id IN ("
+                "  SELECT id FROM partnertransaction "
+                "  WHERE status = 'pending' AND created_at < :cutoff"
+                ")"
+            )
+            await session.execute(nullify_stmt, {"cutoff": cutoff})
+            
             del_stmt = text("DELETE FROM partnertransaction WHERE status = 'pending' AND created_at < :cutoff")
             await session.execute(del_stmt, {"cutoff": cutoff})
             await session.commit()
-            logger.info(f"✅ Cleaned up {to_delete} stale transactions.")
+            logger.info(f"✅ Cleaned up {to_delete} stale transactions (and nullified related FKs).")
         else:
             logger.info("✅ No stale transactions found.")
 
