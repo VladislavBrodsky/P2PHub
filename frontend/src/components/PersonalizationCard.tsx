@@ -47,8 +47,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
-                    // Adjusted positioning to be closer to the profile picture
-                    className={`absolute ${variant === 'compact' ? 'top-1.5 left-3' : 'top-2 left-4'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''}`}
+                    // Adjusted positioning to be top-left of the profile picture
+                    className={`absolute ${variant === 'compact' ? 'top-[30px] left-[18px]' : 'top-[34px] left-[14px]'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''}`}
                 >
                     <Crown
                         size={variant === 'compact' ? 24 : 30}
