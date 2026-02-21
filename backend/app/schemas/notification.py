@@ -23,3 +23,5 @@ class NotificationPayload(ShadowBaseModel):
     parse_mode: str = "Markdown"
     buttons: list[list[InlineButton]] | None = None
     priority: str = "medium"  # low, medium, high (critical)
+    salt: str = "" # Optional salt for deduplication (e.g. partner_id)
+

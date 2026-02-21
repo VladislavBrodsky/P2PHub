@@ -145,7 +145,12 @@ async def create_partner(
     
     if is_new:
         # #comment: Move side effects (Level 2-9 awards, notifications) to background task
-        await handle_partner_creation_task.kiq(partner.id, referrer.id if referrer else None)
+        try:
+            await handle_partner_creation_task.kiq(partner.id, referrer.id if referrer else None)
+        except Exception as e:
+            logger.error(f"Failed to enqueue partner creation task: {e}. Executing synchronously as fallback.")
+            # Mission-critical fallback: If queue is down, run side effects in-process to ensure DB integrity
+            await handle_partner_creation_task(partner.id, referrer_id=referrer.id if referrer else None)
 
     return partner, is_new
 
@@ -170,7 +175,7 @@ async def handle_partner_creation_task(partner_id: int, referrer_id: int | None 
         try:
             await leaderboard_service.update_score(partner.id, partner.xp)
         except Exception as e:
-            logger.warning(f"Failed to sync to leaderboard: {e}")
+            logger.warning(f"Failed to sync to leaderboard (Redis): {e}")
 
         # 2. Cache Invalidation
         try:
@@ -185,15 +190,18 @@ async def handle_partner_creation_task(partner_id: int, referrer_id: int | None 
             
             if referrer_id:
                 await redis_service.client.delete(f"ref_tree_members_v2:{referrer_id}:1")
+        except Exception as e:
+            logger.warning(f"Cache invalidation failed (Redis): {e}")
 
-            # 3. Trigger Referral Logic (XP, Notifications, Network Counting)
-            # This was previously triggered in the endpoint but is more robust here.
+        # 3. Trigger Referral Logic (XP, Notifications, Network Counting)
+        # MISSION-CRITICAL: This must run even if Redis/Caches are failing.
+        try:
             if partner.referrer_id:
                 logger.info(f"🚀 Triggering referral logic for new partner {partner.id}")
                 await process_referral_logic(partner.id)
-
         except Exception as e:
-            logger.error(f"Side effects failed: {e}")
+            logger.error(f"CRITICAL: Referral logic failed for {partner.id}: {e}")
+            raise e # Raise to ensure Sentry captures this if it's a real DB error
 
 async def _resolve_referrer(session: AsyncSession, code: str | None, current_id: int | None) -> Partner | None:
     if not code: return None

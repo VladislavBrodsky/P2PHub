@@ -466,7 +466,8 @@ class PaymentService:
             
             await notification_service.send_standard(
                 chat_id=int(partner.telegram_id),
-                text=f"{welcome_msg}\n\n{xp_msg}"
+                text=f"{welcome_msg}\n\n{xp_msg}",
+                salt=f"pro_welcome_{partner.id}"
             )
             
             # Record XP Transaction and Audit for Buyer
@@ -502,7 +503,8 @@ class PaymentService:
             # We send it to them so they can forward/copy it
             await notification_service.send_low_prio(
                 chat_id=int(partner.telegram_id),
-                text=f"{viral_intro}\n{viral_msg}"
+                text=f"{viral_intro}\n{viral_msg}",
+                salt=f"pro_viral_{partner.id}"
             )
 
 
@@ -537,7 +539,8 @@ class PaymentService:
                 await notification_service.send_critical(
                     chat_id=int(admin_id),
                     text=admin_notify_msg,
-                    parse_mode="HTML"
+                    parse_mode="HTML",
+                    salt=f"adm_upg_{partner.id}_{transaction.id}"
                 )
             except Exception as e:
                 logger.error(f"Failed to notify admin about successful purchase: {e}")

@@ -155,7 +155,8 @@ class NotificationService:
         parse_mode: str = "Markdown", 
         buttons: list | None = None,
         priority: str = "medium",
-        bypass_dedup: bool = False
+        bypass_dedup: bool = False,
+        salt: str = ""
     ):
         """
         Enqueues a notification with scale-aware priority and duplicate prevention.
@@ -171,8 +172,8 @@ class NotificationService:
                 return
 
             # High-performance Deduplication Check
-            if not bypass_dedup and await rate_limit_service.is_duplicate(int(chat_id), text):
-                logger.info(f"🚫 [DEDUP] Skipping duplicate message for {chat_id}")
+            if not bypass_dedup and await rate_limit_service.is_duplicate(int(chat_id), text, salt=salt):
+                logger.info(f"🚫 [DEDUP] Skipping duplicate message for {chat_id} (salt: {salt})")
                 return
 
             payload = NotificationPayload(
@@ -180,7 +181,8 @@ class NotificationService:
                 text=text,
                 parse_mode=parse_mode,
                 buttons=buttons,
-                priority=priority
+                priority=priority,
+                salt=salt
             )
             
             await send_telegram_task.kiq(payload.model_dump())
@@ -340,13 +342,13 @@ class NotificationService:
         """Mission-critical messages (Security, Payments). Bypasses dedup by default."""
         await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup)
 
-    async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown"):
+    async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
         """Standard interaction messages (Referrals)."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="medium", bypass_dedup=bypass_dedup, salt=salt)
 
-    async def send_low_prio(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown"):
+    async def send_low_prio(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
         """Background messages (XP, Social tips)."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="low", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="low", bypass_dedup=bypass_dedup, salt=salt)
 
 notification_service = NotificationService()
 

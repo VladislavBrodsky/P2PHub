@@ -102,7 +102,8 @@ async def approve_payment(
             user_msg = get_msg(lang, "pro_welcome")
             await notification_service.send_standard(
                 chat_id=partner.telegram_id,
-                text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}"
+                text=f"✅ *PAYMENT APPROVED!*\n\n{user_msg}",
+                salt=f"pay_appr_{transaction.id}"
             )
         except Exception as e:
             logger.error(f"[DEBUG] User approval notification failed: {e}")
@@ -152,7 +153,8 @@ async def reject_payment(
         try:
             await notification_service.send_standard(
                 chat_id=partner.telegram_id,
-                text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support."
+                text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support.",
+                salt=f"pay_rej_{transaction.id}"
             )
         except Exception as e:
             logger.error(f"Failed to send rejection notification: {e}")

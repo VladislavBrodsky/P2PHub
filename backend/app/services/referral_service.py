@@ -179,8 +179,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain)
             except Exception as e_redis:
                 logger.error(f"Redis invalidation failed for {referrer.id}: {e_redis}")
-            
-            msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list)
+            msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list, salt=str(partner.id))
             deferred_tasks.append(msg_task)
 
         except Exception as e:
@@ -222,28 +221,26 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
     if xp_gain > 0:
         await leaderboard_service.increment_score(referrer.id, xp_gain)
 
-    # Use existing pipe or create a one-off
-    p = pipe if pipe is not None else redis_service.client.pipeline(transaction=False)
-    
-    try:
-        # Standard Profile Cache (v2 Legacy & v3 High-Perf)
+    async def _work(p):
         p.delete(f"partner:profile:{referrer.telegram_id}")
         p.delete(f"profile_cache_v3:{referrer.id}")
-        
         p.delete(f"partner:earnings:{referrer.telegram_id}")
         p.delete(f"ref_tree_stats_v2:{referrer.id}")
         p.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
-        
         for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
             p.delete(f"growth_metrics:{referrer.id}:{tf}")
-            
-        if pipe is None:
-            await p.execute()
-    finally:
-        if pipe is None:
-            await p.close()
 
-def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name: str, chain: list):
+    if pipe is not None:
+        await _work(pipe)
+    else:
+        try:
+            async with redis_service.client.pipeline(transaction=False) as p:
+                await _work(p)
+                await p.execute()
+        except Exception as e:
+            logger.warning(f"Redis invalidation failed (one-off): {e}")
+
+def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name: str, chain: list, salt: str = ""):
     chain_text = " ← ".join([*chain, name])
     chain.append(format_partner_name(referrer))
     lang = referrer.language_code or "en"
@@ -255,7 +252,7 @@ def _prepare_referral_notification(referrer: Partner, level: int, xp: int, name:
     elif level == 2: msg = get_msg(lang, "referral_l2_congrats", referral_chain=chain_text, xp=xp)
     else: msg = get_msg(lang, "referral_deep_activity", level=level, referral_chain=chain_text, xp=xp)
     
-    return notification_service.send_low_prio(chat_id=int(referrer.telegram_id), text=msg, buttons=buttons)
+    return notification_service.send_low_prio(chat_id=int(referrer.telegram_id), text=msg, buttons=buttons, salt=salt)
 
 async def _finalize_referral_logic(deferred_tasks: list):
     if deferred_tasks:
@@ -502,7 +499,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                     
                     deferred_notifications.append(notification_service.send_standard(
                         chat_id=int(rcpt.telegram_id), text=msg,
-                        buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]]
+                        buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]],
+                        salt=f"upg_agg_{partner.id}"
                     ))
                 except Exception as e:
                     logger.error(f"Notification error for {r_id}: {e}")
