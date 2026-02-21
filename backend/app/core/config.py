@@ -95,7 +95,7 @@ class Settings(BaseSettings):
     DEBUG: bool = Field(default=False, validation_alias="DEBUG")
     REDIS_URL: str = Field(default="redis://localhost:6379/0", validation_alias="REDIS_URL")
     PORT: int = Field(default=8000, validation_alias="PORT")
-    FRONTEND_URL: str = Field(default="https://p2phub-frontend.up.railway.app", validation_alias="FRONTEND_URL")
+    FRONTEND_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app", validation_alias="FRONTEND_URL")
     
     # --- WEBHOOKS ---
     WEBHOOK_URL: str | None = Field(default=None, validation_alias="WEBHOOK_URL")
@@ -117,7 +117,7 @@ class Settings(BaseSettings):
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
     TON_API_KEY: str | None = Field(default=None, validation_alias="TON_API_KEY")
-    TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
+    TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
 
     # --- BUSINESS LOGIC ---
     PRO_PRICE_USD: float = 39.0
@@ -145,7 +145,7 @@ class Settings(BaseSettings):
 
     ALLOWED_ORIGINS: list[str] = Field(
         default_factory=lambda: [
-            "https://p2phub-frontend.up.railway.app",
+            "https://p2phub-frontend-production.up.railway.app",
             "http://localhost:3000",
             "http://localhost:5173",
         ],
