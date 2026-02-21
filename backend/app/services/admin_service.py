@@ -42,7 +42,8 @@ class AdminService:
                     # Enqueue for each user
                     await notification_service.send_low_prio(
                         chat_id=int(tg_id),
-                        text=text
+                        text=text,
+                        salt=f"broadcast_{int(time.time())}_{tg_id}"
                     )
                     broadcast_count += 1
 

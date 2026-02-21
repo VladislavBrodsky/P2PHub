@@ -97,19 +97,19 @@ class TestNotificationEnqueue:
             # Critical should bypass dedup by default and be high priority
             await notification_service.send_critical(123, "Critical")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Critical", parse_mode="Markdown", buttons=None, priority="high", bypass_dedup=True
+                123, "Critical", parse_mode="Markdown", buttons=None, priority="high", bypass_dedup=True, salt=""
             )
 
             # Standard should NOT bypass dedup and be medium priority
             await notification_service.send_standard(123, "Standard")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Standard", parse_mode="Markdown", buttons=None, priority="medium", bypass_dedup=False
+                123, "Standard", parse_mode="Markdown", buttons=None, priority="medium", bypass_dedup=False, salt=""
             )
 
             # Low Prio should NOT bypass dedup and be low priority
             await notification_service.send_low_prio(123, "Low")
             notification_service.enqueue_notification.assert_called_with(
-                123, "Low", parse_mode="Markdown", buttons=None, priority="low", bypass_dedup=False
+                123, "Low", parse_mode="Markdown", buttons=None, priority="low", bypass_dedup=False, salt=""
             )
         finally:
             notification_service.enqueue_notification = orig_enqueue

@@ -132,7 +132,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 btn_text = get_msg(lang, "btn_upgrade")
                 buttons = [[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
                 await notification_service.send_critical(
-                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons
+                    chat_id=int(referrer.telegram_id), text=fomo_msg, buttons=buttons,
+                    salt=f"pro_fomo_{level}_{partner.id}"
                 )
             
             current_referrer_id = referrer.referrer_id
@@ -375,7 +376,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         btn_text = get_msg(lang, "btn_upgrade")
                         deferred_notifications.append(notification_service.send_critical(
                             chat_id=int(referrer.telegram_id), text=fomo_msg,
-                            buttons=[[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
+                            buttons=[[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]],
+                            salt=f"comm_fomo_l{comm_level}_{partner.id}"
                         ))
             
             # If no more qualified partners in lineage, commission leaks to Company

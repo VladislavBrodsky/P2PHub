@@ -338,9 +338,9 @@ class NotificationService:
         await self.send_standard(chat_id=chat_id, text=text)
 
     # High-performance priority wrappers
-    async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True, parse_mode: str = "Markdown"):
+    async def send_critical(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = True, parse_mode: str = "Markdown", salt: str = ""):
         """Mission-critical messages (Security, Payments). Bypasses dedup by default."""
-        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup)
+        await self.enqueue_notification(chat_id, text, parse_mode=parse_mode, buttons=buttons, priority="high", bypass_dedup=bypass_dedup, salt=salt)
 
     async def send_standard(self, chat_id: int, text: str, buttons: list | None = None, bypass_dedup: bool = False, parse_mode: str = "Markdown", salt: str = ""):
         """Standard interaction messages (Referrals)."""
