@@ -73,8 +73,24 @@ i18n
         fallbackLng: 'en',
         debug: import.meta.env.DEV,
 
+        // Force synchronous initialization since ALL translations are pre-bundled
+        // into the JS bundle (no HTTP fetching needed). Without this, i18n.init()
+        // schedules completion on the next microtask tick — causing the first
+        // React render to see raw keys before i18n is "ready".
+        initImmediate: false,
+
+        // Only load exact language codes ('en', 'ru'), not sub-variants
+        // like 'en-US' or 'en-GB' which don't exist in our resources.
+        load: 'languageOnly',
+
         interpolation: {
             escapeValue: false, // not needed for react as it escapes by default
+        },
+
+        react: {
+            // Disable Suspense mode to prevent translation flicker.
+            // Keys are available synchronously since we use initImmediate: false.
+            useSuspense: false,
         },
 
         detection: {
