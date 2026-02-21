@@ -195,26 +195,31 @@ class ViralMarketingStudio:
             else: 
                 body_text = "\n".join(lines)
 
-        # Append hashtags strictly (ensuring they are in the body)
+        # 🛡️ HASHTAG GUARDIAN V2 (Deduplication & Formatting)
         hashtags_list = res_json.get("hashtags", [])
+        if isinstance(hashtags_list, str):
+            hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
         
-        # 🛡️ HASHTAG GUARDIAN (2-4 LIMIT)
-        if isinstance(hashtags_list, list):
-            if len(hashtags_list) > 4:
-                hashtags_list = hashtags_list[:4]
-            
-            if hashtags_list:
-                hashtag_str = " ".join(hashtags_list)
-                if hashtag_str not in body_text:
-                    body_text = body_text.strip() + f"\n\n{hashtag_str}"
-        elif isinstance(hashtags_list, str):
-            # Fallback if AI returns a string
-            tags = hashtags_list.split()
-            if len(tags) > 4:
-                hashtags_list = " ".join(tags[:4])
-            if hashtags_list not in body_text:
-                body_text = body_text.strip() + f"\n\n{hashtags_list}"
-            hashtags_list = hashtags_list.split()
+        # Ensure limit of 2-4
+        if len(hashtags_list) > 4: hashtags_list = hashtags_list[:4]
+        
+        # Clean body_text of any existing hashtags at the end to prevent duplicates
+        # We look for lines starting with # at the end of the post
+        body_lines = body_text.strip().split("\n")
+        while body_lines and any(word.startswith("#") for word in body_lines[-1].split()):
+            body_lines.pop()
+        
+        body_text = "\n".join(body_lines).strip()
+        
+        if hashtags_list:
+            hashtag_str = " ".join(hashtags_list)
+            body_text += f"\n\n{hashtag_str}"
+            output["hashtags"] = hashtags_list
+        else:
+            output["hashtags"] = []
+
+        output["body"] = body_text
+        output["text"] = body_text
 
         duration = (datetime.now() - start_time).total_seconds()
         

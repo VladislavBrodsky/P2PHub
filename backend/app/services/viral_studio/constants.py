@@ -84,12 +84,13 @@ FORMATTING_MASTERY: Final[str] = """
 
 6. **PARAGRAPHS:** Double line breaks (empty line) between paragraphs for readability.
 
-7. **HASHTAGS:** End with 3-5 relevant trending hashtags
+7. **HASHTAGS:** DO NOT include hashtags in the message 'body'. Instead, only provide them in the 'hashtags' field of the JSON. They will be appended automatically.
 
 **NO MISTAKES ALLOWED:**
 - Check every ** is properly closed
 - Check every _ is properly closed
 - Check every hyperlink follows [text](url) format
+- NO HASHTAGS in the body text.
 - No orphaned markdown symbols
 """
 

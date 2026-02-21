@@ -118,9 +118,9 @@ Write as a high-status NATIVE {language} CMO. Every word must feel earned, authe
 {{
   "title": "A high-status strategic title <10 words",
   "body": "**[Strategic Title]**\\n\\n**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
-  "hashtags": "#Tag1 #Tag2 #Tag3" 
+"hashtags": "#Tag1 #Tag2 #Tag3" 
 }}
-(Choose exactly 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. Output them in exactly 1 line separated by spaces. Do NOT include hashtags in the body itself.)
+(Choose exactly 2-4 unique hashtags. Output them ONLY in the 'hashtags' field. DO NOT include them in the 'body' string. This is a strict formatting rule.)
 
 """
 
