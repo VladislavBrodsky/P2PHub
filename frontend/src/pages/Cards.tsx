@@ -51,7 +51,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         physical: {
             title: t('cards.physical.title'),
             description: t('cards.physical.desc'),
-            price: '$85',
+            price: '$129',
             bonus: 'Free',
             bonusText: t('cards.physical.bonus_text'),
         },
