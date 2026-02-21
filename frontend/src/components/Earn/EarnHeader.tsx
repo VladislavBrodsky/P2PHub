@@ -145,21 +145,21 @@ export const EarnHeader = () => {
 
                         {/* XP Progress header row */}
                         <div className="flex items-baseline justify-between px-0.5">
-                            <span className="text-[8px] font-black uppercase tracking-[0.16em] text-white/40 leading-none">
+                            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-white/40 leading-none">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-[10px] font-black text-white/90 tabular-nums"
+                                className="text-xs font-black text-white/90 tabular-nums"
                             >
                                 {progress.current.toLocaleString()} <span className="text-white/30">/</span> {progress.total.toLocaleString()} <span className="text-white/40 font-bold">XP</span>
                             </motion.span>
                         </div>
 
                         {/* Progress bar */}
-                        <div className="relative h-[9px] w-full rounded-full overflow-hidden"
+                        <div className="relative h-3 w-full rounded-full overflow-hidden"
                             style={{ background: 'rgba(255,255,255,0.07)' }}>
                             {/* Glow under bar */}
                             <motion.div
@@ -192,32 +192,32 @@ export const EarnHeader = () => {
                         </div>
 
                         {/* Stats grid */}
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-2 gap-3">
                             {/* Partners */}
                             <motion.div
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-xl p-2.5 border"
+                                className="relative overflow-hidden rounded-2xl p-4 border"
                                 style={{
                                     background: 'rgba(255,255,255,0.04)',
                                     borderColor: 'rgba(255,255,255,0.08)',
                                 }}
                             >
-                                <div className="flex items-center gap-1 mb-1">
-                                    <div className="w-4 h-4 rounded-md flex items-center justify-center"
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="w-6 h-6 rounded-lg flex items-center justify-center"
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
-                                        <Users className="w-2.5 h-2.5 text-amber-400" />
+                                        <Users className="w-3.5 h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-[6.5px] font-black uppercase tracking-[0.16em] text-white/35">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
                                         {t('earn_header.partners')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-[1.15rem] font-black text-white leading-none tabular-nums">
+                                <div className="flex items-baseline gap-1.5">
+                                    <span className="text-2xl font-black text-white leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
-                                    <TrendingUp className="w-2.5 h-2.5 text-amber-400/60 mb-0.5" />
+                                    <TrendingUp className="w-4 h-4 text-amber-400/60 mb-0.5" />
                                 </div>
                                 {/* Corner glow */}
                                 <div className="absolute -bottom-3 -right-3 w-12 h-12 rounded-full blur-xl opacity-20"
@@ -229,27 +229,27 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-xl p-2.5 border"
+                                className="relative overflow-hidden rounded-2xl p-4 border"
                                 style={{
                                     background: 'rgba(255,255,255,0.04)',
                                     borderColor: 'rgba(255,255,255,0.08)',
                                 }}
                             >
-                                <div className="flex items-center gap-1 mb-1">
-                                    <div className="w-4 h-4 rounded-md flex items-center justify-center"
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="w-6 h-6 rounded-lg flex items-center justify-center"
                                         style={{ background: `${badgeColor}22` }}>
-                                        <Zap className="w-2.5 h-2.5" style={{ color: badgeColor }} />
+                                        <Zap className="w-3.5 h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-[6.5px] font-black uppercase tracking-[0.16em] text-white/35">
+                                    <span className="text-[9px] font-black uppercase tracking-[0.16em] text-white/35">
                                         {t('earn_header.total_xp')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1">
-                                    <span className="text-[1.15rem] font-black leading-none tabular-nums"
+                                <div className="flex items-baseline gap-1.5">
+                                    <span className="text-2xl font-black leading-none tabular-nums"
                                         style={{ color: 'white' }}>
                                         {xp.toLocaleString()}
                                     </span>
-                                    <span className="text-[7px] font-black uppercase mb-0.5"
+                                    <span className="text-[10px] font-black uppercase mb-0.5"
                                         style={{ color: `${badgeColor}cc` }}>xp</span>
                                 </div>
                                 {/* Corner glow */}
