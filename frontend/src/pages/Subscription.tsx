@@ -768,7 +768,7 @@ export default function SubscriptionPage() {
                         </div>
                     </section>
 
-                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.3-ELITE</div>
+                    <div className="text-center opacity-10 text-[6px] font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.4-ELITE</div>
 
                     {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
                     <AnimatePresence>
