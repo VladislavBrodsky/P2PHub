@@ -111,7 +111,7 @@ export const EarnHeader = () => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-2xl sm:text-[2.1rem] font-black text-(--color-text-primary) leading-none tracking-tight"
+                                    className="text-2xl sm:text-[1.8rem] font-black text-(--color-text-primary) leading-none tracking-tight"
                                 >
                                     {level}
                                 </motion.span>

@@ -57,7 +57,7 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
                         className="glass-panel border-0 bg-white/5 rounded-2xl p-3 flex flex-col items-center justify-center relative group hover:bg-white/10 transition-colors"
                     >
                         <span className="absolute top-2 left-2 text-[8px] font-black text-white/30 group-hover:text-blue-500 transition-colors">L{level}</span>
-                        <span className="text-lg font-black text-white line-clamp-1">{count.toLocaleString()}</span>
+                        <span className="text-base sm:text-lg font-black text-white truncate">{count.toLocaleString()}</span>
                         <span className="text-[9px] font-bold text-slate-500 uppercase tracking-tighter">Partners</span>
                     </motion.div>
                 ))}
