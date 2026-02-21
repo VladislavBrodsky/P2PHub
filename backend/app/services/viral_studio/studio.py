@@ -443,7 +443,14 @@ class ViralMarketingStudio:
         return await redis_service.get_or_compute(cache_key, compute_audit, expire=10800)
 
     async def _fetch_rss_global_news(self) -> list[dict]:
-        feeds = ["https://cointelegraph.com/rss", "https://www.coindesk.com/arc/outboundfeeds/rss/"]
+        feeds = [
+            # English Sources
+            "https://cointelegraph.com/rss", 
+            "https://www.coindesk.com/arc/outboundfeeds/rss/",
+            # Russian Sources
+            "https://forklog.com/feed/",
+            "https://bits.media/rss2/"
+        ]
         news_items = []
         async with httpx.AsyncClient(timeout=10.0) as client:
             for url in feeds:
