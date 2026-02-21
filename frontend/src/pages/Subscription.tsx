@@ -33,6 +33,7 @@ export default function SubscriptionPage() {
     const [proStats, setProStats] = useState<{ sold: number; total: number } | null>(null);
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
     const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any } | null>(null);
+    const [isSelectingCurrency, setIsSelectingCurrency] = useState(false);
 
     const isPro = user?.is_pro;
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
@@ -443,48 +444,69 @@ export default function SubscriptionPage() {
 
                     {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
                     <div className="mb-10 px-1 relative z-20">
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => {
-                                selection();
-                                const el = document.getElementById('currency-selector-anchor');
-                                el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            }}
-                            className={`group relative w-full flex items-center justify-center gap-2 h-12 px-8 rounded-full font-black text-[12px] tracking-widest uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
-                                ? 'vibing-blue-animated text-white shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)]'
-                                : 'vibing-yellow-animated text-[#0a1000] shadow-[0_15px_30px_-5px_rgba(255,215,0,0.3)]'
-                                }`}
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                            <Lock size={14} className="group-hover:scale-110 transition-transform relative z-10" />
-                            <span className="relative z-10">
-                                {selectedPlan === 'PRO'
-                                    ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
-                                    : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
-                            </span>
-                        </motion.button>
-
-                        <div id="currency-selector-anchor" className="mt-4">
-                            {!paymentMethod && (
-                                <div className="grid grid-cols-2 gap-3 mt-4">
-                                    <button
-                                        onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                        className="group h-[4.5rem] bg-slate-50/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-yellow-500/5 active:scale-95 shadow-sm"
-                                    >
-                                        <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                        <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH TON</span>
-                                    </button>
-                                    <button
-                                        onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                        className="group h-[4.5rem] bg-slate-50/50 dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
-                                    >
-                                        <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                        <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH USDT</span>
-                                    </button>
-                                </div>
+                        <AnimatePresence mode="wait">
+                            {!isSelectingCurrency ? (
+                                <motion.button
+                                    key="buy-btn"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => {
+                                        selection();
+                                        setIsSelectingCurrency(true);
+                                    }}
+                                    className={`group relative w-full flex items-center justify-center gap-2 h-12 px-8 rounded-full font-black text-[12px] tracking-widest uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
+                                        ? 'vibing-blue-animated text-white shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)]'
+                                        : 'vibing-yellow-animated text-[#0a1000] shadow-[0_15px_30px_-5px_rgba(255,215,0,0.3)]'
+                                        }`}
+                                >
+                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    <Lock size={14} className="group-hover:scale-110 transition-transform relative z-10" />
+                                    <span className="relative z-10">
+                                        {selectedPlan === 'PRO'
+                                            ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
+                                            : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
+                                    </span>
+                                </motion.button>
+                            ) : (
+                                <motion.div
+                                    key="currency-picker"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-[9px] font-black text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('subscription.upgrade.select_currency', 'Select Currency')}</span>
+                                        <button
+                                            onClick={() => setIsSelectingCurrency(false)}
+                                            className="text-[9px] font-black text-blue-500 uppercase tracking-widest"
+                                        >
+                                            {t('common.cancel', 'CANCEL')}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
+                                            className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
+                                        >
+                                            <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
+                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH TON</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
+                                            className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                        >
+                                            <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
+                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">PAY WITH USDT</span>
+                                        </button>
+                                    </div>
+                                </motion.div>
                             )}
-                        </div>
+                        </AnimatePresence>
+                        <div id="currency-selector-anchor" className="absolute -top-20" />
                     </div>
 
                     {/* ── BENEFITS GRID ───────────────────────────────────────────── */}
@@ -498,12 +520,28 @@ export default function SubscriptionPage() {
                             className="mb-8"
                         >
                             {/* Plan headline */}
-                            <div className={`rounded-[2rem] p-5 mb-5 border relative overflow-hidden shadow-sm backdrop-blur-md ${selectedPlan === 'PRO'
-                                ? 'bg-blue-500/5 dark:bg-blue-900/10 border-blue-500/20 dark:border-blue-500/20'
-                                : 'bg-yellow-500/5 dark:bg-yellow-900/10 border-yellow-500/20 dark:border-yellow-500/20'
+                            <div className={`rounded-[2rem] p-5 mb-5 border relative overflow-hidden shadow-premium backdrop-blur-md transition-all duration-500 ${selectedPlan === 'PRO'
+                                ? 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/20 dark:border-blue-500/20'
+                                : 'bg-yellow-500/5 dark:bg-yellow-500/10 border-yellow-500/20 dark:border-yellow-500/20'
                                 }`}>
-                                <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-30 -mr-8 -mt-8 bg-blue-500" />
-                                <div className="relative">
+
+                                {/* Shimmer Light Gradient Animation */}
+                                <motion.div
+                                    animate={{
+                                        x: ['-100%', '200%'],
+                                        opacity: [0, 0.4, 0]
+                                    }}
+                                    transition={{
+                                        duration: 3,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                        repeatDelay: 1.5
+                                    }}
+                                    className={`absolute inset-0 pointer-events-none bg-linear-to-r from-transparent ${selectedPlan === 'PRO' ? 'via-white/40' : 'via-yellow-300/40'} to-transparent skew-x-[-20deg] z-0`}
+                                />
+
+                                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 ${selectedPlan === 'PRO' ? 'bg-blue-500' : 'bg-yellow-500'} transition-colors duration-500`} />
+                                <div className="relative z-10">
                                     <div className={`text-[9px] font-black uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-blue-600 dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`}>
                                         {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')} — {t('subscription.plan_headline')}
                                     </div>
