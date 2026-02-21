@@ -118,11 +118,7 @@ class ViralMarketingStudio:
                 ref_link = "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
         
         intel = await self._get_cached_intel(target_audience, post_type, language)
-        
-        # Scaling Tier Intelligence: Determine Model based on Partner Tier
-        is_pro_plus = (partner.subscription_plan == "PRO_PLUS_MONTHLY")
-        # Elite users gets flagship models (GPT-4o), regular PRO gets ultra-fast efficient models (Llama-3-70B/GPT-4o-mini)
-        primary_model = "gpt-4o" if is_pro_plus else "gpt-4o-mini"
+        is_pro_plus = partner.is_pro_plus
         
         # Sync with Predictive Resonance Engine
         resonance_data = None
@@ -275,40 +271,63 @@ class ViralMarketingStudio:
     async def _get_text_content(self, system_prompt: str, user_prompt: str, is_pro_plus: bool = False) -> tuple[dict | None, int]:
         # Define model sequence based on tier
         if is_pro_plus:
-            # Most powerful primary, top performing/latest fallback
-            openai_models = ["gpt-4o", "gpt-4-turbo"] 
-            google_models = ["gemini-pro-latest", "gemini-2.5-pro", "gemini-3-pro-preview"]
+            # Flagship experimental models for Elite users
+            openai_models = ["gpt-4o", "o1-preview"]
+            google_models = ["gemini-1.5-pro", "gemini-2.0-flash-exp", "gemini-3-pro-preview"] 
         else:
             # Most powerful primary, efficient/modern fallbacks
-            openai_models = ["gpt-4o", "gpt-4o-mini"]
-            google_models = ["gemini-2.5-flash", "gemini-2.0-flash"]
+            openai_models = ["gpt-4o-mini", "gpt-4o"]
+            google_models = ["gemini-1.5-flash", "gemini-2.0-flash-exp"]
             
         combined_sequence = []
-        for m in openai_models:
-            combined_sequence.append(("openai", m))
-        for m in google_models:
-            combined_sequence.append(("google", m))
+        for m in openai_models: combined_sequence.append(("openai", m))
+        for m in google_models: combined_sequence.append(("google", m))
             
         for provider, model_name in combined_sequence:
             try:
                 if provider == "openai" and self.openai_client:
-                    res = await self.openai_client.chat.completions.create(
-                        model=model_name, 
-                        messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
-                        response_format={"type": "json_object"}
+                    # o1 models don't support system role or response_format in many versions
+                    is_o1 = "o1-" in model_name
+                    if is_o1:
+                        messages = [{"role": "user", "content": f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}"}]
+                        kwargs = {}
+                    else:
+                        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+                        kwargs = {"response_format": {"type": "json_object"}}
+
+                    res = await asyncio.wait_for(
+                        self.openai_client.chat.completions.create(
+                            model=model_name, 
+                            messages=messages,
+                            **kwargs
+                        ),
+                        timeout=25.0
                     )
                     self._last_used_text_model = model_name
                     content = res.choices[0].message.content
                     if "```json" in content:
                         content = content.split("```json")[-1].split("```")[0]
                     return json.loads(content), res.usage.total_tokens
+
                 elif provider == "google" and self.genai_client:
-                    res = await self.genai_client.aio.models.generate_content(
-                        model=model_name, contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
-                        config=genai_types.GenerateContentConfig(response_mime_type='application/json', temperature=0.7)
+                    # New genai SDK: system_instruction goes in config
+                    res = await asyncio.wait_for(
+                        self.genai_client.aio.models.generate_content(
+                            model=model_name, 
+                            contents=user_prompt,
+                            config=genai_types.GenerateContentConfig(
+                                system_instruction=system_prompt,
+                                response_mime_type='application/json', 
+                                temperature=0.7
+                            )
+                        ),
+                        timeout=20.0
                     )
                     self._last_used_text_model = model_name
-                    return json.loads(res.text), 0
+                    content = res.text
+                    if "```json" in content:
+                        content = content.split("```json")[-1].split("```")[0]
+                    return json.loads(content), 0
             except Exception as e: 
                 logger.warning(f"Text model {model_name} failed: {e}")
                 continue
@@ -319,15 +338,15 @@ class ViralMarketingStudio:
         """Sequential image generation using priority models and rich fallbacks."""
         if is_pro_plus:
             model_sequence = [
-                ("google", "imagen-4.0-generate-001"),  # Primary: Imagen 4.0 (Gemini 3 Pro/Nano Banana ecosystem)
+                ("google", "imagen-3.0-generate-001"),  # Stable primary
+                ("google", "imagen-4.0-generate-001"),  # User requested experimental
                 ("openai", "dall-e-3"),                 # Quality fallback
-                ("google", "imagen-3.0-generate-001"),  # Alternative fallback
             ]
         else:
             model_sequence = [
-                ("google", "imagen-4.0-generate-001"),      # Primary: Imagen 4.0
-                ("openai", "dall-e-3"),                     # Quality fallback
-                ("google", "imagen-3.0-fast-generate-001")  # Fast fallback
+                ("google", "imagen-3.0-fast-generate-001"),
+                ("google", "imagen-3.0-generate-001"),
+                ("openai", "dall-e-3"),
             ]
 
         for provider, model_name in model_sequence:
@@ -392,7 +411,7 @@ class ViralMarketingStudio:
                     prompt=prompt, 
                     config=genai_types.GenerateImagesConfig(number_of_images=1)
                 ), 
-                timeout=45.0 # Imagen 3 can be slow
+                timeout=25.0 
             )
             
             if res and res.generated_images:
