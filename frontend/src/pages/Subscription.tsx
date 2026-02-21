@@ -111,7 +111,11 @@ export default function SubscriptionPage() {
         };
         checkAutoActions();
         window.addEventListener('focus', checkAutoActions);
-        return () => window.removeEventListener('focus', checkAutoActions);
+        window.addEventListener('trigger-auto-purchase', checkAutoActions);
+        return () => {
+            window.removeEventListener('focus', checkAutoActions);
+            window.removeEventListener('trigger-auto-purchase', checkAutoActions);
+        };
     }, [impact]);
 
     const formattedTime = useMemo(() => {

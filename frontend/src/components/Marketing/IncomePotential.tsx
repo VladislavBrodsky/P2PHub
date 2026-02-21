@@ -340,6 +340,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <button
                             onClick={() => {
                                 localStorage.setItem('auto_purchase_pro', 'true');
+                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                 onNavigateToPartner?.();
                             }}
                             className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-black text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
