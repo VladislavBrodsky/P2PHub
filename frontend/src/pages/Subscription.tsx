@@ -216,9 +216,21 @@ export default function SubscriptionPage() {
         const isPlus = (user.subscription_plan?.includes('PLUS'));
         const isLifetime = !user.pro_expires_at || user.subscription_plan === 'PRO_LIFETIME';
         return (
-            <div className={`flex flex-col items-center justify-center min-h-dvh w-screen sm:w-full -mx-4 sm:mx-0 px-6 pb-32 pt-10 text-center relative overflow-hidden font-sans`}>
+            <div className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-4 text-center relative overflow-hidden font-sans`}>
+                {/* Navigation Header */}
+                <div className="w-full flex items-center justify-between mb-8 relative z-20">
+                    <button
+                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                        className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform"
+                    >
+                        <X size={20} className="text-slate-600 dark:text-white/60" />
+                    </button>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
+                    <div className="w-10" /> {/* Spacer */}
+                </div>
+
                 {/* Fixed Background Layer to prevent clipping */}
-                <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-deep)" />
+                <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-app)" />
                 <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-(--color-bg-app) via-indigo-500/10 to-(--color-bg-deep)' : 'bg-linear-to-b from-(--color-bg-app) via-amber-500/8 to-(--color-bg-deep)'}`} />
 
                 {/* Glow Effects */}
@@ -226,7 +238,7 @@ export default function SubscriptionPage() {
                 <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
                 <div className="relative z-10 w-full max-w-[320px] mx-auto flex flex-col items-center">
-                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-8 mt-[-5dvh]">
+                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-8 pt-4">
                         <div className={`w-28 h-28 rounded-[2.5rem] flex items-center justify-center shadow-2xl border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
                             <Crown size={56} className="text-white fill-white/20 drop-shadow-lg" />
                         </div>
@@ -323,6 +335,20 @@ export default function SubscriptionPage() {
 
     return (
         <div className="flex flex-col px-3 pb-24 pt-0 max-w-lg mx-auto overflow-x-hidden">
+            {/* Main Navigation Header */}
+            <div className="w-full flex items-center justify-between py-4 mb-2 relative z-50">
+                <button
+                    onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                    className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform shadow-sm"
+                >
+                    <X size={20} className="text-slate-600 dark:text-white/60" />
+                </button>
+                <div className="flex flex-col items-center">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
+                </div>
+                <div className="w-10" />
+            </div>
+
             <div className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-(--color-bg-app) border border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-8px_rgba(99,102,241,0.15)] mb-5">
                 <div className="relative z-10 w-full p-4">
                     {/* Background Depth Orbs */}

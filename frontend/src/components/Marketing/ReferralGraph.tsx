@@ -68,18 +68,18 @@ export const ReferralGraph = () => {
         <div className={clsx(
             "relative w-full h-[480px] flex items-center justify-center overflow-hidden rounded-[2.5rem] border transition-all duration-700 perspective-1000",
             "bg-linear-to-b from-emerald-50/50 to-teal-50/30 border-emerald-500/20",
-            "dark:bg-[#020805] dark:border-emerald-500/20",
+            "dark:bg-(--color-bg-app) dark:border-emerald-500/20",
             "shadow-[0_20px_50px_-15px_rgba(16,185,129,0.3)] dark:shadow-[inset_0_0_80px_rgba(16,185,129,0.05),0_0_40px_-10px_rgba(16,185,129,0.2)]",
-            "group" // For hover states if needed
+            "group overflow-x-hidden" // For hover states if needed
         )}>
             {/* 1. Viral Network Sub-Grid Backdrop */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.05)_1px,transparent_1px)] bg-size-[30px_30px] mask-[radial-gradient(ellipse_at_center,white,transparent_80%)] pointer-events-none" />
 
             {/* Core Radar Sweep Effect */}
             <motion.div
-                className="absolute text-emerald-500/10 pointer-events-none"
-                style={{ width: '800px', height: '800px', top: '50%', left: '50%', marginTop: '-400px', marginLeft: '-400px', background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.2) 100%)', borderRadius: '50%' }}
-                animate={{ rotate: 360 }}
+                className="absolute text-emerald-500/10 pointer-events-none z-0"
+                style={{ width: '200%', height: '200%', top: '50%', left: '50%', background: 'conic-gradient(from 0deg, transparent 70%, rgba(16,185,129,0.2) 100%)', borderRadius: '50%' }}
+                animate={{ rotate: 360, x: '-50%', y: '-50%' }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             />
 
@@ -90,12 +90,12 @@ export const ReferralGraph = () => {
                 "opacity-100"
             )} />
 
-            <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none overflow-hidden">
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 180, repeat: Infinity, ease: "linear" }}
                 >
-                    <Globe className="w-[600px] h-[600px] text-emerald-500 dark:text-emerald-500/40 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" strokeWidth={0.2} />
+                    <Globe className="w-[150%] h-[150%] text-emerald-500 dark:text-emerald-500/40 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]" strokeWidth={0.2} />
                 </motion.div>
             </div>
 
