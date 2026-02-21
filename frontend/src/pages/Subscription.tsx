@@ -317,11 +317,11 @@ export default function SubscriptionPage() {
                         </div>
 
                         {/* Hero Titles */}
-                        <div className="max-w-[320px] mx-auto mb-8">
-                            <h1 className="text-[32px] font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-3">
-                                {t('common.pro_active', 'PRO Active')}
+                        <div className="max-w-[420px] mx-auto mb-8">
+                            <h1 className={`text-[42px] font-black tracking-tighter leading-none mb-3 italic uppercase ${isProPlus ? 'vibing-purple-text' : 'vibing-yellow-text'}`}>
+                                {isProPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('common.pro_active', 'PRO Active')}
                             </h1>
-                            <p className="text-[14px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed opacity-80">
+                            <p className="text-[14px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed opacity-80 max-w-[280px] mx-auto">
                                 {t('subscription.upgrade.desc', 'Lifetime access is available for a limited time. Pricing may switch to annual subscriptions after this period.')}
                             </p>
                         </div>
@@ -371,9 +371,9 @@ export default function SubscriptionPage() {
                         {/* High-End Card Selector */}
                         <div className="relative bg-slate-100/50 dark:bg-black/30 p-2 rounded-[2.5rem] flex gap-2 border border-slate-200 dark:border-white/5 shadow-inner-lg backdrop-blur-2xl">
                             <div
-                                className={`absolute inset-y-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[2rem] ${selectedPlan === 'PRO'
-                                    ? 'left-2 w-[calc(50%-0.5rem)] bg-white dark:bg-white/10 border border-slate-200/50 dark:border-white/10 shadow-premium'
-                                    : 'left-[calc(50%+0.5rem)] w-[calc(50%-0.5rem)] bg-linear-to-br from-blue-600 via-indigo-600 to-violet-700 shadow-premium-blue border border-white/20'
+                                className={`absolute inset-y-2 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[2rem] shadow-premium ${selectedPlan === 'PRO'
+                                    ? 'left-2 w-[calc(50%-0.5rem)] vibing-yellow-animated border border-yellow-400/30'
+                                    : 'left-[calc(50%+0.5rem)] w-[calc(50%-0.5rem)] vibing-crystal-purple-animated border border-white/20'
                                     }`}
                             />
 
@@ -382,16 +382,16 @@ export default function SubscriptionPage() {
                                 onClick={() => { selection(); setSelectedPlan('PRO'); }}
                                 className={`relative flex-1 py-6 flex flex-col items-center gap-1 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
-                                <span className={`text-[10px] font-black tracking-[0.2em] uppercase mb-2 ${selectedPlan === 'PRO' ? 'text-slate-500 dark:text-white/70' : 'text-slate-400 dark:text-white/40'}`}>
+                                <span className={`text-[10px] font-black tracking-[0.2em] uppercase mb-2 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
                                     {t('subscription.upgrade.pro_title', 'PRO ACCESS')}
                                 </span>
                                 <div className="flex items-baseline gap-1">
-                                    <span className={`text-[18px] font-bold ${selectedPlan === 'PRO' ? 'text-slate-400/50' : 'text-slate-400/30'}`}>$</span>
-                                    <span className={`text-[38px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                    <span className={`text-[18px] font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
+                                    <span className={`text-[38px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
                                         39
                                     </span>
                                 </div>
-                                <span className={`text-[9px] font-black uppercase tracking-[0.15em] mt-2 ${selectedPlan === 'PRO' ? 'text-slate-400/80 dark:text-white/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                <span className={`text-[9px] font-black uppercase tracking-[0.15em] mt-2 ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
                                     {t('subscription.upgrade.monthly_label', '30 DAYS')}
                                 </span>
                             </button>
