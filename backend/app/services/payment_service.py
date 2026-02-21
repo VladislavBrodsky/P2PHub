@@ -488,7 +488,8 @@ class PaymentService:
             session.add(XPTransaction(
                 partner_id=partner.id, amount=upgrade_xp,
                 type="UPGRADE_BONUS",
-                description=f"{'PRO+ (Upgrade)' if is_pro_to_plus_upgrade else ('PRO+' if is_plus else 'PRO')} Upgrade Reward"
+                description=f"{'PRO+ (Upgrade)' if is_pro_to_plus_upgrade else ('PRO+' if is_plus else 'PRO')} Upgrade Reward",
+                reference_id=f"upg_bonus_{transaction.id}"
             ))
             
             await audit_service.log_xp_award(

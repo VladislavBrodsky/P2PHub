@@ -82,7 +82,7 @@ async def _is_already_awarded(session: AsyncSession, partner_id: int) -> bool:
     check_stmt = select(XPTransaction).where(
         XPTransaction.reference_id == str(partner_id),
         XPTransaction.type.in_(["REFERRAL_L1", "REFERRAL_DEEP", "REFERRAL_SIGNUP"])
-    ).limit(1)
+    ).limit(1).with_for_update()
     return (await session.exec(check_stmt)).first() is not None
 
 async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int, Partner]:

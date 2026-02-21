@@ -278,18 +278,21 @@ async def get_my_profile(
             )
             
             # Log Base Reward
+            checkin_ref = f"checkin_{partner.id}_{now_dt.strftime('%Y-%m-%d')}"
             session.add(XPTransaction(
                 partner_id=partner.id,
                 amount=total_reward,
                 type="CHECKIN",
-                description=f"Daily Check-in Reward {'(7-Day Streak Bonus Included)' if is_streak_milestone else ''}"
+                description=f"Daily Check-in Reward {'(7-Day Streak Bonus Included)' if is_streak_milestone else ''}",
+                reference_id=checkin_ref
             ))
             session.add(Earning(
                 partner_id=partner.id,
                 amount=total_reward,
                 description=f"Daily Reward {'+ Streak Bonus' if is_streak_milestone else ''}",
                 type="DAILY_REWARD",
-                currency="XP"
+                currency="XP",
+                reference_id=checkin_ref
             ))
             
             await session.commit()
@@ -312,18 +315,21 @@ async def get_my_profile(
             {"inc": checkin_xp, "p_id": partner.id}
         )
         
+        checkin_ref = f"checkin_{partner.id}_{now_dt.strftime('%Y-%m-%d')}"
         session.add(XPTransaction(
             partner_id=partner.id,
             amount=checkin_xp,
             type="CHECKIN",
-            description="Daily Check-in Reward"
+            description="Daily Check-in Reward",
+            reference_id=checkin_ref
         ))
         session.add(Earning(
             partner_id=partner.id,
             amount=checkin_xp,
             description="Daily Check-in Bonus",
             type="DAILY_REWARD",
-            currency="XP"
+            currency="XP",
+            reference_id=checkin_ref
         ))
         
         await session.commit()
@@ -1235,7 +1241,8 @@ async def complete_academy_stage(
             amount=effective_xp,
             description=f"Academy Reward (Stage {stage_id})",
             type="TASK_XP",
-            currency="XP"
+            currency="XP",
+            reference_id=f"academy_{partner.id}_{stage_id}"
         )
         session.add(new_earning)
 
