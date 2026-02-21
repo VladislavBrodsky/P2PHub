@@ -468,36 +468,35 @@ export const AdminPage = () => {
     return (
         <div className="p-4 safe-pb space-y-6">
             {/* Header */}
-            <div className="grid grid-cols-[3rem_1fr_3rem] items-start w-full py-4 gap-4">
-                <div /> {/* Left Spacer to maintain center */}
-
-                <div className="flex flex-col items-center text-center space-y-2">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-1 border border-blue-500/20 shadow-lg shadow-blue-500/5">
-                        <ShieldCheck className="text-blue-500" size={24} />
+            <div className="flex flex-col items-center justify-center w-full py-6 space-y-4 text-center">
+                <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 rounded-3xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-lg shadow-blue-500/5">
+                        <ShieldCheck className="text-blue-500" size={28} />
                     </div>
+
+                    <button
+                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
+                        className={`w-14 h-14 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}
+                        title="Refresh Data"
+                    >
+                        <RefreshCw size={24} className="text-blue-400" />
+                    </button>
+                </div>
+
+                <div className="space-y-1">
                     <h1 className="text-2xl font-black tracking-tight text-white leading-tight">
                         Advanced Admin Command Center
                     </h1>
 
-                    <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
+                    <div className="flex items-center justify-center gap-2 pt-1">
                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
-                        <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/5 border border-white/10">
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
                             <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
                             <span className="text-[9px] font-black uppercase text-slate-300">
                                 {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
                             </span>
                         </div>
                     </div>
-                </div>
-
-                <div className="flex justify-end pt-1">
-                    <button
-                        onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
-                        className={`p-2.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/20 ${isRefreshing ? 'animate-spin' : ''}`}
-                        title="Refresh Data"
-                    >
-                        <RefreshCw size={18} className="text-blue-400" />
-                    </button>
                 </div>
             </div>
 
@@ -1007,7 +1006,10 @@ export const AdminPage = () => {
                                         <Layers size={10} />
                                     </div>
                                 </div>
-                                <div className="text-lg font-black text-emerald-500">{stats?.kpis.avg_depth} <span className="text-[10px] opacity-60">Gen</span></div>
+                                <div className="text-lg font-black text-emerald-500">
+                                    {typeof stats?.kpis.avg_depth === 'number' ? stats.kpis.avg_depth.toFixed(2) : '1.00'}
+                                    <span className="text-[10px] opacity-40 ml-1 font-bold">Gen</span>
+                                </div>
                                 <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Generation Depth</div>
                             </div>
                         </div>
@@ -1016,19 +1018,19 @@ export const AdminPage = () => {
                         <div className="grid grid-cols-4 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
-                                <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_7d}%</div>
+                                <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_7d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
-                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_30d}%</div>
+                                <div className={`text-sm font-black ${stats?.kpis.retention_30d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_30d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
-                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_90d}%</div>
+                                <div className={`text-sm font-black ${stats?.kpis.retention_90d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_90d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
                                 <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
-                                <div className="text-sm font-black text-slate-400">{stats?.kpis.retention_180d}%</div>
+                                <div className={`text-sm font-black ${stats?.kpis.retention_180d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_180d || 0}%</div>
                             </div>
                         </div>
 
