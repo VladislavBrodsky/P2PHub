@@ -5,7 +5,7 @@ import {
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
     Flame, Brain, Rocket, Network, Star, Lock, Infinity as InfinityIcon, Target, TrendingUp, Bot,
-    Send, BarChart2, Radio, X, Fingerprint
+    Send, BarChart2, Radio, X, Fingerprint, AlertTriangle
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -961,8 +961,17 @@ export default function SubscriptionPage() {
                                                     <div className="flex flex-col gap-2">
                                                         <div className="flex items-center gap-2 mb-1">
                                                             <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg">2</div>
-                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION HASH')}</span>
+                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION ID')}</span>
                                                         </div>
+
+                                                        {/* CRITICAL INSTRUCTION ALERT */}
+                                                        <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
+                                                            <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                                                            <p className="text-[9px] font-black text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
+                                                                {t('subscription.upgrade.final_instruction', 'IMPORTANT: You MUST paste the TxID below and click "I PAID" to finalize activation.')}
+                                                            </p>
+                                                        </div>
+
                                                         <div className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-5 shadow-sm">
                                                             <div className="relative mb-3">
                                                                 <input
@@ -978,7 +987,7 @@ export default function SubscriptionPage() {
                                                             <div className="flex items-center gap-2 px-2">
                                                                 <HelpCircle size={10} className="text-slate-400 shrink-0" />
                                                                 <p className="text-[8px] text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
-                                                                    {t('subscription.upgrade.hash_help', 'Copy the TxID from your wallet transaction history.')}
+                                                                    {t('subscription.upgrade.hash_help', 'Copy Transaction ID from your history.')}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -994,8 +1003,8 @@ export default function SubscriptionPage() {
                                                     <div className="flex items-center justify-center gap-3">
                                                         {isLoading ? <Loader2 className="animate-spin" /> : (
                                                             <>
-                                                                <Rocket size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                                                <span>{t('subscription.upgrade.verify_transaction', 'INITIALIZE VERIFICATION')}</span>
+                                                                <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                                                <span>{t('subscription.upgrade.verify_transaction', 'I PAID')}</span>
                                                             </>
                                                         )}
                                                     </div>
