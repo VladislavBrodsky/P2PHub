@@ -475,8 +475,8 @@ export default function SubscriptionPage() {
                                 {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
                             </h2>
 
-                            <p className="text-[11px] sm:text-[12px] text-slate-500 dark:text-slate-400 font-bold leading-tight max-w-[260px] mx-auto opacity-70">
-                                {t('subscription.upgrade.subheadline', 'Choose your plan. PRO members grow their network faster.')}
+                            <p className="text-[11px] sm:text-[12px] text-slate-500 dark:text-slate-400 font-bold leading-tight max-w-[280px] mx-auto opacity-70">
+                                {t('subscription.upgrade.subheadline', 'Accelerate your network growth and passive income with elite-level tools.')}
                             </p>
                         </div>
 
@@ -794,12 +794,13 @@ export default function SubscriptionPage() {
                                 <div className="space-y-8 relative z-10">
                                     <div className="text-center">
                                         <motion.div
-                                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4"
-                                            animate={{ boxShadow: ["0 0 0px rgba(0,102,255,0)", "0 0 15px rgba(0,102,255,0.3)", "0 0 0px rgba(0,102,255,0)"] }}
+                                            className="inline-flex items-center gap-2 px-6 py-2 rounded-2xl vibing-crystal-purple-animated mb-6 shadow-premium relative overflow-hidden group/badge"
+                                            animate={{ boxShadow: ["0 0 10px rgba(168,85,247,0.2)", "0 0 25px rgba(168,85,247,0.5)", "0 0 10px rgba(168,85,247,0.2)"] }}
                                             transition={{ duration: 3, repeat: Infinity }}
                                         >
-                                            <Shield size={10} className="text-blue-500" />
-                                            <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest">
+                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-300" />
+                                            <Shield size={12} className="text-white relative z-10" />
+                                            <span className="text-[10px] font-black text-white uppercase tracking-[0.15em] relative z-10">
                                                 {t('subscription.upgrade.secure_encryption_active')}
                                             </span>
                                         </motion.div>
