@@ -32,6 +32,7 @@ export default function SubscriptionPage() {
     const [expandedBenefit, setExpandedBenefit] = useState<string | null>(null);
     const [proStats, setProStats] = useState<{ sold: number; total: number } | null>(null);
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
+    const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any } | null>(null);
 
     const isPro = user?.is_pro;
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
@@ -187,7 +188,7 @@ export default function SubscriptionPage() {
                         </div>
                     </motion.div>
 
-                    <h1 className="text-[38px] font-extrabold mb-4 tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px]">
+                    <h1 className="text-[28px] font-black mb-3 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
                         {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
                     </h1>
 
@@ -213,9 +214,9 @@ export default function SubscriptionPage() {
 
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                            className={`w-full h-14 rounded-full font-black text-[13px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
+                            className={`w-full h-12 rounded-full font-black text-[12px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
-                            <Trophy size={16} />
+                            <Trophy size={14} />
                             {t('subscription.pro_active.command_center', 'COMMAND CENTER')}
                         </button>
 
@@ -227,9 +228,9 @@ export default function SubscriptionPage() {
                                     setShowPaymentOptionsForPro(true);
                                     scrollToPayment();
                                 }}
-                                className="w-full h-14 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-black text-[13px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-3"
+                                className="w-full h-12 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-black text-[12px] tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-2"
                             >
-                                <Sparkles size={16} fill="currentColor" />
+                                <Sparkles size={14} fill="currentColor" />
                                 {t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE')}
                             </button>
                         )}
@@ -316,11 +317,11 @@ export default function SubscriptionPage() {
                             </div>
 
                             {/* Title */}
-                            <div className="space-y-4 mt-2">
-                                <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto">
+                            <div className="space-y-3 mt-1">
+                                <h1 className="text-[28px] font-black tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[280px] mx-auto">
                                     {t('common.pro_active')}
                                 </h1>
-                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px] mx-auto leading-relaxed">
+                                <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium max-w-[280px] mx-auto leading-relaxed">
                                     {t('subscription.upgrade.desc')}
                                 </p>
                             </div>
@@ -363,25 +364,25 @@ export default function SubscriptionPage() {
                             />
                             <button
                                 onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
+                                className={`relative flex-1 py-3 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'text-slate-900 dark:text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
                             >
-                                <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-60 mb-1">{t('subscription.upgrade.pro_title')}</span>
+                                <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-60 mb-0.5">{t('subscription.upgrade.pro_title')}</span>
                                 <div className="flex items-baseline gap-0.5">
-                                    <span className="text-[12px] font-bold opacity-40">$</span>
-                                    <span className="text-3xl font-black tracking-tighter leading-none">39</span>
+                                    <span className="text-[11px] font-bold opacity-40">$</span>
+                                    <span className="text-2xl font-black tracking-tighter leading-none">39</span>
                                 </div>
-                                <span className="text-[8px] font-black opacity-40 uppercase tracking-widest mt-1">{t('subscription.upgrade.monthly_label')}</span>
+                                <span className="text-[7px] font-black opacity-40 uppercase tracking-widest mt-0.5">{t('subscription.upgrade.monthly_label')}</span>
                             </button>
                             <button
                                 onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
+                                className={`relative flex-1 py-3 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'text-white scale-100' : 'text-slate-400 dark:text-white/20 scale-95'}`}
                             >
-                                <span className="text-[9px] font-black tracking-[0.2em] uppercase opacity-80 mb-1">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
+                                <span className="text-[8px] font-black tracking-[0.2em] uppercase opacity-80 mb-0.5">{isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title')}</span>
                                 <div className="flex items-baseline gap-0.5">
-                                    <span className="text-[12px] font-bold opacity-60">$</span>
-                                    <span className="text-3xl font-black tracking-tighter leading-none">{isStandardPro ? upgradePrice : proPlusPrice}</span>
+                                    <span className="text-[11px] font-bold opacity-60">$</span>
+                                    <span className="text-2xl font-black tracking-tighter leading-none">{isStandardPro ? upgradePrice : proPlusPrice}</span>
                                 </div>
-                                <span className="text-[8px] font-black opacity-80 uppercase tracking-widest mt-1">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME' : t('subscription.upgrade.lifetime_label')}</span>
+                                <span className="text-[7px] font-black opacity-80 uppercase tracking-widest mt-0.5">{isStandardPro ? t('subscription.upgrade.upgrade_label') || 'ONE-TIME' : t('subscription.upgrade.lifetime_label')}</span>
                                 {selectedPlan !== 'PRO_PLUS' && (
                                     <div className="absolute -top-1.5 -right-1 px-2 py-0.5 bg-linear-to-r from-orange-500 to-rose-600 text-[8px] font-black text-white rounded-full border border-white/20 shadow-lg animate-bounce">
                                         BEST VALUE
@@ -392,39 +393,39 @@ export default function SubscriptionPage() {
                     </div>
 
                     {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
-                    <div className="mb-10 px-1">
-                        <div className="flex items-center justify-between mb-5 px-3">
+                    <div className="mb-6 px-1">
+                        <div className="flex items-center justify-between mb-3 px-3">
                             <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-4 bg-blue-600 rounded-full" />
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.15em] text-slate-800 dark:text-white/60">
+                                <div className="w-1 h-3 bg-blue-600 rounded-full" />
+                                <h3 className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-500 dark:text-white/40">
                                     {t('subscription.comparison.title', 'Key Differences')}
                                 </h3>
                             </div>
-                            <div className="flex gap-2 text-[8px] font-black uppercase tracking-widest opacity-40">
-                                <span>Pro</span>
-                                <span className="text-blue-500">vs</span>
-                                <span>Elite</span>
+                            <div className="text-[7px] font-black text-blue-500/60 uppercase tracking-widest animate-pulse">
+                                TAP TO EXPLORE
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-3 gap-2">
                             {[
-                                { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-                                { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10' },
-                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                                { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('subscription.benefits.network_levels_desc_plus') },
+                                { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('subscription.benefits.tokens_desc_plus') },
+                                { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('subscription.benefits.tg_multi_channel_desc') },
                             ].map((item, idx) => (
-                                <div key={idx} className="bg-white/40 dark:bg-white/5 border border-slate-200/60 dark:border-white/5 rounded-2xl p-4 flex flex-col items-center gap-2 relative overflow-hidden group hover:bg-white/60 dark:hover:bg-white/10 transition-all shadow-sm">
-                                    <div className={`w-9 h-9 rounded-xl ${item.bg} ${item.color} flex items-center justify-center mb-1 group-hover:scale-110 transition-transform shadow-inner`}>
-                                        <item.icon size={16} />
+                                <button
+                                    key={idx}
+                                    onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon }); }}
+                                    className="bg-slate-50/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-xl p-2.5 flex flex-col items-center gap-1 relative overflow-hidden group hover:bg-white/10 transition-all shadow-sm active:scale-95 text-center"
+                                >
+                                    <div className={`w-7 h-7 rounded-lg ${item.bg} ${item.color} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
+                                        <item.icon size={12} />
                                     </div>
-                                    <span className="text-[9px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest">{item.label}</span>
+                                    <span className="text-[7px] font-black text-slate-400 dark:text-white/30 uppercase tracking-widest">{item.label}</span>
 
-                                    <div className="flex items-center gap-2.5 mt-1">
-                                        <span className="text-[13px] font-black text-slate-900 dark:text-white/60">{item.pro}</span>
-                                        <div className="w-px h-4 bg-slate-200 dark:bg-white/10" />
-                                        <div className="flex flex-col items-center">
-                                            <span className={`text-[17px] font-black ${selectedPlan === 'PRO_PLUS' ? 'text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]' : 'text-slate-900 dark:text-white'}`}>{item.plus}</span>
-                                        </div>
+                                    <div className="flex items-center gap-1 mt-0.5">
+                                        <span className="text-[11px] font-black text-slate-900/40 dark:text-white/30">{item.pro}</span>
+                                        <div className="w-px h-2.5 bg-slate-200 dark:bg-white/10" />
+                                        <span className={`text-[14px] font-black ${selectedPlan === 'PRO_PLUS' ? 'text-(--color-primary) drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]' : 'text-slate-900 dark:text-white'}`}>{item.plus}</span>
                                     </div>
 
                                     {selectedPlan === 'PRO_PLUS' && (
@@ -435,8 +436,7 @@ export default function SubscriptionPage() {
                                             animate={{ opacity: 1 }}
                                         />
                                     )}
-                                    <div className={`absolute top-0 right-0 w-8 h-8 bg-(--color-primary) opacity-0 group-hover:opacity-10 blur-xl transition-opacity pointer-events-none`} />
-                                </div>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -451,13 +451,13 @@ export default function SubscriptionPage() {
                                 const el = document.getElementById('currency-selector-anchor');
                                 el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }}
-                            className={`group relative w-full flex items-center justify-center gap-2 h-14 px-8 rounded-full font-black text-[13px] tracking-widest uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
+                            className={`group relative w-full flex items-center justify-center gap-2 h-12 px-8 rounded-full font-black text-[12px] tracking-widest uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
                                 ? 'vibing-blue-animated text-white shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)]'
                                 : 'vibing-yellow-animated text-[#0a1000] shadow-[0_15px_30px_-5px_rgba(255,215,0,0.3)]'
                                 }`}
                         >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                            <Lock size={16} className="group-hover:scale-110 transition-transform relative z-10" />
+                            <Lock size={14} className="group-hover:scale-110 transition-transform relative z-10" />
                             <span className="relative z-10">
                                 {selectedPlan === 'PRO'
                                     ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
@@ -674,7 +674,7 @@ export default function SubscriptionPage() {
                                                     <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
                                                     <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                                 </div>
-                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-14 rounded-full font-black text-[13px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
+                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-black text-[12px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                                 </button>
                                             </div>
@@ -689,7 +689,7 @@ export default function SubscriptionPage() {
                                                     <label className="text-[8px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest ml-1">{t('subscription.upgrade.paste_tx_hash')}</label>
                                                     <input value={manualHash} onChange={(e) => setManualHash(e.target.value)} placeholder="0x..." className="w-full h-12 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500/50 outline-none transition-colors" />
                                                 </div>
-                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-14 rounded-full font-black text-[13px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-40 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
+                                                <button onClick={handleManualSubmit} disabled={isLoading || !manualHash} className={`w-full h-12 rounded-full font-black text-[12px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-40 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
                                                     {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.verify_transaction')}
                                                 </button>
                                             </div>
@@ -764,20 +764,39 @@ export default function SubscriptionPage() {
 
                     {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
                     <AnimatePresence>
-                        {status !== 'idle' && (
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl">
-                                <div className="vibing-premium-panel p-8 w-full max-w-sm text-center">
-                                    {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
-                                    {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
-                                    {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
-                                    <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">
-                                        {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
-                                    </h2>
-                                    <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
-                                        {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
-                                    </p>
-                                    <button onClick={() => setStatus('idle')} className="w-full h-[4.5rem] bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-[2rem] font-black text-[12px] uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">GOT IT</button>
-                                </div>
+                        {(status !== 'idle' || infoModal) && (
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-black/80 backdrop-blur-xl">
+                                {infoModal ? (
+                                    <div className="bg-slate-50 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 p-7 w-full max-w-sm rounded-[2.5rem] text-center relative overflow-hidden shadow-2xl">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                                        <div className="relative z-10">
+                                            <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-600 dark:text-blue-400 mx-auto mb-5 shadow-inner">
+                                                <infoModal.icon size={32} />
+                                            </div>
+                                            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-3 tracking-tight">{infoModal.title}</h3>
+                                            <p className="text-[12px] text-slate-500 dark:text-white/50 uppercase font-bold tracking-widest leading-relaxed mb-8">{infoModal.desc}</p>
+                                            <button
+                                                onClick={() => { selection(); setInfoModal(null); }}
+                                                className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-full font-black text-[12px] uppercase tracking-widest transition-all active:scale-95 shadow-lg"
+                                            >
+                                                {t('common.close', 'CLOSE')}
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="vibing-premium-panel p-8 w-full max-w-sm text-center">
+                                        {status === 'pending' && <Loader2 size={48} className="text-amber-500 animate-spin mx-auto mb-6" />}
+                                        {status === 'success' && <Trophy size={48} className="text-emerald-500 mx-auto mb-6" />}
+                                        {status === 'manual_review' && <CheckCircle2 size={48} className="text-blue-500 mx-auto mb-6" />}
+                                        <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase mb-2">
+                                            {status === 'pending' ? 'VERIFYING...' : status === 'success' ? 'WELCOME TO PRO' : 'SUBMITTED'}
+                                        </h2>
+                                        <p className="text-[9px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-8">
+                                            {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
+                                        </p>
+                                        <button onClick={() => setStatus('idle')} className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-black text-[12px] uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">GOT IT</button>
+                                    </div>
+                                )}
                             </motion.div>
                         )}
                     </AnimatePresence>
