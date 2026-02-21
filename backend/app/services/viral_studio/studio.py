@@ -154,7 +154,7 @@ class ViralMarketingStudio:
         # We prioritize quality by waiting for the text content first, 
         # then using it to calibrate the elite image prompt for maximum relevance.
 
-        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt, model_override=primary_model)
+        res_json, tokens_openai = await self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
 
         if not res_json or "error" in res_json: 
             return res_json or {"error": "Generation failed", "status": "failed"}
@@ -164,7 +164,7 @@ class ViralMarketingStudio:
         image_prompt = prompts.build_viral_image_prompt(intel, body_for_image)
         
         # Generate image based on the specific post theme
-        image_url = await self._generate_image(image_prompt, partner.id, turbo_mode=True)
+        image_url = await self._generate_image(image_prompt, partner.id, is_pro_plus=is_pro_plus)
 
 
         # Consistency fix for text fields
@@ -269,112 +269,111 @@ class ViralMarketingStudio:
 
         return output
 
-    async def _get_text_content(self, system_prompt: str, user_prompt: str, fast_mode: bool = False, model_override: str | None = None) -> tuple[dict | None, int]:
-        # PRIORITY: OpenAI Flagship Tier (Top-notch text generation as requested)
-        if self.openai_client:
-            # Model selection logic: Override > FastMode > PlanDefault
-            if model_override:
-                models = [model_override, "gpt-4o-mini"]
-            elif fast_mode: 
-                models = ["gpt-4o-mini"]
-            else:
-                models = ["gpt-4o", "gpt-4o-mini"]
-                
-            for model_name in models:
-                try:
+    async def _get_text_content(self, system_prompt: str, user_prompt: str, is_pro_plus: bool = False) -> tuple[dict | None, int]:
+        # Define model sequence based on tier
+        if is_pro_plus:
+            # Most powerful primary, top performing/latest fallback
+            openai_models = ["gpt-4o", "gpt-4-turbo"] 
+            google_models = ["gemini-1.5-pro-latest", "gemini-2.0-flash"]
+        else:
+            # Most powerful primary, efficient/modern fallbacks
+            openai_models = ["gpt-4o", "gpt-4o-mini"]
+            google_models = ["gemini-2.0-flash"]
+            
+        combined_sequence = []
+        for m in openai_models:
+            combined_sequence.append(("openai", m))
+        for m in google_models:
+            combined_sequence.append(("google", m))
+            
+        for provider, model_name in combined_sequence:
+            try:
+                if provider == "openai" and self.openai_client:
                     res = await self.openai_client.chat.completions.create(
                         model=model_name, 
                         messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
                         response_format={"type": "json_object"}
                     )
                     self._last_used_text_model = model_name
-                    return json.loads(res.choices[0].message.content), res.usage.total_tokens
-                except Exception: 
-                    continue
-        
-        # SECONDARY/EMERGENCY: Google Gemini Tier
-        if self.genai_client:
-            # In fast mode, we go straight to Flash
-            models = ['gemini-2.0-flash'] if fast_mode else ['gemini-2.0-pro-exp-02-05', 'gemini-1.5-pro', 'gemini-2.0-flash']
-            for model in models:
-                try:
+                    content = res.choices[0].message.content
+                    if "```json" in content:
+                        content = content.split("```json")[-1].split("```")[0]
+                    return json.loads(content), res.usage.total_tokens
+                elif provider == "google" and self.genai_client:
                     res = await self.genai_client.aio.models.generate_content(
-                        model=model, contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
+                        model=model_name, contents=f"SYSTEM: {system_prompt}\n\nUSER: {user_prompt}",
                         config=genai_types.GenerateContentConfig(response_mime_type='application/json', temperature=0.7)
                     )
-                    self._last_used_text_model = model
+                    self._last_used_text_model = model_name
                     return json.loads(res.text), 0
-                except Exception: 
-                    continue
+            except Exception as e: 
+                logger.warning(f"Text model {model_name} failed: {e}")
+                continue
                 
         return None, 0
 
-    async def _generate_image(self, prompt: str, partner_id: int, turbo_mode: bool = False) -> str | None:
-        """Sequential image generation trying Google then OpenAI."""
-        # 1. Google Imagen (Fastest & Usually Best)
-        if self.genai_client:
-            # TURBO PRIORITY: Use fast models first to hit 10-15s target
-            if turbo_mode:
-                models = [
-                    'imagen-4.0-fast-generate-001',
-                    'imagen-3.0-fast-generate-001',
-                    'imagen-4.0-ultra-generate-001',
-                    'imagen-3.0-generate-001'
-                ]
-            else:
-                models = [
-                    'imagen-4.0-ultra-generate-001', 
-                    'imagen-4.0-generate-001', 
-                    'imagen-3.0-generate-001', 
-                    'imagen-3.0-fast-generate-001'
-                ]
+    async def _generate_image(self, prompt: str, partner_id: int, is_pro_plus: bool = False) -> str | None:
+        """Sequential image generation using priority models and rich fallbacks."""
+        if is_pro_plus:
+            # PRO+ : Always most powerful primary, top performing/latest fallbacks
+            model_sequence = [
+                ("google", "imagen-3.0-generate-001"), # Gemini 3 Pro (Nano Banana)
+                ("google", "imagen-4.0-generate-001"), # Latest/Top performing
+                ("openai", "dall-e-3")                 # Most powerful fallback
+            ]
+        else:
+            # PRO  : Gemini 3 Pro primary, powerful + efficient fallbacks without glitches
+            model_sequence = [
+                ("google", "imagen-3.0-generate-001"),      # Gemini 3 Pro (Nano Banana)
+                ("openai", "dall-e-3"),                     # Powerful fallback
+                ("google", "imagen-3.0-fast-generate-001")  # Modern and efficient fallback
+            ]
 
-            for m in models:
+        for provider, model_name in model_sequence:
+            if provider == "google" and self.genai_client:
                 try:
-                    success, url = await self._try_imagen(m, prompt, partner_id)
+                    success, url = await self._try_imagen(model_name, prompt, partner_id)
                     if success:
-                        self._last_working_imagen_model = m
-                        self._last_used_image_model = m
+                        self._last_working_imagen_model = model_name
+                        self._last_used_image_model = model_name
                         return url
                 except Exception as e:
-                    logger.warning(f"Imagen model {m} failed: {e}")
-        
-        # 2. Emergency Alternative: OpenAI DALL-E 3
-        if self.openai_client:
-            model_name = "dall-e-3"
-            img_url = None
-            try:
-                # Truncate prompt to 4000 chars for Dall-E 3 limit
-                safe_prompt = prompt[:4000]
-                res = await self.openai_client.images.generate(model=model_name, prompt=safe_prompt, n=1)
-                img_url = res.data[0].url
-                self._last_used_image_model = model_name
-            except Exception as e:
-                logger.error(f"DALL-E 3 failed: {e}. Trying DALL-E 2 with safe prompt.")
+                    logger.warning(f"Imagen model {model_name} failed: {e}")
+                    
+            elif provider == "openai" and self.openai_client:
+                img_url = None
                 try:
-                    # Fallback to dall-e-2 and absolute safe prompt if safety or length issue
-                    model_name = "dall-e-2"
-                    generic_prompt = "A high-quality, abstract digital artwork with deep energetic colors, premium aesthetic."
-                    res = await self.openai_client.images.generate(model=model_name, prompt=generic_prompt, n=1)
+                    # Truncate prompt to 4000 chars for Dall-E 3 limit
+                    safe_prompt = prompt[:4000]
+                    res = await self.openai_client.images.generate(model=model_name, prompt=safe_prompt, n=1)
                     img_url = res.data[0].url
                     self._last_used_image_model = model_name
-                except Exception as e2:
-                    logger.error(f"DALL-E 2 fallback failed: {e2}")
-
-            if img_url:
-                try:
-                    filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
-                    save_path = self._get_save_path(filename)
-                    async with httpx.AsyncClient() as client:
-                        img_res = await client.get(img_url)
-                        if img_res.status_code == 200:
-                            with open(save_path, 'wb') as f: f.write(img_res.content)
-                            return f"/generated_media/{filename}"
                 except Exception as e:
-                    logger.error(f"Failed to locally cache DALL-E image: {e}")
-                
-                # If local cache fails, return the external URL
-                return img_url
+                    logger.error(f"DALL-E 3 failed: {e}. Trying DALL-E 2 with safe prompt.")
+                    try:
+                        # Fallback to dall-e-2 and absolute safe prompt if safety or length issue
+                        fallback_model = "dall-e-2"
+                        generic_prompt = "A high-quality, abstract digital artwork with deep energetic colors, premium aesthetic."
+                        res = await self.openai_client.images.generate(model=fallback_model, prompt=generic_prompt, n=1)
+                        img_url = res.data[0].url
+                        self._last_used_image_model = fallback_model
+                    except Exception as e2:
+                        logger.error(f"DALL-E 2 fallback failed: {e2}")
+
+                if img_url:
+                    try:
+                        filename = f"viral_dalle_{partner_id}_{secrets.token_hex(4)}.png"
+                        save_path = self._get_save_path(filename)
+                        async with httpx.AsyncClient() as client:
+                            img_res = await client.get(img_url)
+                            if img_res.status_code == 200:
+                                with open(save_path, 'wb') as f: f.write(img_res.content)
+                                return f"/generated_media/{filename}"
+                    except Exception as e:
+                        logger.error(f"Failed to locally cache DALL-E image: {e}")
+                    
+                    # If local cache fails, return the external URL
+                    return img_url
         
         if not self.openai_client and not self.genai_client:
             logger.error("🛑 CRITICAL: No Image AI client initialized. Check API keys.")
