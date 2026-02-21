@@ -508,29 +508,28 @@ export default function SubscriptionPage() {
                     </div>
 
                     {/* ── DEADLINE STICKY HEADER ── */}
-                    <div className="mb-6 mt-2 px-1">
-                        <div className="rounded-[2rem] overflow-hidden p-3 bg-slate-900 dark:bg-black border border-indigo-500/30 flex items-center justify-between relative group shadow-[0_0_20px_rgba(79,70,229,0.2)]">
-                            <div className="absolute inset-0 bg-linear-to-r from-indigo-950 via-slate-900 to-indigo-950 opacity-100" />
-                            <div className="circuit-decor opacity-20" />
-                            <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
+                    <div className="mb-4 mt-1 px-1">
+                        <div className="rounded-[2.5rem] overflow-hidden p-2.5 bg-yellow-400 border border-yellow-500/50 flex items-center justify-between relative group shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)]">
+                            <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
+                            <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
-                            <div className="relative z-10 flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
+                            <div className="relative z-10 flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black">
                                     <Clock size={16} className="animate-pulse" />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest leading-none">LIFETIME ACCESS OFFER</span>
-                                    <span className="text-[10px] font-black text-white/90 uppercase tracking-tighter leading-tight">CLOSING PERMANENTLY</span>
+                                    <span className="text-[7px] font-black text-black/60 uppercase tracking-widest leading-none">LIFETIME ACCESS OFFER</span>
+                                    <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-tight">CLOSING PERMANENTLY</span>
                                 </div>
                             </div>
 
                             <div className="relative z-10 flex items-center gap-1 font-mono">
                                 {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
                                     <React.Fragment key={i}>
-                                        <div className="bg-white/95 text-slate-900 rounded px-1.5 py-1 text-xs font-black min-w-[24px] text-center shadow-sm">
+                                        <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-[11px] font-black min-w-[28px] text-center shadow-xl">
                                             {val.toString().padStart(2, '0')}
                                         </div>
-                                        {i < 2 && <span className="text-[10px] font-black text-white animate-pulse">:</span>}
+                                        {i < 2 && <span className="text-[10px] font-black text-black/80 animate-pulse">:</span>}
                                     </React.Fragment>
                                 ))}
                             </div>
