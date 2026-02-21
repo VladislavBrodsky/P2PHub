@@ -238,17 +238,17 @@ export default function SubscriptionPage() {
                 <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
                 <div className="relative z-10 w-full max-w-[320px] mx-auto flex flex-col items-center">
-                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-8 pt-4">
-                        <div className={`w-28 h-28 rounded-[2.5rem] flex items-center justify-center shadow-2xl border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
-                            <Crown size={56} className="text-white fill-white/20 drop-shadow-lg" />
+                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-6 pt-2">
+                        <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
+                            <Crown size={40} className="text-white fill-white/20 drop-shadow-lg" />
                         </div>
                     </motion.div>
 
-                    <h1 className="text-[28px] font-black mb-3 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
+                    <h1 className="text-[22px] font-black mb-2 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
                         {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
                     </h1>
 
-                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium max-w-[280px] mx-auto leading-relaxed mb-12">
+                    <p className="text-slate-500 dark:text-slate-400 text-[13px] font-medium max-w-[280px] mx-auto leading-relaxed mb-8">
                         {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
                     </p>
 
@@ -259,8 +259,8 @@ export default function SubscriptionPage() {
                                     <Sparkles size={20} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-[9px] font-black text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
-                                    <p className="text-[14px] font-black text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
+                                    <p className="text-[9px] font-black text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
+                                    <p className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-lg md:ml-2">

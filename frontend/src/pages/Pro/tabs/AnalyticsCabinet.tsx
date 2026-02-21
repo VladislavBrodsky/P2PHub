@@ -74,7 +74,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
             </div>
 
             {/* Main Content Area */}
-            <div className="relative">
+            <div className={`relative ${!isProPlus ? 'max-h-[500px] overflow-hidden rounded-[2rem]' : ''}`}>
                 <div className={`space-y-6 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-30 select-none' : ''}`}>
                     <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
