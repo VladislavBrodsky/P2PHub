@@ -26,7 +26,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     return (
-        <div className={`relative ${className}`}>
+        <div className={`relative overflow-visible pt-2 ${className}`}>
             {/* Premium Background Glow */}
             <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
 

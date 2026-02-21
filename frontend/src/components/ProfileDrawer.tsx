@@ -134,7 +134,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
                             {/* Scrollable Content */}
                             <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4 overscroll-none" style={{ overscrollBehavior: 'none' }}>
-                                <div className="mt-0">
+                                <div className="mt-4">
                                     <PersonalizationCard variant="compact" />
                                 </div>
 
