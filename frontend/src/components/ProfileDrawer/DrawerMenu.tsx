@@ -268,11 +268,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                         }`}>
                                         {item.label}
                                     </span>
-                                    {isProItem && (
-                                        <span className="text-[9px] font-black uppercase tracking-widest text-black/60 dark:text-black/60 -mt-0.5">
-                                            {t('common.pro_active')}
-                                        </span>
-                                    )}
+
                                 </div>
                             </div>
                             <motion.div
