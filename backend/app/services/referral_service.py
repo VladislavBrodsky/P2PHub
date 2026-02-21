@@ -326,6 +326,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Pointer for the current ancestor being evaluated
     curr_lineage_idx = 0
     buyer_name = format_partner_name(partner)
+    
+    # Recipient Tracking for Aggregated Notifications/Audits
+    recipient_totals = {} # {recipient_id: {"amount": float, "xp": float, "levels": list[int], "qualified": bool}}
 
     async with redis_service.client.pipeline(transaction=False) as redis_pipe:
         # Loop through each commission level (slice of the pie)
@@ -384,6 +387,14 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 
             if not recipient: continue # Should not happen if company_account is set
 
+            if recipient.id not in recipient_totals:
+                recipient_totals[recipient.id] = {"amount": 0.0, "xp": 0.0, "levels": [], "qualified": False}
+            
+            rt = recipient_totals[recipient.id]
+            rt["amount"] += commission
+            rt["levels"].append(comm_level)
+            if found_qualified_partner: rt["qualified"] = True
+
             # Award commission
             balance_before = balance_cache.get(recipient.id, 0.0)
             balance_after = round(balance_before + commission, 4)
@@ -400,6 +411,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             xp_before = xp_cache.get(recipient.id, 0.0)
             xp_after = xp_before + xp_gain
             xp_cache[recipient.id] = xp_after
+            rt["xp"] += xp_gain 
 
             recipient.xp = Partner.xp + xp_gain
             
@@ -437,46 +449,63 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 reference_id=f"upg_xp_{partner.id}_{comm_level}"
             ))
 
-            # Audit & Notify
+            # Skip individual notifications now as they are aggregated below
+            pass
+
+        # --- Aggregated Side Effects Post-Loop ---
+        for r_id, rt in recipient_totals.items():
+            rcpt = ancestor_map.get(r_id) or company_account
+            if not rcpt: continue
+            
+            xp_after = xp_cache.get(r_id, 0.0)
+            xp_before = xp_after - rt["xp"]
+            balance_after = balance_cache.get(r_id, 0.0)
+            balance_before = balance_after - rt["amount"]
+
             try:
                 await audit_service.log_commission(
-                    session=session, partner_id=recipient.id, buyer_id=partner.id,
-                    amount=commission, level=comm_level,
+                    session=session, partner_id=r_id, buyer_id=partner.id,
+                    amount=rt["amount"], level=rt["levels"][0],
                     balance_before=balance_before, balance_after=balance_after,
+                    details={"all_levels": rt["levels"]}
                 )
             except Exception as e:
-                logger.error(f"Audit log_commission error for {recipient.id}: {e}")
+                logger.error(f"Audit log_commission error for {r_id}: {e}")
 
             try:
                 await audit_service.log_xp_award(
-                    session=session, partner_id=recipient.id, buyer_id=partner.id,
-                    xp_amount=xp_gain, level=comm_level, is_pro=recipient.is_pro,
-                    xp_before=xp_before, xp_after=xp_after
+                    session=session, partner_id=r_id, buyer_id=partner.id,
+                    xp_amount=rt["xp"], level=rt["levels"][0], is_pro=rcpt.is_pro,
+                    xp_before=xp_before, xp_after=xp_after,
+                    details={"all_levels": rt["levels"]}
                 )
             except Exception as e:
-                logger.error(f"Audit log_xp_award error for {recipient.id}: {e}")
+                logger.error(f"Audit log_xp_award error for {r_id}: {e}")
 
             try:
-                await _check_level_up(recipient, deferred_notifications, xp_after)
+                await _check_level_up(rcpt, deferred_notifications, xp_after)
             except Exception as e:
-                logger.error(f"Level up check error for {recipient.id}: {e}")
+                logger.error(f"Level up check error for {r_id}: {e}")
 
-            # Stage Redis Invalidation (Leaderboard, Profile, Earnings)
             try:
-                await _stage_redis_invalidation(recipient, comm_level, xp_gain=xp_gain, pipe=redis_pipe)
+                await _stage_redis_invalidation(rcpt, rt["levels"][0], xp_gain=rt["xp"], pipe=redis_pipe)
             except Exception as e:
-                logger.error(f"Redis invalidation error for {recipient.id}: {e}")
+                logger.error(f"Redis invalidation error for {r_id}: {e}")
 
-            if found_qualified_partner:
+            if rt["qualified"]:
                 try:
-                    lang = recipient.language_code or "en"
-                    msg = get_msg(lang, "commission_received", amount=round(commission, 2), level=comm_level, from_user=buyer_name)
+                    lang = rcpt.language_code or "en"
+                    if len(rt["levels"]) > 1:
+                        msg = f"💰 **Multiple Commissions Received!**\n\nTotal: **{round(rt['amount'], 2)} USDT** from **{buyer_name}**."
+                    else:
+                        msg = get_msg(lang, "commission_received", amount=round(rt["amount"], 2), level=rt["levels"][0], from_user=buyer_name)
+                    
                     deferred_notifications.append(notification_service.send_standard(
-                        chat_id=int(recipient.telegram_id), text=msg,
+                        chat_id=int(rcpt.telegram_id), text=msg,
                         buttons=[[{"text": get_msg(lang, "btn_check_balance"), "web_app": {"url": settings.FRONTEND_URL}}]]
                     ))
                 except Exception as e:
-                    logger.error(f"Notification error for {recipient.id}: {e}")
+                    logger.error(f"Notification error for {r_id}: {e}")
 
     # Finalize Transaction (NO internal commit to maintain atomicity with caller)
     if earnings_to_add:

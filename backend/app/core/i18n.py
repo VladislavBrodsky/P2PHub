@@ -42,6 +42,11 @@ MESSAGES = {
             "You have reached *Level {level}*!\n\n"
             "Continue your development to unlock advanced tiers and optimize your rewards! 🚀"
         ),
+        "level_up_multi": (
+            "🏆 *MAJOR PROGRESS!* 🏆\n\n"
+            "You have rapidly ascended from Level {old_level} to *Level {new_level}*! 🚀\n\n"
+            "Your network efficiency is unmatched. Advanced rewards have been optimized for your new rank! ✨"
+        ),
         "task_completed": (
             "✅ *Task Completed!*\n\n"
             "You earned *+{reward} XP*.\n"
@@ -235,6 +240,11 @@ MESSAGES = {
             "🏆 *Новая Веха Достигнута!* 🏆\n\n"
             "Вы достигли *Уровня {level}*!\n\n"
             "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+        ),
+        "level_up_multi": (
+            "🏆 *СТРЕМИТЕЛЬНЫЙ ПРОГРЕСС!* 🏆\n\n"
+            "Вы совершили рывок с уровня {old_level} до *Уровня {new_level}*! 🚀\n\n"
+            "Эффективность вашей сети впечатляет. Все награды адаптированы под ваш новый высокий ранг! ✨"
         ),
         "task_completed": (
             "✅ *Задание выполнено!*\n\n"

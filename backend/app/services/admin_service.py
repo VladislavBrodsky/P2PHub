@@ -421,10 +421,15 @@ class AdminService:
         tx_map = {s: c for s, c in tx_stats.all()}
         
         # 2. Orphaned partners (referrer set but path null - infrastructure bug)
-        orphaned = (await session.exec(select(func.count(Partner.id)).where(Partner.referrer_id is not None, Partner.path is None))).one() or 0
+        orphaned = (await session.exec(
+            select(func.count(Partner.id)).where(
+                Partner.referrer_id.is_not(None), 
+                Partner.path.is_(None)
+            )
+        )).one() or 0
         
         # 3. Economy Integrity: Negative Balances or XP/Level Mismatch
-        neg_balance = (await session.exec(select(func.count(Partner.id)).where(Partner.balance < 0))).one() or 0
+        neg_balance = (await session.exec(select(func.count(Partner.id)).where(Partner.balance < 0.0))).one() or 0
         
         # Optional: verify if someone has more XP than their level suggests (usually okay, but good to flag)
         

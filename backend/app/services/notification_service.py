@@ -318,11 +318,16 @@ class NotificationService:
             await session.commit()
 
     async def send_level_up_notification(self, chat_id: int, old_level: int, new_level: int, lang: str = "en"):
-        """Sends notifications for each level gained."""
+        """Sends notifications for levels gained."""
         if new_level > old_level:
             from app.core.i18n import get_msg
-            for lvl in range(old_level + 1, new_level + 1):
-                msg = get_msg(lang, "level_up", level=lvl)
+            if new_level - old_level > 1:
+                # Consolidated notification for massive gain
+                msg = get_msg(lang, "level_up_multi", old_level=old_level, new_level=new_level)
+                await self.send_standard(chat_id=chat_id, text=msg)
+            else:
+                # Standard single level up
+                msg = get_msg(lang, "level_up", level=new_level)
                 await self.send_standard(chat_id=chat_id, text=msg)
 
     async def send_system_message(self, chat_id: int, title: str, content: str):

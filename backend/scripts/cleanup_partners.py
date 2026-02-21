@@ -36,7 +36,7 @@ async def main():
 
         from sqlalchemy.ext.asyncio import create_async_engine
         from sqlalchemy.orm import sessionmaker
-        from sqlmodel import select
+        from sqlmodel import delete, select
         from sqlmodel.ext.asyncio.session import AsyncSession
 
         engine = create_async_engine(settings.DATABASE_URL, echo=True, future=True)
@@ -44,7 +44,6 @@ async def main():
 
         async with async_session() as session:
             # Delete users with ui-avatars photo_url
-            # Need strict typing for like? No.
             stmt = select(Partner).where(Partner.photo_url.like("%ui-avatars.com%"))
             result = await session.exec(stmt)
             fake_users = result.all()
@@ -58,7 +57,8 @@ async def main():
                 await session.flush()
                 
                 # Delete child records
-                from app.models.partner import Earning, PartnerTask, XPTransaction, ViralGeneration, SocialPost
+                from app.models.partner import (Earning, PartnerTask, SocialPost,
+                                               ViralGeneration, XPTransaction)
                 from app.models.transaction import PartnerTransaction
                 
                 await session.execute(delete(PartnerTransaction).where(PartnerTransaction.partner_id == user.id))
@@ -71,7 +71,7 @@ async def main():
                 await session.delete(user)
 
             # Delete users with name 'Test' and no photo
-            stmt2 = select(Partner).where(Partner.first_name == "Test").where(Partner.photo_url == None)
+            stmt2 = select(Partner).where(Partner.first_name == "Test").where(Partner.photo_url.is_(None))
             result2 = await session.exec(stmt2)
             test_users = result2.all()
 

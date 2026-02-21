@@ -36,7 +36,8 @@ async def list_posts(
     # Cache key based on params
     cache_key = f"blog:list:{lang}:{category}:{q}:{offset}:{limit}"
     
-    async def fetch_posts():
+    async def fetch_posts_data():
+        """Fetches the core blog data (shared across users)."""
         # Base query
         statement = select(BlogPost).where(BlogPost.is_published)
         
@@ -64,19 +65,6 @@ async def list_posts(
         e_stmt = select(BlogPostEngagement).where(BlogPostEngagement.post_slug.in_(slugs))
         engagements = {e.post_slug: e for e in (await session.exec(e_stmt)).all()}
         
-        # Get user likes
-        tg_id = str(tg_user.get("id")) if tg_user else None
-        p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
-        partner = (await session.exec(p_stmt)).first() if tg_id else None
-        
-        user_likes = set()
-        if partner:
-            l_stmt = select(PartnerBlogLike.post_slug).where(
-                PartnerBlogLike.partner_id == partner.id,
-                PartnerBlogLike.post_slug.in_(slugs)
-            )
-            user_likes = set((await session.exec(l_stmt)).all())
-        
         items = []
         for p in posts:
             eng = engagements.get(p.slug)
@@ -91,8 +79,7 @@ async def list_posts(
                 "author": p.author,
                 "image_url": p.image_url,
                 "published_at": p.published_at.isoformat() if p.published_at else None,
-                "likes": likes,
-                "liked": p.slug in user_likes
+                "likes": likes
             })
             
         return {
@@ -102,8 +89,30 @@ async def list_posts(
             "limit": limit
         }
 
-    # Use cache for list (short TTL 60s for list to keep it fresh)
-    return await redis_service.get_or_compute(cache_key, fetch_posts, expire=60)
+    # Use cache for technical post data (shared across all users)
+    blog_data = await redis_service.get_or_compute(cache_key, fetch_posts_data, expire=60)
+    
+    # Inject user-specific "liked" status (NOT CACHED globally)
+    items = blog_data.get("items", [])
+    if items and user_data:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+        
+        p_stmt = select(Partner).where(Partner.telegram_id == tg_id)
+        partner = (await session.exec(p_stmt)).first()
+        
+        if partner:
+            slugs = [item["slug"] for item in items]
+            l_stmt = select(PartnerBlogLike.post_slug).where(
+                PartnerBlogLike.partner_id == partner.id,
+                PartnerBlogLike.post_slug.in_(slugs)
+            )
+            user_likes = set((await session.exec(l_stmt)).all())
+            
+            for item in items:
+                item["liked"] = item["slug"] in user_likes
+    
+    return {**blog_data, "items": items}
 
 @router.get("/stats")
 async def get_blog_stats(
