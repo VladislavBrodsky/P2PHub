@@ -244,99 +244,108 @@ export const ProDashboardModals = ({
                                 </button>
                             </div>
 
-                            {/* Sub Tabs Selection - Integrated PRO/PRO+ Flow */}
-                            <div className="mx-auto w-[90%] mt-6">
-                                <div className="grid grid-cols-2 p-1.5 bg-slate-100 dark:bg-black/40 rounded-3xl border border-slate-200 dark:border-white/5 relative backdrop-blur-xl">
+                            {/* Sub-tab Switcher: PRO / PRO+ */}
+                            <div className="px-5 pt-4 pb-1">
+                                <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-2xl border border-slate-200/60 dark:border-white/8 relative">
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro'); }}
-                                        className={`py-2.5 rounded-2.5xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'pro'
-                                            ? 'bg-white dark:bg-white/10 text-indigo-600 dark:text-white shadow-xl shadow-indigo-500/10'
+                                        className={`relative py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
+                                            ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
                                         <Zap size={11} className={setupTab === 'pro' ? 'text-indigo-500' : 'opacity-40'} />
-                                        PRO PROTOCOL
+                                        PRO
                                     </button>
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro_plus'); }}
-                                        className={`py-2.5 rounded-2.5xl text-[9px] font-black uppercase tracking-[0.15em] transition-all duration-500 flex items-center justify-center gap-2 relative z-10 ${setupTab === 'pro_plus'
-                                            ? 'bg-white dark:bg-white/10 text-emerald-600 dark:text-white shadow-xl shadow-emerald-500/10'
+                                        className={`relative py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
+                                            ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
                                         <Sparkles size={11} className={setupTab === 'pro_plus' ? 'text-emerald-500' : 'opacity-40'} />
                                         PRO+ ELITE
                                         {!status?.is_pro_plus && (
-                                            <div className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-lg">
+                                            <span className="ml-0.5 inline-flex items-center justify-center w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm flex-shrink-0">
                                                 <Lock size={7} className="text-white" />
-                                            </div>
+                                            </span>
                                         )}
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Body Section */}
-                            <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-6">
+                            {/* Scrollable Body */}
+                            <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-4">
+
+                                {/* ─── PRO TAB ─── */}
                                 {setupTab === 'pro' && (
                                     <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
+                                        key="pro-tab"
+                                        initial={{ opacity: 0, x: -12 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-6"
+                                        className="space-y-4"
                                     >
-                                        {/* Platform Switcher for PRO */}
-                                        <div className="flex gap-2 p-1 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200 dark:border-white/5">
-                                            <button
-                                                onClick={() => { selection(); setActiveProPlatform('tg'); }}
-                                                className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${activeProPlatform === 'tg' ? 'bg-white dark:bg-white/10 shadow-sm text-sky-500 dark:text-white' : 'text-slate-400'}`}
-                                            >
-                                                Telegram (Single)
-                                            </button>
-                                            <button
-                                                onClick={() => { selection(); setActiveProPlatform('x'); }}
-                                                className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${activeProPlatform === 'x' ? 'bg-white dark:bg-white/10 shadow-sm text-indigo-500 dark:text-white' : 'text-slate-400'}`}
-                                            >
-                                                X (Twitter)
-                                            </button>
+                                        {/* Platform Switcher */}
+                                        <div className="flex gap-1.5 p-1 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200/70 dark:border-white/8">
+                                            {[
+                                                { id: 'tg', label: 'Telegram', color: 'sky' },
+                                                { id: 'x', label: 'X (Twitter)', color: 'indigo' },
+                                            ].map(({ id, label, color }) => (
+                                                <button
+                                                    key={id}
+                                                    onClick={() => { selection(); setActiveProPlatform(id as any); }}
+                                                    className={`flex-1 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${activeProPlatform === id
+                                                        ? `bg-white dark:bg-white/10 shadow-sm text-${color}-500`
+                                                        : 'text-slate-400'}`}
+                                                >
+                                                    {label}
+                                                </button>
+                                            ))}
                                         </div>
 
-                                        {activeProPlatform === 'tg' ? (
-                                            <div className="space-y-5">
-                                                <div className="flex flex-col items-center text-center p-6 bg-sky-500/5 rounded-3xl border border-sky-500/10 gap-3">
-                                                    <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
-                                                        <Send size={24} className="-ml-0.5" />
+                                        {/* Telegram (PRO) */}
+                                        {activeProPlatform === 'tg' && (
+                                            <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                <div className="flex items-center gap-3 p-4 bg-sky-500/5 rounded-2xl border border-sky-500/15">
+                                                    <div className="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 flex-shrink-0">
+                                                        <Send size={18} className="-ml-0.5" />
                                                     </div>
-                                                    <div className="space-y-1">
-                                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Telegram Primary Node</h4>
-                                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[280px]">Standard PRO enables 1 active broadcasting channel. Upgrade to PRO+ for 5x sync.</p>
-                                                        <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="mt-2 text-[10px] text-sky-500 font-bold underline italic">View Step-by-Step Guide</button>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Telegram Primary Node</p>
+                                                        <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Single channel on PRO. Upgrade to PRO+ for 5-channel sync.</p>
                                                     </div>
+                                                    <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="text-[8px] text-sky-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                 </div>
-                                                <div className="space-y-2">
-                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest pl-1">{t('pro_dashboard.setup.channel_id')}</label>
+                                                <div className="space-y-1.5">
+                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.channel_id')}</label>
                                                     <input
                                                         type="text"
                                                         value={tgChannels[0] || ''}
                                                         onChange={(e) => {
-                                                            const newChannels = [...tgChannels];
-                                                            newChannels[0] = e.target.value;
-                                                            setTgChannels(newChannels);
+                                                            const nch = [...tgChannels];
+                                                            nch[0] = e.target.value;
+                                                            setTgChannels(nch);
                                                         }}
-                                                        className="w-full h-12 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl px-4 text-[11px] font-mono focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/10"
+                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                         placeholder="@your_channel_username"
                                                     />
                                                 </div>
-                                            </div>
-                                        ) : (
-                                            <div className="space-y-5">
-                                                <div className="flex flex-col items-center text-center p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 gap-3">
-                                                    <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
-                                                        <Network size={24} />
+                                            </motion.div>
+                                        )}
+
+                                        {/* X (PRO) */}
+                                        {activeProPlatform === 'x' && (
+                                            <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                                    <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 flex-shrink-0">
+                                                        <Network size={18} />
                                                     </div>
-                                                    <div className="space-y-1">
-                                                        <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">X Global Broadcast</h4>
-                                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 max-w-[280px]">Autonomous API integration for persistent profile presence.</p>
-                                                        <button onClick={() => { selection(); setShowManual('setup_x'); }} className="mt-2 text-[10px] text-indigo-500 font-bold underline italic">API Connection Instructions</button>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
+                                                        <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Autonomous API integration for persistent profile presence.</p>
                                                     </div>
+                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                 </div>
-                                                <div className="space-y-3">
+                                                <div className="space-y-2">
                                                     {[
                                                         { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
                                                         { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
@@ -344,73 +353,76 @@ export const ProDashboardModals = ({
                                                         { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
                                                     ].map((field, i) => (
                                                         <div key={i} className="space-y-1">
-                                                            <div className="flex justify-between px-1">
-                                                                <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{field.label}</label>
-                                                            </div>
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
                                                             <input
                                                                 type={field.type || 'text'}
                                                                 value={field.value}
                                                                 onChange={(e) => field.setter(e.target.value)}
-                                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl px-4 text-[10px] font-mono focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-200"
+                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                                 placeholder={field.placeholder}
                                                             />
                                                         </div>
                                                     ))}
                                                 </div>
-                                            </div>
+                                            </motion.div>
                                         )}
                                     </motion.div>
                                 )}
 
+                                {/* ─── PRO+ TAB ─── */}
                                 {setupTab === 'pro_plus' && (
                                     <motion.div
-                                        initial={{ opacity: 0, x: 20 }}
+                                        key="pro-plus-tab"
+                                        initial={{ opacity: 0, x: 12 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        className="space-y-6"
+                                        className="space-y-4"
                                     >
                                         {!status?.is_pro_plus ? (
-                                            <div className="relative group overflow-hidden p-8 bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-[2.5rem] border border-emerald-500/20 shadow-2xl flex flex-col items-center text-center gap-6">
-                                                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl" />
+                                            /* ── Upgrade Preview Card ── */
+                                            <div className="relative overflow-hidden p-5 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center text-center gap-4">
+                                                {/* Icon */}
                                                 <motion.div
-                                                    animate={{
-                                                        scale: [1, 1.05, 1],
-                                                        rotate: [0, 2, 0, -2, 0]
-                                                    }}
-                                                    transition={{ duration: 6, repeat: Infinity }}
-                                                    className="w-24 h-24 rounded-3xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-2xl shadow-emerald-500/30 relative"
+                                                    animate={{ scale: [1, 1.04, 1] }}
+                                                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                                                    className="relative mt-1"
                                                 >
-                                                    <Sparkles size={48} />
-                                                    <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-amber-500 border-4 border-white dark:border-slate-900 flex items-center justify-center text-white shadow-lg">
-                                                        <Lock size={14} />
+                                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/25">
+                                                        <Sparkles size={30} />
+                                                    </div>
+                                                    <div className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-md">
+                                                        <Lock size={10} className="text-white" />
                                                     </div>
                                                 </motion.div>
 
-                                                <div className="space-y-2 relative z-10">
-                                                    <h4 className="text-[20px] font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                                {/* Headline */}
+                                                <div className="space-y-1.5">
+                                                    <h4 className="text-[17px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none italic">
                                                         Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                     </h4>
-                                                    <p className="text-[11px] font-bold text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto leading-relaxed">
+                                                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
                                                         Upgrade to PRO+ to unlock the complete neural broadcasting stack.
                                                     </p>
                                                 </div>
 
-                                                <div className="grid grid-cols-2 gap-3 w-full relative z-10">
+                                                {/* Feature Grid */}
+                                                <div className="grid grid-cols-2 gap-2 w-full">
                                                     {[
                                                         { icon: Send, label: '5x TG Channels', detail: 'Mass Sync' },
                                                         { icon: Blocks, label: 'Omni-Channel', detail: '7+ Networks' },
                                                         { icon: Network, label: 'LinkedIn', detail: 'Authority Node' },
                                                         { icon: Sparkles, label: 'Ultra AI', detail: 'Advanced Models' }
                                                     ].map((feat, i) => (
-                                                        <div key={i} className="p-3 bg-white/50 dark:bg-white/5 rounded-2xl border border-white dark:border-white/10 flex items-center gap-2.5">
-                                                            <feat.icon size={14} className="text-emerald-500" />
-                                                            <div className="text-left">
-                                                                <p className="text-[8px] font-black text-slate-900 dark:text-white uppercase leading-none mb-0.5">{feat.label}</p>
-                                                                <p className="text-[7px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{feat.detail}</p>
+                                                        <div key={i} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-white/80 dark:border-white/10 flex items-center gap-2">
+                                                            <feat.icon size={13} className="text-emerald-500 flex-shrink-0" />
+                                                            <div className="text-left min-w-0">
+                                                                <p className="text-[9px] font-black text-slate-900 dark:text-white uppercase leading-none truncate">{feat.label}</p>
+                                                                <p className="text-[7.5px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{feat.detail}</p>
                                                             </div>
                                                         </div>
                                                     ))}
                                                 </div>
 
+                                                {/* CTA */}
                                                 <button
                                                     onClick={() => {
                                                         selection();
@@ -418,58 +430,59 @@ export const ProDashboardModals = ({
                                                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                                         setShowSetup(false);
                                                     }}
-                                                    className="w-full py-4 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2.5xl text-[11px] font-black uppercase tracking-[0.25em] shadow-2xl shadow-emerald-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 relative overflow-hidden group/upgrade"
+                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                                 >
-                                                    <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/upgrade:animate-shimmer" />
-                                                    <Zap size={16} className="group-hover/upgrade:animate-pulse" />
+                                                    <Zap size={14} />
                                                     CLAIM PRO+ STATUS
                                                 </button>
                                             </div>
                                         ) : (
-                                            <div className="space-y-6">
-                                                {/* Platform Switcher for PRO+ */}
-                                                <div className="flex gap-2 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/10">
+                                            /* ── PRO+ Full Controls ── */
+                                            <div className="space-y-4">
+                                                {/* Platform Switcher */}
+                                                <div className="flex gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-xl border border-emerald-500/10">
                                                     {[
                                                         { id: 'multi_tg', label: 'Multi-TG', icon: Send },
                                                         { id: 'linkedin', label: 'LinkedIn', icon: Network },
-                                                        { id: 'omni', label: 'Omni-Sync', icon: Blocks }
+                                                        { id: 'omni', label: 'Omni', icon: Blocks }
                                                     ].map((tab) => (
                                                         <button
                                                             key={tab.id}
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
-                                                            className={`flex-1 py-2 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
+                                                            className={`flex-1 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
                                                         >
-                                                            <tab.icon size={10} />
+                                                            <tab.icon size={9} />
                                                             {tab.label}
                                                         </button>
                                                     ))}
                                                 </div>
 
+                                                {/* Multi-TG */}
                                                 {activePlusPlatform === 'multi_tg' && (
-                                                    <div className="space-y-5">
-                                                        <div className="p-5 bg-emerald-500/5 rounded-3xl border border-emerald-500/10 flex items-center gap-4">
-                                                            <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-lg">
-                                                                <Send size={24} className="-ml-0.5" />
+                                                    <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
+                                                            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                                                <Send size={18} className="-ml-0.5" />
                                                             </div>
-                                                            <div className="flex-1">
-                                                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Multi-Channel Sync</h4>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400">Broadcasting to up to 5 channels simultaneously. <button onClick={() => setShowManual('setup_tg')} className="font-bold underline text-emerald-600">Guide</button></p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Multi-Channel Sync</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Up to 5 channels simultaneously.</p>
                                                             </div>
                                                             <button
                                                                 onClick={handleTestTG}
                                                                 disabled={isTesting}
-                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-lg shadow-emerald-500/20"
+                                                                className="px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 flex-shrink-0"
                                                             >
-                                                                {isTesting ? <Loader2 size={10} className="animate-spin" /> : <Zap size={10} />}
+                                                                {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
                                                                 Test
                                                             </button>
                                                         </div>
-                                                        <div className="grid grid-cols-1 gap-2.5">
+                                                        <div className="space-y-2">
                                                             {[0, 1, 2, 3, 4].map((idx) => {
                                                                 const val = tgChannels[idx] || '';
                                                                 const testSt = tgTestResults[val.trim()];
                                                                 return (
-                                                                    <div key={idx} className="relative group/input">
+                                                                    <div key={idx} className="relative">
                                                                         <input
                                                                             type="text"
                                                                             value={val}
@@ -480,7 +493,7 @@ export const ProDashboardModals = ({
                                                                                 setTgChannels(nch);
                                                                             }}
                                                                             placeholder={`@channel_node_${idx + 1}`}
-                                                                            className={`w-full h-11 bg-white dark:bg-black/20 border rounded-2xl px-4 text-[10px] font-mono transition-all ${testSt === 'active' ? 'border-emerald-500' : 'border-slate-200 dark:border-white/10 dark:text-white'}`}
+                                                                            className={`w-full h-10 bg-white dark:bg-black/20 border rounded-xl px-4 pr-14 text-[10px] font-mono outline-none transition-all dark:text-white ${testSt === 'active' ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-400/10' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10'}`}
                                                                         />
                                                                         {testSt && (
                                                                             <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-[7px] font-black uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -491,58 +504,62 @@ export const ProDashboardModals = ({
                                                                 );
                                                             })}
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 )}
 
+                                                {/* LinkedIn */}
                                                 {activePlusPlatform === 'linkedin' && (
-                                                    <div className="space-y-5">
-                                                        <div className="p-5 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 flex items-center gap-4">
-                                                            <div className="w-12 h-12 rounded-2xl bg-indigo-700 flex items-center justify-center text-white shadow-lg">
-                                                                <Network size={24} />
+                                                    <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                                            <div className="w-10 h-10 rounded-xl bg-indigo-700 flex items-center justify-center text-white shadow-md flex-shrink-0">
+                                                                <Network size={18} />
                                                             </div>
-                                                            <div className="flex-1">
-                                                                <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest">LinkedIn Authority</h4>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 italic">Sync your [professional identity](https://linkedin.com) for high-trust B2B reach.</p>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">LinkedIn Authority</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-trust B2B professional reach.</p>
                                                             </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_linkedin'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                         </div>
-                                                        <div className="space-y-2">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Access Token / OAuth String</label>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">Access Token / OAuth String</label>
                                                             <textarea
                                                                 value={linkedinToken}
                                                                 onChange={(e) => setLinkedinToken(e.target.value)}
                                                                 placeholder="Paste LinkedIn Access Token"
-                                                                className="w-full h-24 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-[10px] font-mono focus:border-indigo-500 outline-hidden dark:text-white resize-none"
+                                                                rows={3}
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 italic leading-relaxed px-1">Obtained via [LinkedIn Developers](https://www.linkedin.com/developers/). Use 'Share on LinkedIn' and 'Read Member Profile' scopes.</p>
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.</p>
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 )}
 
+                                                {/* Omni-Sync */}
                                                 {activePlusPlatform === 'omni' && (
-                                                    <div className="space-y-5">
-                                                        <div className="p-5 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-3xl border border-emerald-500/20 text-center space-y-2">
-                                                            <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Omni-Channel Sync</h4>
-                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto">Neural broadcasting across all major Web2 and Web3 social stacks.</p>
+                                                    <motion.div key="plus-omni" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="p-4 bg-gradient-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center">
+                                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">Omni-Channel Sync</h4>
+                                                            <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto">Neural broadcasting across all major Web2 & Web3 social stacks.</p>
                                                         </div>
-                                                        <div className="grid grid-cols-2 gap-3">
+                                                        <div className="grid grid-cols-2 gap-2">
                                                             {[
-                                                                { id: 'threads', name: 'Threads', status: 'Active Beta' },
-                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon' },
-                                                                { id: 'discord', name: 'Discord', status: 'Experimental' },
-                                                                { id: 'fb', name: 'Facebook', status: 'Planning' }
+                                                                { id: 'threads', name: 'Threads', status: 'Active Beta', progress: 'w-2/3' },
+                                                                { id: 'insta', name: 'Instagram', status: 'Coming Soon', progress: 'w-1/2' },
+                                                                { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3' },
+                                                                { id: 'fb', name: 'Facebook', status: 'Planning', progress: 'w-1/4' }
                                                             ].map((p) => (
-                                                                <div key={p.id} className="p-4 bg-white/50 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 flex flex-col gap-1.5 group hover:border-emerald-500/30 transition-all">
-                                                                    <div className="flex justify-between items-center">
-                                                                        <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{p.name}</span>
-                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[6px] font-black uppercase tracking-widest">{p.status}</div>
+                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/10 space-y-2">
+                                                                    <div className="flex justify-between items-center gap-1">
+                                                                        <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
+                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap flex-shrink-0">{p.status}</div>
                                                                     </div>
                                                                     <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
-                                                                        <div className={`h-full bg-emerald-500/30 ${p.status === 'Planning' ? 'w-1/4' : 'w-2/3'}`} />
+                                                                        <div className={`h-full bg-emerald-400/50 rounded-full ${p.progress}`} />
                                                                     </div>
                                                                 </div>
                                                             ))}
                                                         </div>
-                                                    </div>
+                                                    </motion.div>
                                                 )}
                                             </div>
                                         )}
@@ -551,26 +568,20 @@ export const ProDashboardModals = ({
                             </div>
 
                             {/* Sticky Footer */}
-                            <div className="p-6 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 relative z-20">
-                                {setupTab === 'pro' || status?.is_pro_plus ? (
+                            <div className="px-5 py-4 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-white/5 backdrop-blur-sm">
+                                {(setupTab === 'pro' || status?.is_pro_plus) ? (
                                     <button
                                         onClick={handleSaveSetup}
                                         disabled={isSaving}
-                                        className="w-full h-14 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.25em] shadow-2xl shadow-indigo-500/30 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 group"
+                                        className="w-full h-13 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                     >
                                         {isSaving ? (
-                                            <>
-                                                <Loader2 className="animate-spin" size={20} />
-                                                SYNCHRONIZING...
-                                            </>
+                                            <><Loader2 className="animate-spin" size={16} /> SYNCHRONIZING...</>
                                         ) : (
-                                            <>
-                                                DEPLOY CONFIGURATION <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                            </>
+                                            <><CheckCircle2 size={15} /> DEPLOY CONFIGURATION</>
                                         )}
                                     </button>
                                 ) : null}
-
                             </div>
                         </motion.div>
                     </motion.div>
