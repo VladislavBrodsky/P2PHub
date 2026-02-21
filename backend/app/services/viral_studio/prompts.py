@@ -162,11 +162,12 @@ Style/Tone: {tone.upper()}
 Language: {language} (write as NATIVE HUMAN speaker)
 Referral Link: {ref_link}
 
-**HUMANIZATION PROTOCOL (CRITICAL):**
-1. **NO AI CLICHES:** Avoid "In the rapidly evolving world...", "Unlock your potential...", or "Here's the secret...".
-2. **PERSONAL VOICE:** Write as if you are sending a note to a trusted partner. Use "I discovered...", "We are building...", "This is why I moved...".
-3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact.
-4. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
+**HUMANIZATION & ADVANCED COPYWRITING PROTOCOL (CRITICAL):**
+1. **NO AI CLICHES:** Avoid empty jargon like "In the rapidly evolving world...", "Unlock your potential...", or "Here's the secret...". Every word must be deliberately chosen to provide deep, super intelligent value.
+2. **PERSONAL VOICE & UNIQUE THOUGHT:** Write as if you are sending a private, high-status note to a trusted partner. Bring unique mental models (e.g., asymmetric risk, liquidity fragmentation, sovereign mechanics). Use "I built this because...", "We are seeing a shift...", "This is why I moved...".
+3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact. Your copywriting must be elite, advanced, and uniquely differentiated from standard marketing.
+4. **ADVANCED TRANSLATION:** If writing in a non-English language, do NOT simply translate. Localize the concepts using highly advanced, native-level business slang, cultural fluency, and unparalleled phrasing.
+5. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
 {("5. **STORY CONTINUITY:** Make an attractive template for this story. Continue the episodes seamlessly with strong hooks." if story_history is not None else "5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.")}
 
 **VIRAL & SEO CALIBRATION:**
