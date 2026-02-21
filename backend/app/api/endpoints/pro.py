@@ -254,6 +254,24 @@ async def generate_content(
     partner: Partner = Depends(get_current_partner),
     session: AsyncSession = Depends(get_session)
 ):
+    """
+    Synthesize high-performing content using the Viral Marketing Studio.
+    """
+    # 1. Verification: Check if AI Engines are online
+    capabilities = viral_studio.get_capabilities()
+    if not capabilities["text_generation"]:
+        # Attempt one-time emergency re-init for cloud environments (in case of startup racing)
+        logger.warning("🚨 AI Engine reporting offline. Attempting emergency re-init...")
+        viral_studio._init_clients()
+        capabilities = viral_studio.get_capabilities()
+        
+    if not capabilities["text_generation"]:
+        logger.error(f"❌ Elite Engines Offline for Partner {partner.id}")
+        raise HTTPException(
+            status_code=503,
+            detail="The Elite AI synthesis engine is currently offline for maintenance. Please try again in 5 minutes."
+        )
+
     if not partner.is_pro:
         raise HTTPException(status_code=403, detail="PRO membership required")
     

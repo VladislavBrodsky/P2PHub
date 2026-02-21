@@ -41,16 +41,24 @@ class ViralMarketingStudio:
         self._intel_cache = {}
 
     def _init_clients(self):
+        # Ensure latest env is loaded in case of dynamic injection
+        from app.core.config import settings
+        
         if settings.OPENAI_API_KEY:
             try:
                 from openai import AsyncOpenAI
                 self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+                logger.info("✅ OpenAI Client Initialized")
             except Exception as e: logger.error(f"OpenAI Init Error: {e}")
         
         if settings.GOOGLE_API_KEY:
             try:
                 self.genai_client = google_genai.Client(api_key=settings.GOOGLE_API_KEY)
+                logger.info("✅ Google GenAI Client Initialized")
             except Exception as e: logger.error(f"Google GenAI Init Error: {e}")
+            
+        if not self.openai_client and not self.genai_client:
+            logger.warning("⚠️ No AI Clients initialized. Check OPENAI_API_KEY and GOOGLE_API_KEY.")
 
     def get_capabilities(self) -> dict[str, bool]:
         return {"text_generation": bool(self.openai_client), "image_generation": bool(self.genai_client)}
@@ -142,23 +150,31 @@ class ViralMarketingStudio:
         system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)
         user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history)
         
-        # ⚡ PRO+ TURBO CONCURRENCY V1.0
-        # For maximum speed, we generate text and a high-fidelity strategy-aware image simultaneously.
-        # CMO Insight: The "Vibe" (Image) is defined by the Strategy/Audience, which we already have in intel.
-        
-        baseline_image_prompt = prompts.build_viral_image_prompt(intel, "") # Vibe-based baseline
-        
-        # Fire both engines in parallel
-        text_task = self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
-        image_task = self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus)
-        
-        (res_json, tokens_openai), image_url = await asyncio.gather(text_task, image_task)
+        # ⚡ CMO HYPER-DRIVE (GLOBAL DEADLINE: 55s)
+        # We wrap the entire parallel process to ensure we return BEFORE the frontend/proxy times out (60s).
+        try:
+            # Baseline image prompt recorded for logging (even if generated in parallel)
+            baseline_image_prompt = prompts.build_viral_image_prompt(intel, "") # Vibe-based baseline
+            image_prompt = baseline_image_prompt
 
-        if not res_json or "error" in res_json: 
-            return res_json or {"error": "Generation failed", "status": "failed"}
-        
-        # Final image prompt recorded for logging (even if generated in parallel)
-        image_prompt = baseline_image_prompt
+            text_task = self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
+            image_task = self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus)
+            
+            # Fire both engines in parallel with a strict global cutoff
+            (res_json, tokens_openai), image_url = await asyncio.wait_for(
+                asyncio.gather(text_task, image_task),
+                timeout=55.0
+            )
+
+            if not res_json or "error" in res_json: 
+                return res_json or {"error": "Creative engine failed to respond in time.", "status": "failed"}
+
+        except asyncio.TimeoutError:
+            logger.error("🛑 GLOBAL GENERATION TIMEOUT (55s). Returning emergency fallback.")
+            return {"error": "The AI is under heavy load. Please try a simpler strategy.", "status": "failed"}
+        except Exception as e:
+            logger.error(f"🔥 UNHANDLED GENERATION ERROR: {e}")
+            return {"error": "The creative synthesis encountered a technical glitch.", "status": "failed"}
 
 
         # Consistency fix for text fields
@@ -271,11 +287,11 @@ class ViralMarketingStudio:
     async def _get_text_content(self, system_prompt: str, user_prompt: str, is_pro_plus: bool = False) -> tuple[dict | None, int]:
         # Define model sequence based on tier
         if is_pro_plus:
-            # Flagship experimental models for Elite users
-            openai_models = ["gpt-4o", "o1-preview"]
-            google_models = ["gemini-1.5-pro", "gemini-2.0-flash-exp", "gemini-3-pro-preview"] 
+            # Primary: Fastest flagship models. Fallback: Most powerful / Experimental
+            openai_models = ["gpt-4o", "gpt-4o-mini", "o1-preview"]
+            google_models = ["gemini-1.5-pro", "gemini-2.0-flash-exp"] 
         else:
-            # Most powerful primary, efficient/modern fallbacks
+            # Strictly efficient models
             openai_models = ["gpt-4o-mini", "gpt-4o"]
             google_models = ["gemini-1.5-flash", "gemini-2.0-flash-exp"]
             
@@ -301,7 +317,7 @@ class ViralMarketingStudio:
                             messages=messages,
                             **kwargs
                         ),
-                        timeout=25.0
+                        timeout=20.0 # Shorter per-model timeout
                     )
                     self._last_used_text_model = model_name
                     content = res.choices[0].message.content
@@ -321,7 +337,7 @@ class ViralMarketingStudio:
                                 temperature=0.7
                             )
                         ),
-                        timeout=20.0
+                        timeout=15.0 # Google is usually faster than DALL-E/GPT-4 for JSON
                     )
                     self._last_used_text_model = model_name
                     content = res.text
@@ -411,7 +427,7 @@ class ViralMarketingStudio:
                     prompt=prompt, 
                     config=genai_types.GenerateImagesConfig(number_of_images=1)
                 ), 
-                timeout=25.0 
+                timeout=20.0 
             )
             
             if res and res.generated_images:
