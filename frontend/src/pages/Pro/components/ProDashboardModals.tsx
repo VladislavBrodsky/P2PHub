@@ -84,6 +84,8 @@ export const ProDashboardModals = ({
     const [xAccSecret, setXAccSecret] = useState('');
     const [tgChannels, setTgChannels] = useState<string[]>(['']);
     const [linkedinToken, setLinkedinToken] = useState('');
+    const [pinterestToken, setPinterestToken] = useState('');
+    const [threadsToken, setThreadsToken] = useState('');
     const [tgTestResults, setTgTestResults] = useState<Record<string, string>>({});
     const [isTesting, setIsTesting] = useState(false);
 
@@ -95,6 +97,8 @@ export const ProDashboardModals = ({
             setXAccToken(status.setup.x_access_token || '');
             setXAccSecret(status.setup.x_access_token_secret || '');
             setLinkedinToken(status.setup.linkedin_access_token || '');
+            setPinterestToken(status.setup.pinterest_access_token || '');
+            setThreadsToken(status.setup.threads_access_token || '');
 
             const main = status.setup.telegram_channel_id;
             const others = status.setup.telegram_channels || [];
@@ -114,7 +118,9 @@ export const ProDashboardModals = ({
                 x_access_token_secret: xAccSecret,
                 telegram_channel_id: tgChannels[0],
                 telegram_channels: tgChannels.slice(1).filter(ch => ch.trim() !== ''),
-                linkedin_access_token: linkedinToken
+                linkedin_access_token: linkedinToken,
+                pinterest_access_token: pinterestToken,
+                threads_access_token: threadsToken
             });
             showNotification({
                 title: t('pro_dashboard.setup.save_success_title'),
@@ -396,21 +402,23 @@ export const ProDashboardModals = ({
 
                                                 {/* Headline */}
                                                 <div className="space-y-1.5">
-                                                    <h4 className="text-[17px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none italic">
-                                                        Elite <span className="text-emerald-500">Sync</span> Ecosystem
+                                                    <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
+                                                        <Trans i18nKey="pro_dashboard.setup.teaser.title">
+                                                            Elite <span className="text-emerald-500">Sync</span> Ecosystem
+                                                        </Trans>
                                                     </h4>
                                                     <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
-                                                        Upgrade to PRO+ to unlock the complete neural broadcasting stack.
+                                                        {t('pro_dashboard.setup.teaser.desc')}
                                                     </p>
                                                 </div>
 
                                                 {/* Feature Grid */}
                                                 <div className="grid grid-cols-2 gap-2 w-full">
                                                     {[
-                                                        { icon: Send, label: '5x TG Channels', detail: 'Mass Sync' },
-                                                        { icon: Blocks, label: 'Omni-Channel', detail: '7+ Networks' },
-                                                        { icon: Network, label: 'LinkedIn', detail: 'Authority Node' },
-                                                        { icon: Sparkles, label: 'Ultra AI', detail: 'Advanced Models' }
+                                                        { icon: Send, label: t('pro_dashboard.setup.teaser.feat_tg'), detail: t('pro_dashboard.setup.teaser.feat_tg_detail') },
+                                                        { icon: Blocks, label: t('pro_dashboard.setup.teaser.feat_omni'), detail: t('pro_dashboard.setup.teaser.feat_omni_detail') },
+                                                        { icon: Network, label: t('pro_dashboard.setup.teaser.feat_li'), detail: t('pro_dashboard.setup.teaser.feat_li_detail') },
+                                                        { icon: Sparkles, label: t('pro_dashboard.setup.teaser.feat_ai'), detail: t('pro_dashboard.setup.teaser.feat_ai_detail') }
                                                     ].map((feat, i) => (
                                                         <div key={i} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-white/80 dark:border-white/10 flex items-center gap-2">
                                                             <feat.icon size={13} className="text-emerald-500 shrink-0" />
@@ -433,7 +441,7 @@ export const ProDashboardModals = ({
                                                     className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                                 >
                                                     <Zap size={14} />
-                                                    CLAIM PRO+ STATUS
+                                                    {t('pro_dashboard.setup.teaser.cta')}
                                                 </button>
                                             </div>
                                         ) : (
@@ -465,8 +473,8 @@ export const ProDashboardModals = ({
                                                                 <Send size={18} className="-ml-0.5" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Multi-Channel Sync</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Up to 5 channels simultaneously.</p>
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.multi_sync.desc')}</p>
                                                             </div>
                                                             <button
                                                                 onClick={handleTestTG}
@@ -474,7 +482,7 @@ export const ProDashboardModals = ({
                                                                 className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 shrink-0"
                                                             >
                                                                 {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
-                                                                Test
+                                                                {t('pro_dashboard.setup.multi_sync.test')}
                                                             </button>
                                                         </div>
                                                         <div className="space-y-2">
@@ -515,21 +523,25 @@ export const ProDashboardModals = ({
                                                                 <Network size={18} />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">LinkedIn Authority</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-trust B2B professional reach.</p>
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.linkedin.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_linkedin'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_linkedin'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.linkedin.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">Access Token / OAuth String</label>
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.linkedin.oauth_label')}</label>
                                                             <textarea
                                                                 value={linkedinToken}
                                                                 onChange={(e) => setLinkedinToken(e.target.value)}
-                                                                placeholder="Paste LinkedIn Access Token"
+                                                                placeholder={t('pro_dashboard.setup.linkedin.placeholder')}
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.</p>
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                <Trans i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
+                                                                    Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
+                                                                </Trans>
+                                                            </p>
                                                         </div>
                                                     </motion.div>
                                                 )}
@@ -546,15 +558,42 @@ export const ProDashboardModals = ({
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {[
-                                                                { id: 'threads', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_t'), status: 'Active', progress: 'w-full', color: 'bg-emerald-500' },
-                                                                { id: 'pinterest', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_p'), status: 'Active', progress: 'w-full', color: 'bg-emerald-500' },
+                                                                { id: 'pinterest', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_p'), icon: Blocks, token: pinterestToken, setToken: setPinterestToken, placeholder: t('pro_dashboard.setup.pinterest.placeholder') },
+                                                                { id: 'threads', name: t('pro_dashboard.setup.tg_sync_multi.more_platforms_t'), icon: Blocks, token: threadsToken, setToken: setThreadsToken, placeholder: t('pro_dashboard.setup.threads.placeholder') },
+                                                            ].map((p) => (
+                                                                <div key={p.id} className="p-4 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-3">
+                                                                    <div className="flex justify-between items-center">
+                                                                        <div className="flex items-center gap-2">
+                                                                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{p.name}</span>
+                                                                            <div className={`w-1.5 h-1.5 rounded-full ${p.token ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'} shrink-0`} />
+                                                                        </div>
+                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[7px] font-black uppercase tracking-widest whitespace-nowrap">ACTIVE</div>
+                                                                    </div>
+                                                                    <div className="relative">
+                                                                        <input
+                                                                            type="password"
+                                                                            value={p.token}
+                                                                            onChange={(e) => p.setToken(e.target.value)}
+                                                                            placeholder={p.placeholder}
+                                                                            className="w-full h-9 bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-white/5 rounded-lg px-3 text-[9px] font-mono outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/5 dark:text-white transition-all"
+                                                                        />
+                                                                        {p.token && (
+                                                                            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-[14px] text-emerald-500">
+                                                                                <CheckCircle2 size={12} />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+
+                                                            {[
                                                                 { id: 'insta', name: 'Instagram', status: 'Coming Soon', progress: 'w-1/3', color: 'bg-amber-500/40' },
                                                                 { id: 'discord', name: 'Discord', status: 'Experimental', progress: 'w-2/3', color: 'bg-indigo-500/40' }
                                                             ].map((p) => (
-                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2">
+                                                                <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2 opacity-60 grayscale-[0.5]">
                                                                     <div className="flex justify-between items-center gap-1">
                                                                         <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
-                                                                        <div className={`px-1.5 py-0.5 rounded-md ${p.status === 'Active' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-slate-500/10 text-slate-400'} text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0`}>{p.status}</div>
+                                                                        <div className="px-1.5 py-0.5 rounded-md bg-slate-500/10 text-slate-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0">{p.status}</div>
                                                                     </div>
                                                                     <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                                                                         <div className={`h-full ${p.color} rounded-full ${p.progress}`} />

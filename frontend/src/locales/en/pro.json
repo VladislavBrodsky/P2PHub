@@ -171,6 +171,24 @@
       "professional_network": "Professional Network",
       "save_success_title": "Successfully Connected",
       "save_success_text": "Your channels are connected and ready to use.",
+      "teaser": {
+        "title": "Elite <1>Sync</1> Ecosystem",
+        "desc": "Upgrade to PRO+ to unlock the complete neural broadcasting stack.",
+        "feat_tg": "5x TG Channels",
+        "feat_tg_detail": "Mass Sync",
+        "feat_omni": "Omni-Channel",
+        "feat_omni_detail": "7+ Networks",
+        "feat_li": "LinkedIn",
+        "feat_li_detail": "Authority Node",
+        "feat_ai": "Ultra AI",
+        "feat_ai_detail": "Advanced Models",
+        "cta": "CLAIM PRO+ STATUS"
+      },
+      "multi_sync": {
+        "title": "Multi-Channel Sync",
+        "desc": "Up to 5 channels simultaneously.",
+        "test": "Test"
+      },
       "x_broadcast": "Post to X",
       "tg_sync": "Connect TG",
       "omni_sync": "Multi-Channel",
@@ -262,6 +280,20 @@
             "desc": "Copy the 'Access Token' (a long string) and paste it into the LinkedIn Node field in the [PRO+ Setup] window."
           }
         ]
+      },
+      "linkedin": {
+        "title": "LinkedIn Authority",
+        "desc": "High-trust B2B professional reach.",
+        "guide": "Guide",
+        "oauth_label": "Access Token / OAuth String",
+        "placeholder": "Paste LinkedIn Access Token",
+        "dev_portal_desc": "Obtained via <1>LinkedIn Developers</1>. Request 'Share on LinkedIn' scope."
+      },
+      "pinterest": {
+        "placeholder": "Pinterest Access Token"
+      },
+      "threads": {
+        "placeholder": "Threads API Token"
       },
       "tg_sync_multi": {
         "title": "Telegram Multi-Sync",

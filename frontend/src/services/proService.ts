@@ -7,6 +7,8 @@ export interface PROStatus {
     has_x_setup: boolean;
     has_telegram_setup: boolean;
     has_linkedin_setup: boolean;
+    has_pinterest_setup: boolean;
+    has_threads_setup: boolean;
     capabilities: {
         text_generation: boolean;
         image_generation: boolean;
@@ -23,6 +25,8 @@ export interface PROStatus {
         telegram_channel_id: string;
         telegram_channels: string[];
         linkedin_access_token: string;
+        pinterest_access_token: string;
+        threads_access_token: string;
     };
 }
 
@@ -34,6 +38,8 @@ export interface PROSetupPayload {
     telegram_channel_id?: string;
     telegram_channels?: string[];
     linkedin_access_token?: string;
+    pinterest_access_token?: string;
+    threads_access_token?: string;
 }
 
 export interface ViralGenerateResponse {
@@ -79,7 +85,7 @@ export const proService = {
         return response.data;
     },
 
-    testIntegration: async (platform: 'x' | 'telegram' | 'linkedin') => {
+    testIntegration: async (platform: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads') => {
         const response = await apiClient.post('/api/pro/test', {
             platform,
             content: "Test Message", // Backend ignores this for test

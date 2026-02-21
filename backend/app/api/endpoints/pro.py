@@ -71,6 +71,8 @@ async def get_pro_status(
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
         "has_linkedin_setup": bool(partner.linkedin_access_token),
+        "has_pinterest_setup": bool(partner.pinterest_access_token),
+        "has_threads_setup": bool(partner.threads_access_token),
         "personal_referral_link": partner.personal_referral_link,
         "setup": {
             "x_api_key": partner.x_api_key or "",
@@ -79,7 +81,9 @@ async def get_pro_status(
             "x_access_token_secret": partner.x_access_token_secret or "",
             "telegram_channel_id": tg_main,
             "telegram_channels": tg_others,
-            "linkedin_access_token": partner.linkedin_access_token or ""
+            "linkedin_access_token": partner.linkedin_access_token or "",
+            "pinterest_access_token": partner.pinterest_access_token or "",
+            "threads_access_token": partner.threads_access_token or ""
         },
         "capabilities": viral_studio.get_capabilities(),
         "bot_username": (await bot.get_me()).username

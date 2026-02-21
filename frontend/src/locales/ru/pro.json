@@ -171,6 +171,24 @@
       "professional_network": "Профессиональная Сеть",
       "save_success_title": "Успешно подключено",
       "save_success_text": "Ваши каналы подключены и готовы к работе.",
+      "teaser": {
+        "title": "Элитная экосистема <1>Sync</1>",
+        "desc": "Перейдите на PRO+, чтобы разблокировать полный стек нейровещания.",
+        "feat_tg": "5x TG каналов",
+        "feat_tg_detail": "Масс-синхронизация",
+        "feat_omni": "Omni-Channel",
+        "feat_omni_detail": "7+ сетей",
+        "feat_li": "LinkedIn",
+        "feat_li_detail": "Узел авторитета",
+        "feat_ai": "Ultra AI",
+        "feat_ai_detail": "Продвинутые модели",
+        "cta": "ПОЛУЧИТЬ СТАТУС PRO+"
+      },
+      "multi_sync": {
+        "title": "Мульти-канальная синхронизация",
+        "desc": "До 5 каналов одновременно.",
+        "test": "Тест"
+      },
       "x_broadcast": "Публикация в X",
       "tg_sync": "Подключение TG",
       "omni_sync": "Мульти-Каналы",
@@ -262,6 +280,20 @@
             "desc": "Скопируйте 'Access Token' (длинная строка) и вставьте его в поле LinkedIn Node в окне [PRO+ Setup]."
           }
         ]
+      },
+      "linkedin": {
+        "title": "Авторитет LinkedIn",
+        "desc": "Высоко доверенный охват B2B профессионалов.",
+        "guide": "Гайд",
+        "oauth_label": "Токен доступа / OAuth строка",
+        "placeholder": "Вставьте LinkedIn Access Token",
+        "dev_portal_desc": "Получено через <1>LinkedIn Developers</1>. Требуется разрешение 'Share on LinkedIn'."
+      },
+      "pinterest": {
+        "placeholder": "Токен доступа Pinterest"
+      },
+      "threads": {
+        "placeholder": "API токен Threads"
       },
       "tg_sync_multi": {
         "title": "Мульти-синхронизация Telegram",
