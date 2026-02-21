@@ -206,6 +206,24 @@ async def submit_manual_payment(
         if not partner:
             raise HTTPException(status_code=404, detail="Partner not found")
 
+        # Prevent multiple exact same hash submissions
+        if tx_hash:
+            existing_hash = await session.exec(
+                select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash.strip())
+            )
+            if existing_hash.first():
+                raise HTTPException(status_code=400, detail="This transaction hash has already been submitted.")
+
+        # Prevent multiple active manual reviews for the same user to avoid UI clutter
+        existing_pending = await session.exec(
+            select(PartnerTransaction).where(
+                PartnerTransaction.partner_id == partner.id,
+                PartnerTransaction.status == "manual_review"
+            )
+        )
+        if existing_pending.first():
+            raise HTTPException(status_code=400, detail="You already have a pending payment verification. Please wait for admin approval.")
+
         # #comment: Create a new transaction record with 'manual_review' status.
         # This prevents the user from being upgraded immediately but allows admins to see the request.
         transaction = await payment_service.create_transaction(

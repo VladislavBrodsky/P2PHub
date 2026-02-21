@@ -83,19 +83,46 @@ class TonVerificationService:
                     # Search hash in blockchain response
                     for btx in blockchain_txs:
                         _btx_hash = self._normalize_hash(btx.get("hash", ""))
-                        # If user provided a hash in the UI session (usually they haven't yet for auto-observer)
-                        # but we check anyway. Or we correlate by amount + destination if we don't have hash.
-                        # For TonConnect/TonKeeper, the hash is the only unique identifier.
                         
-                        # Note: Most pending transactions won't have a hash yet if they just opened the modal.
-                        # However, if they just finished the payment in the wallet, the hash exists on-chain.
-                        # We only match if we can find a hash provided by the user OR if we match by sender (harder in TON).
+                        # Match by Hash if user provided it
+                        hash_match = _ptx.tx_hash and self._normalize_hash(_ptx.tx_hash) == _btx_hash
                         
-                        # In this version, we match by HASH if the user provided it, 
-                        # but in 'Observer Mode', the user might haven't entered the hash yet.
-                        # High-level Observe: If hash exists in blockchain but not in our DB, we can't safely match 
-                        # unless we match by Amount + Sender Address. (TODO: Add sender address to PartnerTransaction)
-                        pass
+                        # Heuristic match: Amount + Time
+                        # We allow a small difference in amount due to rounding (0.0001 TON)
+                        # We check if the on-chain transaction happened AFTER the session was created
+                        in_msg = btx.get("in_msg", {})
+                        if not in_msg: continue
+                        
+                        btx_amount_ton = int(in_msg.get("value", 0)) / 1_000_000_000
+                        expected_amount = _ptx.amount_crypto or 0
+                        
+                        amount_match = abs(btx_amount_ton - expected_amount) < 0.0002
+                        
+                        utime = int(btx.get("utime", 0))
+                        btx_time = datetime.fromtimestamp(utime, UTC).replace(tzinfo=None)
+                        time_match = btx_time >= (_ptx.created_at - timedelta(seconds=60))
+                        
+                        if hash_match or (amount_match and time_match):
+                            logger.info(f"✅ Observer found match for PTX {_ptx.id} (Partner {_ptx.partner_id})")
+                            
+                            # Upgrade the user
+                            # We fetch the partner here to pass to the service
+                            stmt_p = select(Partner).where(Partner.id == _ptx.partner_id)
+                            res_p = await session.exec(stmt_p)
+                            partner = res_p.first()
+                            
+                            if partner:
+                                await payment_service.upgrade_to_pro(
+                                    session=session,
+                                    partner=partner,
+                                    amount=_ptx.amount,
+                                    currency="TON",
+                                    network="TON",
+                                    tx_hash=_btx_hash,
+                                    transaction_id=_ptx.id
+                                )
+                                logger.info(f"🚀 Auto-upgraded Partner {partner.id} via Observer")
+                                break # Move to next pending transaction
 
             except Exception as e:
                 logger.error(f"Observer loop error: {e}")

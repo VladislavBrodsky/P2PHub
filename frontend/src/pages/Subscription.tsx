@@ -229,13 +229,13 @@ export default function SubscriptionPage() {
                     <div className="w-10" /> {/* Spacer */}
                 </div>
 
-                {/* Fixed Background Layer to prevent clipping */}
-                <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-app)" />
-                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-(--color-bg-app) via-indigo-500/10 to-(--color-bg-deep)' : 'bg-linear-to-b from-(--color-bg-app) via-amber-500/8 to-(--color-bg-deep)'}`} />
+                {/* Fixed Background Layer to prevent clipping - Changed to absolute to work with parent transforms */}
+                <div className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-app)" />
+                <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-(--color-bg-app) via-indigo-500/10 to-(--color-bg-deep)' : 'bg-linear-to-b from-(--color-bg-app) via-amber-500/8 to-(--color-bg-deep)'}`} />
 
-                {/* Glow Effects */}
-                <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
-                <div className={`fixed top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
+                {/* Glow Effects - Changed to absolute to stay pinned to content if needed, or stayed fixed but relative to this container */}
+                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
+                <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
                 <div className="relative z-10 w-full max-w-[320px] mx-auto flex flex-col items-center">
                     <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-6 pt-2">
@@ -977,7 +977,7 @@ export default function SubscriptionPage() {
 
                                                 <button
                                                     onClick={handleManualSubmit}
-                                                    disabled={isLoading || !manualHash}
+                                                    disabled={isLoading || !manualHash || status === 'manual_review'}
                                                     className={`w-full h-14 rounded-[1.5rem] font-black text-[13px] uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
                                                 >
                                                     <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000" />
@@ -985,7 +985,7 @@ export default function SubscriptionPage() {
                                                         {isLoading ? <Loader2 className="animate-spin" /> : (
                                                             <>
                                                                 <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                                                <span>{t('subscription.upgrade.verify_transaction', 'I PAID')}</span>
+                                                                <span>{status === 'manual_review' ? t('subscription.upgrade.pending_review', 'PENDING REVIEW') : t('subscription.upgrade.verify_transaction', 'I PAID')}</span>
                                                             </>
                                                         )}
                                                     </div>

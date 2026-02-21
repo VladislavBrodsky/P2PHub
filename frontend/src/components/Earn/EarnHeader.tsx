@@ -144,15 +144,15 @@ export const EarnHeader = () => {
                     <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 min-w-0">
 
                         {/* XP Progress header row */}
-                        <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0">
-                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none">
+                        <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0 gap-2">
+                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none shrink-0">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-[10px] sm:text-xs font-black text-(--color-text-primary) transition-colors tabular-nums"
+                                className="text-[9px] sm:text-xs font-black text-(--color-text-primary) transition-colors tabular-nums whitespace-nowrap"
                             >
                                 {Math.floor(progress.current).toLocaleString()} <span className="opacity-30">/</span> {Math.floor(progress.total).toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
@@ -210,7 +210,7 @@ export const EarnHeader = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1 min-w-0">
-                                    <span className="text-[17px] sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums truncate">
+                                    <span className="text-[16px] sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
                                     <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500/60 mb-0.5 shrink-0" />
@@ -237,7 +237,7 @@ export const EarnHeader = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
-                                    <span className="text-[17px] sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary) truncate">
+                                    <span className="text-[16px] sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
                                     <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5 shrink-0"
