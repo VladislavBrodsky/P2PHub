@@ -390,7 +390,7 @@ export default function SubscriptionPage() {
                                             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shrink-0" />
                                             {t('subscription.upgrade.live_demand', 'LIVE DEMAND')}
                                         </div>
-                                        <div className="text-[12px] font-black text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 break-words">
+                                        <div className="text-[12px] font-black text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
                                             {t('subscription.upgrade.lifetime_slots', 'LIFETIME SLOTS')}
                                         </div>
                                     </div>
@@ -458,7 +458,7 @@ export default function SubscriptionPage() {
                                 onClick={() => { selection(); setSelectedPlan('PRO'); }}
                                 className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
-                                <span className={`text-[8px] font-black tracking-[0.1em] uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
+                                <span className={`text-[8px] font-black tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
                                     {t('subscription.upgrade.pro_title', 'PRO ACCESS')}
                                 </span>
                                 <div className="flex items-baseline gap-0.5">
@@ -467,7 +467,7 @@ export default function SubscriptionPage() {
                                         39
                                     </span>
                                 </div>
-                                <span className={`text-[7px] font-black uppercase tracking-[0.1em] ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                <span className={`text-[7px] font-black uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
                                     {t('subscription.upgrade.monthly_label', '30 DAYS')}
                                 </span>
                             </button>
@@ -500,7 +500,7 @@ export default function SubscriptionPage() {
                                         {isStandardPro ? upgradePrice : proPlusPrice}
                                     </span>
                                 </div>
-                                <span className={`text-[7px] font-black uppercase tracking-[0.1em] ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                <span className={`text-[7px] font-black uppercase tracking-widest ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
                                     {isStandardPro ? t('subscription.upgrade.upgrade_label', 'ONE-TIME') : t('subscription.upgrade.lifetime_label', 'FOREVER')}
                                 </span>
                             </button>
@@ -608,7 +608,7 @@ export default function SubscriptionPage() {
                                         : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
                                         }`}
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                     <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
                                     <span className="relative z-10">
                                         {selectedPlan === 'PRO'
@@ -636,14 +636,14 @@ export default function SubscriptionPage() {
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                            className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
+                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                         >
                                             <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
                                             <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                         </button>
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                            className="group h-[4.5rem] bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                         >
                                             <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
                                             <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>

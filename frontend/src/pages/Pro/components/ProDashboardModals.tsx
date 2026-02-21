@@ -537,7 +537,7 @@ export const ProDashboardModals = ({
                                                 {/* Omni-Sync */}
                                                 {activePlusPlatform === 'omni' && (
                                                     <motion.div key="plus-omni" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="p-4 bg-gradient-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center">
+                                                        <div className="p-4 bg-linear-to-r from-emerald-500/10 to-indigo-500/10 rounded-2xl border border-emerald-500/20 text-center">
                                                             <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1">Omni-Channel Sync</h4>
                                                             <p className="text-[9px] text-slate-500 dark:text-slate-400 max-w-[220px] mx-auto">Neural broadcasting across all major Web2 & Web3 social stacks.</p>
                                                         </div>
@@ -551,7 +551,7 @@ export const ProDashboardModals = ({
                                                                 <div key={p.id} className="p-3 bg-white/60 dark:bg-white/5 rounded-2xl border border-slate-100 dark:border-white/10 space-y-2">
                                                                     <div className="flex justify-between items-center gap-1">
                                                                         <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate">{p.name}</span>
-                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap flex-shrink-0">{p.status}</div>
+                                                                        <div className="px-1.5 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[6.5px] font-black uppercase tracking-widest whitespace-nowrap shrink-0">{p.status}</div>
                                                                     </div>
                                                                     <div className="h-1 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
                                                                         <div className={`h-full bg-emerald-400/50 rounded-full ${p.progress}`} />

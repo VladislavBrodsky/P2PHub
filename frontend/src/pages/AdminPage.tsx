@@ -1651,7 +1651,7 @@ export const AdminPage = () => {
                                 </div>
                             </div>
 
-                            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-black/5 dark:border-white/5 relative z-10">
+                            <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-white/5 relative z-10">
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
                                         <AlertTriangle size={14} />

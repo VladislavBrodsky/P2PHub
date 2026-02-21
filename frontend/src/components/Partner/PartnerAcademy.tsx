@@ -68,7 +68,7 @@ export const PartnerAcademy = () => {
                     <motion.div
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-[#0f172a]/40 backdrop-blur-3xl ring-1 ring-white/10 pointer-events-auto"
+                        className="glass-panel-premium rounded-[1.5rem] p-2 border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 pointer-events-auto"
                     >
                         <div className="flex items-center gap-2 pl-2">
                             <div className="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">
