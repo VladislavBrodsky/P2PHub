@@ -512,11 +512,6 @@ export default function SubscriptionPage() {
                                     </motion.div>
                                 </div>
 
-                                <div className="flex items-center justify-center gap-3 text-[6px] font-bold text-slate-300 dark:text-white/10 uppercase tracking-[0.4em] relative z-10 font-mono">
-                                    <span className="flex items-center gap-1"><div className="w-0.5 h-0.5 rounded-full bg-indigo-500 opacity-40" /> V1.8.14</span>
-                                    <span className="flex items-center gap-1"><div className="w-0.5 h-0.5 rounded-full bg-indigo-500 opacity-40" /> ENCRYPTED</span>
-                                    <span className="flex items-center gap-1"><div className="w-0.5 h-0.5 rounded-full bg-indigo-500 opacity-40" /> SYNCED</span>
-                                </div>
                             </div>
                         )}
                     </div>
