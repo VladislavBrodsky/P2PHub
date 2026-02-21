@@ -14,6 +14,7 @@ import { apiClient } from '../api/client';
 import { useHaptic } from '../hooks/useHaptic';
 import { useConfig } from '../context/ConfigContext';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
 
 export default function SubscriptionPage() {
     const { t } = useTranslation();
@@ -882,19 +883,19 @@ export default function SubscriptionPage() {
                                             onClick={() => { selection(); setPaymentMethod('TON'); }}
                                             className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-yellow-500/5 hover:border-yellow-500/30 hover:shadow-xl active:scale-95"
                                         >
-                                            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-                                                <Wallet size={22} strokeWidth={2.5} />
+                                            <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                                                <TONLogo className="w-6 h-6" />
                                             </div>
-                                            <span className="text-[9px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet')}</span>
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                         </button>
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
                                             className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/5 hover:border-emerald-500/30 hover:shadow-xl active:scale-95"
                                         >
-                                            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-                                                <CreditCard size={22} strokeWidth={2.5} />
+                                            <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                                                <USDTLogo className="w-6 h-6" />
                                             </div>
-                                            <span className="text-[9px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address')}</span>
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
                                         </button>
                                     </div>
                                     <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
