@@ -129,7 +129,7 @@ export const PartnerDashboard = () => {
                 <div className="grid grid-cols-2 gap-2">
                     <div
                         onClick={() => { selection(); setIsFinanceOpen(true); }}
-                        className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm flex flex-col cursor-pointer active:scale-[0.98] transition-all hover:bg-white/80 dark:hover:bg-slate-800/50"
+                        className="p-3 rounded-2xl bg-(--color-bg-glass) border border-(--color-border-glass) backdrop-blur-md shadow-sm flex flex-col cursor-pointer active:scale-[0.98] transition-all hover:bg-white/80 dark:hover:bg-slate-800/50"
                     >
                         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>{t('partner_dashboard.total_earned')}</span>
@@ -154,7 +154,7 @@ export const PartnerDashboard = () => {
                         )}
                     </div>
                     <div
-                        className="p-3 rounded-2xl bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
+                        className="p-3 rounded-2xl bg-(--color-bg-glass) border border-(--color-border-glass) backdrop-blur-md shadow-sm active:scale-95 transition-transform cursor-pointer relative group overflow-hidden"
                         onClick={handleExplorerOpen}
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
@@ -183,7 +183,7 @@ export const PartnerDashboard = () => {
                     {/* Partner Briefing Card - Moved from CommunityPage */}
                     <div
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="group relative overflow-hidden rounded-[1.25rem] bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 p-2 px-3 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
+                        className="group relative overflow-hidden rounded-[1.25rem] bg-(--color-bg-glass) border border-(--color-border-glass) p-2 px-3 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
                     >
                         <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -217,7 +217,7 @@ export const PartnerDashboard = () => {
                     </div>
                     {/* #comment: Unified card styling for secondary tools to maintain dashboard vertical breathing room */}
                     <div
-                        className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                        className="bg-(--color-bg-glass) border border-(--color-border-glass) rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                         onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-3">
@@ -560,7 +560,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.03 }}
                                 key={item.id || idx}
-                                className="bg-white/60 dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                                className="bg-[--color-bg-glass] border border-[--color-border-glass] rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                             >
                                 <div className="flex items-center gap-2">
                                     <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>

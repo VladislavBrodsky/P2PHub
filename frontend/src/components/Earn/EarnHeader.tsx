@@ -33,23 +33,23 @@ export const EarnHeader = () => {
             />
 
             {/* Card body */}
-            <div className="relative rounded-[1.95rem] bg-[#0d1117]/90 dark:bg-[#0d1117]/95 backdrop-blur-3xl overflow-hidden">
+            <div className="relative rounded-[1.95rem] bg-(--color-bg-glass) backdrop-blur-3xl overflow-hidden border border-(--color-border-glass)">
 
                 {/* ── Ambient glows ── */}
                 <div
-                    className="absolute -top-16 -left-16 w-64 h-64 rounded-full blur-[80px] opacity-30 pointer-events-none"
-                    style={{ background: `radial-gradient(circle, ${badgeColor}80, transparent 70%)` }}
+                    className="absolute -top-16 -left-16 w-64 h-64 rounded-full blur-[80px] opacity-20 pointer-events-none"
+                    style={{ background: `radial-gradient(circle, ${badgeColor}40, transparent 70%)` }}
                 />
                 <div
-                    className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full blur-[60px] opacity-20 pointer-events-none"
-                    style={{ background: `radial-gradient(circle, ${badgeColor}60, transparent 70%)` }}
+                    className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full blur-[60px] opacity-10 pointer-events-none"
+                    style={{ background: `radial-gradient(circle, ${badgeColor}30, transparent 70%)` }}
                 />
 
                 {/* Subtle grid texture */}
                 <div
-                    className="absolute inset-0 opacity-[0.04] pointer-events-none"
+                    className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04] pointer-events-none"
                     style={{
-                        backgroundImage: 'linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px)',
+                        backgroundImage: 'linear-gradient(var(--color-text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--color-text-primary) 1px, transparent 1px)',
                         backgroundSize: '32px 32px',
                     }}
                 />
