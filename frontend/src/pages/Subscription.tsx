@@ -509,21 +509,21 @@ export default function SubscriptionPage() {
 
                     {/* ── DEADLINE STICKY HEADER ── */}
                     <div className="mb-4 mt-1 px-1">
-                        <div className="rounded-[2.5rem] overflow-hidden p-2.5 bg-yellow-400 border border-yellow-500/50 flex items-center justify-between relative group shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)]">
+                        <div className="rounded-[2.5rem] overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/50 flex items-center justify-between relative group shadow-[0_8px_20px_-8px_rgba(234,179,8,0.5)]">
                             <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                             <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
                             <div className="relative z-10 flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black">
+                                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
                                     <Clock size={16} className="animate-pulse" />
                                 </div>
-                                <div className="flex flex-col">
-                                    <span className="text-[7px] font-black text-black/60 uppercase tracking-widest leading-none">LIFETIME ACCESS OFFER</span>
-                                    <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-tight">CLOSING PERMANENTLY</span>
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-[7px] font-black text-black/60 uppercase tracking-widest leading-none truncate">LIFETIME ACCESS</span>
+                                    <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-tight truncate">OFFER CLOSING</span>
                                 </div>
                             </div>
 
-                            <div className="relative z-10 flex items-center gap-1 font-mono">
+                            <div className="relative z-10 flex items-center gap-1 font-mono shrink-0">
                                 {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
                                     <React.Fragment key={i}>
                                         <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-[11px] font-black min-w-[28px] text-center shadow-xl">
