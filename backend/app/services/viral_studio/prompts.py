@@ -105,22 +105,22 @@ Persona Tone: {tone.upper()}
 Product: Partner Center (Центр Партнеров) + Sovereign Ecosystem
 Referral Link (MUST INCLUDE): {ref_link}
 
-**CRITICAL INSTRUCTION: NO SPLITTING & CAPTION LIMIT.**
-Generate the entire content (title, body, CTA, hashtags) as a single coherent narrative. DO NOT split the message.
-The TOTAL length of the 'body' MUST be under 950 characters to fit perfectly in a Telegram photo caption.
-{chapter_rule_system} Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique: be valuable/educational, while subtly positioning Pintopay as the 'secret weapon' or 'smart money move').
+**CRITICAL INSTRUCTION: LENGTH, FORMATTING & HASHTAGS.**
+Generate the entire content (title, body) as a single coherent narrative. DO NOT split the message.
+The TOTAL length of the 'body' MUST be strictly between 700 and 900 characters (symbols). This is critical to fit perfectly in a Telegram photo caption while maximizing depth.
+{chapter_rule_system} Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique).
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
-Write as a high-status NATIVE {language} leader. Every word must feel earned and authentic. Be human, be real.
+Write as a high-status NATIVE {language} leader. Every word must feel earned and authentic.
 
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
-  "body": "**[Strategic Title]**\\n\\n[HUMANIZED ALPHA HOOK]\\n\\n[The 'Field Note' Insight - 3-5 short rhythmic paragraphs]\\n\\n**[{cta_text}]({ref_link})**",
+  "body": "**[Strategic Title]**\\n\\n**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
   "hashtags": "#Tag1 #Tag2 #Tag3 #Tag4" 
 }}
-(Choose carefully 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. DO NOT repeat them. Write them in 1 line EXACTLY like the example: #fintech #web3 #cryptocard #cryptopayments)
+(Choose exactly 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. DO NOT repeat them. Output them in exactly 1 line separated by spaces. Do NOT include hashtags in the body itself.)
 
 """
 
@@ -138,7 +138,8 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     audience_tags = audience_intel.get("viral_hashtags", [])
     strategy_tags = category_strategy.get("viral_hashtags", [])
     tone_tags = ToneIntelligence.TONES.get(tone.lower(), {}).get("viral_hashtags", [])
-    all_potential_hashtags = list(set(audience_tags + strategy_tags + tone_tags))
+    # Guarantee uniqueness of potential tags
+    all_potential_hashtags = list(dict.fromkeys(audience_tags + strategy_tags + tone_tags))
     
     audience_seo = audience_intel.get("performing_keywords_2026", [])
     strategy_seo = category_strategy.get("seo_keywords", [])
@@ -169,8 +170,12 @@ Referral Link: {ref_link}
 {("5. **STORY CONTINUITY:** Make an attractive template for this story. Continue the episodes seamlessly with strong hooks." if story_history is not None else "5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.")}
 
 **VIRAL & SEO CALIBRATION:**
-1. **HASHTAGS (STRICT LIMIT 2-4 UNIQUE):** Choose exactly 2-4 UNIQUE hashtags. Write them on one line separated by spaces (e.g., #Pintopay #Crypto #Wealth). DO NOT repeat them. List to pick from: {', '.join(all_potential_hashtags)}.
-2. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords/concepts: {', '.join(seo_keywords)}. 
+1. **GOLDEN FORMATTING RULES:** 
+   - ALWAYS make the Title, Hook, and CTA strictly **bold**. 
+   - Split text into 3-5 distinct short paragraphs (1-3 sentences maximum per paragraph) with double line breaks for mobile readability.
+   - 🚫 ABSOLUTELY NO weird markdown asterisks (e.g., *Passive Income System* or *Sovereign Abundance*) around random words. Keep the text naturally clean.
+2. **HASHTAGS:** Strict limit of 2-4 UNIQUE hashtags in one line. Do not put them in the body text or use them inline.
+3. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords: {', '.join(seo_keywords)}.
 
 **STORYTELLING CONTEXT:**
 Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
