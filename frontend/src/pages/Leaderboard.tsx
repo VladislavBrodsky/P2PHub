@@ -192,8 +192,9 @@ export default function LeaderboardPage() {
                                                 className="h-full w-full object-cover"
                                             />
                                         ) : (
-                                            <div className="h-full w-full flex items-center justify-center bg-slate-200 dark:bg-slate-700 text-slate-400">
-                                                <User size={20} />
+                                            <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
+                                                } text-white font-black text-lg shadow-inner`}>
+                                                {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
                                             </div>
                                         )}
                                     </div>
