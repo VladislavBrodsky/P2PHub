@@ -18,6 +18,7 @@ import { blogService } from '../../services/blogService';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
+import { DrawerSettings } from './DrawerSettings';
 
 interface DrawerMenuProps {
     onClose: () => void;
@@ -56,28 +57,8 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         switch (id) {
             case 'settings':
                 return (
-                    <div className="space-y-3 pt-2">
-                        <div className="flex items-center justify-between p-2 rounded-lg bg-(--card-bg) border border-(--card-border)">
-                            <div className="flex items-center gap-2">
-                                <Bell className="h-3.5 w-3.5 text-(--color-text-secondary)" />
-                                <span className="text-xs font-bold text-(--color-text-primary)">{t('menu.notifications')}</span>
-                            </div>
-                            <div className="h-4 w-7 rounded-full bg-emerald-500 relative">
-                                <div className="absolute right-0.5 top-0.5 h-3 w-3 rounded-full bg-white shadow-sm" />
-                            </div>
-                        </div>
-                        <button
-                            onClick={toggleLanguage}
-                            className="w-full flex items-center justify-between p-2 rounded-lg bg-(--card-bg) border border-(--card-border) active:scale-95 transition-transform"
-                        >
-                            <div className="flex items-center gap-2">
-                                <Globe className="h-3.5 w-3.5 text-(--color-text-secondary)" />
-                                <span className="text-xs font-bold text-(--color-text-primary)">{t('common.language')}</span>
-                            </div>
-                            <span className="text-xs font-medium text-(--color-text-secondary)">
-                                {i18n.language.startsWith('ru') ? 'Русский' : 'English'}
-                            </span>
-                        </button>
+                    <div className="pt-2">
+                        <DrawerSettings selection={selection} />
                     </div>
                 );
             case 'community':

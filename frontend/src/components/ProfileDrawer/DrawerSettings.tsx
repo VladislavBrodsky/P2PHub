@@ -132,10 +132,6 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                     </button>
                 ))}
             </div>
-
-            <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
-                P2PHub v1.7.0 (Stable)
-            </p>
         </div>
     );
 }

@@ -209,11 +209,11 @@ export const EarnHeader = () => {
                                         {t('earn_header.partners')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1 sm:gap-1.5">
-                                    <span className="text-lg sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
+                                <div className="flex items-baseline gap-1 min-w-0">
+                                    <span className="text-[17px] sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums truncate">
                                         {partners.toLocaleString()}
                                     </span>
-                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500/60 mb-0.5" />
+                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500/60 mb-0.5 shrink-0" />
                                 </div>
                                 {/* Corner glow */}
                                 <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
@@ -236,11 +236,11 @@ export const EarnHeader = () => {
                                         {t('earn_header.total_xp')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1 sm:gap-1.5">
-                                    <span className="text-lg sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
+                                <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
+                                    <span className="text-[17px] sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary) truncate">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
-                                    <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5"
+                                    <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5 shrink-0"
                                         style={{ color: `${badgeColor}cc` }}>xp</span>
                                 </div>
                                 {/* Corner glow */}

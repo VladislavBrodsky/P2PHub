@@ -16,7 +16,6 @@ import { UpgradeButton } from './ui/UpgradeButton';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { DrawerMenu } from './ProfileDrawer/DrawerMenu';
-import { DrawerSettings } from './ProfileDrawer/DrawerSettings';
 import { useUser } from '../context/UserContext';
 import { useTMALock } from '../hooks/useTMALock';
 
@@ -189,7 +188,11 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                     </motion.button>
                                 </div>
 
-                                <DrawerSettings selection={selection} />
+                                <div className="mt-8 mb-4">
+                                    <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
+                                        P2PHub v1.7.0 (Stable)
+                                    </p>
+                                </div>
                             </div>
                         </motion.div>
                     </div>
