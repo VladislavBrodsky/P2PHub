@@ -50,7 +50,16 @@ export const StudioTab = ({
     const { t, i18n } = useTranslation();
     const [postType, setPostType] = useState('');
     const [audience, setAudience] = useState('');
-    const [language, setLanguage] = useState(i18n.language === 'ru' ? 'Russian' : 'English');
+    const [language, setLanguage] = useState(() => {
+        const langMap: Record<string, string> = {
+            'ru': 'Russian',
+            'en': 'English',
+            'es': 'Spanish',
+            'fr': 'French',
+            'de': 'German'
+        };
+        return langMap[i18n.language.split('-')[0]] || 'English';
+    });
     const [tone, setTone] = useState('authoritative');
     const [isGenerating, setIsGenerating] = useState(false);
     const [countdown, setCountdown] = useState(30);
@@ -573,8 +582,8 @@ export const StudioTab = ({
                                 onChange={(val) => setPostType(val)}
                                 options={defaultPostTypes.map(pt => ({
                                     id: pt.id,
-                                    label: i18n.language === 'ru' ? pt.ru : pt.en,
-                                    description: i18n.language === 'ru' ? pt.desc_ru : pt.desc_en
+                                    label: t(`pro_dashboard.studio.post_types.${pt.id}`),
+                                    description: t(`pro_dashboard.studio.post_types_desc.${pt.id}`)
                                 }))}
                                 placeholder={t('pro_dashboard.studio.strategy_placeholder')}
                                 color="indigo"
@@ -602,8 +611,8 @@ export const StudioTab = ({
                                     })
                                     .map(a => ({
                                         id: a.id,
-                                        label: i18n.language === 'ru' ? a.ru : a.en,
-                                        description: i18n.language === 'ru' ? a.desc_ru : a.desc_en
+                                        label: t(`pro_dashboard.studio.audiences.${a.id}`),
+                                        description: t(`pro_dashboard.studio.audiences_desc.${a.id}`)
                                     }))}
                                 placeholder={t('pro_dashboard.studio.target_placeholder')}
                                 color="purple"
@@ -726,10 +735,10 @@ export const StudioTab = ({
                                 instruction={t('pro_dashboard.studio.tone_instruction')}
                                 value={tone}
                                 onChange={(val) => setTone(val)}
-                                options={defaultTones.map(t => ({
-                                    id: t.id,
-                                    label: i18n.language === 'ru' ? t.ru : t.en,
-                                    description: i18n.language === 'ru' ? t.desc_ru : t.desc_en
+                                options={defaultTones.map(toneObj => ({
+                                    id: toneObj.id,
+                                    label: t(`pro_dashboard.studio.tones.${toneObj.id}`),
+                                    description: t(`pro_dashboard.studio.tones_desc.${toneObj.id}`)
                                 }))}
                                 placeholder={t('pro_dashboard.studio.tone_placeholder')}
                                 color="amber"
