@@ -343,7 +343,7 @@ export default function ReferralPage() {
                                 <div className="relative h-48 sm:h-52 shrink-0">
                                     <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
                                     <img
-                                        src={`${getApiUrl()}/images/v3_referral_promo.jpg`}
+                                        src={`${getApiUrl()}/images/2026-01-12%2021.13.02.jpg`}
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="w-full h-full object-cover"
                                     />
