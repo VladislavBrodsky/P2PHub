@@ -228,10 +228,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <div className="flex items-center justify-between bg-white/5 rounded-2xl px-3 py-2 border border-white/5">
                             <div className="flex items-center gap-3">
                                 <div className="flex -space-x-2">
-                                    {[10, 25, 42].map((seed, i) => (
-                                        <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0">
+                                    {[
+                                        "https://randomuser.me/api/portraits/women/44.jpg",
+                                        "https://randomuser.me/api/portraits/women/68.jpg",
+                                        "https://randomuser.me/api/portraits/women/65.jpg"
+                                    ].map((imgUrl, i) => (
+                                        <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
                                             <img
-                                                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9`}
+                                                src={imgUrl}
                                                 alt="Partner"
                                                 className="w-full h-full object-cover"
                                             />
