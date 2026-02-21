@@ -274,6 +274,16 @@ async def get_notification_stats(
         total = (await session.exec(select(func.count(NotificationRetry.id)))).one() or 0
         return {"sent": sent, "pending": pending, "failed": failed, "total": total}
 
+@router.get("/palantir-feed", response_model=list[dict[str, Any]])
+async def get_palantir_feed(
+    limit: int = 100,
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Returns the real-time raw system event feed for God-Mode Master tracking.
+    """
+    return await admin_service.get_palantir_feed(limit=limit)
+
 @router.post("/maintenance/retry-notifications")
 async def retry_notifications(
     admin: dict = Depends(get_current_admin)

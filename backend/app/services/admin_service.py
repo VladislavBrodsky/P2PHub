@@ -658,6 +658,41 @@ class AdminService:
             await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
             return True
 
+    async def get_palantir_feed(self, limit: int = 100) -> list[dict[str, Any]]:
+        """
+        Retrieves the raw 'Palantir' event feed (the master activity log of the platform).
+        Fetches the latest critical system activities (XP updates, commissions, upgrades, payments).
+        """
+        from app.models.audit_log import AuditLog
+        from sqlmodel import select
+        
+        async for session in get_session():
+            stmt = (
+                select(AuditLog, Partner)
+                .join(Partner, Partner.id == AuditLog.partner_id, isouter=True)
+                .order_by(AuditLog.created_at.desc())
+                .limit(limit)
+            )
+            result = await session.exec(stmt)
+            rows = result.all()
+            
+            feed = []
+            for log, partner in rows:
+                action_val = str(log.action_type.value) if hasattr(log.action_type, 'value') else str(log.action_type)
+                feed.append({
+                    "id": log.id,
+                    "action_type": action_val,
+                    "action": log.action,
+                    "description": log.description,
+                    "details": log.details,
+                    "created_at": log.created_at.isoformat(),
+                    "username": partner.username if partner else None,
+                    "telegram_id": partner.telegram_id if partner else "system",
+                    "partner_level": partner.level if partner else None,
+                    "partner_is_pro": partner.is_pro if partner else False,
+                })
+            return feed
+
     async def clear_system_cache(self) -> dict[str, Any]:
         """Flushes key system caches."""
         # Clear admin stats cache in DB

@@ -4,7 +4,7 @@ import {
     CheckCircle, Clock, AlertTriangle, ShieldCheck, RefreshCw,
     User, ExternalLink, TrendingUp, TrendingDown, Users,
     Zap, PieChart, Wallet, Calendar, Search, X, Trash, Plus,
-    Activity, Database, Layers, Bell
+    Activity, Database, Layers, Bell, Eye
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -136,8 +136,9 @@ export const AdminPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
-    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance'>('kpis');
+    const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir'>('kpis');
     const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
+    const [palantirFeed, setPalantirFeed] = useState<any[]>([]);
     const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
     const [partnerDetails, setPartnerDetails] = useState<any | null>(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
@@ -257,6 +258,15 @@ export const AdminPage = () => {
         }
     };
 
+    const fetchPalantirFeed = async () => {
+        try {
+            const res = await apiClient.get('/api/admin/palantir-feed');
+            setPalantirFeed(res.data);
+        } catch (err) {
+            console.error('Failed to fetch palantir feed:', err);
+        }
+    };
+
     /**
      * Executes the Economy Integrity Audit.
      * Triggers a backend check that compares actual XP & USDT balances against 
@@ -319,6 +329,8 @@ export const AdminPage = () => {
     useEffect(() => {
         if (viewMode === 'maintenance') {
             fetchNotifStats();
+        } else if (viewMode === 'palantir') {
+            fetchPalantirFeed();
         }
     }, [viewMode]);
 
@@ -419,18 +431,19 @@ export const AdminPage = () => {
 
             {/* Navigation Tabs */}
             <div className="flex gap-1 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl overflow-x-auto scrollbar-none">
-                {(['kpis', 'financials', 'payments', 'network', 'search', 'maintenance'] as const).map((mode) => (
+                {(['kpis', 'financials', 'payments', 'network', 'search', 'maintenance', 'palantir'] as const).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
-                        className={`px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap ${viewMode === mode
+                        className={`px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${viewMode === mode
                             ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
-                            : 'text-slate-500'
+                            : 'text-slate-500 hover:bg-white/5'
                             }`}
                     >
-                        {mode === 'kpis' ? <Activity size={12} className="inline mr-1" /> : null}
-                        {mode === 'financials' ? <Wallet size={12} className="inline mr-1" /> : null}
-                        {mode === 'network' ? <Layers size={12} className="inline mr-1" /> : null}
+                        {mode === 'kpis' ? <Activity size={12} /> : null}
+                        {mode === 'financials' ? <Wallet size={12} /> : null}
+                        {mode === 'network' ? <Layers size={12} /> : null}
+                        {mode === 'palantir' ? <Eye size={12} className={viewMode === 'palantir' ? 'text-indigo-500' : ''} /> : null}
                         {mode}
                         {mode === 'payments' && transactions.length > 0 && (
                             <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px]">
@@ -442,6 +455,71 @@ export const AdminPage = () => {
             </div>
 
             <AnimatePresence mode="wait">
+                {viewMode === 'palantir' && (
+                    <motion.div
+                        key="palantir"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-6"
+                    >
+                        <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-3">
+                            <Eye className="text-indigo-500 shrink-0 mt-0.5" size={16} />
+                            <div>
+                                <h3 className="text-xs font-black text-indigo-500 uppercase tracking-widest">God-Mode Palantir Feed</h3>
+                                <p className="text-[10px] text-slate-500 font-medium mt-1">
+                                    Raw, unfiltered real-time matrix feed of system events. Watch user acquisitions, global notifications, commissions, and system audits happen instantly across the network.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            {palantirFeed.length === 0 ? (
+                                <div className="p-12 text-center text-slate-500 font-black uppercase text-[10px] tracking-widest glass-panel-premium rounded-3xl border border-black/5 dark:border-white/5">
+                                    No Events Captured Yet
+                                </div>
+                            ) : (
+                                palantirFeed.map(log => (
+                                    <div key={log.id} className="p-3 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-start gap-3 group hover:border-indigo-500/30 transition-all">
+                                        <div className="w-10 h-10 shrink-0 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center border border-black/5 dark:border-white/5 overflow-hidden relative">
+                                            {log.action_type === 'UPGRADE' || log.action_type === 'PAYMENT' ? (
+                                                <Zap size={16} className="text-amber-500" />
+                                            ) : log.action_type === 'COMMISSION' ? (
+                                                <Wallet size={16} className="text-emerald-500" />
+                                            ) : log.action_type === 'SYSTEM' ? (
+                                                <Activity size={16} className="text-blue-500" />
+                                            ) : (
+                                                <Eye size={16} className="text-indigo-500" />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex sm:items-center flex-col sm:flex-row justify-between gap-1 mb-1">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] font-black uppercase text-indigo-500 tracking-widest">
+                                                        {log.action_type}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-500 font-bold uppercase truncate">
+                                                        {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? `User ${log.telegram_id}` : 'System Process'}
+                                                    </span>
+                                                    {log.partner_is_pro && (
+                                                        <span className="px-1.5 py-0.5 rounded-md bg-amber-500/10 text-amber-500 text-[8px] font-black uppercase tracking-widest">PRO</span>
+                                                    )}
+                                                </div>
+                                                <div className="text-[9px] text-slate-500 font-bold uppercase whitespace-nowrap">
+                                                    {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                                                </div>
+                                            </div>
+                                            <p className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
+                                                {log.description || log.action}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
+                        </div>
+                    </motion.div>
+                )}
+
                 {viewMode === 'kpis' && (
                     <motion.div
                         key="kpis"
