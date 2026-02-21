@@ -53,9 +53,9 @@ class AudienceProfile:
             },
             "hooks": [
                 "The 3% liquidity leak most whales are ignoring.",
-                "Why the elite 1% move their assets outside the 'Legacy Box'.",
-                "Sovereign Velocity: The standard for 2026 capital execution.",
-                "Your asymmetric alpha isn't in the chart; it's in the infrastructure."
+                "Your asymmetric alpha isn't in the chart; it's in the infrastructure.",
+                "Sovereign Velocity: Why the elite move assets outside the 'Legacy Box'.",
+                "The institutional bypass for the new crypto aristocracy."
             ],
             "visual_base": "An elite Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blazer. Captured in a moody, high-contrast private executive suite with a panoramic view of a foggy financial district. Atmosphere is thick with focus and strategic power. Shot on Leica M11, 35mm f/1.4.",
             "cta_style": "Stealth, authoritative, high-stakes",
@@ -230,45 +230,45 @@ class AudienceProfile:
         },
         
         "hustlers": {
-            "name": "Student Hustlers",
-            "performing_keywords_2026": ["Side Hustle Alpha", "Student Wealth", "Independent Income", "Hustle Protocol"],
+            "name": "Emerging Alpha Architects",
+            "performing_keywords_2026": ["Asymmetric Hustle", "Early Momentum", "Neural Income", "Status Stacking"],
             "psychographics": {
                 "pain_points": [
-                    "Student loan debt",
-                    "Limited credit history",
-                    "Side hustle payment friction",
-                    "Traditional banks rejecting them",
-                    "Need to move fast on opportunities"
+                    "Debt-fueled education cycles",
+                    "Credential stagnation",
+                    "Missing the early adoption wave",
+                    "Geographic financial friction",
+                    "Identity suppression in junior roles"
                 ],
                 "desires": [
-                    "Financial independence from parents",
-                    "Build wealth early",
-                    "Status among peers",
-                    "Escape the 'broke student' trap",
-                    "Future-proof career"
+                    "Leapfrog the corporate ladder",
+                    "Build a 7-figure personal brand",
+                    "Absolute autonomous income",
+                    "Early retirement before 30",
+                    "Global peer status"
                 ],
-                "values": ["Ambition", "Speed", "Street smarts", "Hustle culture"],
-                "language_patterns": ["Energetic", "Trendy", "Rebellious", "Peer-influenced"],
-                "triggers": ["Early advantage", "Peer success", "Anti-establishment", "Future wealth"]
+                "values": ["Velocity", "Innovation", "Risk Mastery", "Freedom"],
+                "language_patterns": ["High-energy", "Visionary", "Analytical", "Rebellious"],
+                "triggers": ["Early advantage", "Peer-led revolutions", "Anti-legacy banking", "Rapid status gains"]
             },
             "tov": {
-                "style": "Energetic, rebellious, future-focused",
-                "formality": "Very casual, Gen-Z coded",
-                "humor": "Meme-heavy, self-aware",
-                "emojis": "🔥💸🎓📚⚡🚀",
-                "sentence_length": "Short. Fast-paced.",
-                "power_words": ["hustle", "grind", "stack", "escape", "future", "retire early"]
+                "style": "High-velocity, rebellious, future-proof",
+                "formality": "Casual mastery",
+                "humor": "Self-aware, forward-leaning",
+                "emojis": "⚡💸🎓🚀🔥",
+                "sentence_length": "Short. Punchy. Relentless.",
+                "power_words": ["momentum", "asymmetric", "stack", "leapfrog", "architect", "alpha"]
             },
             "hooks": [
-                "My peers are taking on debt to buy time. I bought the infrastructure to buy my freedom.",
-                "They tell you to wait your turn. The network told me to build my own.",
-                "The new financial reality is already here. We are just the first ones to realize it.",
-                "I didn't want a side hustle. I wanted absolute sovereign territory. Here is how it started."
+                "The corporate ladder is broken. We built a elevator outside the building.",
+                "Why I stopped trading grades for debt and started trading insights for liquidity.",
+                "Alpha Stacking: How to build a financial fortress before your first interview.",
+                "Chapter 1: Decoupling your potential from your credentials."
             ],
-            "visual_base": "An ambitious Gen-Z visionary in premium streetwear-luxe. Collaborating in a vibrant, futuristic innovation hub where neon data-streams merge with brilliant natural light. High-energy, high-status, and unapologetically future-focused.",
-            "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independent Income Setup"],
-            "cta_style": "Visionary, inclusive, community-proof",
-            "viral_hashtags": ["#StudentHustle", "#WealthCreation", "#FinancialIndependence", "#FutureCEO"]
+            "visual_base": "A high-status 'Emerging Alpha' in a futuristic urban tech-hub. Clean, architectural streetwear, focused on a sleek data-overlay. High-contrast, high-energy lighting reflecting the dawn of a new empire. Shot on Leica M11.",
+            "lead_magnets": ["The Asymmetric Income Protocol", "Status Stacking: The Early Wealth Blueprint", "The 1-Click Sovereign Setup"],
+            "cta_style": "High-velocity, action-oriented",
+            "viral_hashtags": ["#AlphaArchitect", "#StudentWealth", "#EarlyMomentum", "#HustleRevolution"]
         },
         
         "burnouts": {

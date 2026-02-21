@@ -316,14 +316,14 @@ class ViralMarketingStudio:
         """Sequential image generation using priority models and rich fallbacks."""
         if is_pro_plus:
             model_sequence = [
-                ("openai", "dall-e-3"),                 # Primary: OpenAI DALL-E 3 (Highest quality, funded)
-                ("google", "imagen-4.0-generate-001"),  # Quality fallback
+                ("google", "imagen-4.0-generate-001"),  # Primary: Imagen 4.0 (Gemini 3 Pro/Nano Banana ecosystem)
+                ("openai", "dall-e-3"),                 # Quality fallback
                 ("google", "imagen-3.0-generate-001"),  # Alternative fallback
             ]
         else:
             model_sequence = [
-                ("openai", "dall-e-3"),                     # Primary: OpenAI DALL-E 3
-                ("google", "imagen-4.0-generate-001"),      # Quality fallback
+                ("google", "imagen-4.0-generate-001"),      # Primary: Imagen 4.0
+                ("openai", "dall-e-3"),                     # Quality fallback
                 ("google", "imagen-3.0-fast-generate-001")  # Fast fallback
             ]
 

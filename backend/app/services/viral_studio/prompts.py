@@ -102,25 +102,25 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
 **YOUR TASK:**
 Write a HUMANIZED, NATIVE-level post in {language} for {target_audience} using the {post_type} strategy.
 Persona Tone: {tone.upper()}
-Product: Partner Center (Центр Партнеров) + Sovereign Ecosystem
+Product: Pintopay Ecosystem (Crypto Cards & Partner Center)
 Referral Link (MUST INCLUDE): {ref_link}
 
-**CRITICAL INSTRUCTION: LENGTH, FORMATTING & HASHTAGS.**
-Generate the entire content (title, body) as a single coherent narrative. DO NOT split the message.
-The TOTAL length of the 'body' MUST be strictly between 700 and 900 characters (symbols). This is critical to fit perfectly in a Telegram photo caption while maximizing depth.
-{chapter_rule_system} Use the best copywriting techniques (e.g., the 'Between the Lines' sales technique).
+**CRITICAL INSTRUCTION: LENGTH & FORMATTING.**
+Generate the entire content (title, body) as a single coherent narrative. DO NOT split the message into multiple parts.
+The TOTAL length of the 'body' MUST be strictly between 700 and 1000 characters (symbols). This is critical for depth while remaining readable on mobile.
+{chapter_rule_system} Use elite copywriting techniques (e.g., the 'Between the Lines' sales technique).
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
-Write as a high-status NATIVE {language} leader. Every word must feel earned and authentic.
+Write as a high-status NATIVE {language} CMO. Every word must feel earned, authentic, and sophisticated.
 
 **OUTPUT FORMAT (JSON ONLY):**
 {{
   "title": "A high-status strategic title <10 words",
   "body": "**[Strategic Title]**\\n\\n**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
-  "hashtags": "#Tag1 #Tag2 #Tag3 #Tag4" 
+  "hashtags": "#Tag1 #Tag2 #Tag3" 
 }}
-(Choose exactly 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. DO NOT repeat them. Output them in exactly 1 line separated by spaces. Do NOT include hashtags in the body itself.)
+(Choose exactly 2-4 most viral, strictly unique hashtags from: {', '.join(all_potential_hashtags)}. Output them in exactly 1 line separated by spaces. Do NOT include hashtags in the body itself.)
 
 """
 
@@ -154,44 +154,40 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
         story_context = f"**STORY CONTINUATION CONTEXT:**\n{recent_episodes}\n(Pick up seamlessly from here, progressing the narrative arc.)"
         
     return f"""
-EXECUTE GLOBAL PARTNER ARCHITECT MODE.
+EXECUTE ELITE CMO MODE (VERSION 2026).
 
+**MISSION BRIEFING:**
 Target: {target_audience}
 Category: {post_type}
 Style/Tone: {tone.upper()}
-Language: {language} (write as NATIVE HUMAN speaker)
+Language: {language} (Write as a sophisticated NATIVE speaker)
 Referral Link: {ref_link}
 
-**HUMANIZATION & ADVANCED COPYWRITING PROTOCOL (CRITICAL):**
-1. **NO AI CLICHES:** Avoid empty jargon like "In the rapidly evolving world...", "Unlock your potential...", or "Here's the secret...". Every word must be deliberately chosen to provide deep, super intelligent value.
-2. **PERSONAL VOICE & UNIQUE THOUGHT:** Write as if you are sending a private, high-status note to a trusted partner. Bring unique mental models (e.g., asymmetric risk, liquidity fragmentation, sovereign mechanics). Use "I built this because...", "We are seeing a shift...", "This is why I moved...".
-3. **SOUL & RHYTHM:** Use varying sentence lengths. Use silence/breaks for impact. Your copywriting must be elite, advanced, and uniquely differentiated from standard marketing.
-4. **ADVANCED TRANSLATION:** If writing in a non-English language, do NOT simply translate. Localize the concepts using highly advanced, native-level business slang, cultural fluency, and unparalleled phrasing.
-5. **NO SPLITTING:** The final generation MUST be a complete, unified message. Title + Body + CTA + Hashtags in ONE JSON response.
-{("5. **STORY CONTINUITY:** Make an attractive template for this story. Continue the episodes seamlessly with strong hooks." if story_history is not None else "5. **NO CHAPTER HEADINGS:** DO NOT write 'Chapter 1:' or 'Chapter X:' or any other chapter headings. This is absolutely forbidden.")}
+**AUDIENCE INTELLIGENCE (USE THESE INSIGHTS):**
+- Pain Points: {', '.join(audience_intel.get('psychographics', {}).get('pain_points', [])[:3])}
+- Desires: {', '.join(audience_intel.get('psychographics', {}).get('desires', [])[:3])}
+- Performing Keywords: {', '.join(seo_keywords)}
 
-**VIRAL & SEO CALIBRATION:**
-1. **GOLDEN FORMATTING RULES:** 
-   - ALWAYS make the Title, Hook, and CTA strictly **bold**. 
-   - Split text into 3-5 distinct short paragraphs (1-3 sentences maximum per paragraph) with double line breaks for mobile readability.
-   - 🚫 ABSOLUTELY NO weird markdown asterisks (e.g., *Passive Income System* or *Sovereign Abundance*) around random words. Keep the text naturally clean.
-   - 🎯 EMOJIS: Place emojis ONLY at the beginning of a paragraph or sentence. NEVER at the end of a sentence or paragraph. Use 1-2 maximum.
-2. **HASHTAGS:** Strict limit of 2-4 UNIQUE hashtags in one line. Do not put them in the body text or use them inline. ALL hashtags MUST be translated into {language} (e.g. if Russian, use Russian text in the hashtag, not English).
-3. **SEO OPTIMIZATION:** Naturally integrate these high-performing keywords: {', '.join(seo_keywords)}.
-
-**STORYTELLING CONTEXT:**
-Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
-Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
 {story_context if story_history is not None else ''}
 
-**CONTENT REQUIREMENTS (2026 HUMANIZED PROTOCOL):**
-1. **KEYWORD INTELLIGENCE:** Integrate high-performing keywords for {target_audience}: {', '.join(audience_intel.get('performing_keywords_2026', []))}. Use them naturally.
-2. **SALES BETWEEN THE LINES (Copywriter Strategy):** Master subtle persuasion. Do not pitch directly. Instead, provide immense value, and subtly weave in the "Pintopay Crypto Card" or "Partner Center" as the *obvious* tool or 'secret weapon' to solve the problem. Position it as a smart money move.
-3. **EMOTION:** Start by mirroring the audience's deep internal monologue or pain point.
-4. **ENGAGEMENT architecture:** End with a provocative thought, FOMO, or a "Signal Request".
-5. **CTA:** The final line MUST be: **[{cta_fallback}]({ref_link})**
-6. **TOTAL LENGTH LIMIT (ABSOLUTE CRITICAL):** Keep the ENTIRE body text strictly under **220 characters**. You are writing for both Telegram and X (Twitter), meaning you MUST respect the absolute strict X limit of 280 characters. Always write at least 20% fewer characters than this absolute limit to account for spacing, emojis, and link structures. If you exceed 240 characters, the X API will reject the post and the system will fail. Count your characters exactly and keep it extremely short, punchy, and dense.
-RETURN ONLY VALID JSON. NO EXPLANATIONS OUTSIDE JSON.
+**HUMANIZATION & CM-LEVEL COPYWRITING:**
+1. **DITCH THE CLICHES:** No "In today's world", no "Unlock potential". Write with the authority of someone who has managed $100M+ budgets.
+2. **PATTERN INTERRUPT:** Start with a hook that stops the scroll. 
+3. **SALES BY SUBTLETY:** Weave the product (Pintopay) into the narrative as an essential tool for the desired lifestyle.
+4. **EMOTIONAL RESONANCE:** Agitate a real, visceral pain point before presenting the elegant solution.
+5. **NATIVE FLUENCY:** Use business idioms and cultural nuances specific to {language}.
+
+**STRUCTURE & FORMATTING:**
+- Title & Hook: **Bold**
+- Paragraphs: 3-5 short, sharp blocks with double line breaks.
+- CTA: Final line MUST be exactly: **[{cta_fallback}]({ref_link})**
+- Hashtags: 2-4 unique tags in {language} at the very end.
+
+**LENGTH PROTOCOL:**
+Write a deep, meaningful transmission. Target length: 700-1000 characters. 
+Do not worry about X (Twitter) limits for this synthesis—the system will handle distribution. Focus on RAW VALUE and EMOTIONAL IMPACT.
+
+RETURN ONLY VALID JSON.
 """
 
 def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
@@ -212,9 +208,10 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
         f"{IMAGE_RULES}\n\n"
         f"SCENE SETUP: {audience_desc} {scene_desc} \n"
         f"{theme_context}"
-        f"EMOTION: Professional focus, calm authority, and visionary breakthrough. \n"
-        f"LIGHTING: Masterful cinematic lighting. \n"
-        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes, rich textures, award-winning photography.\n"
+        f"EMOTION: Deep empathy, authenticity, and high-status human resonance. The image must feel like a soul-to-soul transmission, not just a professional shot. \n"
+        f"ATMOSPHERE: Visionary breakthrough, calm authority, and a sense of 'reached a finish line' freedom. \n"
+        f"LIGHTING: Masterful cinematic lighting with natural depth and warmth. \n"
+        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes (the windows to the soul), rich organic textures, award-winning photography.\n"
         f"CRITICAL: DO NOT render any text, words, letters, logos, or titles in the image. The image must be completely TEXT-FREE."
     )
 
