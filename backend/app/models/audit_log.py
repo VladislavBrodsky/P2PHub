@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from enum import Enum
 
-from sqlalchemy import JSON, Column
+from sqlalchemy import JSON, Column, text
 from sqlmodel import Field, SQLModel
 
 

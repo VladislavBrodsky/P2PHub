@@ -77,7 +77,11 @@ export const ReferralGraph = () => {
 
     const handleUpgrade = () => {
         impact('heavy');
-        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+        if (user?.is_pro) {
+            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+        } else {
+            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+        }
     };
 
     const funnelStages = [

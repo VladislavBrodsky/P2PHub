@@ -274,7 +274,7 @@ export default function SubscriptionPage() {
                             className={`w-full h-11 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
                             <Trophy size={13} />
-                            {t('subscription.pro_active.command_center', 'COMMAND CENTER')}
+                            {t('subscription.pro_active.command_center', 'OPEN PRO DASHBOARD')}
                         </button>
 
                         {!isPlus && (
