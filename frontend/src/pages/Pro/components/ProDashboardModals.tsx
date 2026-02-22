@@ -103,6 +103,10 @@ export const ProDashboardModals = ({
 
     // Pre-fill effect
     React.useEffect(() => {
+        if (status?.is_pro_plus) {
+            setSetupTab('pro_plus');
+        }
+
         if (status?.setup) {
             setXApiKey(status.setup.x_api_key || '');
             setXApiSecret(status.setup.x_api_secret || '');
