@@ -238,42 +238,42 @@ export default function SubscriptionPage() {
                 <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
                 <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
-                <div className="relative z-10 w-full max-w-[320px] mx-auto flex flex-col items-center">
-                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-6 pt-2">
-                        <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
-                            <Crown size={40} className="text-white fill-white/20 drop-shadow-lg" />
+                <div className="relative z-10 w-full max-w-[300px] mx-auto flex flex-col items-center">
+                    <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-5 pt-1">
+                        <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
+                            <Crown size={32} className="text-white fill-white/20 drop-shadow-md" />
                         </div>
                     </motion.div>
 
-                    <h1 className="text-[22px] font-black mb-2 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
+                    <h1 className="text-[18px] font-black mb-1.5 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[240px]">
                         {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
                     </h1>
 
-                    <p className="text-slate-500 dark:text-slate-400 text-[13px] font-medium max-w-[280px] mx-auto leading-relaxed mb-8">
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px] font-medium max-w-[240px] mx-auto leading-relaxed mb-6">
                         {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
                     </p>
 
-                    <div className="w-full space-y-4">
-                        <div className="p-5 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2rem] flex items-center justify-between shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]">
-                            <div className="flex items-center gap-4">
-                                <div className={`w-11 h-11 rounded-[1rem] flex items-center justify-center bg-white/5 border border-white/10 shadow-inner shrink-0 ${isPlus ? 'text-yellow-600' : 'text-blue-400'}`}>
-                                    <Sparkles size={20} />
+                    <div className="w-full space-y-3">
+                        <div className="p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[1.5rem] flex items-center justify-between shadow-[0_15px_30px_-10px_rgba(0,0,0,0.4)]">
+                            <div className="flex items-center gap-3">
+                                <div className={`w-9 h-9 rounded-[0.75rem] flex items-center justify-center bg-white/5 border border-white/10 shadow-inner shrink-0 ${isPlus ? 'text-yellow-600' : 'text-blue-400'}`}>
+                                    <Sparkles size={16} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-[9px] font-black text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
-                                    <p className="text-[14px] font-black text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
+                                    <p className="text-[8px] font-black text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
+                                    <p className="text-[12px] font-black text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
                                 </div>
                             </div>
-                            <div className="w-9 h-9 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-lg md:ml-2">
-                                <CheckCircle2 size={16} className="text-emerald-400" />
+                            <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-md">
+                                <CheckCircle2 size={14} className="text-emerald-400" />
                             </div>
                         </div>
 
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                            className={`w-full h-12 rounded-full font-black text-[12px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
+                            className={`w-full h-11 rounded-full font-black text-[11px] tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
-                            <Trophy size={14} />
+                            <Trophy size={13} />
                             {t('subscription.pro_active.command_center', 'COMMAND CENTER')}
                         </button>
 
@@ -636,7 +636,7 @@ export default function SubscriptionPage() {
 
                                             <div className="flex items-center justify-center gap-1.5 mt-0.5 w-full">
                                                 <span className="text-[10px] font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-5 text-right">{inactiveValue}</span>
-                                                <div className="w-[1px] h-3 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
+                                                <div className="w-px h-3 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
                                                 <span className={`text-[15px] font-black tracking-tighter transition-all duration-500 w-7 text-left ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_10px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]'}`}>
                                                     {activeValue}
                                                 </span>
@@ -863,24 +863,24 @@ export default function SubscriptionPage() {
                                             <div className="w-12 h-1 bg-linear-to-r from-blue-500 to-yellow-500 mx-auto rounded-full opacity-60" />
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-2 gap-3">
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                                className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-yellow-500/5 hover:border-yellow-500/30 hover:shadow-xl active:scale-95"
+                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[1.25rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
                                             >
-                                                <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-                                                    <TONLogo className="w-6 h-6" />
+                                                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                                                    <TONLogo className="w-5 h-5" />
                                                 </div>
-                                                <span className="text-[10px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
+                                                <span className="text-[9px] font-black text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                                className="group relative h-24 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-2 transition-all duration-300 hover:scale-[1.03] hover:bg-emerald-500/5 hover:border-emerald-500/30 hover:shadow-xl active:scale-95"
+                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[1.25rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
                                             >
-                                                <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-                                                    <USDTLogo className="w-6 h-6" />
+                                                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                                                    <USDTLogo className="w-5 h-5" />
                                                 </div>
-                                                <span className="text-[10px] font-black text-slate-500 dark:text-white/40 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
+                                                <span className="text-[9px] font-black text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
                                             </button>
                                         </div>
                                         <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
