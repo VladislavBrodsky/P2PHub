@@ -64,6 +64,35 @@ class ViralAnalyticsService:
             return await self._fetch_linkedin_metrics(post, session)
         elif post.platform == "facebook":
             return await self._fetch_facebook_metrics(post, session)
+        elif post.platform == "threads":
+            return await self._fetch_threads_metrics(post, session)
+        return None
+
+    async def _fetch_threads_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
+        import httpx
+        partner = await session.get(Partner, post.partner_id)
+        if not partner or not partner.threads_access_token: return None
+        try:
+            async with httpx.AsyncClient() as client:
+                # Threads metrics are fetched from the media ID
+                url = f"https://graph.threads.net/v1.0/{post.external_id}?fields=metrics&access_token={partner.threads_access_token}"
+                resp = await client.get(url)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    metrics = data.get("metrics", {})
+                    # Typical fields: views, likes, replies, reposts, quotes
+                    likes = metrics.get("likes", 0)
+                    reposts = metrics.get("reposts", 0)
+                    return {
+                        "views": metrics.get("views", 0),
+                        "likes": likes,
+                        "reactions": likes,
+                        "reposts": reposts,
+                        "shares": reposts,
+                        "replies": metrics.get("replies", 0),
+                        "engagement_rate": 0.0
+                    }
+        except Exception: pass
         return None
 
     async def _fetch_x_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
