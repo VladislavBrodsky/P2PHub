@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 /* === LIQUID CRYSTAL PROGRESS BAR === */
 @keyframes liquid-crystal-shift {
   0% {
