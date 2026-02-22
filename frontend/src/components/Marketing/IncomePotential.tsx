@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
 import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock, Flame, ChevronRight, Zap } from 'lucide-react';
 import { useState, useMemo, useEffect, useRef } from 'react';
@@ -16,14 +16,14 @@ interface IncomePotentialProps {
 }
 
 export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['marketing', 'common']);
 
     const JOB_LEVELS = useMemo(() => [
-        { id: 'student', label: t('income.levels.student'), rate: 0 },
-        { id: 'entry', label: t('income.levels.entry'), rate: 15 },
-        { id: 'pro', label: t('income.levels.pro'), rate: 30 },
-        { id: 'manager', label: t('income.levels.manager'), rate: 60 },
-        { id: 'exec', label: t('income.levels.exec'), rate: 120 }
+        { id: 'student', label: t('income.levels.student', { defaultValue: 'Student' }), rate: 0 },
+        { id: 'entry', label: t('income.levels.entry', { defaultValue: 'Entry Level' }), rate: 15 },
+        { id: 'pro', label: t('income.levels.pro', { defaultValue: 'Professional' }), rate: 30 },
+        { id: 'manager', label: t('income.levels.manager', { defaultValue: 'Manager' }), rate: 60 },
+        { id: 'exec', label: t('income.levels.exec', { defaultValue: 'Executive' }), rate: 120 }
     ], [t]);
 
     const [mode, setMode] = useState<CalculatorMode>('profit');
@@ -110,7 +110,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
     return (
         <section className="px-4 py-8">
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
@@ -122,7 +122,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-600/20 blur-[120px] pointer-events-none" />
 
                 <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
-                    <motion.div
+                    <m.div
                         className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5"
                         animate={{
                             boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
@@ -134,7 +134,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500">
                             {t('income.badge')}
                         </span>
-                    </motion.div>
+                    </m.div>
 
                     <h3 className="text-3xl font-black tracking-tight leading-none max-w-[280px] mx-auto">
                         {t('income.title')} <br />
@@ -179,7 +179,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                             <AnimatePresence mode="wait">
                                 {mode === 'profit' ? (
-                                    <motion.div
+                                    <m.div
                                         key="profit"
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -222,9 +222,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                                             </button>
                                         </div>
-                                    </motion.div>
+                                    </m.div>
                                 ) : (
-                                    <motion.div
+                                    <m.div
                                         key="inaction"
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -295,12 +295,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </div>
                                             </div>
                                         </div>
-                                    </motion.div>
+                                    </m.div>
                                 )}
                             </AnimatePresence>
                         </>
                     ) : (
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="space-y-6"
@@ -322,7 +322,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                             <div className="text-center h-12 flex items-center justify-center">
                                 <AnimatePresence mode="wait">
-                                    <motion.p
+                                    <m.p
                                         key={currentMessageIndex}
                                         initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
                                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -331,17 +331,17 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
                                     >
                                         {viralMessages[currentMessageIndex]}
-                                    </motion.p>
+                                    </m.p>
                                 </AnimatePresence>
                             </div>
-                        </motion.div>
+                        </m.div>
                     )}
                 </div>
 
                 {/* ──────────────── $1/MIN MATH BREAKDOWN ──────────────── */}
                 <AnimatePresence>
                     {showMathSection && (
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, height: 0, scale: 0.95 }}
                             animate={{ opacity: 1, height: 'auto', scale: 1 }}
                             exit={{ opacity: 0, height: 0, scale: 0.95 }}
@@ -385,7 +385,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     { key: 'per_month', amount: '$43,200', period: '/month', highlight: true, delay: 0.24 },
                                     { key: 'per_year', amount: '$518,400', period: '/year', highlight: false, delay: 0.32 },
                                 ] as const).map(({ key, amount, period, highlight, delay }, idx, arr) => (
-                                    <motion.div
+                                    <m.div
                                         key={key}
                                         initial={{ opacity: 0, x: -20 }}
                                         animate={mathVisible ? { opacity: 1, x: 0 } : {}}
@@ -417,21 +417,21 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 TARGET
                                             </div>
                                         )}
-                                    </motion.div>
+                                    </m.div>
                                 ))}
 
                                 {/* Formula note */}
-                                <motion.div
+                                <m.div
                                     initial={{ opacity: 0 }}
                                     animate={mathVisible ? { opacity: 1 } : {}}
                                     transition={{ delay: 0.5 }}
                                     className="text-center -mt-1"
                                 >
                                     <span className="text-[9px] text-slate-400 dark:text-white/20 font-mono">{t('income.math.formula_note')}</span>
-                                </motion.div>
+                                </m.div>
 
                                 {/* FOMO red bar */}
-                                <motion.div
+                                <m.div
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={mathVisible ? { opacity: 1, y: 0 } : {}}
                                     transition={{ delay: 0.55 }}
@@ -444,7 +444,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     <p className="text-[11px] font-bold text-rose-700 dark:text-rose-300 leading-snug">
                                         {t('income.math.fomo_line')}
                                     </p>
-                                </motion.div>
+                                </m.div>
 
                                 {/* Live social proof */}
                                 <div className="pt-1.5 flex flex-col gap-3">
@@ -473,7 +473,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-1">
                                                     <AnimatePresence mode="wait">
-                                                        <motion.span
+                                                        <m.span
                                                             key={liveCount}
                                                             initial={{ y: -5, opacity: 0 }}
                                                             animate={{ y: 0, opacity: 1 }}
@@ -482,7 +482,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             className="text-xs font-black text-slate-900 dark:text-white leading-none"
                                                         >
                                                             {liveCount.toLocaleString()}
-                                                        </motion.span>
+                                                        </m.span>
                                                     </AnimatePresence>
                                                     <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">online</span>
                                                 </div>
@@ -499,7 +499,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
                                     </div>
 
-                                    <motion.button
+                                    <m.button
                                         whileHover={{ scale: 1.01 }}
                                         whileTap={{ scale: 0.99 }}
                                         onClick={() => {
@@ -511,10 +511,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     >
                                         {t('income.math.cta_urgency')}
                                         <ArrowRight className="w-3.5 h-3.5" />
-                                    </motion.button>
+                                    </m.button>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     )}
                 </AnimatePresence>
 
@@ -613,7 +613,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 ) : (
                     /* Post-Unlock Content: "Lead the Market" Button Redesign */
                     <div className="pt-4 relative z-10 text-center">
-                        <motion.button
+                        <m.button
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-black text-[11px] tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
@@ -621,7 +621,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             {t('income.cta.lead')}
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                             <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
-                        </motion.button>
+                        </m.button>
                         <p className="mt-4 text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
                             {t('income.cta.unlocked')}
                         </p>
@@ -646,13 +646,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                     </div>
                 )}
-            </motion.div>
+            </m.div>
             {/* Info Modals Portal */}
             {typeof document !== 'undefined' && ReactDOM.createPortal(
                 <AnimatePresence>
                     {activeModal && (
                         <>
-                            <motion.div
+                            <m.div
                                 key="modal-backdrop"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -661,7 +661,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-sm"
                             />
                             <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 pointer-events-none">
-                                <motion.div
+                                <m.div
                                     key="modal-content"
                                     initial={{ scale: 0.9, opacity: 0, y: 20 }}
                                     animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -778,7 +778,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </>
                                         )}
                                     </div>
-                                </motion.div>
+                                </m.div>
                             </div>
                         </>
                     )}

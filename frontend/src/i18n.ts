@@ -7,9 +7,21 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // we use dynamic imports. This allows Vite to split each language/sector 
 // into its own small chunk, loaded only when needed.
 const loadResources = async (language: string, namespace: string) => {
+    // Normalize language: 'en-US' -> 'en'
+    const shortLang = language.split('-')[0];
     try {
-        // Vite supports dynamic imports with template literals
-        const resources = await import(`./locales/${language}/${namespace}.json`);
+        // Try the specific language first
+        let resources;
+        try {
+            resources = await import(`./locales/${language}/${namespace}.json`);
+        } catch (e) {
+            // Fallback to short language if different
+            if (shortLang !== language) {
+                resources = await import(`./locales/${shortLang}/${namespace}.json`);
+            } else {
+                throw e;
+            }
+        }
         return resources.default;
     } catch (e) {
         console.error(`[i18n] Failed to load ${language}/${namespace}:`, e);
@@ -26,19 +38,15 @@ i18n
         fallbackLng: 'en',
         ns: namespaces,
         defaultNS: 'common',
+        fallbackNS: namespaces, // #comment: Allow components to find keys across any namespace
         debug: import.meta.env.DEV,
         interpolation: {
             escapeValue: false,
         },
-        backend: {
-            // #comment: custom backend using the lazy loader defined above
-            async loadResources(language: string, namespace: string, callback: any) {
-                const resources = await loadResources(language, namespace);
-                callback(null, resources);
-            }
-        },
         react: {
-            useSuspense: false,
+            useSuspense: true, // #comment: Enable Suspense to prevent raw key flashing
+            bindI18n: 'languageChanged loaded',
+            bindI18nStore: 'added removed',
         },
         detection: {
             order: ['querystring', 'localStorage'],
@@ -48,12 +56,15 @@ i18n
         }
     });
 
-// #comment: Manually load the initial language/namespaces to prevent raw key flashing 
-// without needing the full i18next-http-backend plugin.
-const initLang = localStorage.getItem('i18nextLng') || 'en';
-Promise.all(namespaces.map(ns =>
-    loadResources(initLang, ns).then(res => i18n.addResourceBundle(initLang, ns, res, true, true))
-));
+// #comment: Custom backend plugin-like logic to handle lazy loading with Suspense support
+const rawLang = localStorage.getItem('i18nextLng') || 'en';
+const initLang = rawLang.split('-')[0];
 
+// Pre-load all namespaces for the initial language to satisfy Suspense
+namespaces.forEach(ns => {
+    loadResources(initLang, ns).then(res => {
+        i18n.addResourceBundle(initLang, ns, res, true, true);
+    });
+});
 
 export default i18n;

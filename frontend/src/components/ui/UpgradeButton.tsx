@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Crown, CheckCircle2, Sparkles } from 'lucide-react';
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ interface UpgradeButtonProps {
 }
 
 export const UpgradeButton = ({ onClick, className = '', showPrice = true }: UpgradeButtonProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['common', 'marketing']);
     const { user } = useUser();
     const isPro = user?.is_pro;
 
@@ -25,7 +25,7 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
     }
 
     return (
-        <motion.button
+        <m.button
             whileHover={{ scale: 1.01, translateY: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleClick}
@@ -82,10 +82,9 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                     )}
                 </div>
 
-                {/* Shimmer Overlay on Hover */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
             </div>
-        </motion.button>
+        </m.button>
     );
 };
 

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { User, Globe, Network, AlertCircle, Brain, Zap, TrendingUp, ChevronRight, Sparkles, Users } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { useUser } from '../../context/UserContext';
@@ -9,7 +9,7 @@ import { useHaptic } from '../../hooks/useHaptic';
 import clsx from 'clsx';
 
 export const ReferralGraph = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['marketing', 'common']);
     const { user } = useUser();
     const { selection, impact } = useHaptic();
 
@@ -73,22 +73,22 @@ export const ReferralGraph = () => {
     const funnelStages = [
         {
             icon: <AlertCircle className="w-12 h-12 text-amber-500" />,
-            title: t('viral_funnel.step1_title'),
-            desc: t('viral_funnel.step1_desc'),
+            title: t('viral_funnel.step1_title', { defaultValue: 'Immediate Opportunity' }),
+            desc: t('viral_funnel.step1_desc', { defaultValue: 'You are currently standing outside the largest wealth transfer in digital history.' }),
             color: 'from-amber-500/20 to-orange-500/20',
             borderColor: 'border-amber-500/30'
         },
         {
             icon: <Brain className="w-12 h-12 text-blue-500" />,
-            title: t('viral_funnel.step2_title'),
-            desc: t('viral_funnel.step2_desc'),
+            title: t('viral_funnel.step2_title', { defaultValue: 'The $1/min Strategy' }),
+            desc: t('viral_funnel.step2_desc', { defaultValue: 'Stop trading hours for dollars. Start capturing global volume dividends.' }),
             color: 'from-blue-500/20 to-indigo-500/20',
             borderColor: 'border-blue-500/30'
         },
         {
             icon: <Zap className="w-12 h-12 text-yellow-500" />,
-            title: t('viral_funnel.step3_title'),
-            desc: t('viral_funnel.step3_desc'),
+            title: t('viral_funnel.step3_title', { defaultValue: 'Activation Status' }),
+            desc: t('viral_funnel.step3_desc', { defaultValue: 'Your node is ready for deployment. Finalize setup to begin yielding USDT.' }),
             color: 'from-yellow-500/20 to-orange-500/20',
             borderColor: 'border-yellow-500/30'
         }
@@ -107,7 +107,7 @@ export const ReferralGraph = () => {
 
                 {/* Visual Neural Connections */}
                 <svg className="absolute inset-0 w-full h-full opacity-30">
-                    <motion.path
+                    <m.path
                         d="M100,250 Q250,100 400,250 T700,250"
                         stroke="currentColor"
                         strokeWidth="1"
@@ -117,7 +117,7 @@ export const ReferralGraph = () => {
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
                         style={{ strokeDasharray: "5, 5" }}
                     />
-                    <motion.path
+                    <m.path
                         d="M-50,400 Q200,550 450,400 T950,400"
                         stroke="currentColor"
                         strokeWidth="1"
@@ -132,7 +132,7 @@ export const ReferralGraph = () => {
 
             <AnimatePresence mode="wait">
                 {!showFunnel ? (
-                    <motion.div
+                    <m.div
                         key="graph"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -141,7 +141,7 @@ export const ReferralGraph = () => {
                     >
                         {/* ── CENTER HUB (USER) ── */}
                         <div className="relative z-20 mb-12">
-                            <motion.div
+                            <m.div
                                 animate={{
                                     boxShadow: [
                                         "0 0 20px rgba(99,102,241,0.2)",
@@ -162,15 +162,15 @@ export const ReferralGraph = () => {
                                     )}
                                     <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/10 to-transparent animate-shimmer" />
                                 </div>
-                            </motion.div>
+                            </m.div>
 
-                            <motion.div
+                            <m.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] shadow-xl border border-white/10 dark:border-black/5"
                             >
-                                {t('income.network.core')}
-                            </motion.div>
+                                {t('income.network.core', { defaultValue: 'CORE HUB ACTIVATED' })}
+                            </m.div>
                         </div>
 
                         {/* ── DISTRIBUTED NODES ── */}
@@ -182,7 +182,7 @@ export const ReferralGraph = () => {
                         </div>
 
                         {/* ── CALCULATION COUNTER ── */}
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="mt-16 sm:mt-24 text-center z-30 w-full max-w-[300px]"
@@ -191,7 +191,7 @@ export const ReferralGraph = () => {
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
 
                                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
-                                    {t('income.network.yield')}
+                                    {t('income.network.yield', { defaultValue: 'PROJECTED PROJECTED MONTHLY YIELD' })}
                                 </span>
 
                                 <div className="flex items-baseline justify-center gap-1">
@@ -202,7 +202,7 @@ export const ReferralGraph = () => {
                                 </div>
 
                                 <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-px">
-                                    <motion.div
+                                    <m.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${(count / 43200) * 100}%` }}
                                         className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
@@ -210,15 +210,15 @@ export const ReferralGraph = () => {
                                 </div>
 
                                 <div className="mt-3 flex justify-between items-center text-[8px] font-black text-white/30 uppercase tracking-widest">
-                                    <span>{t('income.math.per_min')}</span>
-                                    <span>MAX DIVIDENDS</span>
+                                    <span>{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
+                                    <span>{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
 
                         {/* ── AMBIENT FLOATING DIVIDENDS ── */}
                         {[...Array(5)].map((_, i) => (
-                            <motion.div
+                            <m.div
                                 key={i}
                                 initial={{ opacity: 0 }}
                                 animate={{
@@ -239,11 +239,11 @@ export const ReferralGraph = () => {
                                 }}
                             >
                                 +$8.64
-                            </motion.div>
+                            </m.div>
                         ))}
-                    </motion.div>
+                    </m.div>
                 ) : (
-                    <motion.div
+                    <m.div
                         key="funnel"
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -252,7 +252,7 @@ export const ReferralGraph = () => {
                     >
                         <AnimatePresence mode="wait">
                             {funnelStep < 3 ? (
-                                <motion.div
+                                <m.div
                                     key={funnelStep}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -284,19 +284,19 @@ export const ReferralGraph = () => {
                                             onClick={nextStep}
                                             className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
                                         >
-                                            {t('common.next')}
+                                            {t('common.next', { defaultValue: 'Next' })}
                                             <ChevronRight className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
                                             className="text-[9px] font-black text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
                                         >
-                                            {t('income.network.close')}
+                                            {t('common.close', { defaultValue: 'Close' })}
                                         </button>
                                     </div>
-                                </motion.div>
+                                </m.div>
                             ) : (
-                                <motion.div
+                                <m.div
                                     key="cta"
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
@@ -311,11 +311,11 @@ export const ReferralGraph = () => {
 
                                     <div className="space-y-2 mb-10 text-center">
                                         <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase leading-tight pb-1">
-                                            {t('viral_funnel.cta')}
+                                            {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                         </h3>
                                         <div className="w-12 h-1.5 bg-emerald-500 mx-auto rounded-full" />
                                         <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">
-                                            {t('viral_funnel.elite_users')}
+                                            {t('viral_funnel.elite_users', { defaultValue: 'OFFER LIMITED TO FIRST 5,000 PARTNERS' })}
                                         </p>
                                     </div>
 
@@ -324,7 +324,7 @@ export const ReferralGraph = () => {
                                             onClick={handleUpgrade}
                                             className="w-full h-16 vibing-emerald-animated rounded-2xl text-white font-black text-sm uppercase tracking-widest shadow-[0_20px_60px_-10px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                         >
-                                            {t('viral_funnel.cta')}
+                                            {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                             <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                                         </button>
 
@@ -332,7 +332,7 @@ export const ReferralGraph = () => {
                                             onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
                                             className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
-                                            {t('income.network.close')}
+                                            {t('common.close', { defaultValue: 'Close' })}
                                         </button>
                                     </div>
 
@@ -349,13 +349,13 @@ export const ReferralGraph = () => {
                                             ))}
                                         </div>
                                         <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-tight text-left">
-                                            {t('viral_funnel.deployed_partners', { count: partnersCount })}
+                                            {t('viral_funnel.deployed_partners', { count: partnersCount, defaultValue: `${partnersCount} nodes activated today` })}
                                         </p>
                                     </div>
-                                </motion.div>
+                                </m.div>
                             )}
                         </AnimatePresence>
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
         </div>
@@ -363,7 +363,7 @@ export const ReferralGraph = () => {
 };
 
 const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
-    <motion.div
+    <m.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay, type: "spring", stiffness: 260, damping: 20 }}
@@ -385,7 +385,7 @@ const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
             "absolute inset-0 rounded-2xl animate-pulse opacity-0 group-hover:opacity-100",
             pro ? "shadow-[0_0_20px_rgba(99,102,241,0.6)]" : "shadow-[0_0_20px_rgba(16,185,129,0.6)]"
         )} />
-    </motion.div>
+    </m.div>
 );
 
 

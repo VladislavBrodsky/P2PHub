@@ -23,7 +23,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ setActiveTab }: DashboardProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['dashboard', 'common']);
     const { user } = useUser();
 
     const container = {

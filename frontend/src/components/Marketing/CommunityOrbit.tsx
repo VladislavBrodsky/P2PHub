@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import React, { memo, useState, useEffect } from 'react';
 import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 import { apiClient } from '../../api/client';
@@ -123,7 +123,7 @@ export const CommunityOrbit = memo(() => {
 
             {/* Background Particles/Stars */}
             {[...Array(12)].map((_, i) => (
-                <motion.div
+                <m.div
                     key={`star-${i}`}
                     className="absolute h-px w-px rounded-full bg-blue-400/60"
                     style={{
@@ -172,7 +172,7 @@ const CentralLogo = memo(() => {
 
     return (
         <div className="relative z-10 flex h-24 w-24 items-center justify-center">
-            <motion.div
+            <m.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -183,7 +183,7 @@ const CentralLogo = memo(() => {
                 <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
 
                 {isUserPhoto ? (
-                    <motion.img
+                    <m.img
                         animate={{
                             scale: [1, 1.05, 1],
                         }}
@@ -202,7 +202,7 @@ const CentralLogo = memo(() => {
                         }}
                     />
                 ) : (
-                    <motion.img
+                    <m.img
                         animate={{
                             scale: [1, 1.08, 1],
                         }}
@@ -226,7 +226,7 @@ const CentralLogo = memo(() => {
                         }}
                     />
                 )}
-            </motion.div>
+            </m.div>
         </div>
     );
 });
@@ -246,7 +246,7 @@ const FractalProfits = memo(() => {
                 const targetY = Math.sin(angle) * distance;
 
                 return (
-                    <motion.div
+                    <m.div
                         key={i}
                         initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
                         animate={{
@@ -271,7 +271,7 @@ const FractalProfits = memo(() => {
                         <span className={`text-[12px] font-black tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
                             +{isTon ? `${amount} TON` : `$${amount}.00`}
                         </span>
-                    </motion.div>
+                    </m.div>
                 );
             })}
         </div>
@@ -294,7 +294,7 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
     const angle = (index / total) * 360;
 
     return (
-        <motion.div
+        <m.div
             className="absolute z-30" // Force high z-index to avoid color bleeding from central glow
             style={{
                 width: 60,
@@ -317,7 +317,7 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                 ease: "linear"
             }}
         >
-            <motion.div
+            <m.div
                 animate={{
                     y: [-6, 6, -6],
                     x: [-3, 3, -3],
@@ -378,7 +378,7 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                         </div>
                     </div>
                 )}
-            </motion.div>
-        </motion.div>
+            </m.div>
+        </m.div>
     );
 });

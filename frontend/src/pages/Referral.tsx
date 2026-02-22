@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, lazy } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
 // import { TaskCard } from '../components/Earn/TaskCard'; // Unused
@@ -26,7 +26,7 @@ import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
 
 export default function ReferralPage() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['social', 'common', 'marketing']);
     const { notification, selection } = useHaptic();
     const { user, updateUser, refreshUser, isLoading } = useUser();
     const { showNotification } = useNotificationStore();
@@ -313,14 +313,14 @@ export default function ReferralPage() {
             <AnimatePresence>
                 {showShareModal && (
                     <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center sm:p-4 px-0 py-0">
-                        <motion.div
+                        <m.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowShareModal(false)}
                             className="absolute inset-0 bg-black/60 backdrop-blur-xl"
                         />
-                        <motion.div
+                        <m.div
                             initial={{ y: "100%", opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: "100%", opacity: 0 }}
@@ -422,7 +422,7 @@ export default function ReferralPage() {
                                     </div>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </div>
                 )}
             </AnimatePresence>
@@ -431,7 +431,7 @@ export default function ReferralPage() {
             <AnimatePresence>
                 {showQR && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-                        <motion.div
+                        <m.div
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
@@ -493,7 +493,7 @@ export default function ReferralPage() {
                                     </button>
                                 </div>
                             </div>
-                        </motion.div>
+                        </m.div>
                     </div>
                 )}
             </AnimatePresence>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { ChevronRight, ArrowUpRight, Clock } from 'lucide-react';
 import { blogService } from '../../services/blogService';
 import { BlogPost } from '../../data/blogPosts';
@@ -8,7 +8,7 @@ import { useHaptic } from '../../hooks/useHaptic';
 import { SectionHeader } from '../ui/SectionHeader';
 
 export const BlogCarousel = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['marketing', 'common']);
     const { selection } = useHaptic();
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +58,7 @@ export const BlogCarousel = () => {
 
             <div className="flex gap-4 overflow-x-auto px-4 pb-6 no-scrollbar snap-x snap-mandatory">
                 {posts.map((post, index) => (
-                    <motion.div
+                    <m.div
                         key={post.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
@@ -115,7 +115,7 @@ export const BlogCarousel = () => {
                                 </div>
                             </div>
                         </div>
-                    </motion.div>
+                    </m.div>
                 ))}
             </div>
         </section>

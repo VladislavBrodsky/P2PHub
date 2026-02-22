@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 interface SectionHeaderProps {
     badge?: string;
@@ -24,7 +24,7 @@ export const SectionHeader = ({
         <div className={`space-y-3 flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'} ${className}`}>
             {badge && (
                 <div className="flex items-center gap-2">
-                    <motion.div
+                    <m.div
                         className="w-2 h-2 rounded-full bg-blue-500"
                         animate={{ opacity: [1, 0.4, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
@@ -35,17 +35,17 @@ export const SectionHeader = ({
                 </div>
             )}
 
-            <motion.h2
+            <m.h2
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] whitespace-pre-line"
             >
                 {title}
-            </motion.h2>
+            </m.h2>
 
             {description && (
-                <motion.p
+                <m.p
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -53,7 +53,7 @@ export const SectionHeader = ({
                     className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px]"
                 >
                     {description}
-                </motion.p>
+                </m.p>
             )}
         </div>
     );

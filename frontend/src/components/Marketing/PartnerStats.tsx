@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 // #comment: Removed useEffect as we now use the optimized useVisibilityPolling hook.
@@ -80,7 +80,7 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 };
 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['dashboard', 'common']);
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '5.0K+', volume: '$0', countries: '142', lastHourCount: 342 });
 
@@ -132,7 +132,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     return (
         <section className="px-4 py-8 relative overflow-hidden">
             <div className="grid grid-cols-3 gap-3">
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
@@ -144,11 +144,11 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.total} />
                     </span>
                     <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.global_partners')}
+                        {t('dashboard.stats.global_partners', { defaultValue: 'Global Partners' })}
                     </span>
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
@@ -161,11 +161,11 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.volume} />
                     </span>
                     <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.volume_shifted')}
+                        {t('dashboard.stats.volume_shifted', { defaultValue: 'Volume Shifted' })}
                     </span>
-                </motion.div>
+                </m.div>
 
-                <motion.div
+                <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
@@ -178,12 +178,12 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.countries} />
                     </span>
                     <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.countries_active')}
+                        {t('dashboard.stats.countries_active', { defaultValue: 'Countries Active' })}
                     </span>
-                </motion.div>
+                </m.div>
             </div>
 
-            <motion.div
+            <m.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
@@ -192,7 +192,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
             >
                 {/* Live Shimmer Indicator */}
                 <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 animate-[pulse-glow_2s_infinite]" />
-                <motion.div
+                <m.div
                     className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full"
                     animate={{ x: ['-100%', '200%'] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -202,7 +202,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <AnimatePresence mode="popLayout">
                         {recentPartners.length > 0 ? (
                             recentPartners.slice(0, 4).map((partner, i) => (
-                                <motion.div
+                                <m.div
                                     key={partner.id || i}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
@@ -210,7 +210,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                                     className="w-[26px] h-[26px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 hover:z-20"
                                 >
                                     <PartnerAvatar partner={partner} index={i} />
-                                </motion.div>
+                                </m.div>
                             ))
                         ) : (
                             [1, 2, 3, 4].map((i) => (
@@ -223,13 +223,13 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
                 <p className="text-[11px] font-bold text-slate-600 dark:text-slate-400 relative z-10 leading-tight">
-                    <Trans i18nKey="dashboard.stats.recent_join" values={{ count: stats.lastHourCount }}>
+                    <Trans i18nKey="dashboard.stats.recent_join" ns="dashboard" values={{ count: stats.lastHourCount }}>
                         <span className="text-slate-900 dark:text-white font-black">
                             +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
                         </span> joined the movement in the last 60m
                     </Trans>
                 </p>
-            </motion.div>
+            </m.div>
         </section>
     );
 };

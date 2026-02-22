@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { CreditCard, Smartphone, Zap, Globe, Coins, QrCode, RotateCcw, TrendingUp, History, Landmark, Wallet, ShieldCheck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -48,7 +48,7 @@ const shiftSteps = [
 ];
 
 export const BentoGrid = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['dashboard', 'common']);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
@@ -124,14 +124,14 @@ export const BentoGrid = () => {
                     className="flex gap-4 overflow-x-auto pb-8 snap-x snap-mandatory no-scrollbar px-4 -mx-4 md:mx-0 md:px-0 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
-                        <motion.div
+                        <m.div
                             key={index}
                             className={`relative group shrink-0 w-[85vw] md:w-[400px] h-[300px] snap-center perspective-1000 cursor-pointer`}
                             onClick={() => toggleFlip(index)}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <motion.div
+                            <m.div
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10%" }}
@@ -182,13 +182,13 @@ export const BentoGrid = () => {
                                         </div>
                                     </div>
 
-                                    <motion.div
+                                    <m.div
                                         className="absolute -right-2 -bottom-2 opacity-5 pointer-events-none"
                                         animate={{ rotate: 360 }}
                                         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
                                     >
                                         {step.watermark}
-                                    </motion.div>
+                                    </m.div>
                                 </div>
 
                                 {/* BACK SIDE */}
@@ -219,16 +219,16 @@ export const BentoGrid = () => {
                                         </button>
                                     </div>
 
-                                    <motion.div
+                                    <m.div
                                         className="absolute -left-10 -top-10 opacity-5 pointer-events-none"
                                         animate={{ rotate: -360 }}
                                         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                                     >
                                         {step.watermark}
-                                    </motion.div>
+                                    </m.div>
                                 </div>
-                            </motion.div>
-                        </motion.div>
+                            </m.div>
+                        </m.div>
                     ))}
                 </div>
 
@@ -237,7 +237,7 @@ export const BentoGrid = () => {
                     {/* Compact Pagination Dots */}
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/5 border border-white/5 backdrop-blur-md shadow-inner">
                         {shiftSteps.map((_, i) => (
-                            <motion.div
+                            <m.div
                                 key={i}
                                 initial={false}
                                 animate={{
