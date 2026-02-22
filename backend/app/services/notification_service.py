@@ -110,6 +110,12 @@ async def send_telegram_task(payload_dict: dict):
             logger.error(f"Failed to pause notifications for {payload.chat_id}: {ue}")
         return True # Handled, don't retry
     except Exception as e:
+        err_msg = str(e).lower()
+        # Terminal errors: No point in retrying
+        if "chat not found" in err_msg or "peer id invalid" in err_msg or "user_id_invalid" in err_msg:
+            logger.error(f"❌ Terminal Dispatch Error (No Retry): {e} for {payload.chat_id}")
+            return True # Pretend success to stop TaskIQ retries, but we didn't send it
+
         logger.error(f"💥 Dispatch Error: {e}")
         sentry_sdk.capture_exception(e)
         return False # Let TaskIQ retry (up to 5 times)
@@ -338,12 +344,18 @@ class NotificationService:
                     except Exception as ue:
                         logger.error(f"Failed to sync block for {item.chat_id}: {ue}")
                 except Exception as e:
-                    item.attempts += 1
-                    item.last_error = str(e)[:100]
-                    # Exponential backoff
-                    wait_sec = min(3600, (2 ** item.attempts) * 60)
-                    item.next_retry_at = datetime.now(UTC).replace(tzinfo=None) + timedelta(seconds=wait_sec)
-                    if item.attempts >= 10: item.status = "failed"
+                    err_msg = str(e).lower()
+                    if "chat not found" in err_msg or "peer id invalid" in err_msg or "user_id_invalid" in err_msg:
+                        logger.error(f"❌ Terminal Retry Error: {e} for {item.chat_id}. Marking as failed.")
+                        item.status = "failed"
+                        item.last_error = f"Terminal: {str(e)[:50]}"
+                    else:
+                        item.attempts += 1
+                        item.last_error = str(e)[:100]
+                        # Exponential backoff
+                        wait_sec = min(3600, (2 ** item.attempts) * 60)
+                        item.next_retry_at = datetime.now(UTC).replace(tzinfo=None) + timedelta(seconds=wait_sec)
+                        if item.attempts >= 10: item.status = "failed"
                 session.add(item)
             await session.commit()
 
