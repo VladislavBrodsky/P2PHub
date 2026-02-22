@@ -52,7 +52,7 @@ i18n
 // without needing the full i18next-http-backend plugin.
 const initLang = localStorage.getItem('i18nextLng') || 'en';
 Promise.all(namespaces.map(ns =>
-    loadResources(initLang, ns).then(res => i18n.addResourceBundle(initLang, 'translation', res, true, true))
+    loadResources(initLang, ns).then(res => i18n.addResourceBundle(initLang, ns, res, true, true))
 ));
 
 
