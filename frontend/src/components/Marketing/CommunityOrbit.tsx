@@ -5,6 +5,7 @@ import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { useUser } from '../../context/UserContext';
 
+// #comment: Asset constants for fallback avatars and crypto icons.
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 
 const CRYPTO_ICONS = [
@@ -14,7 +15,8 @@ const CRYPTO_ICONS = [
     { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
 ];
 
-// Crypto SVG Icons
+// #comment: CryptoIcon component is memoized to prevent re-renders of static SVG paths 
+// during the high-frequency orbit animations.
 const CryptoIcon = memo(({ name }: { name: string }) => {
     if (name === 'BTC') {
         return (
@@ -54,6 +56,7 @@ type OrbitItem =
     | { type: 'avatar'; src: string }
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
+// #comment: Main CommunityOrbit component. Manages fetching of top partners and layout of the orbit.
 export const CommunityOrbit = memo(() => {
     const [items, setItems] = useState<OrbitItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +109,7 @@ export const CommunityOrbit = memo(() => {
         fetchItems();
     }, []);
 
-    // Placeholder items for the skeleton state
+    // #comment: Placeholder items ensure the orbit shape is present even while data is loading.
     const placeholderItems = [...Array(8)].map((_, i) => ({
         type: i % 2 === 0 ? 'avatar' : 'crypto',
         isPlaceholder: true
@@ -115,8 +118,8 @@ export const CommunityOrbit = memo(() => {
     const displayItems = isLoading ? placeholderItems : items;
 
     return (
-        <div className="relative flex h-[420px] w-full items-center justify-center overflow-visible">
-            {/* Ambient Background Glow */}
+        <div className="relative flex h-[360px] sm:h-[400px] w-full items-center justify-center overflow-visible">
+            {/* #comment: Ambient Background Glow - Provides the "Hub" feel without blocking interactions. */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
             </div>
@@ -220,7 +223,6 @@ const CentralLogo = memo(() => {
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             if (!target.src.includes('raw.githubusercontent.com')) {
-                                // High-reliability fallback to remote asset
                                 target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
                             }
                         }}
@@ -278,24 +280,26 @@ const FractalProfits = memo(() => {
     );
 });
 
+// #comment: OrbitingItem represents an individual partner or crypto icon in the orbit.
 const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
-    const [radius, setRadius] = useState(140);
+    const [radius, setRadius] = useState(120);
 
+    // #comment: Radius adjustment based on viewport width to ensure orbit fits on smaller mobile screens.
     useEffect(() => {
         const updateRadius = () => {
-            setRadius(window.innerWidth < 380 ? 110 : 140);
+            setRadius(window.innerWidth < 380 ? 90 : 120);
         };
         updateRadius();
         window.addEventListener('resize', updateRadius);
         return () => window.removeEventListener('resize', updateRadius);
     }, []);
 
-    const duration = 50 + (index * 2); // Variation in speeds for a more organic feel
+    const duration = 50 + (index * 2);
     const angle = (index / total) * 360;
 
     return (
         <m.div
-            className="absolute z-30" // Force high z-index to avoid color bleeding from central glow
+            className="absolute z-5" // #comment: Lowered z-index to ensure items pass behind the hero text (which is z-40).
             style={{
                 width: 60,
                 height: 60,
