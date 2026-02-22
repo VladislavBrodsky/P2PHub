@@ -70,8 +70,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     <CommunityOrbit />
                 </div>
 
-                {/* #comment: Hero Content Section - Re-introducing negative margin for the 'Great' version look. */}
-                <div className="text-center gap-10 px-2 flex flex-col items-center -mt-8 relative z-20">
+                {/* #comment: Hero Content Section - Centered layout with balanced spacing. */}
+                <div className="text-center gap-10 px-2 flex flex-col items-center mt-2 relative z-20">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (

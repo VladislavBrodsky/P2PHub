@@ -24,7 +24,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             onPointerEnter={onMouseEnter}
             className={`relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 transition-colors duration-200 active:scale-90 ${active
                 ? 'text-blue-500'
-                : 'text-(--nav-inactive) hover:text-(--nav-active)'
+                : 'text-nav-inactive hover:text-nav-active'
                 }`}
             aria-label={label}
         >

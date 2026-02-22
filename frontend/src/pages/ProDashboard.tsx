@@ -523,7 +523,7 @@ export const ProDashboard = () => {
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
                         </div>
-                    ) : status && !status.is_pro ? (
+                    ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}

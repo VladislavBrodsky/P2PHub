@@ -48,11 +48,11 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 <div className="flex items-center justify-between gap-4">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
+                        className="group flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
                         aria-label="Open menu"
                     >
-                        <Menu className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-primary)">
+                        <Menu className="text-text-primary h-5 w-5 transition-transform group-hover:scale-110" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary">
                             {t('common.menu')}
                         </span>
                     </button>
@@ -61,21 +61,21 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <m.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-3 rounded-2xl border border-border-glass bg-bg-glass px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-(--color-text-secondary) dark:text-blue-400">{t('common.lvl')}</span>
-                            <span className="text-sm font-black text-(--color-text-primary) leading-none">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-sm font-black text-text-primary leading-none">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
                                 <Crown size={12} className="text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
-                        <div className="h-3 w-px bg-(--color-border-glass)" />
+                        <div className="h-3 w-px bg-border-glass" />
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-black text-(--color-text-primary) leading-none">
+                            <span className="text-[12px] font-black text-text-primary leading-none">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
                             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>

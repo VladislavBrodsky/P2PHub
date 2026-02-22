@@ -88,7 +88,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     ${!isHeaderVisible ? '' : (isStaging ? 'pt-[calc(var(--header-total-height)+16px)]' : 'pt-[calc(var(--header-total-height)+4px)]')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
-                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} pb-[calc(var(--spacing-safe-bottom)+100px)]`}>
+                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} pb-[calc(var(--spacing-safe-bottom,20px)+120px)]`}>
                     {/* #comment: AnimatePresence removed here because App.tsx handles transition visibility.
                         Maintaining component state is critical for Smooth tab switching. */}
                     <div className="mx-auto w-full">

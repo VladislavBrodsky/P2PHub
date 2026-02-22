@@ -232,9 +232,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 
     return (
         <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>
-            <div className={showOnboarding ? 'hidden' : 'block h-full'}>
+            <div className={showOnboarding ? 'hidden' : 'block'}>
                 <Suspense fallback={<RevealSkeleton />}>
-                    <div className={`h-full ${activeTab === 'home' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'home' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('home') || activeTab === 'home') && (
                             <FeatureErrorBoundary featureName={t('system.features.dashboard')}>
                                 <Suspense fallback={<DashboardSkeleton />}>
@@ -243,63 +243,63 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'cards' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'cards' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('cards') || activeTab === 'cards') && (
                             <FeatureErrorBoundary featureName={t('system.features.cards')}>
                                 <CardsPage setActiveTab={navigateTo} />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'partner' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'partner' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('partner') || activeTab === 'partner') && (
                             <FeatureErrorBoundary featureName={t('system.features.community')}>
                                 <CommunityPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'earn' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'earn' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('earn') || activeTab === 'earn') && (
                             <FeatureErrorBoundary featureName={t('system.features.referral')}>
                                 <ReferralPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'league' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'league' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('league') || activeTab === 'league') && (
                             <FeatureErrorBoundary featureName={t('system.features.leaderboard')}>
                                 <LeaderboardPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'subscription' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'subscription' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('subscription') || activeTab === 'subscription') && (
                             <FeatureErrorBoundary featureName={t('system.features.subscription')}>
                                 <SubscriptionPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'blog' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'blog' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('blog') || activeTab === 'blog') && (
                             <FeatureErrorBoundary featureName={t('system.features.blog')}>
                                 <BlogPage setActiveTab={navigateTo} currentTab={activeTab} />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'admin' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'admin' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('admin') || activeTab === 'admin') && (
                             <FeatureErrorBoundary featureName={t('system.features.admin')}>
                                 <AdminPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'pro' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'pro' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('pro') || activeTab === 'pro') && (
                             <FeatureErrorBoundary featureName={t('system.features.pro_dashboard')}>
                                 <ProPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>
-                    <div className={`h-full ${activeTab === 'faq' ? 'block' : 'hidden'}`}>
+                    <div className={activeTab === 'faq' ? 'block' : 'hidden'}>
                         {(visitedTabs.has('faq') || activeTab === 'faq') && (
                             <FeatureErrorBoundary featureName={t('system.features.faq')}>
                                 <FAQPage />
@@ -310,8 +310,8 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     {['coming_soon'].includes(activeTab) && (
                         <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                             <div className="text-4xl mb-4">🚀</div>
-                            <h2 className="text-2xl font-black mb-2 uppercase text-(--color-text-primary)">{t('system.coming_soon.title')}</h2>
-                            <p className="text-(--color-text-secondary) font-medium">
+                            <h2 className="text-2xl font-black mb-2 uppercase text-text-primary">{t('system.coming_soon.title')}</h2>
+                            <p className="text-text-secondary font-medium">
                                 {t('system.coming_soon.desc')}
                             </p>
                         </div>
