@@ -75,7 +75,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Header - Fixed above the scroll layer */}
             {isHeaderVisible && (
-                <div className="relative z-100">
+                <div className="relative z-[110]">
                     <Header onOpenMenu={() => setIsMenuOpen(true)} />
                 </div>
             )}
@@ -86,12 +86,12 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
                 style={{
                     overscrollBehaviorY: 'none',
-                    paddingTop: !isHeaderVisible ? '0px' : (isStaging ? 'calc(var(--header-total-height, 146px) + 40px)' : 'calc(var(--header-total-height, 146px) + 24px)')
+                    paddingTop: !isHeaderVisible ? '0px' : (isStaging ? 'calc(var(--header-total-height, 150px) + 60px)' : 'calc(var(--header-total-height, 150px) + 48px)')
                 }}
             >
                 <div
                     className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}
-                    style={{ paddingBottom: 'calc(var(--spacing-safe-bottom, 20px) + 320px)' }}
+                    style={{ paddingBottom: 'calc(var(--spacing-safe-bottom, 24px) + 380px)' }}
                 >
                     {/* #comment: AnimatePresence removed here because App.tsx handles transition visibility.
                         Maintaining component state is critical for Smooth tab switching. */}
@@ -114,7 +114,10 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Integrated Footer Stack */}
             {(isFooterVisible && !isKeyboardOpen) && (
-                <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-safe-bottom">
+                <div
+                    className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none"
+                    style={{ paddingBottom: 'var(--spacing-safe-bottom, 24px)' }}
+                >
                     <div className="flex w-full justify-center pb-4 pointer-events-auto">
                         <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />
                     </div>

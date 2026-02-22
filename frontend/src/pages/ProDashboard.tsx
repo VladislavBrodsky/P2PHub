@@ -427,7 +427,7 @@ export const ProDashboard = () => {
             id="pro-dashboard-container"
             className="w-full text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-12"
         >
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-8 pb-16 min-h-[80vh]">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-16 pb-16 min-h-[80vh]">
                 {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2 sm:gap-3">
@@ -445,10 +445,10 @@ export const ProDashboard = () => {
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                 <Zap size={10} className="text-indigo-500 animate-pulse" />
-                                <span className="text-[9px] font-black text-slate-700 dark:text-slate-300 tabular-nums leading-none tracking-tight">
+                                <span className="text-[9px] font-black text-text-primary tabular-nums leading-none tracking-tight">
                                     {status?.pro_tokens ?? 0}
                                 </span>
-                                <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
+                                <span className="text-[9px] font-black text-text-secondary uppercase tracking-widest leading-none">
                                     {t('pro_dashboard.tokens_left').split(' ')[1] || 'tokens'}
                                 </span>
                             </div>
