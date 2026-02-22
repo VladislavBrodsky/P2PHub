@@ -545,39 +545,39 @@ export default function SubscriptionPage() {
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
 
                                 <div className="relative flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
-                                    <div>
-                                        <div className="flex items-center gap-1.5 mb-0.5">
-                                            <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400" />
-                                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 opacity-80">
+                                    <div className="flex flex-col text-left">
+                                        <div className="flex items-center gap-1 mb-0.5">
+                                            <Zap className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400" />
+                                            <span className="text-[7px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 opacity-80">
                                                 {t('income.math.subheading')}
                                             </span>
                                         </div>
-                                        <h4 className="text-[13px] font-black text-slate-900 dark:text-white leading-tight">
+                                        <h4 className="text-[11px] font-black text-slate-900 dark:text-white leading-tight">
                                             {t('income.math.heading')}
                                         </h4>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-[18px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter">$43,200</div>
-                                        <div className="text-[8px] font-black text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('income.math.per_month')}</div>
+                                        <div className="text-[16px] font-black text-emerald-600 dark:text-emerald-400 tracking-tighter mb-0.5">$43,200</div>
+                                        <div className="text-[7px] font-black text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('income.math.per_month')}</div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2">
-                                    <div className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-[8px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-1">{t('income.math.per_day')}</div>
-                                        <div className="text-[15px] font-black text-slate-900 dark:text-white tracking-tighter">$1,440</div>
+                                    <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
+                                        <div className="text-[7px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('income.math.per_day')}</div>
+                                        <div className="text-[13px] font-black text-slate-900 dark:text-white tracking-tighter">$1,440</div>
                                     </div>
-                                    <div className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-[8px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-1">{t('income.math.per_year')}</div>
-                                        <div className="text-[15px] font-black text-slate-900 dark:text-white tracking-tighter">$518,400</div>
+                                    <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
+                                        <div className="text-[7px] font-black text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('income.math.per_year')}</div>
+                                        <div className="text-[13px] font-black text-slate-900 dark:text-white tracking-tighter">$518,400</div>
                                     </div>
                                 </div>
 
-                                <div className="flex items-center justify-between text-[9px]">
+                                <div className="flex items-center justify-between text-[8px]">
                                     <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('income.math.formula_note')}</span>
-                                    <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
-                                        <Flame className="w-2.5 h-2.5 text-rose-500 animate-pulse" />
-                                        <span className="text-[8px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
+                                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
+                                        <Flame className="w-2 h-2 text-rose-500 animate-pulse" />
+                                        <span className="text-[7px] font-black text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -609,7 +609,7 @@ export default function SubscriptionPage() {
                                         <button
                                             key={idx}
                                             onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                            className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.5rem] p-2.5 flex flex-col items-center gap-1.5 relative overflow-hidden group transition-all shadow-md hover:shadow-lg active:scale-95 text-center"
+                                            className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.25rem] p-2 flex flex-col items-center gap-1 relative overflow-hidden group transition-all shadow-md hover:shadow-lg active:scale-95 text-center"
                                         >
                                             <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
 
@@ -619,25 +619,25 @@ export default function SubscriptionPage() {
                                                         initial={{ opacity: 0, scale: 0.5 }}
                                                         animate={{ opacity: 1, scale: 1 }}
                                                         exit={{ opacity: 0, scale: 0.5 }}
-                                                        className="absolute top-2 right-2.5 z-10"
+                                                        className="absolute top-1.5 right-1.5 z-10"
                                                     >
-                                                        <span className="text-[6px] font-black bg-linear-to-r from-rose-500 to-pink-500 text-white px-1.5 py-0.5 tracking-widest rounded-full shadow-[0_2px_8px_rgba(244,63,94,0.5)] uppercase flex items-center gap-0.5">
-                                                            <Zap size={6} className="fill-white animate-pulse" />
+                                                        <span className="text-[5px] font-black bg-linear-to-r from-rose-500 to-pink-500 text-white px-1 py-0.5 tracking-widest rounded-full shadow-[0_2px_8px_rgba(244,63,94,0.5)] uppercase flex items-center gap-0.5">
+                                                            <Zap size={5} className="fill-white animate-pulse" />
                                                             TURBO
                                                         </span>
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>
 
-                                            <div className={`w-9 h-9 mt-1 rounded-xl ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 shadow-sm`}>
-                                                <item.icon size={16} strokeWidth={2.5} />
+                                            <div className={`w-8 h-8 mt-0.5 rounded-lg ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 shadow-sm`}>
+                                                <item.icon size={14} strokeWidth={2.5} />
                                             </div>
-                                            <span className="text-[9px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">{item.label}</span>
+                                            <span className="text-[8px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">{item.label}</span>
 
-                                            <div className="flex items-center justify-center gap-2 mt-0.5 w-full">
-                                                <span className="text-[12px] font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-6 text-right">{inactiveValue}</span>
-                                                <div className="w-[1.5px] h-3.5 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
-                                                <span className={`text-[18px] font-black tracking-tighter transition-all duration-500 w-8 text-left ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]' : 'vibing-yellow-text drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]'}`}>
+                                            <div className="flex items-center justify-center gap-1.5 mt-0.5 w-full">
+                                                <span className="text-[10px] font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-5 text-right">{inactiveValue}</span>
+                                                <div className="w-[1px] h-3 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
+                                                <span className={`text-[15px] font-black tracking-tighter transition-all duration-500 w-7 text-left ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_10px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]'}`}>
                                                     {activeValue}
                                                 </span>
                                             </div>
