@@ -66,13 +66,9 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 {/* Mesh Background Overlay */}
                 <div className="mesh-gradient-dark fixed inset-0 opacity-20 pointer-events-none dark:block hidden z-0" />
 
-                {/* Header - Portaled or high z-index fixed */}
+                {/* Header - Fixed top relative to viewport */}
                 {isHeaderVisible && (
-                    <div className="fixed top-0 left-0 right-0 z-[150] pointer-events-none flex justify-center">
-                        <div className="w-full max-w-lg">
-                            <Header onOpenMenu={() => setIsMenuOpen(true)} />
-                        </div>
-                    </div>
+                    <Header onOpenMenu={() => setIsMenuOpen(true)} />
                 )}
 
                 {/* Main Content Area - THE SCROLL LAYER */}
@@ -81,8 +77,8 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
                     style={{
                         overscrollBehaviorY: 'none',
-                        paddingTop: !isHeaderVisible ? '0px' : '200px',
-                        paddingBottom: '400px'
+                        paddingTop: !isHeaderVisible ? '0px' : '160px',
+                        paddingBottom: '120px'
                     }}
                 >
                     <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}>

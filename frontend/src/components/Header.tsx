@@ -43,10 +43,10 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
     return (
         <header
-            className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg transition-all duration-300 pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-150 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{ paddingTop: 'calc(var(--spacing-safe-top, 20px) + var(--spacing-telegram-header, 74px) + 12px)' }}
         >
-            <div className="flex flex-col gap-4 px-4 pointer-events-auto">
+            <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
                 <div className="flex items-center justify-between gap-4">
                     <button
