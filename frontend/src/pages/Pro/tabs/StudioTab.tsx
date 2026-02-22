@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
     CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, ArrowRight, X,
-    Zap, Users, Link as LinkIcon, Info, Network, Lock, Blocks
+    Zap, Users, Link as LinkIcon, Info, Network, Lock, Blocks, MessageSquare, Facebook, Instagram
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
@@ -70,7 +70,7 @@ export const StudioTab = ({
     const [publishedPlatforms, setPublishedPlatforms] = useState<string[]>([]);
     const [showShareModal, setShowShareModal] = useState(false);
     const [isSharingSystem, setIsSharingSystem] = useState(false);
-    const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin' | 'threads' | 'pinterest')[]>([]);
+    const [selectedPublishPlatforms, setSelectedPublishPlatforms] = useState<('x' | 'telegram' | 'linkedin' | 'threads' | 'pinterest' | 'facebook' | 'discord')[]>([]);
     const [selectedTgChannel, setSelectedTgChannel] = useState<string>(''); // for multi-channel TG select
     const [isRegeneratingHashtags, setIsRegeneratingHashtags] = useState(false);
 
@@ -477,7 +477,7 @@ export const StudioTab = ({
         impact('heavy');
     };
 
-    const handlePublishToPlatform = async (platform: 'x' | 'telegram' | 'linkedin') => {
+    const handlePublishToPlatform = async (platform: 'x' | 'telegram' | 'linkedin' | 'threads' | 'pinterest' | 'facebook' | 'discord') => {
         if (!generatedResult) return;
         setIsPublishing(true);
         impact('heavy');
@@ -538,7 +538,7 @@ export const StudioTab = ({
         }
     };
 
-    const togglePublishPlatform = (platform: 'x' | 'telegram' | 'linkedin') => {
+    const togglePublishPlatform = (platform: 'x' | 'telegram' | 'linkedin' | 'threads' | 'pinterest' | 'facebook' | 'discord') => {
         if (publishedPlatforms.includes(platform)) return;
         setSelectedPublishPlatforms(prev =>
             prev.includes(platform)
@@ -1184,7 +1184,7 @@ export const StudioTab = ({
 
                                         <div className="grid gap-2">
                                             {(status?.is_pro_plus
-                                                ? (['x', 'telegram', 'linkedin', 'threads', 'pinterest'] as const)
+                                                ? (['x', 'telegram', 'linkedin', 'threads', 'pinterest', 'facebook', 'discord'] as const)
                                                 : (['x', 'telegram', 'linkedin'] as const)
                                             ).map((platform) => {
                                                 const isSelected = selectedPublishPlatforms.includes(platform as any);
@@ -1196,8 +1196,10 @@ export const StudioTab = ({
                                                         case 'x': return <Network size={16} />;
                                                         case 'telegram': return <Send size={16} className="-ml-0.5" />;
                                                         case 'linkedin': return <Users size={16} />;
-                                                        case 'threads': return <Share size={16} />;
+                                                        case 'threads': return <Instagram size={16} />;
                                                         case 'pinterest': return <ImageIcon size={16} />;
+                                                        case 'facebook': return <Facebook size={16} />;
+                                                        case 'discord': return <MessageSquare size={16} />;
                                                         default: return <Blocks size={16} />;
                                                     }
                                                 };
@@ -1209,6 +1211,8 @@ export const StudioTab = ({
                                                         case 'linkedin': return 'LinkedIn';
                                                         case 'threads': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_t');
                                                         case 'pinterest': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_p');
+                                                        case 'facebook': return 'Facebook';
+                                                        case 'discord': return 'Discord';
                                                         default: return (platform as string).toUpperCase();
                                                     }
                                                 };

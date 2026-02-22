@@ -83,7 +83,7 @@ export const proService = {
         return response.data;
     },
 
-    publishContent: async (platform: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads', content: string, image_path?: string, generation_id?: number, channel_id?: string) => {
+    publishContent: async (platform: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord', content: string, image_path?: string, generation_id?: number, channel_id?: string) => {
         const response = await apiClient.post('/api/pro/post', {
             platform,
             content,
