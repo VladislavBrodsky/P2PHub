@@ -339,13 +339,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                 {/* Header: Structured and Centered */}
                                 <div className="relative flex flex-col items-center text-center pt-2 mb-4">
-                                    {/* Pulsing live dot - Floating Absolute */}
-                                    <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-2 py-0.5 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                    {/* Pulsing live dot - Centered Above Subheading */}
+                                    <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-2.5 py-0.5 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)] mb-3">
                                         <span className="relative flex h-1.5 w-1.5">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                                         </span>
-                                        <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
+                                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
                                     </div>
 
                                     <div className="max-w-[85%] space-y-1.5">

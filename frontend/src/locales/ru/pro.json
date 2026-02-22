@@ -317,6 +317,50 @@
           }
         ]
       },
+      "facebook_manual": {
+        "title": "Профессиональная синхронизация Facebook",
+        "subtitle": "Доступ к социальному узлу",
+        "steps": [
+          {
+            "title": "Шаг 1: Meta для разработчиков",
+            "desc": "Войдите на [Meta Developer Portal](https://developers.facebook.com/) и создайте новое приложение."
+          },
+          {
+            "title": "Шаг 2: Добавьте Facebook Login",
+            "desc": "Добавьте продукт 'Facebook Login' в ваше приложение. Настройте его для Web."
+          },
+          {
+            "title": "Шаг 3: Создайте токен пользователя",
+            "desc": "Используйте Graph API Explorer для генерации 'User Access Token' с правами `publish_video` и `public_profile`."
+          },
+          {
+            "title": "Шаг 4: Долгосрочный токен",
+            "desc": "Обменяйте ваш краткосрочный токен на долгосрочный (60 дней) в инструменте Access Token Tool. Вставьте его в поле Facebook Node."
+          }
+        ]
+      },
+      "discord_manual": {
+        "title": "Протокол Discord Webhook",
+        "subtitle": "Автоматизированный сигнал сообщества",
+        "steps": [
+          {
+            "title": "Шаг 1: Настройки канала",
+            "desc": "В вашем Discord севере перейдите в настройки канала, куда вы хотите отправлять посты."
+          },
+          {
+            "title": "Шаг 2: Интеграции",
+            "desc": "Нажмите 'Интеграции' и затем 'Webhooks'. Создайте новый Webhook."
+          },
+          {
+            "title": "Шаг 3: Имя протокола",
+            "desc": "Назовите его 'P2PHub Sync' и скопируйте 'Webhook URL'."
+          },
+          {
+            "title": "Шаг 4: Прямой нейро-канал",
+            "desc": "Вставьте Webhook URL в поле Discord в окне настройки [PRO+ Setup]. Ваше сообщество синхронизировано!"
+          }
+        ]
+      },
       "linkedin": {
         "title": "Авторитет LinkedIn",
         "desc": "Высоко доверенный охват B2B профессионалов.",
@@ -335,6 +379,18 @@
         "title": "Threads Meta",
         "desc": "Прямой доступ к новейшему виральному узлу Meta.",
         "placeholder": "API токен Threads",
+        "guide": "Гайд"
+      },
+      "facebook": {
+        "title": "Facebook Соцсеть",
+        "desc": "Глобальный охват аудитории для максимального влияния.",
+        "placeholder": "Токен доступа Facebook",
+        "guide": "Гайд"
+      },
+      "discord": {
+        "title": "Discord Сообщество",
+        "desc": "Прямой канал уведомлений для вашей основной группы.",
+        "placeholder": "Discord Webhook URL",
         "guide": "Гайд"
       },
       "tg_sync_multi": {

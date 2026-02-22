@@ -317,6 +317,50 @@
           }
         ]
       },
+      "facebook_manual": {
+        "title": "Facebook Professional Sync",
+        "subtitle": "Social Node Access",
+        "steps": [
+          {
+            "title": "Step 1: Meta for Developers",
+            "desc": "Log in to the [Meta Developer Portal](https://developers.facebook.com/) and create a new application."
+          },
+          {
+            "title": "Step 2: Add Facebook Login",
+            "desc": "Add the 'Facebook Login' product to your app. Configure it for Web."
+          },
+          {
+            "title": "Step 3: Generate User Token",
+            "desc": "Use the Graph API Explorer to generate a 'User Access Token' with `publish_video` and `public_profile` permissions."
+          },
+          {
+            "title": "Step 4: Long-Lived Token",
+            "desc": "Exchange your short-lived token for a long-lived one (60 days) in the Access Token Tool. Paste it into the Facebook Node field."
+          }
+        ]
+      },
+      "discord_manual": {
+        "title": "Discord Webhook Protocol",
+        "subtitle": "Automated Community Signal",
+        "steps": [
+          {
+            "title": "Step 1: Channel Settings",
+            "desc": "In your Discord server, go to the settings of the channel where you want to post."
+          },
+          {
+            "title": "Step 2: Integrations",
+            "desc": "Click 'Integrations' and then 'Webhooks'. Create a new Webhook."
+          },
+          {
+            "title": "Step 3: Protocol Name",
+            "desc": "Name it 'P2PHub Sync' and copy the 'Webhook URL'."
+          },
+          {
+            "title": "Step 4: Neural Direct",
+            "desc": "Paste the Webhook URL into the Discord field in the [PRO+ Setup] window. Your community is now synced!"
+          }
+        ]
+      },
       "linkedin": {
         "title": "LinkedIn Authority",
         "desc": "High-trust B2B professional reach.",
@@ -335,6 +379,18 @@
         "title": "Threads Meta",
         "desc": "Direct access to Meta's newest viral node.",
         "placeholder": "Threads API Token",
+        "guide": "Guide"
+      },
+      "facebook": {
+        "title": "Facebook Social",
+        "desc": "Global network reach for maximum exposure.",
+        "placeholder": "Facebook Access Token",
+        "guide": "Guide"
+      },
+      "discord": {
+        "title": "Discord Community",
+        "desc": "Direct notification channel for your core group.",
+        "placeholder": "Discord Webhook URL",
         "guide": "Guide"
       },
       "tg_sync_multi": {
