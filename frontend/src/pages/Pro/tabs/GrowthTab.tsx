@@ -568,7 +568,7 @@ export const GrowthTab = ({
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[2rem] p-6 sm:p-8 max-w-sm w-full text-center border border-emerald-500/20 shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),10px_10px_30px_4px_rgba(16,185,129,0.15)] relative overflow-hidden group/locked-card"
+                            className="pro-card-extreme bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-8 max-w-sm w-full text-center border border-emerald-500/20 shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),10px_10px_30px_4px_rgba(16,185,129,0.15)] relative overflow-hidden group/locked-card"
                         >
                             {/* Liquid Gradient Background Animation */}
                             <motion.div

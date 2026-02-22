@@ -8,6 +8,21 @@
   "light": "Light",
   "dark": "Dark",
   "back": "Back",
+  "hi": "Hi",
+  "system": {
+    "features": {
+      "dashboard": "Dashboard",
+      "cards": "Cards",
+      "partner": "Partner",
+      "pro": "Pro"
+    }
+  },
+  "community": {
+    "tab_dashboard": "Dashboard",
+    "tab_earn": "Earn",
+    "tab_partner": "Social",
+    "tab_cards": "Cards"
+  },
   "copy": "Copy",
   "close": "Close",
   "copied": "Copied",

@@ -74,8 +74,8 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
                     style={{
                         overscrollBehaviorY: 'none',
-                        paddingTop: !isHeaderVisible ? '0px' : 'var(--header-total-height, 160px)',
-                        paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 24px) + 20px)'
+                        paddingTop: !isHeaderVisible ? '0px' : 'var(--header-total-height, 84px)',
+                        paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 16px) + 8px)'
                     }}
                 >
                     <div className={cn(

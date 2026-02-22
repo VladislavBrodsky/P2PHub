@@ -23,7 +23,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ setActiveTab }: DashboardProps) {
-    const { t } = useTranslation(['dashboard', 'common']);
+    const { t } = useTranslation(['dashboard', 'common', 'marketing', 'social']);
     const { user } = useUser();
 
     // #comment: Animation Variants for coordinated entry of dashboard elements.
@@ -42,14 +42,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     // #comment: Dynamic Hero Rotation - Switches content based on the day to keep the UI fresh.
     const rotationIndex = useMemo(() => Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3, []);
-    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" }), [rotationIndex, t]);
-    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" }), [rotationIndex, t]);
+    const heroTitle1 = useMemo(() => t(`dashboard:hero_rotation.${rotationIndex}.title_1`, { defaultValue: t('Everything You Know') }), [rotationIndex, t]);
+    const heroTitle2 = useMemo(() => t(`dashboard:hero_rotation.${rotationIndex}.title_2`, { defaultValue: t('About Money Is a Lie') }), [rotationIndex, t]);
 
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
 
     return (
         <m.div
-            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-14 pb-24"
+            className="flex w-full flex-col px-4 min-h-dvh transition-colors duration-500 relative gap-14 pb-8 items-center"
             variants={container}
             initial="hidden"
             animate="show"
@@ -78,7 +78,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
                                 <p className={`text-label font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
-                                    {t('dashboard.open_pro_dashboard')}
+                                    {t('dashboard:open_pro_dashboard')}
                                 </p>
                             </m.button>
                         ) : (
@@ -88,7 +88,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
                                 <p className="text-label font-black uppercase tracking-[0.2em] text-white">
-                                    {t('dashboard.hero_badge')}
+                                    {t('dashboard:hero_badge')}
                                 </p>
                             </m.div>
                         )}
@@ -137,9 +137,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             <m.div variants={item} className="flex flex-col gap-8 w-full">
                 <div className="w-full">
                     <SectionHeader
-                        badge={t('evolution.badge')}
-                        title={t('evolution.title')}
-                        description={t('evolution.desc')}
+                        badge={t('dashboard:evolution.badge')}
+                        title={t('dashboard:evolution.title')}
+                        description={t('dashboard:evolution.desc')}
                     />
                 </div>
                 <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
@@ -164,20 +164,20 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* #comment: 6. Final CTA - Clear conversion point. */}
             <m.div variants={item} className="w-full flex flex-col items-center text-center py-12 gap-8">
                 <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-black uppercase tracking-[0.3em] w-fit border border-blue-500/20 shadow-lg">
-                    {t('dashboard.movement_active')}
+                    {t('dashboard:movement_active')}
                 </div>
                 <h4 className="text-display font-black tracking-tight text-text-primary whitespace-pre-line leading-tight">
-                    {t('dashboard.cta_title')}
+                    {t('dashboard:cta_title')}
                 </h4>
                 <p className="text-body text-text-secondary max-w-[280px] leading-relaxed font-medium">
-                    {t('dashboard.cta_desc')}
+                    {t('dashboard:cta_desc')}
                 </p>
             </m.div>
 
             {/* #comment: Semantic description. */}
             <m.div variants={item} className="px-8 pt-4 pb-12">
                 <p className="text-text-secondary text-center text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
-                    <Trans i18nKey="dashboard.hero_desc">
+                    <Trans i18nKey="dashboard:hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.
                     </Trans>
                 </p>

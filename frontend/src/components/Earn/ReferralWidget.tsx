@@ -8,7 +8,7 @@ interface ReferralWidgetProps {
 }
 
 export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['social', 'common']);
 
     return (
         <div className="mt-2 mb-4 relative w-full h-12">

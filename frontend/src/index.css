@@ -1,5 +1,27 @@
+/*
+ * index.css — Master CSS Entry Point for PintoPay v1.8.4
+ *
+ * IMPORT ORDER IS CRITICAL FOR TAILWIND v4:
+ * 1. `@import "tailwindcss"` must be FIRST — it injects the engine.
+ * 2. `theme.css` must come SECOND — it defines all @theme{} tokens which
+ *    Tailwind's engine uses to generate utility classes (e.g., text-text-primary, bg-bg-app).
+ * 3. All other stylesheets come last. They use @reference "tailwindcss" to
+ *    access Tailwind's built-in utilities inside @layer blocks, but they do NOT
+ *    re-import the engine — @reference is read-only and safe.
+ *
+ * NOTE: `@reference "tailwindcss"` in sub-files is NOT the same as `@import "tailwindcss"`.
+ * It is a Tailwind v4 directive that tells the compiler "I want to use Tailwind utilities
+ * in this file's @layer blocks without re-running the full engine." It is 100% correct and
+ * intentional. VS Code's CSS linter may show a warning, but it does NOT affect the build.
+ */
+
+/* 1. Tailwind Engine — MUST be first */
 @import "tailwindcss";
+
+/* 2. Design System Tokens — MUST be second, defines all @theme{} variables */
 @import "./styles/theme.css";
+
+/* 3. Application CSS — In dependency order */
 @import "./styles/base.css";
 @import "./styles/utilities.css";
 @import "./styles/components.css";

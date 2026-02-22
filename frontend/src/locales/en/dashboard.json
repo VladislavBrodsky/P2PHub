@@ -1,39 +1,43 @@
 {
-  "dashboard": {
-    "hero_badge": "Partner Network 2.0",
-    "open_pro_dashboard": "OPEN PRO+ DASHBOARD",
-    "hero_rotation": {
-      "0": {
-        "title_1": "The Future of Finance is Here",
-        "title_2": "Welcome to the Web3 Era"
-      },
-      "1": {
-        "title_1": "Together,",
-        "title_2": "We Build a Brand That Unites"
-      },
-      "2": {
-        "title_1": "Capital Evolution",
-        "title_2": "Through Technology"
-      }
-    },
-    "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money.",
-    "movement_active": "Community active",
-    "cta_title": "Become a partner\nand lead the change",
-    "cta_desc": "Don't just watch the future unfold. Own a piece of the new global financial infrastructure.",
-    "stats": {
-      "global_partners": "Global Partners",
-      "volume_shifted": "Volume shifted",
-      "countries_active": "countries active",
-      "recent_join": "<0>+{{count}} new partners</0> joined the community in the last 60m"
-    },
-    "ticker": [
-      "EARN PINTOPAY TOKENS",
-      "GLOBAL PAYMENTS",
-      "INSTANT WITHDRAWALS",
-      "BECOME A PARTNER",
-      "$1+ PER MIN 24/7"
-    ]
+  "common": {
+    "back": "Back",
+    "tap_to_flip": "TAP TO FLIP",
+    "lvl": "LVL",
+    "menu": "Menu"
   },
+  "hero_badge": "Partner Network 2.0",
+  "open_pro_dashboard": "OPEN PRO+ DASHBOARD",
+  "hero_rotation": {
+    "0": {
+      "title_1": "The Future of Finance is Here",
+      "title_2": "Welcome to the Web3 Era"
+    },
+    "1": {
+      "title_1": "Together,",
+      "title_2": "We Build a Brand That Unites"
+    },
+    "2": {
+      "title_1": "Capital Evolution",
+      "title_2": "Through Technology"
+    }
+  },
+  "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money.",
+  "movement_active": "Community active",
+  "cta_title": "Become a partner\nand lead the change",
+  "cta_desc": "Don't just watch the future unfold. Own a piece of the new global financial infrastructure.",
+  "stats": {
+    "global_partners": "Global Partners",
+    "volume_shifted": "Volume shifted",
+    "countries_active": "countries active",
+    "recent_join": "<0>+{{count}} new partners</0> joined the community in the last 60m"
+  },
+  "ticker": [
+    "EARN PINTOPAY TOKENS",
+    "GLOBAL PAYMENTS",
+    "INSTANT WITHDRAWALS",
+    "BECOME A PARTNER",
+    "$1+ PER MIN 24/7"
+  ],
   "onboarding": {
     "welcome": "Welcome to Pintopay Partner",
     "early": "You're among the first!",
@@ -111,7 +115,7 @@
       }
     }
   },
-  "stats": {
+  "analytics_stats": {
     "title": "Analytics Node",
     "subtitle": "Deep Data Insights",
     "charts": {

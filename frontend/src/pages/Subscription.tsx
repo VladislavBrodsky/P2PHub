@@ -908,7 +908,7 @@ export default function SubscriptionPage() {
                                                         <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
                                                         <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                                     </div>
-                                                    <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-black text-[12px] uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
+                                                    <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-black text-caption uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
                                                         {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                                     </button>
                                                 </div>

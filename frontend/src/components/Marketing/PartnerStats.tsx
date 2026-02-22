@@ -79,7 +79,7 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 };
 
 export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
-    const { t } = useTranslation(['dashboard', 'common']);
+    const { t } = useTranslation(['dashboard', 'common', 'marketing', 'social']);
     const [recentPartners, setRecentPartners] = useState<any[]>([]);
     const [stats, setStats] = useState({ total: '5.0K+', volume: '$0', countries: '142', lastHourCount: 342 });
 
@@ -129,7 +129,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     }, 5 * 60 * 1000);
 
     return (
-        <section className="px-4 py-8 relative overflow-hidden">
+        <section className="px-4 py-8 relative overflow-hidden w-full max-w-lg mx-auto">
             <div className="grid grid-cols-3 gap-3">
                 <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -143,7 +143,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.total} />
                     </span>
                     <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
-                        {t('dashboard.stats.global_partners')}
+                        {t('dashboard:stats.global_partners')}
                     </span>
                 </m.div>
 
@@ -160,7 +160,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.volume} />
                     </span>
                     <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
-                        {t('dashboard.stats.volume_shifted')}
+                        {t('dashboard:stats.volume_shifted')}
                     </span>
                 </m.div>
 
@@ -177,7 +177,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <CountUp value={stats.countries} />
                     </span>
                     <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
-                        {t('dashboard.stats.countries_active')}
+                        {t('dashboard:stats.countries_active')}
                     </span>
                 </m.div>
             </div>
@@ -220,7 +220,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
                     <p className="text-label font-bold text-text-secondary leading-tight truncate max-w-[220px]">
                         <Trans
-                            i18nKey="dashboard.stats.recent_join"
+                            i18nKey="stats.recent_join"
                             ns="dashboard"
                             values={{ count: stats.lastHourCount }}
                         >

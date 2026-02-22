@@ -48,7 +48,7 @@ const shiftSteps = [
 ];
 
 export const BentoGrid = () => {
-    const { t } = useTranslation(['dashboard', 'common']);
+    const { t } = useTranslation(['dashboard', 'common', 'marketing']);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
@@ -213,7 +213,7 @@ export const BentoGrid = () => {
                                         </div>
 
                                         <button className={`mt-2 px-6 py-2.5 rounded-xl text-label font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-error/10 text-error border border-error/20 hover:bg-error/20' : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'}`}>
-                                            {index < 3 ? t('common.back') : t('income.cta.join')}
+                                            {index < 3 ? t('common.back') : t('marketing:income.cta.join')}
                                         </button>
                                     </div>
                                 </div>
