@@ -1,6 +1,6 @@
 // #comment: Dashboard.tsx - Main entry point for the Partner Network interface.
-// Restored to the stable "Great" version from commit 2349372a.
-// Uses optimized 'm' components for performance while maintaining the spacious vertical hierarchy and premium crystal text effects.
+// Refactored to use optimized 'm' component from framer-motion and lazy-loaded namespaces for i18n.
+// Spacing has been restored to the "Great" version while maintaining performance improvements.
 import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useMemo, lazy, Suspense } from 'react';
@@ -42,12 +42,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     // #comment: Dynamic Hero Rotation - Switches content based on the day to keep the UI fresh.
     const rotationIndex = useMemo(() => Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3, []);
-    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, {
-        defaultValue: "Everything You Know"
-    }), [rotationIndex, t]);
-    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, {
-        defaultValue: "About Money Is a Lie"
-    }), [rotationIndex, t]);
+    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" }), [rotationIndex, t]);
+    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" }), [rotationIndex, t]);
 
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
 
@@ -58,15 +54,23 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* #comment: 1. Hero Section - The Central "Hub" Experience.
-                Restored the original spacing hierarchy that the user liked. */}
+            {/* #comment: Ambient Background Glow for PRO users. 
+                Restoring the depth effects that were removed in the last 'improvement'. */}
+            {user?.is_pro && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
+                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
+                </div>
+            )}
+
+            {/* #comment: 1. Hero Section - Spacious & Centered Layout.
+                Restoring the 400px height and tight vertical lockup. */}
             <m.div variants={item} className="px-4">
-                {/* Orbit Container - Fixed height to ensure stability */}
                 <div className="relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center">
                     <CommunityOrbit />
                 </div>
 
-                {/* Sub-Hero Text Section - Coordinated spacing for readability */}
+                {/* #comment: Hero Content Section - Re-introducing negative margin for the 'Great' version look. */}
                 <div className="text-center space-y-10 px-2 flex flex-col items-center -mt-8 relative z-20">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">

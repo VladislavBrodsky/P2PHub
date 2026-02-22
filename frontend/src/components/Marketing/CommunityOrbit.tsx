@@ -5,10 +5,7 @@ import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { useUser } from '../../context/UserContext';
 
-// #comment: CommunityOrbit.tsx - Immersive background animation showcasing the partner network.
-// This version restores the full-sized (60x60) lush icons and original orbital radii (140px).
-// It creates a sense of scale and movement that defines the premium aesthetic of the hub.
-
+// #comment: Asset constants for fallback avatars and crypto icons.
 const ALL_AVATARS = Object.values(AVATAR_DATA);
 
 const CRYPTO_ICONS = [
@@ -18,6 +15,8 @@ const CRYPTO_ICONS = [
     { name: 'TON', color: '#0098EA', gradientStart: '#0098EA', gradientEnd: '#00C2FF' }
 ];
 
+// #comment: CryptoIcon component is memoized to prevent re-renders of static SVG paths 
+// during the high-frequency orbit animations.
 const CryptoIcon = memo(({ name }: { name: string }) => {
     if (name === 'BTC') {
         return (
@@ -57,6 +56,7 @@ type OrbitItem =
     | { type: 'avatar'; src: string }
     | { type: 'crypto'; name: string; color: string; gradientStart?: string; gradientEnd?: string };
 
+// #comment: Main CommunityOrbit component. Manages fetching of top partners and layout of the orbit.
 export const CommunityOrbit = memo(() => {
     const [items, setItems] = useState<OrbitItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -109,6 +109,7 @@ export const CommunityOrbit = memo(() => {
         fetchItems();
     }, []);
 
+    // #comment: Placeholder items ensure the orbit shape is present even while data is loading.
     const placeholderItems = [...Array(8)].map((_, i) => ({
         type: i % 2 === 0 ? 'avatar' : 'crypto',
         isPlaceholder: true
@@ -118,55 +119,54 @@ export const CommunityOrbit = memo(() => {
 
     return (
         <div className="relative flex h-[360px] sm:h-[400px] w-full items-center justify-center overflow-visible">
-            {/* Background Glow */}
+            {/* #comment: Ambient Background Glow - Provides the "Hub" feel without blocking interactions. */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
             </div>
 
-            {/* Stars */}
-            {
-                [...Array(12)].map((_, i) => (
-                    <m.div
-                        key={`star-${i}`}
-                        className="absolute h-px w-px rounded-full bg-blue-400/60"
-                        style={{
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                            opacity: [0, 1, 0],
-                            scale: [0, 2, 0],
-                        }}
-                        transition={{
-                            duration: 3 + Math.random() * 5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: Math.random() * 5,
-                        }}
-                    />
-                ))}
+            {/* Background Particles/Stars */}
+            {[...Array(12)].map((_, i) => (
+                <m.div
+                    key={`star-${i}`}
+                    className="absolute h-px w-px rounded-full bg-blue-400/60"
+                    style={{
+                        top: `${Math.random() * 100}%`,
+                        left: `${Math.random() * 100}%`,
+                        willChange: 'transform, opacity'
+                    }}
+                    animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0, 2, 0],
+                    }}
+                    transition={{
+                        duration: 3 + Math.random() * 5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: Math.random() * 5,
+                    }}
+                />
+            ))}
 
-            {/* Central Hub */}
+            {/* Central Logic */}
             <CentralLogo />
 
-            {/* Profits */}
+            {/* Floating Profits */}
             <FractalProfits />
 
-            {/* Items */}
-            {
-                displayItems.map((item, i) => (
-                    <OrbitingItem
-                        key={`${i}-${(item as any).type}`}
-                        item={item as any}
-                        index={i}
-                        total={displayItems.length}
-                        isLoading={isLoading}
-                    />
-                ))
-            }
+            {/* Orbiting Avatars & Crypto Icons */}
+            {displayItems.map((item, i) => (
+                <OrbitingItem
+                    key={`${i}-${(item as any).type}`}
+                    item={item as any}
+                    index={i}
+                    total={displayItems.length}
+                    isLoading={isLoading}
+                />
+            ))}
         </div>
     );
 });
+
 
 const CentralLogo = memo(() => {
     const { user } = useUser();
@@ -176,63 +176,58 @@ const CentralLogo = memo(() => {
     return (
         <div className="relative z-10 flex h-24 w-24 items-center justify-center">
             <m.div
-                initial={{ scale: 0.8, opacity: 0 }
-                }
+                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{
-                    duration: 0.8, ease: "easeOut"
-                }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
                 className="relative z-10 flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.5)] overflow-hidden border-2 border-white"
+                style={{ willChange: 'transform' }}
             >
                 <div className="absolute inset-0 z-0 rounded-full bg-blue-500 blur-3xl opacity-40 animate-pulse" />
                 <div className="absolute inset-0 z-10 rounded-full border border-white/30" />
 
-                {
-                    isUserPhoto ? (
-                        <m.img
-                            animate={{
-                                scale: [1, 1.05, 1],
-                            }}
-                            transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            src={logoSrc}
-                            alt="User Profile"
-                            className="relative z-20 w-full h-full object-cover rounded-full"
-                            loading="eager"
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = LOGO_DATA;
+                {isUserPhoto ? (
+                    <m.img
+                        animate={{
+                            scale: [1, 1.05, 1],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        src={logoSrc}
+                        alt="User Profile"
+                        className="relative z-20 w-full h-full object-cover rounded-full"
+                        loading="eager"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = LOGO_DATA;
+                        }}
+                    />
+                ) : (
+                    <m.img
+                        animate={{
+                            scale: [1, 1.08, 1],
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                        src={logoSrc}
+                        alt="Pintopay Logo"
+                        width="56"
+                        height="56"
+                        loading="eager"
+                        className="relative z-20 w-14 h-14 object-contain"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            if (!target.src.includes('raw.githubusercontent.com')) {
+                                target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
                             }
-                            }
-                        />
-                    ) : (
-                        <m.img
-                            animate={{
-                                scale: [1, 1.08, 1],
-                            }}
-                            transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            src={logoSrc}
-                            alt="Pintopay Logo"
-                            width="56"
-                            height="56"
-                            loading="eager"
-                            className="relative z-20 w-14 h-14 object-contain"
-                            onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                if (!target.src.includes('raw.githubusercontent.com')) {
-                                    target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                                }
-                            }
-                            }
-                        />
-                    )}
+                        }}
+                    />
+                )}
             </m.div>
         </div>
     );
@@ -241,64 +236,63 @@ const CentralLogo = memo(() => {
 const FractalProfits = memo(() => {
     return (
         <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
-            {
-                [...Array(12)].map((_, i) => {
-                    const isTon = i % 2 !== 0;
-                    const amount = isTon
-                        ? Math.floor(Math.random() * 33) + 1
-                        : Math.floor(Math.random() * 55) + 5;
-                    const angle = (Math.random() * 360) * (Math.PI / 180);
-                    const isMobile = window.innerWidth <= 480;
-                    const distance = (isMobile ? 100 : 140) + Math.random() * (isMobile ? 80 : 160);
-                    const targetX = Math.cos(angle) * distance;
-                    const targetY = Math.sin(angle) * distance;
+            {[...Array(12)].map((_, i) => {
+                const isTon = i % 2 !== 0;
+                const amount = isTon
+                    ? Math.floor(Math.random() * 33) + 1
+                    : Math.floor(Math.random() * 55) + 5;
 
-                    return (
-                        <m.div
-                            key={i}
-                            initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-                            animate={{
-                                scale: [0, 1.2, 0.9],
-                                opacity: [0, 1, 0],
-                                x: targetX,
-                                y: targetY,
-                            }}
-                            transition={{
-                                duration: 10 + Math.random() * 10,
-                                repeat: Infinity,
-                                delay: i * 1.5,
-                                ease: "easeOut"
-                            }}
-                            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 whitespace-nowrap"
-                        >
-                            <div className={`flex items-center justify-center w-5 h-5 rounded-full ${isTon ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]'}`}>
-                                <div className="p-1">
-                                    <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
-                                </div>
+                const angle = (Math.random() * 360) * (Math.PI / 180);
+                // #comment: Restoring elegant floating distance for profits.
+                const distance = 140 + Math.random() * 160;
+                const targetX = Math.cos(angle) * distance;
+                const targetY = Math.sin(angle) * distance;
+
+                return (
+                    <m.div
+                        key={i}
+                        initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
+                        animate={{
+                            scale: [0, 1.2, 0.9],
+                            opacity: [0, 1, 0],
+                            x: targetX,
+                            y: targetY,
+                        }}
+                        transition={{
+                            duration: 10 + Math.random() * 10,
+                            repeat: Infinity,
+                            delay: i * 1.5,
+                            ease: "easeOut"
+                        }}
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 whitespace-nowrap"
+                    >
+                        <div className={`flex items-center justify-center w-5 h-5 rounded-full ${isTon ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]'}`}>
+                            <div className="p-1">
+                                <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
                             </div>
-                            <span className={`text-[12px] font-black tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
-                                +{isTon ? `${amount} TON` : `$${amount}.00`}
-                            </span>
-                        </m.div>
-                    );
-                })}
+                        </div>
+                        <span className={`text-[12px] font-black tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
+                            +{isTon ? `${amount} TON` : `$${amount}.00`}
+                        </span>
+                    </m.div>
+                );
+            })}
         </div>
     );
 });
 
+// #comment: OrbitingItem - Restoring the 'Lush' 56x56 icon size for a premium look.
 const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
     const [radius, setRadius] = useState(140);
-    const [iconSize, setIconSize] = useState(60);
 
+    // #comment: Geometry Logic - Restored original radii (110/140) for a more spacious feel.
     useEffect(() => {
-        const updateSize = () => {
-            const isMobile = window.innerWidth <= 480;
-            setRadius(isMobile ? 100 : 140);
-            setIconSize(isMobile ? 48 : 60);
+        const updateRadius = () => {
+            setRadius(window.innerWidth < 380 ? 110 : 140);
         };
-        updateSize();
-        window.addEventListener('resize', updateSize);
-        return () => window.removeEventListener('resize', updateSize);
+        updateRadius();
+        window.addEventListener('resize', updateRadius);
+        return () => window.removeEventListener('resize', updateRadius);
     }, []);
 
     const duration = 50 + (index * 2);
@@ -306,13 +300,12 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
 
     return (
         <m.div
-            className="absolute z-30"
+            className="absolute z-5"
             style={{
-                width: iconSize,
-                height: iconSize,
+                width: 56,
+                height: 56,
                 willChange: 'transform'
-            }
-            }
+            }}
             animate={{
                 x: [
                     Math.cos((angle) * (Math.PI / 180)) * radius,
@@ -343,54 +336,53 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                 }}
                 className="h-full w-full"
             >
-                {
-                    isLoading ? (
-                        <div className="h-full w-full rounded-full bg-slate-200/20 dark:bg-white/5 animate-pulse border border-white/10" />
-                    ) : item.type === 'avatar' ? (
-                        <div className="group relative h-full w-full">
-                            <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
-                            <div
-                                className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-slate-100 dark:bg-slate-900 shadow-2xl transition-transform duration-300 group-hover:scale-110"
-                                style={{
-                                    boxShadow: '0 8px 32px -8px rgba(0,0,0,0.5)',
+                {isLoading ? (
+                    <div className="h-full w-full rounded-full bg-slate-200/20 dark:bg-white/5 animate-pulse border border-white/10" />
+                ) : item.type === 'avatar' ? (
+                    <div className="group relative h-full w-full">
+                        <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
+                        <div
+                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-slate-100 dark:bg-slate-900 shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                            style={{
+                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.5)',
+                            }}
+                        >
+                            <img
+                                src={item.src}
+                                alt="Member"
+                                width={60}
+                                height={60}
+                                loading="eager"
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    if (!target.src.includes('unsplash.com')) {
+                                        target.src = ALL_AVATARS[index % ALL_AVATARS.length];
+                                    }
                                 }}
-                            >
-                                <img
-                                    src={item.src}
-                                    alt="Member"
-                                    width={60}
-                                    height={60}
-                                    loading="eager"
-                                    className="h-full w-full object-cover"
-                                    onError={(e) => {
-                                        const target = e.target as HTMLImageElement;
-                                        if (!target.src.includes('unsplash.com')) {
-                                            target.src = ALL_AVATARS[index % ALL_AVATARS.length];
-                                        }
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="group relative h-full w-full">
-                            <div
-                                className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-100"
-                                style={{ backgroundColor: item.color }}
                             />
-                            <div
-                                className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white shadow-2xl transition-transform duration-300 group-hover:scale-110"
-                                style={{
-                                    background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
-                                    boxShadow: `0 10px 30px -10px ${item.color}`
-                                }}
-                            >
-                                <div className="absolute inset-0.5 rounded-full border border-white/40" />
-                                <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
-                                    <CryptoIcon name={item.name} />
-                                </div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="group relative h-full w-full">
+                        <div
+                            className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-100"
+                            style={{ backgroundColor: item.color }}
+                        />
+                        <div
+                            className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                            style={{
+                                background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
+                                boxShadow: `0 10px 30px -10px ${item.color}`
+                            }}
+                        >
+                            <div className="absolute inset-0.5 rounded-full border border-white/40" />
+                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+                                <CryptoIcon name={item.name} />
                             </div>
                         </div>
-                    )}
+                    </div>
+                )}
             </m.div>
         </m.div>
     );
