@@ -2,6 +2,8 @@
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
+import './styles/animations.css';
+import './styles/premium.css';
 // #comment: Reorganized imports and lazy declarations to satisfy Fast Refresh (react-refresh/only-export-components).
 // Constants and non-component exports (like prefetchPages) were moved to separate utility files.
 import { prefetchPages } from './utils/navigation';

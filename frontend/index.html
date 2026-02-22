@@ -67,10 +67,10 @@
   <script>
     setTimeout(() => {
       if (!window.__APP_STARTUP__.script_started) {
-        console.error('[FATAL] Main script failed to start within 5 seconds');
+        console.error('[FATAL] Main script failed to start within 15 seconds');
         document.getElementById('root').innerHTML += '<div style="color:orange; padding:20px;">Main bundle failed to execute. Check console.</div>';
       }
-    }, 5000);
+    }, 15000);
   </script>
 </body>
 
