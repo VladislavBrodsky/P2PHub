@@ -28,8 +28,32 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1200,
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          // 1. Core Framework (Keep together for stability)
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
+            return 'vendor-core';
+          }
+          // 2. Heavy Visualization / UI Libs (Isolate)
+          if (id.includes('node_modules/recharts')) {
+            return 'vendor-charts';
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          // 3. Telegram & Wallet (Isolate)
+          if (id.includes('node_modules/@telegram-apps') || id.includes('node_modules/@tonconnect')) {
+            return 'vendor-tma';
+          }
+        }
+      }
+    }
   },
 })
 
