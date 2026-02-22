@@ -108,6 +108,14 @@ async def get_my_leaderboard_stats(
         # Get rank from Redis (0-indexed, so add 1)
         try:
             rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe)
+            
+            # #comment Phase 2 Scaling: Self-Healing. 
+            # If user is missing from Redis (e.g. not in top 1000 warmup), 
+            # we lazily re-inject them to ensure their rank is always visible.
+            if rank is None and timeframe == "all":
+                await leaderboard_service.update_score(partner.id, partner.xp)
+                rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe)
+
             rank_val = (rank + 1) if rank is not None else -1
             
             # Get specific XP for this timeframe from Redis directly
@@ -120,7 +128,13 @@ async def get_my_leaderboard_stats(
                 key = leaderboard_service.LEADERBOARD_KEY
                 
             season_xp = await redis_service.client.zscore(key, str(partner.id))
-            display_xp = float(season_xp) if season_xp is not None else 0.0
+            
+            # Fallback to DB XP for global timeframe if Redis entry was just created/missing
+            if season_xp is None and timeframe == "all":
+                display_xp = partner.xp
+            else:
+                display_xp = float(season_xp) if season_xp is not None else 0.0
+                
         except Exception as e:
             logger.error(f"Rank/XP Read Failed for {timeframe}: {e}")
             rank_val = -1
@@ -132,6 +146,7 @@ async def get_my_leaderboard_stats(
             "level": partner.level,
             "referrals": partner.referral_count
         }
+
 
     from datetime import UTC, datetime  # Ensure imported for local function
     return await redis_service.get_or_compute(cache_key, fetch_user_stats, expire=60)

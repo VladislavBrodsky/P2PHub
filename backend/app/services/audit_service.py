@@ -40,11 +40,29 @@ class AuditService:
                 ip_address=ip_address
             )
             session.add(log_entry)
-            await session.flush()
             return log_entry
         except Exception as e:
             logger.error(f"Failed to create audit log: {e}")
             return None
+
+    @async_retry(max_attempts=3, base_delay=1.0)
+    async def log_events_bulk(
+        self,
+        session: AsyncSession,
+        logs: list[dict]
+    ) -> bool:
+        """
+        Efficiently creates multiple audit logs in a single batch operation.
+        Each log dict should contain AuditLog fields.
+        """
+        try:
+            entries = [AuditLog(**log) for log in logs]
+            session.add_all(entries)
+            return True
+        except Exception as e:
+            logger.error(f"Failed to create bulk audit logs: {e}")
+            return False
+
 
     # ──────────────────────────────────────────────────────────
     # XP Events

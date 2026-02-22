@@ -64,15 +64,18 @@ async def process_referral_logic(partner_id: int):
             ancestor_map = await _get_ancestor_map(session, partner)
             
             # 2. Process Awards (20 Levels)
-            xp_txs, deferred_tasks = await _process_referral_awards(session, partner, ancestor_map)
-            
-            # 3. Batch Commit & Finalize Notifications
-            # We always commit if there are ancestor updates or deferred notification tasks
-            if xp_txs or deferred_tasks:
-                if xp_txs:
-                    session.add_all(xp_txs)
-                await session.commit()
-                await _finalize_referral_logic(deferred_tasks)
+            # Use a single Redis pipeline for all invalidations in this signup event
+            async with redis_service.client.pipeline(transaction=False) as redis_pipe:
+                xp_txs, deferred_tasks = await _process_referral_awards(session, partner, ancestor_map, redis_pipe)
+                
+                # 3. Batch Commit & Finalize Notifications
+                if xp_txs or deferred_tasks:
+                    if xp_txs:
+                        session.add_all(xp_txs)
+                    await session.commit()
+                    # Execute Redis invalidations after DB commit for consistency
+                    await redis_pipe.execute()
+                    await _finalize_referral_logic(deferred_tasks)
 
     except Exception as e:
         sentry_sdk.capture_exception(e)
@@ -94,9 +97,11 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
     result = await session.exec(select(Partner).where(Partner.id.in_(lineage_ids)).with_for_update())
     return {p.id: p for p in result.all()}
 
-async def _process_referral_awards(session: AsyncSession, partner: Partner, ancestor_map: dict[int, Partner]) -> tuple[list[XPTransaction], list]:
+async def _process_referral_awards(session: AsyncSession, partner: Partner, ancestor_map: dict[int, Partner], redis_pipe) -> tuple[list[XPTransaction], list]:
     xp_txs = []
     deferred_tasks = []
+    audit_logs = []
+    earnings = []
     current_referrer_id = partner.referrer_id
     chain_list = ["You"]
     new_partner_name = format_partner_name(partner)
@@ -106,16 +111,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer: break
 
-        # #comment: Network Growth Tracking (Milestone logic)
-        # referral_count is optimized for "Invite X friends" (L1) tasks.
-        # It is set synchronously in partner_service.create_partner for L1.
-        # We NO LONGER increment it for level > 1 to avoid task cheating.
-        pass
-
-        # #comment: PROFESSIONAL COMPRESSION LOGIC (XP Rewards)
-        # Free users get rewards up to Level 3. 
-        # L4-L9 require Standard PRO.
-        # L10-L20 require PRO+ exclusively.
+        # Compression Logic Check
         qualified = False
         if level <= 3:
             qualified = True
@@ -125,16 +121,15 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             qualified = referrer.is_pro_plus
 
         if not qualified:
-            # Send FOMO notification for rewards beyond current plan capability
             if level in [4, 10]:
                 lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
                 btn_text = get_msg(lang, "btn_upgrade")
                 buttons = [[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
-                await notification_service.send_critical(
+                deferred_tasks.append(notification_service.send_critical(
                     chat_id=str(referrer.telegram_id), text=fomo_msg, buttons=buttons,
                     salt=f"pro_fomo_{level}_{partner.id}"
-                )
+                ))
             
             current_referrer_id = referrer.referrer_id
             continue
@@ -145,7 +140,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             xp_before = float(referrer.xp)
             xp_after = xp_before + xp_gain
             
-            # #comment: Atomic Increment for high-concurrency safety
+            # Atomic Increment
             referrer.xp = Partner.xp + xp_gain
             
             xp_txs.append(XPTransaction(
@@ -154,9 +149,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral Partner Joined (L{level})", reference_id=str(partner.id)
             ))
 
-            # 1.3 Unified Transaction: Log Referral XP as an Earning
             from app.models.partner import Earning
-            session.add(Earning(
+            earnings.append(Earning(
                 partner_id=referrer.id,
                 amount=xp_gain,
                 description=f"Referral Reward: {new_partner_name} (L{level})",
@@ -165,32 +159,25 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 reference_id=f"ref_xp_{partner.id}_{referrer.id}"
             ))
 
-            # Log Audit — XP Award
-            await audit_service.log_xp_award(
-                session=session, partner_id=referrer.id, new_user_id=partner.id,
-                xp_amount=xp_gain, level=level, is_pro=referrer.is_pro,
-                xp_before=xp_before, xp_after=xp_after
-            )
+            audit_logs.append({
+                "partner_id": referrer.id,
+                "action_type": ActionType.XP_AWARD,
+                "description": f"XP Awarded: +{round(xp_gain, 2)} (L{level})",
+                "entity_type": "partner", "entity_id": str(referrer.id), "action": "xp_award",
+                "details": {"new_user_id": partner.id, "xp_amount": xp_gain, "level": level, "xp_before": xp_before, "xp_after": xp_after}
+            })
+
+            audit_logs.append({
+                "partner_id": referrer.id,
+                "action_type": ActionType.REFERRAL,
+                "description": f"New referral (L{level}): @{partner.username or partner.telegram_id} joined under #{referrer.id}",
+                "entity_type": "referral", "entity_id": str(partner.id), "action": "referral_signup",
+                "details": {"new_partner_id": partner.id, "referrer_id": referrer.id, "level": level}
+            })
+
+            await _check_level_up(referrer, deferred_tasks, xp_after)
+            await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain, pipe=redis_pipe)
             
-            # Log Audit — Referral Chain (creates immutable event ledger entry per level)
-            await audit_service.log_referral_signup(
-                session=session,
-                new_partner_id=partner.id,
-                new_partner_tg=partner.username or str(partner.telegram_id),
-                referrer_id=referrer.id,
-                referrer_tg=referrer.username or str(referrer.telegram_id),
-                level=level
-            )
-
-            try:
-                await _check_level_up(referrer, deferred_tasks, xp_after)
-            except Exception as e_lvl:
-                logger.error(f"Level up check failed for {referrer.id}: {e_lvl}")
-
-            try:
-                await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain)
-            except Exception as e_redis:
-                logger.error(f"Redis invalidation failed for {referrer.id}: {e_redis}")
             msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list, salt=str(partner.id))
             deferred_tasks.append(msg_task)
 
@@ -200,7 +187,12 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         current_referrer_id = referrer.referrer_id
         session.add(referrer)
 
+    # Batch inserts
+    if earnings: session.add_all(earnings)
+    if audit_logs: await audit_service.log_events_bulk(session, audit_logs)
+
     return xp_txs, deferred_tasks
+
 
 def _calculate_referral_xp(level: int, partner: Partner) -> float:
     """

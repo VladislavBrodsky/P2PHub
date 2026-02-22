@@ -68,7 +68,7 @@
 }
 
 @utility content-main-padding {
-  padding-top: calc(var(--header-total-height) + 8px) !important;
+  padding-top: calc(var(--header-total-height) - 4px) !important;
 }
 
 @utility staging-offset {
