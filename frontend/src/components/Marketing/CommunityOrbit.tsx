@@ -243,8 +243,8 @@ const FractalProfits = memo(() => {
                     : Math.floor(Math.random() * 55) + 5;
 
                 const angle = (Math.random() * 360) * (Math.PI / 180);
-                // #comment: Reduced distance of floating profits to keep them within the visual hub.
-                const distance = 80 + Math.random() * 60;
+                // #comment: Restoring elegant floating distance for profits.
+                const distance = 140 + Math.random() * 160;
                 const targetX = Math.cos(angle) * distance;
                 const targetY = Math.sin(angle) * distance;
 
@@ -281,14 +281,14 @@ const FractalProfits = memo(() => {
     );
 });
 
-// #comment: OrbitingItem - Reduced size to 44x44 for a more refined, compact look.
+// #comment: OrbitingItem - Restoring the 'Lush' 56x56 icon size for a premium look.
 const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
-    const [radius, setRadius] = useState(100);
+    const [radius, setRadius] = useState(140);
 
-    // #comment: Geometry Tuning - Keeps the orbit tight and centered to prevent hero text collisions.
+    // #comment: Geometry Logic - Restored original radii (110/140) for a more spacious feel.
     useEffect(() => {
         const updateRadius = () => {
-            setRadius(window.innerWidth < 380 ? 80 : 100);
+            setRadius(window.innerWidth < 380 ? 110 : 140);
         };
         updateRadius();
         window.addEventListener('resize', updateRadius);
@@ -302,8 +302,8 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
         <m.div
             className="absolute z-5"
             style={{
-                width: 44,
-                height: 44,
+                width: 56,
+                height: 56,
                 willChange: 'transform'
             }}
             animate={{

@@ -3,5 +3,7 @@
 @import "./styles/base.css";
 @import "./styles/utilities.css";
 @import "./styles/components.css";
-/* @import "./styles/animations.css"; */
-/* @import "./styles/premium.css"; */
+/* #comment: Restoring critical premium styles and animations. 
+   These are essential for the 'vibing' crystal effects and micro-interactions. */
+@import "./styles/animations.css";
+@import "./styles/premium.css";

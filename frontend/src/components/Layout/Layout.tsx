@@ -76,7 +76,8 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             )}
 
-            {/* Main Content Area - THE SCROLL LAYER */}
+            {/* #comment: Main Content Area - THE SCROLL LAYER. 
+                Kept transparent to allow background depth effects (fixed orbs) to show through. */}
             <main
                 id="main-scroll-root"
                 className={`flex-1 overflow-x-hidden relative z-10

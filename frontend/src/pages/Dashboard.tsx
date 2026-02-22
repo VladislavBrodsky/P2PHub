@@ -54,16 +54,24 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* #comment: Hero Section - Orbit & Hub. 
-                Using a slightly reduced height container for better vertical balance on mobile. */}
+            {/* #comment: Ambient Background Glow for PRO users. 
+                Restoring the depth effects that were removed in the last 'improvement'. */}
+            {user?.is_pro && (
+                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
+                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
+                </div>
+            )}
+
+            {/* #comment: 1. Hero Section - Spacious & Centered Layout.
+                Restoring the 400px height and tight vertical lockup. */}
             <m.div variants={item} className="px-4">
-                <div className="relative overflow-visible -mx-4 h-[340px] mt-4 flex items-center justify-center">
+                <div className="relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center">
                     <CommunityOrbit />
                 </div>
 
-                {/* #comment: Hero Content Section - Removed negative margin to prevent overlaps. 
-                    Added significant top padding to ensure the 'Hub' has breathing room. */}
-                <div className="text-center space-y-12 px-2 flex flex-col items-center mt-4 relative z-20">
+                {/* #comment: Hero Content Section - Re-introducing negative margin for the 'Great' version look. */}
+                <div className="text-center space-y-10 px-2 flex flex-col items-center -mt-8 relative z-20">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (
