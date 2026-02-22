@@ -153,5 +153,4 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             </div>
         );
-    );
-};
+    };

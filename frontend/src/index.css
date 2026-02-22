@@ -3,7 +3,13 @@
 @import "./styles/base.css";
 @import "./styles/utilities.css";
 @import "./styles/components.css";
-/* #comment: Restoring critical premium styles and animations. 
-   These are essential for the 'vibing' crystal effects and micro-interactions. */
 @import "./styles/animations.css";
 @import "./styles/premium.css";
+
+/* Global overrides for higher specificity */
+@layer base {
+   :root {
+      --header-total-height: 150px;
+      --spacing-safe-bottom: 24px;
+   }
+}
