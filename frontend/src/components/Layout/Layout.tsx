@@ -83,12 +83,16 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 id="main-scroll-root"
-                className={`flex-1 overflow-x-hidden relative z-10
-                    overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
-                    ${!isHeaderVisible ? '' : (isStaging ? 'pt-[calc(var(--header-total-height,146px)+32px)]' : 'pt-[calc(var(--header-total-height,146px)+20px)]')}`}
-                style={{ overscrollBehaviorY: 'none' }}
+                className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
+                style={{
+                    overscrollBehaviorY: 'none',
+                    paddingTop: !isHeaderVisible ? '0px' : (isStaging ? 'calc(var(--header-total-height, 146px) + 40px)' : 'calc(var(--header-total-height, 146px) + 24px)')
+                }}
             >
-                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} pb-[calc(var(--spacing-safe-bottom,20px)+200px)]`}>
+                <div
+                    className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}
+                    style={{ paddingBottom: 'calc(var(--spacing-safe-bottom, 20px) + 240px)' }}
+                >
                     {/* #comment: AnimatePresence removed here because App.tsx handles transition visibility.
                         Maintaining component state is critical for Smooth tab switching. */}
                     <div className="mx-auto w-full">
