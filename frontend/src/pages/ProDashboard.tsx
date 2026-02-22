@@ -425,10 +425,9 @@ export const ProDashboard = () => {
     return (
         <div
             id="pro-dashboard-container"
-            className="w-full bg-(--color-bg-app) text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-2 pb-12"
+            className="w-full bg-(--color-bg-app) text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-12"
         >
-            <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(30,58,138,0.15)_0%,transparent_50%)] pointer-events-none" />
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-4 pb-16 min-h-[80vh]">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-2 pb-16 min-h-[80vh]">
                 {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2 sm:gap-3">
