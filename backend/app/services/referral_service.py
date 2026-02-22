@@ -91,7 +91,7 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
         lineage_ids.append(partner.referrer_id)
     lineage_ids = list(dict.fromkeys(lineage_ids))[-20:]
     
-    result = await session.exec(select(Partner).where(Partner.id.in_(lineage_ids)))
+    result = await session.exec(select(Partner).where(Partner.id.in_(lineage_ids)).with_for_update())
     return {p.id: p for p in result.all()}
 
 async def _process_referral_awards(session: AsyncSession, partner: Partner, ancestor_map: dict[int, Partner]) -> tuple[list[XPTransaction], list]:
@@ -301,8 +301,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     lineage_ids = [*path_ids, partner.referrer_id] if partner.referrer_id else path_ids
     lineage_ids = list(dict.fromkeys(lineage_ids))
     
-    # Fetch all ancestors in bulk
-    statement = select(Partner).where(Partner.id.in_(lineage_ids))
+    # Fetch all ancestors in bulk with pessimistic locking
+    # #comment Phase 3 Reliability: with_for_update() prevents race conditions
+    # when multiple referrals in the same lineage upgrade simultaneously.
+    # This ensures level-up checks are based on the latest locked XP value.
+    statement = select(Partner).where(Partner.id.in_(lineage_ids)).with_for_update()
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
@@ -313,7 +316,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     
     # MISSION-CRITICAL: Ensure company account is resolved correctly from config
     admin_id_to_fetch = settings.ADMIN_USER_IDS[0] if settings.ADMIN_USER_IDS else "716720099"
-    stmt_admin = select(Partner).where(Partner.telegram_id == admin_id_to_fetch)
+    stmt_admin = select(Partner).where(Partner.telegram_id == admin_id_to_fetch).with_for_update()
     res_admin = await session.exec(stmt_admin)
     company_account = res_admin.first()
 

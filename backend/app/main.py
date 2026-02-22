@@ -152,9 +152,25 @@ async def lifespan(app: FastAPI):
                 if is_polling_leader:
                     logger.info("💡 Bot Polling Master: Starting Long Polling...")
                     await bot.delete_webhook(drop_pending_updates=True)
+                    
+                    # Ensure the lock is extended as long as this worker is alive
+                    async def extend_lock():
+                        try:
+                            while True:
+                                await asyncio.sleep(30)
+                                await redis_service.client.expire("lock:bot_polling_master", 60)
+                        except asyncio.CancelledError:
+                            # Cleanly shutdown
+                            await redis_service.client.delete("lock:bot_polling_master")
+                        except Exception as e:
+                            logger.warning(f"⚠️ Polling master lock extension failed: {e}")
+
+                    extender_task = asyncio.create_task(extend_lock())
                     polling_task = asyncio.create_task(dp.start_polling(bot))
+                    
                     app.state.polling_task = polling_task
-                    logger.info("✅ Bot started with Long Polling")
+                    app.state.extender_task = extender_task
+                    logger.info("✅ Bot started with Long Polling (Leadership Secured)")
                 else:
                     logger.info("ℹ️ Another web worker is already handling Bot Polling.")
             except Exception as e:
@@ -223,15 +239,24 @@ async def lifespan(app: FastAPI):
     from app.core.http_client import http_client
     await http_client.close_client()
 
-    if not settings.WEBHOOK_URL and hasattr(app.state, "polling_task"):
-        app.state.polling_task.cancel()
-        try:
-            await app.state.polling_task
-        except asyncio.CancelledError:
-            # #comment: Expected behavior when cancelling the polling task during shutdown.
-            logger.info("ℹ️ Polling task cancelled successfully.")
-        except Exception as e:
-            logger.error(f"❌ Error cancelling polling task: {e}")
+    if not settings.WEBHOOK_URL:
+        if hasattr(app.state, "polling_task"):
+            app.state.polling_task.cancel()
+            try:
+                await app.state.polling_task
+            except asyncio.CancelledError:
+                logger.info("ℹ️ Polling task cancelled successfully.")
+            except Exception as e:
+                logger.error(f"❌ Error cancelling polling task: {e}")
+        
+        if hasattr(app.state, "extender_task"):
+            app.state.extender_task.cancel()
+            try:
+                await app.state.extender_task
+            except asyncio.CancelledError:
+                logger.info("ℹ️ Polling extender task cancelled successfully.")
+            except Exception as e:
+                logger.error(f"❌ Error cancelling polling extender task: {e}")
 
 
 app = FastAPI(title="Pintopay Partner Hub API", lifespan=lifespan)

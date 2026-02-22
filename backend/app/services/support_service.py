@@ -621,8 +621,12 @@ class SupportAgentService:
         """
         logger.info("🧹 Starting cleanup of stale support sessions...")
         try:
-            # 1. Find all session keys
-            keys = await redis_service.client.keys("support_session:*")
+            # 1. Find all session keys using scan_iter for performance
+            # #comment: scan_iter is O(N) but doesn't block the event loop like keys()
+            keys = []
+            async for key in redis_service.client.scan_iter("support_session:*"):
+                keys.append(key)
+            
             if not keys:
                 return
 
