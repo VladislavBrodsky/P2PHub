@@ -1,7 +1,6 @@
 import { m, AnimatePresence } from 'framer-motion';
 import { Users, Zap, Globe2 } from 'lucide-react';
 import { useState, useEffect } from 'react';
-// #comment: Removed useEffect as we now use the optimized useVisibilityPolling hook.
 import { useTranslation, Trans } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { useVisibilityPolling } from '../../hooks/useVisibilityPolling';
