@@ -11,6 +11,7 @@ import { proService, PROStatus } from '../../../services/proService';
 import { getApiUrl } from '../../../utils/api';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages, tones as defaultTones } from '../utils/constants';
+import { socialLogos } from '../utils/socialLogos';
 import { PremiumSelect } from '../components/PremiumSelect';
 import { applyGlitchOverlay } from '../../../utils/glitchImageOverlay';
 
@@ -1192,14 +1193,15 @@ export const StudioTab = ({
                                                 const isProPlus = status?.is_pro_plus;
 
                                                 const getIcon = () => {
+                                                    const iconClass = "w-full h-full object-contain p-1.5";
                                                     switch (platform) {
-                                                        case 'x': return <Network size={16} />;
-                                                        case 'telegram': return <Send size={16} className="-ml-0.5" />;
-                                                        case 'linkedin': return <Users size={16} />;
-                                                        case 'threads': return <Instagram size={16} />;
-                                                        case 'pinterest': return <ImageIcon size={16} />;
-                                                        case 'facebook': return <Facebook size={16} />;
-                                                        case 'discord': return <MessageSquare size={16} />;
+                                                        case 'x': return <img src={socialLogos.x} className={iconClass} alt="X" />;
+                                                        case 'telegram': return <img src={socialLogos.telegram} className={iconClass} alt="Telegram" />;
+                                                        case 'linkedin': return <img src={socialLogos.linkedin} className={iconClass} alt="LinkedIn" />;
+                                                        case 'threads': return <img src={socialLogos.threads} className={iconClass} alt="Threads" />;
+                                                        case 'pinterest': return <img src={socialLogos.pinterest} className={iconClass} alt="Pinterest" />;
+                                                        case 'facebook': return <img src={socialLogos.facebook} className={iconClass} alt="Facebook" />;
+                                                        case 'discord': return <img src={socialLogos.discord} className={iconClass} alt="Discord" />;
                                                         default: return <Blocks size={16} />;
                                                     }
                                                 };
@@ -1399,21 +1401,21 @@ export const StudioTab = ({
                                             onClick={() => handleSharePlatform('telegram')}
                                             className="h-12 bg-[#0088cc]/10 hover:bg-[#0088cc]/20 border border-[#0088cc]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
-                                            <Send size={14} className="text-[#0088cc] -rotate-45 translate-x-0.5" />
+                                            <img src={socialLogos.telegram} alt="Telegram" className="w-5 h-5 object-contain" />
                                             <span className="text-[10px] font-black uppercase text-[#0088cc]">Telegram</span>
                                         </button>
                                         <button
                                             onClick={() => handleSharePlatform('whatsapp')}
                                             className="h-12 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
-                                            <div className="w-4 h-4 rounded-full bg-[#25D366] shrink-0" />
+                                            <img src={socialLogos.whatsapp} alt="WhatsApp" className="w-5 h-5 object-contain" />
                                             <span className="text-[10px] font-black uppercase text-[#25D366]">WhatsApp</span>
                                         </button>
                                         <button
                                             onClick={() => handleSharePlatform('x')}
                                             className="h-12 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
-                                            <span className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-0.5">𝕏</span>
+                                            <img src={socialLogos.x} alt="X" className="w-4 h-4 dark:invert object-contain" />
                                             <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Twitter</span>
                                         </button>
                                         <button

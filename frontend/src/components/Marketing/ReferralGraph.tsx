@@ -15,12 +15,45 @@ export const ReferralGraph = () => {
 
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
+    const [count, setCount] = useState(0);
+    const [isCalculating, setIsCalculating] = useState(true);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
         const pseudoRandom = Math.abs(Math.sin(seed * 12345));
         return Math.floor(pseudoRandom * (765 - 333 + 1)) + 333;
     }, []);
+
+    // ── HIGH-VELOCITY CALCULATION LOGIC ──
+    useEffect(() => {
+        if (!isCalculating) return;
+
+        const duration = 4000; // 4 seconds total
+        const startTime = Date.now();
+        const target = 43200;
+
+        const update = () => {
+            const now = Date.now();
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Ease out cubic for more 'anticipation' at the end
+            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(easeOutCubic * target));
+
+            if (progress < 1) {
+                requestAnimationFrame(update);
+            } else {
+                impact('medium');
+                setTimeout(() => {
+                    setIsCalculating(false);
+                    setShowFunnel(true);
+                }, 800);
+            }
+        };
+
+        requestAnimationFrame(update);
+    }, [isCalculating, impact]);
 
     const handleUpgrade = () => {
         impact('heavy');
@@ -148,26 +181,39 @@ export const ReferralGraph = () => {
                             <div className="absolute bottom-[20%] right-[15%]"><MemberAvatar delay={0.7} /></div>
                         </div>
 
-                        {/* ── CTA OVERLAY ── */}
+                        {/* ── CALCULATION COUNTER ── */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 1 }}
-                            className="mt-16 sm:mt-24 text-center z-30"
+                            className="mt-16 sm:mt-24 text-center z-30 w-full max-w-[300px]"
                         >
-                            <h3 className="text-sm sm:text-lg font-black text-slate-900 dark:text-white mb-6 uppercase tracking-tight">
-                                {t('income.network.title')}
-                            </h3>
-                            <button
-                                onClick={() => { selection(); setShowFunnel(true); }}
-                                className="px-10 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center gap-3 overflow-hidden group"
-                            >
-                                <div className="absolute inset-0 bg-indigo-600 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                                <span className="relative z-10 flex items-center gap-3">
-                                    {t('income.profit.unlock_btn')}
-                                    <Sparkles className="w-4 h-4 animate-pulse" />
+                            <div className="relative px-6 py-5 rounded-[2rem] bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
+                                <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
+
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
+                                    {t('income.network.yield')}
                                 </span>
-                            </button>
+
+                                <div className="flex items-baseline justify-center gap-1">
+                                    <span className="text-4xl sm:text-5xl font-black tabular-nums tracking-tighter text-white">
+                                        ${count.toLocaleString()}
+                                    </span>
+                                    <span className="text-lg font-black text-indigo-500">.00</span>
+                                </div>
+
+                                <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-px">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${(count / 43200) * 100}%` }}
+                                        className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
+                                    />
+                                </div>
+
+                                <div className="mt-3 flex justify-between items-center text-[8px] font-black text-white/30 uppercase tracking-widest">
+                                    <span>{t('income.math.per_min')}</span>
+                                    <span>MAX DIVIDENDS</span>
+                                </div>
+                            </div>
                         </motion.div>
 
                         {/* ── AMBIENT FLOATING DIVIDENDS ── */}
@@ -283,7 +329,7 @@ export const ReferralGraph = () => {
                                         </button>
 
                                         <button
-                                            onClick={() => { setShowFunnel(false); setFunnelStep(0); }}
+                                            onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
                                             className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
                                             {t('income.network.close')}
