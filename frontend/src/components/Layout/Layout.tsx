@@ -82,10 +82,10 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 id="main-scroll-root"
                 className={`flex-1 overflow-x-hidden relative z-10
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
-                    ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
+                    ${!isHeaderVisible ? '' : (isStaging ? 'pt-[calc(var(--header-total-height,80px)+32px)]' : 'pt-[calc(var(--header-total-height,80px)+12px)]')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
-                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
+                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} pb-[calc(var(--spacing-safe-bottom,20px)+80px)]`}>
                     {/* #comment: Removed key={activeTab} and mode=\"wait\" here as well to maintain component state when switching tabs.
                         This is critical for the 'visitedTabs' optimization in App.tsx. */}
                     <AnimatePresence initial={false}>
@@ -116,7 +116,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
             {/* Integrated Footer Stack */}
             {(isFooterVisible && !isKeyboardOpen) && (
-                <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-safe-bottom">
+                <div className="fixed bottom-0 left-1/2 z-50 flex w-full max-w-lg -translate-x-1/2 flex-col items-center pointer-events-none pb-[calc(var(--spacing-safe-bottom,20px)+16px)]">
                     <div className="flex w-full justify-center pb-4 pointer-events-auto">
                         <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />
                     </div>

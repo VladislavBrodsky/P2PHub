@@ -325,7 +325,7 @@ export default function ReferralPage() {
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: "100%", opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="w-full sm:max-w-sm bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pb-safe-bottom"
+                            className="w-full sm:max-w-sm bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pb-[calc(var(--spacing-safe-bottom,20px)+16px)]"
                         >
                             {/* Header / Close */}
                             <div className="absolute top-4 right-4 z-50">

@@ -446,7 +446,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                        className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] safe-pt border-x border-t sm:border border-slate-200 dark:border-white/5 overscroll-none"
+                        className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] pt-[calc(var(--spacing-safe-top,20px))] border-x border-t sm:border border-slate-200 dark:border-white/5 overscroll-none"
                         style={{
                             height: '100dvh',
                             maxHeight: '100dvh',
@@ -639,7 +639,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 pt-4 pb-6 backdrop-blur-3xl shrink-0 safe-pb">
+                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 pt-4 pb-[calc(var(--spacing-safe-bottom,20px)+24px)] backdrop-blur-3xl shrink-0">
                             {/* Glass background overlay */}
                             <div className="absolute inset-0 mesh-gradient-dark opacity-5 pointer-events-none" />
 

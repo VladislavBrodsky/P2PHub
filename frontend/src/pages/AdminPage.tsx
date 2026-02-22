@@ -523,7 +523,7 @@ export const AdminPage = () => {
     }
 
     return (
-        <div className="p-4 safe-pb space-y-6">
+        <div className="p-4 pb-[calc(var(--spacing-safe-bottom,20px)+80px)] space-y-6">
             {/* Header */}
             <div className="flex flex-col items-center justify-center w-full py-6 space-y-4 text-center">
                 <div className="flex items-center justify-center w-full">
