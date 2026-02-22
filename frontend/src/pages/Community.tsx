@@ -36,7 +36,7 @@ export default function CommunityPage() {
 
 
             {/* Top Navigation / Switcher */}
-            <div className="relative z-20 mb-4 mt-2 flex justify-center">
+            <div className="relative z-20 mb-6 mt-6 flex justify-center">
                 <div className="p-1 rounded-2xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div

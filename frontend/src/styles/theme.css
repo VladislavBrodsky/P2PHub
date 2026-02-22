@@ -24,6 +24,21 @@
   --color-slate-900: #0f172a;
   /* Keep surface slightly lighter */
 
+  /* Map core CSS variables to Tailwind theme! */
+  --color-surface: var(--color-surface);
+  --color-bg-app: var(--color-bg-app);
+  --color-bg-deep: var(--color-bg-deep);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-brand-primary: var(--color-brand-primary);
+  --color-brand-blue: var(--color-brand-blue);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-error: var(--color-error);
+
+  --color-bg-glass: var(--color-bg-glass);
+  --color-border-glass: var(--color-border-glass);
+  --color-glass-highlight: var(--color-glass-highlight);
 
   /* Typography Scale */
   --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;

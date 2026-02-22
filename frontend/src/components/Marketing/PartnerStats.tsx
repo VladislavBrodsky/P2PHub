@@ -136,7 +136,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-blue-500/10 to-transparent border border-blue-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
+                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-blue-500/10 to-transparent border border-blue-500/15 shadow-premium text-center flex flex-col gap-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <Users className="w-5 h-5 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
@@ -153,7 +153,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
                     transition={{ delay: 0.05 }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-emerald-500/10 to-transparent border border-emerald-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
+                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-emerald-500/10 to-transparent border border-emerald-500/15 shadow-premium text-center flex flex-col gap-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <Zap className="w-5 h-5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
@@ -170,7 +170,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
                     transition={{ delay: 0.1 }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-purple-500/10 to-transparent border border-purple-500/15 shadow-premium text-center space-y-2 relative overflow-hidden group"
+                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-purple-500/10 to-transparent border border-purple-500/15 shadow-premium text-center flex flex-col gap-2 relative overflow-hidden group"
                 >
                     <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                     <Globe2 className="w-5 h-5 text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]" />

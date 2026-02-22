@@ -71,7 +71,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
 
                 {/* #comment: Hero Content Section - Re-introducing negative margin for the 'Great' version look. */}
-                <div className="text-center space-y-10 px-2 flex flex-col items-center -mt-8 relative z-20">
+                <div className="text-center gap-10 px-2 flex flex-col items-center -mt-8 relative z-20">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (
@@ -111,7 +111,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     </div>
 
                     {/* Main Titles - Ultra-premium typography */}
-                    <div className="space-y-4">
+                    <div className="flex flex-col gap-4">
                         <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto">
                             {heroTitle1}
                         </h1>
@@ -141,7 +141,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* #comment: 3. The Evolution - Bento Grid.
                 Showcases the project roadmap through an interactive horizontal grid. */}
-            <m.div variants={item} className="space-y-6">
+            <m.div variants={item} className="flex flex-col gap-6">
                 <SectionHeader
                     badge={t('evolution.badge')}
                     title={t('evolution.title')}

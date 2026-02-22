@@ -51,7 +51,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col h-dvh min-h-dvh w-full overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col h-dvh min-h-dvh w-full max-w-md mx-auto overflow-hidden bg-bg-app text-text-primary sm:border-x sm:border-border-glass sm:shadow-2xl">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -86,20 +86,13 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 style={{ overscrollBehaviorY: 'none' }}
             >
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} pb-[calc(var(--spacing-safe-bottom,20px)+80px)]`}>
-                    {/* #comment: Removed key={activeTab} and mode=\"wait\" here as well to maintain component state when switching tabs.
-                        This is critical for the 'visitedTabs' optimization in App.tsx. */}
-                    <AnimatePresence initial={false}>
-                        <m.div
-                            key={activeTab}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2, ease: 'easeOut' }}
-                            className="mx-auto w-full"
-                        >
-                            {children}
-                        </m.div>
-                    </AnimatePresence>
+                    {/* #comment: Removed key={activeTab} and AnimatePresence to maintain component state when switching tabs.
+                        This is critical for the 'visitedTabs' optimization in App.tsx. Tab contents animate themselves. */}
+                    <div
+                        className="mx-auto w-full"
+                    >
+                        {children}
+                    </div>
                 </div>
             </main>
 
