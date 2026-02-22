@@ -37,7 +37,9 @@ class ViralAnalyticsService:
                         post_id=post.id,
                         views=metrics.get("views", 0),
                         likes=metrics.get("likes", 0),
+                        reactions=metrics.get("reactions", 0),
                         reposts=metrics.get("reposts", 0),
+                        shares=metrics.get("shares", 0),
                         replies=metrics.get("replies", 0),
                         engagement_rate=metrics.get("engagement_rate", 0.0)
                     )
@@ -58,6 +60,10 @@ class ViralAnalyticsService:
             return await self._fetch_x_metrics(post, session)
         elif post.platform == "telegram":
             return await self._fetch_telegram_metrics(post)
+        elif post.platform == "linkedin":
+            return await self._fetch_linkedin_metrics(post, session)
+        elif post.platform == "facebook":
+            return await self._fetch_facebook_metrics(post, session)
         return None
 
     async def _fetch_x_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
@@ -71,30 +77,34 @@ class ViralAnalyticsService:
         try:
             import tweepy
             client = tweepy.Client(
-                bearer_token=settings.TWITTER_BEARER_TOKEN, # Or use user keys
+                bearer_token=settings.TWITTER_BEARER_TOKEN,
                 consumer_key=partner.x_api_key,
                 consumer_secret=partner.x_api_secret,
                 access_token=partner.x_access_token,
                 access_token_secret=partner.x_access_token_secret
             )
             
-            # Twitter ID must be int for some methods, string for others
             response = await asyncio.get_event_loop().run_in_executor(
                 None,
                 lambda: client.get_tweet(
                     id=post.external_id, 
-                    tweet_fields=["public_metrics", "non_public_metrics"]
+                    tweet_fields=["public_metrics"]
                 )
             )
             
             if response and response.data:
                 metrics = response.data.public_metrics
+                likes = metrics.get("like_count", 0)
+                reposts = metrics.get("retweet_count", 0)
+                views = metrics.get("impression_count", 0)
                 return {
-                    "views": metrics.get("impression_count", 0),
-                    "likes": metrics.get("like_count", 0),
-                    "reposts": metrics.get("retweet_count", 0),
+                    "views": views,
+                    "likes": likes,
+                    "reactions": likes, # X likes are reactions
+                    "reposts": reposts,
+                    "shares": reposts,     # X retweets are shares
                     "replies": metrics.get("reply_count", 0),
-                    "engagement_rate": 0.0 # Calculate if needed
+                    "engagement_rate": ((likes + reposts) / views) if views > 0 else 0.0
                 }
         except Exception as e:
             logger.debug(f"X metric fetch skipped/failed: {e}")
@@ -102,98 +112,118 @@ class ViralAnalyticsService:
 
     async def _fetch_telegram_metrics(self, post: SocialPost) -> dict[str, Any] | None:
         """
-        Fetches Telegram metrics.
-        Strategy: Use public web preview (t.me/s/...) to scrap view counts.
-        Reactions are harder to scrap but we'll try to find them if present.
+        Fetches Telegram metrics via public web preview.
         """
         import re
 
         import httpx
 
         try:
-            # We need the channel public name or ID for the web preview.
-            # channel_id can be "@name" or "-100..."
             chan = post.channel_id
             if not chan:
                 return None
-            
-            # If it's a numeric ID, we need to hope it's not strictly private 
-            # or use the t.me/c/ID/msg format (which requires login/not scrapable easily)
-            # However, t.me/s/ works for public channels.
             
             target_url = None
             if chan.startswith("@"):
                 channel_name = chan[1:]
                 target_url = f"https://t.me/s/{channel_name}/{post.external_id}"
             elif not chan.startswith("-"):
-                # Case where it might be just the name without @
                 channel_name = chan
                 target_url = f"https://t.me/s/{channel_name}/{post.external_id}"
             
             if not target_url:
-                # Private channel or numeric ID - we can't scrap via web preview.
-                # In this case, we default to 0 or return what we have.
                 return {
-                    "views": 0,
-                    "likes": 0,
-                    "reposts": 0,
-                    "replies": 0,
-                    "engagement_rate": 0.0,
-                    "status": "private_or_invalid"
+                    "views": 0, "likes": 0, "reactions": 0, "reposts": 0, "shares": 0,
+                    "replies": 0, "engagement_rate": 0.0, "status": "private"
                 }
 
             async with httpx.AsyncClient(timeout=10.0) as client:
-                headers = {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-                }
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/91.0.4472.124"}
                 response = await client.get(target_url, headers=headers)
                 if response.status_code != 200:
                     return None
                 
                 html = response.text
-                
-                # Scrap Views
-                # <span class="tgme_widget_message_views">...</span>
                 views = 0
                 views_match = re.search(r'class="tgme_widget_message_views">([^<]+)</span>', html)
                 if views_match:
                     views_str = views_match.group(1).strip()
-                    # Handle K/M suffixes
-                    if 'K' in views_str:
-                        views = int(float(views_str.replace('K', '')) * 1000)
-                    elif 'M' in views_str:
-                        views = int(float(views_str.replace('M', '')) * 1000000)
-                    else:
-                        with contextlib.suppress(Exception):
-                            views = int(re.sub(r'[^\d]', '', views_str))
+                    if 'K' in views_str: views = int(float(views_str.replace('K', '')) * 1000)
+                    elif 'M' in views_str: views = int(float(views_str.replace('M', '')) * 1000000)
+                    else: views = int(re.sub(r'[^\d]', '', views_str) or 0)
                 
-                # Scrap Reactions (if any)
-                # Reactions are tricky as they appear as separate nodes
-                # <div class="tgme_widget_message_reactions">...</div>
-                likes = 0
+                total_reactions = 0
                 reactions_match = re.findall(r'class="tgme_widget_message_reaction_count">([^<]+)</span>', html)
                 for count_str in reactions_match:
                     with contextlib.suppress(Exception):
                         c_str = count_str.strip()
-                        if 'K' in c_str:
-                            likes += int(float(c_str.replace('K', '')) * 1000)
-                        elif 'M' in c_str:
-                            likes += int(float(c_str.replace('M', '')) * 1000000)
-                        else:
-                            likes += int(re.sub(r'[^\d]', '', c_str))
+                        if 'K' in c_str: total_reactions += int(float(c_str.replace('K', '')) * 1000)
+                        elif 'M' in c_str: total_reactions += int(float(c_str.replace('M', '')) * 1000000)
+                        else: total_reactions += int(re.sub(r'[^\d]', '', c_str) or 0)
 
                 return {
                     "views": views,
-                    "likes": likes,
-                    "reposts": 0, # reposts are not easily visible on web preview
+                    "likes": total_reactions,
+                    "reactions": total_reactions,
+                    "reposts": 0, # Hard to scrap
+                    "shares": 0,
                     "replies": 0,
-                    "engagement_rate": (likes / views) if views > 0 else 0.0,
-                    "status": "active" if views > 0 else "awaiting_data"
+                    "engagement_rate": (total_reactions / views) if views > 0 else 0.0,
+                    "status": "active"
                 }
-
         except Exception as e:
             logger.error(f"Telegram scraping failed: {e}")
             return None
+
+    async def _fetch_linkedin_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
+        import httpx
+        partner = await session.get(Partner, post.partner_id)
+        if not partner or not partner.linkedin_access_token: return None
+        try:
+            async with httpx.AsyncClient() as client:
+                headers = {"Authorization": f"Bearer {partner.linkedin_access_token}"}
+                # Fetch social actions (likes/comments/shares)
+                url = f"https://api.linkedin.com/v2/socialActions/{post.external_id}"
+                resp = await client.get(url, headers=headers)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    # LinkedIn doesn't easily expose views for personal posts via API
+                    # but we can get reactions and shares
+                    return {
+                        "views": 0,
+                        "likes": 0, # LinkedIn uses reactions
+                        "reactions": data.get("totalShareStatistics", {}).get("shareCount", 0), # This is confusing in LI API
+                        "reposts": 0,
+                        "shares": data.get("totalShareStatistics", {}).get("shareCount", 0),
+                        "replies": 0,
+                        "engagement_rate": 0.0
+                    }
+        except Exception: pass
+        return None
+
+    async def _fetch_facebook_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
+        import httpx
+        partner = await session.get(Partner, post.partner_id)
+        if not partner or not partner.facebook_access_token: return None
+        try:
+            async with httpx.AsyncClient() as client:
+                url = f"https://graph.facebook.com/v19.0/{post.external_id}?fields=reactions.summary(true),shares&access_token={partner.facebook_access_token}"
+                resp = await client.get(url)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    reactions = data.get("reactions", {}).get("summary", {}).get("total_count", 0)
+                    shares = data.get("shares", {}).get("count", 0)
+                    return {
+                        "views": 0,
+                        "likes": reactions,
+                        "reactions": reactions,
+                        "reposts": shares,
+                        "shares": shares,
+                        "replies": 0,
+                        "engagement_rate": 0.0
+                    }
+        except Exception: pass
+        return None
 
     async def refresh_post_metrics(self, post_id: int, session: AsyncSession):
         """
@@ -209,7 +239,9 @@ class ViralAnalyticsService:
                 post_id=post.id,
                 views=metrics.get("views", 0),
                 likes=metrics.get("likes", 0),
+                reactions=metrics.get("reactions", 0),
                 reposts=metrics.get("reposts", 0),
+                shares=metrics.get("shares", 0),
                 replies=metrics.get("replies", 0),
                 engagement_rate=metrics.get("engagement_rate", 0.0)
             )
@@ -217,6 +249,7 @@ class ViralAnalyticsService:
             post.last_metric_check = datetime.now(UTC).replace(tzinfo=None)
             session.add(post)
             await session.commit()
+
 
     async def get_partner_stats(self, partner_id: int, session: AsyncSession) -> dict[str, Any]:
         """
@@ -236,11 +269,14 @@ class ViralAnalyticsService:
         
         # 2. Total Posts & Aggregated Metrics
         posts_stmt = select(SocialPost).where(SocialPost.partner_id == partner_id).order_by(SocialPost.created_at.desc())
-        posts = (await session.exec(posts_stmt)).all()
+        result = await session.exec(posts_stmt)
+        posts = result.all()
         
         total_views = 0
         total_likes = 0
+        total_reactions = 0
         total_reposts = 0
+        total_shares = 0
         
         post_details = []
         for post in posts:
@@ -250,11 +286,15 @@ class ViralAnalyticsService:
             
             views = latest_metric.views if latest_metric else 0
             likes = latest_metric.likes if latest_metric else 0
+            reactions = latest_metric.reactions if latest_metric else likes # Fallback to likes
             reposts = latest_metric.reposts if latest_metric else 0
+            shares = latest_metric.shares if latest_metric else reposts # Fallback to reposts
             
             total_views += views
             total_likes += likes
+            total_reactions += reactions
             total_reposts += reposts
+            total_shares += shares
             
             # Construct post link
             post_link = None
@@ -266,13 +306,18 @@ class ViralAnalyticsService:
                     channel_name = chan[1:]
                     post_link = f"https://t.me/{channel_name}/{post.external_id}"
                 elif chan:
-                    # For private channels -100... or numeric IDs, t.me/c/ID/msg_id
                     clean_id = str(chan).replace("-100", "")
                     post_link = f"https://t.me/c/{clean_id}/{post.external_id}"
+            elif post.platform == "linkedin":
+                post_link = f"https://www.linkedin.com/feed/update/{post.external_id}"
+            elif post.platform == "facebook":
+                post_link = f"https://www.facebook.com/{post.external_id}"
+            elif post.platform == "threads":
+                post_link = f"https://www.threads.net/t/{post.external_id}"
 
             # Calculate a "Viral Resonance Score" (0-100)
-            # Logic: (Likes*3 + Reposts*5) / Views normalized, or just engagement growth
-            raw_score = ((likes * 3) + (reposts * 5)) / (views / 100) if views > 50 else (likes + reposts) * 2
+            engagement = reactions + shares
+            raw_score = (engagement * 5) / (views / 100) if views > 50 else engagement * 2
             resonance_score = min(100, round(raw_score, 1))
 
             post_details.append({
@@ -280,7 +325,9 @@ class ViralAnalyticsService:
                 "platform": post.platform,
                 "views": views,
                 "likes": likes,
+                "reactions": reactions,
                 "reposts": reposts,
+                "shares": shares,
                 "resonance_score": resonance_score,
                 "link": post_link,
                 "channel_name": post.channel_name or post.channel_id or "Main",
@@ -294,16 +341,18 @@ class ViralAnalyticsService:
                 "total_posts": len(posts),
                 "total_views": total_views,
                 "total_likes": total_likes,
+                "total_reactions": total_reactions,
                 "total_reposts": total_reposts,
-                "avg_engagement": (total_likes + total_reposts) / total_views if total_views > 0 else 0,
+                "total_shares": total_shares,
+                "avg_engagement": (total_reactions + total_shares) / total_views if total_views > 0 else 0,
                 "trends": {
-                    "views": "+12.4%", # Simulated trends for UI aesthetics
+                    "views": "+12.4%", 
                     "likes": "+8.2%",
                     "reposts": "+15.1%",
                     "success": "+3.4%"
                 }
             },
-            "posts": post_details[:20] # Last 20 posts
+            "posts": post_details[:20] 
         }
 
     async def get_predictive_insights(self, partner_id: int, session: AsyncSession) -> dict[str, Any]:

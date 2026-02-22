@@ -171,7 +171,9 @@ class SocialPostMetric(SQLModel, table=True):
     post_id: int = Field(foreign_key="socialpost.id", index=True)
     views: int = Field(default=0)
     likes: int = Field(default=0)
+    reactions: int = Field(default=0)  # Total reactions (likes, hearts, etc.)
     reposts: int = Field(default=0)
+    shares: int = Field(default=0)     # Explicit shares count
     replies: int = Field(default=0)
     engagement_rate: float = Field(default=0.0)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)

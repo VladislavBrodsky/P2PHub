@@ -502,10 +502,10 @@ export const ProDashboardModals = ({
                                                 <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
                                                     {[
                                                         { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg') || 'Telegram', src: socialLogos.telegram },
-                                                        { id: 'x', label: 'X', src: socialLogos.x },
+                                                        { id: 'x', label: 'X', src: socialLogos.x, invert: true },
                                                         { id: 'linkedin', label: 'LinkedIn', src: socialLogos.linkedin },
                                                         { id: 'pinterest', label: 'Pinterest', src: socialLogos.pinterest },
-                                                        { id: 'threads', label: 'Threads', src: socialLogos.threads },
+                                                        { id: 'threads', label: 'Threads', src: socialLogos.threads, invert: true },
                                                         { id: 'facebook', label: 'Facebook', src: socialLogos.facebook },
                                                         { id: 'discord', label: 'Discord', src: socialLogos.discord }
                                                     ].map((tab) => (
@@ -514,7 +514,7 @@ export const ProDashboardModals = ({
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
                                                             className={`shrink-0 py-2 px-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 border ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-lg text-emerald-600 dark:text-white border-emerald-500/20' : 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
                                                         >
-                                                            <img src={tab.src} alt={tab.label} className="w-4 h-4 object-contain" />
+                                                            <img src={tab.src} alt={tab.label} className={`w-4 h-4 object-contain ${(tab as any).invert ? 'dark:invert' : ''}`} />
                                                             {tab.label}
                                                         </button>
                                                     ))}
@@ -588,7 +588,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
-                                                                <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1" />
+                                                                <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
@@ -683,7 +683,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
-                                                                <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5" />
+                                                                <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5 dark:invert" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>

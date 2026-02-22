@@ -2,13 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
-    Terminal, Share, Flame, Globe, Send, Twitter, Linkedin, ChevronRight,
+    Terminal, Share, Flame, Globe, ChevronRight,
     Loader2, Brain, Lock, Play, ChevronDown
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PROStatus } from '../../../services/proService';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { LiquidCounter } from '../utils/LiquidCounter';
+import { socialLogos } from '../utils/socialLogos';
 import { ACADEMY_STAGES, getCategoryColor } from '../../../data/academyData';
 
 interface GrowthTabProps {
@@ -489,10 +490,11 @@ export const GrowthTab = ({
                         return platformsList.map((platform: any, i: number) => (
                             <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
                                 <div className="flex items-center gap-2.5 mb-2">
-                                    <div className="w-7 h-7 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform">
-                                        {platform.name && platform.name.includes('Telegram') && <Send size={12} className="text-indigo-500" />}
-                                        {platform.name && platform.name.includes('X') && <Twitter size={12} className="text-indigo-500" />}
-                                        {platform.name && platform.name.includes('LinkedIn') && <Linkedin size={12} className="text-indigo-500" />}
+                                    <div className="w-7 h-7 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform p-1.5">
+                                        {platform.name && platform.name.toLowerCase().includes('telegram') && <img src={socialLogos.telegram} className="w-full h-full object-contain" alt="Telegram" />}
+                                        {platform.name && (platform.name.toLowerCase().includes(' x') || platform.name === 'X') && <img src={socialLogos.x} className="w-full h-full object-contain dark:invert" alt="X" />}
+                                        {platform.name && platform.name.toLowerCase().includes('linkedin') && <img src={socialLogos.linkedin} className="w-full h-full object-contain" alt="LinkedIn" />}
+                                        {!['telegram', ' x', 'linkedin'].some(s => platform.name?.toLowerCase().includes(s)) && <Globe size={12} className="text-indigo-500" />}
                                     </div>
                                     <span className="text-[9px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{platform.name}</span>
                                 </div>

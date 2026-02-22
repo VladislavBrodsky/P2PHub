@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Sparkles, Send, ChevronRight, Terminal, Bot, Image as ImageIcon,
+    Sparkles, ChevronRight, Terminal, Bot, Send, Users, Image as ImageIcon,
     CheckCircle2, Loader2, Copy, Download, RefreshCw, Undo2, Share, ArrowLeft, ArrowRight, X,
-    Zap, Users, Link as LinkIcon, Info, Network, Lock, Blocks, MessageSquare, Facebook, Instagram
+    Zap, Link as LinkIcon, Info, Lock, Blocks
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
@@ -1195,10 +1195,10 @@ export const StudioTab = ({
                                                 const getIcon = () => {
                                                     const iconClass = "w-full h-full object-contain p-1.5";
                                                     switch (platform) {
-                                                        case 'x': return <img src={socialLogos.x} className={iconClass} alt="X" />;
+                                                        case 'x': return <img src={socialLogos.x} className={iconClass + " dark:invert"} alt="X" />;
                                                         case 'telegram': return <img src={socialLogos.telegram} className={iconClass} alt="Telegram" />;
                                                         case 'linkedin': return <img src={socialLogos.linkedin} className={iconClass} alt="LinkedIn" />;
-                                                        case 'threads': return <img src={socialLogos.threads} className={iconClass} alt="Threads" />;
+                                                        case 'threads': return <img src={socialLogos.threads} className={iconClass + " dark:invert"} alt="Threads" />;
                                                         case 'pinterest': return <img src={socialLogos.pinterest} className={iconClass} alt="Pinterest" />;
                                                         case 'facebook': return <img src={socialLogos.facebook} className={iconClass} alt="Facebook" />;
                                                         case 'discord': return <img src={socialLogos.discord} className={iconClass} alt="Discord" />;
