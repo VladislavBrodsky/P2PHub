@@ -514,7 +514,7 @@ export const ProDashboardModals = ({
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
                                                             className={`shrink-0 py-2 px-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 border ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-lg text-emerald-600 dark:text-white border-emerald-500/20' : 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
                                                         >
-                                                            <img src={tab.src} alt={tab.label} className="w-4 h-4 object-contain" />
+                                                            <img src={tab.src} alt={tab.label} className="w-4 h-4 object-contain rounded-full bg-white/50 dark:bg-black/20" />
                                                             {tab.label}
                                                         </button>
                                                     ))}
@@ -524,8 +524,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'tg' && (
                                                     <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.telegram} alt="Telegram" className="w-6 h-6 object-contain" />
+                                                            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-cover scale-110" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
@@ -587,8 +587,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'x' && (
                                                     <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.x} alt="X" className="w-6 h-6 object-contain rounded-full" />
+                                                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.x} alt="X" className="w-full h-full object-cover" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
@@ -622,8 +622,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'linkedin' && (
                                                     <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-indigo-700 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.linkedin} alt="LinkedIn" className="w-6 h-6 object-contain" />
+                                                            <div className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-cover" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
@@ -653,8 +653,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'pinterest' && (
                                                     <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-rose-500/5 rounded-2xl border border-rose-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-rose-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.pinterest} alt="Pinterest" className="w-6 h-6 object-contain" />
+                                                            <div className="w-10 h-10 rounded-full bg-[#BD081C] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.pinterest} alt="Pinterest" className="w-full h-full object-cover" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
@@ -682,8 +682,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'threads' && (
                                                     <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.threads} alt="Threads" className="w-6 h-6 object-contain rounded-full bg-white" />
+                                                            <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-cover scale-110" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
@@ -711,8 +711,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'facebook' && (
                                                     <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-blue-500/5 rounded-2xl border border-blue-500/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.facebook} alt="Facebook" className="w-6 h-6 object-contain" />
+                                                            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.facebook} alt="Facebook" className="w-full h-full object-cover" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.facebook.title')}</p>
@@ -740,8 +740,8 @@ export const ProDashboardModals = ({
                                                 {activePlusPlatform === 'discord' && (
                                                     <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-[#5865F2]/5 rounded-2xl border border-[#5865F2]/15">
-                                                            <div className="w-10 h-10 rounded-2xl bg-[#5865F2] flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <img src={socialLogos.discord} alt="Discord" className="w-6 h-6 object-contain" />
+                                                            <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
+                                                                <img src={socialLogos.discord} alt="Discord" className="w-full h-full object-cover scale-125" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.discord.title')}</p>
