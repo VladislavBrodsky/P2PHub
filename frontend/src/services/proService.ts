@@ -1,4 +1,6 @@
 import { apiClient } from '../api/client';
+import { getSafeLaunchParams } from '../utils/tma';
+import { getApiUrl } from '../utils/api';
 
 export interface PROStatus {
     is_pro: boolean;
@@ -158,5 +160,63 @@ export const proService = {
     refreshPostMetrics: async (post_id: number) => {
         const response = await apiClient.post(`/api/pro/analytics/post/${post_id}/refresh`);
         return response.data;
+    },
+
+    generateContentStream: async (
+        post_type: string,
+        target_audience: string,
+        language: string,
+        onEvent: (event: { type: string; content?: any; tokens_remaining?: number }) => void,
+        tone?: string,
+        referral_link?: string
+    ) => {
+        const url = `${getApiUrl().replace('http://', 'https://')}/api/pro/generate-stream`;
+        const params = getSafeLaunchParams();
+        const initDataRaw = params.initDataRaw || '';
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Telegram-Init-Data': initDataRaw,
+            },
+            body: JSON.stringify({
+                post_type,
+                target_audience,
+                language,
+                tone_of_voice: tone,
+                referral_link
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error('ReadableStream supported');
+
+        const decoder = new TextDecoder();
+        let partialData = '';
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+
+            partialData += decoder.decode(value, { stream: true });
+            const lines = partialData.split('\n\n');
+            partialData = lines.pop() || '';
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    try {
+                        const data = JSON.parse(line.slice(6));
+                        onEvent(data);
+                    } catch (e) {
+                        console.error('[SSE] JSON Parse Error:', e);
+                    }
+                }
+            }
+        }
     }
 };

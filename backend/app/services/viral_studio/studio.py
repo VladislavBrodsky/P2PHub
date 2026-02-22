@@ -380,6 +380,135 @@ class ViralMarketingStudio:
                 
         return None, 0
 
+    async def generate_viral_content_stream(self, partner: Partner, post_type: str, target_audience: str, language: str,
+                                         tone_of_voice: str | None = "authoritative", referral_link: str | None = None,
+                                         session: AsyncSession | None = None):
+        """
+        🚀 ELITE STREAMING MODE: Yields content segments in real-time.
+        Sequence: [Meta] -> [Title] -> [Body Chunks] -> [Hashtags] -> [Image URL] -> [Done]
+        """
+        if not self.openai_client and not self.genai_client:
+            yield {"type": "error", "content": "Elite AI engine offline."}
+            return
+
+        # 1. Setup & Pre-Processing
+        intel = await self._get_cached_intel(target_audience, post_type, language)
+        is_pro_plus = partner.is_pro_plus
+        
+        if post_type == "partners":
+            ref_link = f"https://t.me/pintopay_probot?start={partner.referral_code}"
+        else:
+            ref_link = referral_link.strip() if referral_link and referral_link.strip() else "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
+
+        yield {"type": "status", "content": "Architecting narrative..."}
+
+        # 2. Parallel Image Task (Don't wait, yield when ready)
+        baseline_image_prompt = prompts.build_viral_image_prompt(intel, "")
+        image_task = asyncio.create_task(self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus))
+
+        # 3. Stream Text Generation (OpenAI Priority for Streaming)
+        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {})
+        user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel)
+        
+        full_text = ""
+        current_field = None
+        buffer = ""
+
+        try:
+            # Note: For streaming, we relax the json_object constraint to get raw stream segments
+            # We use a simplified parser to extract fields as they arrive.
+            messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
+            
+            # Using gpt-4o-mini as the default high-speed streaming model for non-PRO+ users
+            model_to_use = "gpt-4o" if is_pro_plus else "gpt-4o-mini"
+            
+            res_stream = await self.openai_client.chat.completions.create(
+                model=model_to_use,
+                messages=messages,
+                stream=True
+            )
+
+            is_inside_json = False
+            title_found = False
+            body_started = False
+            
+            async for chunk in res_stream:
+                delta = chunk.choices[0].delta.content
+                if not delta: continue
+                buffer += delta
+                
+                # Simple Heuristic Parser for field-by-field streaming
+                if '"title":' in buffer and not title_found:
+                    # Wait for title content
+                    title_match = re.search(r'"title":\s*"([^"]*)', buffer)
+                    if title_match:
+                        title = title_match.group(1)
+                        yield {"type": "title", "content": title}
+                        title_found = True
+                
+                if '"body":' in buffer and not body_started:
+                    # Look for start of body content
+                    body_match = re.search(r'"body":\s*"', buffer)
+                    if body_match:
+                        body_started = True
+                        # Flush anything already in buffer after the quote
+                        remaining = buffer[body_match.end():]
+                        if remaining:
+                            yield {"type": "body_chunk", "content": remaining.replace('\\n', '\n').replace('\\"', '"')}
+                            full_text += remaining
+                        buffer = "" # Clear buffer to start tracking clean body
+                elif body_started:
+                    # We are streaming the body. Keep looking for the closing quote or buffer up.
+                    if '"' in buffer:
+                        # Might be end of body or just a quote inside. 
+                        # In JSON escaping, internal quotes are \".
+                        # Real end of field is usually followed by , or }
+                        potential_end = re.search(r'(?<!\\)"\s*[,}]', buffer)
+                        if potential_end:
+                            # Found end of body
+                            chunk_content = buffer[:potential_end.start()]
+                            if chunk_content:
+                                yield {"type": "body_chunk", "content": chunk_content.replace('\\n', '\n').replace('\\"', '"')}
+                                full_text += chunk_content
+                            body_started = False
+                            buffer = buffer[potential_end.end():]
+                        else:
+                            # Not the end yet, yield what we have
+                            # But wait for more to be sure about the escape
+                            if len(buffer) > 20: 
+                                yield {"type": "body_chunk", "content": buffer[:-20].replace('\\n', '\n').replace('\\"', '"')}
+                                full_text += buffer[:-20]
+                                buffer = buffer[-20:]
+                    else:
+                        # No quotes, just pure content
+                        if len(buffer) > 20:
+                            yield {"type": "body_chunk", "content": buffer[:-20].replace('\\n', '\n').replace('\\"', '"')}
+                            full_text += buffer[:-20]
+                            buffer = buffer[-20:]
+            
+            # Final check for hashtags and concluding body if any left
+            if '"hashtags":' in buffer:
+                tags_match = re.search(r'"hashtags":\s*\[(.*?)\]', buffer, re.DOTALL)
+                if tags_match:
+                    try:
+                        tags = json.loads("[" + tags_match.group(1) + "]")
+                        yield {"type": "hashtags", "content": tags}
+                    except: pass
+
+            yield {"type": "status", "content": "Capturing visuals..."}
+            
+            # 4. Finalize Image
+            image_url = await image_task
+            yield {"type": "image", "content": image_url}
+
+            # 5. Done
+            yield {"type": "done", "content": {"body": full_text, "image_url": image_url}}
+
+        except Exception as e:
+            logger.error(f"Streaming Synthesis Failure: {e}")
+            yield {"type": "error", "content": str(e)}
+
+
     async def _generate_image(self, prompt: str, partner_id: int, is_pro_plus: bool = False) -> str | None:
         """Sequential image generation using priority models and rich fallbacks."""
         if is_pro_plus:

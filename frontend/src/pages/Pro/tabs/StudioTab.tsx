@@ -179,6 +179,17 @@ export const StudioTab = ({
         setIsGenerating(true);
         impact('heavy');
 
+        // Reset previous result state for clean stream
+        setGeneratedResult({
+            id: null,
+            title: '',
+            body: '',
+            hashtags: [],
+            image_prompt: '',
+            image_url: null,
+            tokens_remaining: status?.pro_tokens || 0
+        });
+
         try {
             // Include referral link if active and valid
             let finalLink: string | undefined = undefined;
@@ -192,17 +203,51 @@ export const StudioTab = ({
                 }
             }
 
-            const result = await proService.generateContent(postType, audience, language, tone, finalLink);
+            await proService.generateContentStream(
+                postType,
+                audience,
+                language,
+                (event) => {
+                    if (event.type === 'meta') {
+                        if (event.tokens_remaining !== undefined) {
+                            setStatus(status ? { ...status, pro_tokens: event.tokens_remaining } : null);
+                        }
+                    } else if (event.type === 'title') {
+                        setGeneratedResult((prev: any) => ({ ...prev, title: event.content }));
+                    } else if (event.type === 'body_chunk') {
+                        setGeneratedResult((prev: any) => ({
+                            ...prev,
+                            body: (prev?.body || '') + event.content
+                        }));
+                    } else if (event.type === 'hashtags') {
+                        setGeneratedResult((prev: any) => ({ ...prev, hashtags: event.content }));
+                    } else if (event.type === 'image') {
+                        setGeneratedResult((prev: any) => ({ ...prev, image_url: event.content }));
+                        impact('medium');
+                    } else if (event.type === 'done') {
+                        const final = event.content;
+                        setGeneratedResult((prev: any) => {
+                            const updated = { ...prev, ...final, status: 'success' };
+                            // Manage History only when done
+                            const newHistory = [...history.slice(0, historyIndex + 1), updated];
+                            setHistory(newHistory);
+                            setHistoryIndex(newHistory.length - 1);
+                            return updated;
+                        });
+                        setExternalStep(3);
+                        notification({
+                            title: t('pro_dashboard.notifications.success'),
+                            text: t('pro_dashboard.notifications.viral_synthesized'),
+                            type: 'success'
+                        });
+                    } else if (event.type === 'error') {
+                        throw new Error(event.content);
+                    }
+                },
+                tone,
+                finalLink
+            );
 
-            // Manage History
-            const newHistory = [...history.slice(0, historyIndex + 1), result];
-            setHistory(newHistory);
-            setHistoryIndex(newHistory.length - 1);
-            setGeneratedResult(result);
-
-            setStatus(status ? { ...status, pro_tokens: result.tokens_remaining } : null);
-            setExternalStep(3);
-            notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.viral_synthesized'), type: 'success' });
         } catch (error: any) {
             console.error('❌ Viral content generation failed:', error);
 
@@ -211,15 +256,10 @@ export const StudioTab = ({
             let errorMessage = t('pro_dashboard.notifications.gen_failed');
 
             if (error.response?.data?.detail) {
-                // Backend provided detailed error
                 errorMessage = error.response.data.detail;
-                console.error('Backend error detail:', errorMessage);
             } else if (error.response?.status === 402) {
                 errorTitle = t('pro_dashboard.notifications.tokens_required');
                 errorMessage = t('pro_dashboard.notifications.tokens_required_text');
-            } else if (error.response?.status === 403) {
-                errorTitle = t('pro_dashboard.notifications.pro_required');
-                errorMessage = t('pro_dashboard.notifications.pro_required_text');
             } else if (error.message) {
                 errorMessage = `${errorMessage}: ${error.message}`;
             }

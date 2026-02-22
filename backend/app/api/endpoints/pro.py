@@ -1,6 +1,7 @@
+import json
 import logging
-
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -461,6 +462,48 @@ async def generate_content(
         "image_url": result.get("image_url"),
         "tokens_remaining": partner.pro_tokens
     }
+
+@router.post("/generate-stream")
+async def generate_content_stream(
+    payload: ViralGenerateRequest,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Synthesize content with real-time streaming (SSE).
+    """
+    if not partner.is_pro:
+        raise HTTPException(status_code=403, detail="PRO membership required")
+    
+    # 1. Token Check & Initial Deduction
+    has_tokens = await viral_studio.check_tokens_and_reset(partner, session, min_tokens=2)
+    if not has_tokens:
+        raise HTTPException(status_code=402, detail="Insufficient tokens")
+    
+    partner.pro_tokens -= 2
+    session.add(partner)
+    await session.commit()
+
+    async def event_generator():
+        try:
+            # Yield initial tokens remaining
+            yield f"data: {json.dumps({'type': 'meta', 'tokens_remaining': partner.pro_tokens})}\n\n"
+            
+            async for event in viral_studio.generate_viral_content_stream(
+                partner=partner,
+                post_type=payload.post_type,
+                target_audience=payload.target_audience,
+                language=payload.language,
+                tone_of_voice=payload.tone_of_voice,
+                referral_link=payload.referral_link,
+                session=session
+            ):
+                yield f"data: {json.dumps(event)}\n\n"
+        except Exception as e:
+            logger.error(f"Stream Error: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'content': str(e)})}\n\n"
+
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 @router.post("/regenerate-hashtags")
 async def regenerate_hashtags(
