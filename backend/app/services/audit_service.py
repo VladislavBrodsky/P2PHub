@@ -270,6 +270,7 @@ class AuditService:
                 "priority": priority,
                 "salt": salt,
                 "error": error
+            }
         )
 
     async def log_notification_buffered(
