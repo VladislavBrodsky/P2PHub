@@ -178,25 +178,19 @@ class NotificationService:
             await send_telegram_task.kiq(payload.model_dump())
             logger.info(f"📤 [CORE-NOTIF] Enqueued for {chat_id} (prio: {priority}, salt: {salt})")
             
-            # Structured event ledger: every notification is recorded with salt/event_type
+            # High-performance Buffered Logger (Zero DB impact during 200K broadcast)
             try:
                 from app.services.audit_service import audit_service
-                from app.models.partner import engine
-                from sqlalchemy.orm import sessionmaker
-                from sqlmodel.ext.asyncio.session import AsyncSession
-                async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-                async with async_session() as session:
-                    await audit_service.log_notification(
-                        session=session,
-                        chat_id=str(chat_id),
-                        event_type=salt or "unknown",
-                        status="enqueued",
-                        priority=priority,
-                        salt=salt
-                    )
-                    await session.commit()
+                await audit_service.log_notification_buffered(
+                    chat_id=str(chat_id),
+                    event_type=salt or "unknown",
+                    status="enqueued",
+                    priority=priority,
+                    salt=salt
+                )
             except Exception as ae:
-                logger.warning(f"Failed to log notification enqueue: {ae}")
+                logger.warning(f"Failed to log notification enqueue (buffered): {ae}")
+
 
         except Exception as e:
             logger.error(f"❌ Enqueue Failed for {chat_id}: {e}")

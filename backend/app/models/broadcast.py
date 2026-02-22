@@ -38,9 +38,11 @@ class Broadcast(SQLModel, table=True):
     total_targets: int = Field(default=0)
     sent_count: int = Field(default=0)
     failed_count: int = Field(default=0)
+    last_partner_id: Optional[int] = Field(default=0, description="Resume cursor for chunked broadacsts")
     
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None))
+
 
     class Config:
         arbitrary_types_allowed = True

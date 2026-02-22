@@ -9,8 +9,40 @@ logger = logging.getLogger(__name__)
 
 
 class AuditService:
+    async def log_buffered(
+        self,
+        partner_id: int | None = None,
+        action_type: ActionType = ActionType.MISC,
+        description: str | None = None,
+        details: dict | None = None,
+        entity_type: str | None = None,
+        entity_id: str | None = None,
+        action: str | None = None,
+    ):
+        """
+        Highest-performance logging for 200K+ user scale.
+        Pushes logs to a Redis List instead of hitting the DB immediately.
+        """
+        from app.services.redis_service import redis_service
+        log_data = {
+            "partner_id": partner_id,
+            "action_type": action_type.value if hasattr(action_type, 'value') else action_type,
+            "description": description,
+            "details": details or {},
+            "entity_type": entity_type,
+            "entity_id": entity_id,
+            "action": action,
+            "actor_id": "system"
+        }
+        try:
+            import json
+            await redis_service.client.lpush("queue:audit_logs", json.dumps(log_data))
+        except Exception as e:
+            logger.error(f"Audit Buffering Failed: {e}")
+
     @async_retry(max_attempts=3, base_delay=1.0)
     async def log_event(
+
         self,
         session: AsyncSession,
         entity_type: str | None = None,
@@ -238,8 +270,39 @@ class AuditService:
                 "priority": priority,
                 "salt": salt,
                 "error": error
+        )
+
+    async def log_notification_buffered(
+        self,
+        chat_id: str,
+        event_type: str,
+        status: str,
+        priority: str = "medium",
+        partner_id: int | None = None,
+        error: str | None = None,
+        salt: str | None = None
+    ):
+
+        """
+        Scale-safe version of log_notification. 
+        Pushes to Redis buffer instead of Postgres.
+        """
+        await self.log_buffered(
+            partner_id=partner_id,
+            action_type=ActionType.NOTIFICATION,
+            description=f"[{status.upper()}] {event_type} → {chat_id}",
+            entity_type="notification",
+            entity_id=chat_id,
+            action=f"notification_{status}",
+            details={
+                "chat_id": chat_id,
+                "event_type": event_type,
+                "priority": priority,
+                "salt": salt,
+                "error": error
             }
         )
+
 
     # ──────────────────────────────────────────────────────────
     # Payment Events
@@ -315,4 +378,60 @@ class AuditService:
         )
 
 
+from app.core.broker import broker
+
+@broker.task(
+    task_name="process_audit_buffer_task",
+    schedule=[{"cron": "*/1 * * * *"}] # Fallback cron, though we also trigger on demand
+)
+async def process_audit_buffer_task():
+    """
+    High-performance background flusher.
+    Drains the entire Redis audit buffer in chunks of 1000.
+    """
+    from sqlalchemy.orm import sessionmaker
+    from app.models.partner import engine
+    from app.services.redis_service import redis_service
+    import json
+    
+    BATCH_SIZE = 1000
+    TOTAL_FLUSHED = 0
+    
+    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    
+    while True:
+        # 1. Pop batch from Redis
+        try:
+            async with redis_service.client.pipeline(transaction=True) as pipe:
+                pipe.lrange("queue:audit_logs", 0, BATCH_SIZE - 1)
+                pipe.ltrim("queue:audit_logs", BATCH_SIZE, -1)
+                results = await pipe.execute()
+                raw_logs = results[0]
+                
+                if not raw_logs:
+                    break
+                    
+                logs = [json.loads(l) for l in raw_logs]
+        except Exception as e:
+            logger.error(f"Failed to drain audit buffer from Redis: {e}")
+            break
+
+        # 2. Bulk Insert to DB
+        async with async_session() as session:
+            try:
+                # Use the new bulk helper
+                await audit_service.log_events_bulk(session, logs)
+                await session.commit()
+                TOTAL_FLUSHED += len(logs)
+            except Exception as e:
+                logger.error(f"PostgreSQL Bulk Audit Flush Failed: {e}")
+                # Don't break here, try next batch or wait for cron
+                break
+                
+    if TOTAL_FLUSHED > 0:
+        logger.info(f"🚀 Audit Flush Complete: {TOTAL_FLUSHED} logs moved to Permanent Storage.")
+
 audit_service = AuditService()
+
+
+

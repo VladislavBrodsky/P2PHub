@@ -30,6 +30,8 @@ taskiq_fastapi.init(
 # about any tasks, so ALL cron jobs and background tasks silently never ran.
 # These imports MUST happen at module level so the worker process registers them.
 import app.services.analytics_tasks
+import app.services.audit_service
+import app.services.broadcast_service
 import app.services.maintenance_service
 import app.services.notification_service
 import app.services.partner_service
@@ -38,3 +40,4 @@ import app.services.subscription_service
 import app.services.support_service
 import app.services.viral_studio.tasks
 import app.services.warmup_service
+
