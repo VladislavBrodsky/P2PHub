@@ -427,7 +427,7 @@ export const ProDashboard = () => {
             id="pro-dashboard-container"
             className="w-full text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-12"
         >
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-0 pb-16 min-h-[80vh]">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-8 pb-16 min-h-[80vh]">
                 {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4">
                     <div className="flex items-center gap-2 sm:gap-3">

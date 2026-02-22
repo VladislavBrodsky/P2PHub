@@ -42,7 +42,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(var(--spacing-safe-top,max(env(safe-area-inset-top),24px))+var(--spacing-telegram-header,12px))] transition-all duration-300 pointer-events-none">
+        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(var(--spacing-safe-top,20px)+var(--spacing-telegram-header,74px)+12px)] transition-all duration-300 pointer-events-none">
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
                 <div className="flex items-center justify-between gap-4">
