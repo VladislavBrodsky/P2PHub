@@ -78,34 +78,44 @@ async def lifespan(app: FastAPI):
     # errors in PostgreSQL logs during worker startup.
 
     # #comment: Distributed Startup Tasks (Offloaded to Workers)
-    # Using TaskIQ ensures these heavy operations don't block web worker startup
-    # and are only executed by the worker cluster (with internal locking).
+    # Using TaskIQ ensures these heavy operations don't block web worker startup.
+    # We use a leader lock to ensure only ONE worker queues these tasks during deployment.
     from app.services.maintenance_service import migrate_blog_task, restore_names_task
+    from app.services.redis_service import redis_service
     from app.services.support_service import warm_up_kb_task
     
-    await warmup_redis.kiq()
-    await warm_up_kb_task.kiq()
-    await restore_names_task.kiq()
-    await migrate_blog_task.kiq()
+    is_startup_leader = False
+    try:
+        startup_lock = "lock:startup_tasks_queued"
+        is_startup_leader = await redis_service.client.set(startup_lock, "1", ex=300, nx=True)
+    except Exception as e:
+        logger.warning(f"⚠️ Could not check startup leader status (Redis issue): {e}")
 
-    # #comment: Migrated Subscription and Photo Sync tasks to TaskIQ Scheduler.
-    # We no longer run infinite loops here to save worker memory and prevent redundant DB load.
+    if is_startup_leader:
+        try:
+            logger.info("📡 Leader Worker: Dispatching startup tasks to workers...")
+            await warmup_redis.kiq()
+            await warm_up_kb_task.kiq()
+            await restore_names_task.kiq()
+            await migrate_blog_task.kiq()
+            logger.info("✅ Startup tasks successfully queued.")
+        except Exception as e:
+            logger.error(f"⚠️ Failed to queue startup tasks: {e}")
+            logger.warning("Application will continue to boot, but background warmup might be delayed.")
+    elif is_startup_leader is False:
+        logger.info("ℹ️ Startup tasks already dispatched or Redis unreachable.")
 
-    logger.info("✅ Webhook registration check starting...")
+    logger.info("✅ Bot integration check starting...")
 
     webhook_base = settings.WEBHOOK_URL
 
     if webhook_base and "your-backend-url" not in webhook_base:
-        # Avoid double-appending the path
+        # Webhook Mode
         path = settings.WEBHOOK_PATH
         webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
 
         try:
-            # #comment: Leader Election for Webhook. Only one worker should register the webhook.
-            # This prevents 4 workers from hammering the Telegram API simultaneously.
-            from app.services.redis_service import redis_service
-            lock_key = "lock:webhook_registration"
-            is_leader = await redis_service.client.set(lock_key, "1", ex=60, nx=True)
+            is_leader = await redis_service.client.set("lock:webhook_registration", "1", ex=60, nx=True)
 
             if is_leader:
                 logger.info(f"📡 Leader Worker: Registering Webhook with Telegram: {webhook_url}")
@@ -119,18 +129,25 @@ async def lifespan(app: FastAPI):
             else:
                 logger.info("ℹ️ Webhook already registered by leader worker. Skipping...")
         except Exception as e:
-            # Ignore flood control if it's already being handled by another worker
             if "Flood control exceeded" in str(e):
                 logger.warning("⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
             else:
-                logger.error(f"❌ Failed to set webhook (URL: {webhook_url}): {e}", exc_info=True)
+                logger.error(f"❌ Failed to set webhook (URL: {webhook_url}): {e}")
     else:
-        # Fallback to polling for local development or if URL is placeholder
-        logger.info("💡 WEBHOOK_URL is not set or is a placeholder. Starting Long Polling...")
-        await bot.delete_webhook(drop_pending_updates=True)
-        polling_task = asyncio.create_task(dp.start_polling(bot))
-        app.state.polling_task = polling_task
-        logger.info("✅ Bot started with Long Polling")
+        # Polling Mode
+        try:
+            is_polling_leader = await redis_service.client.set("lock:bot_polling_master", "1", ex=60, nx=True)
+            
+            if is_polling_leader:
+                logger.info("💡 Bot Polling Master: Starting Long Polling...")
+                await bot.delete_webhook(drop_pending_updates=True)
+                polling_task = asyncio.create_task(dp.start_polling(bot))
+                app.state.polling_task = polling_task
+                logger.info("✅ Bot started with Long Polling")
+            else:
+                logger.info("ℹ️ Another worker is already handling Bot Polling. Skipping...")
+        except Exception as e:
+            logger.error(f"⚠️ Polling check failed (Redis issue): {e}. Fallback: Polling disabled for this worker.")
 
     # Explicit Database Connection Check
     # Why: Catches database connection issues early in the startup process.

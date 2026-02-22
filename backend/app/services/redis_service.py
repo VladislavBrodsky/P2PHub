@@ -10,11 +10,11 @@ logger = logging.getLogger(__name__)
 
 class RedisService:
     def __init__(self):
-        # #comment: Implementing connection pooling to handle high-concurrency across Gunicorn workers.
-        # max_connections=20 per worker (80 total) allows headroom for traffic spikes.
-        # socket_keepalive ensures idle connections aren't dropped by cloud firewalls.
+        # #comment: Implementing connection pooling to handle concurrency.
+        # Reduced max_connections from 20 to 5 to prevent hitting proxy limits
+        # when running multiple Gunicorn and TaskIQ workers.
         pool_args = {
-            "max_connections": 20,
+            "max_connections": 5,
             "socket_timeout": 5.0,
             "socket_keepalive": True,
             "retry_on_timeout": True,

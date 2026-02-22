@@ -61,19 +61,19 @@ def find_and_load_env():
                 if env_path.exists() and env_path.is_file():
                     # Check readability
                     with open(env_path) as f:
-                        # Quick check for non-empty
-                        if f.read(1):
+                        content = f.read().strip()
+                        if content:
                             load_dotenv(dotenv_path=str(env_path), override=False)
-                            logger.info(f"✅ Environment variables loaded (if missing) from: {env_path.resolve()}")
+                            logger.info(f"✅ Loaded .env from: {env_path.resolve()}")
                             loaded_any = True
-                            # We keep loading in order of search_dirs (more specific overrides less specific)
-                            # but usually we want to stop after the most specific one found.
-                            return 
             except Exception as e:
                 logger.debug(f"Skipping {env_path}: {e}")
 
     if not loaded_any:
-        logger.debug("ℹ️ No .env file loaded from standard locations. Relying on shell environment variables.")
+        # Check raw environment
+        db_url = os.environ.get("DATABASE_URL")
+        redis_url = os.environ.get("REDIS_URL")
+        logger.info(f"ℹ️ No .env files loaded. Raw ENV check: DATABASE_URL={'SET' if db_url else 'MISSING'}, REDIS_URL={'SET' if redis_url else 'MISSING'}")
 
 # Execute environment loading
 find_and_load_env()
@@ -204,6 +204,20 @@ class Settings(BaseSettings):
         case_sensitive=True,
     )
 
+    @model_validator(mode='before')
+    @classmethod
+    def empty_str_to_none(cls, data: Dict) -> Dict:
+        """
+        Convert empty strings or whitespace strings to None.
+        This allows Pydantic to fall back to the defined 'default' values
+        even if an empty variable is present in the environment.
+        """
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, str) and not value.strip():
+                    data[key] = None
+        return data
+
     @model_validator(mode='after')
     def audit_environment(self) -> 'Settings':
         """
@@ -217,8 +231,12 @@ class Settings(BaseSettings):
             logger.warning(f"⚠️ WARNING: BOT_TOKEN has unusual format: {self.BOT_TOKEN[:10]}...")
             
         # 2. Check DATABASE_URL
-        if not self.DATABASE_URL or ("postgresql" not in self.DATABASE_URL and "sqlite" not in self.DATABASE_URL):
-            logger.error("🛑 CRITICAL: DATABASE_URL is missing or not a Postgres/SQLite URL!")
+        if not self.DATABASE_URL or not any(x in self.DATABASE_URL for x in ["postgresql", "postgres", "sqlite"]):
+            logger.error(f"🛑 CRITICAL: DATABASE_URL is invalid or missing! Type: {type(self.DATABASE_URL)}, Value: {str(self.DATABASE_URL)[:10] if self.DATABASE_URL else 'None'}...")
+            
+        # 3. Check REDIS_URL
+        if not self.REDIS_URL or not any(self.REDIS_URL.startswith(s) for s in ["redis://", "rediss://", "unix://"]):
+            logger.error(f"🛑 CRITICAL: REDIS_URL has invalid scheme! Value: {str(self.REDIS_URL)[:10] if self.REDIS_URL else 'None'}...")
             
         return self
 
