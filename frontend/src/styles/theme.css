@@ -1,7 +1,3 @@
-/* Enable Class-Based Theme Support for v4 */
-@variant dark (&:where(.dark, .dark *));
-@variant light (&:where(.light, .light *));
-
 @theme {
   /* === PINTOPAY DESIGN SYSTEM 2026 - v1.7.0 (Stable) === */
   /* Apple-esque Aesthetic - High Fidelity, Depth, Micro-interactions */
