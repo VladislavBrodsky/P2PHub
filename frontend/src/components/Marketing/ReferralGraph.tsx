@@ -187,11 +187,11 @@ export const ReferralGraph = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="mt-16 sm:mt-24 text-center z-30 w-full max-w-[300px]"
                         >
-                            <div className="relative px-6 py-5 rounded-[2rem] bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
+                            <div className="relative px-6 py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
 
                                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
-                                    {t('income.network.yield', { defaultValue: 'PROJECTED PROJECTED MONTHLY YIELD' })}
+                                    {t('income.network.yield', { defaultValue: 'PROJECTED MONTHLY YIELD' })}
                                 </span>
 
                                 <div className="flex items-baseline justify-center gap-1">
@@ -304,7 +304,7 @@ export const ReferralGraph = () => {
                                 >
                                     <div className="relative mb-10">
                                         <div className="absolute inset-0 bg-emerald-500 blur-3xl opacity-30 animate-pulse" />
-                                        <div className="w-24 h-24 rounded-[2rem] bg-white dark:bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10 shadow-2xl">
+                                        <div className="w-24 h-24 rounded-2xl bg-white dark:bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10 shadow-2xl">
                                             <Sparkles className="w-12 h-12 text-emerald-500" />
                                         </div>
                                     </div>

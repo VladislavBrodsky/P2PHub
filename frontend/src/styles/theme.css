@@ -25,20 +25,20 @@
   /* Keep surface slightly lighter */
 
   /* Map core CSS variables to Tailwind theme! */
-  --color-surface: var(--color-surface);
-  --color-bg-app: var(--color-bg-app);
-  --color-bg-deep: var(--color-bg-deep);
-  --color-text-primary: var(--color-text-primary);
-  --color-text-secondary: var(--color-text-secondary);
-  --color-brand-primary: var(--color-brand-primary);
-  --color-brand-blue: var(--color-brand-blue);
-  --color-success: var(--color-success);
-  --color-warning: var(--color-warning);
-  --color-error: var(--color-error);
+  --color-surface: var(--sys-surface);
+  --color-bg-app: var(--sys-bg-app);
+  --color-bg-deep: var(--sys-bg-deep);
+  --color-text-primary: var(--sys-text-primary);
+  --color-text-secondary: var(--sys-text-secondary);
+  --color-brand-primary: var(--sys-brand-primary);
+  --color-brand-blue: var(--sys-brand-blue);
+  --color-success: var(--sys-success);
+  --color-warning: var(--sys-warning);
+  --color-error: var(--sys-error);
 
-  --color-bg-glass: var(--color-bg-glass);
-  --color-border-glass: var(--color-border-glass);
-  --color-glass-highlight: var(--color-glass-highlight);
+  --color-bg-glass: var(--sys-bg-glass);
+  --color-border-glass: var(--sys-border-glass);
+  --color-glass-highlight: var(--sys-glass-highlight);
 
   /* Typography Scale */
   --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;
@@ -224,27 +224,27 @@
 :root,
 .light {
   /* Core Colors */
-  --color-surface: #FFFFFF;
-  --color-bg-app: #F9FAFB;
-  --color-bg-deep: #F9FAFB;
-  --color-text-primary: #0F172A;
-  --color-text-secondary: #64748B;
+  --sys-surface: #FFFFFF;
+  --sys-bg-app: #F9FAFB;
+  --sys-bg-deep: #F9FAFB;
+  --sys-text-primary: #0F172A;
+  --sys-text-secondary: #64748B;
 
-  --color-brand-primary: #2563EB;
-  --color-brand-blue: #3B82F6;
-  --color-brand-blue-deep: #1D4ED8;
-  --color-action-black: #0F172A;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
+  --sys-brand-primary: #2563EB;
+  --sys-brand-blue: #3B82F6;
+  --raw-brand-blue-deep: #1D4ED8;
+  --raw-action-black: #0F172A;
+  --sys-success: #10B981;
+  --sys-warning: #F59E0B;
+  --sys-error: #EF4444;
 
   /* Semantic - Light */
-  --color-brand-border: rgba(15, 23, 42, 0.08);
-  --color-bg-surface: #FFFFFF;
-  --color-bg-glass: rgba(255, 255, 255, 0.75);
-  --color-border-glass: rgba(0, 0, 0, 0.08);
+  --raw-brand-border: rgba(15, 23, 42, 0.08);
+  --sys-bg-surface: #FFFFFF;
+  --sys-bg-glass: rgba(255, 255, 255, 0.75);
+  --sys-border-glass: rgba(0, 0, 0, 0.08);
   /* Darker for better definition in light mode */
-  --color-glass-highlight: rgba(255, 255, 255, 0.5);
+  --sys-glass-highlight: rgba(255, 255, 255, 0.5);
 
   /* Card Semantic */
   --card-bg: rgba(255, 255, 255, 0.85);
@@ -266,12 +266,12 @@
   --btn-secondary-hover: rgba(15, 23, 42, 0.08);
 
   /* Status Colors Semantic */
-  --color-success-bg: rgba(16, 185, 129, 0.1);
-  --color-success-text: #059669;
-  --color-warning-bg: rgba(245, 158, 11, 0.1);
-  --color-warning-text: #B45309;
-  --color-error-bg: rgba(239, 68, 64, 0.1);
-  --color-error-text: #DC2626;
+  --sys-success-bg: rgba(16, 185, 129, 0.1);
+  --sys-success-text: #059669;
+  --sys-warning-bg: rgba(245, 158, 11, 0.1);
+  --sys-warning-text: #B45309;
+  --sys-error-bg: rgba(239, 68, 64, 0.1);
+  --sys-error-text: #DC2626;
 
   /* Interaction and Depth */
   --focus-ring: rgba(37, 99, 235, 0.3);
@@ -285,17 +285,17 @@
 
 /* Dark Mode Overrides - Subtle & High Fidelity */
 .dark {
-  --color-bg-deep: #030712;
+  --sys-bg-deep: #030712;
   /* Deeper slate for elite feel */
-  --color-bg-app: #030712;
-  --color-surface: #0f172a;
-  --color-bg-surface: #0f172a;
-  --color-text-primary: #F9FAFB;
-  --color-text-secondary: #cbd5e1;
+  --sys-bg-app: #030712;
+  --sys-surface: #0f172a;
+  --sys-bg-surface: #0f172a;
+  --sys-text-primary: #F9FAFB;
+  --sys-text-secondary: #cbd5e1;
   /* Increased contrast for WCAG (formerly #94a3b8) */
-  --color-bg-glass: rgba(15, 23, 42, 0.8);
-  --color-border-glass: rgba(255, 255, 255, 0.1);
-  --color-glass-highlight: rgba(255, 255, 255, 0.05);
+  --sys-bg-glass: rgba(15, 23, 42, 0.8);
+  --sys-border-glass: rgba(255, 255, 255, 0.1);
+  --sys-glass-highlight: rgba(255, 255, 255, 0.05);
 
   /* Card Semantic */
   --card-bg: rgba(15, 23, 42, 0.6);
@@ -317,12 +317,12 @@
   --btn-secondary-hover: rgba(255, 255, 255, 0.15);
 
   /* Status Colors Semantic */
-  --color-success-bg: rgba(16, 185, 129, 0.15);
-  --color-success-text: #34D399;
-  --color-warning-bg: rgba(245, 158, 11, 0.15);
-  --color-warning-text: #FBBF24;
-  --color-error-bg: rgba(239, 68, 64, 0.15);
-  --color-error-text: #F87171;
+  --sys-success-bg: rgba(16, 185, 129, 0.15);
+  --sys-success-text: #34D399;
+  --sys-warning-bg: rgba(245, 158, 11, 0.15);
+  --sys-warning-text: #FBBF24;
+  --sys-error-bg: rgba(239, 68, 64, 0.15);
+  --sys-error-text: #F87171;
 
   /* Interaction and Depth */
   --focus-ring: rgba(255, 255, 255, 0.2);
@@ -331,6 +331,6 @@
 
   --nav-active: #FFFFFF;
   --nav-inactive: #64748b;
-  --color-brand-primary: #FFFFFF;
+  --sys-brand-primary: #FFFFFF;
   --bg-image: none;
 }

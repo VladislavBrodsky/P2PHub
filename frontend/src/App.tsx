@@ -384,24 +384,24 @@ function App() {
 
     return (
         <UIProvider>
-            <AnimatePresence>
-                {!isComplete && (
-                    <m.div
-                        key="loader"
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.8, ease: "easeInOut" }}
-                        className="fixed inset-0 z-100"
-                    >
-                        <StartupLoader progress={progress} statusText={status} />
-                    </m.div>
-                )}
-            </AnimatePresence>
+            <LazyMotion features={domAnimation}>
+                <AnimatePresence>
+                    {!isComplete && (
+                        <m.div
+                            key="loader"
+                            initial={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.8, ease: "easeInOut" }}
+                            className="fixed inset-0 z-100"
+                        >
+                            <StartupLoader progress={progress} statusText={status} />
+                        </m.div>
+                    )}
+                </AnimatePresence>
 
-            <div className={!isComplete ? 'hidden' : 'block h-full'}>
-                <PulseBanner />
-                <NotificationOverlay />
-                <LazyMotion features={domAnimation}>
+                <div className={!isComplete ? 'hidden' : 'block h-full'}>
+                    <PulseBanner />
+                    <NotificationOverlay />
                     <AnimatePresence mode="wait">
                         {showOnboarding && (
                             <Suspense fallback={<div className="fixed inset-0 bg-slate-950 z-200" />}>
@@ -415,8 +415,8 @@ function App() {
                         )}
                     </AnimatePresence>
                     <AppContent onReady={complete} showOnboarding={showOnboarding} />
-                </LazyMotion>
-            </div>
+                </div>
+            </LazyMotion>
         </UIProvider>
     );
 }
