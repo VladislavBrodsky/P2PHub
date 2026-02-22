@@ -179,7 +179,19 @@ export const StudioTab = ({
         impact('heavy');
 
         try {
-            const result = await proService.generateContent(postType, audience, language, tone);
+            // Include referral link if active and valid
+            let finalLink: string | undefined = undefined;
+            if (usePersonalLink && personalLink) {
+                if (personalLink.startsWith('https://t.me/pintopaybot?start=') || personalLink.startsWith('t.me/pintopaybot?start=')) {
+                    finalLink = personalLink;
+                } else {
+                    notification({ title: t('common.error') || 'Invalid Link', text: "Link must start with 'https://t.me/pintopaybot?start='", type: 'error' });
+                    setIsGenerating(false);
+                    return;
+                }
+            }
+
+            const result = await proService.generateContent(postType, audience, language, tone, finalLink);
 
             // Manage History
             const newHistory = [...history.slice(0, historyIndex + 1), result];
@@ -219,7 +231,7 @@ export const StudioTab = ({
         } finally {
             setIsGenerating(false);
         }
-    }, [postType, audience, language, tone, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
+    }, [postType, audience, language, tone, usePersonalLink, personalLink, history, historyIndex, status, t, notification, impact, setHistory, setHistoryIndex, setGeneratedResult, setStatus, setExternalStep]);
 
     const handleRegenerateHashtags = async () => {
         if (!generatedResult || isRegeneratingHashtags) return;

@@ -98,6 +98,9 @@ export const ProDashboardModals = ({
     const [tgTestResults, setTgTestResults] = useState<Record<string, string>>({});
     const [isTesting, setIsTesting] = useState(false);
 
+    // Personal Link State
+    const [personalLink, setPersonalLink] = useState('');
+
     // Pre-fill effect
     React.useEffect(() => {
         if (status?.setup) {
@@ -111,6 +114,8 @@ export const ProDashboardModals = ({
             setFacebookToken(status.setup.facebook_access_token || '');
             setDiscordToken(status.setup.discord_webhook_url || '');
 
+            setPersonalLink(status.personal_referral_link || '');
+
             const main = status.setup.telegram_channel_id;
             const others = status.setup.telegram_channels || [];
             const all = main ? [main, ...others] : (others.length > 0 ? others : ['']);
@@ -121,7 +126,21 @@ export const ProDashboardModals = ({
     const handleSaveSetup = async () => {
         setIsSaving(true);
         selection();
+
+        if (personalLink && !personalLink.startsWith('https://t.me/pintopaybot?start=') && !personalLink.startsWith('t.me/pintopaybot?start=')) {
+            showNotification({
+                title: t('pro_dashboard.notifications.error') || 'Error',
+                message: "Referral link must start with 'https://t.me/pintopaybot?start='",
+                type: 'warning'
+            });
+            setIsSaving(false);
+            return;
+        }
+
         try {
+            if (personalLink) {
+                await proService.updateReferralLink(personalLink);
+            }
             await proService.setupSocial({
                 x_api_key: xApiKey,
                 x_api_secret: xApiSecret,
@@ -350,6 +369,19 @@ export const ProDashboardModals = ({
                                                         placeholder="@your_channel_username"
                                                     />
                                                 </div>
+                                                <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/5">
+                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                    <input
+                                                        type="text"
+                                                        value={personalLink}
+                                                        onChange={(e) => setPersonalLink(e.target.value)}
+                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                        placeholder="https://t.me/pintopaybot?start=..."
+                                                    />
+                                                    <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                        Auto-inserts in Studio posts to credit your network.
+                                                    </p>
+                                                </div>
                                             </motion.div>
                                         )}
 
@@ -530,6 +562,19 @@ export const ProDashboardModals = ({
                                                                     </div>
                                                                 );
                                                             })}
+                                                        </div>
+                                                        <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-white/5 mt-3">
+                                                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                            <input
+                                                                type="text"
+                                                                value={personalLink}
+                                                                onChange={(e) => setPersonalLink(e.target.value)}
+                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                                placeholder="https://t.me/pintopaybot?start=..."
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                Auto-inserts in Studio posts to credit your network.
+                                                            </p>
                                                         </div>
                                                     </motion.div>
                                                 )}
