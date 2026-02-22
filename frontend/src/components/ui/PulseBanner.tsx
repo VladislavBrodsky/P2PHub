@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, TrendingUp, Users, CreditCard, Info } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { useTranslation } from 'react-i18next';
+import { useUI } from '../../context/UIContext';
+import { cn } from '../../lib/utils';
 
 interface PulseItem {
     id: number;
@@ -14,6 +16,7 @@ interface PulseItem {
 
 export const PulseBanner = () => {
     const { t } = useTranslation();
+    const { isFooterVisible, isKeyboardOpen } = useUI();
     const [pulse, setPulse] = useState<PulseItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -43,7 +46,7 @@ export const PulseBanner = () => {
         }
     }, [pulse.length]);
 
-    if (pulse.length === 0) return null;
+    if (pulse.length === 0 || !isFooterVisible || isKeyboardOpen) return null;
 
     const item = pulse[currentIndex];
 
@@ -58,7 +61,7 @@ export const PulseBanner = () => {
     };
 
     return (
-        <div className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+96px)] left-0 right-0 z-40 flex justify-center pointer-events-none">
+        <div className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+104px)] left-0 right-0 z-40 flex justify-center pointer-events-none">
             <div className="w-full max-w-lg h-8 bg-slate-900/50 dark:bg-black/40 backdrop-blur-xl border-t border-b border-white/5 overflow-hidden flex items-center justify-center relative">
                 <AnimatePresence mode="wait">
                     <motion.div
@@ -67,20 +70,20 @@ export const PulseBanner = () => {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -20, opacity: 0 }}
                         transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="flex items-center gap-2 px-4 whitespace-nowrap"
+                        className="flex items-center gap-2 pl-4 pr-12 whitespace-nowrap min-w-0 subpixel-antialiased"
                     >
-                        <div className="flex items-center gap-1.5">
-                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/5 border border-white/10">
+                        <div className="flex items-center gap-1.5 shrink-0">
+                            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/5 border border-white/10 shrink-0">
                                 {getIcon(item.type)}
                             </span>
-                            <span className="text-[10px] font-black text-white uppercase tracking-wider">
+                            <span className="text-label font-black text-white uppercase tracking-wider shrink-0">
                                 {item.name}
                             </span>
                         </div>
-                        <span className="text-[10px] font-bold text-slate-400">
+                        <span className="text-label font-bold text-slate-400 truncate">
                             {item.description}
                         </span>
-                        <span className="text-[8px] font-black text-slate-600 ml-2">
+                        <span className="text-[8px] font-black text-slate-600 ml-2 shrink-0">
                             {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                     </motion.div>

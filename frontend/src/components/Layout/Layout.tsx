@@ -80,7 +80,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 >
                     <div className={cn(
                         "relative mx-auto w-full transition-all duration-300",
-                        activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'
+                        activeTab === 'pro' ? 'px-0' : 'px-4'
                     )}>
                         <div className="flex flex-col gap-0 w-full min-h-full">
                             {children}

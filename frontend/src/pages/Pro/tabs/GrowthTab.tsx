@@ -37,7 +37,7 @@ export const GrowthTab = ({
     selection,
     impact
 }: GrowthTabProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('pro');
     const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
     const hasInitialAutoExpanded = useRef(false);
     const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);

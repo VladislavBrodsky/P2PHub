@@ -25,7 +25,7 @@ const parseChannelName = (raw: string | null | undefined): string => {
 };
 
 export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('pro');
     const { user } = useUser();
     const [stats, setStats] = useState<any>(null);
     const [resonance, setResonance] = useState<any>(null);

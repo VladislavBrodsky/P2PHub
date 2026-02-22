@@ -96,7 +96,7 @@ export const ReferralGraph = () => {
 
     return (
         <div className={clsx(
-            "relative w-full h-[520px] flex items-center justify-center overflow-hidden rounded-[3rem] border transition-all duration-700",
+            "relative w-full h-[460px] md:h-[520px] flex items-center justify-center overflow-hidden rounded-3xl md:rounded-[3rem] border transition-all duration-700",
             "bg-white dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl",
             "group"
         )}>
@@ -185,9 +185,9 @@ export const ReferralGraph = () => {
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-16 sm:mt-24 text-center z-30 w-full max-w-[300px]"
+                            className="mt-20 md:mt-24 text-center z-30 w-full max-w-[300px]"
                         >
-                            <div className="relative px-6 py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
+                            <div className="relative px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
 
                                 <span className="text-label font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">

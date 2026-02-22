@@ -115,7 +115,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[3rem] bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 space-y-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-[2.5rem] md:rounded-[3rem] bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/30 blur-[120px] pointer-events-none animate-pulse" />
@@ -138,7 +138,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                     <h3 className="text-3xl font-black tracking-tight leading-none max-w-[340px] mx-auto">
                         {t('income.title')} <br />
-                        <span className="text-blue-500 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400 dark:text-animate-shimmer">{t('income.title_highlight')}</span>
+                        <span className="text-blue-500 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400 dark:animate-text-shimmer">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
                         <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
@@ -154,7 +154,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
-                    "p-6 rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border space-y-6",
+                    "p-6 rounded-2xl md:rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
                     !isStrategyUnlocked
                         ? "bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
                         : "bg-white/40 dark:bg-[#020805]/80 border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)]"
@@ -184,42 +184,41 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="space-y-6"
+                                        className="flex flex-col gap-6"
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Calculator className="w-4 h-4 text-blue-500" />
                                             <span className="text-label font-black uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
                                         </div>
-                                        <div className="space-y-2">
+                                        <div className="flex flex-col gap-3">
                                             <div className="flex justify-between items-end">
                                                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
                                                 <span className="text-xl font-black text-blue-500">{activePartners}</span>
                                             </div>
-                                            <input
-                                                type="range"
-                                                min="5"
-                                                max="960"
-                                                value={activePartners}
-                                                onChange={(e) => setActivePartners(parseInt(e.target.value))}
-                                                className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                            />
+                                            <div className="relative h-6 flex items-center">
+                                                <input
+                                                    type="range"
+                                                    min="5"
+                                                    max="960"
+                                                    value={activePartners}
+                                                    onChange={(e) => setActivePartners(parseInt(e.target.value))}
+                                                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full appearance-none cursor-pointer accent-blue-500"
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="pt-4 border-t border-slate-200 dark:border-white/10">
-                                            <div className="flex justify-between items-center mb-4">
+                                        <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
+                                            <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-2xl font-black text-emerald-500">${estimatedMonthly}</span>
+                                                <span className="text-3xl font-black text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">${estimatedMonthly}</span>
                                             </div>
 
-                                            {/* UNLOCK STRATEGY BUTTON REDESIGN (v3 - ACID BLUE LIQUID) */}
                                             <button
-                                                onClick={() => {
-                                                    handleUnlock();
-                                                }}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-label tracking-widest active:scale-[0.98] transition-all overflow-hidden"
+                                                onClick={() => handleUnlock()}
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-14 rounded-2xl font-black text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-blue-500/20"
                                             >
-                                                <Lock className="w-3.5 h-3.5 mb-0.5 text-white" />
-                                                <span className="text-white">{t('income.profit.unlock_btn')}</span>
-                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/30 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                                                <Lock className="w-4 h-4 text-white" />
+                                                <span className="text-white uppercase">{t('income.profit.unlock_btn')}</span>
+                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                                             </button>
                                         </div>
                                     </m.div>
@@ -229,7 +228,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="space-y-6"
+                                        className="flex flex-col gap-6"
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Clock className="w-4 h-4 text-rose-500" />
@@ -518,48 +517,35 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     )}
                 </AnimatePresence>
 
-                <div className="grid grid-cols-2 gap-4 relative z-10">
-                    <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-3 group transition-all hover:bg-blue-500/5 relative overflow-hidden shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(59,130,246,0.3)]">
-                        {/* Glow effect for dark mode */}
-                        <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                        <div className="flex justify-between items-start mb-2">
-                            <Users className="w-5 h-5 text-slate-400 dark:text-blue-400 group-hover:text-blue-500 transition-colors" />
-                        </div>
-
-                        <div className="mb-4">
-                            <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">1.2B</div>
-                            <div className="text-label font-black text-slate-500 dark:text-blue-300/80 uppercase tracking-[0.2em] mb-1">{t('income.stats.global_target')}</div>
-                            <div className="text-label font-medium text-slate-400 dark:text-slate-300 leading-tight">
-                                {t('income.stats.scaling')}
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between mt-auto">
-                            <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
-                                <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-label font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
-                            </div>
-                            <button onClick={() => setActiveModal('market')} className="text-slate-300 dark:text-white/20 hover:text-blue-400 transition-colors">
+                <div className="grid grid-cols-2 gap-3 relative z-0">
+                    <div className="p-4 rounded-2xl bg-white/40 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 backdrop-blur-md flex flex-col gap-3 group transition-all hover:bg-blue-500/5 shadow-sm">
+                        <div className="flex justify-between items-start">
+                            <Users className="w-5 h-5 text-blue-500" />
+                            <button onClick={() => setActiveModal('market')} className="text-slate-300 dark:text-white/20 hover:text-blue-400">
                                 <AlertCircle className="w-4 h-4" />
                             </button>
                         </div>
+                        <div className="space-y-1">
+                            <div className="text-2xl font-black tabular-nums text-slate-900 dark:text-white">1.2B</div>
+                            <div className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.global_target')}</div>
+                        </div>
                     </div>
 
-                    <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-2 group transition-all hover:bg-blue-500/5 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.3)] relative overflow-hidden">
-                        <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mb-1 group-hover:scale-110 transition-transform" />
-                        <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(52,211,153,0.2)]">24/7</div>
-                        <div className="text-label font-black text-slate-500 dark:text-emerald-300/80 uppercase tracking-[0.2em]">{t('income.stats.revenue')}</div>
-                        <div className="text-label font-medium text-slate-400 dark:text-slate-300 leading-tight">
-                            {t('income.stats.dividends')}
+                    <div className="p-4 rounded-2xl bg-white/40 dark:bg-slate-900/60 border border-slate-200 dark:border-white/10 backdrop-blur-md flex flex-col gap-3 group transition-all hover:bg-emerald-500/5 shadow-sm">
+                        <div className="flex justify-between items-start">
+                            <DollarSign className="w-5 h-5 text-emerald-500" />
+                            <button onClick={() => setActiveModal('revenue')} className="text-slate-300 dark:text-white/20 hover:text-emerald-400">
+                                <AlertCircle className="w-4 h-4" />
+                            </button>
                         </div>
-                        <button onClick={() => setActiveModal('revenue')} className="absolute bottom-3 right-3 text-slate-300 dark:text-white/20 hover:text-emerald-400 transition-colors">
-                            <AlertCircle className="w-4 h-4" />
-                        </button>
+                        <div className="space-y-1">
+                            <div className="text-2xl font-black tabular-nums text-slate-900 dark:text-white">24/7</div>
+                            <div className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.revenue')}</div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-2 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                <div className="relative z-10 mx-1 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
                     {/* Liquid Background Layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
                     <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />
@@ -648,143 +634,145 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 )}
             </m.div>
             {/* Info Modals Portal */}
-            {typeof document !== 'undefined' && ReactDOM.createPortal(
-                <AnimatePresence>
-                    {activeModal && (
-                        <>
-                            <m.div
-                                key="modal-backdrop"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setActiveModal(null)}
-                                className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-sm"
-                            />
-                            <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 pointer-events-none">
+            {
+                typeof document !== 'undefined' && ReactDOM.createPortal(
+                    <AnimatePresence>
+                        {activeModal && (
+                            <>
                                 <m.div
-                                    key="modal-content"
-                                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                                    className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden"
-                                >
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
-                                    <div className="relative z-10 space-y-4">
-                                        {activeModal === 'market' && (
-                                            <>
-                                                <div className="relative">
-                                                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
-                                                        <TrendingUp className="w-6 h-6 text-white" />
-                                                    </div>
-                                                    <div className="absolute -top-1 -right-1">
-                                                        <span className="relative flex h-3 w-3">
-                                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                <h3 className="text-xl font-black text-white leading-tight">
-                                                    <Trans i18nKey="income_details.market_title">
-                                                        The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
-                                                    </Trans>
-                                                </h3>
-
-                                                <div className="space-y-3 py-2">
-                                                    <p className="text-sm text-slate-300 leading-relaxed">
-                                                        <Trans i18nKey="income_details.market_desc">
-                                                            Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
-                                                        </Trans>
-                                                    </p>
-                                                    <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                        <div className="flex justify-between items-center text-xs mb-1">
-                                                            <span className="text-slate-400">{t('income_details.adoption_curve')}</span>
-                                                            <span className="text-emerald-400 font-bold">{t('income_details.you_are_here')}</span>
+                                    key="modal-backdrop"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    onClick={() => setActiveModal(null)}
+                                    className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-sm"
+                                />
+                                <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 pointer-events-none">
+                                    <m.div
+                                        key="modal-content"
+                                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                        className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden"
+                                    >
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                                        <div className="relative z-10 space-y-4">
+                                            {activeModal === 'market' && (
+                                                <>
+                                                    <div className="relative">
+                                                        <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
+                                                            <TrendingUp className="w-6 h-6 text-white" />
                                                         </div>
-                                                        <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
-                                                            <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
-                                                                <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/50 animate-pulse"></div>
+                                                        <div className="absolute -top-1 -right-1">
+                                                            <span className="relative flex h-3 w-3">
+                                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <h3 className="text-xl font-black text-white leading-tight">
+                                                        <Trans i18nKey="income_details.market_title">
+                                                            The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
+                                                        </Trans>
+                                                    </h3>
+
+                                                    <div className="space-y-3 py-2">
+                                                        <p className="text-sm text-slate-300 leading-relaxed">
+                                                            <Trans i18nKey="income_details.market_desc">
+                                                                Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
+                                                            </Trans>
+                                                        </p>
+                                                        <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                            <div className="flex justify-between items-center text-xs mb-1">
+                                                                <span className="text-slate-400">{t('income_details.adoption_curve')}</span>
+                                                                <span className="text-emerald-400 font-bold">{t('income_details.you_are_here')}</span>
+                                                            </div>
+                                                            <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
+                                                                <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
+                                                                    <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/50 animate-pulse"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <button
-                                                    onClick={() => setActiveModal(null)}
-                                                    className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
-                                                >
-                                                    {t('income_details.maximize_btn')}
-                                                </button>
-                                            </>
-                                        )}
+                                                    <button
+                                                        onClick={() => setActiveModal(null)}
+                                                        className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
+                                                    >
+                                                        {t('income_details.maximize_btn')}
+                                                    </button>
+                                                </>
+                                            )}
 
-                                        {activeModal === 'revenue' && (
-                                            <>
-                                                <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
-                                                    <DollarSign className="w-6 h-6 text-white" />
-                                                </div>
+                                            {activeModal === 'revenue' && (
+                                                <>
+                                                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
+                                                        <DollarSign className="w-6 h-6 text-white" />
+                                                    </div>
 
-                                                <h3 className="text-xl font-black text-white leading-tight">
-                                                    <Trans i18nKey="income_details.revenue_title">
-                                                        Unlock <span className="text-emerald-400">True Passive Income</span>
-                                                    </Trans>
-                                                </h3>
+                                                    <h3 className="text-xl font-black text-white leading-tight">
+                                                        <Trans i18nKey="income_details.revenue_title">
+                                                            Unlock <span className="text-emerald-400">True Passive Income</span>
+                                                        </Trans>
+                                                    </h3>
 
-                                                <p className="text-xs text-slate-400 font-medium">
-                                                    {t('income_details.revenue_desc')}
-                                                </p>
+                                                    <p className="text-xs text-slate-400 font-medium">
+                                                        {t('income_details.revenue_desc')}
+                                                    </p>
 
-                                                <div className="space-y-2.5 my-2">
-                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                        <div className="mt-0.5 p-1 rounded-full bg-emerald-500/10">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                    <div className="space-y-2.5 my-2">
+                                                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                            <div className="mt-0.5 p-1 rounded-full bg-emerald-500/10">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                            </div>
+                                                            <div>
+                                                                <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
+                                                                <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
-                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
+
+                                                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                            <div className="mt-0.5 p-1 rounded-full bg-blue-500/10">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                                            </div>
+                                                            <div>
+                                                                <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
+                                                                <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                            <div className="mt-0.5 p-1 rounded-full bg-purple-500/10">
+                                                                <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                                                            </div>
+                                                            <div>
+                                                                <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
+                                                                <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                        <div className="mt-0.5 p-1 rounded-full bg-blue-500/10">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
-                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                        <div className="mt-0.5 p-1 rounded-full bg-purple-500/10">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                                                        </div>
-                                                        <div>
-                                                            <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
-                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <button
-                                                    onClick={() => {
-                                                        setActiveModal(null);
-                                                        onNavigateToPartner?.();
-                                                    }}
-                                                    className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
-                                                >
-                                                    {t('income_details.start_earning')} <ArrowRight className="w-4 h-4" />
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </m.div>
-                            </div>
-                        </>
-                    )}
-                </AnimatePresence>,
-                document.body
-            )}
-        </section>
+                                                    <button
+                                                        onClick={() => {
+                                                            setActiveModal(null);
+                                                            onNavigateToPartner?.();
+                                                        }}
+                                                        className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                                                    >
+                                                        {t('income_details.start_earning')} <ArrowRight className="w-4 h-4" />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </m.div>
+                                </div>
+                            </>
+                        )}
+                    </AnimatePresence>,
+                    document.body
+                )
+            }
+        </section >
     );
 };

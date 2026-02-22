@@ -67,7 +67,7 @@ export const ProDashboardModals = ({
     showGrowthModal,
     setShowGrowthModal
 }: ProModalsProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('pro');
     const { showNotification } = useNotificationStore();
 
     // Setup Local State

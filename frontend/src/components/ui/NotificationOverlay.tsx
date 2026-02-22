@@ -6,7 +6,7 @@ import { useUI } from '../../context/UIContext';
 
 export const NotificationOverlay = () => {
     const { notification, hideNotification } = useNotificationStore();
-    const { isNotificationsVisible } = useUI();
+    const { isNotificationsVisible, isKeyboardOpen } = useUI();
 
     useEffect(() => {
         if (notification) {
@@ -27,7 +27,7 @@ export const NotificationOverlay = () => {
 
     return (
         <AnimatePresence>
-            {notification && isNotificationsVisible && (
+            {notification && isNotificationsVisible && !isKeyboardOpen && (
                 <motion.div
                     key={`${notification.title}-${notification.message}`}
                     drag="y"
@@ -38,11 +38,10 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+120px)] left-0 right-0 z-10000 flex justify-center pointer-events-none px-4"
-                    whileDrag={{ scale: 0.95, opacity: 0.8 }}
+                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+120px)] left-0 right-0 z-10000 flex justify-center pointer-events-none px-4 subpixel-antialiased"
                 >
                     <div className={`
-                        glass-panel-premium rounded-full px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm w-full pointer-events-auto 
+                            glass-panel-premium rounded-full px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm w-full pointer-events-auto 
                         backdrop-blur-3xl bg-white/80 dark:bg-slate-900/80 border transition-colors duration-500 touch-pan-y overscroll-none
                         ${notification.type === 'success' ? 'border-blue-500/20' :
                             notification.type === 'warning' ? 'border-emerald-500/20' :

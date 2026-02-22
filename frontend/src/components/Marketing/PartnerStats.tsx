@@ -135,50 +135,50 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-blue-500/10 to-transparent border border-blue-500/15 shadow-premium text-center gap-2 relative overflow-hidden group"
+                    viewport={{ once: true }}
+                    className="flex flex-col items-center justify-center p-4 py-6 rounded-2xl bg-white/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-premium text-center gap-2 relative overflow-hidden group"
                 >
-                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <Users className="w-5 h-5 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]" />
-                    <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
+                    <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Users className="w-5 h-5 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+                    <span className="text-xl font-black text-text-primary uppercase leading-none tracking-tighter">
                         <CountUp value={stats.total} />
                     </span>
-                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.global_partners', { defaultValue: 'Global Partners' })}
+                    <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
+                        {t('dashboard.stats.global_partners')}
                     </span>
                 </m.div>
 
                 <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
+                    viewport={{ once: true }}
                     transition={{ delay: 0.05 }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-emerald-500/10 to-transparent border border-emerald-500/15 shadow-premium text-center gap-2 relative overflow-hidden group"
+                    className="flex flex-col items-center justify-center p-4 py-6 rounded-2xl bg-white/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-premium text-center gap-2 relative overflow-hidden group"
                 >
-                    <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <Zap className="w-5 h-5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-                    <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
+                    <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Zap className="w-5 h-5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+                    <span className="text-xl font-black text-text-primary uppercase leading-none tracking-tighter">
                         <CountUp value={stats.volume} />
                     </span>
-                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.volume_shifted', { defaultValue: 'Volume Shifted' })}
+                    <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
+                        {t('dashboard.stats.volume_shifted')}
                     </span>
                 </m.div>
 
                 <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
+                    viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="flex flex-col items-center justify-center p-5 rounded-[2.5rem] bg-linear-to-b from-purple-500/10 to-transparent border border-purple-500/15 shadow-premium text-center gap-2 relative overflow-hidden group"
+                    className="flex flex-col items-center justify-center p-4 py-6 rounded-2xl bg-white/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 shadow-premium text-center gap-2 relative overflow-hidden group"
                 >
-                    <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                    <Globe2 className="w-5 h-5 text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.4)]" />
-                    <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
+                    <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Globe2 className="w-5 h-5 text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                    <span className="text-xl font-black text-text-primary uppercase leading-none tracking-tighter">
                         <CountUp value={stats.countries} />
                     </span>
-                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
-                        {t('dashboard.stats.countries_active', { defaultValue: 'Countries Active' })}
+                    <span className="text-label font-black text-text-secondary uppercase tracking-[0.15em] leading-none opacity-60">
+                        {t('dashboard.stats.countries_active')}
                     </span>
                 </m.div>
             </div>
@@ -186,53 +186,57 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
             <m.div
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.01, margin: "100px 0px" }}
+                viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-6 p-4 rounded-3xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200/50 dark:border-white/5 flex items-center justify-center gap-4 shadow-premium-lg cursor-pointer hover:bg-white/60 dark:hover:bg-slate-900/60 transition-all active:scale-[0.97] relative group overflow-hidden"
+                className="mt-8 p-4 rounded-xl bg-white/60 dark:bg-slate-900/40 backdrop-blur-md border border-slate-200/50 dark:border-white/5 flex items-center justify-center gap-4 shadow-premium-lg cursor-pointer hover:bg-white/80 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden"
             >
-                {/* Live Shimmer Indicator */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 animate-[pulse-glow_2s_infinite]" />
+                {/* Live Indicator */}
+                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/80 animate-pulse" />
+
+                <div className="flex items-center gap-3 relative z-10 w-full justify-center">
+                    <div className="flex -space-x-2 shrink-0">
+                        <AnimatePresence mode="popLayout">
+                            {recentPartners.length > 0 ? (
+                                recentPartners.slice(0, 4).map((partner, i) => (
+                                    <m.div
+                                        key={partner.id || i}
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: i * 0.05 }}
+                                        className="w-[28px] h-[28px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 relative z-10"
+                                    >
+                                        <PartnerAvatar partner={partner} index={i} />
+                                    </m.div>
+                                ))
+                            ) : (
+                                [1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="w-[28px] h-[28px] rounded-full border border-white/20 dark:border-slate-800 bg-slate-200/20 dark:bg-white/5 animate-pulse" />
+                                ))
+                            )}
+                        </AnimatePresence>
+                        <div className="w-[28px] h-[28px] rounded-full border-2 border-white dark:border-slate-800 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0 scale-90">
+                            <Zap size={10} className="animate-[pulse-glow_1.5s_infinite]" />
+                        </div>
+                    </div>
+
+                    <p className="text-label font-bold text-text-secondary leading-tight truncate max-w-[220px]">
+                        <Trans
+                            i18nKey="dashboard.stats.recent_join"
+                            ns="dashboard"
+                            values={{ count: stats.lastHourCount }}
+                        >
+                            <span className="text-text-primary font-black">
+                                +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
+                            </span> joined the movement
+                        </Trans>
+                    </p>
+                </div>
+
                 <m.div
                     className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full"
                     animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 />
-
-                <div className="flex -space-x-1 relative z-10">
-                    <AnimatePresence mode="popLayout">
-                        {recentPartners.length > 0 ? (
-                            recentPartners.slice(0, 4).map((partner, i) => (
-                                <m.div
-                                    key={partner.id || i}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: i * 0.05 }}
-                                    className="w-[26px] h-[26px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 hover:z-20"
-                                >
-                                    <PartnerAvatar partner={partner} index={i} />
-                                </m.div>
-                            ))
-                        ) : (
-                            [1, 2, 3, 4].map((i) => (
-                                <div key={i} className="w-[26px] h-[26px] rounded-full border border-white/20 dark:border-slate-800 bg-slate-200/20 dark:bg-white/5 animate-pulse" />
-                            ))
-                        )}
-                    </AnimatePresence>
-                    <div className="w-[26px] h-[26px] rounded-full border-2 border-white dark:border-slate-800 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0">
-                        <Zap size={7} className="animate-[pulse-glow_1.5s_infinite]" />
-                    </div>
-                </div>
-                <p className="text-label font-bold text-slate-600 dark:text-slate-400 relative z-10 leading-tight">
-                    <Trans
-                        i18nKey="dashboard.stats.recent_join"
-                        ns="dashboard"
-                        values={{ count: stats.lastHourCount }}
-                    >
-                        <span className="text-slate-900 dark:text-white font-black">
-                            +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
-                        </span> joined the movement in the last 60m
-                    </Trans>
-                </p>
             </m.div>
         </section>
     );

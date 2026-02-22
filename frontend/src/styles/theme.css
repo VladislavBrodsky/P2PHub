@@ -32,9 +32,10 @@
 
   --header-height: 52px;
   --bottom-nav-height: 80px;
-  --spacing-telegram-header: 74px;
-  /* Safe Areas + Telegram Header padding for bot buttons visibility */
-  --header-total-height: calc(var(--header-height, 52px) + var(--spacing-safe-top, 24px) + var(--spacing-telegram-header, 74px));
+  --spacing-telegram-header: 0px;
+  /* Safe Areas + Header height (compact for elite feel) */
+  --header-total-height: calc(var(--header-height, 52px) + var(--spacing-safe-top, 24px) + 8px);
+
 
   /* Typography Weights & Leading */
   --font-weight-regular: 400;
@@ -102,6 +103,10 @@
     -apple-system,
     sans-serif;
   --font-display: "Inter",
+    "Onest",
+    system-ui,
+    sans-serif;
+  --font-heading: "Inter",
     "Onest",
     system-ui,
     sans-serif;

@@ -26,7 +26,7 @@ import { ProDashboardModals } from './Pro/components/ProDashboardModals';
 type Tab = 'studio' | 'tools' | 'growth' | 'analytics';
 
 export const ProDashboard = () => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('pro');
     const { selection, impact, notification: hapticNotification } = useHaptic();
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();

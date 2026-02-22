@@ -49,7 +49,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <m.div
-            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-12 pb-20"
+            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-14 pb-24"
             variants={container}
             initial="hidden"
             animate="show"
@@ -63,17 +63,17 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             )}
 
             {/* #comment: 1. Hero Section - Spacious & Centered Layout. */}
-            <m.div variants={item} className="flex flex-col items-center pt-0 sm:pt-2">
+            <m.div variants={item} className="flex flex-col items-center pt-4 sm:pt-8">
                 <div className="relative overflow-visible mx-auto h-[320px] sm:h-[400px] flex items-center justify-center shrink-0">
                     <CommunityOrbit />
                 </div>
 
-                <div className="text-center px-4 flex flex-col items-center mt-6 relative z-20">
-                    <div className="flex items-center gap-3 mb-8">
+                <div className="text-center px-6 flex flex-col items-center mt-8 relative z-20">
+                    <div className="flex items-center gap-3 mb-10">
                         {user?.is_pro ? (
                             <m.button
                                 onClick={() => setActiveTab?.('pro')}
-                                className={`inline-flex items-center justify-center rounded-full border px-6 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
+                                className={`inline-flex items-center justify-center rounded-full border px-6 py-2.5 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
@@ -83,7 +83,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             </m.button>
                         ) : (
                             <m.div
-                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
+                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2.5 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
@@ -98,7 +98,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 onClick={() => setActiveTab?.('admin')}
-                                className="p-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-4 transition-transform active:scale-90"
+                                className="p-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-5 transition-transform active:scale-90"
                             >
                                 <ShieldCheck size={14} className="text-blue-500" />
                                 <span className="text-label font-black uppercase tracking-widest">Admin</span>
@@ -106,12 +106,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-4">
-                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[300px] mx-auto">
+                    <div className="flex flex-col gap-5">
+                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[320px] mx-auto">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-display font-black tracking-tighter leading-tight text-center max-w-[300px] vibing-crystal-text mx-auto"
+                            className="text-display font-black tracking-tighter leading-tight text-center max-w-[320px] vibing-crystal-text mx-auto"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -129,20 +129,20 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 2. Viral Proof - Partner Stats. */}
-            <m.div variants={item} className="mt-4">
+            <m.div variants={item} className="mt-4 w-full">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </m.div>
 
             {/* #comment: 3. The Evolution - Bento Grid. */}
-            <m.div variants={item} className="flex flex-col gap-8">
-                <div className="px-4">
+            <m.div variants={item} className="flex flex-col gap-8 w-full">
+                <div className="w-full">
                     <SectionHeader
                         badge={t('evolution.badge')}
                         title={t('evolution.title')}
                         description={t('evolution.desc')}
                     />
                 </div>
-                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
                     <BentoGrid />
                 </Suspense>
             </m.div>
@@ -162,14 +162,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 6. Final CTA - Clear conversion point. */}
-            <m.div variants={item} className="px-6 text-center py-12 space-y-6">
-                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
+            <m.div variants={item} className="w-full flex flex-col items-center text-center py-12 gap-8">
+                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-black uppercase tracking-[0.3em] w-fit border border-blue-500/20 shadow-lg">
                     {t('dashboard.movement_active')}
                 </div>
                 <h4 className="text-display font-black tracking-tight text-text-primary whitespace-pre-line leading-tight">
                     {t('dashboard.cta_title')}
                 </h4>
-                <p className="text-body text-text-secondary max-w-[280px] mx-auto leading-relaxed font-medium">
+                <p className="text-body text-text-secondary max-w-[280px] leading-relaxed font-medium">
                     {t('dashboard.cta_desc')}
                 </p>
             </m.div>

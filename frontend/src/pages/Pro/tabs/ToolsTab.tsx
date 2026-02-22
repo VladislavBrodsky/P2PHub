@@ -33,7 +33,7 @@ export const ToolsTab = ({
     marketAudit,
     selection
 }: ToolsTabProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('pro');
 
     return (
         <motion.div

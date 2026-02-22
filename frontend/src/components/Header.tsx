@@ -43,15 +43,15 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 z-150 w-full flex justify-center transition-all duration-300 pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{ paddingTop: 'calc(var(--spacing-safe-top, 24px) + 12px)' }}
         >
-            <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto">
-                {/* Navigation & Stats */}
-                <div className="flex items-center justify-between gap-4">
+            <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto relative z-10">
+                {/* Navigation & Stats - Contained within a centered glass bar */}
+                <div className="w-full flex items-center justify-between gap-3 mx-auto relative">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
+                        className="group flex items-center gap-2 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-5 py-2.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-5 w-5 transition-transform group-hover:scale-110" />
@@ -60,25 +60,23 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         </span>
                     </button>
 
-                    <div className="flex-1" /> {/* Spacer */}
-
                     <m.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-border-glass bg-bg-glass px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-4 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-5 py-2.5 shadow-premium backdrop-blur-2xl transition-all shrink-0 hover:border-blue-500/30"
                         aria-label="User stats"
                     >
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-label font-black uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
-                            <span className="text-caption font-black text-text-primary leading-none">
+                        <div className="flex items-center gap-1.5 leading-none">
+                            <span className="text-label font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-caption font-black text-text-primary">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
                                 <Crown size={12} className="text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
-                        <div className="h-3 w-px bg-border-glass" />
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-caption font-black text-text-primary leading-none">
+                        <div className="h-3 w-px bg-slate-200 dark:bg-border-glass/50" />
+                        <div className="flex items-center gap-1.5 leading-none">
+                            <span className="text-caption font-black text-text-primary">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
                             <span className="text-label font-black uppercase tracking-wider text-success dark:text-emerald-400">XP</span>

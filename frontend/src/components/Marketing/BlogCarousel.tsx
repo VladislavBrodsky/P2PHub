@@ -92,13 +92,15 @@ export const BlogCarousel = () => {
                                     </span>
                                 </div>
 
-                                <h4 className="text-xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-2">
-                                    {post.title}
-                                </h4>
+                                <div className="flex flex-col gap-2 pt-1">
+                                    <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-2">
+                                        {post.title}
+                                    </h4>
 
-                                <p className="text-xs font-medium leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-3 opacity-80">
-                                    {post.excerpt}
-                                </p>
+                                    <p className="text-label font-medium leading-relaxed text-slate-500 dark:text-slate-400 line-clamp-2 opacity-70">
+                                        {post.excerpt}
+                                    </p>
+                                </div>
                             </div>
 
                             <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10">
