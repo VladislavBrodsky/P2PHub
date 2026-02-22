@@ -77,6 +77,13 @@ async def lifespan(app: FastAPI):
     # We no longer call create_db_and_tables() here to prevent noisy "relation already exists"
     # errors in PostgreSQL logs during worker startup.
 
+    # --- Distinguish between Web and Worker processes ---
+    # TaskIQ workers should NOT handle bot updates (polling or webhooks).
+    # This prevents the 'TelegramConflictError' when web workers and background workers start simultaneously.
+    is_taskiq_worker = os.environ.get("TASKIQ_WORKER") == "True" or any("taskiq" in arg for arg in sys.argv)
+    service_name = os.environ.get("RAILWAY_SERVICE_NAME", "unknown").lower()
+    is_web_service = "web" in service_name or "backend" in service_name or not is_taskiq_worker
+
     # #comment: Distributed Startup Tasks (Offloaded to Workers)
     # Using TaskIQ ensures these heavy operations don't block web worker startup.
     # We use a leader lock to ensure only ONE worker queues these tasks during deployment.
@@ -87,13 +94,14 @@ async def lifespan(app: FastAPI):
     is_startup_leader = False
     try:
         startup_lock = "lock:startup_tasks_queued"
+        # Only the first process of the first service to boot will queue tasks.
         is_startup_leader = await redis_service.client.set(startup_lock, "1", ex=300, nx=True)
     except Exception as e:
         logger.warning(f"⚠️ Could not check startup leader status (Redis issue): {e}")
 
     if is_startup_leader:
         try:
-            logger.info("📡 Leader Worker: Dispatching startup tasks to workers...")
+            logger.info("📡 Leader Process: Dispatching startup tasks to workers...")
             await warmup_redis.kiq()
             await warm_up_kb_task.kiq()
             await restore_names_task.kiq()
@@ -103,51 +111,46 @@ async def lifespan(app: FastAPI):
             logger.error(f"⚠️ Failed to queue startup tasks: {e}")
             logger.warning("Application will continue to boot, but background warmup might be delayed.")
     elif is_startup_leader is False:
-        logger.info("ℹ️ Startup tasks already dispatched or Redis unreachable.")
+        logger.debug("ℹ️ Startup tasks already dispatched by another leader process.")
 
-    logger.info("✅ Bot integration check starting...")
+    # --- Bot Integration Section (Web Only) ---
+    if is_web_service:
+        logger.info("✅ Bot integration check starting...")
+        webhook_base = settings.WEBHOOK_URL
 
-    webhook_base = settings.WEBHOOK_URL
+        if webhook_base and "your-backend-url" not in webhook_base:
+            # Webhook Mode
+            path = settings.WEBHOOK_PATH
+            webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
 
-    if webhook_base and "your-backend-url" not in webhook_base:
-        # Webhook Mode
-        path = settings.WEBHOOK_PATH
-        webhook_url = webhook_base if webhook_base.endswith(path) else f"{webhook_base.rstrip('/')}{path}"
-
-        try:
-            is_leader = await redis_service.client.set("lock:webhook_registration", "1", ex=60, nx=True)
-
-            if is_leader:
-                logger.info(f"📡 Leader Worker: Registering Webhook with Telegram: {webhook_url}")
-                async with asyncio.timeout(15.0):
-                    await bot.set_webhook(
-                        url=webhook_url,
-                        secret_token=settings.WEBHOOK_SECRET,
-                        drop_pending_updates=True
-                    )
-                logger.info(f"🚀 Webhook successfully set to: {webhook_url}")
-            else:
-                logger.info("ℹ️ Webhook already registered by leader worker. Skipping...")
-        except Exception as e:
-            if "Flood control exceeded" in str(e):
-                logger.warning("⚠️ Webhook flood control: Another worker might have already set it. Continuing...")
-            else:
-                logger.error(f"❌ Failed to set webhook (URL: {webhook_url}): {e}")
+            try:
+                is_leader = await redis_service.client.set("lock:webhook_registration", "1", ex=60, nx=True)
+                if is_leader:
+                    logger.info(f"📡 Web Leader: Registering Webhook: {webhook_url}")
+                    async with asyncio.timeout(15.0):
+                        await bot.set_webhook(url=webhook_url, secret_token=settings.WEBHOOK_SECRET, drop_pending_updates=True)
+                    logger.info("🚀 Webhook successfully set.")
+            except Exception as e:
+                logger.error(f"❌ Failed to set webhook: {e}")
+        else:
+            # Polling Mode
+            try:
+                # We need a long-lived lock for polling to prevent multiple web workers from polling at once.
+                # However, we only attempt if we are the web service.
+                is_polling_leader = await redis_service.client.set("lock:bot_polling_master", "1", ex=60, nx=True)
+                
+                if is_polling_leader:
+                    logger.info("💡 Bot Polling Master: Starting Long Polling...")
+                    await bot.delete_webhook(drop_pending_updates=True)
+                    polling_task = asyncio.create_task(dp.start_polling(bot))
+                    app.state.polling_task = polling_task
+                    logger.info("✅ Bot started with Long Polling")
+                else:
+                    logger.info("ℹ️ Another web worker is already handling Bot Polling.")
+            except Exception as e:
+                logger.error(f"⚠️ Polling check failed: {e}")
     else:
-        # Polling Mode
-        try:
-            is_polling_leader = await redis_service.client.set("lock:bot_polling_master", "1", ex=60, nx=True)
-            
-            if is_polling_leader:
-                logger.info("💡 Bot Polling Master: Starting Long Polling...")
-                await bot.delete_webhook(drop_pending_updates=True)
-                polling_task = asyncio.create_task(dp.start_polling(bot))
-                app.state.polling_task = polling_task
-                logger.info("✅ Bot started with Long Polling")
-            else:
-                logger.info("ℹ️ Another worker is already handling Bot Polling. Skipping...")
-        except Exception as e:
-            logger.error(f"⚠️ Polling check failed (Redis issue): {e}. Fallback: Polling disabled for this worker.")
+        logger.info("ℹ️ TaskIQ Worker detected. Skipping bot integration (handled by web service).")
 
     # Explicit Database Connection Check
     # Why: Catches database connection issues early in the startup process.
