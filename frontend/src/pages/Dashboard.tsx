@@ -54,16 +54,16 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* #comment: 1. Hero Section - The Central "Hub" Experience.
-                Restored the original spacing hierarchy that the user liked. */}
+            {/* #comment: Hero Section - Orbit & Hub. 
+                Using a slightly reduced height container for better vertical balance on mobile. */}
             <m.div variants={item} className="px-4">
-                {/* Orbit Container - Fixed height to ensure stability */}
-                <div className="relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center">
+                <div className="relative overflow-visible -mx-4 h-[340px] mt-4 flex items-center justify-center">
                     <CommunityOrbit />
                 </div>
 
-                {/* Sub-Hero Text Section - Coordinated spacing for readability */}
-                <div className="text-center space-y-10 px-2 flex flex-col items-center -mt-8 relative z-20">
+                {/* #comment: Hero Content Section - Removed negative margin to prevent overlaps. 
+                    Added significant top padding to ensure the 'Hub' has breathing room. */}
+                <div className="text-center space-y-12 px-2 flex flex-col items-center mt-4 relative z-20">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (

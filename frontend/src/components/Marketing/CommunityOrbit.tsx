@@ -243,7 +243,8 @@ const FractalProfits = memo(() => {
                     : Math.floor(Math.random() * 55) + 5;
 
                 const angle = (Math.random() * 360) * (Math.PI / 180);
-                const distance = 140 + Math.random() * 160;
+                // #comment: Reduced distance of floating profits to keep them within the visual hub.
+                const distance = 80 + Math.random() * 60;
                 const targetX = Math.cos(angle) * distance;
                 const targetY = Math.sin(angle) * distance;
 
@@ -280,14 +281,14 @@ const FractalProfits = memo(() => {
     );
 });
 
-// #comment: OrbitingItem represents an individual partner or crypto icon in the orbit.
+// #comment: OrbitingItem - Reduced size to 44x44 for a more refined, compact look.
 const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
-    const [radius, setRadius] = useState(120);
+    const [radius, setRadius] = useState(100);
 
-    // #comment: Radius adjustment based on viewport width to ensure orbit fits on smaller mobile screens.
+    // #comment: Geometry Tuning - Keeps the orbit tight and centered to prevent hero text collisions.
     useEffect(() => {
         const updateRadius = () => {
-            setRadius(window.innerWidth < 380 ? 90 : 120);
+            setRadius(window.innerWidth < 380 ? 80 : 100);
         };
         updateRadius();
         window.addEventListener('resize', updateRadius);
@@ -299,10 +300,10 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
 
     return (
         <m.div
-            className="absolute z-5" // #comment: Lowered z-index to ensure items pass behind the hero text (which is z-40).
+            className="absolute z-5"
             style={{
-                width: 60,
-                height: 60,
+                width: 44,
+                height: 44,
                 willChange: 'transform'
             }}
             animate={{
