@@ -272,10 +272,10 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         {LEVEL_COLORS.map((_, i) => (
                             <motion.path
                                 key={i}
-                                d={chartPaths[i]}
+                                d={chartPaths[i] || 'M 0,0'}
                                 fill={`url(#${gradientId}-${i})`}
                                 initial={{ opacity: 0 }}
-                                animate={{ opacity: 1, d: chartPaths[i] }}
+                                animate={{ opacity: 1, d: chartPaths[i] || 'M 0,0' }}
                                 transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
                                 className="transition-opacity duration-300"
                             />

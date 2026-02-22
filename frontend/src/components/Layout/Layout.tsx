@@ -51,7 +51,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col h-dvh min-h-dvh w-full max-w-md mx-auto overflow-hidden bg-bg-app text-text-primary sm:border-x sm:border-border-glass sm:shadow-2xl">
+        <div className="selection:bg-blue-500/10 fixed top-0 bottom-0 left-1/2 -translate-x-1/2 flex flex-col h-dvh min-h-dvh w-full max-w-md overflow-hidden bg-bg-app text-text-primary sm:border-x sm:border-border-glass sm:shadow-2xl">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
