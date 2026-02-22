@@ -37,7 +37,8 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(var(--spacing-safe-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
+        // #comment: Fixed Header Centering - Using left-0 right-0 mx-auto for extreme stability.
+        <header className="fixed top-0 left-0 right-0 mx-auto z-50 w-full max-w-lg pt-[calc(var(--spacing-safe-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
 
 
 

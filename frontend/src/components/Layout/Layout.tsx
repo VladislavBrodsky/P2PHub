@@ -46,7 +46,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col h-dvh min-h-dvh w-full overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col items-center overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
 
 
             {/* Staging Ribbon */}
@@ -80,12 +80,12 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 Kept transparent to allow background depth effects (fixed orbs) to show through. */}
             <main
                 id="main-scroll-root"
-                className={`flex-1 overflow-x-hidden relative z-10
+                className={`flex-1 w-full overflow-x-hidden relative z-10 flex flex-col items-center
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
-                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
+                <div className={`relative w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
                     {/* #comment: LazyMotion 'm' component used here for smaller bundle size. */}
                     <AnimatePresence initial={false}>
                         <m.div
@@ -94,7 +94,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2, ease: 'easeOut' }}
-                            className="mx-auto w-full"
+                            className="w-full"
                         >
                             {children}
                         </m.div>
