@@ -105,7 +105,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
                             transition={{ type: 'spring', stiffness: 380, damping: 38, mass: 0.8 }}
-                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-(--color-bg-app) border-r border-(--color-border-glass) shadow-2xl ml-0 mr-auto overscroll-none"
+                            className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-bg-app border-r border-border-glass shadow-2xl ml-0 mr-auto overscroll-none"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
@@ -120,12 +120,12 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] px-4 pb-2 flex items-center justify-between z-20">
                                 <button
                                     onClick={onClose}
-                                    className="p-2 rounded-full bg-(--card-bg) border border-(--card-border) text-(--color-text-primary) shadow-sm active:scale-90 transition-all"
+                                    className="p-2 rounded-full bg-card-bg border border-card-border text-text-primary shadow-sm active:scale-90 transition-all"
                                     aria-label="Close menu"
                                 >
                                     <ArrowLeft className="h-5 w-5" />
                                 </button>
-                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-secondary)">
+                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-text-secondary">
                                     {t('common.menu')}
                                 </div>
                                 <div className="w-9" /> {/* Spacer to center title */}
@@ -162,13 +162,13 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                         }}
                                         className={`w-full rounded-full py-1.5 px-3 border transition-all ${wallet
                                             ? 'bg-emerald-500 text-white border-transparent'
-                                            : 'bg-(--btn-secondary-bg) backdrop-blur-md text-(--color-text-primary) border-(--card-border) hover:bg-(--btn-secondary-hover)'}`}
+                                            : 'bg-btn-secondary-bg backdrop-blur-md text-text-primary border-card-border hover:bg-btn-secondary-hover'}`}
                                         aria-label={wallet ? "Wallet connected" : "Connect wallet"}
                                     >
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <div className={`p-1 rounded-lg ${wallet ? 'bg-white/20' : 'bg-blue-500/10 border border-blue-500/20'}`}>
-                                                    <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-(--color-brand-blue)'}`} />
+                                                    <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-brand-blue'}`} />
                                                 </div>
                                                 <div className="text-left">
                                                     <div className="text-[7px] font-black uppercase tracking-widest opacity-70">
@@ -189,8 +189,8 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                 </div>
 
                                 <div className="mt-8 mb-4">
-                                    <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-(--color-text-secondary) opacity-50">
-                                        P2PHub v1.7.0 (Stable)
+                                    <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary opacity-50">
+                                        P2PHub v1.8.3 (Stable)
                                     </p>
                                 </div>
                             </div>

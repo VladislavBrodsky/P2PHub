@@ -33,7 +33,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
         // Now uses semantic CSS variables (--color-bg-deep, --color-text-primary) to sync perfectly 
         // with both Light and Dark themes. Added transition-colors for a premium fading effect.
         <div
-            className="fixed inset-0 z-100 flex flex-col items-center justify-start bg-(--color-bg-app) pt-[calc(var(--header-total-height)+144px)] transition-colors duration-500 overflow-hidden"
+            className="fixed inset-0 z-100 flex flex-col items-center justify-start bg-bg-app pt-[calc(var(--header-total-height)+144px)] transition-colors duration-500 overflow-hidden"
             role="status"
             aria-live="polite"
             aria-busy="true"
@@ -83,7 +83,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 <div className="mt-6 flex flex-col items-center space-y-4">
                     <div className="relative group">
                         <div className="flex items-baseline space-x-1 relative">
-                            <span className="text-4xl font-black text-(--color-text-primary) tracking-tighter tabular-nums drop-shadow-sm">
+                            <span className="text-4xl font-black text-text-primary tracking-tighter tabular-nums drop-shadow-sm">
                                 {displayProgress}
                             </span>
                             <span className="text-lg font-bold text-blue-500">%</span>
@@ -94,7 +94,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         {/* Status Badge - Matching user screenshot exactly */}
                         <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden min-w-[140px] flex justify-center">
                             <div className="relative z-10">
-                                <p className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px] opacity-80">
+                                <p className="text-text-primary font-black tracking-[0.2em] uppercase text-[10px] opacity-80">
                                     {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText.toUpperCase()}
                                 </p>
                             </div>
@@ -122,11 +122,11 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                     className="flex items-center space-x-4 opacity-40 animate-fade-in-up"
                     style={{ animationDelay: '0.5s' }}
                 >
-                    <div className="h-px w-10 bg-linear-to-r from-transparent to-(--color-text-secondary)" />
-                    <span className="text-[10px] font-black tracking-[0.5em] uppercase text-(--color-text-secondary) whitespace-nowrap">
+                    <div className="h-px w-10 bg-linear-to-r from-transparent to-text-secondary" />
+                    <span className="text-[10px] font-black tracking-[0.5em] uppercase text-text-secondary whitespace-nowrap">
                         Advanced Ecosystem
                     </span>
-                    <div className="h-px w-10 bg-linear-to-l from-transparent to-(--color-text-secondary)" />
+                    <div className="h-px w-10 bg-linear-to-l from-transparent to-text-secondary" />
                 </div>
             </div>
         </div>
