@@ -1,4 +1,4 @@
-# --- Stage 1: Build (Force Rebuild v1.8.18) ---
+# --- Stage 1: Build (Force Rebuild v1.8.19) ---
 FROM node:20-alpine AS build
 
 # Install build dependencies
