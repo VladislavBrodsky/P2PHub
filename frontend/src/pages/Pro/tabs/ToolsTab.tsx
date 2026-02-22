@@ -289,7 +289,7 @@ export const ToolsTab = ({
 
                     {/* Capability Description */}
                     <div className="p-4 bg-slate-50 dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/5 backdrop-blur-xl relative overflow-hidden shadow-inner">
-                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-600 dark:text-slate-400 leading-relaxed relative z-10">
+                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed relative z-10">
                             {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
                         </p>
                     </div>

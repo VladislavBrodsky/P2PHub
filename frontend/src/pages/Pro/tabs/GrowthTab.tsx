@@ -181,7 +181,7 @@ export const GrowthTab = ({
                     <Bot className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="text-xs sm:text-[13px] font-bold text-slate-600 dark:text-slate-300 leading-snug italic truncate">
+                    <p className="text-xs sm:text-[13px] font-bold text-slate-500 dark:text-slate-400 leading-snug italic truncate">
                         "{t('pro_dashboard.academy.desc')}"
                     </p>
                 </div>
@@ -382,7 +382,7 @@ export const GrowthTab = ({
                                                     transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
                                                 >
                                                     <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
-                                                        <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                                        <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                                                             <div className="flex items-center gap-2 mb-4">
                                                                 <CategoryIcon size={16} className="text-indigo-500" />
                                                                 <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
