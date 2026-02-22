@@ -35,26 +35,6 @@
     animation: shine 4s infinite linear;
   }
 
-  .pt-safe-top {
-    padding-top: var(--spacing-safe-top);
-  }
-
-  .pb-safe-bottom {
-    padding-bottom: calc(var(--spacing-safe-bottom) + 16px);
-  }
-
-  .safe-pt {
-    padding-top: var(--spacing-safe-top);
-  }
-
-  .safe-pb {
-    padding-bottom: calc(var(--spacing-safe-bottom) + 80px);
-  }
-
-  .header-safe-height {
-    height: calc(var(--header-height) + var(--spacing-safe-top));
-  }
-
   .dark .glass-panel {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
   }

@@ -119,22 +119,10 @@ body {
     font-weight: var(--font-weight-medium);
   }
 
-  .safe-pt {
-    padding-top: var(--spacing-safe-top);
-  }
-
-  .safe-pb {
-    padding-bottom: var(--spacing-safe-bottom);
-  }
-
   .center-flex {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .safe-pb {
-    padding-bottom: calc(var(--spacing-safe-bottom) + 80px);
   }
 
   .hide-scrollbar {

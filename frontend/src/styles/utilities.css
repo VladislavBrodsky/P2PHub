@@ -66,11 +66,3 @@
     pointer-events: none;
   }
 }
-
-@utility content-main-padding {
-  padding-top: calc(var(--header-total-height) + 12px) !important;
-}
-
-@utility staging-offset {
-  padding-top: calc(var(--header-total-height) + 32px) !important;
-}
