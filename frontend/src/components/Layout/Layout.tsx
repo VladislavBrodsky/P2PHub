@@ -51,7 +51,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col h-dvh min-h-dvh w-full overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -90,6 +90,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                         This is critical for the 'visitedTabs' optimization in App.tsx. */}
                     <AnimatePresence initial={false}>
                         <m.div
+                            key={activeTab}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
