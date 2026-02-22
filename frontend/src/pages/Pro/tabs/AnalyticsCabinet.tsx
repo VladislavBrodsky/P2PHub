@@ -84,8 +84,8 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-50 grayscale' : ''}`}>
                 {[
                     { label: t('pro_dashboard.analytics.total_views'), value: stats?.summary?.total_views || 0, icon: Eye, color: 'text-blue-500', trend: stats?.summary?.trends?.views },
-                    { label: t('pro_dashboard.analytics.engagement'), value: stats?.summary?.total_likes || 0, icon: ThumbsUp, color: 'text-emerald-500', trend: stats?.summary?.trends?.likes },
-                    { label: t('pro_dashboard.analytics.viral_reach'), value: stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-purple-500', trend: stats?.summary?.trends?.reposts },
+                    { label: t('pro_dashboard.analytics.engagement'), value: stats?.summary?.total_reactions || stats?.summary?.total_likes || 0, icon: ThumbsUp, color: 'text-emerald-500', trend: stats?.summary?.trends?.likes },
+                    { label: t('pro_dashboard.analytics.viral_reach'), value: stats?.summary?.total_shares || stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-purple-500', trend: stats?.summary?.trends?.reposts },
                     { label: t('pro_dashboard.analytics.success_rate'), value: `${((stats?.summary?.avg_engagement || 0) * 100).toFixed(1)}%`, icon: TrendingUp, color: 'text-orange-500', trend: stats?.summary?.trends?.success }
                 ].map((stat, i) => (
                     <motion.div
@@ -291,18 +291,18 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                                         <div className="flex items-center gap-1 sm:gap-2">
                                                             <div className="flex items-center gap-0.5">
                                                                 <ThumbsUp size={8} className="text-emerald-500 shrink-0" />
-                                                                <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 tabular-nums">{post.likes}</span>
+                                                                <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 tabular-nums">{post.reactions !== undefined ? post.reactions : post.likes}</span>
                                                             </div>
                                                             <div className="flex items-center gap-0.5">
                                                                 <Share2 size={8} className="text-purple-500 shrink-0" />
-                                                                <span className="text-[9px] sm:text-[10px] font-black text-purple-500 tabular-nums">{post.reposts}</span>
+                                                                <span className="text-[9px] sm:text-[10px] font-black text-purple-500 tabular-nums">{post.shares !== undefined ? post.shares : post.reposts}</span>
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center gap-1.5 sm:gap-2">
                                                             <div className="hidden sm:block w-12 h-1 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden shrink-0">
                                                                 <motion.div
                                                                     initial={{ width: 0 }}
-                                                                    animate={{ width: `${Math.min(((post.likes + post.reposts) / (Math.max(1, post.views))) * 1000, 100)}%` }}
+                                                                    animate={{ width: `${Math.min((((post.reactions || post.likes) + (post.shares || post.reposts)) / (Math.max(1, post.views))) * 1000, 100)}%` }}
                                                                     className="h-full vibing-blue-animated"
                                                                 />
                                                             </div>
