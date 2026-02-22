@@ -54,7 +54,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             href="https://t.me/pintopaygrowth"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)"
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
                             <span className="text-[10px] font-black uppercase text-text-primary">{t('menu.channel')}</span>
@@ -63,7 +63,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             href="https://t.me/pintopayworld"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-(--card-bg) hover:bg-blue-500/10 transition-colors border border-(--card-border)"
+                            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <Users className="h-5 w-5 text-[#0088cc]" />
                             <span className="text-[10px] font-black uppercase text-text-primary">{t('menu.chat')}</span>
@@ -108,7 +108,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         )}
 
                         {(t('faq.questions', { returnObjects: true }) as Array<{ q: string; a: string }>).map((item, i) => (
-                            <div key={i} className="rounded-lg bg-(--card-bg) border border-(--card-border) overflow-hidden shadow-sm">
+                            <div key={i} className="rounded-lg bg-card-bg border border-card-border overflow-hidden shadow-sm">
                                 <button
                                     onClick={() => toggleSection(`faq-${i}`, true)}
                                     className="w-full p-2.5 flex justify-between items-start gap-2 text-left active:bg-blue-500/5 transition-colors">
@@ -128,7 +128,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                             exit={{ height: 0, opacity: 0 }}
                                             transition={{ duration: 0.2 }}
                                         >
-                                            <div className="px-2.5 pb-2.5 text-[10px] font-medium text-text-secondary leading-relaxed border-t border-(--card-border) pt-2">
+                                            <div className="px-2.5 pb-2.5 text-[10px] font-medium text-text-secondary leading-relaxed border-t border-card-border pt-2">
                                                 {item.a}
                                             </div>
                                         </motion.div>
@@ -147,7 +147,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 onClose();
                                 setSupportOpen(true);
                             }}
-                            className="w-full py-4 rounded-xl bg-(--btn-primary-bg) text-(--btn-primary-text) hover:bg-(--btn-primary-hover) text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
+                            className="w-full py-4 rounded-xl bg-btn-primary-bg text-btn-primary-text hover:bg-btn-primary-hover text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
                         >
                             <Headphones className="h-4 w-4" />
                             {t('menu.support')}
@@ -181,7 +181,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         key={item.id}
                         className={`rounded-2xl overflow-hidden shadow-sm group relative transition-all duration-300 ${isProItem
                             ? 'bg-linear-to-r from-amber-500 via-yellow-500 to-orange-600 border-none animate-[vibing-gradient_10s_infinite_linear] bg-size-[300%_300%]'
-                            : 'bg-(--card-bg) backdrop-blur-sm border border-(--card-border)'
+                            : 'bg-card-bg backdrop-blur-sm border border-card-border'
                             }`}
                     >
                         {isProItem && (
@@ -221,7 +221,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             <div className="flex items-center gap-3">
                                 <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
                                     ? 'bg-black/10 dark:bg-white/30 border border-black/10 dark:border-white/40 text-black dark:text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
-                                    : 'bg-(--card-bg) border border-(--card-border) text-text-secondary group-hover:text-text-primary'
+                                    : 'bg-card-bg border border-card-border text-text-secondary group-hover:text-text-primary'
                                     }`}>
                                     {React.cloneElement(item.icon as React.ReactElement, {
                                         className: `h-4 w-4 ${isProItem ? 'animate-pulse' : ''}`
@@ -256,7 +256,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     exit={{ height: 0, opacity: 0 }}
                                     transition={{ duration: 0.2 }}
                                 >
-                                    <div className={`px-4 pb-4 border-t ${isProItem ? 'border-white/10' : 'border-(--card-border)'}`}>
+                                    <div className={`px-4 pb-4 border-t ${isProItem ? 'border-white/10' : 'border-card-border'}`}>
                                         {renderSectionContent(item.id)}
                                     </div>
                                 </motion.div>

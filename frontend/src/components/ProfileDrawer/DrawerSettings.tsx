@@ -49,7 +49,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
     return (
         <div className="mt-0 space-y-4 pt-1">
             {/* Notification Toggle */}
-            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--card-bg) backdrop-blur-md border border-(--card-border) relative overflow-hidden">
+            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-card-bg backdrop-blur-md border border-card-border relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
                     { id: false, icon: Bell, label: t('common.active'), activeColor: 'rgba(16,185,129,0.1)', iconColor: '#10B981', isPaused: false },
@@ -78,7 +78,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
             </div>
 
             {/* Language Selector */}
-            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--card-bg) backdrop-blur-md border border-(--card-border) relative overflow-hidden">
+            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-card-bg backdrop-blur-md border border-card-border relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
                     { id: 'en', flag: '🇺🇸', label: 'English', activeColor: 'rgba(59,130,246,0.1)' },
@@ -106,7 +106,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
             </div>
 
             {/* Theme Selector */}
-            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-(--card-bg) backdrop-blur-md border border-(--card-border) relative overflow-hidden">
+            <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-card-bg backdrop-blur-md border border-card-border relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
                     { id: 'light' as const, icon: Sun, label: 'Light', activeColor: 'rgba(251,191,36,0.1)', iconColor: '#FBBF24' },

@@ -198,7 +198,7 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-input-bg border-input-border flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
                             >
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
@@ -225,7 +225,7 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-input-bg border-input-border flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
                             >
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"

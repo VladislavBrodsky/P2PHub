@@ -187,7 +187,7 @@ export default function FAQPage() {
                 <div className="flex items-center gap-3 mb-6">
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                        className="p-2.5 rounded-xl bg-(--card-bg) border border-(--card-border) text-text-primary active:scale-95 transition-all backdrop-blur-md shadow-xl"
+                        className="p-2.5 rounded-xl bg-card-bg border border-card-border text-text-primary active:scale-95 transition-all backdrop-blur-md shadow-xl"
                     >
                         <ArrowLeft size={18} />
                     </button>
@@ -220,7 +220,7 @@ export default function FAQPage() {
                         placeholder={t('faq.search_placeholder', 'Search for answers...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-text-secondary/40 relative z-0"
+                        className="w-full h-16 pl-12 pr-4 bg-card-bg border-2 border-card-border focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-text-secondary/40 relative z-0"
                     />
                 </div>
             </div>
@@ -233,7 +233,7 @@ export default function FAQPage() {
                         onClick={() => { selection(); setSelectedCategory(cat.id); }}
                         className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
-                            : 'bg-(--card-bg) border border-(--card-border) text-text-secondary'
+                            : 'bg-card-bg border border-card-border text-text-secondary'
                             }`}
                     >
                         {cat.icon}
@@ -257,11 +257,11 @@ export default function FAQPage() {
                             >
                                 <button
                                     onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
-                                    className={`w-full text-left p-5 rounded-2xl bg-(--card-bg) border border-(--card-border) transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-blue-500/30 border-blue-500/20 shadow-xl' : 'hover:border-blue-500/30'
+                                    className={`w-full text-left p-5 rounded-2xl bg-card-bg border border-card-border transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-blue-500/30 border-blue-500/20 shadow-xl' : 'hover:border-blue-500/30'
                                         }`}
                                 >
                                     <div className="flex items-start gap-4 h-full">
-                                        <div className="w-12 h-12 rounded-xl bg-(--background-secondary) flex items-center justify-center shrink-0 shadow-inner">
+                                        <div className="w-12 h-12 rounded-xl bg-bg-secondary flex items-center justify-center shrink-0 shadow-inner">
                                             {faq.icon}
                                         </div>
                                         <div className="flex-1 pt-1">
@@ -291,7 +291,7 @@ export default function FAQPage() {
                                                 exit={{ height: 0, opacity: 0 }}
                                                 className="overflow-hidden"
                                             >
-                                                <div className="mt-5 pt-5 border-t border-(--card-border)">
+                                                <div className="mt-5 pt-5 border-t border-card-border">
                                                     <p className="text-xs font-medium text-text-secondary leading-relaxed">
                                                         {renderFormattedText(faq.a)}
                                                     </p>

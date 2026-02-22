@@ -75,7 +75,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     style={{
                         overscrollBehaviorY: 'none',
                         paddingTop: !isHeaderVisible ? '0px' : 'var(--header-total-height, 160px)',
-                        paddingBottom: 'calc(var(--nav-height, 100px) + var(--spacing-safe-bottom, 24px) + 20px)'
+                        paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 24px) + 20px)'
                     }}
                 >
                     <div className={cn(

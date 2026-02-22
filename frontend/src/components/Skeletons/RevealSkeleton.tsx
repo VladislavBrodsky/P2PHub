@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 export const RevealSkeleton = () => {
     return (
         <div
-            className="fixed inset-0 flex items-center justify-center bg-(--color-bg-app) z-60 backdrop-blur-sm"
+            className="fixed inset-0 flex items-center justify-center bg-bg-app z-60 backdrop-blur-sm"
             role="status"
             aria-live="polite"
             aria-busy="true"

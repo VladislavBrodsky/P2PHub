@@ -49,6 +49,16 @@
   --color-border-glass: var(--sys-border-glass);
   --color-glass-highlight: var(--sys-glass-highlight);
 
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
+  --color-bg-secondary: var(--sys-bg-surface);
+  --color-input-bg: var(--input-bg);
+  --color-input-border: var(--input-border);
+
+  --color-btn-primary-bg: var(--btn-primary-bg);
+  --color-btn-primary-text: var(--btn-primary-text);
+  --color-btn-primary-hover: var(--btn-primary-hover);
+
   /* Typography Scale */
   --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;
   --font-display-family: "Inter", "Onest", system-ui, sans-serif;
