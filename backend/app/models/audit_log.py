@@ -36,7 +36,11 @@ class AuditLog(SQLModel, table=True):
     actor_id: str | None = Field(default="system", index=True)
     details: dict | None = Field(default=None, sa_column=Column(JSON)) # Metadata (hashes, states)
     ip_address: str | None = Field(default=None)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
+        index=True,
+        sa_column_kwargs={"server_default": text("now()"), "nullable": False}
+    )
 
     class Config:
         arbitrary_types_allowed = True

@@ -325,7 +325,7 @@ export default function ReferralPage() {
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: "100%", opacity: 0 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="w-full sm:max-w-sm bg-white dark:bg-slate-900 rounded-t-[2rem] sm:rounded-[2rem] relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pb-safe-bottom"
+                            className="w-full sm:max-w-sm bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pb-safe-bottom"
                         >
                             {/* Header / Close */}
                             <div className="absolute top-4 right-4 z-50">
@@ -340,20 +340,20 @@ export default function ReferralPage() {
                             {/* Scrollable Content */}
                             <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto overscroll-none" style={{ overscrollBehavior: 'none' }}>
                                 {/* Visual Header */}
-                                <div className="relative h-48 sm:h-52 shrink-0">
+                                <div className="relative h-40 sm:h-44 shrink-0">
                                     <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
                                     <img
                                         src="https://images.unsplash.com/photo-1639762681485-074b7f4fc8bc?q=80&w=2832&auto=format&fit=crop"
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-4 left-6 z-20 right-6">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-[9px] font-black text-blue-400 uppercase tracking-widest">
+                                    <div className="absolute bottom-3 left-5 z-20 right-5">
+                                        <div className="flex items-center gap-1.5 mb-1.5">
+                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-[8px] font-black text-blue-400 uppercase tracking-widest">
                                                 {t('referral.modal.limited_tier')}
                                             </span>
                                         </div>
-                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tighter leading-none shadow-black drop-shadow-sm">
+                                        <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none shadow-black drop-shadow-sm">
                                             {t('referral.modal.recruit_title')}
                                         </h3>
                                     </div>
@@ -374,40 +374,40 @@ export default function ReferralPage() {
                                     </div>
 
                                     {/* Quick Actions Grid */}
-                                    <div className="grid grid-cols-1 gap-3">
+                                    <div className="grid grid-cols-1 gap-2.5">
                                         <button
                                             onClick={handleShareTelegram}
-                                            className="w-full h-12 rounded-2xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-black text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
+                                            className="w-full h-11 rounded-xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-black text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
                                         >
                                             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <Send className="w-5 h-5 -rotate-45 mb-0.5" />
-                                            <span>{t('referral.modal.share_telegram')}</span>
+                                            <Send className="w-4 h-4 -rotate-45 mb-0.5" />
+                                            <span className="text-sm">{t('referral.modal.share_telegram')}</span>
                                         </button>
 
-                                        <div className="grid grid-cols-2 gap-2.5">
+                                        <div className="grid grid-cols-2 gap-2">
                                             {window.Telegram?.WebApp && (
                                                 <button
                                                     onClick={handleShareViralCard}
-                                                    className="h-11 rounded-2xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-[13px] border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
+                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-[12px] border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
                                                 >
-                                                    <Sparkles className="w-4 h-4" />
+                                                    <Sparkles className="w-3.5 h-3.5" />
                                                     <span>{t('referral.modal.viral_btn')}</span>
                                                 </button>
                                             )}
                                             <button
                                                 onClick={handleNativeShare}
-                                                className={`h-11 rounded-2xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-[13px] border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
+                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-[12px] border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
                                             >
-                                                <ExternalLink className="w-4 h-4" />
+                                                <ExternalLink className="w-3.5 h-3.5" />
                                                 <span>{t('referral.modal.share_more')}</span>
                                             </button>
                                         </div>
 
                                         <button
                                             onClick={handleCopyLink}
-                                            className="h-9 rounded-xl flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-xs active:scale-95 transition-all"
+                                            className="h-8 rounded-lg flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-[10px] active:scale-95 transition-all"
                                         >
-                                            <Copy className="w-3.5 h-3.5" />
+                                            <Copy className="w-3 h-3" />
                                             <span>{t('referral.modal.copy_link')}</span>
                                         </button>
                                     </div>
@@ -435,7 +435,7 @@ export default function ReferralPage() {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-6 relative shadow-2xl"
+                            className="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-5 relative shadow-2xl"
                         >
                             <button
                                 onClick={() => setShowQR(false)}
@@ -515,7 +515,7 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <h1 className="text-2xl font-black mb-1 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
+            <h1 className="text-xl font-black mb-1 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
 
             <div className="flex justify-center mb-4">
                 <button

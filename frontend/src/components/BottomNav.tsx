@@ -18,7 +18,7 @@ export default function BottomNav({ activeTab, setActiveTab, prefetchPages }: Bo
     };
 
     return (
-        <nav className="glass-panel relative mx-4 mb-6 flex h-16 w-full max-w-[440px] items-center justify-around rounded-3xl px-2 shadow-premium border border-(--color-border-glass)">
+        <nav className="glass-panel relative mx-4 mb-4 flex h-14 w-full max-w-[400px] items-center justify-around rounded-2xl px-2 shadow-premium border border-(--color-border-glass)">
 
             <NavButton
                 active={activeTab === 'home'}

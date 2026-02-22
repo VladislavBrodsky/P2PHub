@@ -343,45 +343,45 @@ export const ReferralGraph = () => {
                                     initial={{ opacity: 0, x: 50, filter: 'blur(10px)' }}
                                     animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
                                     exit={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
-                                    className="w-full max-w-sm flex flex-col items-center gap-5 sm:gap-6"
+                                    className="w-full max-w-xs flex flex-col items-center gap-4 sm:gap-5"
                                 >
                                     <div className={clsx(
-                                        "w-20 h-20 sm:w-24 sm:h-24 rounded-[2.5rem] sm:rounded-[3rem] flex items-center justify-center bg-linear-to-br border shadow-xl animate-float transition-all",
+                                        "w-16 h-16 sm:w-20 sm:h-20 rounded-[2rem] sm:rounded-[2.5rem] flex items-center justify-center bg-linear-to-br border shadow-xl animate-float transition-all",
                                         funnelStages[funnelStep].color,
                                         funnelStages[funnelStep].borderColor,
                                         "dark:bg-opacity-20"
                                     )}>
-                                        <div className="scale-75 sm:scale-100">
+                                        <div className="scale-65 sm:scale-90">
                                             {funnelStages[funnelStep].icon}
                                         </div>
                                     </div>
 
-                                    <div className="space-y-3 sm:space-y-4 px-2">
-                                        <h3 className="text-lg sm:text-xl font-black uppercase tracking-tighter text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md leading-tight">
+                                    <div className="space-y-2 sm:space-y-3 px-2">
+                                        <h3 className="text-base sm:text-lg font-black uppercase tracking-tighter text-slate-900 dark:text-white drop-shadow-sm dark:drop-shadow-md leading-tight">
                                             {funnelStages[funnelStep].title}
                                         </h3>
-                                        <div className="w-10 sm:w-12 h-1 bg-emerald-500 mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-                                        <p className="text-[9px] sm:text-[11px] font-bold text-slate-600 dark:text-white/70 uppercase tracking-[0.2em] sm:tracking-widest leading-relaxed px-2 sm:px-4">
+                                        <div className="w-8 sm:w-10 h-1 bg-emerald-500 mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                                        <p className="text-[8px] sm:text-[10px] font-bold text-slate-600 dark:text-white/70 uppercase tracking-[0.15em] sm:tracking-widest leading-relaxed px-2 sm:px-4">
                                             {funnelStages[funnelStep].desc}
                                         </p>
                                     </div>
 
                                     <div className="flex flex-col gap-2 sm:gap-3 w-full mt-2 sm:mt-4">
-                                        <div className="flex justify-center gap-1.5 mb-1 sm:mb-2">
+                                        <div className="flex justify-center gap-1 mb-1 sm:mb-2">
                                             {funnelStages.map((_, i) => (
-                                                <div key={i} className={clsx("h-1 rounded-full transition-all duration-300", i === funnelStep ? "w-6 sm:w-8 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" : "w-1.5 sm:w-2 bg-slate-300 dark:bg-white/20")} />
+                                                <div key={i} className={clsx("h-1 rounded-full transition-all duration-300", i === funnelStep ? "w-5 sm:w-6 bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.6)]" : "w-1.5 bg-slate-300 dark:bg-white/20")} />
                                             ))}
                                         </div>
                                         <button
                                             onClick={nextStep}
-                                            className="w-full h-12 sm:h-14 vibing-blue-animated rounded-full flex items-center justify-center gap-2 sm:gap-3 text-white font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-transform"
+                                            className="w-full h-10 sm:h-12 vibing-blue-animated rounded-full flex items-center justify-center gap-2 sm:gap-3 text-white font-black text-[9px] sm:text-[10px] uppercase tracking-[0.15em] shadow-2xl active:scale-95 transition-transform"
                                         >
                                             <span>{t('blog.navigation.next')}</span>
-                                            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                                            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
-                                            className="text-[9px] sm:text-[10px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.3em] hover:text-slate-600 dark:hover:text-white transition-colors mt-1 sm:mt-2"
+                                            className="text-[8px] sm:text-[9px] font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.2em] hover:text-slate-600 dark:hover:text-white transition-colors mt-1 sm:mt-2"
                                         >
                                             {t('income.network.close')}
                                         </button>
@@ -392,20 +392,20 @@ export const ReferralGraph = () => {
                                     key="cta-final"
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="w-full max-w-sm flex flex-col items-center gap-5 sm:gap-8"
+                                    className="w-full max-w-xs flex flex-col items-center gap-4 sm:gap-6"
                                 >
                                     <div className="relative">
                                         <div className="absolute inset-0 bg-emerald-500 blur-2xl opacity-40 animate-pulse" />
-                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-[2rem] sm:rounded-[2.5rem] bg-white dark:bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10 shadow-xl">
-                                            <Sparkles className="w-8 h-8 sm:w-12 sm:h-12 text-emerald-500 dark:text-emerald-400" />
+                                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] bg-white dark:bg-slate-900 border-2 border-emerald-500/50 flex items-center justify-center relative z-10 shadow-xl">
+                                            <Sparkles className="w-7 h-7 sm:w-10 sm:h-10 text-emerald-500 dark:text-emerald-400" />
                                         </div>
                                     </div>
 
                                     <div className="space-y-2 sm:space-y-3 px-2">
-                                        <h3 className="text-lg sm:text-xl font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
+                                        <h3 className="text-base sm:text-lg font-black uppercase tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-emerald-600 via-slate-900 to-emerald-600 dark:from-emerald-400 dark:via-white dark:to-emerald-400 animate-text-shimmer leading-tight pb-1">
                                             {t('viral_funnel.cta')}
                                         </h3>
-                                        <p className="text-[8px] sm:text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] sm:tracking-[0.3em]">
+                                        <p className="text-[7px] sm:text-[9px] font-black text-emerald-500 uppercase tracking-[0.15em] sm:tracking-[0.2em]">
                                             {t('viral_funnel.elite_users')}
                                         </p>
                                     </div>
@@ -413,11 +413,11 @@ export const ReferralGraph = () => {
                                     <div className="w-full space-y-3 sm:space-y-4">
                                         <button
                                             onClick={handleUpgrade}
-                                            className="w-full h-12 sm:h-14 vibing-emerald-animated rounded-[2rem] text-white font-black text-[9px] sm:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group px-2"
+                                            className="w-full h-10 sm:h-12 vibing-emerald-animated rounded-[1.5rem] text-white font-black text-[8px] sm:text-[10px] uppercase tracking-widest sm:tracking-widest shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:scale-105 active:scale-95 transition-all group px-2"
                                         >
                                             <div className="flex items-center justify-center gap-2 sm:gap-3">
                                                 <span>{t('viral_funnel.cta')}</span>
-                                                <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:scale-125 transition-transform" />
+                                                <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover:scale-125 transition-transform" />
                                             </div>
                                         </button>
 
@@ -430,11 +430,10 @@ export const ReferralGraph = () => {
                                     </div>
 
                                     {/* Small Social Proof Footer */}
-                                    <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md">
-                                        <div className="flex items-center gap-3 text-left">
-                                            <div className="flex -space-x-2">
+                                    <div className="p-3 rounded-xl bg-slate-100/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md w-full">
+                                        <div className="flex items-center gap-2 text-left">
+                                            <div className="flex -space-x-1.5 shrink-0">
                                                 {[1, 2, 3].map(i => {
-                                                    // Generating an index between 1 and 99 based on count and position for pseudo-random real faces
                                                     const faceIndex = (partnersCount + i * 17) % 99 + 1;
                                                     const gender = i % 2 === 0 ? 'men' : 'women';
                                                     return (
@@ -442,12 +441,12 @@ export const ReferralGraph = () => {
                                                             key={i}
                                                             src={`https://randomuser.me/api/portraits/${gender}/${faceIndex}.jpg`}
                                                             alt="Partner avatar"
-                                                            className="w-8 h-8 rounded-full border-2 object-cover border-slate-100 dark:border-[#020617] bg-white dark:bg-slate-800"
+                                                            className="w-6 h-6 rounded-full border object-cover border-slate-100 dark:border-[#020617] bg-white dark:bg-slate-800"
                                                         />
                                                     );
                                                 })}
                                             </div>
-                                            <p className="text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-tight tracking-wider">
+                                            <p className="flex-1 text-[7px] sm:text-[8px] font-bold text-slate-500 dark:text-white/50 uppercase leading-none tracking-tight">
                                                 {t('viral_funnel.deployed_partners', { count: partnersCount })}
                                             </p>
                                         </div>

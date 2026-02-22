@@ -46,11 +46,11 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 <div className="flex items-center justify-between gap-4">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-2 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
+                        className="group flex items-center gap-2 rounded-xl border border-(--color-border-glass) bg-(--color-bg-glass) px-3 py-1.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0"
                         aria-label="Open menu"
                     >
-                        <Menu className="text-(--color-text-primary) h-5 w-5 transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-(--color-text-primary)">
+                        <Menu className="text-(--color-text-primary) h-4 w-4 transition-transform group-hover:scale-110" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.15em] text-(--color-text-primary)">
                             {t('common.menu')}
                         </span>
                     </button>
@@ -59,15 +59,15 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <motion.button
                         animate={controls}
-                        className="flex items-center gap-3 rounded-2xl border border-(--color-border-glass) bg-(--color-bg-glass) px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 relative overflow-hidden group"
+                        className="flex items-center gap-2.5 rounded-xl border border-(--color-border-glass) bg-(--color-bg-glass) px-3 py-1.5 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 relative overflow-hidden group"
                         aria-label="User stats"
                     >
                         {/* Shimmer effect on hover/animate */}
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
 
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 opacity-70">{t('common.lvl')}</span>
-                            <span className="text-sm font-black text-(--color-text-primary) leading-none">
+                        <div className="flex items-center gap-1">
+                            <span className="text-[9px] font-black uppercase tracking-wider text-blue-600 dark:text-blue-400 opacity-70">{t('common.lvl')}</span>
+                            <span className="text-xs font-black text-(--color-text-primary) leading-none">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
@@ -80,11 +80,11 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             )}
                         </div>
                         <div className="h-3 w-px bg-(--color-border-glass)" />
-                        <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-black text-(--color-text-primary) leading-none tabular-nums">
+                        <div className="flex items-center gap-1">
+                            <span className="text-[11px] font-black text-(--color-text-primary) leading-none tabular-nums">
                                 {Math.floor(user?.xp ?? 0)}
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 animate-pulse">XP</span>
+                            <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 animate-pulse">XP</span>
                         </div>
                     </motion.button>
                 </div>

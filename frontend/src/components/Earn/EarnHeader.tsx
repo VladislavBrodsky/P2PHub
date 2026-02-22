@@ -23,17 +23,17 @@ export const EarnHeader = () => {
     const badgeColor = rank.badgeColor;
 
     return (
-        <section className="relative overflow-hidden rounded-[2rem] p-px shadow-2xl z-30">
+        <section className="relative overflow-hidden rounded-2xl p-px shadow-xl z-30">
             {/* Outer border gradient ring */}
             <div
-                className="absolute inset-0 rounded-[2rem] opacity-70"
+                className="absolute inset-0 rounded-2xl opacity-70"
                 style={{
                     background: `linear-gradient(135deg, ${badgeColor}60 0%, transparent 50%, ${badgeColor}40 100%)`,
                 }}
             />
 
             {/* Card body */}
-            <div className="relative rounded-[1.95rem] bg-(--color-bg-glass) backdrop-blur-3xl overflow-hidden border border-(--color-border-glass)">
+            <div className="relative rounded-[0.95rem] bg-(--color-bg-glass) backdrop-blur-3xl overflow-hidden border border-(--color-border-glass)">
 
                 {/* ── Ambient glows ── */}
                 <div
@@ -57,9 +57,9 @@ export const EarnHeader = () => {
                 <div className="relative z-10 flex items-center gap-4 p-4">
 
                     {/* ────────── LEFT: Radial Ring + Rank Badge ────────── */}
-                    <div className="flex flex-col items-center shrink-0 gap-2">
+                    <div className="flex flex-col items-center shrink-0 gap-1.5">
                         {/* Ring - Responsive size */}
-                        <div className="relative w-[80px] h-[80px] sm:w-[96px] sm:h-[96px]">
+                        <div className="relative w-[72px] h-[72px] sm:w-[86px] sm:h-[86px]">
                             <svg
                                 className="absolute inset-0 w-full h-full -rotate-90"
                                 viewBox="0 0 100 100"
@@ -111,7 +111,7 @@ export const EarnHeader = () => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-2xl sm:text-[1.8rem] font-black text-(--color-text-primary) leading-none tracking-tight"
+                                    className="text-xl sm:text-[1.5rem] font-black text-(--color-text-primary) leading-none tracking-tight"
                                 >
                                     {level}
                                 </motion.span>
@@ -198,7 +198,7 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[64px] sm:min-h-[80px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
                             >
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
@@ -210,10 +210,10 @@ export const EarnHeader = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1 min-w-0">
-                                    <span className="text-[16px] sm:text-2xl font-black text-(--color-text-primary) leading-none tabular-nums">
+                                    <span className="text-[14px] sm:text-xl font-black text-(--color-text-primary) leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
-                                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500/60 mb-0.5 shrink-0" />
+                                    <TrendingUp className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500/60 mb-0.5 shrink-0" />
                                 </div>
                                 {/* Corner glow */}
                                 <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
@@ -225,7 +225,7 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-4 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[64px] sm:min-h-[80px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-(--input-bg) border-(--input-border) flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
                             >
                                 <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
                                     <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
@@ -237,7 +237,7 @@ export const EarnHeader = () => {
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
-                                    <span className="text-[16px] sm:text-2xl font-black leading-none tabular-nums text-(--color-text-primary)">
+                                    <span className="text-[14px] sm:text-xl font-black leading-none tabular-nums text-(--color-text-primary)">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
                                     <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5 shrink-0"

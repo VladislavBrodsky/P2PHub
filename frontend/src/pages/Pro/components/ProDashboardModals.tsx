@@ -666,17 +666,17 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.facebook} alt="Facebook" className="w-6 h-6 object-contain" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Facebook Groups & Pages</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Automate posting to FB communities.</p>
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.facebook.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.facebook.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_facebook'); }} className="text-[8px] text-blue-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_facebook'); }} className="text-[8px] text-blue-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.facebook.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">PAGE ACCESS TOKEN</label>
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.facebook.placeholder')}</label>
                                                             <textarea
                                                                 value={facebookToken}
                                                                 onChange={(e) => setFacebookToken(e.target.value)}
-                                                                placeholder="Enter Page/Community Access Token"
+                                                                placeholder={t('pro_dashboard.setup.facebook.placeholder')}
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                             />
@@ -695,17 +695,17 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.discord} alt="Discord" className="w-6 h-6 object-contain" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Discord Broadcaster</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Seamless bridging to your Discord servers.</p>
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.discord.title')}</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.discord.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_discord'); }} className="text-[8px] text-[#5865F2] font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_discord'); }} className="text-[8px] text-[#5865F2] font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.discord.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">CHANNEL WEBHOOK URL</label>
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.discord.placeholder')}</label>
                                                             <textarea
                                                                 value={discordToken}
                                                                 onChange={(e) => setDiscordToken(e.target.value)}
-                                                                placeholder="https://discord.com/api/webhooks/..."
+                                                                placeholder={t('pro_dashboard.setup.discord.placeholder')}
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                             />
@@ -1050,7 +1050,9 @@ export const ProDashboardModals = ({
                                                         showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.title') :
                                                             showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.title') :
                                                                 showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.title') :
-                                                                    t('pro_dashboard.academy.viral_assets.title')}
+                                                                    showManual === 'setup_facebook' ? t('pro_dashboard.setup.facebook_manual.title') :
+                                                                        showManual === 'setup_discord' ? t('pro_dashboard.setup.discord_manual.title') :
+                                                                            t('pro_dashboard.academy.viral_assets.title')}
                                         </h3>
                                         <div className="flex items-center gap-2 mt-1">
                                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
@@ -1058,7 +1060,9 @@ export const ProDashboardModals = ({
                                                 {showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.subtitle') :
                                                     showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.subtitle') :
                                                         showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.subtitle') :
-                                                            t('pro_dashboard.academy.studio_manual.subtitle')}
+                                                            showManual === 'setup_facebook' ? t('pro_dashboard.setup.facebook_manual.subtitle') :
+                                                                showManual === 'setup_discord' ? t('pro_dashboard.setup.discord_manual.subtitle') :
+                                                                    t('pro_dashboard.academy.studio_manual.subtitle')}
                                             </p>
                                         </div>
                                     </div>
@@ -1072,14 +1076,16 @@ export const ProDashboardModals = ({
                             </div>
 
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6 relative z-10">
-                                {['studio', 'setup_x', 'setup_tg', 'setup_linkedin', 'setup_pinterest', 'setup_threads'].includes(showManual || '') ? (
+                                {['studio', 'setup_x', 'setup_tg', 'setup_linkedin', 'setup_pinterest', 'setup_threads', 'setup_facebook', 'setup_discord'].includes(showManual || '') ? (
                                     (() => {
                                         const key = showManual === 'studio' ? 'pro_dashboard.academy.studio_manual.steps' :
                                             showManual === 'setup_x' ? 'pro_dashboard.setup.x_manual.steps' :
                                                 showManual === 'setup_tg' ? 'pro_dashboard.setup.tg_manual.steps' :
                                                     showManual === 'setup_linkedin' ? 'pro_dashboard.setup.linkedin_manual.steps' :
                                                         showManual === 'setup_pinterest' ? 'pro_dashboard.setup.pinterest_manual.steps' :
-                                                            'pro_dashboard.setup.threads_manual.steps';
+                                                            showManual === 'setup_threads' ? 'pro_dashboard.setup.threads_manual.steps' :
+                                                                showManual === 'setup_facebook' ? 'pro_dashboard.setup.facebook_manual.steps' :
+                                                                    'pro_dashboard.setup.discord_manual.steps';
                                         const steps = t(key, { returnObjects: true });
                                         if (Array.isArray(steps)) {
                                             return steps.map((step: any, i: number) => (

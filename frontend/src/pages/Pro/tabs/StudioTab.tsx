@@ -565,18 +565,18 @@ export const StudioTab = ({
                                     scale: externalStep === s ? 1.15 : 1,
                                     backgroundColor: externalStep === s ? 'rgb(255, 255, 255)' : externalStep > s ? 'rgb(16, 185, 129)' : 'rgb(241, 245, 249)'
                                 }}
-                                className={`w-8 h-8 rounded-2xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
+                                className={`w-7 h-7 rounded-xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
                                     ? 'vibing-crystal-purple-animated text-white ring-4 ring-purple-500/5'
                                     : externalStep > s
                                         ? 'bg-emerald-500 text-white'
                                         : 'bg-slate-50 dark:bg-slate-900 text-slate-400 dark:text-slate-700 border border-slate-200 dark:border-white/10'
                                     }`}
                             >
-                                {externalStep > s ? <CheckCircle2 size={14} /> : (
+                                {externalStep > s ? <CheckCircle2 size={13} /> : (
                                     <span className={externalStep === s ? 'animate-pulse' : ''}>{s}</span>
                                 )}
                             </motion.div>
-                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] mt-2 transition-colors duration-500 ${externalStep === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
+                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${externalStep === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
                                 }`}>
                                 {s === 1 ? 'Frame' : s === 2 ? 'Synthes' : 'Deploy'}
                             </span>
@@ -593,17 +593,17 @@ export const StudioTab = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     className="space-y-6"
                 >
-                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-8 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-purple-500/20 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
-                        <div className="flex items-center justify-between mb-5 sm:mb-7 relative z-10">
+                        <div className="flex items-center justify-between mb-4 sm:mb-5 relative z-10">
                             <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl vibing-crystal-purple-animated flex items-center justify-center shrink-0 shadow-xl shadow-purple-500/20">
-                                    <Terminal size={18} className="text-white" />
+                                <div className="w-8 h-8 rounded-xl vibing-crystal-purple-animated flex items-center justify-center shrink-0 shadow-xl shadow-purple-500/20">
+                                    <Terminal size={16} className="text-white" />
                                 </div>
                                 <div>
-                                    <h4 className="text-[13px] sm:text-[15px] font-bold text-slate-900 dark:text-white leading-none mb-1.5">
+                                    <h4 className="text-[11px] sm:text-[13px] font-bold text-slate-900 dark:text-white leading-none mb-1">
                                         {t('pro_dashboard.studio.matrix_title')}
                                     </h4>
                                     <div className="flex items-center gap-1.5">
@@ -752,11 +752,11 @@ export const StudioTab = ({
                                                         value={personalLink}
                                                         onChange={(e) => setPersonalLink(e.target.value)}
                                                         placeholder="https://t.me/pintopaybot?start=..."
-                                                        className="w-full h-11 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl pl-4 pr-24 text-[11px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/5 outline-hidden transition-all shadow-inner"
+                                                        className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-[10px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/5 outline-hidden transition-all shadow-inner"
                                                     />
                                                     <button
                                                         onClick={() => handleUpdatePersonalLink(personalLink)}
-                                                        className="absolute right-1 top-1 bottom-1 px-4 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-[9px] font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
+                                                        className="absolute right-1 top-1 bottom-1 px-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md text-[8px] font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
                                                     >
                                                         {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common.save', 'Save')}
                                                     </button>
@@ -818,7 +818,7 @@ export const StudioTab = ({
                             <button
                                 onClick={() => { selection(); setExternalStep(2); }}
                                 disabled={!postType || !audience}
-                                className="w-full h-14 vibing-crystal-purple-animated rounded-[1.5rem] font-black text-white text-[12px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
+                                className="w-full h-11 vibing-crystal-purple-animated rounded-xl font-black text-white text-[11px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
                             >
                                 <Sparkles size={16} className="animate-pulse" />
                                 {t('pro_dashboard.studio.initiate_btn')}
@@ -838,11 +838,11 @@ export const StudioTab = ({
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="relative overflow-hidden rounded-[2.5rem] bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
+                    className="relative overflow-hidden rounded-[1.5rem] bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
                 >
                     <div className="circuit-decor opacity-10" />
 
-                    <div className="relative p-8 sm:p-12 text-center space-y-8">
+                    <div className="relative p-6 sm:p-10 text-center space-y-6">
                         {isGenerating ? (
                             <div className="py-4 flex flex-col items-center justify-center space-y-8">
                                 {/* Compact Premium Loader */}
@@ -872,8 +872,8 @@ export const StudioTab = ({
                                     <div className="bg-slate-50 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-5 border border-slate-200 dark:border-white/10 shadow-premium-sm">
                                         <div className="space-y-4">
                                             <div className="flex justify-between items-end">
-                                                <span className="text-[32px] font-black text-slate-900 dark:text-white leading-none tabular-nums">
-                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-lg opacity-30">%</span>
+                                                <span className="text-[28px] font-black text-slate-900 dark:text-white leading-none tabular-nums">
+                                                    {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-base opacity-30">%</span>
                                                 </span>
                                                 <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{countdown}s ETA</span>
                                             </div>
@@ -942,7 +942,7 @@ export const StudioTab = ({
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <div className="glass-panel-premium rounded-[2.5rem] border border-slate-200 dark:border-white/10 shadow-3xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
+                        <div className="glass-panel-premium rounded-[1.5rem] border border-slate-200 dark:border-white/10 shadow-3xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                             {/* Image Section */}
                             <div className="aspect-16/10 bg-slate-900 relative flex items-center justify-center overflow-hidden group/img scanning-glow">
                                 <div className="circuit-decor opacity-20" />
@@ -1096,15 +1096,15 @@ export const StudioTab = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <button
                                     onClick={() => { selection(); setShowPublishModal(true); }}
-                                    className="h-12 vibing-crystal-purple-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
+                                    className="h-10 vibing-crystal-purple-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
                                 >
-                                    {t('pro_dashboard.studio.publish_btn')} <Send size={14} className="animate-pulse" />
+                                    {t('pro_dashboard.studio.publish_btn')} <Send size={13} className="animate-pulse" />
                                 </button>
                                 <button
                                     onClick={() => { impact('light'); setShowShareModal(true); }}
-                                    className="h-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                    className="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
                                 >
-                                    {t('pro_dashboard.studio.share_btn')} <Share size={14} />
+                                    {t('pro_dashboard.studio.share_btn')} <Share size={13} />
                                 </button>
                             </div>
 
@@ -1206,7 +1206,7 @@ export const StudioTab = ({
                                                         key={platform}
                                                         onClick={() => isProPlus ? togglePublishPlatform(platform as any) : handlePublishToPlatform(platform as any)}
                                                         disabled={isPublishing || isPublished}
-                                                        className={`w-full h-14 rounded-2xl border transition-all flex items-center justify-between px-4 group relative overflow-hidden ${isPublished
+                                                        className={`w-full h-12 rounded-xl border transition-all flex items-center justify-between px-4 group relative overflow-hidden ${isPublished
                                                             ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500'
                                                             : isSelected
                                                                 ? 'bg-purple-500/10 border-purple-500/40 text-purple-600 dark:text-purple-400 shadow-inner'

@@ -439,8 +439,8 @@ export const ProDashboard = () => {
                         >
                             <Zap size={20} className="relative z-10 w-4 h-4 sm:w-5 sm:h-5" />
                         </motion.div>
-                        <div className="space-y-1">
-                            <h1 className="text-base sm:text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
+                        <div className="space-y-0.5">
+                            <h1 className="text-sm sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
                                 Viral Marketing <span className="vibing-crystal-text">Studio</span>
                             </h1>
                             <div className="flex items-center gap-1.5 px-0.5">
@@ -458,13 +458,13 @@ export const ProDashboard = () => {
 
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
-                        className="w-8 h-8 sm:w-10 sm:h-10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-xl border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
+                        className="w-7 h-7 sm:w-9 sm:h-9 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-lg border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
                     >
-                        <Settings size={14} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        <Settings size={13} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                 </div>
 
-                <div className="flex p-0.5 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-[1.25rem] border border-white/40 dark:border-white/5 shadow-premium mt-3 mx-auto max-w-[420px] w-full">
+                <div className="flex p-0.5 bg-white/40 dark:bg-slate-900/20 backdrop-blur-3xl rounded-xl border border-white/40 dark:border-white/5 shadow-premium mt-3 mx-auto max-w-[380px] w-full">
                     {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
@@ -506,12 +506,12 @@ export const ProDashboard = () => {
                                         <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px] rounded-xl" />
                                     </motion.div>
                                 )}
-                                <span className="relative z-10 flex items-center justify-center gap-1.5">
-                                    {tab === 'studio' && <Cpu size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
-                                    {tab === 'tools' && <Settings size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
-                                    {tab === 'growth' && <Users size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
-                                    {tab === 'analytics' && <BarChart3 size={14} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
-                                    <span className="text-[9px] font-black uppercase tracking-[0.12em]">{t(`pro_dashboard.tab_${tab}`)}</span>
+                                <span className="relative z-10 flex items-center justify-center gap-1">
+                                    {tab === 'studio' && <Cpu size={12} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'tools' && <Settings size={12} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'growth' && <Users size={12} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    {tab === 'analytics' && <BarChart3 size={12} className={`transition-transform duration-500 ${activeTab === tab ? 'scale-110' : ''}`} />}
+                                    <span className="text-[8.5px] font-black uppercase tracking-widest">{t(`pro_dashboard.tab_${tab}`)}</span>
                                 </span>
                             </button>
                         );
@@ -529,11 +529,11 @@ export const ProDashboard = () => {
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-8 rounded-[2rem] border border-slate-200 dark:border-white/10 shadow-2xl max-w-sm w-full relative overflow-hidden"
+                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl max-w-xs w-full relative overflow-hidden"
                             >
                                 <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                                <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-500 mx-auto mb-6 shadow-xl shadow-indigo-500/20">
-                                    <Shield size={32} className="animate-pulse" />
+                                <div className="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 mx-auto mb-5 shadow-xl shadow-indigo-500/20">
+                                    <Shield size={28} className="animate-pulse" />
                                 </div>
                                 <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
                                     {t('pro_dashboard.locked.title')}
