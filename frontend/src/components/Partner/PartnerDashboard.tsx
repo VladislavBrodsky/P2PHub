@@ -397,9 +397,8 @@ export const PartnerDashboard = () => {
                     </div>
                 </div>
             )}
-        </div >
-    </div >
-);
+        </>
+    );
 };
 
 

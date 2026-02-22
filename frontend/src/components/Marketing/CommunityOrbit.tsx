@@ -243,8 +243,8 @@ const FractalProfits = memo(() => {
                     : Math.floor(Math.random() * 55) + 5;
 
                 const angle = (Math.random() * 360) * (Math.PI / 180);
-                // #comment: Restoring elegant floating distance for profits.
-                const distance = 140 + Math.random() * 160;
+                // #comment: Tightened profit radius to prevent UI overlap in hero section.
+                const distance = 110 + Math.random() * 60;
                 const targetX = Math.cos(angle) * distance;
                 const targetY = Math.sin(angle) * distance;
 

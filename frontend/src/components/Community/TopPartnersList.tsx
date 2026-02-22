@@ -161,6 +161,6 @@ export const TopPartnersList = () => {
                     </button>
                 )
             }
-        </div >
+        </div>
     );
 };

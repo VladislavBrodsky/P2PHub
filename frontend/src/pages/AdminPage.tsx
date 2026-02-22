@@ -2247,6 +2247,6 @@ export const AdminPage = () => {
                 })()}
             </AnimatePresence>
 
-        </div >
+        </div>
     );
 };

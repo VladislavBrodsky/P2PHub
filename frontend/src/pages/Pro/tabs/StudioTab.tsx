@@ -1485,6 +1485,6 @@ export const StudioTab = ({
                     document.body
                 )
             }
-        </motion.div >
+        </motion.div>
     );
 };

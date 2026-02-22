@@ -645,6 +645,6 @@ export const ProDashboard = () => {
                 showGrowthModal={showGrowthModal}
                 setShowGrowthModal={setShowGrowthModal}
             />
-        </div >
+        </div>
     );
 };

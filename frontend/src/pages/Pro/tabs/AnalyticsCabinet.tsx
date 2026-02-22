@@ -118,9 +118,9 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
             </div>
 
             {/* Main Content Area */}
-            <div className={`relative ${!isProPlus ? 'max-h-[500px] overflow-hidden rounded-[2rem]' : ''}`}>
+            <div className={`relative ${!isProPlus ? 'max-h-[500px] overflow-hidden rounded-2xl' : ''}`}>
                 <div className={`space-y-6 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-30 select-none' : ''}`}>
-                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
@@ -217,7 +217,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                         </div>
                     </div>
 
-                    <div className="bg-white/40 dark:bg-white/5 backdrop-blur-3xl rounded-[2rem] border border-white/40 dark:border-white/10 shadow-premium overflow-hidden">
+                    <div className="bg-white/40 dark:bg-white/5 backdrop-blur-3xl rounded-2xl border border-white/40 dark:border-white/10 shadow-premium overflow-hidden">
                         <div className="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-white/50 dark:bg-white/2">
                             <div className="flex items-center gap-2">
                                 <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-500">
@@ -362,7 +362,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 text-center bg-linear-to-b from-transparent via-white/40 dark:via-slate-900/40 to-white/90 dark:to-slate-950/90 backdrop-blur-[2px] rounded-[2rem]"
+                        className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 text-center bg-linear-to-b from-transparent via-white/40 dark:via-slate-900/40 to-white/90 dark:to-slate-950/90 backdrop-blur-[2px] rounded-2xl"
                     >
                         <div className="relative mb-6">
                             <motion.div
@@ -404,7 +404,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                     </motion.div>
                 )}
             </div>
-        </div >
+        </div>
     );
 };
 

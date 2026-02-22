@@ -63,15 +63,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             )}
 
-            {/* #comment: 1. Hero Section - Spacious & Centered Layout.
-                Restoring the 400px height and tight vertical lockup. */}
-            <m.div variants={item} className="px-4">
-                <div className="relative overflow-visible mx-auto h-[360px] sm:h-[400px] mt-2 flex items-center justify-center">
+            {/* #comment: 1. Hero Section - Spacious & Centered Layout. */}
+            <m.div variants={item} className="px-4 flex flex-col items-center">
+                <div className="relative overflow-visible mx-auto h-[380px] sm:h-[440px] mt-2 flex items-center justify-center shrink-0">
                     <CommunityOrbit />
                 </div>
 
-                {/* #comment: Hero Content Section - Restored clean vertical stacking without negative margins. */}
-                <div className="text-center gap-6 px-2 flex flex-col items-center mt-4 relative z-20">
+                {/* #comment: Hero Content Section - High-impact vertical lockup */}
+                <div className="text-center gap-8 px-2 flex flex-col items-center mt-6 relative z-20 pb-12">
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (
