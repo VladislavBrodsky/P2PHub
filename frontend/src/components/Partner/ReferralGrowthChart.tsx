@@ -184,7 +184,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         <TrendingUp className="w-4 h-4 text-blue-500" />
                         {t('common.metrics.network_growth')}
                     </h3>
-                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400">
+                    <p className="text-label font-bold text-slate-500 dark:text-slate-400">
                         {t('common.metrics.partners_joined', { timeframe: t(`common.timeframes.${timeframe}`, timeframe) })} <span className="text-blue-500">{metrics.current_count}</span>
                     </p>
                 </div>
@@ -193,7 +193,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 <div className="relative">
                     <button
                         onClick={() => { selection(); setIsDropdownOpen(!isDropdownOpen); }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] font-black text-slate-900 dark:text-white transition-all active:scale-95"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-label font-black text-slate-900 dark:text-white transition-all active:scale-95"
                     >
                         {t(`common.timeframes.${timeframe}`, timeframe)}
                         <ChevronDown className={cn("w-3 h-3 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
@@ -218,7 +218,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                                 setIsDropdownOpen(false);
                                             }}
                                             className={cn(
-                                                "w-full px-2 py-1.5 text-[10px] font-bold rounded-lg transition-colors text-left flex items-center justify-between",
+                                                "w-full px-2 py-1.5 text-label font-bold rounded-lg transition-colors text-left flex items-center justify-between",
                                                 timeframe === tf
                                                     ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
                                                     : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
@@ -237,7 +237,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
 
             <div className="flex w-full relative">
                 {/* Left Y-Axis Labels */}
-                <div className="flex flex-col justify-between py-2 pr-1 h-32 text-[8px] font-bold text-slate-400 dark:text-slate-500 text-right min-w-[20px]">
+                <div className="flex flex-col justify-between py-2 pr-1 h-32 text-label font-bold text-slate-400 dark:text-slate-500 text-right min-w-[20px]">
                     <span>{maxValue.toLocaleString()}</span>
                     <span className="opacity-50">{Math.round(maxValue * 0.75).toLocaleString()}</span>
                     <span>{Math.round(maxValue * 0.50).toLocaleString()}</span>
@@ -358,7 +358,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9px] rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
+                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-label rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
                             >
                                 <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
                                     <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
@@ -383,7 +383,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                 </div>
 
                                 {chartData[hoveredIndex].joined_per_level && (
-                                    <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-[8px]">
+                                    <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-label">
                                         <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">{t('common.metrics.flow_power')}</span>
                                         <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
                                     </div>
@@ -397,7 +397,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             {/* X-Axis Labels */}
             <div className="flex justify-between mt-1 px-1">
                 {chartData.filter((_, i) => i % (timeframe === '24H' ? 4 : timeframe === '7D' ? 1 : Math.max(1, Math.floor(chartData.length / 4))) === 0).map((point, i) => (
-                    <span key={i} className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{point.date}</span>
+                    <span key={i} className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{point.date}</span>
                 ))}
             </div>
 
@@ -408,7 +408,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         <TrendingUp className="w-3 h-3" />
                     </div>
                     <div>
-                        <div className="text-[9px] text-slate-500 dark:text-slate-400 font-bold leading-tight">{t('common.metrics.growth_rate')}</div>
+                        <div className="text-label text-slate-500 dark:text-slate-400 font-bold leading-tight">{t('common.metrics.growth_rate')}</div>
                         <div className="text-xs font-black text-emerald-500">
                             {metrics.growth_pct >= 0 ? '+' : ''}{metrics.growth_pct}%
                         </div>
@@ -416,7 +416,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 </div>
                 <button
                     onClick={onReportClick}
-                    className="text-[8px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-wider flex items-center gap-1"
+                    className="text-label font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-wider flex items-center gap-1"
                 >
                     {t('common.metrics.report')} <ChevronDown className="w-3 h-3 -rotate-90" />
                 </button>

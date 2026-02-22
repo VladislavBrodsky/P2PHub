@@ -43,8 +43,12 @@
   },
   "referral": {
     "title": "Growth & Levels",
-    "members": "Members",
-    "info": "REFERRAL.INFO",
+    "subtitle": "Track your progress and grow your network.",
+    "members": "Partners",
+    "xp_progress": "XP Progress",
+    "total_xp": "Total XP",
+    "partners": "Partners",
+    "info": "Learn how the referral system works",
     "viral": {
       "hook": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀",
       "subtitle": "Create your source of passive income. $1 every minute. 📈",

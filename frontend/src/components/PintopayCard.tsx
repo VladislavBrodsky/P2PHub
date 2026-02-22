@@ -194,7 +194,7 @@ export const PintopayCard = ({
                         {/* CVV/Security Code Visual */}
                         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-center z-10">
                             <div className={`h-6 w-10 rounded-sm border ${variant === 'platinum' ? 'bg-slate-200 border-slate-300' : 'bg-white/20 border-white/10'}`} />
-                            <span className={`text-[10px] font-mono tracking-widest opacity-80 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>000 / CVV</span>
+                            <span className={`text-label font-mono tracking-widest opacity-80 ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>000 / CVV</span>
                         </div>
                     </div>
                 </motion.div>

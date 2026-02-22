@@ -63,8 +63,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             )}
 
             {/* #comment: 1. Hero Section - Spacious & Centered Layout. */}
-            <m.div variants={item} className="flex flex-col items-center pt-2">
-                <div className="relative overflow-visible mx-auto h-[380px] sm:h-[440px] flex items-center justify-center shrink-0">
+            <m.div variants={item} className="flex flex-col items-center pt-0 sm:pt-2">
+                <div className="relative overflow-visible mx-auto h-[320px] sm:h-[400px] flex items-center justify-center shrink-0">
                     <CommunityOrbit />
                 </div>
 
@@ -107,7 +107,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-tight text-center max-w-[280px] mx-auto">
+                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[300px] mx-auto">
                             {heroTitle1}
                         </h1>
                         <m.div

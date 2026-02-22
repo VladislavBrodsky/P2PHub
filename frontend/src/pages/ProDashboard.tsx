@@ -445,10 +445,10 @@ export const ProDashboard = () => {
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                 <Zap size={10} className="text-indigo-500 animate-pulse" />
-                                <span className="text-[9px] font-black text-text-primary tabular-nums leading-none tracking-tight">
+                                <span className="text-label font-black text-text-primary tabular-nums leading-none tracking-tight">
                                     {status?.pro_tokens ?? 0}
                                 </span>
-                                <span className="text-[9px] font-black text-text-secondary uppercase tracking-widest leading-none">
+                                <span className="text-label font-black text-text-secondary uppercase tracking-widest leading-none">
                                     {t('pro_dashboard.tokens_left').split(' ')[1] || 'tokens'}
                                 </span>
                             </div>

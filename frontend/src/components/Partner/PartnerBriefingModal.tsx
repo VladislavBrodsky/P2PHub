@@ -126,7 +126,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                 <h2 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
                                     {t('referral.brief.title')}
                                 </h2>
-                                <p className="text-[11px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.25em] mt-2 opacity-90">
+                                <p className="text-label font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.25em] mt-2 opacity-90">
                                     {t('referral.brief.guide')}
                                 </p>
                             </div>
@@ -173,7 +173,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                             <div className={`p-2 rounded-lg border shadow-sm transition-transform group-hover:scale-110 ${colors[section.color as keyof typeof colors]}`}>
                                                 <Icon className="w-4 h-4" />
                                             </div>
-                                            <h3 className={`text-[11px] font-black tracking-widest uppercase ${isRed ? 'text-red-600 dark:text-red-400' : 'text-slate-900 dark:text-white'
+                                            <h3 className={`text-label font-black tracking-widest uppercase ${isRed ? 'text-red-600 dark:text-red-400' : 'text-slate-900 dark:text-white'
                                                 }`}>
                                                 {section.title}
                                             </h3>
@@ -181,7 +181,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                         {section.badge && (
                                             <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-red-500/15 border border-red-500/20 backdrop-blur-sm">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                                                <span className="text-[9px] font-black uppercase tracking-wider text-red-600 dark:text-red-400">
+                                                <span className="text-label font-black uppercase tracking-wider text-red-600 dark:text-red-400">
                                                     {section.badge}
                                                 </span>
                                             </div>
@@ -191,7 +191,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                     {/* Section Content */}
                                     <div className="pl-11 pr-2">
                                         {section.content && (
-                                            <p className="text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed font-semibold">
+                                            <p className="text-caption text-slate-600 dark:text-slate-300 leading-relaxed font-semibold">
                                                 {section.content}
                                             </p>
                                         )}
@@ -222,7 +222,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                                                 <h4 className="text-label font-black uppercase tracking-wider text-red-700 dark:text-red-400 leading-tight">
                                                                     {point.title}
                                                                 </h4>
-                                                                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-normal italic opacity-80">
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 font-bold leading-normal italic opacity-80">
                                                                     {point.desc}
                                                                 </p>
                                                             </div>

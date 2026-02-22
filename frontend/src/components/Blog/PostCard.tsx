@@ -58,18 +58,18 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
             )}
             <div className="relative flex-1 min-w-0 space-y-1.5 sm:space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] sm:max-w-none">
+                    <span className="text-label font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] sm:max-w-none">
                         {t(getCategoryKey(post.category))}
                     </span>
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                        <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                        <div className="flex items-center gap-1.5 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
                             <Clock className="w-3 h-3 text-blue-500/70" />
                             <span className="whitespace-nowrap">
                                 {post.published_at ? new Date(post.published_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : ''}
                             </span>
                         </div>
                         {post.likes > 0 && (
-                            <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                            <div className="flex items-center gap-1.5 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
                                 <Heart className={`w-3 h-3 ${post.liked ? 'fill-red-500 text-red-500' : ''}`} />
                                 {post.likes}
                             </div>
@@ -77,11 +77,11 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                     </div>
                 </div>
                 <div>
-                    <h4 className="text-[14px] sm:text-[15px] font-black leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
+                    <h4 className="text-sm sm:text-body font-black leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                         {post.title}
                     </h4>
                     <p
-                        className="mt-1 text-[10px] sm:text-[11px] font-bold text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed uppercase tracking-tight opacity-80"
+                        className="mt-1 text-label sm:text-label font-bold text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed uppercase tracking-tight opacity-80"
                         dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                     />
                 </div>

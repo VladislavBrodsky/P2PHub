@@ -133,7 +133,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
 
                             <div className="space-y-2 mb-6 text-left">
                                 <div className="text-center">
-                                    <h2 className="text-[9px] font-black tracking-[0.4em] text-blue-600 dark:text-blue-400 uppercase">
+                                    <h2 className="text-label font-black tracking-[0.4em] text-blue-600 dark:text-blue-400 uppercase">
                                         {t('level100.apex_achievement')}
                                     </h2>
                                     <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
@@ -182,7 +182,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                     <Share2 className="w-3.5 h-3.5 text-white group-hover:rotate-12 transition-transform" />
                                 </button>
 
-                                <p className="text-[9px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest animate-pulse">
+                                <p className="text-label font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest animate-pulse">
                                     {t('level100.limited_slots')}
                                 </p>
                             </div>

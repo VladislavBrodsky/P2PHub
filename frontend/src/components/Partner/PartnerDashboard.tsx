@@ -140,7 +140,7 @@ export const PartnerDashboard = () => {
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-label font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
                             >
                                 {t('partner_dashboard.upgrade_pro_btn')}
                             </button>
@@ -148,7 +148,7 @@ export const PartnerDashboard = () => {
                         {user?.is_pro && user?.subscription_plan !== 'PRO_PLUS_MONTHLY' && (user?.balance || 0) >= 69 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO_PLUS'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-label font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
                             >
                                 {t('partner_dashboard.upgrade_plus_btn')}
                             </button>
@@ -197,7 +197,7 @@ export const PartnerDashboard = () => {
                                     <h3 className="text-xs font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
                                         {t('referral.brief.title')}
                                     </h3>
-                                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
+                                    <span className="text-label font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
                                         {t('referral.brief.guide')}
                                     </span>
                                 </div>
@@ -206,10 +206,10 @@ export const PartnerDashboard = () => {
                             <div className="flex items-center gap-2 shrink-0 pr-1">
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                                 <div className="flex flex-col text-right">
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
+                                    <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
                                         {t('referral.brief.read').split(' ')[0]}
                                     </span>
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
+                                    <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
                                         {t('referral.brief.read').split(' ')[1]}
                                     </span>
                                 </div>
@@ -329,7 +329,7 @@ export const PartnerDashboard = () => {
                             <span className="tracking-widest">{t('partner_dashboard.expand_btn')}</span>
                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
                         </div>
-                        <span className="text-[9px] font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">{t('partner_dashboard.expand_sub')}</span>
+                        <span className="text-label font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">{t('partner_dashboard.expand_sub')}</span>
                     </Button>
                 </div>
             </div>
@@ -574,10 +574,10 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         )}
                                     </div>
                                     <div className='flex flex-col'>
-                                        <span className="font-bold text-slate-900 dark:text-white text-[10.5px] leading-tight">
+                                        <span className="font-bold text-slate-900 dark:text-white text-label leading-tight">
                                             {formatEarningDescription(item.description)}
                                         </span>
-                                        <span className="text-[7.5px] text-slate-500 opacity-50 font-medium">
+                                        <span className="text-label text-slate-500 opacity-50 font-medium">
                                             {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                     </div>
@@ -585,7 +585,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
 
                                 <div className="flex items-center gap-2">
                                     {item.status && item.status !== 'completed' && (
-                                        <div className={`px-1 rounded text-[6px] font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                                        <div className={`px-1 rounded text-label font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
                                             ? 'bg-amber-500/20 text-amber-500'
                                             : 'bg-red-500/20 text-red-500'
                                             }`}>
@@ -596,8 +596,8 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                                             <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                                <span className="text-[5.5px] font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
-                                                <span className="text-[11px] font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
+                                                <span className="text-label font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common.lvl')}</span>
+                                                <span className="text-label font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
                                             </div>
                                         </div>
                                     )}
@@ -605,7 +605,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         <span className={`font-black ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
                                             {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                                         </span>
-                                        <span className={`text-[7.5px] font-black ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                                        <span className={`text-label font-black ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                                             {item.currency}
                                         </span>
                                     </div>

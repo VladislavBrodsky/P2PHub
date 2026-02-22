@@ -70,9 +70,11 @@
       "per_year": "$518,400 per year",
       "formula_note": "1 min × 60 × 24 × 30 = 43,200",
       "fomo_line": "Every minute you're NOT in this — someone else is earning $1 in your place.",
-      "people_joining": "people joined the $1/min strategy in the last hour",
-      "spots_left": "Elite slots left today",
-      "cta_urgency": "CLAIM YOUR SLOT NOW"
+      "people_joining": "{{count}} people joined the $1/min strategy in the last hour",
+      "spots_left": "{{count}} Elite slots left today",
+      "cta_urgency": "CLAIM YOUR SLOT NOW",
+      "target_badge": "TARGET",
+      "online_badge": "ONLINE"
     }
   },
   "income_details": {

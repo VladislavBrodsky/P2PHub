@@ -5,7 +5,7 @@ import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 
 export const EarnHeader = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['social', 'common']);
     const { user } = useUser();
 
     const level = user?.level || 1;
@@ -99,8 +99,8 @@ export const EarnHeader = () => {
 
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-text-primary opacity-40 leading-none mb-0.5">
-                                    {t('earn_header.level')}
+                                <span className="text-label font-black uppercase tracking-[0.18em] text-text-primary opacity-40 leading-none mb-0.5">
+                                    {t('common.lvl')}
                                 </span>
                                 <motion.span
                                     key={level}
@@ -129,7 +129,7 @@ export const EarnHeader = () => {
                             <div className="absolute inset-0 bg-linear-to-r from-white/20 via-white/5 to-transparent pointer-events-none" />
                             <div className="relative flex items-center gap-1">
                                 <Trophy className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/90" />
-                                <span className="text-[7px] sm:text-[7.5px] font-black uppercase tracking-[0.12em] sm:tracking-[0.14em] text-white/95 whitespace-nowrap">
+                                <span className="text-label sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.14em] text-white/95 whitespace-nowrap">
                                     {t(`ranks.${rank.name}`)}
                                 </span>
                             </div>
@@ -141,14 +141,14 @@ export const EarnHeader = () => {
 
                         {/* XP Progress header row */}
                         <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0 gap-2">
-                            <span className="text-[8px] sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
-                                {t('earn_header.xp_progress')}
+                            <span className="text-label sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
+                                {t('referral.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-[9px] sm:text-xs font-black text-text-primary transition-colors tabular-nums whitespace-nowrap"
+                                className="text-label sm:text-xs font-black text-text-primary transition-colors tabular-nums whitespace-nowrap"
                             >
                                 {Math.floor(progress.current).toLocaleString()} <span className="opacity-30">/</span> {Math.floor(progress.total).toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
@@ -201,12 +201,12 @@ export const EarnHeader = () => {
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
                                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
-                                        {t('earn_header.partners')}
+                                    <span className="text-label sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
+                                        {t('referral.partners')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1 min-w-0">
-                                    <span className="text-[14px] sm:text-xl font-black text-text-primary leading-none tabular-nums">
+                                    <span className="text-sm sm:text-xl font-black text-text-primary leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
                                     <TrendingUp className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500/60 mb-0.5 shrink-0" />
@@ -228,15 +228,15 @@ export const EarnHeader = () => {
                                         style={{ background: `${badgeColor}22` }}>
                                         <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
-                                        {t('earn_header.total_xp')}
+                                    <span className="text-label sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
+                                        {t('referral.total_xp')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
-                                    <span className="text-[14px] sm:text-xl font-black leading-none tabular-nums text-text-primary">
+                                    <span className="text-sm sm:text-xl font-black leading-none tabular-nums text-text-primary">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
-                                    <span className="text-[8px] sm:text-label font-black uppercase mb-0.5 shrink-0"
+                                    <span className="text-label sm:text-label font-black uppercase mb-0.5 shrink-0"
                                         style={{ color: `${badgeColor}cc` }}>xp</span>
                                 </div>
                                 {/* Corner glow */}

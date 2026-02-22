@@ -143,7 +143,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
                         <CountUp value={stats.total} />
                     </span>
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
+                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
                         {t('dashboard.stats.global_partners', { defaultValue: 'Global Partners' })}
                     </span>
                 </m.div>
@@ -160,7 +160,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
                         <CountUp value={stats.volume} />
                     </span>
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
+                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
                         {t('dashboard.stats.volume_shifted', { defaultValue: 'Volume Shifted' })}
                     </span>
                 </m.div>
@@ -177,7 +177,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <span className="text-xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter">
                         <CountUp value={stats.countries} />
                     </span>
-                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
+                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none opacity-80">
                         {t('dashboard.stats.countries_active', { defaultValue: 'Countries Active' })}
                     </span>
                 </m.div>
@@ -222,8 +222,12 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         <Zap size={7} className="animate-[pulse-glow_1.5s_infinite]" />
                     </div>
                 </div>
-                <p className="text-[11px] font-bold text-slate-600 dark:text-slate-400 relative z-10 leading-tight">
-                    <Trans i18nKey="dashboard.stats.recent_join" ns="dashboard" values={{ count: stats.lastHourCount }}>
+                <p className="text-label font-bold text-slate-600 dark:text-slate-400 relative z-10 leading-tight">
+                    <Trans
+                        i18nKey="dashboard.stats.recent_join"
+                        ns="dashboard"
+                        values={{ count: stats.lastHourCount }}
+                    >
                         <span className="text-slate-900 dark:text-white font-black">
                             +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
                         </span> joined the movement in the last 60m

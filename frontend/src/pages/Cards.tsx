@@ -122,13 +122,13 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         <div className="flex items-center gap-2 overflow-hidden">
                             <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
                                 <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
-                                <span className="text-[11px] font-black text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
+                                <span className="text-label font-black text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
 
                             <div className="text-left min-w-0">
-                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] wrap-break-word">
+                                <p className="text-label font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] wrap-break-word">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
@@ -136,7 +136,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
 
                         <div className="bg-white dark:bg-slate-900 px-3.5 py-2 rounded-[1rem] border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 active:bg-slate-50 dark:active:bg-slate-950 transition-colors">
                             <Apple size={16} strokeWidth={0} className="fill-slate-900 dark:fill-white" />
-                            <span className="text-[13px] font-extrabold text-slate-900 dark:text-white">Pay</span>
+                            <span className="text-caption font-extrabold text-slate-900 dark:text-white">Pay</span>
                         </div>
                     </div>
 

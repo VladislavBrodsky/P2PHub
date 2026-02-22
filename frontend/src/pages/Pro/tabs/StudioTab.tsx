@@ -629,7 +629,7 @@ export const StudioTab = ({
                                     <span className={externalStep === s ? 'animate-pulse' : ''}>{s}</span>
                                 )}
                             </motion.div>
-                            <span className={`text-[7px] font-black uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${externalStep === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
+                            <span className={`text-label font-black uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${externalStep === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
                                 }`}>
                                 {s === 1 ? 'Frame' : s === 2 ? 'Synthes' : 'Deploy'}
                             </span>
@@ -656,12 +656,12 @@ export const StudioTab = ({
                                     <Terminal size={16} className="text-white" />
                                 </div>
                                 <div>
-                                    <h4 className="text-[11px] sm:text-[13px] font-bold text-slate-900 dark:text-white leading-none mb-1">
+                                    <h4 className="text-label sm:text-caption font-bold text-slate-900 dark:text-white leading-none mb-1">
                                         {t('pro_dashboard.studio.matrix_title')}
                                     </h4>
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-[9px] font-medium text-slate-400 leading-none">
+                                        <span className="text-label font-medium text-slate-400 leading-none">
                                             {t('pro_dashboard.studio.matrix_subtitle')}
                                         </span>
                                     </div>
@@ -735,9 +735,9 @@ export const StudioTab = ({
                                             <Users size={24} className="text-white" />
                                         </div>
                                         <div>
-                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 flex items-center gap-2">
+                                            <h4 className="text-caption font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 flex items-center gap-2">
                                                 {t('pro_dashboard.studio.partners_strategy.title')}
-                                                <span className="px-1.5 py-0.5 bg-purple-500 rounded text-[7px] text-white">
+                                                <span className="px-1.5 py-0.5 bg-purple-500 rounded text-label text-white">
                                                     {t('pro_dashboard.studio.partners_strategy.mode')}
                                                 </span>
                                             </h4>
@@ -766,10 +766,10 @@ export const StudioTab = ({
                                                 <LinkIcon size={16} />
                                             </div>
                                             <div>
-                                                <h4 className="text-[12px] font-bold text-slate-900 dark:text-white">
+                                                <h4 className="text-caption font-bold text-slate-900 dark:text-white">
                                                     {t('pro_dashboard.studio.add_personal_link')}
                                                 </h4>
-                                                <p className="text-[9px] font-medium text-slate-400 leading-tight mt-0.5">
+                                                <p className="text-label font-medium text-slate-400 leading-tight mt-0.5">
                                                     {t('pro_dashboard.studio.personal_link_subtitle')}
                                                 </p>
                                             </div>
@@ -809,7 +809,7 @@ export const StudioTab = ({
                                                     />
                                                     <button
                                                         onClick={() => handleUpdatePersonalLink(personalLink)}
-                                                        className="absolute right-1 top-1 bottom-1 px-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md text-[8px] font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
+                                                        className="absolute right-1 top-1 bottom-1 px-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md text-label font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
                                                     >
                                                         {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common.save', 'Save')}
                                                     </button>
@@ -817,7 +817,7 @@ export const StudioTab = ({
 
                                                 <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
                                                     <Info size={12} className="text-amber-500 shrink-0" />
-                                                    <p className="text-[9px] font-medium text-slate-600 dark:text-slate-400 leading-tight">
+                                                    <p className="text-label font-medium text-slate-600 dark:text-slate-400 leading-tight">
                                                         {t('pro_dashboard.studio.personal_link_warning')} <span className="font-bold text-purple-500 break-all">https://t.me/pintopaybot?start=...</span>
                                                     </p>
                                                 </div>
@@ -871,14 +871,14 @@ export const StudioTab = ({
                             <button
                                 onClick={() => { selection(); setExternalStep(2); }}
                                 disabled={!postType || !audience}
-                                className="w-full h-11 vibing-crystal-purple-animated rounded-xl font-black text-white text-[11px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
+                                className="w-full h-11 vibing-crystal-purple-animated rounded-xl font-black text-white text-label uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 disabled:grayscale sm:hidden"
                             >
                                 <Sparkles size={16} className="animate-pulse" />
                                 {t('pro_dashboard.studio.initiate_btn')}
                                 <ChevronRight size={16} />
                             </button>
 
-                            <p className="text-[9px] font-black text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
+                            <p className="text-label font-black text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
                                 POWERED BY <a href="https://t.me/web3adopters" target="_blank" rel="noopener noreferrer" className="hover:text-purple-500 transition-colors">@web3adopters</a>
                             </p>
 
@@ -915,7 +915,7 @@ export const StudioTab = ({
                                     <div className="text-center space-y-2">
                                         <div className="inline-flex items-center gap-2 bg-purple-500/10 py-1.5 px-4 rounded-full border border-purple-500/20">
                                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
-                                            <h3 className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">
+                                            <h3 className="text-label font-black uppercase tracking-[0.2em] text-purple-500">
                                                 SYNTHESIZING VIRAL CORE
                                             </h3>
                                         </div>
@@ -928,7 +928,7 @@ export const StudioTab = ({
                                                 <span className="text-[28px] font-black text-slate-900 dark:text-white leading-none tabular-nums">
                                                     {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-base opacity-30">%</span>
                                                 </span>
-                                                <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{countdown}s ETA</span>
+                                                <span className="text-label font-black text-slate-400 uppercase tracking-widest">{countdown}s ETA</span>
                                             </div>
                                             <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden relative">
                                                 <motion.div
@@ -940,7 +940,7 @@ export const StudioTab = ({
                                         </div>
                                     </div>
 
-                                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
+                                    <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
                                         Architecting narrative resonance...
                                     </p>
                                 </div>
@@ -958,12 +958,12 @@ export const StudioTab = ({
                                     <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                                         {t('pro_dashboard.studio.ready_title')}
                                     </h3>
-                                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-purple-500">
+                                    <p className="text-label font-black uppercase tracking-[0.2em] text-purple-500">
                                         {t('pro_dashboard.studio.ready_subtitle')}
                                     </p>
                                 </div>
 
-                                <p className="text-[11px] font-medium leading-relaxed text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto">
+                                <p className="text-label font-medium leading-relaxed text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto">
                                     {t('pro_dashboard.studio.ready_p')}
                                 </p>
 
@@ -976,7 +976,7 @@ export const StudioTab = ({
                                     </button>
                                     <button
                                         onClick={() => { selection(); setExternalStep(1); }}
-                                        className="h-10 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                        className="h-10 text-label font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                     >
                                         {t('pro_dashboard.studio.back_btn')}
                                     </button>
@@ -1027,7 +1027,7 @@ export const StudioTab = ({
                                                     <div className="w-10 h-10 rounded-xl bg-black/60 backdrop-blur-md border border-purple-500/30 flex items-center justify-center">
                                                         <Sparkles size={16} className="text-purple-400 animate-pulse" />
                                                     </div>
-                                                    <span className="text-[8px] font-black uppercase tracking-widest text-white/70 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full">
+                                                    <span className="text-label font-black uppercase tracking-widest text-white/70 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full">
                                                         Rendering
                                                     </span>
                                                 </div>
@@ -1039,7 +1039,7 @@ export const StudioTab = ({
                                         <div className="w-16 h-16 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center mx-auto mb-4 animate-pulse">
                                             <ImageIcon className="w-8 h-8 text-purple-400" />
                                         </div>
-                                        <p className="text-[9px] uppercase tracking-[0.2em] text-purple-300 font-bold max-w-[200px] leading-relaxed">
+                                        <p className="text-label uppercase tracking-[0.2em] text-purple-300 font-bold max-w-[200px] leading-relaxed">
                                             {generatedResult.image_prompt}
                                         </p>
                                     </div>
@@ -1047,7 +1047,7 @@ export const StudioTab = ({
 
                                 {/* Badge */}
                                 <div className="absolute top-4 left-4 z-10">
-                                    <span className="bg-purple-500/90 backdrop-blur-md text-white text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-purple-400/30 shadow-lg">
+                                    <span className="bg-purple-500/90 backdrop-blur-md text-white text-label font-black px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-purple-400/30 shadow-lg">
                                         {t('pro_dashboard.studio.ai_generated_badge')}
                                     </span>
                                 </div>
@@ -1090,7 +1090,7 @@ export const StudioTab = ({
                                     </h3>
                                     <div className="flex items-center gap-2">
                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                                        <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Viral Synthesis Optimized</span>
+                                        <span className="text-label font-black text-slate-400 uppercase tracking-[0.2em]">Viral Synthesis Optimized</span>
                                     </div>
                                 </div>
 
@@ -1110,7 +1110,7 @@ export const StudioTab = ({
                                             <Copy size={12} />
                                         </button>
                                     </div>
-                                    <div className="text-[11px] sm:text-[12px] font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
+                                    <div className="text-label sm:text-caption font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
                                         {renderMarkdown(generatedResult.body)}
                                     </div>
                                 </div>
@@ -1118,7 +1118,7 @@ export const StudioTab = ({
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex flex-wrap gap-2">
                                         {generatedResult.hashtags?.map((tag: string, i: number) => (
-                                            <span key={i} className="px-3 py-1 rounded-full bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/10 text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">
+                                            <span key={i} className="px-3 py-1 rounded-full bg-purple-500/5 dark:bg-purple-500/10 border border-purple-500/10 text-label font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest">
                                                 #{tag.replace(/^#/, '')}
                                             </span>
                                         ))}
@@ -1141,7 +1141,7 @@ export const StudioTab = ({
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="absolute -top-3 right-0 bg-emerald-500 text-white text-[7px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg z-10 border border-white/20"
+                                    className="absolute -top-3 right-0 bg-emerald-500 text-white text-label font-black px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg z-10 border border-white/20"
                                 >
                                     <Blocks size={8} /> Omni-Channel Enabled
                                 </motion.div>
@@ -1163,13 +1163,13 @@ export const StudioTab = ({
 
                             <button
                                 onClick={handleReset}
-                                className="w-full h-11 bg-slate-100 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10 rounded-xl font-black text-[9px] uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400 hover:border-purple-500/50 transition-all flex items-center justify-center gap-2"
+                                className="w-full h-11 bg-slate-100 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10 rounded-xl font-black text-label uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400 hover:border-purple-500/50 transition-all flex items-center justify-center gap-2"
                             >
                                 <Undo2 size={14} />
                                 {t('pro_dashboard.studio.generate_new_btn', 'Generate New Post')}
                             </button>
 
-                            <p className="text-[9px] font-black text-slate-400 text-center mt-6 uppercase tracking-widest opacity-40">
+                            <p className="text-label font-black text-slate-400 text-center mt-6 uppercase tracking-widest opacity-40">
                                 POWERED BY <a href="https://t.me/web3adopters" target="_blank" rel="noopener noreferrer" className="hover:text-purple-500 transition-colors">@web3adopters</a>
                             </p>
                         </div>
@@ -1209,10 +1209,10 @@ export const StudioTab = ({
                                             <Send size={20} />
                                         </div>
                                         <div className="space-y-0.5">
-                                            <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                                            <h3 className="text-body font-black uppercase tracking-tight text-slate-900 dark:text-white">
                                                 {t('pro_dashboard.publish.title')}
                                             </h3>
-                                            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-purple-500">
+                                            <p className="text-label font-black uppercase tracking-[0.15em] text-purple-500">
                                                 {t('pro_dashboard.publish.subtitle')}
                                             </p>
                                         </div>
@@ -1286,14 +1286,14 @@ export const StudioTab = ({
                                                             </div>
                                                             <div className="text-left min-w-0">
                                                                 <div className="flex items-center gap-2">
-                                                                    <span className="block text-[11px] font-black uppercase tracking-widest leading-none mb-1 truncate">
+                                                                    <span className="block text-label font-black uppercase tracking-widest leading-none mb-1 truncate">
                                                                         {getLabel()}
                                                                     </span>
                                                                     {!isProPlus && platform !== 'telegram' && (
                                                                         <Lock size={10} className="text-slate-400" />
                                                                     )}
                                                                 </div>
-                                                                <span className="block text-[8px] font-black uppercase tracking-tighter opacity-60">
+                                                                <span className="block text-label font-black uppercase tracking-tighter opacity-60">
                                                                     {isPublished ? t('pro_dashboard.publish.platform_success') : (isProPlus ? (isSelected ? t('pro_dashboard.publish.platform_selected') : t('pro_dashboard.publish.platform_tap_select')) : t('pro_dashboard.publish.platform_tap'))}
                                                                 </span>
                                                             </div>
@@ -1337,7 +1337,7 @@ export const StudioTab = ({
                                                         <div className="mt-1 p-3 bg-sky-500/5 border border-sky-500/20 rounded-2xl space-y-2">
                                                             <div className="flex items-center gap-2 px-1">
                                                                 <Send size={10} className="text-sky-500" />
-                                                                <span className="text-[9px] font-black uppercase tracking-widest text-sky-600 dark:text-sky-400">Post to Channel</span>
+                                                                <span className="text-label font-black uppercase tracking-widest text-sky-600 dark:text-sky-400">Post to Channel</span>
                                                             </div>
                                                             <div className="grid gap-1.5">
                                                                 {allChs.map((ch: string) => {
@@ -1356,7 +1356,7 @@ export const StudioTab = ({
                                                                     );
                                                                 })}
                                                             </div>
-                                                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-1">
+                                                            <p className="text-label font-black text-slate-400 uppercase tracking-widest px-1">
                                                                 {allChs.length} channels configured — select target
                                                             </p>
                                                         </div>
@@ -1385,13 +1385,13 @@ export const StudioTab = ({
                                     {isPublishing && (
                                         <div className="flex items-center justify-center gap-2 pt-1">
                                             <Loader2 className="animate-spin text-purple-500" size={16} />
-                                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-purple-400">{t('pro_dashboard.publish.processing')}</span>
+                                            <span className="text-label font-black uppercase tracking-[0.2em] text-purple-400">{t('pro_dashboard.publish.processing')}</span>
                                         </div>
                                     )}
 
                                     <button
                                         onClick={() => setShowPublishModal(false)}
-                                        className="w-full py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                        className="w-full py-2.5 text-label font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                     >
                                         {t('pro_dashboard.studio.back_btn')}
                                     </button>
@@ -1427,10 +1427,10 @@ export const StudioTab = ({
                                             <Share size={20} />
                                         </div>
                                         <div className="space-y-0.5">
-                                            <h3 className="text-[15px] font-black uppercase tracking-tight text-slate-900 dark:text-white">
+                                            <h3 className="text-body font-black uppercase tracking-tight text-slate-900 dark:text-white">
                                                 {t('pro_dashboard.studio.share_modal.title')}
                                             </h3>
-                                            <p className="text-[9px] font-black uppercase tracking-[0.15em] text-blue-500">
+                                            <p className="text-label font-black uppercase tracking-[0.15em] text-blue-500">
                                                 {t('pro_dashboard.studio.share_modal.subtitle')}
                                             </p>
                                         </div>
@@ -1474,7 +1474,7 @@ export const StudioTab = ({
 
                                     <button
                                         onClick={() => setShowShareModal(false)}
-                                        className="w-full mt-2 py-2.5 text-[8px] font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                        className="w-full mt-2 py-2.5 text-label font-black uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                     >
                                         {t('pro_dashboard.studio.back_btn')}
                                     </button>

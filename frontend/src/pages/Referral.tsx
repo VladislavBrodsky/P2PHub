@@ -24,6 +24,7 @@ import { getApiUrl } from '../utils/api';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
+import { SectionHeader } from '../components/ui/SectionHeader';
 
 export default function ReferralPage() {
     const { t } = useTranslation(['social', 'common', 'marketing']);
@@ -349,7 +350,7 @@ export default function ReferralPage() {
                                     />
                                     <div className="absolute bottom-3 left-5 z-20 right-5">
                                         <div className="flex items-center gap-1.5 mb-1.5">
-                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-[8px] font-black text-blue-400 uppercase tracking-widest">
+                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-black text-blue-400 uppercase tracking-widest">
                                                 {t('referral.modal.limited_tier')}
                                             </span>
                                         </div>
@@ -515,9 +516,15 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <h1 className="text-display font-black mb-1 tracking-tighter text-gradient-primary text-center leading-tight">{t('referral.title')}</h1>
+            <div className="mb-0 pt-2 pb-1">
+                <SectionHeader
+                    title={t('referral.title')}
+                    description={t('referral.subtitle')}
+                    align="center"
+                />
+            </div>
 
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center mb-6">
                 <button
                     onClick={() => setShowBriefModal(true)}
                     className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"

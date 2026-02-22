@@ -57,7 +57,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-label font-black uppercase text-text-primary">{t('menu.channel')}</span>
+                            <span className="text-label font-black uppercase text-text-primary">{t('navigation.channel')}</span>
                         </a>
                         <a
                             href="https://t.me/pintopayworld"
@@ -66,7 +66,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-label font-black uppercase text-text-primary">{t('menu.chat')}</span>
+                            <span className="text-label font-black uppercase text-text-primary">{t('navigation.chat')}</span>
                         </a>
                     </div>
                 );
@@ -150,7 +150,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="w-full py-4 rounded-xl bg-btn-primary-bg text-btn-primary-text hover:bg-btn-primary-hover text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
                         >
                             <Headphones className="h-4 w-4" />
-                            {t('menu.support')}
+                            {t('navigation.support')}
                         </button>
                     </div>
                 );
@@ -162,13 +162,13 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const isAdmin = user?.username === 'uslincoln' || user?.username === 'uslincon' || user?.is_admin;
 
     const menuItems = [
-        ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('menu.admin_panel') }] : []),
-        ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: t('menu.pro_panel') }] : []),
-        { id: 'settings', icon: <Settings />, label: t('menu.settings') },
-        { id: 'blog', icon: <Newspaper />, label: t('menu.blog') },
-        { id: 'community', icon: <Users />, label: t('menu.community') },
-        { id: 'faq', icon: <HelpCircle />, label: t('menu.faq') },
-        { id: 'support', icon: <Headphones />, label: t('menu.support') },
+        ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('navigation.admin_panel') }] : []),
+        ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: t('navigation.pro_panel') }] : []),
+        { id: 'settings', icon: <Settings />, label: t('navigation.settings') },
+        { id: 'blog', icon: <Newspaper />, label: t('navigation.blog') },
+        { id: 'community', icon: <Users />, label: t('navigation.community') },
+        { id: 'faq', icon: <HelpCircle />, label: t('navigation.faq') },
+        { id: 'support', icon: <Headphones />, label: t('navigation.support') },
     ];
 
     return (

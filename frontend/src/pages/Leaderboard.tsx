@@ -91,7 +91,7 @@ export default function LeaderboardPage() {
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-emerald-500">Live Rankings</span>
+                    <span className="text-label font-black uppercase tracking-[0.25em] text-emerald-500">Live Rankings</span>
                 </div>
                 <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
                     {t('leaderboard.title')}
@@ -107,7 +107,7 @@ export default function LeaderboardPage() {
                                 setTimeframe(tf);
                                 setShowAll(false);
                             }}
-                            className={`flex-1 py-2 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
+                            className={`flex-1 py-2 text-label font-black uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
                                 ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
                                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                                 }`}
@@ -213,7 +213,7 @@ export default function LeaderboardPage() {
                                             <p className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
                                         </div>
                                         <div className="flex items-center gap-1.5 flex-wrap">
-                                            <div className="flex items-center gap-1 text-[9px] font-bold text-slate-500 dark:text-slate-400">
+                                            <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
                                                 <span>LVL {user.level}</span>
                                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                                                 <div className="flex items-center gap-1 text-blue-500/70">
@@ -230,7 +230,7 @@ export default function LeaderboardPage() {
                                 <span className="text-xs font-black text-slate-900 dark:text-white font-mono tracking-tighter">
                                     {Math.floor(user.xp).toLocaleString()}
                                 </span>
-                                <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500/80 leading-none">
+                                <span className="text-label font-black uppercase tracking-widest text-emerald-500/80 leading-none">
                                     {t('leaderboard.xp')}
                                 </span>
                             </div>

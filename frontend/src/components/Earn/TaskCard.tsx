@@ -107,12 +107,12 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
                     {/* Title & Reward */}
                     <div className="flex flex-col min-w-0">
-                        <h4 className="text-[13px] font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
+                        <h4 className="text-caption font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
                             {t(`tasks.${task.id}.title`, task.title)}
                         </h4>
                         {!isCompleted && (
                             <div className="flex items-center gap-1.5 mt-0.5">
-                                <div className={`px-1.5 py-0.5 rounded-md text-[9px] tracking-wide uppercase ${isClaimable
+                                <div className={`px-1.5 py-0.5 rounded-md text-label tracking-wide uppercase ${isClaimable
                                     ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-black'
                                     : 'xp-acid-badge'}`}>
                                     +{reward} XP
@@ -120,13 +120,13 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 {(isPro || isProPlus) && (
                                     <div className="flex items-center gap-1">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className={`text-[8px] font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} BOOST</span>
+                                        <span className={`text-label font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} BOOST</span>
                                     </div>
                                 )}
                             </div>
                         )}
                         {isCompleted && (
-                            <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
+                            <span className="text-label font-black text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
                                 <CheckCircle2 className="w-2.5 h-2.5" />
                                 {t('tasks.done', 'Done')}
                             </span>
@@ -157,7 +157,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                 <div className="px-4 pb-4 pt-0 space-y-4 border-t border-slate-100 dark:border-white/5 mt-0 relative z-10">
                     {/* Description */}
                     <div className="pt-3">
-                        <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                             {renderInline(t(`tasks.${task.id}.desc`, task.description))}
                         </p>
                     </div>
@@ -165,7 +165,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {/* Progress Bar for Referral/Action Tasks */}
                     {(task.type === 'referral' || task.type === 'action') && !isCompleted && (
                         <div className="space-y-1.5">
-                            <div className="flex justify-between items-baseline text-[9px] font-black uppercase tracking-widest px-0.5">
+                            <div className="flex justify-between items-baseline text-label font-black uppercase tracking-widest px-0.5">
                                 <span className="text-slate-400">{t('tasks.progress', 'Progress')}</span>
                                 <span className="text-slate-900 dark:text-white tracking-tighter opacity-80">
                                     {Math.min(currentProgress, task.requirement || 0)} / {task.requirement}

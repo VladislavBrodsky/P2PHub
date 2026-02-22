@@ -272,7 +272,7 @@ export const ProDashboardModals = ({
                                         </h3>
                                         <div className="flex items-center gap-1.5">
                                             <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                            <span className="text-[8px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
+                                            <span className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
                                                 {t('pro_dashboard.setup.subtitle')}
                                             </span>
                                         </div>
@@ -337,7 +337,7 @@ export const ProDashboardModals = ({
                                                 <button
                                                     key={id}
                                                     onClick={() => { selection(); setActiveProPlatform(id as any); }}
-                                                    className={`flex-1 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeProPlatform === id
+                                                    className={`flex-1 py-2 rounded-xl text-label font-black uppercase tracking-widest transition-all ${activeProPlatform === id
                                                         ? `bg-white dark:bg-white/10 shadow-sm text-${color}-500`
                                                         : 'text-slate-400'}`}
                                                 >
@@ -354,13 +354,13 @@ export const ProDashboardModals = ({
                                                         <Send size={18} className="-ml-0.5" />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Telegram Primary Node</p>
-                                                        <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Single channel on PRO. Upgrade to PRO+ for 5-channel sync.</p>
+                                                        <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Telegram Primary Node</p>
+                                                        <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Single channel on PRO. Upgrade to PRO+ for 5-channel sync.</p>
                                                     </div>
-                                                    <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="text-[8px] text-sky-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                    <button onClick={() => { selection(); setShowManual('setup_tg'); }} className="text-label text-sky-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                 </div>
                                                 <div className="space-y-1.5">
-                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.channel_id')}</label>
+                                                    <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.channel_id')}</label>
                                                     <input
                                                         type="text"
                                                         value={tgChannels[0] || ''}
@@ -369,20 +369,20 @@ export const ProDashboardModals = ({
                                                             nch[0] = e.target.value;
                                                             setTgChannels(nch);
                                                         }}
-                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                         placeholder="@your_channel_username"
                                                     />
                                                 </div>
                                                 <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-white/5">
-                                                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                    <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
                                                     <input
                                                         type="text"
                                                         value={personalLink}
                                                         onChange={(e) => setPersonalLink(e.target.value)}
-                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                        className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                         placeholder="https://t.me/pintopaybot?start=..."
                                                     />
-                                                    <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                    <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                         Auto-inserts in Studio posts to credit your network.
                                                     </p>
                                                 </div>
@@ -397,10 +397,10 @@ export const ProDashboardModals = ({
                                                         <Network size={18} />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
-                                                        <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Autonomous API integration for persistent profile presence.</p>
+                                                        <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
+                                                        <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">Autonomous API integration for persistent profile presence.</p>
                                                     </div>
-                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                    <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-label text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                 </div>
                                                 <div className="space-y-2">
                                                     {[
@@ -410,7 +410,7 @@ export const ProDashboardModals = ({
                                                         { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
                                                     ].map((field, i) => (
                                                         <div key={i} className="space-y-1">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
                                                             <input
                                                                 type={field.type || 'text'}
                                                                 value={field.value}
@@ -453,7 +453,7 @@ export const ProDashboardModals = ({
 
                                                 {/* Headline */}
                                                 <div className="space-y-1.5">
-                                                    <h4 className="text-[14px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
+                                                    <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
                                                         <Trans i18nKey="pro_dashboard.setup.teaser.title">
                                                             Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                         </Trans>
@@ -474,8 +474,8 @@ export const ProDashboardModals = ({
                                                         <div key={i} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-white/80 dark:border-white/10 flex items-center gap-2">
                                                             <feat.icon size={13} className="text-emerald-500 shrink-0" />
                                                             <div className="text-left min-w-0">
-                                                                <p className="text-[9px] font-black text-slate-900 dark:text-white uppercase leading-none truncate">{feat.label}</p>
-                                                                <p className="text-[7.5px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{feat.detail}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase leading-none truncate">{feat.label}</p>
+                                                                <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-0.5 truncate">{feat.detail}</p>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -528,13 +528,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-contain scale-110" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.multi_sync.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.multi_sync.desc')}</p>
                                                             </div>
                                                             <button
                                                                 onClick={handleTestTG}
                                                                 disabled={isTesting}
-                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 shrink-0"
+                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-label font-black uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 shrink-0"
                                                             >
                                                                 {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
                                                                 {t('pro_dashboard.setup.multi_sync.test')}
@@ -559,7 +559,7 @@ export const ProDashboardModals = ({
                                                                             className={`w-full h-10 bg-white dark:bg-black/20 border rounded-xl px-4 pr-14 text-label font-mono outline-none transition-all dark:text-white ${testSt === 'active' ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-400/10' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10'}`}
                                                                         />
                                                                         {testSt && (
-                                                                            <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-[7px] font-black uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                                            <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-label font-black uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
                                                                                 {testSt === 'active' ? '● Live' : '● Error'}
                                                                             </div>
                                                                         )}
@@ -568,15 +568,15 @@ export const ProDashboardModals = ({
                                                             })}
                                                         </div>
                                                         <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-white/5 mt-3">
-                                                            <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
                                                             <input
                                                                 type="text"
                                                                 value={personalLink}
                                                                 onChange={(e) => setPersonalLink(e.target.value)}
-                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[11px] font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                                 placeholder="https://t.me/pintopaybot?start=..."
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 Auto-inserts in Studio posts to credit your network.
                                                             </p>
                                                         </div>
@@ -591,10 +591,10 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-impact viral distribution. PRO+ supports up to 3 accounts.</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">High-impact viral distribution. PRO+ supports up to 3 accounts.</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-label text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                         </div>
                                                         <div className="space-y-2">
                                                             {[
@@ -604,7 +604,7 @@ export const ProDashboardModals = ({
                                                                 { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
                                                             ].map((field, i) => (
                                                                 <div key={i} className="space-y-1">
-                                                                    <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
+                                                                    <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
                                                                     <input
                                                                         type={field.type || 'text'}
                                                                         value={field.value}
@@ -626,13 +626,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-contain p-1" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.linkedin.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.linkedin.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_linkedin'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.linkedin.guide')}</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_linkedin'); }} className="text-label text-indigo-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.linkedin.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.linkedin.oauth_label')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.linkedin.oauth_label')}</label>
                                                             <textarea
                                                                 value={linkedinToken}
                                                                 onChange={(e) => setLinkedinToken(e.target.value)}
@@ -640,7 +640,7 @@ export const ProDashboardModals = ({
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 <Trans i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
                                                                     Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
                                                                 </Trans>
@@ -657,13 +657,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.pinterest} alt="Pinterest" className="w-full h-full object-contain p-1" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.pinterest.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.pinterest.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_pinterest'); }} className="text-[8px] text-rose-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.pinterest.guide')}</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_pinterest'); }} className="text-label text-rose-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.pinterest.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.pinterest.placeholder')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.pinterest.placeholder')}</label>
                                                             <textarea
                                                                 value={pinterestToken}
                                                                 onChange={(e) => setPinterestToken(e.target.value)}
@@ -671,7 +671,7 @@ export const ProDashboardModals = ({
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-black">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
                                                             </p>
                                                         </div>
@@ -686,13 +686,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5 dark:invert" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.threads.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.threads.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_threads'); }} className="text-[8px] text-emerald-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.threads.guide')}</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_threads'); }} className="text-label text-emerald-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.threads.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.threads.placeholder')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.threads.placeholder')}</label>
                                                             <textarea
                                                                 value={threadsToken}
                                                                 onChange={(e) => setThreadsToken(e.target.value)}
@@ -700,7 +700,7 @@ export const ProDashboardModals = ({
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-black">Meta for Developers</a>. Require Threads API product activation.
                                                             </p>
                                                         </div>
@@ -715,13 +715,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.facebook} alt="Facebook" className="w-full h-full object-contain p-1" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.facebook.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.facebook.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.facebook.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.facebook.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_facebook'); }} className="text-[8px] text-blue-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.facebook.guide')}</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_facebook'); }} className="text-label text-blue-500 font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.facebook.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.facebook.placeholder')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.facebook.placeholder')}</label>
                                                             <textarea
                                                                 value={facebookToken}
                                                                 onChange={(e) => setFacebookToken(e.target.value)}
@@ -729,7 +729,7 @@ export const ProDashboardModals = ({
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-black">Meta for Developers</a>. Select App and Generate Token.
                                                             </p>
                                                         </div>
@@ -744,13 +744,13 @@ export const ProDashboardModals = ({
                                                                 <img src={socialLogos.discord} alt="Discord" className="w-full h-full object-contain p-1" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
-                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.discord.title')}</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.discord.desc')}</p>
+                                                                <p className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.discord.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.discord.desc')}</p>
                                                             </div>
-                                                            <button onClick={() => { selection(); setShowManual('setup_discord'); }} className="text-[8px] text-[#5865F2] font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.discord.guide')}</button>
+                                                            <button onClick={() => { selection(); setShowManual('setup_discord'); }} className="text-label text-[#5865F2] font-black uppercase tracking-widest underline shrink-0">{t('pro_dashboard.setup.discord.guide')}</button>
                                                         </div>
                                                         <div className="space-y-1.5">
-                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.discord.placeholder')}</label>
+                                                            <label className="text-label font-black text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.discord.placeholder')}</label>
                                                             <textarea
                                                                 value={discordToken}
                                                                 onChange={(e) => setDiscordToken(e.target.value)}
@@ -758,7 +758,7 @@ export const ProDashboardModals = ({
                                                                 rows={3}
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                             />
-                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                            <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                                 Obtain Webhook URL via your <span className="text-[#5865F2] italic font-black">Discord Server Settings → Integrations → Webhooks</span>.
                                                             </p>
                                                         </div>
@@ -826,12 +826,12 @@ export const ProDashboardModals = ({
                                         <div className="flex items-center gap-2">
                                             <div className="flex items-center gap-1.5">
                                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
-                                                <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
+                                                <span className="text-label font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
                                                     Global Sync Enabled
                                                 </span>
                                             </div>
                                             <span className="text-slate-300 dark:text-slate-700">|</span>
-                                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest tabular-nums">
+                                            <span className="text-label font-black text-slate-400 uppercase tracking-widest tabular-nums">
                                                 {marketAudit.generated_at ? new Date(marketAudit.generated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Online'}
                                             </span>
                                         </div>
@@ -841,7 +841,7 @@ export const ProDashboardModals = ({
                                     <button
                                         onClick={() => { selection(); handleRefreshAudit(); }}
                                         disabled={isAuditing}
-                                        className="hidden sm:flex h-10 px-4 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-widest items-center gap-2 transition-all disabled:opacity-50"
+                                        className="hidden sm:flex h-10 px-4 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-label font-black uppercase tracking-widest items-center gap-2 transition-all disabled:opacity-50"
                                     >
                                         {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} className="text-indigo-500" />}
                                         {isAuditing ? 'Scanning...' : 'Update (-3)'}
@@ -883,14 +883,14 @@ export const ProDashboardModals = ({
                                                     <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
                                                     <h4 className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">Strategy Intelligence</h4>
                                                 </div>
-                                                <p className="text-[13px] sm:text-[14px] font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
+                                                <p className="text-caption sm:text-sm font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
                                                     {marketAudit.cmo_summary}
                                                 </p>
                                             </div>
 
                                             {/* Market Sentiment Stats */}
                                             <div className="p-5 bg-emerald-500/5 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/10 flex flex-col justify-center space-y-1">
-                                                <p className="text-[9px] font-black text-emerald-600/70 dark:text-emerald-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
+                                                <p className="text-label font-black text-emerald-600/70 dark:text-emerald-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
                                                 <div className="flex items-end gap-2">
                                                     <p className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{marketAudit.market_sentiment}</p>
                                                     <TrendingUp size={16} className="text-emerald-500 mb-0.5" />
@@ -899,8 +899,8 @@ export const ProDashboardModals = ({
 
                                             {/* Global Trend Shift */}
                                             <div className="p-5 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex flex-col justify-center space-y-1">
-                                                <p className="text-[9px] font-black text-amber-600/70 dark:text-amber-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
-                                                <p className="text-[11px] font-bold text-slate-900 dark:text-slate-300 leading-tight uppercase line-clamp-2">{marketAudit.global_trend_shift}</p>
+                                                <p className="text-label font-black text-amber-600/70 dark:text-amber-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
+                                                <p className="text-label font-bold text-slate-900 dark:text-slate-300 leading-tight uppercase line-clamp-2">{marketAudit.global_trend_shift}</p>
                                             </div>
                                         </div>
 
@@ -909,9 +909,9 @@ export const ProDashboardModals = ({
                                             <div className="flex items-center justify-between px-1">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-1.5 h-4 bg-purple-500 rounded-full" />
-                                                    <h4 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-widest">Global Live Tracker</h4>
+                                                    <h4 className="text-label font-black text-slate-900 dark:text-white uppercase tracking-widest">Global Live Tracker</h4>
                                                 </div>
-                                                <div className="px-2 py-0.5 bg-rose-500/10 rounded-md text-[7px] font-black text-rose-500 uppercase tracking-[0.2em] animate-pulse">
+                                                <div className="px-2 py-0.5 bg-rose-500/10 rounded-md text-label font-black text-rose-500 uppercase tracking-[0.2em] animate-pulse">
                                                     Last 180 Minutes
                                                 </div>
                                             </div>
@@ -935,12 +935,12 @@ export const ProDashboardModals = ({
 
                                                         <div className="flex-1 space-y-2.5">
                                                             <div className="flex flex-wrap items-center gap-2">
-                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-[7px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
-                                                                <span className={`px-2 py-0.5 rounded-md text-[7px] font-black uppercase tracking-[0.2em] ${news.impact === 'Massive'
+                                                                <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
+                                                                <span className={`px-2 py-0.5 rounded-md text-label font-black uppercase tracking-[0.2em] ${news.impact === 'Massive'
                                                                     ? 'bg-rose-500/10 text-rose-500'
                                                                     : 'bg-emerald-500/10 text-emerald-500'
                                                                     }`}>{news.relevance || 'High'} Relevance</span>
-                                                                {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-[7px] font-black text-amber-500 uppercase tracking-[0.2em] animate-bounce">Hot Now</span>}
+                                                                {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-label font-black text-amber-500 uppercase tracking-[0.2em] animate-bounce">Hot Now</span>}
                                                             </div>
 
                                                             <h5 className="text-body font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
@@ -955,7 +955,7 @@ export const ProDashboardModals = ({
                                                                 </div>
                                                                 <div className="p-2.5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-xl border border-indigo-500/10 flex items-center gap-2">
                                                                     <Zap size={10} className="text-amber-500 shrink-0" />
-                                                                    <p className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest line-clamp-1">
+                                                                    <p className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest line-clamp-1">
                                                                         {news.fomo_trigger || 'Action Protocol Required'}
                                                                     </p>
                                                                 </div>
@@ -977,9 +977,9 @@ export const ProDashboardModals = ({
                                                 <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
                                                     <Flame size={20} className="animate-bounce" />
                                                 </div>
-                                                <h4 className="text-[13px] font-black text-white uppercase tracking-widest">Growth Imperative</h4>
+                                                <h4 className="text-caption font-black text-white uppercase tracking-widest">Growth Imperative</h4>
                                             </div>
-                                            <p className="text-caption sm:text-[13px] font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
+                                            <p className="text-caption sm:text-caption font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
                                                 "{marketAudit.viral_motivation}"
                                             </p>
                                         </div>
@@ -996,14 +996,14 @@ export const ProDashboardModals = ({
                                     Initiate Viral Protocol <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
                                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1">
-                                    <div className="flex items-center gap-2 text-emerald-500 font-black text-[8px] uppercase tracking-[0.2em]">
+                                    <div className="flex items-center gap-2 text-emerald-500 font-black text-label uppercase tracking-[0.2em]">
                                         <CheckCircle2 size={12} />
                                         Audit Verified for 60m Dominance
                                     </div>
                                     <button
                                         onClick={() => { selection(); handleRefreshAudit(); }}
                                         disabled={isAuditing}
-                                        className="text-[8px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+                                        className="text-label font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5"
                                     >
                                         {isAuditing ? 'Syncing...' : 'Sync Global Node (-3 Tokens)'}
                                     </button>
@@ -1035,8 +1035,8 @@ export const ProDashboardModals = ({
                                 <div className="flex justify-between items-start">
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-2">
-                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-[7px] font-black text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
-                                            <span className="text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.read_time', { time: selectedArticle.readTime })}</span>
+                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-label font-black text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
+                                            <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.read_time', { time: selectedArticle.readTime })}</span>
                                         </div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">{selectedArticle.title}</h3>
                                     </div>
@@ -1054,7 +1054,7 @@ export const ProDashboardModals = ({
                                 </div>
                                 <button
                                     onClick={() => setSelectedArticle(null)}
-                                    className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-[11px] uppercase tracking-widest active:scale-95 transition-all shadow-lg"
+                                    className="w-full h-14 vibing-blue-animated rounded-2xl font-black text-white text-label uppercase tracking-widest active:scale-95 transition-all shadow-lg"
                                 >
                                     {t('pro_dashboard.academy.understand_btn')}
                                 </button>
@@ -1105,7 +1105,7 @@ export const ProDashboardModals = ({
                                         </h3>
                                         <div className="flex items-center gap-2 mt-1">
                                             <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                            <p className="text-[9px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
+                                            <p className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
                                                 {showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.subtitle') :
                                                     showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.subtitle') :
                                                         showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.subtitle') :
@@ -1144,8 +1144,8 @@ export const ProDashboardModals = ({
                                                         {(i + 1).toString().padStart(2, '0')}
                                                     </div>
                                                     <div className="space-y-1.5 pt-1">
-                                                        <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
-                                                        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{renderMarkdown(step.desc, true)}</div>
+                                                        <h4 className="text-caption font-black text-slate-900 dark:text-white uppercase tracking-tight">{step.title}</h4>
+                                                        <div className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-80">{renderMarkdown(step.desc, true)}</div>
                                                     </div>
                                                 </div>
                                             ));
@@ -1157,9 +1157,9 @@ export const ProDashboardModals = ({
                                         <div className="p-5 bg-linear-to-br from-pink-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-pink-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                             <div className="flex items-center gap-2">
                                                 <Flame size={14} className="text-pink-500" />
-                                                <h4 className="text-[11px] font-black text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
+                                                <h4 className="text-label font-black text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
                                             </div>
-                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
+                                            <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
                                             <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
                                                 {t('pro_dashboard.tools.headline.neural_desc')}
                                             </div>
@@ -1167,9 +1167,9 @@ export const ProDashboardModals = ({
                                         <div className="p-5 bg-linear-to-br from-amber-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-amber-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                             <div className="flex items-center gap-2">
                                                 <Sparkles size={14} className="text-amber-500" />
-                                                <h4 className="text-[11px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
+                                                <h4 className="text-label font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
                                             </div>
-                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
+                                            <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
                                             <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
                                                 {t('pro_dashboard.tools.bio.neural_desc')}
                                             </div>
@@ -1200,7 +1200,7 @@ export const ProDashboardModals = ({
                             <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5 relative z-10">
                                 <button
                                     onClick={() => { selection(); setShowManual(null); }}
-                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                                    className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                                 >
                                     {t('pro_dashboard.academy.understand_btn') || 'I Understand the Protocol'}
                                     <ArrowRight size={16} />
@@ -1285,7 +1285,7 @@ export const ProDashboardModals = ({
                                             <CheckCircle2 size={16} className="text-emerald-500" />
                                         </div>
                                         <h4 className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Headline</h4>
-                                        <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
                                             {headlineResult}
                                         </p>
                                         <button
@@ -1405,7 +1405,7 @@ export const ProDashboardModals = ({
                                             <CheckCircle2 size={16} className="text-emerald-500" />
                                         </div>
                                         <h4 className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Bio</h4>
-                                        <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
                                             {bioResult}
                                         </p>
                                         <button

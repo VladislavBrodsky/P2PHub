@@ -89,8 +89,8 @@
   --color-btn-secondary-hover: var(--btn-secondary-hover);
 
   /* #comment: Typography Scale - Renamed to --text-* for Tailwind v4 auto-utility mapping */
-  --text-display: 34px;
-  --text-heading: 20px;
+  --text-display: 30px;
+  --text-heading: 18px;
   --text-body: 15px;
   --text-button: 16px;
   --text-caption: 12px;

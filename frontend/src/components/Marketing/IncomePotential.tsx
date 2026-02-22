@@ -131,7 +131,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
                         <TrendingUp className="w-3.5 h-3.5 text-blue-500" />
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-blue-500">
+                        <span className="text-label font-black uppercase tracking-[0.2em] text-blue-500">
                             {t('income.badge')}
                         </span>
                     </m.div>
@@ -165,13 +165,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-label font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-label font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
@@ -215,7 +215,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 onClick={() => {
                                                     handleUnlock();
                                                 }}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-[11px] tracking-widest active:scale-[0.98] transition-all overflow-hidden"
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-11 rounded-full font-black text-label tracking-widest active:scale-[0.98] transition-all overflow-hidden"
                                             >
                                                 <Lock className="w-3.5 h-3.5 mb-0.5 text-white" />
                                                 <span className="text-white">{t('income.profit.unlock_btn')}</span>
@@ -361,13 +361,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                                         </span>
-                                        <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
+                                        <span className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
                                     </div>
 
                                     <div className="max-w-[85%] space-y-1.5">
                                         <div className="flex items-center justify-center gap-1.5">
                                             <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0" />
-                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
+                                            <span className="text-label font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
                                                 {t('income.math.subheading')}
                                             </span>
                                         </div>
@@ -405,7 +405,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 <ChevronRight className="w-3 h-3 text-slate-300 dark:text-white/20 shrink-0" />
                                             )}
                                             <span className={clsx(
-                                                'text-[11px] font-bold',
+                                                'text-label font-bold',
                                                 highlight ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-white/50'
                                             )}>
                                                 {t(`income.math.${key}`)}
@@ -413,7 +413,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
 
                                         {highlight && (
-                                            <div className="absolute -top-px -right-px bg-emerald-500 text-[6px] font-black uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
+                                            <div className="absolute -top-px -right-px bg-emerald-500 text-label font-black uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
                                                 TARGET
                                             </div>
                                         )}
@@ -427,7 +427,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     transition={{ delay: 0.5 }}
                                     className="text-center -mt-1"
                                 >
-                                    <span className="text-[9px] text-slate-400 dark:text-white/20 font-mono">{t('income.math.formula_note')}</span>
+                                    <span className="text-label text-slate-400 dark:text-white/20 font-mono">{t('income.math.formula_note')}</span>
                                 </m.div>
 
                                 {/* FOMO red bar */}
@@ -441,7 +441,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                                     </span>
-                                    <p className="text-[11px] font-bold text-rose-700 dark:text-rose-300 leading-snug">
+                                    <p className="text-label font-bold text-rose-700 dark:text-rose-300 leading-snug">
                                         {t('income.math.fomo_line')}
                                     </p>
                                 </m.div>
@@ -484,7 +484,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             {liveCount.toLocaleString()}
                                                         </m.span>
                                                     </AnimatePresence>
-                                                    <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">online</span>
+                                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">online</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -492,8 +492,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="flex flex-col items-end">
                                             <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
                                                 <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                                <span className="text-amber-600 dark:text-amber-500 font-black text-[9px] tracking-tight">
-                                                    {slotsLeft} {t('income.math.spots_left').split(' ')[0]}
+                                                <span className="text-amber-600 dark:text-amber-500 font-black text-label tracking-tight">
+                                                    {t('income.math.spots_left', { count: slotsLeft })}
                                                 </span>
                                             </div>
                                         </div>
@@ -529,8 +529,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                         <div className="mb-4">
                             <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">1.2B</div>
-                            <div className="text-[9px] font-black text-slate-500 dark:text-blue-300/80 uppercase tracking-[0.2em] mb-1">{t('income.stats.global_target')}</div>
-                            <div className="text-[9px] font-medium text-slate-400 dark:text-slate-300 leading-tight">
+                            <div className="text-label font-black text-slate-500 dark:text-blue-300/80 uppercase tracking-[0.2em] mb-1">{t('income.stats.global_target')}</div>
+                            <div className="text-label font-medium text-slate-400 dark:text-slate-300 leading-tight">
                                 {t('income.stats.scaling')}
                             </div>
                         </div>
@@ -538,7 +538,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <div className="flex items-center justify-between mt-auto">
                             <div className="flex items-center gap-1 bg-emerald-500/10 px-1.5 py-0.5 rounded-md border border-emerald-500/20">
                                 <TrendingUp className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                                <span className="text-[9px] font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
+                                <span className="text-label font-black text-emerald-700 dark:text-emerald-400 uppercase tracking-tighter whitespace-nowrap">+17% YoY</span>
                             </div>
                             <button onClick={() => setActiveModal('market')} className="text-slate-300 dark:text-white/20 hover:text-blue-400 transition-colors">
                                 <AlertCircle className="w-4 h-4" />
@@ -549,8 +549,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-2 group transition-all hover:bg-blue-500/5 shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(16,185,129,0.3)] relative overflow-hidden">
                         <DollarSign className="w-5 h-5 text-emerald-500 dark:text-emerald-400 mb-1 group-hover:scale-110 transition-transform" />
                         <div className="text-3xl font-black tabular-nums tracking-tighter text-slate-900 dark:text-white dark:drop-shadow-[0_0_15px_rgba(52,211,153,0.2)]">24/7</div>
-                        <div className="text-[9px] font-black text-slate-500 dark:text-emerald-300/80 uppercase tracking-[0.2em]">{t('income.stats.revenue')}</div>
-                        <div className="text-[9px] font-medium text-slate-400 dark:text-slate-300 leading-tight">
+                        <div className="text-label font-black text-slate-500 dark:text-emerald-300/80 uppercase tracking-[0.2em]">{t('income.stats.revenue')}</div>
+                        <div className="text-label font-medium text-slate-400 dark:text-slate-300 leading-tight">
                             {t('income.stats.dividends')}
                         </div>
                         <button onClick={() => setActiveModal('revenue')} className="absolute bottom-3 right-3 text-slate-300 dark:text-white/20 hover:text-emerald-400 transition-colors">
@@ -573,7 +573,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                                 {t('income.waiting.title')}
                             </h4>
-                            <div className="text-[11px] leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
+                            <div className="text-label leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
                                 <Trans i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
                                     <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
@@ -616,7 +616,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <m.button
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-black text-[11px] tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
+                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-black text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
                         >
                             {t('income.cta.lead')}
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
@@ -640,7 +640,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </div>
                                 <div className="text-left">
                                     <div className="text-label font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
-                                    <div className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
+                                    <div className="text-label font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
                                 </div>
                             </div>
                         </div>

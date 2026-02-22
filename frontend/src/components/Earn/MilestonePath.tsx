@@ -70,7 +70,7 @@ export const MilestonePath = () => {
         <div className="space-y-4">
             <div className="flex items-center gap-3 px-1">
                 <div className={`w-1.5 h-4 rounded-full ${color} shadow-[0_0_10px_rgba(0,0,0,0.1)]`} />
-                <span className="text-[9px] font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 whitespace-nowrap">{typeLabel}</span>
+                <span className="text-label font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 whitespace-nowrap">{typeLabel}</span>
                 <div className="h-px w-full bg-linear-to-r from-slate-200 dark:from-white/10 to-transparent" />
             </div>
 
@@ -149,12 +149,12 @@ export const MilestonePath = () => {
                             </div>
 
                             <div className="text-center space-y-0.5 sm:space-y-1 relative z-10 w-full">
-                                <span className={`text-[7px] sm:text-[8px] font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <span className={`text-label sm:text-label font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {t('common.lvl')} {item.level}
                                 </span>
-                                <h5 className={`text-label sm:text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <h5 className={`text-[11px] sm:text-caption font-black leading-tight line-clamp-3 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (
-                                        <span className="opacity-40 italic tracking-widest text-[9px] sm:text-label">LOCKED</span>
+                                        <span className="opacity-40 italic tracking-widest text-label sm:text-label">LOCKED</span>
                                     ) : (
                                         t(item.reward, { level: item.level })
                                     )}
@@ -199,11 +199,11 @@ export const MilestonePath = () => {
                             )}
                         </div>
                         <div className="flex flex-col">
-                            <h4 className={`text-[13px] font-black uppercase tracking-tight ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
+                            <h4 className={`text-caption font-black uppercase tracking-tight ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                 {t('milestones.part_label', { part: idx + 1 })}: {t(chapter.title)}
                             </h4>
                             <div className="flex items-center gap-2 mt-0.5">
-                                <span className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em]">
+                                <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em]">
                                     {t('milestones.progression_phase')}
                                 </span>
                                 {(chapter.isPartiallyComplete || chapter.isUnlocked) && (
@@ -259,14 +259,14 @@ export const MilestonePath = () => {
                                 <div className="relative z-10 flex flex-col items-center">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-5">
                                         <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
-                                        <span className="text-[9px] font-black text-white uppercase tracking-[0.25em]">{t('level100.ultimate_horizon')}</span>
+                                        <span className="text-label font-black text-white uppercase tracking-[0.25em]">{t('level100.ultimate_horizon')}</span>
                                     </div>
 
                                     <h3 className="text-2xl sm:text-3xl font-black text-white leading-[0.9] tracking-tight uppercase">
                                         {t('level100.achievements_title')}
                                     </h3>
 
-                                    <p className="text-[11px] font-bold text-blue-100/70 leading-relaxed mt-4 max-w-[240px]">
+                                    <p className="text-label font-bold text-blue-100/70 leading-relaxed mt-4 max-w-[240px]">
                                         <Trans i18nKey="level100.achievements_desc">
                                             Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
                                         </Trans>
@@ -293,7 +293,7 @@ export const MilestonePath = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                        <span className="text-[9px] font-black text-blue-200/50 uppercase tracking-widest">
+                                        <span className="text-label font-black text-blue-200/50 uppercase tracking-widest">
                                             {t('achievements_path.elite_recognition')}
                                         </span>
                                     </div>
@@ -321,7 +321,7 @@ export const MilestonePath = () => {
                                 <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
                                     {t('achievements_path.reveal_part', { index: visibleChapters + 1 })}
                                 </span>
-                                <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
+                                <span className="text-label font-bold text-slate-500 uppercase tracking-widest">
                                     {t('achievements_path.unlock_horizons')}
                                 </span>
                             </div>
@@ -469,7 +469,7 @@ export const MilestonePath = () => {
                                             <div className="w-full space-y-6">
                                                 <div className="flex items-center gap-3 px-1">
                                                     <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(79,70,229,0.8)] animate-pulse" />
-                                                    <span className="text-[11px] font-black text-indigo-500 uppercase tracking-[0.2em]">{t('achievements_path.pro_tip')}</span>
+                                                    <span className="text-label font-black text-indigo-500 uppercase tracking-[0.2em]">{t('achievements_path.pro_tip')}</span>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <button

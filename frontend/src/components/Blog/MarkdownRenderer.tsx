@@ -27,7 +27,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <h3
                         key={`h3-${index}`}
-                        className="text-[17px] font-black mt-6 mb-2.5 text-slate-900 dark:text-white leading-tight tracking-tight flex items-center gap-2"
+                        className="text-lg font-black mt-6 mb-2.5 text-slate-900 dark:text-white leading-tight tracking-tight flex items-center gap-2"
                     >
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-lg shadow-blue-500/40" />
                         <span dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^###\s+/, '')) }} />
@@ -38,7 +38,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <h2
                         key={`h2-${index}`}
-                        className="text-xl sm:text-2xl font-black mt-10 mb-5 text-slate-900 dark:text-white leading-tight tracking-tight border-l-6 border-blue-500 pl-5 py-3 bg-linear-to-r from-blue-500/10 via-blue-500/5 to-transparent rounded-r-[2rem] shadow-sm uppercase!"
+                        className="text-xl sm:text-2xl font-black mt-10 mb-5 text-slate-900 dark:text-white leading-tight tracking-tight border-l-6 border-blue-500 pl-5 py-3 bg-linear-to-r from-blue-500/10 via-blue-500/5 to-transparent rounded-r-2xl shadow-sm uppercase!"
                         dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
                     />
                 );
@@ -62,7 +62,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                     >
                         <div className="mt-2 w-2 h-2 shrink-0 rounded-full bg-blue-500/30 group-hover:bg-blue-500 transition-all duration-300 shadow-sm" />
                         <p
-                            className="text-[14px] sm:text-[15px] font-bold text-slate-600 dark:text-slate-400 group-hover:dark:text-slate-200 transition-colors leading-[1.6]"
+                            className="text-caption sm:text-body font-bold text-slate-600 dark:text-slate-400 group-hover:dark:text-slate-200 transition-colors leading-[1.6]"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^[*|-]\s+/, '')) }}
                         />
                     </div>
@@ -74,7 +74,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
                 return (
                     <blockquote
                         key={`quote-${index}`}
-                        className="my-8 p-6 sm:p-8 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 border-l-8 border-blue-500/20 italic text-[15px] sm:text-[16px] text-slate-700 dark:text-slate-300 leading-relaxed shadow-inner font-medium relative overflow-hidden"
+                        className="my-8 p-6 sm:p-8 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 border-l-8 border-blue-500/20 italic text-body sm:text-button text-slate-700 dark:text-slate-300 leading-relaxed shadow-inner font-medium relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                             <BookOpen className="w-20 h-20 rotate-12" />
@@ -92,7 +92,7 @@ export const MarkdownRenderer = memo(({ content }: MarkdownRendererProps) => {
             return (
                 <p
                     key={`p-${index}`}
-                    className="text-[14px] sm:text-[16px] font-bold text-slate-600 dark:text-slate-400 leading-[1.7] sm:leading-[1.8] tracking-tight mb-2 opacity-95"
+                    className="text-caption sm:text-button font-bold text-slate-600 dark:text-slate-400 leading-[1.7] sm:leading-[1.8] tracking-tight mb-2 opacity-95"
                     dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed) }}
                 />
             );
@@ -128,7 +128,7 @@ function processMarkdown(text: string): string {
         .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-white/10 text-blue-600 dark:text-blue-400 font-black text-[0.9em] mx-0.5">$1</code>')
 
         // Special CTA button
-        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-4 px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-[12px] font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 no-underline active:scale-95">$1</a>')
+        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-4 px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-caption font-black uppercase tracking-widest rounded-2xl transition-all shadow-xl shadow-blue-500/20 hover:shadow-blue-500/40 no-underline active:scale-95">$1</a>')
 
         // Internal blog links [text](internal:slug)
         .replace(/\[(.*?)\]\s*\(internal:(.*?)\)/g, (match, text, slug) => {

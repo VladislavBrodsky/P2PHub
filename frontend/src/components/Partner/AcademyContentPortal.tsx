@@ -116,13 +116,13 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         className="pointer-events-auto p-2 rounded-xl bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white hover:scale-105 active:scale-90 transition-all shadow-md flex items-center gap-2 group z-50"
                     >
                         <X className="w-4 h-4" />
-                        <span className="text-[9px] font-black uppercase tracking-widest pr-1 hidden sm:block">{t('common.close')}</span>
+                        <span className="text-label font-black uppercase tracking-widest pr-1 hidden sm:block">{t('common.close')}</span>
                     </button>
 
                     {/* Stage Badge - Centered specifically for better hierarchy */}
                     <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                        <span className="text-[8px] font-black text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">Academy</span>
-                        <h3 className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
+                        <span className="text-label font-black text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">Academy</span>
+                        <h3 className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
                     </div>
 
                     {/* Stats Badge */}
@@ -131,8 +131,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             <span className="text-xs font-black text-white leading-none">{user?.level || 1}</span>
                         </div>
                         <div className="flex flex-col items-end">
-                            <span className="text-[9px] font-black text-slate-900 dark:text-white leading-none">{Math.floor(user?.xp || 0)}</span>
-                            <span className="text-[6.5px] font-black text-green-500 uppercase tracking-widest">XP</span>
+                            <span className="text-label font-black text-slate-900 dark:text-white leading-none">{Math.floor(user?.xp || 0)}</span>
+                            <span className="text-label font-black text-green-500 uppercase tracking-widest">XP</span>
                         </div>
                     </div>
 
@@ -173,7 +173,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     <h2 className="text-2xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">
                                         {stage.id === 20 ? t('academy.locked.stage_20_lock_title') : t('academy.stage_locked')}
                                     </h2>
-                                    <p className="text-[14px] text-slate-500 dark:text-slate-400 font-medium max-w-[280px] leading-relaxed">
+                                    <p className="text-caption text-slate-500 dark:text-slate-400 font-medium max-w-[280px] leading-relaxed">
                                         {stage.id === 20 ? t('academy.locked.stage_20_lock_desc') : t('academy.lock_desc')}
                                     </p>
                                 </div>
@@ -181,11 +181,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 <div className="w-full p-6 rounded-[2rem] bg-linear-to-br from-amber-500/10 to-transparent border border-amber-500/20 space-y-5">
                                     <div className="flex items-center gap-3">
                                         <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
-                                        <span className="text-[11px] font-black text-amber-500 uppercase tracking-widest">{t('academy.pro_benefits')}</span>
+                                        <span className="text-label font-black text-amber-500 uppercase tracking-widest">{t('academy.pro_benefits')}</span>
                                     </div>
                                     <ul className="space-y-2 text-left">
                                         {Array.isArray(t('academy.pro_items', { returnObjects: true })) && (t('academy.pro_items', { returnObjects: true }) as string[]).map((item, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                                            <li key={i} className="flex items-center gap-3 text-label font-bold text-slate-700 dark:text-slate-300">
                                                 <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
                                                 {item}
                                             </li>
@@ -210,10 +210,10 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             <div className="space-y-10">
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-[9px] font-black text-blue-500 uppercase tracking-widest">
+                                        <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-black text-blue-500 uppercase tracking-widest">
                                             {t('academy.mastery', { stage: stage.id })}
                                         </div>
-                                        <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                        <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-black text-slate-500 uppercase tracking-widest">
                                             {category}
                                         </div>
                                     </div>
@@ -223,15 +223,15 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 </div>
 
                                 {/* Main Article Content */}
-                                <div className="space-y-7 text-slate-600 dark:text-slate-400 text-[15px] leading-relaxed font-medium">
-                                    <div className="text-[15px] text-slate-900 dark:text-white font-bold leading-snug">
+                                <div className="space-y-7 text-slate-600 dark:text-slate-400 text-body leading-relaxed font-medium">
+                                    <div className="text-body text-slate-900 dark:text-white font-bold leading-snug">
                                         {renderInline(t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') }))}
                                     </div>
 
                                     <div className="p-5 rounded-[1.5rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
                                         <div className="flex items-center justify-between relative z-10">
-                                            <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-[11px] uppercase tracking-widest">
+                                            <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-black text-label uppercase tracking-widest">
                                                 <Lightbulb className="w-4 h-4" />
                                                 {t(`academy_content.stage_${stage.id}_lesson_secret_title`, { defaultValue: t('academy.profit_secret') })}
                                             </div>
@@ -242,25 +242,25 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 <Share2 className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
-                                        <p className="text-[14px] italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
+                                        <p className="text-caption italic leading-relaxed text-slate-700 dark:text-slate-200 relative z-10 font-bold">
                                             &ldquo;{renderInline(t(`academy_content.stage_${stage.id}_lesson_secret`, { defaultValue: t('academy.profit_quote') }))}&rdquo;
                                         </p>
                                     </div>
 
                                     <div className="space-y-6">
                                         {/* Main body with full markdown support */}
-                                        <div className="text-[15px] leading-relaxed text-slate-600 dark:text-slate-400">
+                                        <div className="text-body leading-relaxed text-slate-600 dark:text-slate-400">
                                             {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_body`, { defaultValue: t('academy.growth_hacker') }))}
                                         </div>
 
                                         {/* AI Expert Section */}
                                         {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10) || t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: '' })) && (
                                             <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-3">
-                                                <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-[11px] uppercase tracking-widest">
+                                                <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-black text-label uppercase tracking-widest">
                                                     <Wand2 className="w-4 h-4" />
                                                     {t('academy.ai_expert')}
                                                 </div>
-                                                <div className="text-[13px] leading-relaxed font-medium">
+                                                <div className="text-caption leading-relaxed font-medium">
                                                     {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: t('academy.ai_desc') }))}
                                                 </div>
                                             </div>
@@ -269,18 +269,18 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         {/* Viral Rule / Marketing Trick Section */}
                                         {t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { defaultValue: '' }) && (
                                             <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-3">
-                                                <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-black text-[11px] uppercase tracking-widest">
+                                                <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-black text-label uppercase tracking-widest">
                                                     <Zap className="w-4 h-4" />
                                                     {t('academy.viral_psychology')}
                                                 </div>
-                                                <p className="text-[13px] leading-relaxed font-bold italic text-slate-800 dark:text-slate-200">
+                                                <p className="text-caption leading-relaxed font-bold italic text-slate-800 dark:text-slate-200">
                                                     &ldquo;{renderInline(t(`academy_content.stage_${stage.id}_lesson_viral_rule`))}&rdquo;
                                                 </p>
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="opacity-90 pt-4 border-t border-slate-100 dark:border-white/5 text-[14px]">
+                                    <div className="opacity-90 pt-4 border-t border-slate-100 dark:border-white/5 text-caption">
                                         {renderMarkdown(t(`academy_content.stage_${stage.id}_lesson_outro`, { defaultValue: t('academy.build_empire') }))}
                                     </div>
 
@@ -295,7 +295,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                                                 <Target className="w-4 h-4" />
                                             </div>
-                                            <h4 className="text-[13px] font-black text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
+                                            <h4 className="text-caption font-black text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
                                         </div>
 
                                         <div
@@ -309,12 +309,12 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 }`}>
                                                 {missionAccomplished ? <CheckCircle2 className="w-4 h-4 text-white" /> : <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
                                             </div>
-                                            <span className="text-[13px] font-bold leading-tight">
+                                            <span className="text-caption font-bold leading-tight">
                                                 {renderInline(t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') }))}
                                             </span>
                                         </div>
 
-                                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center pt-2">
+                                        <p className="text-label text-slate-500 font-bold uppercase tracking-widest text-center pt-2">
                                             {missionAccomplished ? t('academy.mission_ready') : t('academy.mission_pending')}
                                         </p>
                                     </motion.div>

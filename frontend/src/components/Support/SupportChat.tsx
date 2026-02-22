@@ -228,7 +228,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             href={match[2]}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`inline-flex items-center gap-2 px-3 py-2 my-1 mx-0.5 rounded-xl transition-all font-bold text-[13px] no-underline group align-middle shadow-sm ${role === 'user'
+                            className={`inline-flex items-center gap-2 px-3 py-2 my-1 mx-0.5 rounded-xl transition-all font-bold text-caption no-underline group align-middle shadow-sm ${role === 'user'
                                 ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30'
                                 : 'bg-blue-500/10 dark:bg-blue-500/20 hover:bg-blue-500/20 dark:hover:bg-blue-500/30 text-blue-600 dark:text-blue-400 border border-blue-500/20'
                                 }`}
@@ -478,7 +478,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                         {t('support.manager')}
                                                     </h3>
                                                     {(user?.level || 0) >= 5 && (
-                                                        <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-blue-500 border border-blue-500/20 shadow-sm">
+                                                        <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-label font-black uppercase tracking-widest text-blue-500 border border-blue-500/20 shadow-sm">
                                                             <BadgeCheck className="h-2.5 w-2.5" />
                                                             {t('support.priority_badge')}
                                                         </span>
@@ -503,12 +503,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <div className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <Terminal className="h-3 w-3 text-blue-400 opacity-70" />
                                         </div>
-                                        <span className="text-[8px] font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 truncate">
+                                        <span className="text-label font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 truncate">
                                             {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
                                         </span>
                                         <div className="ml-auto flex items-center gap-1">
                                             <Zap className="h-2.5 w-2.5 text-amber-400" />
-                                            <span className="text-[8px] font-black text-amber-400/80 uppercase">{user?.balance?.toFixed(2) || '0.00'}</span>
+                                            <span className="text-label font-black text-amber-400/80 uppercase">{user?.balance?.toFixed(2) || '0.00'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -542,10 +542,10 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                             <div className="absolute -inset-0.5 rounded-[inherit] bg-linear-to-br from-blue-500/10 to-indigo-500/10 opacity-50 blur-sm -z-10" />
                                         )}
 
-                                        <div className="text-[14px] leading-relaxed font-medium">
+                                        <div className="text-body leading-relaxed font-medium">
                                             {renderMessageContent(msg.content, msg.role)}
                                         </div>
-                                        <div className={`mt-1.5 flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
+                                        <div className={`mt-1.5 flex items-center gap-1.5 text-label font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>
                                             <Clock className="h-2.5 w-2.5" />
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -576,7 +576,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                     />
                                                 ))}
                                             </div>
-                                            <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 animate-pulse">
+                                            <span className="text-label font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 animate-pulse">
                                                 {typingLabel}
                                             </span>
                                         </div>
@@ -595,7 +595,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     >
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-                                            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
+                                            <p className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
                                                 {t('support.suggested_topics')}
                                             </p>
                                             <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
@@ -680,7 +680,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             </div>
 
                             <div className="mt-4 flex flex-col items-center gap-1.5 opacity-20 select-none">
-                                <p className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
+                                <p className="text-label font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
                                     {t('support.powered_by')}
                                 </p>
                                 <div className="h-[2px] w-6 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />

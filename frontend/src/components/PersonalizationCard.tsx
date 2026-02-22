@@ -132,7 +132,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                             {!isProPlus && (
                                 <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-bg-app z-20`}>
-                                    <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
+                                    <span className="text-label font-black">{user?.level || 1}</span>
                                 </div>
                             )}
 
@@ -176,14 +176,14 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     }}
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
-                                    <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('common.total')}:</span>
-                                    <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} XP</span>
+                                    <span className="text-label font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('common.total')}:</span>
+                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} XP</span>
                                 </motion.div>
-                                <span className="text-[9px] font-black text-text-primary whitespace-nowrap flex items-baseline gap-1">
+                                <span className="text-label font-black text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{xpProgress.current.toLocaleString()}</span>
                                     <span className="text-text-secondary font-medium">/</span>
                                     <span>{xpProgress.total.toLocaleString()}</span>
-                                    <span className="text-[7px] text-text-secondary uppercase ml-0.5 shrink-0">{t('common.next_lvl')}</span>
+                                    <span className="text-label text-text-secondary uppercase ml-0.5 shrink-0">{t('common.next_lvl')}</span>
                                 </span>
                             </div>
                             <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

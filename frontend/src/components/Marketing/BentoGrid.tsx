@@ -157,7 +157,7 @@ export const BentoGrid = () => {
                                             <div className="p-3 w-fit rounded-2xl bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg transition-transform group-hover:scale-110">
                                                 {step.icon}
                                             </div>
-                                            <span className={`text-[9px] font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
+                                            <span className={`text-label font-black px-2.5 py-1 rounded-full ${step.statusColor} tracking-widest`}>
                                                 {t(`evolution.steps.${step.id}.status`)}
                                             </span>
                                         </div>
@@ -176,7 +176,7 @@ export const BentoGrid = () => {
                                         </p>
 
                                         <div className="pt-2 flex justify-end opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-[9px] font-black text-blue-500 flex items-center gap-1">
+                                            <span className="text-label font-black text-blue-500 flex items-center gap-1">
                                                 {t('common.tap_to_flip')} <RotateCcw size={10} />
                                             </span>
                                         </div>
@@ -209,7 +209,7 @@ export const BentoGrid = () => {
                                                 {t(`evolution.steps.${step.id}.back_title`)}
                                             </h4>
 
-                                            <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-90 max-w-[260px] mx-auto">
+                                            <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed opacity-90 max-w-[260px] mx-auto">
                                                 {t(`evolution.steps.${step.id}.back_desc`)}
                                             </p>
                                         </div>

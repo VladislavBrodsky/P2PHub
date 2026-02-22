@@ -209,7 +209,7 @@ export const ReferralGraph = () => {
                                     />
                                 </div>
 
-                                <div className="mt-3 flex justify-between items-center text-[8px] font-black text-white/30 uppercase tracking-widest">
+                                <div className="mt-3 flex justify-between items-center text-label font-black text-white/30 uppercase tracking-widest">
                                     <span>{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
                                     <span>{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
                                 </div>
@@ -289,7 +289,7 @@ export const ReferralGraph = () => {
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
-                                            className="text-[9px] font-black text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
+                                            className="text-label font-black text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
                                         >
                                             {t('common.close', { defaultValue: 'Close' })}
                                         </button>

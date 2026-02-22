@@ -118,7 +118,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                             <div className="text-xl font-black text-white leading-none">
                                 {payload[0].value}
                             </div>
-                            <div className="text-[9px] font-black text-blue-400 uppercase tracking-widest mt-1">New Partners</div>
+                            <div className="text-label font-black text-blue-400 uppercase tracking-widest mt-1">New Partners</div>
                         </div>
                     </div>
                 </div>
@@ -542,7 +542,7 @@ export const AdminPage = () => {
                             <p className="text-slate-500 text-label font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
                                 <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
-                                <span className="text-[9px] font-black uppercase text-slate-500 dark:text-slate-300">
+                                <span className="text-label font-black uppercase text-slate-500 dark:text-slate-300">
                                     {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
                                 </span>
                             </div>
@@ -585,7 +585,7 @@ export const AdminPage = () => {
                         {mode === 'ledger' ? <BookOpen size={12} className={viewMode === 'ledger' ? 'text-emerald-500' : ''} /> : null}
                         {mode}
                         {mode === 'payments' && transactions.length > 0 && (
-                            <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-[8px]">
+                            <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-blue-500 text-white text-label">
                                 {transactions.length}
                             </span>
                         )}
@@ -639,7 +639,7 @@ export const AdminPage = () => {
                                 {notificationsHealth && (
                                     <div className="grid grid-cols-3 gap-2 py-3 border-t border-indigo-500/10 relative z-10">
                                         <div className="space-y-1">
-                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                            <div className="text-label font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
                                                 <Send size={8} /> Sent
                                             </div>
                                             <div className="text-lg font-black text-emerald-500 font-mono tracking-tighter">
@@ -647,7 +647,7 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-1 border-x border-indigo-500/10 px-3">
-                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                            <div className="text-label font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
                                                 <ShieldAlert size={8} /> Failed
                                             </div>
                                             <div className="text-lg font-black text-rose-500 font-mono tracking-tighter">
@@ -655,7 +655,7 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-1 pl-3">
-                                            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                            <div className="text-label font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
                                                 <Database size={8} /> Queued
                                             </div>
                                             <div className={`text-lg font-black font-mono tracking-tighter ${notificationsHealth.redis_queue_depth > 0 ? 'text-indigo-400' : 'text-slate-400'}`}>
@@ -714,7 +714,7 @@ export const AdminPage = () => {
                                                     >
                                                         {log.action_type}
                                                     </span>
-                                                    <span className="text-[11px] font-black text-slate-900 dark:text-slate-100 truncate flex items-center gap-1.5">
+                                                    <span className="text-label font-black text-slate-900 dark:text-slate-100 truncate flex items-center gap-1.5">
                                                         {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? log.telegram_id : <span className="text-slate-400 font-medium">CORE</span>}
                                                         {log.partner_is_pro && (
                                                             <div className="w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
@@ -748,7 +748,7 @@ export const AdminPage = () => {
                                                     <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                                                         {Object.entries(log.details).slice(0, 4).map(([key, val]) => (
                                                             <div key={key} className="flex flex-col gap-0.5">
-                                                                <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">{key.replace(/_/g, ' ')}</span>
+                                                                <span className="text-label font-black uppercase text-slate-500 tracking-widest">{key.replace(/_/g, ' ')}</span>
                                                                 <span className="text-label font-mono text-indigo-400 font-bold truncate">
                                                                     {typeof val === 'object' ? JSON.stringify(val) : String(val)}
                                                                 </span>
@@ -785,7 +785,7 @@ export const AdminPage = () => {
                                         <p className="text-label text-slate-500 font-bold uppercase">Multi-Target Communication Hub</p>
                                     </div>
                                 </div>
-                                <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">
+                                <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-label font-black text-emerald-500 uppercase tracking-widest animate-pulse">
                                     System Ready
                                 </div>
                             </div>
@@ -868,7 +868,7 @@ export const AdminPage = () => {
                                                             <div className="text-label font-black text-slate-100 uppercase tracking-widest">
                                                                 Operation #{b.id}
                                                             </div>
-                                                            <div className="text-[8px] text-slate-500 font-bold uppercase">
+                                                            <div className="text-label text-slate-500 font-bold uppercase">
                                                                 Audience: {b.audience_type}
                                                             </div>
                                                         </div>
@@ -909,10 +909,10 @@ export const AdminPage = () => {
                                     <table className="w-full text-left">
                                         <thead>
                                             <tr className="border-b border-white/5 bg-white/5">
-                                                <th className="px-6 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Date</th>
-                                                <th className="px-6 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest">Message Snapshot</th>
-                                                <th className="px-6 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-center">Outcome</th>
-                                                <th className="px-6 py-4 text-[9px] font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
+                                                <th className="px-6 py-4 text-label font-black text-slate-500 uppercase tracking-widest">Date</th>
+                                                <th className="px-6 py-4 text-label font-black text-slate-500 uppercase tracking-widest">Message Snapshot</th>
+                                                <th className="px-6 py-4 text-label font-black text-slate-500 uppercase tracking-widest text-center">Outcome</th>
+                                                <th className="px-6 py-4 text-label font-black text-slate-500 uppercase tracking-widest text-center">Status</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-white/5">
@@ -927,7 +927,7 @@ export const AdminPage = () => {
                                                             <div className="text-label font-black text-slate-300 uppercase whitespace-nowrap">
                                                                 {new Date(b.created_at).toLocaleDateString()}
                                                             </div>
-                                                            <div className="text-[8px] font-bold text-slate-500 uppercase font-mono">
+                                                            <div className="text-label font-bold text-slate-500 uppercase font-mono">
                                                                 {new Date(b.created_at).toLocaleTimeString()}
                                                             </div>
                                                         </td>
@@ -935,22 +935,22 @@ export const AdminPage = () => {
                                                             <div className="text-label font-medium text-slate-400 truncate group-hover:text-slate-200 transition-colors">
                                                                 {b.message_text}
                                                             </div>
-                                                            <div className="text-[8px] font-black text-indigo-500 uppercase tracking-tight mt-1">
+                                                            <div className="text-label font-black text-indigo-500 uppercase tracking-tight mt-1">
                                                                 Targets: {b.audience_type}
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 text-center">
-                                                            <div className="text-[11px] font-black text-slate-200 font-mono tracking-tighter">
-                                                                {b.sent_count} <span className="text-[8px] opacity-40">OK</span>
+                                                            <div className="text-label font-black text-slate-200 font-mono tracking-tighter">
+                                                                {b.sent_count} <span className="text-label opacity-40">OK</span>
                                                             </div>
                                                             {b.failed_count > 0 && (
-                                                                <div className="text-[9px] font-black text-rose-500 font-mono tracking-tighter">
-                                                                    {b.failed_count} <span className="text-[7px] opacity-60 uppercase">Err</span>
+                                                                <div className="text-label font-black text-rose-500 font-mono tracking-tighter">
+                                                                    {b.failed_count} <span className="text-label opacity-60 uppercase">Err</span>
                                                                 </div>
                                                             )}
                                                         </td>
                                                         <td className="px-6 py-4 text-center">
-                                                            <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest
+                                                            <span className={`px-2 py-0.5 rounded-lg text-label font-black uppercase tracking-widest
                                                                 ${b.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500' :
                                                                     b.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500' :
                                                                         'bg-blue-500/10 text-blue-500'}`}>
@@ -1001,19 +1001,19 @@ export const AdminPage = () => {
 
                             <div className="grid grid-cols-3 gap-4 relative z-10 pt-4 border-t border-white/10">
                                 <div>
-                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                    <div className="text-label font-black uppercase opacity-60 flex items-center gap-1">
                                         <Zap size={10} /> PRO
                                     </div>
                                     <div className="text-lg font-black">{stats?.events.total_pro}</div>
                                 </div>
                                 <div>
-                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                    <div className="text-label font-black uppercase opacity-60 flex items-center gap-1">
                                         <Users size={10} /> 24h
                                     </div>
                                     <div className="text-lg font-black">{stats?.events.active_24h}</div>
                                 </div>
                                 <div>
-                                    <div className="text-[9px] font-black uppercase opacity-60 flex items-center gap-1">
+                                    <div className="text-label font-black uppercase opacity-60 flex items-center gap-1">
                                         Revenue
                                     </div>
                                     <div className="text-lg font-black">${stats?.financials.total_revenue || 0}</div>
@@ -1024,15 +1024,15 @@ export const AdminPage = () => {
                         {/* Core KPI Grid */}
                         <div className="grid grid-cols-3 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Engagement</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Engagement</div>
                                 <div className="text-sm font-black text-blue-500">{stats?.kpis.engagement_rate}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Conv. Rate</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Conv. Rate</div>
                                 <div className="text-sm font-black text-emerald-500">{stats?.kpis.conversion_rate}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">ARPU</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">ARPU</div>
                                 <div className="text-sm font-black text-violet-500">${stats?.kpis.arpu}</div>
                             </div>
                         </div>
@@ -1041,27 +1041,27 @@ export const AdminPage = () => {
                         <div className="grid grid-cols-2 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Viral K-Factor</div>
+                                    <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Viral K-Factor</div>
                                     <div className="p-1 bg-indigo-500/10 rounded-lg text-indigo-500">
                                         <Zap size={10} />
                                     </div>
                                 </div>
                                 <div className="text-lg font-black text-indigo-500">{stats?.kpis.k_factor}</div>
-                                <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Referrals per User</div>
+                                <div className="text-label font-bold text-slate-500 uppercase">Avg Referrals per User</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ref. Participation</div>
+                                    <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Ref. Participation</div>
                                     <div className="p-1 bg-pink-500/10 rounded-lg text-pink-500">
                                         <Users size={10} />
                                     </div>
                                 </div>
                                 <div className="text-lg font-black text-pink-500">{stats?.kpis.ref_participation}%</div>
-                                <div className="text-[8px] font-bold text-slate-500 uppercase">Active referrers share</div>
+                                <div className="text-label font-bold text-slate-500 uppercase">Active referrers share</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Network Density</div>
+                                    <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Network Density</div>
                                     <div className="p-1 bg-emerald-500/10 rounded-lg text-emerald-500">
                                         <Layers size={10} />
                                     </div>
@@ -1070,26 +1070,26 @@ export const AdminPage = () => {
                                     {typeof stats?.kpis.avg_depth === 'number' ? stats.kpis.avg_depth.toFixed(2) : '1.00'}
                                     <span className="text-label opacity-40 ml-1 font-bold">Gen</span>
                                 </div>
-                                <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Generation Depth</div>
+                                <div className="text-label font-bold text-slate-500 uppercase">Avg Generation Depth</div>
                             </div>
                         </div>
 
                         {/* Retention Benchmarks Row */}
                         <div className="grid grid-cols-4 gap-3">
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
                                 <div className="text-sm font-black text-amber-500">{stats?.kpis.retention_7d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
                                 <div className={`text-sm font-black ${stats?.kpis.retention_30d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_30d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
                                 <div className={`text-sm font-black ${stats?.kpis.retention_90d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_90d || 0}%</div>
                             </div>
                             <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                                <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
+                                <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
                                 <div className={`text-sm font-black ${stats?.kpis.retention_180d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_180d || 0}%</div>
                             </div>
                         </div>
@@ -1099,17 +1099,17 @@ export const AdminPage = () => {
                             <div className="grid grid-cols-2 gap-3">
                                 <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Manual Approval Time</div>
+                                        <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Manual Approval Time</div>
                                         <div className="p-1 bg-amber-500/10 rounded-lg text-amber-500">
                                             <Clock size={10} />
                                         </div>
                                     </div>
                                     <div className="text-lg font-black text-amber-500">{stats.performance.avg_manual_approval_min} min</div>
-                                    <div className="text-[8px] font-bold text-slate-500 uppercase">Avg response efficiency</div>
+                                    <div className="text-label font-bold text-slate-500 uppercase">Avg response efficiency</div>
                                 </div>
                                 <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <div className="text-[8px] font-black uppercase text-slate-500 dark:text-slate-400">Slot Adoption (FOMO)</div>
+                                        <div className="text-label font-black uppercase text-slate-500 dark:text-slate-400">Slot Adoption (FOMO)</div>
                                         <div className="p-1 bg-blue-500/10 rounded-lg text-blue-500">
                                             <Zap size={10} />
                                         </div>
@@ -1118,7 +1118,7 @@ export const AdminPage = () => {
                                         {stats.performance.pro_slots_display}
                                         <span className="text-label text-slate-500 font-bold ml-1.5 opacity-60">/ {stats.performance.pro_slots_actual} REAL</span>
                                     </div>
-                                    <div className="text-[8px] font-bold text-slate-500 uppercase">Calculated Traction Base</div>
+                                    <div className="text-label font-bold text-slate-500 uppercase">Calculated Traction Base</div>
                                 </div>
                             </div>
                         )}
@@ -1135,11 +1135,11 @@ export const AdminPage = () => {
                                 {Object.entries(stats?.tasks || {}).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([taskId, count]) => (
                                     <div key={taskId} className="group flex flex-col gap-2">
                                         <div className="flex items-center justify-between">
-                                            <div className="text-[11px] font-black text-slate-700 dark:text-slate-100 uppercase tracking-tight">
+                                            <div className="text-label font-black text-slate-700 dark:text-slate-100 uppercase tracking-tight">
                                                 {taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                                             </div>
-                                            <div className="text-[11px] font-black text-blue-500 dark:text-blue-400">
-                                                {count} <span className="text-[9px] opacity-60 ml-0.5">COMPLETED</span>
+                                            <div className="text-label font-black text-blue-500 dark:text-blue-400">
+                                                {count} <span className="text-label opacity-60 ml-0.5">COMPLETED</span>
                                             </div>
                                         </div>
                                         <div className="h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden border border-black/5 dark:border-white/5">
@@ -1167,14 +1167,14 @@ export const AdminPage = () => {
                                 {stats?.top_partners?.map((p, idx) => (
                                     <div key={p.telegram_id} className="flex items-center justify-between group p-3 rounded-2xl hover:bg-white/5 transition-all">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-[11px] font-black text-slate-500 dark:text-slate-400 border border-black/5 dark:border-white/5">
+                                            <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-label font-black text-slate-500 dark:text-slate-400 border border-black/5 dark:border-white/5">
                                                 #{idx + 1}
                                             </div>
                                             <div>
                                                 <div className="text-xs font-black text-slate-800 dark:text-slate-100 italic transition-colors group-hover:text-blue-500">
                                                     {p.username ? `@${p.username}` : `Partner #${p.telegram_id.toString().slice(-4)}`}
                                                 </div>
-                                                <div className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
+                                                <div className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
                                                     MASTER HUB PARTNER
                                                 </div>
                                             </div>
@@ -1273,7 +1273,7 @@ export const AdminPage = () => {
                                             </div>
                                             <span className="text-label font-black uppercase text-slate-400 tracking-widest">{period}</span>
                                         </div>
-                                        <div className={`px-2 py-1 rounded-full text-[9px] font-black flex items-center gap-1 shadow-sm ${data.percent_change >= 0
+                                        <div className={`px-2 py-1 rounded-full text-label font-black flex items-center gap-1 shadow-sm ${data.percent_change >= 0
                                             ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
                                             : 'bg-red-500/10 text-red-500 ring-1 ring-red-500/20'
                                             }`}>
@@ -1285,10 +1285,10 @@ export const AdminPage = () => {
                                         <div className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
                                             {data.count}
                                         </div>
-                                        <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Acquired Units</div>
+                                        <div className="text-label font-black text-slate-400 uppercase tracking-[0.2em]">Acquired Units</div>
                                     </div>
                                     <div className="flex items-center justify-between relative z-10 pt-4 border-t border-black/5 dark:border-white/5">
-                                        <div className="text-[9px] text-slate-500 font-black uppercase tracking-widest">Previous Era</div>
+                                        <div className="text-label text-slate-500 font-black uppercase tracking-widest">Previous Era</div>
                                         <div className="text-xs font-black text-slate-700 dark:text-slate-300">{data.previous}</div>
                                     </div>
                                 </motion.div>
@@ -1326,7 +1326,7 @@ export const AdminPage = () => {
                                         {stats?.financials.net_profit}
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-[8px] font-black text-slate-500 uppercase">Gross Margin</div>
+                                        <div className="text-label font-black text-slate-500 uppercase">Gross Margin</div>
                                         <div className="text-xl font-black text-emerald-500">{stats?.financials.gross_margin}%</div>
                                     </div>
                                 </div>
@@ -1335,12 +1335,12 @@ export const AdminPage = () => {
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Paid to Referral Network (Actual)</div>
+                                    <div className="text-slate-500 text-label font-black uppercase">Paid to Referral Network (Actual)</div>
                                     <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_commissions}</div>
                                     <div className="text-label text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Referral Network Target Split (56/44)</div>
+                                    <div className="text-slate-500 text-label font-black uppercase">Referral Network Target Split (56/44)</div>
                                     <div className="text-lg font-black text-slate-400 dark:text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
                                     <div className="text-label text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
                                 </div>
@@ -1348,11 +1348,11 @@ export const AdminPage = () => {
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Gross Revenue (Total)</div>
+                                    <div className="text-slate-500 text-label font-black uppercase">Gross Revenue (Total)</div>
                                     <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_revenue}</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-500 text-[9px] font-black uppercase">Revenue USDT / TON</div>
+                                    <div className="text-slate-500 text-label font-black uppercase">Revenue USDT / TON</div>
                                     <div className="text-xs font-bold text-slate-700 dark:text-white">
                                         USDT: ${stats?.financials.total_revenue_usdt}
                                     </div>
@@ -1413,7 +1413,7 @@ export const AdminPage = () => {
                                                 <div className="text-sm font-black text-slate-900 dark:text-slate-100">
                                                     @{sale.username || sale.telegram_id}
                                                 </div>
-                                                <div className="text-[9px] font-bold text-slate-500 uppercase flex items-center gap-1">
+                                                <div className="text-label font-bold text-slate-500 uppercase flex items-center gap-1">
                                                     {new Date(sale.created_at).toLocaleDateString()} · {sale.currency}
                                                 </div>
                                             </div>
@@ -1657,7 +1657,7 @@ export const AdminPage = () => {
                                                         <div className="text-sm font-black text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">
                                                             {p.username ? `@${p.username}` : `${p.first_name || 'Partner'}`}
                                                         </div>
-                                                        <div className="text-[9px] font-bold text-slate-500 uppercase">
+                                                        <div className="text-label font-bold text-slate-500 uppercase">
                                                             ID: {p.telegram_id} {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && `· ${p.level} Lvl`}
                                                         </div>
                                                     </div>
@@ -1694,14 +1694,14 @@ export const AdminPage = () => {
                             {/* System Health Cards */}
                             <div className="grid grid-cols-2 gap-3 relative z-10">
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-2">
-                                    <div className="text-[9px] font-black text-slate-500 uppercase">DB Latency</div>
+                                    <div className="text-label font-black text-slate-500 uppercase">DB Latency</div>
                                     <div className={`text-lg font-black ${health && health.latency_ms > 200 ? 'text-amber-500' : 'text-emerald-500'}`}>
                                         {health ? `${health.latency_ms}ms` : '--'}
                                     </div>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-2">
                                     <div className="space-y-1">
-                                        <div className="text-[8px] font-black text-slate-500 uppercase">Orphaned Partners</div>
+                                        <div className="text-label font-black text-slate-500 uppercase">Orphaned Partners</div>
                                         <div className={`text-xl font-black ${stats?.events.audit?.orphaned_count === 0 ? 'text-emerald-500' : 'text-red-500'}`}>
                                             {stats?.events.audit?.orphaned_count ?? 0}
                                         </div>
@@ -1752,18 +1752,18 @@ export const AdminPage = () => {
                                             <ShieldCheck size={14} />
                                             Economy Integrity Audit
                                         </div>
-                                        <div className="text-[9px] font-bold text-slate-500">
+                                        <div className="text-label font-bold text-slate-500">
                                             {economyAudit ? (economyAudit.status === 'healthy' ? <span className="text-emerald-500">HEALTHY</span> : <span className="text-red-500">ANOMALIES</span>) : 'NOT RUN'}
                                         </div>
                                     </div>
                                     {economyAudit && (
                                         <div className="grid grid-cols-2 gap-2 pb-2">
                                             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                                <div className="text-[7px] text-slate-500 font-black uppercase">Checked</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">Checked</div>
                                                 <div className="text-xs font-black text-slate-900 dark:text-slate-100">{economyAudit.total_checked}</div>
                                             </div>
                                             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                                <div className="text-[7px] text-slate-500 font-black uppercase">Discrepancies</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">Discrepancies</div>
                                                 <div className={`text-xs font-black ${economyAudit.discrepancies_found === 0 ? 'text-emerald-500' : 'text-red-500'}`}>{economyAudit.discrepancies_found}</div>
                                             </div>
                                         </div>
@@ -1786,18 +1786,18 @@ export const AdminPage = () => {
                                             <Layers size={14} />
                                             Network Tree Integrity Audit
                                         </div>
-                                        <div className="text-[9px] font-bold text-slate-500">
+                                        <div className="text-label font-bold text-slate-500">
                                             {treeAudit ? (treeAudit.status === 'healthy' ? <span className="text-emerald-500">HEALTHY</span> : <span className="text-red-500">ANOMALIES</span>) : 'NOT RUN'}
                                         </div>
                                     </div>
                                     {treeAudit && (
                                         <div className="grid grid-cols-2 gap-2 pb-2">
                                             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                                <div className="text-[7px] text-slate-500 font-black uppercase">Checked</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">Checked</div>
                                                 <div className="text-xs font-black text-slate-900 dark:text-slate-100">{treeAudit.total_checked}</div>
                                             </div>
                                             <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                                <div className="text-[7px] text-slate-500 font-black uppercase">Anomalies</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">Anomalies</div>
                                                 <div className={`text-xs font-black ${treeAudit.anomaly_count === 0 ? 'text-emerald-500' : 'text-red-500'}`}>{treeAudit.anomaly_count}</div>
                                             </div>
                                         </div>
@@ -1820,21 +1820,21 @@ export const AdminPage = () => {
                                             <Bell size={14} />
                                             Notification System
                                         </div>
-                                        <div className="text-[9px] font-bold text-slate-500">
+                                        <div className="text-label font-bold text-slate-500">
                                             {notifStats ? ((notifStats.pending > 10 || notifStats.failed > 50) ? <span className="text-amber-500">CONGESTED</span> : <span className="text-emerald-500">HEALTHY</span>) : 'Checking...'}
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-3 gap-2">
                                         <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                            <div className="text-[7px] text-slate-500 font-black uppercase">Sent</div>
+                                            <div className="text-label text-slate-500 font-black uppercase">Sent</div>
                                             <div className="text-xs font-black text-emerald-500">{notifStats?.sent ?? 0}</div>
                                         </div>
                                         <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                            <div className="text-[7px] text-slate-500 font-black uppercase">Pending</div>
+                                            <div className="text-label text-slate-500 font-black uppercase">Pending</div>
                                             <div className="text-xs font-black text-amber-500">{notifStats?.pending ?? 0}</div>
                                         </div>
                                         <div className="p-2 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 text-center">
-                                            <div className="text-[7px] text-slate-500 font-black uppercase">Failed</div>
+                                            <div className="text-label text-slate-500 font-black uppercase">Failed</div>
                                             <div className="text-xs font-black text-red-500">{notifStats?.failed ?? 0}</div>
                                         </div>
                                     </div>
@@ -1906,16 +1906,16 @@ export const AdminPage = () => {
                                         <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/5 dark:border-white/5">
                                             {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && (
                                                 <div className="text-center">
-                                                    <div className="text-[8px] text-slate-500 font-black uppercase">Level</div>
+                                                    <div className="text-label text-slate-500 font-black uppercase">Level</div>
                                                     <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.level}</div>
                                                 </div>
                                             )}
                                             <div className="text-center">
-                                                <div className="text-[8px] text-slate-500 font-black uppercase">Network</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">Network</div>
                                                 <div className="text-xs font-black text-slate-900 dark:text-slate-100">{p.referral_count}</div>
                                             </div>
                                             <div className="text-center">
-                                                <div className="text-[8px] text-slate-500 font-black uppercase">XP</div>
+                                                <div className="text-label text-slate-500 font-black uppercase">XP</div>
                                                 <div className="text-xs font-black text-blue-500">{p.xp}</div>
                                             </div>
                                         </div>
@@ -1983,14 +1983,14 @@ export const AdminPage = () => {
                                             <div className="text-xl font-black text-blue-500">
                                                 {(partnerDetails.is_pro && (partnerDetails.subscription_plan || "").includes('PLUS')) ? 'PRO+' : `Level ${partnerDetails.level}`}
                                             </div>
-                                            <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
+                                            <div className="text-label font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
                                         </div>
                                         <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
                                             <div className="text-label font-black text-slate-500 uppercase">PRO Status</div>
                                             <div className={`text-xl font-black ${partnerDetails.is_pro ? 'text-amber-500' : 'text-slate-400'}`}>
                                                 {partnerDetails.is_pro ? 'ACTIVE' : 'INACTIVE'}
                                             </div>
-                                            <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.pro_tokens} Tokens</div>
+                                            <div className="text-label font-bold text-slate-400 uppercase">{partnerDetails.pro_tokens} Tokens</div>
                                         </div>
                                     </div>
 
@@ -2126,7 +2126,7 @@ export const AdminPage = () => {
                             <div className="rounded-3xl bg-slate-900/60 border border-white/5 overflow-hidden">
                                 <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
                                     <span className="text-label font-black text-slate-500 uppercase tracking-widest">Latest Events</span>
-                                    {isLedgerLoading && <span className="text-[9px] text-emerald-400 animate-pulse">Loading…</span>}
+                                    {isLedgerLoading && <span className="text-label text-emerald-400 animate-pulse">Loading…</span>}
                                 </div>
                                 <div className="divide-y divide-white/5 max-h-[480px] overflow-y-auto">
                                     {ledgerEvents.length === 0 && !isLedgerLoading && (
@@ -2137,20 +2137,20 @@ export const AdminPage = () => {
                                         return (
                                             <div key={ev.id} className="px-4 py-3 hover:bg-white/3 transition-colors group">
                                                 <div className="flex items-start gap-3">
-                                                    <div className={`mt-0.5 px-2 py-1 rounded-lg border text-[9px] font-black uppercase tracking-widest flex items-center gap-1 shrink-0 ${cfg.bg} ${cfg.color}`}>
+                                                    <div className={`mt-0.5 px-2 py-1 rounded-lg border text-label font-black uppercase tracking-widest flex items-center gap-1 shrink-0 ${cfg.bg} ${cfg.color}`}>
                                                         {cfg.icon}{ev.action_type || 'MISC'}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <div className="text-[11px] font-semibold text-white/90 truncate">{ev.description || ev.action}</div>
+                                                        <div className="text-label font-semibold text-white/90 truncate">{ev.description || ev.action}</div>
                                                         <div className="flex items-center gap-2 mt-0.5">
-                                                            {ev.partner_id && <span className="text-[9px] text-slate-600">P#{ev.partner_id}</span>}
-                                                            {ev.entity_id && <span className="text-[9px] text-slate-600">→ {ev.entity_id}</span>}
-                                                            <span className="text-[9px] text-slate-700 ml-auto shrink-0">{fmt(ev.created_at)}</span>
+                                                            {ev.partner_id && <span className="text-label text-slate-600">P#{ev.partner_id}</span>}
+                                                            {ev.entity_id && <span className="text-label text-slate-600">→ {ev.entity_id}</span>}
+                                                            <span className="text-label text-slate-700 ml-auto shrink-0">{fmt(ev.created_at)}</span>
                                                         </div>
                                                         {ev.details && Object.keys(ev.details).length > 0 && (
                                                             <div className="mt-1.5 hidden group-hover:flex flex-wrap gap-1.5">
                                                                 {Object.entries(ev.details).filter(([_, v]) => v != null && v !== '').slice(0, 6).map(([k, v]) => (
-                                                                    <span key={k} className="px-1.5 py-0.5 rounded-md bg-white/5 text-[9px] text-slate-400">
+                                                                    <span key={k} className="px-1.5 py-0.5 rounded-md bg-white/5 text-label text-slate-400">
                                                                         <span className="text-slate-600">{k}:</span> {String(v).slice(0, 30)}
                                                                     </span>
                                                                 ))}
@@ -2168,7 +2168,7 @@ export const AdminPage = () => {
                             <div className="p-5 rounded-3xl bg-slate-900/60 border border-violet-500/20 space-y-3">
                                 <div className="flex items-center gap-2 mb-1">
                                     <Bell size={14} className="text-violet-400" />
-                                    <span className="text-[11px] font-black text-white uppercase tracking-widest">Notification History by Chat ID</span>
+                                    <span className="text-label font-black text-white uppercase tracking-widest">Notification History by Chat ID</span>
                                 </div>
                                 <p className="text-label text-slate-500">Use to verify: "Was user X notified about event Y?"</p>
                                 <div className="flex gap-2">
@@ -2192,13 +2192,13 @@ export const AdminPage = () => {
                                                 <div key={ev.id} className="px-3 py-2 flex items-start justify-between gap-2 hover:bg-white/3">
                                                     <div>
                                                         <div className="text-label font-semibold text-white/80">{ev.event_type || ev.action}</div>
-                                                        <div className="text-[9px] text-slate-600">{ev.salt} · {ev.priority}</div>
+                                                        <div className="text-label text-slate-600">{ev.salt} · {ev.priority}</div>
                                                     </div>
                                                     <div className="flex flex-col items-end gap-1 shrink-0">
-                                                        <span className={`px-1.5 py-0.5 rounded-md text-[8px] font-black uppercase ${ev.action?.includes('enqueued') ? 'bg-emerald-500/10 text-emerald-400' : ev.action?.includes('failed') ? 'bg-red-500/10 text-red-400' : 'bg-slate-500/10 text-slate-400'}`}>
+                                                        <span className={`px-1.5 py-0.5 rounded-md text-label font-black uppercase ${ev.action?.includes('enqueued') ? 'bg-emerald-500/10 text-emerald-400' : ev.action?.includes('failed') ? 'bg-red-500/10 text-red-400' : 'bg-slate-500/10 text-slate-400'}`}>
                                                             {ev.action?.replace('notification_', '') || '—'}
                                                         </span>
-                                                        <span className="text-[9px] text-slate-700">{fmt(ev.created_at)}</span>
+                                                        <span className="text-label text-slate-700">{fmt(ev.created_at)}</span>
                                                     </div>
                                                 </div>
                                             ))}
@@ -2231,8 +2231,8 @@ export const AdminPage = () => {
                                                 {reconcileResult.flags.map((f: any, i: number) => (
                                                     <div key={i} className="px-3 py-2 flex items-center justify-between gap-2 hover:bg-white/3">
                                                         <div>
-                                                            <span className="text-[9px] font-black text-red-400 uppercase">{f.type}</span>
-                                                            <span className="text-[9px] text-slate-500 ml-2">P#{f.partner_id} · {f.telegram_id}</span>
+                                                            <span className="text-label font-black text-red-400 uppercase">{f.type}</span>
+                                                            <span className="text-label text-slate-500 ml-2">P#{f.partner_id} · {f.telegram_id}</span>
                                                         </div>
                                                         <span className={`text-label font-black ${f.diff > 0 ? 'text-amber-400' : 'text-red-400'}`}>{f.diff > 0 ? '+' : ''}{f.diff}</span>
                                                     </div>

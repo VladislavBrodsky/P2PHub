@@ -286,10 +286,10 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         <h1 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-[7px] font-black uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
+                                            <span className="text-label font-black uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
                                         </div>
                                     </div>
-                                    <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
+                                    <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
                                         {t('blog.latest_count', { count: total })}
                                     </p>
                                 </div>
@@ -341,7 +341,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                             <div className="absolute top-6 left-6 z-20">
                                                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-600/90 backdrop-blur-md border border-white/20 shadow-xl">
                                                     <Zap className="w-3 h-3 text-white fill-current" />
-                                                    <span className="text-[9px] font-black uppercase tracking-widest text-white">
+                                                    <span className="text-label font-black uppercase tracking-widest text-white">
                                                         {t('blog.navigation.featured')}
                                                     </span>
                                                 </div>
@@ -506,7 +506,7 @@ const BlogDetail = ({
                         <h5 className="text-white font-extrabold text-body leading-tight mb-0.5 tracking-tight">
                             {isCard ? t('blog.marketing.get_card') : t('blog.marketing.upgrade_pro')}
                         </h5>
-                        <p className="text-white/80 text-[11px] font-medium leading-relaxed line-clamp-1">
+                        <p className="text-white/80 text-label font-medium leading-relaxed line-clamp-1">
                             {isCard ? t('blog.marketing.spend_everywhere') : t('blog.marketing.unlock_tools')}
                         </p>
                     </div>
@@ -553,7 +553,7 @@ const BlogDetail = ({
 
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-center mr-2">
-                            <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
+                            <div className="text-label font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
                             <div className="text-label font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
@@ -588,7 +588,7 @@ const BlogDetail = ({
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent" />
                             <div className="absolute bottom-6 left-6 flex items-center gap-2">
                                 <div className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                                    <p className="text-[9px] font-black text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
+                                    <p className="text-label font-black text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
                                 </div>
                             </div>
                         </div>
@@ -625,7 +625,7 @@ const BlogDetail = ({
                                     <User className="w-4 h-4 text-slate-400" />
                                 </div>
                             ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-[8px] font-black text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
+                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-label font-black text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
                                 +12k
                             </div>
                         </div>
@@ -690,7 +690,7 @@ const BlogDetail = ({
                         </button>
                     </div>
 
-                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">
+                    <p className="text-label font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">
                         {t('blog.navigation.feedback_loop')}
                     </p>
                 </div>
@@ -718,7 +718,7 @@ const BlogDetail = ({
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0 py-1">
-                                        <p className="text-[8px] font-black uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
+                                        <p className="text-label font-black uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
                                             <div className="w-1 h-1 rounded-full bg-blue-500" />
                                             {t(getCategoryKey(relatedPost.category))}
                                         </p>
@@ -744,7 +744,7 @@ const BlogDetail = ({
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
+                            <span className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
                             <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
                         </div>
                     </button>
@@ -753,7 +753,7 @@ const BlogDetail = ({
                         className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
+                            <span className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
                             <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
                         </div>
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">

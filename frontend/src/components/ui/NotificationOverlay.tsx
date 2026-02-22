@@ -38,7 +38,7 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+140px)] left-0 right-0 z-10000 flex justify-center pointer-events-none px-4"
+                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+120px)] left-0 right-0 z-10000 flex justify-center pointer-events-none px-4"
                     whileDrag={{ scale: 0.95, opacity: 0.8 }}
                 >
                     <div className={`
@@ -57,7 +57,7 @@ export const NotificationOverlay = () => {
                         )}
                         <div className="flex-1 overflow-hidden">
                             <h4 className="text-xs font-semibold text-slate-900 dark:text-white truncate tracking-tight">{notification.title}</h4>
-                            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-medium mt-0.5">{notification.message}</p>
+                            <p className="text-label text-slate-500 dark:text-slate-400 truncate font-medium mt-0.5">{notification.message}</p>
                         </div>
                         <button
                             onClick={hideNotification}
