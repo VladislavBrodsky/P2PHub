@@ -646,7 +646,7 @@ export const StudioTab = ({
                     exit={{ opacity: 0, scale: 0.98 }}
                     className="space-y-6"
                 >
-                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+                    <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-purple-500/20 pointer-events-none" />
                         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
@@ -756,7 +756,7 @@ export const StudioTab = ({
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-5 rounded-[2rem] bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 space-y-4 shadow-premium-sm relative overflow-hidden group/link"
+                                    className="p-5 rounded-2xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 space-y-4 shadow-premium-sm relative overflow-hidden group/link"
                                 >
                                     <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 via-transparent to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500" />
 
@@ -891,7 +891,7 @@ export const StudioTab = ({
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="relative overflow-hidden rounded-[1.5rem] bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
+                    className="relative overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
                 >
                     <div className="circuit-decor opacity-10" />
 
@@ -995,7 +995,7 @@ export const StudioTab = ({
                         animate={{ opacity: 1, y: 0 }}
                         className="space-y-4"
                     >
-                        <div className="glass-panel-premium rounded-[1.5rem] border border-slate-200 dark:border-white/10 shadow-3xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
+                        <div className="glass-panel-premium rounded-xl border border-slate-200 dark:border-white/10 shadow-3xl overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-2xl">
                             {/* Image Section */}
                             <div className="aspect-16/10 bg-slate-900 relative flex items-center justify-center overflow-hidden group/img scanning-glow">
                                 <div className="circuit-decor opacity-20" />
@@ -1195,7 +1195,7 @@ export const StudioTab = ({
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.95, y: 20, opacity: 0 }}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-xl p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
                                 >
                                     <button
                                         onClick={() => setShowPublishModal(false)}
@@ -1413,7 +1413,7 @@ export const StudioTab = ({
                                     animate={{ scale: 1, y: 0, opacity: 1 }}
                                     exit={{ scale: 0.95, y: 20, opacity: 0 }}
                                     onClick={(e) => e.stopPropagation()}
-                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-[1.5rem] p-5 space-y-4 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                                    className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-xl p-5 space-y-4 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
                                 >
                                     <button
                                         onClick={() => setShowShareModal(false)}

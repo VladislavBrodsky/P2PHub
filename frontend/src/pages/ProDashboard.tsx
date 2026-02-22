@@ -425,7 +425,7 @@ export const ProDashboard = () => {
     return (
         <div
             id="pro-dashboard-container"
-            className="w-full text-(--color-text-primary) font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-12"
+            className="w-full text-text-primary font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-12"
         >
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-16 pb-16 min-h-[80vh]">
                 {/* Header Section - Mobile Optimized */}
@@ -645,6 +645,6 @@ export const ProDashboard = () => {
                 showGrowthModal={showGrowthModal}
                 setShowGrowthModal={setShowGrowthModal}
             />
-        </div>
+        </div >
     );
 };

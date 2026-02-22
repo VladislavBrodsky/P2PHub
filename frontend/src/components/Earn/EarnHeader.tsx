@@ -33,7 +33,7 @@ export const EarnHeader = () => {
             />
 
             {/* Card body */}
-            <div className="relative rounded-[0.95rem] bg-(--color-bg-glass) backdrop-blur-3xl overflow-hidden border border-(--color-border-glass)">
+            <div className="relative rounded-[0.95rem] bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass">
 
                 {/* ── Ambient glows ── */}
                 <div
@@ -103,7 +103,7 @@ export const EarnHeader = () => {
 
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-(--color-text-primary) opacity-40 leading-none mb-0.5">
+                                <span className="text-[7px] font-black uppercase tracking-[0.18em] text-text-primary opacity-40 leading-none mb-0.5">
                                     {t('earn_header.level')}
                                 </span>
                                 <motion.span
@@ -111,7 +111,7 @@ export const EarnHeader = () => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-xl sm:text-[1.5rem] font-black text-(--color-text-primary) leading-none tracking-tight"
+                                    className="text-xl sm:text-[1.5rem] font-black text-text-primary leading-none tracking-tight"
                                 >
                                     {level}
                                 </motion.span>
@@ -145,14 +145,14 @@ export const EarnHeader = () => {
 
                         {/* XP Progress header row */}
                         <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0 gap-2">
-                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-none shrink-0">
+                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-[9px] sm:text-xs font-black text-(--color-text-primary) transition-colors tabular-nums whitespace-nowrap"
+                                className="text-[9px] sm:text-xs font-black text-text-primary transition-colors tabular-nums whitespace-nowrap"
                             >
                                 {Math.floor(progress.current).toLocaleString()} <span className="opacity-30">/</span> {Math.floor(progress.total).toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
@@ -205,12 +205,12 @@ export const EarnHeader = () => {
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
                                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-tight truncate">
+                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
                                         {t('earn_header.partners')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-1 min-w-0">
-                                    <span className="text-[14px] sm:text-xl font-black text-(--color-text-primary) leading-none tabular-nums">
+                                    <span className="text-[14px] sm:text-xl font-black text-text-primary leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
                                     <TrendingUp className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500/60 mb-0.5 shrink-0" />
@@ -232,12 +232,12 @@ export const EarnHeader = () => {
                                         style={{ background: `${badgeColor}22` }}>
                                         <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-(--color-text-primary) opacity-40 leading-tight truncate">
+                                    <span className="text-[7px] sm:text-[9px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
                                         {t('earn_header.total_xp')}
                                     </span>
                                 </div>
                                 <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
-                                    <span className="text-[14px] sm:text-xl font-black leading-none tabular-nums text-(--color-text-primary)">
+                                    <span className="text-[14px] sm:text-xl font-black leading-none tabular-nums text-text-primary">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
                                     <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5 shrink-0"

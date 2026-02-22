@@ -60,7 +60,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
             <div className={`
-                relative rounded-[2.5rem] bg-(--color-bg-glass) backdrop-blur-xl border border-(--color-border-glass) group
+                relative rounded-[2.5rem] bg-bg-glass backdrop-blur-xl border border-border-glass group
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : ''}
             `}>
@@ -89,17 +89,17 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             <motion.div
                                 whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
                                 className={`
-                                ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-[1.5rem]'} 
+                                ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-xl'} 
                                 overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
-                                ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : 'border-(--color-border-glass)'}
-                                bg-(--color-bg-app) 
+                                ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : 'border-border-glass'}
+                                bg-bg-app 
                             `}
                             >
                                 {/* Skeleton/Placeholder while loading */}
                                 {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
-                                    <div className="absolute inset-0 bg-(--btn-secondary-bg) flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-btn-secondary-bg flex items-center justify-center">
                                         <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent animate-pulse"></div>
-                                        <User size={variant === 'compact' ? 24 : 32} className="text-(--color-text-secondary) opacity-40" />
+                                        <User size={variant === 'compact' ? 24 : 32} className="text-text-secondary opacity-40" />
                                     </div>
                                 )}
 
@@ -124,14 +124,14 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                         }}
                                     />
                                 ) : !isUserLoading && (
-                                    <div className="h-full w-full flex items-center justify-center bg-(--btn-secondary-bg) text-(--color-text-secondary)">
+                                    <div className="h-full w-full flex items-center justify-center bg-btn-secondary-bg text-text-secondary">
                                         <User size={variant === 'compact' ? 24 : 32} />
                                     </div>
                                 )}
                             </motion.div>
 
                             {!isProPlus && (
-                                <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-(--color-bg-app) z-20`}>
+                                <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-bg-app z-20`}>
                                     <span className={`${variant === 'compact' ? 'text-[7px]' : 'text-[8px]'} font-black`}>{user?.level || 1}</span>
                                 </div>
                             )}
@@ -154,7 +154,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 const displayName = fullName.length > 20 ? firstName : fullName;
 
                                 return (
-                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-(--color-text-primary) truncate w-full`}>
+                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-text-primary truncate w-full`}>
                                         {t('common.hi')}, {displayName}!
                                     </h2>
                                 );
@@ -179,11 +179,11 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     <span className="text-[8px] font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('common.total')}:</span>
                                     <span className="text-[9px] font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} XP</span>
                                 </motion.div>
-                                <span className="text-[9px] font-black text-(--color-text-primary) whitespace-nowrap flex items-baseline gap-1">
+                                <span className="text-[9px] font-black text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{xpProgress.current.toLocaleString()}</span>
-                                    <span className="text-(--color-text-secondary) font-medium">/</span>
+                                    <span className="text-text-secondary font-medium">/</span>
                                     <span>{xpProgress.total.toLocaleString()}</span>
-                                    <span className="text-[7px] text-(--color-text-secondary) uppercase ml-0.5 shrink-0">{t('common.next_lvl')}</span>
+                                    <span className="text-[7px] text-text-secondary uppercase ml-0.5 shrink-0">{t('common.next_lvl')}</span>
                                 </span>
                             </div>
                             <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

@@ -29,7 +29,7 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
             whileHover={{ scale: 1.01, translateY: -2 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleClick}
-            className={`relative w-full group overflow-hidden rounded-[1.5rem] p-[1.5px] shadow-2xl transition-all duration-500 ${className}`}
+            className={`relative w-full group overflow-hidden rounded-xl p-[1.5px] shadow-2xl transition-all duration-500 ${className}`}
         >
             {/* ── Liquid Animated Border ── */}
             <div

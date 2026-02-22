@@ -45,21 +45,21 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         animate={{ y: 0, opacity: 1, scale: 1 }}
                         exit={{ y: 100, opacity: 0, scale: 0.95 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                        className="w-full max-w-md bg-white dark:bg-slate-900 border-x border-t border-slate-200 dark:border-white/10 sm:rounded-[2rem] relative shadow-2xl overflow-hidden h-full sm:h-auto sm:max-h-[85vh] flex flex-col z-100 overscroll-none"
+                        className="w-full max-w-md bg-white dark:bg-slate-900 border-x border-t border-slate-200 dark:border-white/10 sm:rounded-2xl relative shadow-2xl overflow-hidden h-full sm:h-auto sm:max-h-[85vh] flex flex-col z-100 overscroll-none"
                         style={{ overscrollBehavior: 'none' }}
                     >
                         {/* Header */}
-                        <div className="p-6 pb-4 border-b border-(--color-border-glass) bg-(--color-bg-glass) backdrop-blur-md sticky top-0 z-10">
+                        <div className="p-6 pb-4 border-b border-border-glass bg-bg-glass backdrop-blur-md sticky top-0 z-10">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-black text-(--color-text-primary) tracking-tight flex items-center gap-2">
+                                <h2 className="text-xl font-black text-text-primary tracking-tight flex items-center gap-2">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     {t('referral.brief.title')}
                                 </h2>
                                 <button
                                     onClick={onClose}
-                                    className="w-8 h-8 rounded-full bg-(--color-text-primary)/5 hover:bg-(--color-text-primary)/10 flex items-center justify-center transition-colors"
+                                    className="w-8 h-8 rounded-full bg-text-primary/5 hover:bg-text-primary/10 flex items-center justify-center transition-colors"
                                 >
-                                    <X className="w-4 h-4 text-(--color-text-primary)/40" />
+                                    <X className="w-4 h-4 text-text-primary/40" />
                                 </button>
                             </div>
                         </div>

@@ -530,7 +530,7 @@ const BlogDetail = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex flex-col min-h-screen bg-(--color-bg-app) relative"
+            className="flex flex-col min-h-screen bg-bg-app relative"
         >
             <div className="fixed top-0 left-0 w-full h-1.5 z-100 bg-slate-100 dark:bg-white/5">
                 <motion.div
@@ -578,7 +578,7 @@ const BlogDetail = ({
             <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto relative z-10 text-justify!">
                 <div className="space-y-6">
                     {post.image && (
-                        <div className="relative w-full aspect-video rounded-[2.5rem] overflow-hidden border border-slate-200 dark:border-white/10 shadow-3xl group">
+                        <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-3xl group">
                             <img
                                 src={post.image}
                                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000"
@@ -609,8 +609,8 @@ const BlogDetail = ({
                 </h1>
 
                 <div className="flex items-center gap-4 py-5 border-y border-slate-200 dark:border-white/5">
-                    <div className="w-12 h-12 rounded-[1.25rem] bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
-                        <div className="w-full h-full rounded-[1.15rem] bg-white dark:bg-slate-900 flex items-center justify-center font-black text-lg text-blue-600 dark:text-blue-400">
+                    <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
+                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-black text-lg text-blue-600 dark:text-blue-400">
                             {post.author?.[0] || 'A'}
                         </div>
                     </div>
@@ -668,7 +668,7 @@ const BlogDetail = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={onLike}
-                            className={`group h-16 px-10 rounded-[2rem] flex items-center gap-4 transition-all duration-500 ${engagement.liked
+                            className={`group h-16 px-10 rounded-2xl flex items-center gap-4 transition-all duration-500 ${engagement.liked
                                 ? 'bg-red-500 text-white scale-105 shadow-2xl shadow-red-500/40'
                                 : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-900 dark:text-white hover:shadow-xl'
                                 }`}
@@ -684,7 +684,7 @@ const BlogDetail = ({
 
                         <button
                             onClick={onShare}
-                            className="w-16 h-16 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
+                            className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
                         >
                             <Share2 className="w-6 h-6 group-hover:rotate-12 transition-transform" />
                         </button>
@@ -709,7 +709,7 @@ const BlogDetail = ({
                                 <button
                                     key={relatedPost.id}
                                     onClick={() => onPostClick(relatedPost)}
-                                    className="flex items-center gap-4 p-4.5 rounded-[2rem] bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/5 active:scale-[0.98] transition-all text-left group hover:shadow-2xl hover:shadow-blue-500/5 hover:border-blue-500/30"
+                                    className="flex items-center gap-4 p-4.5 rounded-2xl bg-white dark:bg-slate-900/50 backdrop-blur-md border border-slate-200 dark:border-white/5 active:scale-[0.98] transition-all text-left group hover:shadow-2xl hover:shadow-blue-500/5 hover:border-blue-500/30"
                                 >
                                     {relatedPost.image && (
                                         <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 border border-slate-200 dark:border-white/10 relative">
@@ -738,7 +738,7 @@ const BlogDetail = ({
                 <div className="pt-12 grid grid-cols-2 gap-4">
                     <button
                         onClick={() => { selection(); onPrev(); }}
-                        className="p-5 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-4 group text-left shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
+                        className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center gap-4 group text-left shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
@@ -750,7 +750,7 @@ const BlogDetail = ({
                     </button>
                     <button
                         onClick={() => { selection(); onNext(); }}
-                        className="p-5 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
+                        className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>

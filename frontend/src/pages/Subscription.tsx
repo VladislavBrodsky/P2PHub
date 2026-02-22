@@ -231,8 +231,8 @@ export default function SubscriptionPage() {
                 </div>
 
                 {/* Fixed Background Layer to prevent clipping - Changed to absolute to work with parent transforms */}
-                <div className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-(--color-bg-app)" />
-                <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-(--color-bg-app) via-indigo-500/10 to-(--color-bg-deep)' : 'bg-linear-to-b from-(--color-bg-app) via-amber-500/8 to-(--color-bg-deep)'}`} />
+                <div className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-bg-app" />
+                <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-bg-app via-indigo-500/10 to-bg-deep' : 'bg-linear-to-b from-bg-app via-amber-500/8 to-bg-deep'}`} />
 
                 {/* Glow Effects - Changed to absolute to stay pinned to content if needed, or stayed fixed but relative to this container */}
                 <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
@@ -240,7 +240,7 @@ export default function SubscriptionPage() {
 
                 <div className="relative z-10 w-full max-w-[300px] mx-auto flex flex-col items-center">
                     <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-5 pt-1">
-                        <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
+                        <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-lg border border-white/20 backdrop-blur-md bg-linear-to-br ${isPlus ? 'from-yellow-300 via-yellow-400 to-orange-500' : 'from-blue-400 via-blue-600 to-blue-900'}`}>
                             <Crown size={32} className="text-white fill-white/20 drop-shadow-md" />
                         </div>
                     </motion.div>
@@ -254,7 +254,7 @@ export default function SubscriptionPage() {
                     </p>
 
                     <div className="w-full space-y-3">
-                        <div className="p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[1.5rem] flex items-center justify-between shadow-[0_15px_30px_-10px_rgba(0,0,0,0.4)]">
+                        <div className="p-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl flex items-center justify-between shadow-[0_15px_30px_-10px_rgba(0,0,0,0.4)]">
                             <div className="flex items-center gap-3">
                                 <div className={`w-9 h-9 rounded-[0.75rem] flex items-center justify-center bg-white/5 border border-white/10 shadow-inner shrink-0 ${isPlus ? 'text-yellow-600' : 'text-blue-400'}`}>
                                     <Sparkles size={16} />
@@ -351,7 +351,7 @@ export default function SubscriptionPage() {
                     <div className="w-10" />
                 </div>
 
-                <div className="relative overflow-hidden rounded-[1.5rem] bg-white dark:bg-(--color-bg-app) border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
+                <div className="relative overflow-hidden rounded-xl bg-white dark:bg-bg-app border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
                     <div className="relative z-10 w-full p-4">
                         {/* Background Depth Orbs */}
                         <div className="absolute top-0 -left-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
@@ -383,7 +383,7 @@ export default function SubscriptionPage() {
 
                             {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
                             {proStats && (
-                                <div className="w-full max-w-[320px] p-4 bg-white dark:bg-black/40 border border-slate-200/60 dark:border-white/10 rounded-[1.25rem] shadow-sm relative overflow-hidden group mx-auto">
+                                <div className="w-full max-w-[320px] p-4 bg-white dark:bg-black/40 border border-slate-200/60 dark:border-white/10 rounded-xl shadow-sm relative overflow-hidden group mx-auto">
                                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-rose-500/5 pointer-events-none" />
 
                                     <div className="flex flex-row items-center justify-between gap-4 mb-3 relative z-10 px-1">
@@ -447,9 +447,9 @@ export default function SubscriptionPage() {
                             </div>
 
                             {/* High-End Card Selector - Low Profile */}
-                            <div className="relative bg-slate-100/50 dark:bg-black/30 p-1.5 rounded-[2rem] flex gap-1.5 border border-slate-200 dark:border-white/5 shadow-inner-lg backdrop-blur-2xl">
+                            <div className="relative bg-slate-100/50 dark:bg-black/30 p-1.5 rounded-2xl flex gap-1.5 border border-slate-200 dark:border-white/5 shadow-inner-lg backdrop-blur-2xl">
                                 <div
-                                    className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-[1.5rem] shadow-premium ${selectedPlan === 'PRO'
+                                    className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-xl shadow-premium ${selectedPlan === 'PRO'
                                         ? 'left-1.5 w-[calc(50%-0.375rem)] vibing-yellow-animated border border-yellow-400/30'
                                         : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] vibing-crystal-purple-animated border border-white/20'
                                         }`}
@@ -511,7 +511,7 @@ export default function SubscriptionPage() {
 
                         {/* ── DEADLINE STICKY HEADER ── */}
                         <div className="mb-4 mt-1 px-1">
-                            <div className="rounded-[1.25rem] overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/30 flex items-center justify-between relative group shadow-sm">
+                            <div className="rounded-xl overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/30 flex items-center justify-between relative group shadow-sm">
                                 <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                                 <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
@@ -540,7 +540,7 @@ export default function SubscriptionPage() {
 
                         {/* ── PROFIT MATH SECTION ── */}
                         <div className="mb-6 px-1">
-                            <div className="relative overflow-hidden rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 p-5 space-y-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)]">
+                            <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 p-5 space-y-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)]">
                                 {/* Ambient glow */}
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
 
@@ -609,7 +609,7 @@ export default function SubscriptionPage() {
                                         <button
                                             key={idx}
                                             onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                            className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-[1.25rem] p-2 flex flex-col items-center gap-1 relative overflow-hidden group transition-all shadow-md hover:shadow-lg active:scale-95 text-center"
+                                            className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-xl p-2 flex flex-col items-center gap-1 relative overflow-hidden group transition-all shadow-md hover:shadow-lg active:scale-95 text-center"
                                         >
                                             <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
 
@@ -695,14 +695,14 @@ export default function SubscriptionPage() {
                                         <div className="grid grid-cols-2 gap-3">
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
+                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
                                                 <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-[1.5rem] flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
                                                 <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
@@ -725,7 +725,7 @@ export default function SubscriptionPage() {
                                 className="mb-8"
                             >
                                 {/* Plan headline */}
-                                <div className={`rounded-[2rem] p-5 mb-5 border relative overflow-hidden shadow-premium backdrop-blur-md transition-all duration-500 ${selectedPlan === 'PRO'
+                                <div className={`rounded-2xl p-5 mb-5 border relative overflow-hidden shadow-premium backdrop-blur-md transition-all duration-500 ${selectedPlan === 'PRO'
                                     ? 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/20 dark:border-blue-500/20'
                                     : 'bg-yellow-500/5 dark:bg-yellow-500/10 border-yellow-500/20 dark:border-yellow-500/20'
                                     }`}>
@@ -815,7 +815,7 @@ export default function SubscriptionPage() {
                                 </div>
 
                                 {/* Quick checklist - Smaller */}
-                                <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-[1.5rem] p-4 grid grid-cols-2 gap-2 shadow-sm backdrop-blur-md">
+                                <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl p-4 grid grid-cols-2 gap-2 shadow-sm backdrop-blur-md">
                                     {(() => {
                                         const benefitsArr = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
                                         const benefitsList = Array.isArray(benefitsArr) ? benefitsArr : [];
@@ -838,7 +838,7 @@ export default function SubscriptionPage() {
                             {/* Background Glows to match Home Style */}
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/20 blur-[100px] pointer-events-none animate-pulse" />
 
-                            <div className="relative z-10 bg-white dark:bg-(--color-bg-app) border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
+                            <div className="relative z-10 bg-white dark:bg-bg-app border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
                                 {/* Inner liquid background layer */}
                                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-yellow-500/5 opacity-40 pointer-events-none" />
 
@@ -866,7 +866,7 @@ export default function SubscriptionPage() {
                                         <div className="grid grid-cols-2 gap-3">
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[1.25rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
+                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
                                             >
                                                 <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                                     <TONLogo className="w-5 h-5" />
@@ -875,7 +875,7 @@ export default function SubscriptionPage() {
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-[1.25rem] flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
+                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
                                             >
                                                 <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
                                                     <USDTLogo className="w-5 h-5" />
@@ -980,7 +980,7 @@ export default function SubscriptionPage() {
                                                     <button
                                                         onClick={handleManualSubmit}
                                                         disabled={isLoading || !manualHash || status === 'manual_review'}
-                                                        className={`w-full h-14 rounded-[1.5rem] font-black text-[13px] uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
+                                                        className={`w-full h-14 rounded-xl font-black text-[13px] uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
                                                     >
                                                         <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000" />
                                                         <div className="flex items-center justify-center gap-3">
@@ -1014,7 +1014,7 @@ export default function SubscriptionPage() {
                                     { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
                                     { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
                                 ].map((stat) => (
-                                    <div key={stat.label} className="p-5 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex flex-col items-center text-center space-y-3 group transition-all duration-300 hover:scale-[1.03] hover:bg-slate-100/80 dark:hover:bg-white/5 shadow-sm">
+                                    <div key={stat.label} className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex flex-col items-center text-center space-y-3 group transition-all duration-300 hover:scale-[1.03] hover:bg-slate-100/80 dark:hover:bg-white/5 shadow-sm">
                                         <div className={`w-10 h-10 rounded-[1rem] shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
                                             <stat.icon size={18} strokeWidth={2.5} />
                                         </div>
@@ -1036,7 +1036,7 @@ export default function SubscriptionPage() {
                             />
                             <div className="space-y-3">
                                 {faqs.map((faq, idx) => (
-                                    <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-[1.5rem] overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50">
+                                    <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50">
                                         <button
                                             onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }}
                                             className="w-full p-4 flex items-center justify-between group text-left"
@@ -1077,13 +1077,13 @@ export default function SubscriptionPage() {
                     {(status !== 'idle' || infoModal) && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl">
                             {infoModal ? (
-                                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-[2rem] text-center relative overflow-hidden shadow-2xl border-white/20">
+                                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
                                     <div className="circuit-decor opacity-30" />
                                     <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
                                     <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] rounded-full opacity-20 -mr-20 -mt-20 ${infoModal.color === 'emerald' ? 'bg-emerald-500' : infoModal.color === 'amber' ? 'bg-amber-500' : 'bg-blue-500'}`} />
 
                                     <div className="relative z-10 flex flex-col items-center">
-                                        <div className={`w-12 h-12 rounded-[1.25rem] flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
                                             <infoModal.icon size={24} className="text-white drop-shadow-md" />
                                         </div>
                                         <h3 className={`text-[16px] font-black uppercase mb-2 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
@@ -1099,7 +1099,7 @@ export default function SubscriptionPage() {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-[2rem] text-center">
+                                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center">
                                     {status === 'pending' && <Loader2 size={32} className="text-amber-500 animate-spin mx-auto mb-4" />}
                                     {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
                                     {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}

@@ -60,8 +60,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                         onClick={toggleNotifications}
                         disabled={user?.notifications_paused === option.isPaused}
                         className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${user?.notifications_paused === option.isPaused
-                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden cursor-default'
-                            : 'text-(--color-text-secondary) hover:bg-white/5'
+                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-text-primary overflow-hidden cursor-default'
+                            : 'text-text-secondary hover:bg-white/5'
                             }`}
                     >
                         {user?.notifications_paused === option.isPaused && (
@@ -88,8 +88,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                         key={option.id}
                         onClick={() => handleLanguageChange(option.id)}
                         className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${i18n.language.startsWith(option.id)
-                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
-                            : 'text-(--color-text-secondary) hover:bg-white/5'
+                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-text-primary overflow-hidden'
+                            : 'text-text-secondary hover:bg-white/5'
                             }`}
                     >
                         {i18n.language.startsWith(option.id) && (
@@ -116,8 +116,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                         key={option.id}
                         onClick={() => { setTheme(option.id); selection(); }}
                         className={`flex flex-1 items-center justify-center gap-2 rounded-xl py-2 transition-all relative z-10 ${theme === option.id
-                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-(--color-text-primary) overflow-hidden'
-                            : 'text-(--color-text-secondary) hover:bg-white/5'
+                            ? 'bg-white/10 dark:bg-white/5 border border-white/10 shadow-lg text-text-primary overflow-hidden'
+                            : 'text-text-secondary hover:bg-white/5'
                             }`}
                     >
                         {theme === option.id && (

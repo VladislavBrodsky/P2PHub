@@ -106,7 +106,7 @@ interface RecentSale {
 const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-4 rounded-[1.5rem] shadow-2xl relative overflow-hidden group ring-1 ring-white/10">
+            <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-4 rounded-xl shadow-2xl relative overflow-hidden group ring-1 ring-white/10">
                 <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
                 <div className="relative z-10">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{label}</p>
@@ -1124,7 +1124,7 @@ export const AdminPage = () => {
                         )}
 
                         {/* Task Completion Breakdown */}
-                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
+                        <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
@@ -1156,7 +1156,7 @@ export const AdminPage = () => {
                         </div>
 
                         {/* Top Partners Leaderboard */}
-                        <div className="p-6 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
+                        <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
@@ -1261,7 +1261,7 @@ export const AdminPage = () => {
                                 <motion.div
                                     key={period}
                                     whileHover={{ y: -4 }}
-                                    className="group relative p-6 rounded-[2rem] premium-stat-card bg-white dark:bg-slate-900/50 border border-black/5 dark:border-white/10 space-y-4 overflow-hidden"
+                                    className="group relative p-6 rounded-2xl premium-stat-card bg-white dark:bg-slate-900/50 border border-black/5 dark:border-white/10 space-y-4 overflow-hidden"
                                 >
                                     {data.percent_change >= 0 && (
                                         <div className="absolute -right-8 -top-8 w-24 h-24 bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500" />
@@ -1486,7 +1486,7 @@ export const AdminPage = () => {
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    className="p-12 text-center space-y-3 glass-panel-premium rounded-[2rem]"
+                                    className="p-12 text-center space-y-3 glass-panel-premium rounded-2xl"
                                 >
                                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                                         <CheckCircle className="text-blue-500" size={32} />
@@ -1502,7 +1502,7 @@ export const AdminPage = () => {
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         exit={{ opacity: 0, x: -100 }}
-                                        className="p-5 rounded-[2rem] glass-panel-premium border border-black/5 dark:border-white/5 space-y-4 relative overflow-hidden"
+                                        className="p-5 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4 relative overflow-hidden"
                                     >
                                         <div className="flex items-start justify-between relative z-10">
                                             <div className="flex items-center gap-4">
@@ -1978,14 +1978,14 @@ export const AdminPage = () => {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-3">
-                                        <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
+                                        <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
                                             <div className="text-[10px] font-black text-slate-500 uppercase">Account Rank</div>
                                             <div className="text-xl font-black text-blue-500">
                                                 {(partnerDetails.is_pro && (partnerDetails.subscription_plan || "").includes('PLUS')) ? 'PRO+' : `Level ${partnerDetails.level}`}
                                             </div>
                                             <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
                                         </div>
-                                        <div className="p-4 rounded-[2rem] bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
+                                        <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
                                             <div className="text-[10px] font-black text-slate-500 uppercase">PRO Status</div>
                                             <div className={`text-xl font-black ${partnerDetails.is_pro ? 'text-amber-500' : 'text-slate-400'}`}>
                                                 {partnerDetails.is_pro ? 'ACTIVE' : 'INACTIVE'}

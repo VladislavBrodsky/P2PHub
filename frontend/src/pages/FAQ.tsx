@@ -25,7 +25,7 @@ const renderFormattedText = (text: string) => {
             <React.Fragment key={i}>
                 {parts.map((part, j) => {
                     if (part.startsWith('**') && part.endsWith('**')) {
-                        return <strong key={j} className="text-(--color-text-primary) font-bold">{part.slice(2, -2)}</strong>;
+                        return <strong key={j} className="text-text-primary font-bold">{part.slice(2, -2)}</strong>;
                     }
                     if (part.startsWith('*') && part.endsWith('*')) {
                         return <span key={j} className="italic opacity-80">{part.slice(1, -1)}</span>;
@@ -179,7 +179,7 @@ export default function FAQPage() {
     });
 
     return (
-        <div className="flex flex-col min-h-screen pb-32 bg-(--color-bg-app) animate-in fade-in duration-500 overflow-x-hidden">
+        <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
             <div className="relative pt-4 pb-16 px-6">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full -z-10" />
@@ -187,7 +187,7 @@ export default function FAQPage() {
                 <div className="flex items-center gap-3 mb-6">
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                        className="p-2.5 rounded-xl bg-(--card-bg) border border-(--card-border) text-(--color-text-primary) active:scale-95 transition-all backdrop-blur-md shadow-xl"
+                        className="p-2.5 rounded-xl bg-(--card-bg) border border-(--card-border) text-text-primary active:scale-95 transition-all backdrop-blur-md shadow-xl"
                     >
                         <ArrowLeft size={18} />
                     </button>
@@ -199,11 +199,11 @@ export default function FAQPage() {
                 <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-4xl font-black text-(--color-text-primary) tracking-tighter leading-none mb-4 uppercase"
+                    className="text-4xl font-black text-text-primary tracking-tighter leading-none mb-4 uppercase"
                 >
                     <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-blue-500" /> }} />
                 </motion.h1>
-                <p className="text-(--color-text-secondary) font-medium text-xs max-w-[280px] leading-relaxed opacity-70">
+                <p className="text-text-secondary font-medium text-xs max-w-[280px] leading-relaxed opacity-70">
                     {t('faq.header_desc')}
                 </p>
             </div>
@@ -220,7 +220,7 @@ export default function FAQPage() {
                         placeholder={t('faq.search_placeholder', 'Search for answers...')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-(--color-text-secondary)/40 relative z-0"
+                        className="w-full h-16 pl-12 pr-4 bg-(--card-bg) border-2 border-(--card-border) focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-text-secondary/40 relative z-0"
                     />
                 </div>
             </div>
@@ -233,7 +233,7 @@ export default function FAQPage() {
                         onClick={() => { selection(); setSelectedCategory(cat.id); }}
                         className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
-                            : 'bg-(--card-bg) border border-(--card-border) text-(--color-text-secondary)'
+                            : 'bg-(--card-bg) border border-(--card-border) text-text-secondary'
                             }`}
                     >
                         {cat.icon}
@@ -269,14 +269,14 @@ export default function FAQPage() {
                                                 <Clock size={10} />
                                                 {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
                                             </div>
-                                            <h3 className="text-sm font-black text-(--color-text-primary) leading-snug group-hover:text-blue-500 transition-colors">
+                                            <h3 className="text-sm font-black text-text-primary leading-snug group-hover:text-blue-500 transition-colors">
                                                 {faq.q}
                                             </h3>
                                         </div>
                                         <div className="pt-4">
                                             <motion.div
                                                 animate={{ rotate: selectedFaq === originalIndex ? 90 : 0 }}
-                                                className="text-(--color-text-secondary)"
+                                                className="text-text-secondary"
                                             >
                                                 <ChevronRight size={18} />
                                             </motion.div>
@@ -292,7 +292,7 @@ export default function FAQPage() {
                                                 className="overflow-hidden"
                                             >
                                                 <div className="mt-5 pt-5 border-t border-(--card-border)">
-                                                    <p className="text-xs font-medium text-(--color-text-secondary) leading-relaxed">
+                                                    <p className="text-xs font-medium text-text-secondary leading-relaxed">
                                                         {renderFormattedText(faq.a)}
                                                     </p>
                                                     <div className="mt-4 flex gap-2">
@@ -325,8 +325,8 @@ export default function FAQPage() {
                         >
                             <Search size={24} className="text-slate-400" />
                         </motion.div>
-                        <h3 className="text-sm font-black text-(--color-text-primary) uppercase mb-1">{t('faq.no_results')}</h3>
-                        <p className="text-xs text-(--color-text-secondary)">{t('faq.no_results_desc')}</p>
+                        <h3 className="text-sm font-black text-text-primary uppercase mb-1">{t('faq.no_results')}</h3>
+                        <p className="text-xs text-text-secondary">{t('faq.no_results_desc')}</p>
                     </motion.div>
                 )}
             </div>
