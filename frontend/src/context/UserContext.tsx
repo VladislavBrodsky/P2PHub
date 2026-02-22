@@ -141,7 +141,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
 
             setUser(userData);
-            updateProgress(90, 'User Verified');
+            updateProgress(100, 'User Verified');
             localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
 
             // Eagerly preload profile photo for instant display
@@ -185,6 +185,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     };
                 });
             }
+            updateProgress(100, 'Offline Ready');
         } finally {
             setIsLoading(false);
         }

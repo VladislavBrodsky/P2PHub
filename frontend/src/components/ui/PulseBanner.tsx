@@ -58,7 +58,7 @@ export const PulseBanner = () => {
     };
 
     return (
-        <div className="w-full bg-slate-900/50 dark:bg-black/40 backdrop-blur-xl border-b border-white/5 h-8 overflow-hidden relative flex items-center justify-center">
+        <div className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+80px)] left-0 right-0 z-40 bg-slate-900/50 dark:bg-black/40 backdrop-blur-xl border-t border-b border-white/5 h-8 overflow-hidden flex items-center justify-center pointer-events-none">
             <AnimatePresence mode="wait">
                 <motion.div
                     key={item.id}

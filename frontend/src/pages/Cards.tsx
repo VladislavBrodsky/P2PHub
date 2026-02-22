@@ -119,16 +119,16 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
 
                     {/* Promo/Bonus Pill */}
                     <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
-                        <div className="flex items-center gap-4">
-                            <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-3 py-2 flex items-center gap-1.5 shadow-md">
+                        <div className="flex items-center gap-2 overflow-hidden">
+                            <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
                                 <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
                                 <span className="text-[11px] font-black text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
 
-                            <div className="text-left">
-                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.3] max-w-[140px]">
+                            <div className="text-left min-w-0">
+                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] break-words">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
