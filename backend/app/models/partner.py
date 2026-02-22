@@ -67,6 +67,8 @@ class Partner(SQLModel, table=True):
     linkedin_access_token: str | None = Field(default=None)
     pinterest_access_token: str | None = Field(default=None)
     threads_access_token: str | None = Field(default=None)
+    facebook_access_token: str | None = Field(default=None)
+    discord_webhook_url: str | None = Field(default=None)
     personal_referral_link: str | None = Field(default=None)
 
     # Daily Check-in Tracking

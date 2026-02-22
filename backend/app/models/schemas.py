@@ -155,6 +155,8 @@ class PROSetupRequest(BaseModel):
     linkedin_access_token: str | None = Field(default=None)
     pinterest_access_token: str | None = Field(default=None)
     threads_access_token: str | None = Field(default=None)
+    facebook_access_token: str | None = Field(default=None)
+    discord_webhook_url: str | None = Field(default=None)
     
     # #comment: Standardized for audit.
     class Config:

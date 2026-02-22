@@ -27,6 +27,8 @@ export interface PROStatus {
         linkedin_access_token: string;
         pinterest_access_token: string;
         threads_access_token: string;
+        facebook_access_token: string | null;
+        discord_webhook_url: string | null;
     };
 }
 
@@ -40,6 +42,8 @@ export interface PROSetupPayload {
     linkedin_access_token?: string;
     pinterest_access_token?: string;
     threads_access_token?: string;
+    facebook_access_token?: string;
+    discord_webhook_url?: string;
 }
 
 export interface ViralGenerateResponse {
@@ -85,7 +89,7 @@ export const proService = {
         return response.data;
     },
 
-    testIntegration: async (platform: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads') => {
+    testIntegration: async (platform: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
         const response = await apiClient.post('/api/pro/test', {
             platform,
             content: "Test Message", // Backend ignores this for test

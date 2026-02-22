@@ -10,6 +10,7 @@ import { proService } from '../../../services/proService';
 import { useNotificationStore } from '../../../store/useNotificationStore';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { Trans, useTranslation } from 'react-i18next';
+import { socialLogos } from '../utils/socialLogos';
 
 import { GrowthStrategistModal } from './GrowthStrategistModal';
 
@@ -72,7 +73,7 @@ export const ProDashboardModals = ({
     // Setup Local State
     const [setupTab, setSetupTab] = useState<'pro' | 'pro_plus'>(status?.is_pro_plus ? 'pro_plus' : 'pro');
     const [activeProPlatform, setActiveProPlatform] = useState<'x' | 'tg'>('tg');
-    const [activePlusPlatform, setActivePlusPlatform] = useState<'tg' | 'x' | 'linkedin' | 'pinterest' | 'threads'>('tg');
+    const [activePlusPlatform, setActivePlusPlatform] = useState<'tg' | 'x' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord'>('tg');
     const [isSaving, setIsSaving] = useState(false);
 
     // Headline Local State
@@ -92,6 +93,8 @@ export const ProDashboardModals = ({
     const [linkedinToken, setLinkedinToken] = useState('');
     const [pinterestToken, setPinterestToken] = useState('');
     const [threadsToken, setThreadsToken] = useState('');
+    const [facebookToken, setFacebookToken] = useState('');
+    const [discordToken, setDiscordToken] = useState('');
     const [tgTestResults, setTgTestResults] = useState<Record<string, string>>({});
     const [isTesting, setIsTesting] = useState(false);
 
@@ -105,6 +108,8 @@ export const ProDashboardModals = ({
             setLinkedinToken(status.setup.linkedin_access_token || '');
             setPinterestToken(status.setup.pinterest_access_token || '');
             setThreadsToken(status.setup.threads_access_token || '');
+            setFacebookToken(status.setup.facebook_access_token || '');
+            setDiscordToken(status.setup.discord_webhook_url || '');
 
             const main = status.setup.telegram_channel_id;
             const others = status.setup.telegram_channels || [];
@@ -126,7 +131,9 @@ export const ProDashboardModals = ({
                 telegram_channels: tgChannels.slice(1).filter(ch => ch.trim() !== ''),
                 linkedin_access_token: linkedinToken,
                 pinterest_access_token: pinterestToken,
-                threads_access_token: threadsToken
+                threads_access_token: threadsToken,
+                facebook_access_token: facebookToken,
+                discord_webhook_url: discordToken
             });
             showNotification({
                 title: t('pro_dashboard.setup.save_success_title'),
@@ -456,20 +463,22 @@ export const ProDashboardModals = ({
                                             /* ── PRO+ Full Controls ── */
                                             <div className="space-y-4">
                                                 {/* Platform Switcher */}
-                                                <div className="flex flex-wrap gap-1 p-1 bg-emerald-50 dark:bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
+                                                <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
                                                     {[
-                                                        { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg') || 'Telegram', icon: Send },
-                                                        { id: 'x', label: 'X (Twitter)', icon: Network },
-                                                        { id: 'linkedin', label: 'LinkedIn', icon: Network },
-                                                        { id: 'pinterest', label: 'Pinterest', icon: Blocks },
-                                                        { id: 'threads', label: 'Threads', icon: Blocks }
+                                                        { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg') || 'Telegram', src: socialLogos.telegram },
+                                                        { id: 'x', label: 'X', src: socialLogos.x },
+                                                        { id: 'linkedin', label: 'LinkedIn', src: socialLogos.linkedin },
+                                                        { id: 'pinterest', label: 'Pinterest', src: socialLogos.pinterest },
+                                                        { id: 'threads', label: 'Threads', src: socialLogos.threads },
+                                                        { id: 'facebook', label: 'Facebook', src: socialLogos.facebook },
+                                                        { id: 'discord', label: 'Discord', src: socialLogos.discord }
                                                     ].map((tab) => (
                                                         <button
                                                             key={tab.id}
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
-                                                            className={`flex-1 min-w-[70px] py-1.5 rounded-2xl text-[8px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-1 ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-sm text-emerald-600 dark:text-white' : 'text-slate-400'}`}
+                                                            className={`shrink-0 py-2 px-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 border ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-lg text-emerald-600 dark:text-white border-emerald-500/20' : 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
                                                         >
-                                                            <tab.icon size={9} />
+                                                            <img src={tab.src} alt={tab.label} className="w-4 h-4 object-contain" />
                                                             {tab.label}
                                                         </button>
                                                     ))}
@@ -480,7 +489,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <Send size={18} className="-ml-0.5" />
+                                                                <img src={socialLogos.telegram} alt="Telegram" className="w-6 h-6 object-contain" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
@@ -530,11 +539,11 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <Network size={18} />
+                                                                <img src={socialLogos.x} alt="X" className="w-6 h-6 object-contain rounded-full" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">X Global Broadcast</p>
-                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-impact viral distribution node.</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">High-impact viral distribution. PRO+ supports up to 3 accounts.</p>
                                                             </div>
                                                             <button onClick={() => { selection(); setShowManual('setup_x'); }} className="text-[8px] text-indigo-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
                                                         </div>
@@ -565,7 +574,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-indigo-700 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <Network size={18} />
+                                                                <img src={socialLogos.linkedin} alt="LinkedIn" className="w-6 h-6 object-contain" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
@@ -596,7 +605,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-rose-500/5 rounded-2xl border border-rose-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-rose-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <Blocks size={18} />
+                                                                <img src={socialLogos.pinterest} alt="Pinterest" className="w-6 h-6 object-contain" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
@@ -625,7 +634,7 @@ export const ProDashboardModals = ({
                                                     <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
                                                         <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0">
-                                                                <Sparkles size={18} />
+                                                                <img src={socialLogos.threads} alt="Threads" className="w-6 h-6 object-contain rounded-full bg-white" />
                                                             </div>
                                                             <div className="flex-1 min-w-0">
                                                                 <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
@@ -644,6 +653,64 @@ export const ProDashboardModals = ({
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-black">Meta for Developers</a>. Require Threads API product activation.
+                                                            </p>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+
+                                                {/* Facebook */}
+                                                {activePlusPlatform === 'facebook' && (
+                                                    <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-blue-500/5 rounded-2xl border border-blue-500/15">
+                                                            <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0">
+                                                                <img src={socialLogos.facebook} alt="Facebook" className="w-6 h-6 object-contain" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Facebook Groups & Pages</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Automate posting to FB communities.</p>
+                                                            </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_facebook'); }} className="text-[8px] text-blue-500 font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">PAGE ACCESS TOKEN</label>
+                                                            <textarea
+                                                                value={facebookToken}
+                                                                onChange={(e) => setFacebookToken(e.target.value)}
+                                                                placeholder="Enter Page/Community Access Token"
+                                                                rows={3}
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-black">Meta for Developers</a>. Select App and Generate Token.
+                                                            </p>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+
+                                                {/* Discord */}
+                                                {activePlusPlatform === 'discord' && (
+                                                    <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
+                                                        <div className="flex items-center gap-3 p-4 bg-[#5865F2]/5 rounded-2xl border border-[#5865F2]/15">
+                                                            <div className="w-10 h-10 rounded-2xl bg-[#5865F2] flex items-center justify-center text-white shadow-md shrink-0">
+                                                                <img src={socialLogos.discord} alt="Discord" className="w-6 h-6 object-contain" />
+                                                            </div>
+                                                            <div className="flex-1 min-w-0">
+                                                                <p className="text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">Discord Broadcaster</p>
+                                                                <p className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">Seamless bridging to your Discord servers.</p>
+                                                            </div>
+                                                            <button onClick={() => { selection(); setShowManual('setup_discord'); }} className="text-[8px] text-[#5865F2] font-black uppercase tracking-widest underline shrink-0">Guide</button>
+                                                        </div>
+                                                        <div className="space-y-1.5">
+                                                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest px-0.5">CHANNEL WEBHOOK URL</label>
+                                                            <textarea
+                                                                value={discordToken}
+                                                                onChange={(e) => setDiscordToken(e.target.value)}
+                                                                placeholder="https://discord.com/api/webhooks/..."
+                                                                rows={3}
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
+                                                            />
+                                                            <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
+                                                                Obtain Webhook URL via your <span className="text-[#5865F2] italic font-black">Discord Server Settings → Integrations → Webhooks</span>.
                                                             </p>
                                                         </div>
                                                     </motion.div>

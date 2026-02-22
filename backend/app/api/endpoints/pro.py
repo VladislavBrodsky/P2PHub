@@ -85,7 +85,9 @@ async def get_pro_status(
             "telegram_channels": tg_others,
             "linkedin_access_token": partner.linkedin_access_token or "",
             "pinterest_access_token": partner.pinterest_access_token or "",
-            "threads_access_token": partner.threads_access_token or ""
+            "threads_access_token": partner.threads_access_token or "",
+            "facebook_access_token": partner.facebook_access_token or "",
+            "discord_webhook_url": partner.discord_webhook_url or ""
         },
         "capabilities": viral_studio.get_capabilities(),
         "bot_username": (await bot.get_me()).username
@@ -299,6 +301,8 @@ async def setup_social_api(
     if payload.linkedin_access_token: partner.linkedin_access_token = payload.linkedin_access_token
     if payload.pinterest_access_token: partner.pinterest_access_token = payload.pinterest_access_token
     if payload.threads_access_token: partner.threads_access_token = payload.threads_access_token
+    if payload.facebook_access_token: partner.facebook_access_token = payload.facebook_access_token
+    if payload.discord_webhook_url: partner.discord_webhook_url = payload.discord_webhook_url
     
     session.add(partner)
     await session.commit()

@@ -332,30 +332,30 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
                             className="overflow-hidden"
                         >
-                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2rem] border border-emerald-500/20 bg-linear-to-br from-slate-900/90 via-[#0a1a0f]/90 to-slate-900/90 p-4 space-y-2 shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
+                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-[2rem] border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-4 space-y-2 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
                                 {/* Ambient glow */}
-                                <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
-                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
+                                <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
+                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
 
                                 {/* Header: Structured and Centered */}
                                 <div className="relative flex flex-col items-center text-center pt-2 mb-4">
                                     {/* Pulsing live dot - Floating Absolute */}
-                                    <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2 py-0.5 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                                    <div className="absolute top-0 right-0 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-2 py-0.5 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)]">
                                         <span className="relative flex h-1.5 w-1.5">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                                         </span>
-                                        <span className="text-[8px] font-black text-emerald-400 uppercase tracking-wider">LIVE</span>
+                                        <span className="text-[8px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
                                     </div>
 
                                     <div className="max-w-[85%] space-y-1.5">
                                         <div className="flex items-center justify-center gap-1.5">
-                                            <Zap className="w-3 h-3 text-emerald-400 animate-pulse shrink-0" />
-                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-400 leading-tight">
+                                            <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0" />
+                                            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
                                                 {t('income.math.subheading')}
                                             </span>
                                         </div>
-                                        <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight drop-shadow-sm">
+                                        <h4 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-sm">
                                             {t('income.math.heading')}
                                         </h4>
                                     </div>
@@ -377,20 +377,20 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         className={clsx(
                                             'relative flex items-center justify-between rounded-xl px-3 py-2 border transition-all',
                                             highlight
-                                                ? 'bg-emerald-500/15 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
-                                                : 'bg-white/5 border-white/8'
+                                                ? 'bg-emerald-50 dark:bg-emerald-500/15 border-emerald-200 dark:border-emerald-500/40 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)]'
+                                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/8'
                                         )}
                                     >
                                         {/* Left: row label */}
                                         <div className="flex items-center gap-2">
                                             {highlight ? (
-                                                <Flame className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                                <Flame className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
                                             ) : (
-                                                <ChevronRight className="w-3 h-3 text-white/20 shrink-0" />
+                                                <ChevronRight className="w-3 h-3 text-slate-300 dark:text-white/20 shrink-0" />
                                             )}
                                             <span className={clsx(
                                                 'text-[11px] font-bold',
-                                                highlight ? 'text-emerald-300' : 'text-white/50'
+                                                highlight ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-white/50'
                                             )}>
                                                 {t(`income.math.${key}`)}
                                             </span>
@@ -411,7 +411,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     transition={{ delay: 0.5 }}
                                     className="text-center -mt-1"
                                 >
-                                    <span className="text-[9px] text-white/20 font-mono">{t('income.math.formula_note')}</span>
+                                    <span className="text-[9px] text-slate-400 dark:text-white/20 font-mono">{t('income.math.formula_note')}</span>
                                 </motion.div>
 
                                 {/* FOMO red bar */}
@@ -419,20 +419,20 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     initial={{ opacity: 0, y: 8 }}
                                     animate={mathVisible ? { opacity: 1, y: 0 } : {}}
                                     transition={{ delay: 0.55 }}
-                                    className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-500/10 border border-rose-500/25"
+                                    className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/25"
                                 >
                                     <span className="relative flex h-2.5 w-2.5 mt-0.5 shrink-0">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                                     </span>
-                                    <p className="text-[11px] font-bold text-rose-300 leading-snug">
+                                    <p className="text-[11px] font-bold text-rose-700 dark:text-rose-300 leading-snug">
                                         {t('income.math.fomo_line')}
                                     </p>
                                 </motion.div>
 
                                 {/* Live social proof */}
                                 <div className="pt-1.5 flex flex-col gap-3">
-                                    <div className="flex items-center justify-between bg-white/5 rounded-2xl px-3 py-2 border border-white/5">
+                                    <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 rounded-2xl px-3 py-2 border border-slate-200 dark:border-white/5">
                                         <div className="flex items-center gap-3">
                                             <div className="flex -space-x-2">
                                                 {[
@@ -440,7 +440,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     "https://randomuser.me/api/portraits/women/68.jpg",
                                                     "https://randomuser.me/api/portraits/women/65.jpg"
                                                 ].map((imgUrl, i) => (
-                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden shrink-0 shadow-lg">
                                                         <img
                                                             src={imgUrl}
                                                             alt="Partner"
@@ -458,20 +458,20 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             animate={{ y: 0, opacity: 1 }}
                                                             exit={{ y: 5, opacity: 0 }}
                                                             transition={{ duration: 0.2 }}
-                                                            className="text-xs font-black text-white leading-none"
+                                                            className="text-xs font-black text-slate-900 dark:text-white leading-none"
                                                         >
                                                             {liveCount.toLocaleString()}
                                                         </motion.span>
                                                     </AnimatePresence>
-                                                    <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">online</span>
+                                                    <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">online</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="flex flex-col items-end">
-                                            <div className="flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-500/20">
+                                            <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
                                                 <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                                <span className="text-amber-500 font-black text-[9px] tracking-tight">
+                                                <span className="text-amber-600 dark:text-amber-500 font-black text-[9px] tracking-tight">
                                                     {slotsLeft} {t('income.math.spots_left').split(' ')[0]}
                                                 </span>
                                             </div>
