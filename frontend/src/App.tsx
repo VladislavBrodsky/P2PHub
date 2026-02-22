@@ -399,22 +399,40 @@ function App() {
                     )}
                 </AnimatePresence>
 
-                <div className={!isComplete ? 'hidden' : 'block h-full'}>
+                <div className={!isComplete ? 'hidden' : 'block h-full relative'}>
                     <PulseBanner />
                     <NotificationOverlay />
+
                     <AnimatePresence mode="wait">
-                        {showOnboarding && (
-                            <Suspense fallback={<div className="fixed inset-0 bg-slate-950 z-200" />}>
-                                <OnboardingStory
-                                    onComplete={() => {
-                                        setShowOnboarding(false);
-                                        localStorage.setItem('p2p_onboarded', 'true');
-                                    }}
-                                />
-                            </Suspense>
+                        {showOnboarding ? (
+                            <m.div
+                                key="onboarding-overlay"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="fixed inset-0 z-200"
+                            >
+                                <Suspense fallback={<div className="fixed inset-0 bg-slate-950" />}>
+                                    <OnboardingStory
+                                        onComplete={() => {
+                                            setShowOnboarding(false);
+                                            localStorage.setItem('p2p_onboarded', 'true');
+                                        }}
+                                    />
+                                </Suspense>
+                            </m.div>
+                        ) : (
+                            <m.div
+                                key="app-content-root"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                className="h-full"
+                            >
+                                <AppContent onReady={complete} showOnboarding={false} />
+                            </m.div>
                         )}
                     </AnimatePresence>
-                    <AppContent onReady={complete} showOnboarding={showOnboarding} />
                 </div>
             </LazyMotion>
         </UIProvider>

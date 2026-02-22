@@ -169,7 +169,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 6. Final CTA - Clear conversion point for users. */}
-            <m.div variants={item} className="px-6 text-center py-12 space-y-6">
+            <m.div variants={item} className="px-6 text-center py-8 space-y-6">
                 <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
                     {t('dashboard.movement_active')}
                 </div>
@@ -182,7 +182,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: Semantic description for SEO and context. */}
-            <m.div variants={item} className="px-8 pb-12">
+            <m.div variants={item} className="px-8 pb-8">
                 <p className="text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest">
                     <Trans i18nKey="dashboard.hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.

@@ -88,8 +88,8 @@ export const PartnerAcademy = () => {
                 </div>
             )}
 
-            {/* Bottom Spacing to ensure path isn't cut off by navbar */}
-            <div className="h-32 pointer-events-none" />
+            {/* Bottom Spacing - significantly reduced to avoid compounding with main Layout padding */}
+            <div className="h-6 pointer-events-none" />
         </div>
     );
 };

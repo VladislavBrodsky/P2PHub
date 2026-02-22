@@ -6,30 +6,28 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // Instead of bundling ~400KB of JSON directly into the main JS bundle, 
 // we use dynamic imports. This allows Vite to split each language/sector 
 // into its own small chunk, loaded only when needed.
+const namespaces = ['common', 'dashboard', 'marketing', 'academy', 'pro', 'social', 'cards', 'other'];
+
 const loadResources = async (language: string, namespace: string) => {
-    // Normalize language: 'en-US' -> 'en'
-    const shortLang = language.split('-')[0];
-    try {
-        // Try the specific language first
-        let resources;
+    const parts = language.split('-');
+    const shortLang = parts[0];
+
+    // Ordered list of locales to try: full (en-US), base (en), fallback (en)
+    const localesToTry = Array.from(new Set([language, shortLang, 'en']));
+
+    for (const locale of localesToTry) {
         try {
-            resources = await import(`./locales/${language}/${namespace}.json`);
+            const resources = await import(`./locales/${locale}/${namespace}.json`);
+            if (resources.default) return resources.default;
         } catch (e) {
-            // Fallback to short language if different
-            if (shortLang !== language) {
-                resources = await import(`./locales/${shortLang}/${namespace}.json`);
-            } else {
-                throw e;
-            }
+            // Continue to next fallback
+            continue;
         }
-        return resources.default;
-    } catch (e) {
-        console.error(`[i18n] Failed to load ${language}/${namespace}:`, e);
-        return {};
     }
+    return {};
 };
 
-const namespaces = ['common', 'dashboard', 'marketing', 'academy', 'pro', 'social', 'cards', 'other'];
+const initLang = localStorage.getItem('i18nextLng') || 'en';
 
 i18n
     .use(LanguageDetector)
@@ -38,13 +36,13 @@ i18n
         fallbackLng: 'en',
         ns: namespaces,
         defaultNS: 'common',
-        fallbackNS: namespaces, // #comment: Allow components to find keys across any namespace
+        fallbackNS: 'common',
         debug: import.meta.env.DEV,
         interpolation: {
             escapeValue: false,
         },
         react: {
-            useSuspense: true, // #comment: Enable Suspense to prevent raw key flashing
+            useSuspense: true,
             bindI18n: 'languageChanged loaded',
             bindI18nStore: 'added removed',
         },
@@ -56,15 +54,26 @@ i18n
         }
     });
 
-// #comment: Custom backend plugin-like logic to handle lazy loading with Suspense support
-const rawLang = localStorage.getItem('i18nextLng') || 'en';
-const initLang = rawLang.split('-')[0];
+// #comment: Parallel Resource Injection - Pre-populates i18next to avoid "key-as-value" flicker during hydration
+const initializeI18n = async () => {
+    const currentLang = i18n.language || initLang;
+    const baseLang = currentLang.split('-')[0];
 
-// Pre-load all namespaces for the initial language to satisfy Suspense
-namespaces.forEach(ns => {
-    loadResources(initLang, ns).then(res => {
-        i18n.addResourceBundle(initLang, ns, res, true, true);
-    });
-});
+    // Load all namespaces for the current language in parallel
+    await Promise.all(
+        namespaces.map(async (ns) => {
+            const res = await loadResources(currentLang, ns);
+            i18n.addResourceBundle(currentLang, ns, res, true, true);
+            // Also seed the base language to handle fallback correctly if we are on a dialect
+            if (baseLang !== currentLang) {
+                i18n.addResourceBundle(baseLang, ns, res, true, true);
+            }
+        })
+    );
+};
+
+// Start initialization immediately
+initializeI18n().catch(console.error);
 
 export default i18n;
+export { loadResources };

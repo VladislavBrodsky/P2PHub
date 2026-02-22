@@ -3,6 +3,7 @@ import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
 import { useUI } from '../../context/UIContext';
+import { cn } from '../../lib/utils';
 
 // #comment: Layout.tsx - Central structural wrapper for the application.
 // This version uses a fixed inset container with a transparent main scroll layer.
@@ -49,9 +50,9 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center bg-bg-app selection:bg-blue-500/10 overflow-hidden">
-            <div className="relative flex flex-col h-full w-full max-w-lg overflow-hidden bg-bg-app sm:border-x sm:border-border-glass sm:shadow-premium-xl">
-
+        <div className="fixed inset-0 flex flex-col items-center justify-start bg-bg-app selection:bg-blue-500/10 overflow-hidden">
+            {/* Main Content Hub - Precisely centered Max-W container */}
+            <div className="relative flex flex-col h-full w-full max-w-lg bg-bg-app sm:border-x sm:border-border-glass sm:shadow-premium-xl overflow-hidden">
                 {/* Staging Ribbon */}
                 {isStaging && (
                     <div className="fixed top-0 left-0 z-[200] w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -59,40 +60,37 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     </div>
                 )}
 
-                {/* Subtle Depth Effects */}
-                <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full blur-[120px]" style={{ backgroundColor: 'color-mix(in srgb, var(--color-bg-app, #030712) 95%, var(--color-brand-primary, #2563EB) 5%)' }} />
-                <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-blue-500/5 blur-[100px]" />
-
                 {/* Mesh Background Overlay */}
                 <div className="mesh-gradient-dark fixed inset-0 opacity-20 pointer-events-none dark:block hidden z-0" />
 
-                {/* Header - Fixed top relative to viewport */}
+                {/* 1. Header (Fixed relative to viewport within main container) */}
                 {isHeaderVisible && (
                     <Header onOpenMenu={() => setIsMenuOpen(true)} />
                 )}
 
-                {/* Main Content Area - THE SCROLL LAYER */}
+                {/* 2. Main content area (Scrollable) */}
                 <main
                     id="main-scroll-root"
                     className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
                     style={{
                         overscrollBehaviorY: 'none',
-                        paddingTop: !isHeaderVisible ? '0px' : '160px',
-                        paddingBottom: '120px'
+                        paddingTop: !isHeaderVisible ? '0px' : 'var(--header-total-height, 160px)',
+                        paddingBottom: 'calc(var(--nav-height, 100px) + var(--spacing-safe-bottom, 24px) + 20px)'
                     }}
                 >
-                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}>
-                        <div className="mx-auto w-full">
+                    <div className={cn(
+                        "relative mx-auto w-full transition-all duration-300",
+                        activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'
+                    )}>
+                        <div className="flex flex-col gap-0 w-full min-h-full">
                             {children}
                         </div>
                     </div>
                 </main>
 
-                {/* Integrated Footer Stack */}
+                {/* 3. Navigation Bar (Pinned to bottom) */}
                 {(isFooterVisible && !isKeyboardOpen) && (
-                    <div
-                        className="fixed bottom-0 left-0 right-0 z-[120] flex w-full flex-col items-center pointer-events-none"
-                    >
+                    <div className="fixed bottom-0 left-0 right-0 z-[120] flex w-full flex-col items-center pointer-events-none">
                         <div className="w-full max-w-lg flex justify-center pb-safe-bottom" style={{ paddingBottom: 'var(--spacing-safe-bottom, 24px)' }}>
                             <div className="flex w-full justify-center pb-4 pointer-events-auto">
                                 <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />
@@ -101,7 +99,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     </div>
                 )}
 
-                {/* Side Menu / Profile Drawer - Portaled out, lazily loaded */}
+                {/* Side Menu / Profile Drawer */}
                 {hasOpened && (
                     <Suspense fallback={null}>
                         <ProfileDrawer

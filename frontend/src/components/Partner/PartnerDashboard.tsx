@@ -118,9 +118,9 @@ export const PartnerDashboard = () => {
 
     return (
         <>
-            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="flex flex-col gap-5 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
                 {/* 0. Personalization Section */}
-                <div onClick={() => setIsBriefingOpen(true)} className="cursor-pointer">
+                <div onClick={() => setIsBriefingOpen(true)} className="cursor-pointer relative z-10 shrink-0">
                     <PersonalizationCard variant="compact" />
                 </div>
 
@@ -397,8 +397,9 @@ export const PartnerDashboard = () => {
                     </div>
                 </div>
             )}
-        </>
-    );
+        </div >
+    </div >
+);
 };
 
 

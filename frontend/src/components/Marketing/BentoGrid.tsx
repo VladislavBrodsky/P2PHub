@@ -114,7 +114,7 @@ export const BentoGrid = () => {
     // #comment: Removed internal header logic as BentoGrid is now a pure-layout component. 
     // Hierarchy is now managed by the Dashboard's SectionHeader for better semantic control.
     return (
-        <section className="px-4 py-8 flex flex-col gap-8 overflow-hidden">
+        <section className="px-4 py-4 flex flex-col gap-8 overflow-hidden">
 
             {/* Carousel Container */}
             <div className="relative">
@@ -152,7 +152,7 @@ export const BentoGrid = () => {
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
-                                    <div className="relative z-10 flex flex-col gap-4 h-full flex flex-col">
+                                    <div className="relative z-10 flex flex-col gap-4 h-full">
                                         <div className="flex items-center justify-between">
                                             <div className="p-3 w-fit rounded-2xl bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg transition-transform group-hover:scale-110">
                                                 {step.icon}
@@ -198,7 +198,7 @@ export const BentoGrid = () => {
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-40 group-hover:opacity-60 transition-opacity`} />
 
-                                    <div className="relative z-10 flex flex-col items-center justify-center h-full flex flex-col gap-4">
+                                    <div className="relative z-10 flex flex-col items-center justify-center h-full gap-4">
                                         {/* Icon based on step */}
                                         <div className="p-4 rounded-full bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg mb-2">
                                             {getBackIcon(index)}
