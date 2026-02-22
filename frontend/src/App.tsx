@@ -1,6 +1,6 @@
 // Deployment Track: 2026-02-20T18:07 [v1.8.4 Production Logic Patch]
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
-import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domMax, m } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 import './styles/animations.css';
 import './styles/premium.css';
@@ -384,7 +384,7 @@ function App() {
 
     return (
         <UIProvider>
-            <LazyMotion features={domAnimation}>
+            <LazyMotion features={domMax}>
                 <AnimatePresence>
                     {!isComplete && (
                         <m.div
