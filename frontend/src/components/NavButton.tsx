@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 
 interface NavButtonProps {
@@ -32,7 +31,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             {/* Active background pill */}
             <AnimatePresence>
                 {active && (
-                    <motion.div
+                    <m.div
                         layoutId="nav-active-pill"
                         className="absolute inset-x-1 top-1.5 bottom-1.5 rounded-2xl bg-blue-500/10 border border-blue-500/20"
                         initial={{ opacity: 0, scale: 0.8 }}
@@ -44,7 +43,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             </AnimatePresence>
 
             {/* Icon with lift animation */}
-            <motion.div
+            <m.div
                 animate={active ? { y: -1, scale: 1.15 } : { y: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 className="relative z-10"
@@ -52,22 +51,22 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                 {icon}
                 {/* Glow behind icon when active */}
                 {active && (
-                    <motion.div
+                    <m.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="absolute inset-0 blur-md bg-blue-500/40 -z-10 rounded-full scale-150"
                     />
                 )}
-            </motion.div>
+            </m.div>
 
             {/* Label */}
-            <motion.span
+            <m.span
                 animate={active ? { opacity: 1, y: 0 } : { opacity: 0.6, y: 0 }}
                 transition={{ duration: 0.2 }}
                 className="text-[9px] font-black tracking-tight leading-tight relative z-10"
             >
                 {label}
-            </motion.span>
+            </m.span>
         </button>
     );
 };

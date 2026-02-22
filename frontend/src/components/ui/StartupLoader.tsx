@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'; // Refined 12:25 PM
 import { LOGO_DATA } from '../../data/avatars';
-// #comment: Removed unused AnimatePresence from framer-motion to simplify imports
-import { motion } from 'framer-motion';
+// #comment: Removed unused AnimatePresence and motion from framer-motion to simplify imports
+// and ensure StartupLoader doesn't block on heavy animation libraries.
 
 interface StartupLoaderProps {
     progress: number;
@@ -52,50 +52,31 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                 {/* Main Animated Hub */}
                 <div className="relative w-40 h-40 flex items-center justify-center">
                     {/* Rotating Conic Border - The "Apple" loading feel */}
-                    <motion.div
-                        className="absolute inset-2 rounded-full border border-transparent blur-px"
+                    <div
+                        className="absolute inset-2 rounded-full border border-transparent blur-px animate-spin"
                         style={{
                             background: 'conic-gradient(from 0deg, transparent 0%, var(--color-brand-blue) 50%, transparent 100%) border-box',
                             mask: 'linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0)',
                             maskComposite: 'destination-out',
                             WebkitMaskComposite: 'destination-out',
+                            animationDuration: '2.2s'
                         }}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
                     />
 
                     {/* Central Logo Disk - "Vibing" scale effect */}
-                    <motion.div
-                        className="relative w-24 h-24 flex items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.4)] blur-px"
-                        animate={{
-                            scale: [1, 1.06, 1],
-                        }}
-                        transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
+                    <div
+                        className="relative w-24 h-24 flex items-center justify-center rounded-full bg-linear-to-br from-blue-500 to-blue-700 shadow-[0_0_50px_rgba(59,130,246,0.4)] animate-pulse"
                     >
-                        <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl animate-pulse" />
+                        <div className="absolute inset-0 rounded-full bg-blue-400/20 blur-xl" />
 
                         {/* Logo - Pulsing with "vibe" */}
-                        <motion.img
+                        <img
                             src={logoSrc}
                             alt="Pintopay"
                             loading="eager"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{
-                                scale: [1, 1.15, 1],
-                                opacity: 1, // Show immediately, don't wait for state
-                            }}
-                            transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="relative w-12 h-12 object-contain z-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+                            className="relative w-12 h-12 object-contain z-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)] animate-bounce-slow"
                         />
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Progress Text - Compacted */}
@@ -113,50 +94,40 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         {/* Status Badge - Matching user screenshot exactly */}
                         <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden min-w-[140px] flex justify-center">
                             <div className="relative z-10">
-                                <motion.p
-                                    key={statusText}
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 0.8, y: 0 }}
-                                    className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px]"
-                                >
+                                <p className="text-(--color-text-primary) font-black tracking-[0.2em] uppercase text-[10px] opacity-80">
                                     {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText.toUpperCase()}
-                                </motion.p>
+                                </p>
                             </div>
                             {/* Scanning Light Beam */}
-                            <motion.div
-                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/10 to-transparent z-0"
-                                animate={{ x: ['-100%', '200%'] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            <div
+                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-400/10 to-transparent z-0 animate-scan"
                             />
                         </div>
 
                         {/* Status Indicator Bar */}
                         <div className="w-20 h-1 rounded-full bg-slate-500/10 overflow-hidden relative shadow-inner">
-                            <motion.div
-                                className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
-                                initial={{ width: 0 }}
-                                animate={{ width: `${displayProgress}%` }}
-                                transition={{ duration: 0.5, ease: "easeOut" }}
+                            <div
+                                className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all duration-500"
+                                style={{ width: `${displayProgress}%` }}
                             />
                         </div>
                     </div>
                 </div>
+
             </div>
 
             {/* Bottom Branding - Ultra Minimal */}
             <div className="absolute bottom-16 left-0 right-0 flex flex-col items-center">
-                <motion.div
-                    className="flex items-center space-x-4 opacity-40"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 0.4, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                <div
+                    className="flex items-center space-x-4 opacity-40 animate-fade-in-up"
+                    style={{ animationDelay: '0.5s' }}
                 >
                     <div className="h-px w-10 bg-linear-to-r from-transparent to-(--color-text-secondary)" />
                     <span className="text-[10px] font-black tracking-[0.5em] uppercase text-(--color-text-secondary) whitespace-nowrap">
                         Advanced Ecosystem
                     </span>
                     <div className="h-px w-10 bg-linear-to-l from-transparent to-(--color-text-secondary)" />
-                </motion.div>
+                </div>
             </div>
         </div>
     );

@@ -2,7 +2,7 @@
 import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 
 
 import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
@@ -49,14 +49,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
 
     return (
-        <motion.div
+        <m.div
             className="flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative"
             variants={container}
             initial="hidden"
             animate="show"
         >
             {/* 1. Hero Section - Spacious & Centered Layout */}
-            <motion.div variants={item} className="px-4 space-y-12">
+            <m.div variants={item} className="px-4 space-y-12">
                 {/* Orbit Container */}
                 <div className="relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center">
                     <CommunityOrbit />
@@ -67,7 +67,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                     {/* Badge & Admin Entry */}
                     <div className="flex items-center gap-3">
                         {user?.is_pro ? (
-                            <motion.button
+                            <m.button
                                 onClick={() => setActiveTab?.('pro')}
                                 className={`inline-flex items-center justify-center rounded-full border px-6 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
                                 animate={{
@@ -78,9 +78,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
                                 </p>
-                            </motion.button>
+                            </m.button>
                         ) : (
-                            <motion.div
+                            <m.div
                                 className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
                                 animate={{
                                     scale: [1, 1.05, 1],
@@ -90,11 +90,11 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
                                     {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
                                 </p>
-                            </motion.div>
+                            </m.div>
                         )}
 
                         {user?.is_admin && user?.username !== 'uslincoln' && (
-                            <motion.button
+                            <m.button
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 onClick={() => setActiveTab?.('admin')}
@@ -102,7 +102,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             >
                                 <ShieldCheck size={14} className="text-blue-500" />
                                 <span className="text-[10px] font-black uppercase tracking-widest">Admin</span>
-                            </motion.button>
+                            </m.button>
                         )}
                     </div>
 
@@ -112,7 +112,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px]">
                             {heroTitle1}
                         </h1>
-                        <motion.div
+                        <m.div
                             className="text-[36px] font-extrabold tracking-tighter leading-[0.9] text-center max-w-[300px] vibing-crystal-text"
                             animate={{
                                 scale: [1, 1.03, 1],
@@ -125,21 +125,21 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             }}
                         >
                             {heroTitle2}
-                        </motion.div>
+                        </m.div>
                     </div>
                 </div>
-            </motion.div>
+            </m.div>
 
 
 
             {/* 2. Viral Proof - Partner Stats */}
-            <motion.div variants={item} className="mt-4">
+            <m.div variants={item} className="mt-4">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
-            </motion.div>
+            </m.div>
 
             {/* #comment: Phase 1 & 2 - Using SectionHeader for proper H2 semantic hierarchy and SEO performance. */}
             {/* 3. The Evolution - Bento Grid */}
-            <motion.div variants={item} className="space-y-6">
+            <m.div variants={item} className="space-y-6">
                 <SectionHeader
                     badge={t('evolution.badge')}
                     title={t('evolution.title')}
@@ -148,25 +148,25 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <Suspense fallback={<RevealSkeleton />}>
                     <BentoGrid />
                 </Suspense>
-            </motion.div>
+            </m.div>
 
             {/* 4. The Opportunity - Income Potential */}
-            <motion.div variants={item}>
+            <m.div variants={item}>
                 <Suspense fallback={<RevealSkeleton />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </Suspense>
-            </motion.div>
+            </m.div>
 
             {/* #comment: Refactored sectioning to ensure clear structural separation between user value (Income) and educational content (Blog). */}
             {/* 5. Intelligence Hub - Blog Carousel */}
-            <motion.div variants={item}>
+            <m.div variants={item}>
                 <Suspense fallback={<RevealSkeleton />}>
                     <BlogCarousel />
                 </Suspense>
-            </motion.div>
+            </m.div>
 
             {/* 6. Final CTA */}
-            <motion.div variants={item} className="px-6 text-center py-12 space-y-6">
+            <m.div variants={item} className="px-6 text-center py-12 space-y-6">
                 <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
                     {t('dashboard.movement_active')}
                 </div>
@@ -176,22 +176,22 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <p className="text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed">
                     {t('dashboard.cta_desc')}
                 </p>
-            </motion.div>
+            </m.div>
 
             {/* Description Text - Moved to Bottom per Image */}
-            <motion.div variants={item} className="px-8 pb-12">
+            <m.div variants={item} className="px-8 pb-12">
                 <p className="text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest">
                     <Trans i18nKey="dashboard.hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.
                     </Trans>
                 </p>
-            </motion.div>
+            </m.div>
 
             {/* 7. Footer - Legal & Disclaimer */}
             <Suspense fallback={null}>
                 <Footer />
             </Suspense>
 
-        </motion.div >
+        </m.div>
     );
 }

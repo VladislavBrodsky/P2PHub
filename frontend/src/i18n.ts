@@ -2,108 +2,58 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
-import enCommon from './locales/en/common.json';
-import enDashboard from './locales/en/dashboard.json';
-import enMarketing from './locales/en/marketing.json';
-import enAcademy from './locales/en/academy.json';
-import enPro from './locales/en/pro.json';
-import enSocial from './locales/en/social.json';
-import enCards from './locales/en/cards.json';
-import enOther from './locales/en/other.json';
-
-import ruCommon from './locales/ru/common.json';
-import ruDashboard from './locales/ru/dashboard.json';
-import ruMarketing from './locales/ru/marketing.json';
-import ruAcademy from './locales/ru/academy.json';
-import ruPro from './locales/ru/pro.json';
-import ruSocial from './locales/ru/social.json';
-import ruCards from './locales/ru/cards.json';
-import ruOther from './locales/ru/other.json';
-
-
-
-const deepMerge = (target: any, source: any) => {
-    if (Array.isArray(source)) return source;
-    if (source instanceof Object && target instanceof Object && !Array.isArray(target)) {
-        const output = { ...target };
-        Object.keys(source).forEach(key => {
-            if (source[key] instanceof Object) {
-                if (!(key in target)) {
-                    output[key] = source[key];
-                } else {
-                    output[key] = deepMerge(target[key], source[key]);
-                }
-            } else {
-                output[key] = source[key];
-            }
-        });
-        return output;
+// #comment: Performance Hack - Custom Lazy Loader for i18n
+// Instead of bundling ~400KB of JSON directly into the main JS bundle, 
+// we use dynamic imports. This allows Vite to split each language/sector 
+// into its own small chunk, loaded only when needed.
+const loadResources = async (language: string, namespace: string) => {
+    try {
+        // Vite supports dynamic imports with template literals
+        const resources = await import(`./locales/${language}/${namespace}.json`);
+        return resources.default;
+    } catch (e) {
+        console.error(`[i18n] Failed to load ${language}/${namespace}:`, e);
+        return {};
     }
-    return source;
 };
 
-const en = [
-    enCommon, enDashboard, enMarketing, enAcademy, enPro, enCards, enOther, enSocial
-].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
-
-const ru = [
-    ruCommon, ruDashboard, ruMarketing, ruAcademy, ruPro, ruCards, ruOther, ruSocial
-].reduce((acc: any, curr: any) => deepMerge(acc, curr), {} as any);
-
-// Ensure a default language is written to localStorage if the user hasn't
-// explicitly chosen one yet. This prevents auto-detection from Telegram's
-// system locale (e.g. Russian) overriding the app's default English UI.
-if (typeof window !== 'undefined' && !localStorage.getItem('i18nextLng')) {
-    localStorage.setItem('i18nextLng', 'en');
-}
+const namespaces = ['common', 'dashboard', 'marketing', 'academy', 'pro', 'social', 'cards', 'other'];
 
 i18n
-    // detect user language
-    // learn more: https://github.com/i18next/i18next-browser-languageDetector
     .use(LanguageDetector)
-    // pass the i18n instance to react-i18next.
     .use(initReactI18next)
-    // init i18next
-    // for all options read: https://www.i18next.com/overview/configuration-options
     .init({
-        resources: {
-            en: { translation: en },
-            ru: { translation: ru }
-        },
         fallbackLng: 'en',
+        ns: namespaces,
+        defaultNS: 'common',
         debug: import.meta.env.DEV,
-
-        // Force synchronous initialization since ALL translations are pre-bundled
-        // into the JS bundle (no HTTP fetching needed). Without this, i18n.init()
-        // schedules completion on the next microtask tick — causing the first
-        // React render to see raw keys before i18n is "ready".
-        initImmediate: false,
-
-        // Only load exact language codes ('en', 'ru'), not sub-variants
-        // like 'en-US' or 'en-GB' which don't exist in our resources.
-        load: 'languageOnly',
-
         interpolation: {
-            escapeValue: false, // not needed for react as it escapes by default
+            escapeValue: false,
         },
-
+        backend: {
+            // #comment: custom backend using the lazy loader defined above
+            async loadResources(language: string, namespace: string, callback: any) {
+                const resources = await loadResources(language, namespace);
+                callback(null, resources);
+            }
+        },
         react: {
-            // Disable Suspense mode to prevent translation flicker.
-            // Keys are available synchronously since we use initImmediate: false.
             useSuspense: false,
         },
-
         detection: {
-            // Only use explicit user preference from localStorage or querystring.
-            // Do NOT use 'navigator' — Telegram's system locale would override
-            // the app's English default and cause blog content to load in Russian.
             order: ['querystring', 'localStorage'],
-            // keys or params to lookup language from
             lookupQuerystring: 'lang',
             lookupLocalStorage: 'i18nextLng',
-            // cache user language on
             caches: ['localStorage'],
         }
     });
+
+// #comment: Manually load the initial language/namespaces to prevent raw key flashing 
+// without needing the full i18next-http-backend plugin.
+const initLang = localStorage.getItem('i18nextLng') || 'en';
+Promise.all(namespaces.map(ns =>
+    loadResources(initLang, ns).then(res => i18n.addResourceBundle(initLang, 'translation', res, true, true))
+));
+
 
 export default i18n;

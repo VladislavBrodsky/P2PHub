@@ -32,6 +32,24 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       output: {
+        manualChunks: (id) => {
+          // 1. Heavy UI/Charts (Isolate)
+          if (id.includes('node_modules/recharts')) {
+            return 'vendor-charts';
+          }
+          // 2. Framer Motion (Isolate)
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion';
+          }
+          // 3. Lucide Icons (Isolate)
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          // 4. Telegram & Wallet (Isolate)
+          if (id.includes('node_modules/@telegram-apps') || id.includes('node_modules/@tonconnect')) {
+            return 'vendor-tma';
+          }
+        }
       }
     }
   },

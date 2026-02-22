@@ -1,6 +1,6 @@
 // Deployment Track: 2026-02-20T18:07 [v1.8.4 Production Logic Patch]
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
-import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domAnimation, m } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 import './styles/animations.css';
 import './styles/premium.css';
@@ -386,7 +386,7 @@ function App() {
         <UIProvider>
             <AnimatePresence>
                 {!isComplete && (
-                    <motion.div
+                    <m.div
                         key="loader"
                         initial={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -394,7 +394,7 @@ function App() {
                         className="fixed inset-0 z-100"
                     >
                         <StartupLoader progress={progress} statusText={status} />
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
 

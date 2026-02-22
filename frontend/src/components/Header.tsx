@@ -1,4 +1,4 @@
-import { motion, useAnimation } from 'framer-motion';
+import { m, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 // #comment: Removed unused ChevronDown and X icons from lucide-react to clean up the import list
 import { Menu, Crown } from 'lucide-react';
@@ -57,7 +57,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <div className="flex-1" /> {/* Spacer */}
 
-                    <motion.button
+                    <m.button
                         animate={controls}
                         className="flex items-center gap-2.5 rounded-xl border border-(--color-border-glass) bg-(--color-bg-glass) px-3 py-1.5 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 relative overflow-hidden group"
                         aria-label="User stats"
@@ -71,12 +71,12 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
-                                <motion.div
+                                <m.div
                                     animate={{ scale: [1, 1.2, 1] }}
                                     transition={{ duration: 2, repeat: Infinity }}
                                 >
                                     <Crown size={12} className="text-amber-500 fill-amber-500/20" />
-                                </motion.div>
+                                </m.div>
                             )}
                         </div>
                         <div className="h-3 w-px bg-(--color-border-glass)" />
@@ -86,7 +86,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             </span>
                             <span className="text-[9px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400 animate-pulse">XP</span>
                         </div>
-                    </motion.button>
+                    </m.button>
                 </div>
             </div>
         </header>

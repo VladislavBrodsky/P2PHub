@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
@@ -85,18 +85,18 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 style={{ overscrollBehaviorY: 'none' }}
             >
                 <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
-                    {/* #comment: Removed key={activeTab} and mode="wait" to prevent full unmount of all tabs on switch. 
-                        This ensures visitedTabs logic in App.tsx works correctly and prevents white-screen deadlocks. */}
+                    {/* #comment: LazyMotion 'm' component used here for smaller bundle size. */}
                     <AnimatePresence initial={false}>
-                        <motion.div
+                        <m.div
+                            key={activeTab}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -6 }}
-                            transition={{ duration: 0.18, ease: 'easeOut' }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.2, ease: 'easeOut' }}
                             className="mx-auto w-full"
                         >
                             {children}
-                        </motion.div>
+                        </m.div>
                     </AnimatePresence>
                 </div>
             </main>
