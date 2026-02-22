@@ -62,6 +62,11 @@ export const proService = {
         return response.data;
     },
 
+    getMemberAvatars: async (limit: number = 10): Promise<{ avatars: { url?: string, file_id?: string }[] }> => {
+        const response = await apiClient.get(`/api/pro/members/avatars?limit=${limit}`);
+        return response.data;
+    },
+
     setupSocial: async (payload: PROSetupPayload) => {
         const response = await apiClient.post('/api/pro/setup', payload);
         return response.data;

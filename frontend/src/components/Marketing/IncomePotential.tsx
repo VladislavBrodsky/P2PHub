@@ -5,6 +5,9 @@ import { useState, useMemo, useEffect, useRef } from 'react';
 import { ReferralGraph } from './ReferralGraph';
 import { useTranslation, Trans } from 'react-i18next';
 import clsx from 'clsx';
+import { useQuery } from '@tanstack/react-query';
+import { proService } from '../../services/proService';
+import { getApiUrl } from '../../utils/api';
 
 type CalculatorMode = 'profit' | 'inaction';
 
@@ -35,6 +38,19 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const [slotsLeft] = useState(() => Math.floor(Math.random() * 7) + 3);
     const [mathVisible, setMathVisible] = useState(false);
     const mathRef = useRef<HTMLDivElement>(null);
+
+    const { data: memberAvatars } = useQuery({
+        queryKey: ['proMemberAvatars'],
+        queryFn: () => proService.getMemberAvatars(3),
+        staleTime: 30 * 60 * 1000, // 30 mins
+        refetchInterval: 30 * 60 * 1000,
+    });
+
+    const displayAvatars: { url?: string, file_id?: string }[] = memberAvatars?.avatars || [
+        { url: "https://randomuser.me/api/portraits/women/44.jpg" },
+        { url: "https://randomuser.me/api/portraits/women/68.jpg" },
+        { url: "https://randomuser.me/api/portraits/women/65.jpg" }
+    ];
 
     const viralMessagesRaw = t('income.network.viral_messages', { returnObjects: true });
     const viralMessages = useMemo(() =>
@@ -435,19 +451,24 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 rounded-2xl px-3 py-2 border border-slate-200 dark:border-white/5">
                                         <div className="flex items-center gap-3">
                                             <div className="flex -space-x-2">
-                                                {[
-                                                    "https://randomuser.me/api/portraits/women/44.jpg",
-                                                    "https://randomuser.me/api/portraits/women/68.jpg",
-                                                    "https://randomuser.me/api/portraits/women/65.jpg"
-                                                ].map((imgUrl, i) => (
-                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden shrink-0 shadow-lg">
-                                                        <img
-                                                            src={imgUrl}
-                                                            alt="Partner"
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                ))}
+                                                {displayAvatars.map((avatar, i) => {
+                                                    const src = avatar.file_id
+                                                        ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}`
+                                                        : avatar.url;
+                                                    return (
+                                                        <div key={i} className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                                            <img
+                                                                src={src}
+                                                                alt="Partner"
+                                                                className="w-full h-full object-cover"
+                                                                onError={(e) => {
+                                                                    // Fallback if image fails to load
+                                                                    e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`;
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-1">

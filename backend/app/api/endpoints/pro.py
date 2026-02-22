@@ -110,6 +110,45 @@ async def get_pro_stats(
         "total": int(setting_total.value) if setting_total else 300
     }
 
+@router.get("/members/avatars")
+async def get_pro_member_avatars(
+    limit: int = 10,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Returns a small list of recent PRO / PRO+ member avatars for social proof UI.
+    Cached naturally on frontend, fast query on backend.
+    """
+    from sqlalchemy import or_
+    stmt = (
+        select(Partner.photo_url, Partner.photo_file_id)
+        .where(Partner.is_pro == True)
+        .where(or_(Partner.photo_url != None, Partner.photo_file_id != None))
+        .order_by(Partner.last_checkin_at.desc())
+        .limit(limit)
+    )
+    result = await session.exec(stmt)
+    records = result.all()
+    
+    valid_avatars = []
+    for r in records:
+        if r.photo_file_id or (r.photo_url and r.photo_url.strip()):
+            valid_avatars.append({
+                "url": r.photo_url,
+                "file_id": r.photo_file_id
+            })
+    
+    # Fallback to defaults to prevent empty UI
+    if len(valid_avatars) < 3:
+        defaults = [
+            {"url": "https://randomuser.me/api/portraits/women/44.jpg", "file_id": None},
+            {"url": "https://randomuser.me/api/portraits/women/68.jpg", "file_id": None},
+            {"url": "https://randomuser.me/api/portraits/women/65.jpg", "file_id": None}
+        ]
+        valid_avatars.extend(defaults[:3 - len(valid_avatars)])
+        
+    return {"avatars": valid_avatars}
+
 class GrowthAdviceRequest(BaseModel):
     language: str = "en"
 
