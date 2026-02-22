@@ -71,7 +71,10 @@ async def approve_payment(
     """
     Approves a manual payment and triggers user upgrade.
     """
-    transaction = await session.get(PartnerTransaction, transaction_id)
+    # LOCK: with_for_update() prevents multiple admins from approving the same txn
+    stmt = select(PartnerTransaction).where(PartnerTransaction.id == transaction_id).with_for_update()
+    result = await session.execute(stmt)
+    transaction = result.scalar_one_or_none()
 
     if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")
@@ -110,7 +113,10 @@ async def reject_payment(
     """
     Rejects a manual payment. Sets status to 'failed' and notifies the user.
     """
-    transaction = await session.get(PartnerTransaction, transaction_id)
+    # LOCK: with_for_update() prevents race conditions during manual review
+    stmt = select(PartnerTransaction).where(PartnerTransaction.id == transaction_id).with_for_update()
+    result = await session.execute(stmt)
+    transaction = result.scalar_one_or_none()
 
     if not transaction:
         raise HTTPException(status_code=404, detail="Transaction not found")

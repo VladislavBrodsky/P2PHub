@@ -621,7 +621,9 @@ class AdminService:
         Applies administrative updates to a partner (Give XP, Set PRO).
         """
         async for session in get_session():
-            partner = await session.get(Partner, partner_id)
+            stmt = select(Partner).where(Partner.id == partner_id).with_for_update()
+            result = await session.execute(stmt)
+            partner = result.scalar_one_or_none()
             if not partner: return False
             
             if "xp" in updates:

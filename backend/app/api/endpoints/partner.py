@@ -196,10 +196,11 @@ async def get_my_profile(
 
     # Check if photo exists in DB first to avoid blocking Telegram API calls during every /me request
     # Eagerly load all required relations to skip the refetch later
+    # #comment: with_for_update() ensures atomic check-in and self-healing logic
     stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
         selectinload(Partner.completed_task_records),
         selectinload(Partner.referrals)
-    )
+    ).with_for_update()
     result = await session.exec(stmt)
     partner = result.first()
 
@@ -1073,7 +1074,7 @@ async def claim_task_reward(
     statement = select(Partner).where(Partner.telegram_id == tg_id).options(
         selectinload(Partner.completed_task_records),
         selectinload(Partner.referrals)
-    )
+    ).with_for_update()
     result = await session.exec(statement)
     partner = result.first()
 
@@ -1250,8 +1251,9 @@ async def complete_academy_stage(
 
     # #comment: Use service-level 'get_partner_full' to eagerly load relationships
     # This prevents 'MissingGreenlet' errors during complex schema mapping.
+    # LOCK: with_for_update=True to handle concurrent stage completions correctly.
     from app.services.partner_service import get_partner_full
-    partner = await get_partner_full(session, tg_id)
+    partner = await get_partner_full(session, tg_id, for_update=True)
 
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")

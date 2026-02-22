@@ -31,7 +31,7 @@ async def get_current_partner(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
     
-    stmt = select(Partner).where(Partner.telegram_id == tg_id)
+    stmt = select(Partner).where(Partner.telegram_id == tg_id).with_for_update()
     result = await session.exec(stmt)
     partner = result.first()
     

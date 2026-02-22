@@ -241,8 +241,10 @@ async def _commit_partner_creation(session: AsyncSession, partner: Partner, tele
         return existing, False
 
 
-async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str) -> Partner | None:
+async def get_partner_by_telegram_id(session: AsyncSession, telegram_id: str, for_update: bool = False) -> Partner | None:
     statement = select(Partner).where(Partner.telegram_id == telegram_id)
+    if for_update:
+        statement = statement.with_for_update()
     result = await session.exec(statement)
     return result.first()
 
@@ -399,7 +401,7 @@ async def migrate_paths(session: AsyncSession):
 
     await session.commit()
     logger.info(f"✅ Migration complete. Processed {processed_count} partners.")
-async def get_partner_full(session: AsyncSession, telegram_id: str) -> Partner | None:
+async def get_partner_full(session: AsyncSession, telegram_id: str, for_update: bool = False) -> Partner | None:
     """
     Fetches a partner with ALL necessary relationships eagerly loaded.
     Why: Prevents 'MissingGreenlet' errors when preparing complex responses.
@@ -409,6 +411,8 @@ async def get_partner_full(session: AsyncSession, telegram_id: str) -> Partner |
         selectinload(Partner.completed_task_records),
         selectinload(Partner.referrals)
     )
+    if for_update:
+        stmt = stmt.with_for_update()
     result = await session.exec(stmt)
     return result.first()
 

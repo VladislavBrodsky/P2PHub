@@ -140,7 +140,7 @@ async def verify_ton(
         logger.warning(f"Invalid user data in verify_ton: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    statement = select(Partner).where(Partner.telegram_id == tg_id).with_for_update()
     result = await session.exec(statement)
     partner = result.first()
 
@@ -199,7 +199,7 @@ async def submit_manual_payment(
         raise HTTPException(status_code=400, detail="Invalid user data")
 
     try:
-        statement = select(Partner).where(Partner.telegram_id == tg_id)
+        statement = select(Partner).where(Partner.telegram_id == tg_id).with_for_update()
         result = await session.exec(statement)
         partner = result.first()
 
@@ -336,7 +336,8 @@ async def upgrade_from_balance(
         logger.warning(f"Invalid user data in upgrade_from_balance: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
 
-    statement = select(Partner).where(Partner.telegram_id == tg_id)
+    # LOCK: with_for_update() prevents double-spending balance in high-concurrency scenarios
+    statement = select(Partner).where(Partner.telegram_id == tg_id).with_for_update()
     result = await session.exec(statement)
     partner = result.first()
 
