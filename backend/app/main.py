@@ -79,10 +79,19 @@ async def lifespan(app: FastAPI):
 
     # --- Distinguish between Web and Worker processes ---
     # TaskIQ workers should NOT handle bot updates (polling or webhooks).
-    # This prevents the 'TelegramConflictError' when web workers and background workers start simultaneously.
-    is_taskiq_worker = os.environ.get("TASKIQ_WORKER") == "True" or any("taskiq" in arg for arg in sys.argv)
+    # We use multiple checks for robustness across different deployment environments.
+    env_taskiq = str(os.environ.get("TASKIQ_WORKER", "")).lower() == "true"
+    is_taskiq_worker = env_taskiq or any("taskiq" in arg.lower() for arg in sys.argv)
+    
     service_name = os.environ.get("RAILWAY_SERVICE_NAME", "unknown").lower()
-    is_web_service = "web" in service_name or "backend" in service_name or not is_taskiq_worker
+    # A service is 'web' if explicitly named so, or if it's NOT a background taskiq worker.
+    is_web_service = ("web" in service_name or "backend" in service_name) and not is_taskiq_worker
+    
+    # Fallback: if we can't determine the service name, trust the TASKIQ_WORKER flag.
+    if service_name == "unknown":
+        is_web_service = not is_taskiq_worker
+        
+    logger.info(f"🔍 Process Discovery: Service='{service_name}', TaskIQ='{is_taskiq_worker}', IsWeb='{is_web_service}'")
 
     # #comment: Distributed Startup Tasks (Offloaded to Workers)
     # Using TaskIQ ensures these heavy operations don't block web worker startup.
