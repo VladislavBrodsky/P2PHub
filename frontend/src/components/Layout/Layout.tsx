@@ -91,7 +91,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             >
                 <div
                     className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}
-                    style={{ paddingBottom: 'calc(var(--spacing-safe-bottom, 20px) + 240px)' }}
+                    style={{ paddingBottom: 'calc(var(--spacing-safe-bottom, 20px) + 320px)' }}
                 >
                     {/* #comment: AnimatePresence removed here because App.tsx handles transition visibility.
                         Maintaining component state is critical for Smooth tab switching. */}
