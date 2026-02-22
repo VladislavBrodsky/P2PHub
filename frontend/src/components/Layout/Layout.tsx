@@ -5,6 +5,11 @@ const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
 import { useUI } from '../../context/UIContext';
 
+// #comment: Layout.tsx - Central structural wrapper for the application.
+// This version restores the exact structural hierarchy of the \"Great\" version.
+// It uses a fixed inset container with a transparent main scroll layer to allow
+// global background effects (orbs, mesh) to remain fixed while content scrolls.
+
 interface LayoutProps {
     children: React.ReactNode;
     activeTab: string;
@@ -46,9 +51,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col items-center overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
-
-
+        <div className="selection:bg-blue-500/10 fixed inset-0 flex flex-col overflow-hidden bg-(--color-bg-app) text-(--color-text-primary)">
             {/* Staging Ribbon */}
             {isStaging && (
                 <div className="fixed top-0 left-0 z-100 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -56,7 +59,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             )}
 
-            {/* Subtle Depth Effects - Consolidate global background orbs here */}
+            {/* #comment: Subtle Depth Effects - Consolidate global background orbs here */}
             <div className="pointer-events-none fixed right-[-10%] top-[-20%] z-0 aspect-square w-[80%] rounded-full blur-[120px]" style={{ backgroundColor: 'color-mix(in srgb, var(--color-bg-app) 95%, var(--color-brand-primary) 5%)' }} />
             <div className="pointer-events-none fixed bottom-[-10%] left-[-20%] z-0 aspect-square w-[60%] rounded-full bg-blue-500/5 blur-[100px]" />
             <div className="pointer-events-none fixed top-[40%] left-[-10%] z-0 aspect-square w-[40%] rounded-full bg-indigo-500/5 blur-[120px] dark:opacity-40" />
@@ -67,8 +70,6 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             {/* Grainy Texture */}
             <div className="pointer-events-none fixed inset-0 z-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
-
-
             {/* Header - Fixed above the scroll layer */}
             {isHeaderVisible && (
                 <div className="relative z-100">
@@ -76,25 +77,24 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 </div>
             )}
 
-            {/* #comment: Main Content Area - THE SCROLL LAYER. 
-                Kept transparent to allow background depth effects (fixed orbs) to show through. */}
+            {/* Main Content Area - THE SCROLL LAYER */}
             <main
                 id="main-scroll-root"
-                className={`flex-1 w-full overflow-x-hidden relative z-10 flex flex-col items-center
+                className={`flex-1 overflow-x-hidden relative z-10
                     overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]
                     ${!isHeaderVisible ? '' : (isStaging ? 'staging-offset' : 'content-main-padding')}`}
                 style={{ overscrollBehaviorY: 'none' }}
             >
-                <div className={`relative w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
-                    {/* #comment: LazyMotion 'm' component used here for smaller bundle size. */}
+                <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'} safe-pb`}>
+                    {/* #comment: Removed key={activeTab} and mode=\"wait\" here as well to maintain component state when switching tabs.
+                        This is critical for the 'visitedTabs' optimization in App.tsx. */}
                     <AnimatePresence initial={false}>
                         <m.div
-                            key={activeTab}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2, ease: 'easeOut' }}
-                            className="w-full"
+                            className="mx-auto w-full"
                         >
                             {children}
                         </m.div>

@@ -1,6 +1,6 @@
 // #comment: Dashboard.tsx - Main entry point for the Partner Network interface.
-// Refactored to use optimized 'm' component from framer-motion and lazy-loaded namespaces for i18n.
-// Spacing has been restored to the "Great" version while maintaining performance improvements.
+// Restored to the stable \"Great\" version that matched the user's reference perfectly.
+// Uses optimized 'm' components for performance while maintaining the spacious vertical hierarchy and premium crystal text effects.
 import { ShieldCheck } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useMemo, lazy, Suspense } from 'react';
@@ -17,6 +17,7 @@ const BentoGrid = lazy(() => import('../components/Marketing/BentoGrid').then(m 
 const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').then(m => ({ default: m.BlogCarousel })));
 const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
 const Footer = lazy(() => import('../components/Layout/Footer').then(m => ({ default: m.Footer })));
+const RevealSkeleton = lazy(() => import('../components/Skeletons/RevealSkeleton').then(m => ({ default: m.RevealSkeleton })));
 
 interface DashboardProps {
     setActiveTab?: (tab: string) => void;
@@ -42,158 +43,160 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     // #comment: Dynamic Hero Rotation - Switches content based on the day to keep the UI fresh.
     const rotationIndex = useMemo(() => Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % 3, []);
-    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, { defaultValue: "Everything You Know" }), [rotationIndex, t]);
-    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, { defaultValue: "About Money Is a Lie" }), [rotationIndex, t]);
+    const heroTitle1 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_1`, {
+        defaultValue: \"Everything You Know\" }), [rotationIndex, t]);
+    const heroTitle2 = useMemo(() => t(`dashboard.hero_rotation.${rotationIndex}.title_2`, {
+            defaultValue: \"About Money Is a Lie\" }), [rotationIndex, t]);
 
-    const isProPlus = (user?.subscription_plan || "").includes('PLUS');
+    const isProPlus = (user?.subscription_plan || \"\").includes('PLUS');
 
-    return (
+    return(
         <m.div
-            className="flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative"
-            variants={container}
-            initial="hidden"
-            animate="show"
+            className=\"flex w-full flex-col pb-safe-bottom px-0 min-h-dvh transition-colors duration-500 relative overflow-visible\"
+            variants = { container }
+            initial=\"hidden\"
+            animate =\"show\"
         >
-            {/* #comment: Ambient Background Glow for PRO users. 
-                Restoring the depth effects that were removed in the last 'improvement'. */}
-            {user?.is_pro && (
-                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
-                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
-                </div>
-            )}
+                {/* #comment: Ambient Background Glow for PRO users. */ }
+            { user?.is_pro && (
+                <div className=\"absolute inset-0 pointer-events-none overflow-hidden z-0\">
+        < div className =\"absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse\" />
+        < div className =\"absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse\" />
+                </div >
+            )
+}
 
-            {/* #comment: 1. Hero Section - Spacious & Centered Layout.
-                Restoring the 400px height and tight vertical lockup. */}
-            <m.div variants={item} className="px-4">
-                <div className="relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center">
-                    <CommunityOrbit />
-                </div>
+{/* 1. Hero Section - Spacious & Centered Layout */ }
+<m.div variants={item} className=\"px-4 space-y-12\">
+{/* Orbit Container */ }
+<div className=\"relative overflow-visible -mx-4 h-[400px] mt-2 flex items-center justify-center\">
+    < CommunityOrbit />
+                </div >
 
-                {/* #comment: Hero Content Section - Re-introducing negative margin for the 'Great' version look. */}
-                <div className="text-center space-y-10 px-2 flex flex-col items-center -mt-8 relative z-20">
-                    {/* Badge & Admin Entry */}
-                    <div className="flex items-center gap-3">
-                        {user?.is_pro ? (
-                            <m.button
-                                onClick={() => setActiveTab?.('pro')}
-                                className={`inline-flex items-center justify-center rounded-full border px-6 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+    {/* Hero Content Section */ }
+    < div className =\"text-center space-y-12 px-2 flex flex-col items-center -mt-8 relative z-20\">
+{/* Badge & Admin Entry */ }
+<div className=\"flex items-center gap-3\">
+{
+    user?.is_pro ? (
+        <m.button
+            onClick={() => setActiveTab?.('pro')}
+            className={`inline-flex items-center justify-center rounded-full border px-6 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{
+                duration: 3, repeat: Infinity, ease: \"easeInOut\" }}
                             >
-                                <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
-                                    {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
-                                </p>
-                            </m.button>
+                    <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                        {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
+                    </p>
+                            </m.button >
                         ) : (
-                            <m.div
-                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                            >
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                                    {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
-                                </p>
-                            </m.div>
-                        )}
-
-                        {user?.is_admin && user?.username !== 'uslincoln' && (
-                            <m.button
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                onClick={() => setActiveTab?.('admin')}
-                                className="p-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-4 transition-transform active:scale-90"
-                            >
-                                <ShieldCheck size={14} className="text-blue-500" />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Admin</span>
-                            </m.button>
-                        )}
-                    </div>
-
-                    {/* Main Titles - Ultra-premium typography */}
-                    <div className="space-y-4">
-                        <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto">
-                            {heroTitle1}
-                        </h1>
                         <m.div
-                            className="text-[36px] font-extrabold tracking-tighter leading-[0.9] text-center max-w-[300px] vibing-crystal-text mx-auto"
-                            animate={{
-                                scale: [1, 1.03, 1],
-                                rotate: [-0.3, 0.3, -0.3],
+                            className=\"inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2 shadow-[0_0_20px_rgba(0,102,255,0.3)]\"
+                                animate = {{ scale: [1, 1.05, 1] }}
+            transition={{
+                duration: 3, repeat: Infinity, ease: \"easeInOut\" }}
+                            >
+                    <p className=\"text-[10px] font-black uppercase tracking-[0.2em] text-white\">
+                                    { t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' }) }
+                                </p>
+                            </ m.div>
+                        )}
+
+            {user?.is_admin && user?.username !== 'uslincoln' && (
+                <m.button
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    onClick={() => setActiveTab?.('admin')}
+                    className=\"p-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-4 transition-transform active:scale-90\"
+                            >
+            <ShieldCheck size={14} className=\"text-blue-500\" />
+            <span className=\"text-[10px] font-black uppercase tracking-widest\">Admin</span>
+                            </m.button >
+                        )
+}
+                    </div >
+
+    {/* Main Titles */ }
+    < div className =\"space-y-4\">
+        < h1 className =\"text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto\">
+{ heroTitle1 }
+                        </h1 >
+    <m.div
+        className=\"text-[36px] font-extrabold tracking-tighter leading-[0.9] text-center max-w-[300px] vibing-crystal-text mx-auto\"
+animate = {{
+    scale: [1, 1.03, 1],
+        rotate: [-0.3, 0.3, -0.3],
                             }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
+transition = {{
+    duration: 3,
+        repeat: Infinity,
+            ease: \"easeInOut\"
+}}
                         >
-                            {heroTitle2}
-                        </m.div>
-                    </div>
-                </div>
-            </m.div>
+    { heroTitle2 }
+                        </m.div >
+                    </div >
+                </div >
+            </m.div >
 
-            {/* #comment: 2. Viral Proof - Partner Stats.
-                Displays live community activity to drive FOMO and social proof. */}
-            <m.div variants={item} className="mt-4">
-                <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
-            </m.div>
+    {/* 2. Viral Proof - Partner Stats */ }
+    < m.div variants = { item } className =\"mt-4\">
+        < PartnerStats onNavigateToEarn = {() => setActiveTab?.('earn')} />
+            </m.div >
 
-            {/* #comment: 3. The Evolution - Bento Grid.
-                Showcases the project roadmap through an interactive horizontal grid. */}
-            <m.div variants={item} className="space-y-6">
-                <SectionHeader
-                    badge={t('evolution.badge')}
-                    title={t('evolution.title')}
-                    description={t('evolution.desc')}
-                />
-                <Suspense fallback={<div className="h-64 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
-                    <BentoGrid />
-                </Suspense>
-            </m.div>
+    {/* 3. The Evolution - Bento Grid */ }
+    < m.div variants = { item } className =\"space-y-6\">
+        < SectionHeader
+badge = { t('evolution.badge') }
+title = { t('evolution.title') }
+description = { t('evolution.desc') }
+    />
+    <Suspense fallback={<RevealSkeleton />}>
+        <BentoGrid />
+    </Suspense>
+            </m.div >
 
-            {/* #comment: 4. The Opportunity - Income Potential.
-                Interactive calculator/graph showcasing potential earnings. */}
-            <m.div variants={item}>
-                <Suspense fallback={<div className="h-80 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
-                    <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
-                </Suspense>
-            </m.div>
+    {/* 4. The Opportunity - Income Potential */ }
+    < m.div variants = { item } >
+        <Suspense fallback={<RevealSkeleton />}>
+            <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
+        </Suspense>
+            </m.div >
 
-            {/* #comment: 5. Intelligence Hub - Blog Carousel.
-                Latest updates and articles to keep partners informed. */}
-            <m.div variants={item}>
-                <Suspense fallback={<div className="h-64 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
-                    <BlogCarousel />
-                </Suspense>
-            </m.div>
+    {/* 5. Intelligence Hub - Blog Carousel */ }
+    < m.div variants = { item } >
+        <Suspense fallback={<RevealSkeleton />}>
+            <BlogCarousel />
+        </Suspense>
+            </m.div >
 
-            {/* #comment: 6. Final CTA - Clear conversion point for users. */}
-            <m.div variants={item} className="px-6 text-center py-12 space-y-6">
-                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
-                    {t('dashboard.movement_active')}
-                </div>
-                <h4 className="text-2xl font-black tracking-tight text-text-primary whitespace-pre-line">
-                    {t('dashboard.cta_title')}
-                </h4>
-                <p className="text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed">
-                    {t('dashboard.cta_desc')}
-                </p>
-            </m.div>
+    {/* 6. Final CTA */ }
+    < m.div variants = { item } className =\"px-6 text-center py-12 space-y-6\">
+        < div className =\"p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg\">
+{ t('dashboard.movement_active') }
+                </div >
+    <h4 className=\"text-2xl font-black tracking-tight text-text-primary whitespace-pre-line\">
+{ t('dashboard.cta_title') }
+                </h4 >
+    <p className=\"text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed\">
+{ t('dashboard.cta_desc') }
+                </p >
+            </m.div >
 
-            {/* #comment: Semantic description for SEO and context. */}
-            <m.div variants={item} className="px-8 pb-12">
-                <p className="text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest">
-                    <Trans i18nKey="dashboard.hero_desc">
-                        Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.
-                    </Trans>
-                </p>
-            </m.div>
+    {/* Description Text */ }
+    < m.div variants = { item } className =\"px-8 pb-12\">
+        < p className =\"text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest\">
+            < Trans i18nKey =\"dashboard.hero_desc\">
+                        Traditional finance is slow, closed, and failing. < span className =\"text-blue-500 font-bold\">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.
+                    </Trans >
+                </p >
+            </m.div >
 
-            {/* 7. Footer */}
-            <Suspense fallback={null}>
-                <Footer />
-            </Suspense>
-        </m.div>
+    {/* 7. Footer */ }
+    < Suspense fallback = { null} >
+        <Footer />
+            </Suspense >
+        </m.div >
     );
 }
