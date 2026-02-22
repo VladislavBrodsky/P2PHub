@@ -42,7 +42,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     }, [controls]);
 
     return (
-        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] transition-all duration-300 pointer-events-none">
+        <header className="fixed top-0 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg pt-[calc(var(--spacing-safe-top,max(env(safe-area-inset-top),24px))+var(--spacing-telegram-header,12px))] transition-all duration-300 pointer-events-none">
             <div className="flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
                 <div className="flex items-center justify-between gap-4">
@@ -76,7 +76,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         <div className="h-3 w-px bg-(--color-border-glass)" />
                         <div className="flex items-center gap-1.5">
                             <span className="text-[12px] font-black text-(--color-text-primary) leading-none">
-                                {user?.xp ?? 0}
+                                {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
                             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
                         </div>

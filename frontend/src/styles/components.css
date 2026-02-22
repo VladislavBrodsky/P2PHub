@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 @layer utilities {
   .glass-panel {
     border-width: 1px;
