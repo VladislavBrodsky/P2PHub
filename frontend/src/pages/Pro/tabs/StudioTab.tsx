@@ -618,7 +618,7 @@ export const StudioTab = ({
                                     scale: externalStep === s ? 1.15 : 1,
                                     backgroundColor: externalStep === s ? 'rgb(255, 255, 255)' : externalStep > s ? 'rgb(16, 185, 129)' : 'rgb(241, 245, 249)'
                                 }}
-                                className={`w-7 h-7 rounded-xl flex items-center justify-center text-[10px] font-black transition-all shadow-xl ${externalStep === s
+                                className={`w-7 h-7 rounded-xl flex items-center justify-center text-label font-black transition-all shadow-xl ${externalStep === s
                                     ? 'vibing-crystal-purple-animated text-white ring-4 ring-purple-500/5'
                                     : externalStep > s
                                         ? 'bg-emerald-500 text-white'
@@ -741,7 +741,7 @@ export const StudioTab = ({
                                                     {t('pro_dashboard.studio.partners_strategy.mode')}
                                                 </span>
                                             </h4>
-                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-8">
+                                            <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-8">
                                                 <Trans i18nKey="pro_dashboard.studio.partners_strategy.desc">
                                                     Using geometric growth protocols and specialized Web App referral links for <span className="text-purple-500 font-bold">maximum geometric scaling</span>.
                                                 </Trans>
@@ -805,7 +805,7 @@ export const StudioTab = ({
                                                         value={personalLink}
                                                         onChange={(e) => setPersonalLink(e.target.value)}
                                                         placeholder="https://t.me/pintopaybot?start=..."
-                                                        className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-[10px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/5 outline-hidden transition-all shadow-inner"
+                                                        className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-label font-medium text-slate-900 dark:text-white placeholder:text-slate-400/50 focus:border-purple-500 focus:ring-4 focus:ring-purple-500/5 outline-hidden transition-all shadow-inner"
                                                     />
                                                     <button
                                                         onClick={() => handleUpdatePersonalLink(personalLink)}
@@ -970,7 +970,7 @@ export const StudioTab = ({
                                 <div className="flex flex-col gap-2.5 pt-4 w-full max-w-[260px] mx-auto">
                                     <button
                                         onClick={handleGenerate}
-                                        className="h-12 vibing-crystal-purple-animated rounded-xl font-black text-white text-[10px] uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-purple-500/20"
+                                        className="h-12 vibing-crystal-purple-animated rounded-xl font-black text-white text-label uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-purple-500/20"
                                     >
                                         {t('pro_dashboard.studio.go_viral_btn')} <ArrowRight size={14} />
                                     </button>
@@ -1149,13 +1149,13 @@ export const StudioTab = ({
                             <div className="grid grid-cols-2 gap-3">
                                 <button
                                     onClick={() => { selection(); setShowPublishModal(true); }}
-                                    className="h-10 vibing-crystal-purple-animated rounded-xl font-black text-white text-[10px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
+                                    className="h-10 vibing-crystal-purple-animated rounded-xl font-black text-white text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
                                 >
                                     {t('pro_dashboard.studio.publish_btn')} <Send size={13} className="animate-pulse" />
                                 </button>
                                 <button
                                     onClick={() => { impact('light'); setShowShareModal(true); }}
-                                    className="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-[10px] uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+                                    className="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-black text-label uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
                                 >
                                     {t('pro_dashboard.studio.share_btn')} <Share size={13} />
                                 </button>
@@ -1219,7 +1219,7 @@ export const StudioTab = ({
                                     </div>
 
                                     <div className="space-y-2.5">
-                                        <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
+                                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
                                             {t('pro_dashboard.publish.mgmt_p')}
                                         </p>
 
@@ -1350,7 +1350,7 @@ export const StudioTab = ({
                                                                                 ? 'bg-sky-500 border-sky-500 text-white shadow-md shadow-sky-500/20'
                                                                                 : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-sky-500/40'}`}
                                                                         >
-                                                                            <span className="text-[10px] font-black font-mono truncate">{ch}</span>
+                                                                            <span className="text-label font-black font-mono truncate">{ch}</span>
                                                                             {isActive && <CheckCircle2 size={14} className="text-white shrink-0 ml-2" />}
                                                                         </button>
                                                                     );
@@ -1374,7 +1374,7 @@ export const StudioTab = ({
                                         >
                                             <button
                                                 onClick={handleOmniPublish}
-                                                className="w-full h-13 vibing-crystal-purple-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-purple-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                                className="w-full h-13 vibing-crystal-purple-animated rounded-2xl font-black text-white text-label uppercase tracking-[0.2em] shadow-xl shadow-purple-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                             >
                                                 <Zap size={16} className="group-hover:scale-125 transition-transform" />
                                                 {t('pro_dashboard.publish.omni_publish_btn', { count: selectedPublishPlatforms.length })}
@@ -1442,21 +1442,21 @@ export const StudioTab = ({
                                             className="h-12 bg-[#0088cc]/10 hover:bg-[#0088cc]/20 border border-[#0088cc]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
                                             <img src={socialLogos.telegram} alt="Telegram" className="w-5 h-5 object-contain" />
-                                            <span className="text-[10px] font-black uppercase text-[#0088cc]">Telegram</span>
+                                            <span className="text-label font-black uppercase text-[#0088cc]">Telegram</span>
                                         </button>
                                         <button
                                             onClick={() => handleSharePlatform('whatsapp')}
                                             className="h-12 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/20 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
                                             <img src={socialLogos.whatsapp} alt="WhatsApp" className="w-5 h-5 object-contain" />
-                                            <span className="text-[10px] font-black uppercase text-[#25D366]">WhatsApp</span>
+                                            <span className="text-label font-black uppercase text-[#25D366]">WhatsApp</span>
                                         </button>
                                         <button
                                             onClick={() => handleSharePlatform('x')}
                                             className="h-12 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 rounded-xl flex items-center justify-center gap-2 transition-all group active:scale-95"
                                         >
                                             <img src={socialLogos.x} alt="X" className="w-4 h-4 dark:invert object-contain" />
-                                            <span className="text-[10px] font-black uppercase text-slate-900 dark:text-white">Twitter</span>
+                                            <span className="text-label font-black uppercase text-slate-900 dark:text-white">Twitter</span>
                                         </button>
                                         <button
                                             onClick={handleSystemShare}
@@ -1468,7 +1468,7 @@ export const StudioTab = ({
                                             ) : (
                                                 <Share size={14} className="text-purple-500 group-hover:scale-110 transition-transform" />
                                             )}
-                                            <span className="text-[10px] font-black uppercase text-purple-500">{t('pro_dashboard.studio.share_modal.more')}</span>
+                                            <span className="text-label font-black uppercase text-purple-500">{t('pro_dashboard.studio.share_modal.more')}</span>
                                         </button>
                                     </div>
 

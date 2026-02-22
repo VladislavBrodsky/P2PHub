@@ -109,7 +109,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const displayLoss = dailyLoss > 0 ? dailyLoss : 0;
 
     return (
-        <section className="px-4 py-4">
+        <section className="px-4 py-8">
             <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -188,7 +188,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Calculator className="w-4 h-4 text-blue-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
+                                            <span className="text-label font-black uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
                                         </div>
                                         <div className="space-y-2">
                                             <div className="flex justify-between items-end">
@@ -233,7 +233,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Clock className="w-4 h-4 text-rose-500" />
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
+                                            <span className="text-label font-black uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
                                         </div>
 
                                         <div className="space-y-4">
@@ -260,7 +260,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <div className="space-y-2">
                                                 <div className="flex justify-between items-end">
                                                     <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
-                                                    <span className="text-[10px] font-black text-rose-500">{hoursWorked} Hours</span>
+                                                    <span className="text-label font-black text-rose-500">{hoursWorked} Hours</span>
                                                 </div>
                                                 <input
                                                     type="range"
@@ -275,7 +275,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="pt-6 text-center space-y-4">
                                             <div className="space-y-1">
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                                                <div className="text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                     {t('income.inaction.value_per_min')}
                                                 </div>
                                                 <div className={`text-4xl font-black transition-colors duration-300 ${currentValPerMin >= 1
@@ -287,7 +287,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
 
                                             <div className="p-3 rounded-2xl bg-[#1A103C] border border-white/5 shadow-inner">
-                                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">
+                                                <div className="text-label font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">
                                                     {t('income.inaction.daily_loss')}
                                                 </div>
                                                 <div className="text-2xl font-black text-white">
@@ -308,11 +308,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <TrendingUp className="w-4 h-4 text-emerald-500" />
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-500">{t('income.network.title')}</span>
+                                    <span className="text-label font-black uppercase tracking-widest text-emerald-500">{t('income.network.title')}</span>
                                 </div>
                                 <button
                                     onClick={() => setIsStrategyUnlocked(false)}
-                                    className="text-[10px] font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                    className="text-label font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                                 >
                                     {t('income.network.close')}
                                 </button>
@@ -507,7 +507,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                             onNavigateToPartner?.();
                                         }}
-                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-10 rounded-xl text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
+                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-10 rounded-xl text-label tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
                                     >
                                         {t('income.math.cta_urgency')}
                                         <ArrowRight className="w-3.5 h-3.5" />
@@ -518,7 +518,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     )}
                 </AnimatePresence>
 
-                <div className="grid grid-cols-2 gap-3 relative z-10">
+                <div className="grid grid-cols-2 gap-4 relative z-10">
                     <div className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/80 border border-blue-500/10 dark:border-white/10 backdrop-blur-xl space-y-3 group transition-all hover:bg-blue-500/5 relative overflow-hidden shadow-sm dark:shadow-[0_10px_30px_-15px_rgba(59,130,246,0.3)]">
                         {/* Glow effect for dark mode */}
                         <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/10 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -559,7 +559,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-2 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                <div className="relative z-10 mx-2 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
                     {/* Liquid Background Layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
                     <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />
@@ -606,7 +606,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
                             <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                         </button>
-                        <p className="text-center mt-6 text-[10px] font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
+                        <p className="text-center mt-6 text-label font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
                             {t('income.cta.beta')}
                         </p>
                     </div>
@@ -622,7 +622,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                             <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                         </m.button>
-                        <p className="mt-4 text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
+                        <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
                             {t('income.cta.unlocked')}
                         </p>
 
@@ -639,7 +639,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     })}
                                 </div>
                                 <div className="text-left">
-                                    <div className="text-[10px] font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
+                                    <div className="text-label font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
                                     <div className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
                                 </div>
                             </div>
@@ -741,7 +741,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         </div>
                                                         <div>
                                                             <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
+                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
                                                         </div>
                                                     </div>
 
@@ -751,7 +751,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         </div>
                                                         <div>
                                                             <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
+                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
                                                         </div>
                                                     </div>
 
@@ -761,7 +761,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         </div>
                                                         <div>
                                                             <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
-                                                            <p className="text-[10px] text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
+                                                            <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
                                                         </div>
                                                     </div>
                                                 </div>

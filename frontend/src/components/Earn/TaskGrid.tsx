@@ -82,7 +82,7 @@ export const TaskGrid = ({
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
                     {t('tasks.active_missions')}
                 </h3>
-                <span className="text-[10px] font-black text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md uppercase tracking-widest">
+                <span className="text-label font-black text-slate-400 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-md uppercase tracking-widest">
                     {tasks.filter(t => !completedTaskIds.includes(t.id)).length} {t('tasks.available')}
                 </span>
             </div>

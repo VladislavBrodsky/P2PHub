@@ -118,7 +118,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     </div>
 
                     {/* Promo/Bonus Pill */}
-                    <div className="bg-white dark:bg-slate-900 rounded-[2rem] p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
                         <div className="flex items-center gap-2 overflow-hidden">
                             <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
                                 <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
@@ -128,7 +128,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             </div>
 
                             <div className="text-left min-w-0">
-                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] break-words">
+                                <p className="text-[11px] font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] wrap-break-word">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
@@ -220,7 +220,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             )}
                         </motion.button>
 
-                        <p className="mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                        <p className="mt-4 text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                             {t('cards.instant_delivery')}
                         </p>
                     </div>

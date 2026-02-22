@@ -388,7 +388,7 @@ export default function ReferralPage() {
                                             {window.Telegram?.WebApp && (
                                                 <button
                                                     onClick={handleShareViralCard}
-                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-[12px] border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
+                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-caption border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
                                                 >
                                                     <Sparkles className="w-3.5 h-3.5" />
                                                     <span>{t('referral.modal.viral_btn')}</span>
@@ -396,7 +396,7 @@ export default function ReferralPage() {
                                             )}
                                             <button
                                                 onClick={handleNativeShare}
-                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-[12px] border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
+                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-caption border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
                                             >
                                                 <ExternalLink className="w-3.5 h-3.5" />
                                                 <span>{t('referral.modal.share_more')}</span>
@@ -405,7 +405,7 @@ export default function ReferralPage() {
 
                                         <button
                                             onClick={handleCopyLink}
-                                            className="h-8 rounded-lg flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-[10px] active:scale-95 transition-all"
+                                            className="h-8 rounded-lg flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-label active:scale-95 transition-all"
                                         >
                                             <Copy className="w-3 h-3" />
                                             <span>{t('referral.modal.copy_link')}</span>
@@ -414,7 +414,7 @@ export default function ReferralPage() {
 
                                     {/* Footer Info */}
                                     <div className="text-center pb-2">
-                                        <p className="text-[10px] text-slate-400 font-medium">
+                                        <p className="text-label text-slate-400 font-medium">
                                             <Trans i18nKey="referral.modal.boost_desc">
                                                 Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>.
                                             </Trans>
@@ -515,12 +515,12 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <h1 className="text-xl font-black mb-1 tracking-tighter text-gradient-primary text-center">{t('referral.title')}</h1>
+            <h1 className="text-display font-black mb-1 tracking-tighter text-gradient-primary text-center leading-tight">{t('referral.title')}</h1>
 
             <div className="flex justify-center mb-4">
                 <button
                     onClick={() => setShowBriefModal(true)}
-                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-bold text-blue-500 hover:bg-slate-900/10 dark:hover:bg-white/10 transition-all active:scale-95"
+                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
                 >
                     <FileText className="w-3 h-3" />
                     {t('referral.brief.btn')}

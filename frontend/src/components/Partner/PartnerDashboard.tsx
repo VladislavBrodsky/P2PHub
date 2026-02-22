@@ -132,7 +132,7 @@ export const PartnerDashboard = () => {
                         onClick={() => { selection(); setIsFinanceOpen(true); }}
                         className="p-3 rounded-2xl bg-bg-glass border border-border-glass backdrop-blur-md shadow-sm flex flex-col cursor-pointer active:scale-[0.98] transition-all hover:bg-white/80 dark:hover:bg-slate-800/50"
                     >
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                        <div className="text-label font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>{t('partner_dashboard.total_earned')}</span>
                             <ChevronRight className="w-3 h-3 opacity-30" />
                         </div>
@@ -159,13 +159,13 @@ export const PartnerDashboard = () => {
                         onClick={handleExplorerOpen}
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
-                        <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                        <div className="text-label font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>{t('partner_dashboard.network_size')}</span>
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
                         <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
                             {totalNetworkSize}
-                            <span className="text-[10px] bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">
+                            <span className="text-label bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">
                                 {growthPct >= 0 ? '+' : ''}{growthPct}%
                             </span>
                         </div>
@@ -227,7 +227,7 @@ export const PartnerDashboard = () => {
                             </div>
                             <div>
                                 <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
-                                <p className="text-[10px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
+                                <p className="text-label font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
                             </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-400" />
@@ -259,7 +259,7 @@ export const PartnerDashboard = () => {
                                 </div>
                                 <div className="flex flex-col gap-0.5">
                                     <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.qr_title')}</span>
-                                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-80">{t('partner_dashboard.qr_desc')}</span>
+                                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 opacity-80">{t('partner_dashboard.qr_desc')}</span>
                                 </div>
                             </div>
                             <div className='w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/5 rounded-full text-slate-400 group-hover:text-blue-500 group-hover:bg-blue-500/10 transition-all'>
@@ -277,7 +277,7 @@ export const PartnerDashboard = () => {
                                 </div>
                                 <div className="flex flex-col gap-0.5 overflow-hidden">
                                     <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.link_title')}</span>
-                                    <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
+                                    <span className="text-label text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
                                 </div>
                             </div>
                             <button
@@ -302,7 +302,7 @@ export const PartnerDashboard = () => {
                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
                         <button
                             onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
-                            className="text-slate-500 hover:text-white text-[10px] font-black uppercase tracking-widest transition-colors"
+                            className="text-slate-500 hover:text-white text-label font-black uppercase tracking-widest transition-colors"
                         >
                             {isEarningsExpanded ? t('common.show_less') : t('common.view_all')}
                         </button>

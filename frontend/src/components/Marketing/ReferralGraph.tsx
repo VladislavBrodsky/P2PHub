@@ -167,7 +167,7 @@ export const ReferralGraph = () => {
                             <m.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] shadow-xl border border-white/10 dark:border-black/5"
+                                className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-black uppercase tracking-[0.2em] shadow-xl border border-white/10 dark:border-black/5"
                             >
                                 {t('income.network.core', { defaultValue: 'CORE HUB ACTIVATED' })}
                             </m.div>
@@ -190,7 +190,7 @@ export const ReferralGraph = () => {
                             <div className="relative px-6 py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
 
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
+                                <span className="text-label font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
                                     {t('income.network.yield', { defaultValue: 'PROJECTED MONTHLY YIELD' })}
                                 </span>
 
@@ -232,7 +232,7 @@ export const ReferralGraph = () => {
                                     repeat: Infinity,
                                     ease: "linear"
                                 }}
-                                className="absolute text-[10px] sm:text-xs font-black text-emerald-500 pointer-events-none"
+                                className="absolute text-label sm:text-xs font-black text-emerald-500 pointer-events-none"
                                 style={{
                                     top: `${20 + i * 15}%`,
                                     left: `${15 + (i * 17) % 70}%`
@@ -314,7 +314,7 @@ export const ReferralGraph = () => {
                                             {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                         </h3>
                                         <div className="w-12 h-1.5 bg-emerald-500 mx-auto rounded-full" />
-                                        <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em]">
+                                        <p className="text-label font-black text-emerald-500 uppercase tracking-[0.2em]">
                                             {t('viral_funnel.elite_users', { defaultValue: 'OFFER LIMITED TO FIRST 5,000 PARTNERS' })}
                                         </p>
                                     </div>
@@ -330,7 +330,7 @@ export const ReferralGraph = () => {
 
                                         <button
                                             onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
-                                            className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
+                                            className="text-label font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
                                             {t('common.close', { defaultValue: 'Close' })}
                                         </button>
@@ -348,7 +348,7 @@ export const ReferralGraph = () => {
                                                 />
                                             ))}
                                         </div>
-                                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-tight text-left">
+                                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 leading-tight text-left">
                                             {t('viral_funnel.deployed_partners', { count: partnersCount, defaultValue: `${partnersCount} nodes activated today` })}
                                         </p>
                                     </div>

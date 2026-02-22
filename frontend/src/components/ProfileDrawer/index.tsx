@@ -8,16 +8,20 @@ import {
     ChevronRight,
 } from 'lucide-react';
 
-import { useHaptic } from '../hooks/useHaptic';
+import { useHaptic } from '../../hooks/useHaptic';
 import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
 import { backButton } from '@telegram-apps/sdk-react';
-import { PersonalizationCard } from './PersonalizationCard';
-import { UpgradeButton } from './ui/UpgradeButton';
+import { PersonalizationCard } from '../PersonalizationCard';
+import { UpgradeButton } from '../ui/UpgradeButton';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
-import { DrawerMenu } from './ProfileDrawer/DrawerMenu';
-import { useUser } from '../context/UserContext';
-import { useTMALock } from '../hooks/useTMALock';
+import { DrawerMenu } from './DrawerMenu';
+import { useUser } from '../../context/UserContext';
+import { useTMALock } from '../../hooks/useTMALock';
+
+// #comment: ProfileDrawer.tsx - Optimized wrapper for the main application menu.
+// This component has been portaled to document.body to ensure it appears above all 
+// layout layers and satisfies the Apple-esque depth requirements.
 
 interface ProfileDrawerProps {
     isOpen: boolean;
@@ -40,7 +44,6 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
         let cleanup: VoidFunction | undefined;
 
         if (isOpen) {
-            // Telegram Back Button interaction
             try {
                 if (backButton.show.isAvailable()) {
                     backButton.show();
@@ -54,14 +57,11 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
         }
 
         return () => {
-
-            // If we're closing and on the home tab, ensure backButton is hidden
             if (isOpen && activeTab === 'home') {
                 try {
                     if (backButton.hide.isAvailable()) backButton.hide();
                 } catch (e) { /* ignore */ }
             }
-
             if (cleanup) cleanup();
         };
     }, [isOpen, onClose, activeTab]);
@@ -120,15 +120,15 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="pt-[calc(env(safe-area-inset-top)+var(--spacing-telegram-header))] px-4 pb-2 flex items-center justify-between z-20">
                                 <button
                                     onClick={onClose}
-                                    className="p-2 rounded-full bg-card-bg border border-card-border text-text-primary shadow-sm active:scale-90 transition-all"
+                                    className="p-2 rounded-full bg-card-bg border border-card-border text-text-primary shadow-sm active:scale-90 transition-all outline-none"
                                     aria-label="Close menu"
                                 >
                                     <ArrowLeft className="h-5 w-5" />
                                 </button>
-                                <div className="text-[10px] font-black uppercase tracking-[0.2em] text-text-secondary">
+                                <div className="text-label font-black uppercase tracking-[0.2em] text-text-secondary">
                                     {t('common.menu')}
                                 </div>
-                                <div className="w-9" /> {/* Spacer to center title */}
+                                <div className="w-9" />
                             </div>
 
                             {/* Scrollable Content */}
@@ -136,7 +136,6 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                 <div className="mt-4 overflow-visible">
                                     <PersonalizationCard variant="compact" />
                                 </div>
-
 
                                 <DrawerMenu onClose={onClose} selection={selection} />
 
@@ -174,7 +173,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                                     <div className="text-[7px] font-black uppercase tracking-widest opacity-70">
                                                         {t('common.wallet')}
                                                     </div>
-                                                    <div className="font-black text-[10px]">
+                                                    <div className="font-black text-label">
                                                         {wallet ? formattedAddress : t('common.connect_wallet')}
                                                     </div>
                                                 </div>
@@ -189,7 +188,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                 </div>
 
                                 <div className="mt-8 mb-4">
-                                    <p className="text-center text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary opacity-50">
+                                    <p className="text-center text-label font-black uppercase tracking-[0.3em] text-text-secondary opacity-50">
                                         P2PHub v1.8.3 (Stable)
                                     </p>
                                 </div>

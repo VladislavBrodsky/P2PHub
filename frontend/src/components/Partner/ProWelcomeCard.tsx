@@ -139,7 +139,7 @@ const BenefitItem = ({ icon, text, desc }: { icon: React.ReactNode, text: string
         </div>
         <div className="flex flex-col">
             <span className="text-sm font-bold text-white leading-none">{text}</span>
-            <span className="text-[10px] text-slate-400 mt-1 font-medium">{desc}</span>
+            <span className="text-label text-slate-400 mt-1 font-medium">{desc}</span>
         </div>
     </div>
 );

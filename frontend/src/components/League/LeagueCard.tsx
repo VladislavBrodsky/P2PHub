@@ -71,7 +71,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`relative overflow-hidden rounded-[2rem] border ${config.borderColor} bg-linear-to-br ${config.color} p-6 sm:p-8 shadow-2xl`}
+            className={`relative overflow-hidden rounded-2xl border ${config.borderColor} bg-linear-to-br ${config.color} p-6 sm:p-8 shadow-2xl`}
         >
             {/* Background Decoration */}
             <div className="absolute -right-8 -top-8 h-48 w-48 opacity-[0.03] text-white">
@@ -87,7 +87,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                         <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${config.textColor}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
+                        <span className="text-[9px] sm:text-label font-black uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
                             {t('leaderboard.current_league')}
                         </span>
                         <h2 className={`text-[22px] sm:text-3xl font-black tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap truncate`}>{config.name}</h2>

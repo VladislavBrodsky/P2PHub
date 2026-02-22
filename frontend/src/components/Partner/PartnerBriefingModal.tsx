@@ -200,7 +200,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                             <div className="space-y-3 pt-1">
                                                 {section.steps.map((step, i) => (
                                                     <div key={i} className="group/step relative flex items-start gap-4">
-                                                        <div className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-purple-500/30 text-[10px] font-black text-purple-600 dark:text-purple-400 shadow-sm transition-transform group-hover/step:translate-x-1">
+                                                        <div className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-slate-900 border border-purple-500/30 text-label font-black text-purple-600 dark:text-purple-400 shadow-sm transition-transform group-hover/step:translate-x-1">
                                                             0{i + 1}
                                                         </div>
                                                         <p className="text-xs text-slate-700 dark:text-slate-300 font-bold leading-normal pt-1 transition-colors group-hover/step:text-slate-900 dark:group-hover/step:text-white">
@@ -219,7 +219,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                                                         <div className="flex gap-2.5 items-start">
                                                             <div className="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-red-500" />
                                                             <div className="space-y-0.5">
-                                                                <h4 className="text-[10px] font-black uppercase tracking-wider text-red-700 dark:text-red-400 leading-tight">
+                                                                <h4 className="text-label font-black uppercase tracking-wider text-red-700 dark:text-red-400 leading-tight">
                                                                     {point.title}
                                                                 </h4>
                                                                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-normal italic opacity-80">

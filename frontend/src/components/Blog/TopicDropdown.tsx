@@ -33,7 +33,7 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
+                    <span className="text-label font-black uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
                     <span className="text-xs font-black text-slate-900 dark:text-white">{t(selectedLabel)}</span>
                 </div>
                 <motion.div

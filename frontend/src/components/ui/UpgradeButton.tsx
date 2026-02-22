@@ -58,7 +58,7 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                         {/* Text Container */}
                         <div className="flex flex-col items-start gap-0.5 min-w-0">
                             <div className="flex items-center gap-2">
-                                <h3 className="text-[12px] font-black text-white uppercase tracking-widest leading-none drop-shadow-sm whitespace-nowrap">
+                                <h3 className="text-caption font-black text-white uppercase tracking-widest leading-none drop-shadow-sm whitespace-nowrap">
                                     {t('common.upgrade_pro')}
                                 </h3>
                                 <Sparkles size={10} className="text-amber-300 animate-pulse shrink-0" />

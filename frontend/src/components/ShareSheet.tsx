@@ -118,7 +118,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         {/* Link Preview */}
                         <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-2xl mb-6 flex items-center justify-between border border-slate-200 dark:border-white/5">
                             <div className="truncate flex-1 mr-4">
-                                <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">Your Link</div>
+                                <div className="text-label uppercase font-bold text-slate-400 mb-1">Your Link</div>
                                 <div className="text-sm font-mono text-slate-900 dark:text-white truncate">{referralLink}</div>
                             </div>
                             <button

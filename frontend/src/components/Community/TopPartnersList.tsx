@@ -110,20 +110,20 @@ export const TopPartnersList = () => {
                                     <span className="text-sm font-black text-slate-900 dark:text-white">
                                         {partner.first_name} {partner.last_name}
                                     </span>
-                                    <span className="text-[10px] font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
+                                    <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
                                         {t(`ranks.${partner.rank}`, partner.rank) as string}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <div className="flex items-center gap-1">
                                         <TrendingUp className="w-3 h-3 text-emerald-500" />
-                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400">
                                             {partner.xp.toLocaleString()} XP
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <Users className="w-3 h-3 text-blue-400" />
-                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400">
                                             {partner.referrals_count} {t('referral.members')}
                                         </span>
                                     </div>
@@ -132,7 +132,7 @@ export const TopPartnersList = () => {
                         </div>
 
                         <div className="flex flex-col items-end">
-                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
+                            <div className="text-label font-black text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
                             <div className={`text-lg font-black ${index === 0 ? 'text-amber-500' :
                                 index === 1 ? 'text-slate-400' :
                                     index === 2 ? 'text-orange-400' :

@@ -47,11 +47,7 @@ export const EarnHeader = () => {
 
                 {/* Subtle grid texture */}
                 <div
-                    className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none"
-                    style={{
-                        backgroundImage: 'linear-gradient(var(--color-text-primary) 1px, transparent 1px), linear-gradient(90deg, var(--color-text-primary) 1px, transparent 1px)',
-                        backgroundSize: '32px 32px',
-                    }}
+                    className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none cyber-grid"
                 />
 
                 <div className="relative z-10 flex items-center gap-4 p-4">
@@ -145,7 +141,7 @@ export const EarnHeader = () => {
 
                         {/* XP Progress header row */}
                         <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0 gap-2">
-                            <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
+                            <span className="text-[8px] sm:text-label font-black uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
                                 {t('earn_header.xp_progress')}
                             </span>
                             <motion.span
@@ -240,7 +236,7 @@ export const EarnHeader = () => {
                                     <span className="text-[14px] sm:text-xl font-black leading-none tabular-nums text-text-primary">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
-                                    <span className="text-[8px] sm:text-[10px] font-black uppercase mb-0.5 shrink-0"
+                                    <span className="text-[8px] sm:text-label font-black uppercase mb-0.5 shrink-0"
                                         style={{ color: `${badgeColor}cc` }}>xp</span>
                                 </div>
                                 {/* Corner glow */}

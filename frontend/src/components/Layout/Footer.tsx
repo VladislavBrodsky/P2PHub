@@ -48,7 +48,7 @@ export const Footer = () => {
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">
-                    <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400/80">
+                    <h5 className="text-label font-black uppercase tracking-[0.2em] text-slate-400/80">
                         {t('legal.disclaimer_title')}
                     </h5>
                     <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
@@ -63,14 +63,14 @@ export const Footer = () => {
                 <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-slate-200 dark:border-white/10">
                     <button
                         onClick={() => setActiveDoc('terms')}
-                        className="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-label font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <Scale className="w-3 h-3" />
                         {t('legal.terms_title')}
                     </button>
                     <button
                         onClick={() => setActiveDoc('privacy')}
-                        className="text-[10px] font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
+                        className="text-label font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"
                     >
                         <FileText className="w-3 h-3" />
                         {t('legal.privacy_title')}
@@ -78,7 +78,7 @@ export const Footer = () => {
                 </div>
 
                 <div className="text-center space-y-2">
-                    <p className="text-[10px] text-slate-400/60 font-bold tracking-widest uppercase">
+                    <p className="text-label text-slate-400/60 font-bold tracking-widest uppercase">
                         {t('legal.copyright')}
                     </p>
                 </div>

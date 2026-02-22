@@ -306,7 +306,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full h-15 pl-13 pr-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5"
                                 />
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-label font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
                                     {t('blog.navigation.search_label')}
                                 </div>
                             </div>
@@ -352,7 +352,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     <div className="p-8 sm:p-10 space-y-4 relative bg-linear-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-60 mt-1">
+                                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest opacity-60 mt-1">
                                                 {currentFeaturedPost.date} • {t('blog.navigation.intelligence_hub')}
                                             </span>
                                         </div>
@@ -369,7 +369,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                                     <BookOpen className="w-4 h-4 text-blue-500" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
+                                                    <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
                                                     <span className="text-xs font-black text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
                                                 </div>
                                             </div>
@@ -387,7 +387,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
+                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-label font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
                                     >
                                         <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                         {t('blog.navigation.updating')}
@@ -405,7 +405,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                 {posts.length < total && (
                                     <div ref={sentinelRef} className="py-10 flex flex-col items-center justify-center gap-3">
                                         <div className="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 animate-pulse">
+                                        <p className="text-label font-black uppercase tracking-widest text-slate-400 animate-pulse">
                                             {t('blog.navigation.scanning')}
                                         </p>
                                     </div>
@@ -503,7 +503,7 @@ const BlogDetail = ({
                     </div>
 
                     <div className="flex-1 min-w-0 py-0.5">
-                        <h5 className="text-white font-extrabold text-[15px] leading-tight mb-0.5 tracking-tight">
+                        <h5 className="text-white font-extrabold text-body leading-tight mb-0.5 tracking-tight">
                             {isCard ? t('blog.marketing.get_card') : t('blog.marketing.upgrade_pro')}
                         </h5>
                         <p className="text-white/80 text-[11px] font-medium leading-relaxed line-clamp-1">
@@ -548,13 +548,13 @@ const BlogDetail = ({
                         className="p-2 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
+                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
                     </button>
 
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-center mr-2">
                             <div className="text-[8px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
-                            <div className="text-[10px] font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
+                            <div className="text-label font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
                             <button
@@ -594,17 +594,17 @@ const BlogDetail = ({
                         </div>
                     )}
                     <div className="flex items-center gap-4">
-                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">
+                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-label font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">
                             {t(getCategoryKey(post.category))}
                         </span>
-                        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400 opacity-60">
+                        <div className="flex items-center gap-2 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
                             <Clock className="w-4 h-4 text-blue-500" />
                             <span>5 {t('blog.navigation.min_analysis')}</span>
                         </div>
                     </div>
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl font-black leading-[1.1] tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
+                <h1 className="text-3xl sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
                     {post.title}
                 </h1>
 
@@ -616,7 +616,7 @@ const BlogDetail = ({
                     </div>
                     <div>
                         <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
+                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
                         <div className="flex -space-x-2.5">
@@ -675,7 +675,7 @@ const BlogDetail = ({
                         >
                             <Heart className={`w-6 h-6 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
+                                <span className="text-label font-black uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
                                 <span className="font-black text-xl italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
@@ -722,7 +722,7 @@ const BlogDetail = ({
                                             <div className="w-1 h-1 rounded-full bg-blue-500" />
                                             {t(getCategoryKey(relatedPost.category))}
                                         </p>
-                                        <h5 className="text-[15px] font-black leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
+                                        <h5 className="text-body font-black leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
                                             {relatedPost.title}
                                         </h5>
                                     </div>

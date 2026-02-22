@@ -229,7 +229,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="flex items-center justify-between px-0.5">
                                         <div className="flex items-center gap-2">
                                             <Clock className="w-3.5 h-3.5 text-blue-500" />
-                                            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-white">
+                                            <h4 className="text-label font-black uppercase tracking-widest text-slate-900 dark:text-white">
                                                 {t('partner_dashboard.finance_stats.history_72h', 'Alpha Activity (72h)')}
                                             </h4>
                                         </div>
@@ -304,7 +304,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             <div className="w-10 h-10 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-3">
                                                 <Clock className="w-4.5 h-4.5 text-slate-300 dark:text-white/20" />
                                             </div>
-                                            <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase mb-1">
+                                            <h5 className="text-label font-black text-slate-900 dark:text-white uppercase mb-1">
                                                 {t('partner_dashboard.finance_stats.no_activity', 'Quiet Perimeter')}
                                             </h5>
                                             <p className="text-[8.5px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-relaxed">
@@ -321,7 +321,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             <div className="w-5 h-5 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
                                                 <Calendar className="w-3 h-3" />
                                             </div>
-                                            <h4 className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
+                                            <h4 className="text-label font-black uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
                                                 {t('partner_dashboard.finance_stats.monthly_summary', 'Performance History')}
                                             </h4>
                                         </div>

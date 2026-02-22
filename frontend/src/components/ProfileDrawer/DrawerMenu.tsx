@@ -57,7 +57,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-text-primary">{t('menu.channel')}</span>
+                            <span className="text-label font-black uppercase text-text-primary">{t('menu.channel')}</span>
                         </a>
                         <a
                             href="https://t.me/pintopayworld"
@@ -66,7 +66,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-[10px] font-black uppercase text-text-primary">{t('menu.chat')}</span>
+                            <span className="text-label font-black uppercase text-text-primary">{t('menu.chat')}</span>
                         </a>
                     </div>
                 );
@@ -84,7 +84,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     <h4 className="text-sm font-black text-text-primary leading-tight">
                                         {t('faq.pro_promo.title')}
                                     </h4>
-                                    <p className="text-[10px] font-medium text-text-secondary leading-relaxed">
+                                    <p className="text-label font-medium text-text-secondary leading-relaxed">
                                         {t('faq.pro_promo.desc')}
                                     </p>
                                     <div className="grid grid-cols-2 gap-1.5 pt-1">
@@ -100,7 +100,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                             onClose();
                                             window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
                                         }}
-                                        className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-[10px] font-black uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
+                                        className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-label font-black uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
                                         {t('faq.pro_promo.cta')}
                                     </button>
                                 </div>
@@ -128,7 +128,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                             exit={{ height: 0, opacity: 0 }}
                                             transition={{ duration: 0.2 }}
                                         >
-                                            <div className="px-2.5 pb-2.5 text-[10px] font-medium text-text-secondary leading-relaxed border-t border-card-border pt-2">
+                                            <div className="px-2.5 pb-2.5 text-label font-medium text-text-secondary leading-relaxed border-t border-card-border pt-2">
                                                 {item.a}
                                             </div>
                                         </motion.div>

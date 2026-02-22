@@ -162,7 +162,7 @@ export default function LeaderboardPage() {
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="relative">
                                     {/* #comment Switched to rounded-full for the rank circle to satisfy the "perfect circle" aesthetic requested. */}
-                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
+                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
                                         index === 1 ? 'bg-slate-300 text-slate-700' :
                                             index === 2 ? 'bg-orange-300 text-orange-800' :
                                                 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'

@@ -5,11 +5,3 @@
 @import "./styles/components.css";
 @import "./styles/animations.css";
 @import "./styles/premium.css";
-
-/* Global overrides for higher specificity */
-@layer base {
-   :root {
-      --header-total-height: 150px;
-      --spacing-safe-bottom: 24px;
-   }
-}

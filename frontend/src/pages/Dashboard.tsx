@@ -49,13 +49,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <m.div
-            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative"
+            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-12 pb-20"
             variants={container}
             initial="hidden"
             animate="show"
         >
-            {/* #comment: Ambient Background Glow for PRO users. 
-                Restoring the depth effects that were removed in the last 'improvement'. */}
+            {/* #comment: Ambient Background Glow for PRO users. */}
             {user?.is_pro && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
                     <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
@@ -64,15 +63,13 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             )}
 
             {/* #comment: 1. Hero Section - Spacious & Centered Layout. */}
-            <m.div variants={item} className="px-4 flex flex-col items-center">
-                <div className="relative overflow-visible mx-auto h-[380px] sm:h-[440px] mt-2 flex items-center justify-center shrink-0">
+            <m.div variants={item} className="flex flex-col items-center pt-2">
+                <div className="relative overflow-visible mx-auto h-[380px] sm:h-[440px] flex items-center justify-center shrink-0">
                     <CommunityOrbit />
                 </div>
 
-                {/* #comment: Hero Content Section - High-impact vertical lockup */}
-                <div className="text-center gap-8 px-2 flex flex-col items-center mt-6 relative z-20 pb-12">
-                    {/* Badge & Admin Entry */}
-                    <div className="flex items-center gap-3">
+                <div className="text-center px-4 flex flex-col items-center mt-6 relative z-20">
+                    <div className="flex items-center gap-3 mb-8">
                         {user?.is_pro ? (
                             <m.button
                                 onClick={() => setActiveTab?.('pro')}
@@ -80,8 +77,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
-                                    {t('dashboard.open_pro_dashboard', { defaultValue: 'OPEN PRO+ DASHBOARD' })}
+                                <p className={`text-label font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                                    {t('dashboard.open_pro_dashboard')}
                                 </p>
                             </m.button>
                         ) : (
@@ -90,8 +87,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white">
-                                    {t('dashboard.hero_badge', { defaultValue: 'PARTNER NETWORK 2.0' })}
+                                <p className="text-label font-black uppercase tracking-[0.2em] text-white">
+                                    {t('dashboard.hero_badge')}
                                 </p>
                             </m.div>
                         )}
@@ -104,18 +101,17 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 className="p-2 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-4 transition-transform active:scale-90"
                             >
                                 <ShieldCheck size={14} className="text-blue-500" />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Admin</span>
+                                <span className="text-label font-black uppercase tracking-widest">Admin</span>
                             </m.button>
                         )}
                     </div>
 
-                    {/* Main Titles - Ultra-premium typography */}
                     <div className="flex flex-col gap-4">
-                        <h1 className="text-[38px] font-extrabold tracking-tighter text-slate-900 dark:text-white leading-[0.9] text-center max-w-[280px] mx-auto">
+                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-tight text-center max-w-[280px] mx-auto">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-[36px] font-extrabold tracking-tighter leading-[0.9] text-center max-w-[300px] vibing-crystal-text mx-auto"
+                            className="text-display font-black tracking-tighter leading-tight text-center max-w-[300px] vibing-crystal-text mx-auto"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -132,57 +128,55 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             </m.div>
 
-            {/* #comment: 2. Viral Proof - Partner Stats.
-                Displays live community activity to drive FOMO and social proof. */}
+            {/* #comment: 2. Viral Proof - Partner Stats. */}
             <m.div variants={item} className="mt-4">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </m.div>
 
-            {/* #comment: 3. The Evolution - Bento Grid.
-                Showcases the project roadmap through an interactive horizontal grid. */}
-            <m.div variants={item} className="flex flex-col gap-6">
-                <SectionHeader
-                    badge={t('evolution.badge')}
-                    title={t('evolution.title')}
-                    description={t('evolution.desc')}
-                />
-                <Suspense fallback={<div className="h-64 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
+            {/* #comment: 3. The Evolution - Bento Grid. */}
+            <m.div variants={item} className="flex flex-col gap-8">
+                <div className="px-4">
+                    <SectionHeader
+                        badge={t('evolution.badge')}
+                        title={t('evolution.title')}
+                        description={t('evolution.desc')}
+                    />
+                </div>
+                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <BentoGrid />
                 </Suspense>
             </m.div>
 
-            {/* #comment: 4. The Opportunity - Income Potential.
-                Interactive calculator/graph showcasing potential earnings. */}
-            <m.div variants={item}>
-                <Suspense fallback={<div className="h-80 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
+            {/* #comment: 4. The Opportunity - Income Potential. */}
+            <m.div variants={item} className="w-full">
+                <Suspense fallback={<div className="h-80 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </Suspense>
             </m.div>
 
-            {/* #comment: 5. Intelligence Hub - Blog Carousel.
-                Latest updates and articles to keep partners informed. */}
-            <m.div variants={item}>
-                <Suspense fallback={<div className="h-64 animate-pulse bg-slate-200/10 rounded-3xl mx-4" />}>
+            {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
+            <m.div variants={item} className="w-full">
+                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <BlogCarousel />
                 </Suspense>
             </m.div>
 
-            {/* #comment: 6. Final CTA - Clear conversion point for users. */}
-            <m.div variants={item} className="px-6 text-center py-8 space-y-6">
-                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-[10px] font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
+            {/* #comment: 6. Final CTA - Clear conversion point. */}
+            <m.div variants={item} className="px-6 text-center py-12 space-y-6">
+                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-black uppercase tracking-[0.3em] w-fit mx-auto border border-blue-500/20 shadow-lg">
                     {t('dashboard.movement_active')}
                 </div>
-                <h4 className="text-2xl font-black tracking-tight text-text-primary whitespace-pre-line">
+                <h4 className="text-display font-black tracking-tight text-text-primary whitespace-pre-line leading-tight">
                     {t('dashboard.cta_title')}
                 </h4>
-                <p className="text-xs font-bold text-text-secondary max-w-[240px] mx-auto leading-relaxed">
+                <p className="text-body text-text-secondary max-w-[280px] mx-auto leading-relaxed font-medium">
                     {t('dashboard.cta_desc')}
                 </p>
             </m.div>
 
-            {/* #comment: Semantic description for SEO and context. */}
-            <m.div variants={item} className="px-8 pb-8">
-                <p className="text-text-secondary text-center text-[10px] font-bold leading-relaxed opacity-60 uppercase tracking-widest">
+            {/* #comment: Semantic description. */}
+            <m.div variants={item} className="px-8 pt-4 pb-12">
+                <p className="text-text-secondary text-center text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
                     <Trans i18nKey="dashboard.hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Pintopay</span> is the bridge to a borderless era where you earn from the flow of world money.
                     </Trans>

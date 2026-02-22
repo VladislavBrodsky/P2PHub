@@ -46,7 +46,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                         <div className="relative flex flex-col items-center text-center">
                             {/* Premium Icon Badge */}
                             <div className="mb-6 relative">
-                                <div className="h-20 w-20 rounded-[2rem] bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                <div className="h-20 w-20 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                     <Crown size={40} className="text-white fill-white/20" />
                                 </div>
                                 <motion.div
@@ -68,7 +68,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                             <div className="w-full space-y-3 mb-8 text-left">
                                 {(t('cards.modal.steps', { returnObjects: true }) as string[]).map((step, i) => (
                                     <div key={i} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-white/10">
-                                        <div className="h-6 w-6 rounded-lg bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-[10px] font-black text-indigo-500 border border-slate-100 dark:border-white/10">
+                                        <div className="h-6 w-6 rounded-lg bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-label font-black text-indigo-500 border border-slate-100 dark:border-white/10">
                                             {i + 1}
                                         </div>
                                         <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{step}</span>

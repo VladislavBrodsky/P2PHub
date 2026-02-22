@@ -145,7 +145,7 @@ function processMarkdown(text: string): string {
         })
 
         // Term/Glossary highlighting (engagement)
-        .replace(/\[TERM:\s*(.*?)\s*\|\s*(.*?)\s*\]/g, '<span class="px-1.5 py-0.25 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 font-black text-[0.85em] cursor-help relative group">$1<span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-[10px] rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl border border-white/10">$2</span></span>')
+        .replace(/\[TERM:\s*(.*?)\s*\|\s*(.*?)\s*\]/g, '<span class="px-1.5 py-0.25 rounded-md bg-indigo-500/10 border border-indigo-500/20 text-indigo-500 font-black text-[0.85em] cursor-help relative group">$1<span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-slate-900 text-white text-label rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 shadow-xl border border-white/10">$2</span></span>')
 
         // Clean up excessive spacing but preserve line breaks if they were meant to be there
         .replace(/[ \t]{2,}/g, ' ');

@@ -44,7 +44,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     return (
         <header
             className="fixed top-0 left-0 right-0 z-150 w-full flex justify-center transition-all duration-300 pointer-events-none"
-            style={{ paddingTop: 'calc(var(--spacing-safe-top, 20px) + var(--spacing-telegram-header, 74px) + 12px)' }}
+            style={{ paddingTop: 'calc(var(--spacing-safe-top, 24px) + 12px)' }}
         >
             <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto">
                 {/* Navigation & Stats */}
@@ -55,7 +55,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-5 w-5 transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary">
+                        <span className="text-label font-black uppercase tracking-[0.2em] text-text-primary">
                             {t('common.menu')}
                         </span>
                     </button>
@@ -68,8 +68,8 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-black uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
-                            <span className="text-sm font-black text-text-primary leading-none">
+                            <span className="text-label font-black uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-caption font-black text-text-primary leading-none">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
@@ -78,10 +78,10 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         </div>
                         <div className="h-3 w-px bg-border-glass" />
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[12px] font-black text-text-primary leading-none">
+                            <span className="text-caption font-black text-text-primary leading-none">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-500 dark:text-emerald-400">XP</span>
+                            <span className="text-label font-black uppercase tracking-wider text-success dark:text-emerald-400">XP</span>
                         </div>
                     </m.button>
                 </div>

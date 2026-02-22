@@ -94,7 +94,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         {/* Status Badge - Matching user screenshot exactly */}
                         <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden min-w-[140px] flex justify-center">
                             <div className="relative z-10">
-                                <p className="text-text-primary font-black tracking-[0.2em] uppercase text-[10px] opacity-80">
+                                <p className="text-text-primary font-black tracking-[0.2em] uppercase text-label opacity-80">
                                     {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText.toUpperCase()}
                                 </p>
                             </div>
@@ -123,7 +123,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                     style={{ animationDelay: '0.5s' }}
                 >
                     <div className="h-px w-10 bg-linear-to-r from-transparent to-text-secondary" />
-                    <span className="text-[10px] font-black tracking-[0.5em] uppercase text-text-secondary whitespace-nowrap">
+                    <span className="text-label font-black tracking-[0.5em] uppercase text-text-secondary whitespace-nowrap">
                         Advanced Ecosystem
                     </span>
                     <div className="h-px w-10 bg-linear-to-l from-transparent to-text-secondary" />

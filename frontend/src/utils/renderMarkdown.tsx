@@ -66,7 +66,7 @@ export function renderMarkdown(text: string | undefined | null): React.ReactNode
                                 const content = line.replace(/^\d+\.\s*/, '').trim();
                                 return (
                                     <li key={lineIdx} className="flex items-start gap-2.5">
-                                        <span className="shrink-0 w-5 h-5 rounded-full bg-blue-500/20 text-blue-500 text-[10px] font-black flex items-center justify-center mt-0.5">
+                                        <span className="shrink-0 w-5 h-5 rounded-full bg-blue-500/20 text-blue-500 text-label font-black flex items-center justify-center mt-0.5">
                                             {lineIdx + 1}
                                         </span>
                                         <span>{renderInline(content)}</span>
@@ -89,7 +89,7 @@ export function renderMarkdown(text: string | undefined | null): React.ReactNode
                                     const num = parseInt(trimmedLine);
                                     return (
                                         <div key={lineIdx} className="flex items-start gap-2.5">
-                                            <span className="shrink-0 w-5 h-5 rounded-full bg-blue-500/20 text-blue-500 text-[10px] font-black flex items-center justify-center mt-0.5">
+                                            <span className="shrink-0 w-5 h-5 rounded-full bg-blue-500/20 text-blue-500 text-label font-black flex items-center justify-center mt-0.5">
                                                 {num}
                                             </span>
                                             <span>{renderInline(content)}</span>

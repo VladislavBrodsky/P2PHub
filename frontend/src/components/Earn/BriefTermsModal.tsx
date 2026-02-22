@@ -132,7 +132,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                 </div>
                                 <div className="flex items-center gap-2 px-3 py-2 bg-rose-500/5 rounded-lg border border-rose-500/20">
                                     <ShieldCheck className="w-3 h-3 text-rose-500" />
-                                    <p className="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase">{t('referral.brief.antibot_active')}</p>
+                                    <p className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase">{t('referral.brief.antibot_active')}</p>
                                 </div>
                             </section>
 

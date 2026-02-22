@@ -139,7 +139,7 @@ export const PremiumSelect = ({
                     {indexStr}. {label}
                 </label>
                 {instruction && (
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug pr-4">
+                    <p className="text-label text-slate-500 dark:text-slate-400 mt-1 leading-snug pr-4">
                         {instruction}
                     </p>
                 )}
@@ -201,11 +201,11 @@ export const PremiumSelect = ({
                                                     `}
                                         >
                                             <div className="flex flex-col text-left mr-2">
-                                                <span className={`text-[12px] sm:text-[13px] font-bold transition-colors ${isSelected ? theme.text : `group-hover/item:${theme.text}`}`}>
+                                                <span className={`text-caption sm:text-[13px] font-bold transition-colors ${isSelected ? theme.text : `group-hover/item:${theme.text}`}`}>
                                                     {option.label}
                                                 </span>
                                                 {option.description && (
-                                                    <span className={`text-[10px] mt-0.5 leading-snug transition-colors ${isSelected ? `text-${color}-600/70 dark:text-${color}-400/70` : `text-slate-500 dark:text-slate-400 group-hover/item:text-${color}-600/70 dark:group-hover/item:text-${color}-400/70`}`}>
+                                                    <span className={`text-label mt-0.5 leading-snug transition-colors ${isSelected ? `text-${color}-600/70 dark:text-${color}-400/70` : `text-slate-500 dark:text-slate-400 group-hover/item:text-${color}-600/70 dark:group-hover/item:text-${color}-400/70`}`}>
                                                         {option.description}
                                                     </span>
                                                 )}

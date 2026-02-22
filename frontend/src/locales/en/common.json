@@ -138,6 +138,12 @@
       "unavailable": "{{feature}} is temporarily unavailable",
       "desc": "A synchronization error occurred in the global system. Our team has been notified.",
       "retry": "Initialize Retry"
+    },
+    "features": {
+      "dashboard": "Dashboard",
+      "academy": "Academy",
+      "wallet": "Wallet",
+      "partner": "Partner"
     }
   },
   "support": {
@@ -283,5 +289,17 @@
         "desc": "Activate PRO to unlock the AI Content Studio. Scale your network faster while you focus on your goals."
       }
     ]
+  },
+  "income": {
+    "desc": "Traditional finance is a <1>closed garden</1>. As a <3>Pintopay Partner</3>, you are the bridge. Every global transaction becomes your dividends.",
+    "waiting": {
+      "desc": "While you trade hours for a fixed wage, the digital economy creates value 24/7. <1>Every minute you wait is a tax on your potential</1><2>Unlock the strategy to stop calculating losses and start capturing profits.</2>"
+    },
+    "cta": {
+      "join": "JOIN NOW"
+    }
+  },
+  "dashboard": {
+    "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money."
   }
 }

@@ -109,7 +109,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
             <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-4 rounded-xl shadow-2xl relative overflow-hidden group ring-1 ring-white/10">
                 <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-blue-500/10 transition-colors" />
                 <div className="relative z-10">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{label}</p>
+                    <p className="text-label font-black text-slate-500 uppercase tracking-widest mb-2">{label}</p>
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
                             <Users size={18} />
@@ -539,7 +539,7 @@ export const AdminPage = () => {
 
                     <div className="flex flex-col items-center justify-center gap-4 pt-1">
                         <div className="flex items-center gap-2">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
+                            <p className="text-slate-500 text-label font-black uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
                                 <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
                                 <span className="text-[9px] font-black uppercase text-slate-500 dark:text-slate-300">
@@ -572,7 +572,7 @@ export const AdminPage = () => {
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
-                        className={`px-3 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${viewMode === mode
+                        className={`px-3 py-2 text-label font-black uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${viewMode === mode
                             ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
                             : 'text-slate-500 hover:bg-white/5'
                             }`}
@@ -622,9 +622,9 @@ export const AdminPage = () => {
                                         <div>
                                             <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
                                                 God-Mode Palantir
-                                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-black animate-pulse">LIVE</span>
+                                                <span className="text-label px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-black animate-pulse">LIVE</span>
                                             </h3>
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">Active Matrix Feed · Real-time Observability</p>
+                                            <p className="text-label text-slate-500 font-bold uppercase tracking-tight">Active Matrix Feed · Real-time Observability</p>
                                         </div>
                                     </div>
                                     <button
@@ -670,14 +670,14 @@ export const AdminPage = () => {
                         {/* Audit Feed List */}
                         <div className="space-y-2 relative">
                             {/* Vertical Line Connector (Matrix Feel) */}
-                            <div className="absolute left-[24px] top-6 bottom-6 w-px bg-linear-to-b from-indigo-500/20 via-indigo-500/40 to-indigo-500/20 hidden sm:block"></div>
+                            <div className="absolute left-safe-bottom top-6 bottom-6 w-px bg-linear-to-b from-indigo-500/20 via-indigo-500/40 to-indigo-500/20 hidden sm:block"></div>
 
                             {palantirFeed.length === 0 ? (
                                 <div className="p-16 text-center space-y-4 glass-panel-premium rounded-[3rem] border border-black/5 dark:border-white/5">
                                     <div className="w-16 h-16 rounded-full bg-slate-500/5 flex items-center justify-center mx-auto border border-white/5">
                                         <Activity size={32} className="text-slate-500 opacity-20" />
                                     </div>
-                                    <div className="text-slate-500 font-black uppercase text-[10px] tracking-[0.2em]">Matrix Offline — No Events Captured</div>
+                                    <div className="text-slate-500 font-black uppercase text-label tracking-[0.2em]">Matrix Offline — No Events Captured</div>
                                 </div>
                             ) : (
                                 palantirFeed.map(log => (
@@ -705,7 +705,7 @@ export const AdminPage = () => {
                                         <div className="flex-1 min-w-0 space-y-1">
                                             <div className="flex items-center justify-between gap-2">
                                                 <div className="flex items-center gap-2 overflow-hidden">
-                                                    <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-lg
+                                                    <span className={`text-label font-black uppercase px-2 py-0.5 rounded-lg
                                                         ${log.action_type === 'UPGRADE' ? 'bg-amber-500/10 text-amber-500' :
                                                             log.action_type === 'PAYMENT' ? 'bg-blue-500/10 text-blue-500' :
                                                                 log.action_type === 'COMMISSION' ? 'bg-emerald-500/10 text-emerald-500' :
@@ -723,7 +723,7 @@ export const AdminPage = () => {
                                                         )}
                                                     </span>
                                                 </div>
-                                                <div className="text-[10px] font-mono text-slate-400 font-bold whitespace-nowrap bg-black/5 dark:bg-white/5 p-1 rounded-md border border-white/5">
+                                                <div className="text-label font-mono text-slate-400 font-bold whitespace-nowrap bg-black/5 dark:bg-white/5 p-1 rounded-md border border-white/5">
                                                     {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
                                                 </div>
                                             </div>
@@ -749,7 +749,7 @@ export const AdminPage = () => {
                                                         {Object.entries(log.details).slice(0, 4).map(([key, val]) => (
                                                             <div key={key} className="flex flex-col gap-0.5">
                                                                 <span className="text-[8px] font-black uppercase text-slate-500 tracking-widest">{key.replace(/_/g, ' ')}</span>
-                                                                <span className="text-[10px] font-mono text-indigo-400 font-bold truncate">
+                                                                <span className="text-label font-mono text-indigo-400 font-bold truncate">
                                                                     {typeof val === 'object' ? JSON.stringify(val) : String(val)}
                                                                 </span>
                                                             </div>
@@ -782,7 +782,7 @@ export const AdminPage = () => {
                                     </div>
                                     <div>
                                         <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-widest">Broadcast Nexus</h3>
-                                        <p className="text-[10px] text-slate-500 font-bold uppercase">Multi-Target Communication Hub</p>
+                                        <p className="text-label text-slate-500 font-bold uppercase">Multi-Target Communication Hub</p>
                                     </div>
                                 </div>
                                 <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">
@@ -792,7 +792,7 @@ export const AdminPage = () => {
 
                             {/* Audience Switcher */}
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <label className="text-label font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                     <UserPlus size={12} /> Target Audience
                                 </label>
                                 <div className="flex flex-wrap gap-2">
@@ -806,7 +806,7 @@ export const AdminPage = () => {
                                         <button
                                             key={aud.id}
                                             onClick={() => setBroadcastForm(prev => ({ ...prev, audience: aud.id }))}
-                                            className={`px-3 py-2 rounded-xl border text-[10px] font-black uppercase tracking-tight transition-all flex items-center gap-1.5
+                                            className={`px-3 py-2 rounded-xl border text-label font-black uppercase tracking-tight transition-all flex items-center gap-1.5
                                                 ${broadcastForm.audience === aud.id
                                                     ? 'bg-orange-500 border-orange-600 text-white shadow-lg'
                                                     : 'bg-white/5 border-white/10 text-slate-500 hover:bg-white/10'}`}
@@ -820,7 +820,7 @@ export const AdminPage = () => {
 
                             {/* Stylized Message Editor */}
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <label className="text-label font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                     <Filter size={12} /> Payload Message
                                 </label>
                                 <div className="relative group">
@@ -830,11 +830,11 @@ export const AdminPage = () => {
                                         placeholder="Message to your fleet..."
                                         className="w-full h-32 p-4 bg-black/20 border border-white/5 rounded-3xl text-sm font-medium text-slate-100 placeholder:text-slate-600 focus:border-orange-500/50 outline-none transition-all resize-none shadow-inner"
                                     />
-                                    <div className="absolute bottom-4 right-4 text-[10px] font-mono text-slate-600 font-bold uppercase pr-2 border-r border-white/10">
+                                    <div className="absolute bottom-4 right-4 text-label font-mono text-slate-600 font-bold uppercase pr-2 border-r border-white/10">
                                         {broadcastForm.text.length} chars
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-2 text-[10px] text-slate-500 font-bold uppercase italic opacity-60 px-2">
+                                <div className="flex items-center gap-2 text-label text-slate-500 font-bold uppercase italic opacity-60 px-2">
                                     <span className="w-1 h-1 rounded-full bg-slate-500"></span>
                                     HTML tags supported (b, i, u, a). Use with caution.
                                 </div>
@@ -853,7 +853,7 @@ export const AdminPage = () => {
                         {/* Active Operations Center */}
                         {activeBroadcasts.length > 0 && (
                             <div className="space-y-3">
-                                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Active Operations</h4>
+                                <h4 className="text-label font-black text-slate-400 uppercase tracking-widest px-2">Active Operations</h4>
                                 <div className="space-y-2">
                                     {activeBroadcasts.map(b => {
                                         const progress = b.total_targets > 0 ? (b.sent_count / b.total_targets) * 100 : 0;
@@ -865,7 +865,7 @@ export const AdminPage = () => {
                                                             <Megaphone className="text-orange-500 animate-pulse" size={14} />
                                                         </div>
                                                         <div>
-                                                            <div className="text-[10px] font-black text-slate-100 uppercase tracking-widest">
+                                                            <div className="text-label font-black text-slate-100 uppercase tracking-widest">
                                                                 Operation #{b.id}
                                                             </div>
                                                             <div className="text-[8px] text-slate-500 font-bold uppercase">
@@ -882,7 +882,7 @@ export const AdminPage = () => {
                                                 </div>
 
                                                 <div className="space-y-1.5">
-                                                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-tight">
+                                                    <div className="flex items-center justify-between text-label font-black uppercase tracking-tight">
                                                         <span className="text-orange-500">{progress.toFixed(1)}% Completed</span>
                                                         <span className="text-slate-400 font-mono tracking-tighter">{b.sent_count} / {b.total_targets}</span>
                                                     </div>
@@ -903,7 +903,7 @@ export const AdminPage = () => {
 
                         {/* Mission History */}
                         <div className="space-y-3">
-                            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-2">Campaign History</h4>
+                            <h4 className="text-label font-black text-slate-400 uppercase tracking-widest px-2">Campaign History</h4>
                             <div className="rounded-[2.5rem] glass-panel-premium border border-white/5 overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left">
@@ -918,13 +918,13 @@ export const AdminPage = () => {
                                         <tbody className="divide-y divide-white/5">
                                             {broadcasts.length === 0 ? (
                                                 <tr>
-                                                    <td colSpan={4} className="px-6 py-12 text-center text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] italic">Nexus History Empty</td>
+                                                    <td colSpan={4} className="px-6 py-12 text-center text-label font-black text-slate-500 uppercase tracking-[0.2em] italic">Nexus History Empty</td>
                                                 </tr>
                                             ) : (
                                                 broadcasts.map(b => (
                                                     <tr key={b.id} className="group hover:bg-white/5 transition-colors">
                                                         <td className="px-6 py-4">
-                                                            <div className="text-[10px] font-black text-slate-300 uppercase whitespace-nowrap">
+                                                            <div className="text-label font-black text-slate-300 uppercase whitespace-nowrap">
                                                                 {new Date(b.created_at).toLocaleDateString()}
                                                             </div>
                                                             <div className="text-[8px] font-bold text-slate-500 uppercase font-mono">
@@ -932,7 +932,7 @@ export const AdminPage = () => {
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 max-w-[200px]">
-                                                            <div className="text-[10px] font-medium text-slate-400 truncate group-hover:text-slate-200 transition-colors">
+                                                            <div className="text-label font-medium text-slate-400 truncate group-hover:text-slate-200 transition-colors">
                                                                 {b.message_text}
                                                             </div>
                                                             <div className="text-[8px] font-black text-indigo-500 uppercase tracking-tight mt-1">
@@ -980,7 +980,7 @@ export const AdminPage = () => {
                             <Activity className="text-blue-500 shrink-0 mt-0.5" size={16} />
                             <div>
                                 <h3 className="text-xs font-black text-blue-500 uppercase tracking-widest">Command Center KPIs</h3>
-                                <p className="text-[10px] text-slate-500 font-medium mt-1">Real-time overview of primary growth, retention, and engagement metrics. Use these indicators to assess platform health, user adoption speed, and viral intelligence (K-Factor).</p>
+                                <p className="text-label text-slate-500 font-medium mt-1">Real-time overview of primary growth, retention, and engagement metrics. Use these indicators to assess platform health, user adoption speed, and viral intelligence (K-Factor).</p>
                             </div>
                         </div>
 
@@ -994,7 +994,7 @@ export const AdminPage = () => {
                                     <TrendingUp size={24} />
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-[10px] font-black uppercase opacity-60">Total Partners</div>
+                                    <div className="text-label font-black uppercase opacity-60">Total Partners</div>
                                     <div className="text-3xl font-black">{stats?.events.total_partners}</div>
                                 </div>
                             </div>
@@ -1068,7 +1068,7 @@ export const AdminPage = () => {
                                 </div>
                                 <div className="text-lg font-black text-emerald-500">
                                     {typeof stats?.kpis.avg_depth === 'number' ? stats.kpis.avg_depth.toFixed(2) : '1.00'}
-                                    <span className="text-[10px] opacity-40 ml-1 font-bold">Gen</span>
+                                    <span className="text-label opacity-40 ml-1 font-bold">Gen</span>
                                 </div>
                                 <div className="text-[8px] font-bold text-slate-500 uppercase">Avg Generation Depth</div>
                             </div>
@@ -1116,7 +1116,7 @@ export const AdminPage = () => {
                                     </div>
                                     <div className="text-lg font-black text-blue-500">
                                         {stats.performance.pro_slots_display}
-                                        <span className="text-[10px] text-slate-500 font-bold ml-1.5 opacity-60">/ {stats.performance.pro_slots_actual} REAL</span>
+                                        <span className="text-label text-slate-500 font-bold ml-1.5 opacity-60">/ {stats.performance.pro_slots_actual} REAL</span>
                                     </div>
                                     <div className="text-[8px] font-bold text-slate-500 uppercase">Calculated Traction Base</div>
                                 </div>
@@ -1126,7 +1126,7 @@ export const AdminPage = () => {
                         {/* Task Completion Breakdown */}
                         <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
+                                <h2 className="text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
                                     <Zap size={14} className="text-blue-500 animate-pulse" />
                                 </div>
@@ -1158,7 +1158,7 @@ export const AdminPage = () => {
                         {/* Top Partners Leaderboard */}
                         <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
+                                <h2 className="text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
                                 <div className="p-2 bg-blue-500/10 rounded-xl">
                                     <TrendingUp size={14} className="text-blue-500" />
                                 </div>
@@ -1181,7 +1181,7 @@ export const AdminPage = () => {
                                         </div>
                                         <div className="text-right">
                                             <div className="text-xs font-black text-emerald-500 dark:text-emerald-400 flex items-center gap-1 justify-end">
-                                                <span className="text-[10px] opacity-60 font-bold">$</span>
+                                                <span className="text-label opacity-60 font-bold">$</span>
                                                 {p.earnings.toLocaleString()}
                                             </div>
                                         </div>
@@ -1203,7 +1203,7 @@ export const AdminPage = () => {
                                     </h2>
                                     <div className="flex items-center gap-2">
                                         <div className="h-1 w-8 bg-blue-500 rounded-full" />
-                                        <p className="text-[10px] font-black text-blue-500/60 uppercase tracking-widest">14-Day Tactical Trajectory</p>
+                                        <p className="text-label font-black text-blue-500/60 uppercase tracking-widest">14-Day Tactical Trajectory</p>
                                     </div>
                                 </div>
                                 <div className="p-2.5 bg-slate-100 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5 text-slate-500 shadow-sm">
@@ -1271,7 +1271,7 @@ export const AdminPage = () => {
                                             <div className={`p-1.5 rounded-lg ${data.percent_change >= 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
                                                 <Activity size={12} />
                                             </div>
-                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{period}</span>
+                                            <span className="text-label font-black uppercase text-slate-400 tracking-widest">{period}</span>
                                         </div>
                                         <div className={`px-2 py-1 rounded-full text-[9px] font-black flex items-center gap-1 shadow-sm ${data.percent_change >= 0
                                             ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
@@ -1309,7 +1309,7 @@ export const AdminPage = () => {
                             <Wallet className="text-emerald-500 shrink-0 mt-0.5" size={16} />
                             <div>
                                 <h3 className="text-xs font-black text-emerald-500 uppercase tracking-widest">Financial Intelligence</h3>
-                                <p className="text-[10px] text-slate-500 font-medium mt-1">Deep dive into gross revenue, net profit margin, and exact distribution logic across the 20-level commission array. Monitor fiat (USDT) vs crypto (TON) asset inflow.</p>
+                                <p className="text-label text-slate-500 font-medium mt-1">Deep dive into gross revenue, net profit margin, and exact distribution logic across the 20-level commission array. Monitor fiat (USDT) vs crypto (TON) asset inflow.</p>
                             </div>
                         </div>
 
@@ -1319,7 +1319,7 @@ export const AdminPage = () => {
                                 <Wallet size={120} />
                             </div>
                             <div className="space-y-1 relative z-10">
-                                <span className="text-blue-600 dark:text-blue-400 text-[10px] font-black uppercase tracking-widest">Profit Income to Company (Net)</span>
+                                <span className="text-blue-600 dark:text-blue-400 text-label font-black uppercase tracking-widest">Profit Income to Company (Net)</span>
                                 <div className="flex items-end justify-between">
                                     <div className="text-4xl font-black text-slate-900 dark:text-white flex items-baseline gap-1">
                                         <span className="text-2xl text-blue-500 font-black">$</span>
@@ -1330,19 +1330,19 @@ export const AdminPage = () => {
                                         <div className="text-xl font-black text-emerald-500">{stats?.financials.gross_margin}%</div>
                                     </div>
                                 </div>
-                                <p className="text-slate-500 dark:text-slate-500 text-[10px] font-bold">Total revenue retained by the company</p>
+                                <p className="text-slate-500 dark:text-slate-500 text-label font-bold">Total revenue retained by the company</p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Paid to Referral Network (Actual)</div>
                                     <div className="text-lg font-black text-slate-900 dark:text-white">${stats?.financials.total_commissions}</div>
-                                    <div className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
+                                    <div className="text-label text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
                                 </div>
                                 <div>
                                     <div className="text-slate-500 text-[9px] font-black uppercase">Referral Network Target Split (56/44)</div>
                                     <div className="text-lg font-black text-slate-400 dark:text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
-                                    <div className="text-[10px] text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
+                                    <div className="text-label text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
                                 </div>
                             </div>
 
@@ -1472,13 +1472,13 @@ export const AdminPage = () => {
                             <ShieldCheck className="text-amber-500 shrink-0 mt-0.5" size={16} />
                             <div className="flex-1 space-y-2">
                                 <h3 className="text-xs font-black text-amber-500 uppercase tracking-widest">Manual TX Verification Hub</h3>
-                                <p className="text-[10px] text-slate-500 font-medium leading-relaxed">Cross-reference decentralized network transactions (TON/TRON). Approval automatically distributes the 20-level commissions to upper referrers. Rejection dispatches a Telegram notice to the user. Ensure the Amount and Destination Wallet match before confirming.</p>
+                                <p className="text-label text-slate-500 font-medium leading-relaxed">Cross-reference decentralized network transactions (TON/TRON). Approval automatically distributes the 20-level commissions to upper referrers. Rejection dispatches a Telegram notice to the user. Ensure the Amount and Destination Wallet match before confirming.</p>
                             </div>
                         </div>
 
                         <div className="flex items-center justify-between px-1">
                             <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Pending Review ({transactions.length})</h2>
-                            <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-[10px] font-black uppercase">Action Required</div>
+                            <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-label font-black uppercase">Action Required</div>
                         </div>
 
                         <AnimatePresence mode="popLayout">
@@ -1512,24 +1512,24 @@ export const AdminPage = () => {
                                                 <div>
                                                     <div className="font-black text-lg flex items-center gap-2 text-slate-900 dark:text-slate-100">
                                                         {tx.amount} {tx.currency}
-                                                        <span className="text-[10px] bg-white/5 px-2 py-0.5 rounded-full text-slate-500 font-bold">
+                                                        <span className="text-label bg-white/5 px-2 py-0.5 rounded-full text-slate-500 font-bold">
                                                             {tx.network}
                                                         </span>
                                                     </div>
-                                                    <div className="text-[10px] font-bold text-slate-500 flex items-center gap-1">
+                                                    <div className="text-label font-bold text-slate-500 flex items-center gap-1">
                                                         <User size={10} />
                                                         Partner ID: {tx.partner_id}
                                                     </div>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase">
+                                                <div className="text-label font-black text-slate-500 dark:text-slate-400 uppercase">
                                                     {tx.created_at ? new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="p-3 rounded-2xl bg-black/20 font-mono text-[10px] break-all flex items-start justify-between gap-3 border border-black/5 dark:border-white/5">
+                                        <div className="p-3 rounded-2xl bg-black/20 font-mono text-label break-all flex items-start justify-between gap-3 border border-black/5 dark:border-white/5">
                                             <span className="text-slate-500 shrink-0 uppercase font-black">TX Hash:</span>
                                             <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-500 dark:text-slate-400"}`}>
                                                 {tx.tx_hash || "Manual Verification Required"}
@@ -1586,7 +1586,7 @@ export const AdminPage = () => {
                             <Layers className="text-violet-500 shrink-0 mt-0.5" size={16} />
                             <div>
                                 <h3 className="text-xs font-black text-violet-500 uppercase tracking-widest">Network Matrix Topography</h3>
-                                <p className="text-[10px] text-slate-500 font-medium mt-1">Visualize and inspect the exact dimensional shape of the 20-generation lineage matrix. Drill into any generation depth to audit individual partner structures.</p>
+                                <p className="text-label text-slate-500 font-medium mt-1">Visualize and inspect the exact dimensional shape of the 20-generation lineage matrix. Drill into any generation depth to audit individual partner structures.</p>
                             </div>
                         </div>
 
@@ -1609,7 +1609,7 @@ export const AdminPage = () => {
                                                 : 'glass-panel-premium border-black/5 dark:border-white/5 text-slate-500 hover:border-blue-500/30'
                                                 }`}
                                         >
-                                            <div className={`text-[10px] font-black uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>Gen {depth}</div>
+                                            <div className={`text-label font-black uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>Gen {depth}</div>
                                             <div className={`text-xl font-black ${isSelected ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>{count}</div>
                                         </button>
                                     );
@@ -1624,7 +1624,7 @@ export const AdminPage = () => {
                                     <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
                                         Gen {selectedNetworkDepth} Partners
                                     </h2>
-                                    <span className="text-[10px] text-slate-500 font-bold uppercase">Showing Top 100</span>
+                                    <span className="text-label text-slate-500 font-bold uppercase">Showing Top 100</span>
                                 </div>
                                 <div className="space-y-2">
                                     {networkMembers.length === 0 ? (
@@ -1711,36 +1711,36 @@ export const AdminPage = () => {
 
                             <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-white/5 relative z-10">
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
-                                    <div className="flex items-center gap-2 text-amber-500 font-bold text-[10px] uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 text-amber-500 font-bold text-label uppercase tracking-widest">
                                         <AlertTriangle size={14} />
                                         Data Consistency Fix
                                     </div>
-                                    <p className="text-[10px] text-slate-500 font-medium">
+                                    <p className="text-label text-slate-500 font-medium">
                                         Recalculates all referral counts, 20-level lineage paths, and caches depth for every partner.
                                         Optimized batch execution.
                                     </p>
                                     <button
                                         onClick={handleRecalculate}
                                         disabled={isRefreshing}
-                                        className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/20"
+                                        className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white text-label font-black uppercase tracking-widest transition-all shadow-lg shadow-amber-500/20"
                                     >
                                         {isRefreshing ? 'Processing...' : 'Recalculate Network Stats'}
                                     </button>
                                 </div>
 
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
-                                    <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-widest">
+                                    <div className="flex items-center gap-2 text-blue-500 font-bold text-label uppercase tracking-widest">
                                         <RefreshCw size={14} />
                                         System Cache Flush
                                     </div>
-                                    <p className="text-[10px] text-slate-500 font-medium">
+                                    <p className="text-label text-slate-500 font-medium">
                                         Flushes Redis cache for TON prices, leaderboards and dashboard KPIs.
                                         Use this after manual DB changes.
                                     </p>
                                     <button
                                         onClick={handleClearCache}
                                         disabled={isRefreshing}
-                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-label font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
                                     >
                                         {isRefreshing ? 'Clearing...' : 'Flush System Cache'}
                                     </button>
@@ -1748,7 +1748,7 @@ export const AdminPage = () => {
 
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-blue-500 font-bold text-[10px] uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 text-blue-500 font-bold text-label uppercase tracking-widest">
                                             <ShieldCheck size={14} />
                                             Economy Integrity Audit
                                         </div>
@@ -1768,13 +1768,13 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                     )}
-                                    <p className="text-[10px] text-slate-500 font-medium">
+                                    <p className="text-label text-slate-500 font-medium">
                                         Verifies economic integrity by checking if current XP and USDT Balance match the sum of their transactions/earnings.
                                     </p>
                                     <button
                                         onClick={handleEconomyAudit}
                                         disabled={isEconomyAuditing}
-                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+                                        className="w-full py-3 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white text-label font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
                                     >
                                         {isEconomyAuditing ? 'Auditing Economy...' : 'Run Economy Audit'}
                                     </button>
@@ -1782,7 +1782,7 @@ export const AdminPage = () => {
 
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-violet-500 font-bold text-[10px] uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 text-violet-500 font-bold text-label uppercase tracking-widest">
                                             <Layers size={14} />
                                             Network Tree Integrity Audit
                                         </div>
@@ -1802,13 +1802,13 @@ export const AdminPage = () => {
                                             </div>
                                         </div>
                                     )}
-                                    <p className="text-[10px] text-slate-500 font-medium">
+                                    <p className="text-label text-slate-500 font-medium">
                                         Validates the integrity of the materialized path and depth for the entire 20-level network matrix.
                                     </p>
                                     <button
                                         onClick={handleTreeAudit}
                                         disabled={isTreeAuditing}
-                                        className="w-full py-3 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-violet-500/20"
+                                        className="w-full py-3 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:opacity-50 text-white text-label font-black uppercase tracking-widest transition-all shadow-lg shadow-violet-500/20"
                                     >
                                         {isTreeAuditing ? 'Auditing Network...' : 'Run Tree Integrity Audit'}
                                     </button>
@@ -1816,7 +1816,7 @@ export const AdminPage = () => {
 
                                 <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm space-y-3">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2 text-emerald-500 font-bold text-[10px] uppercase tracking-widest">
+                                        <div className="flex items-center gap-2 text-emerald-500 font-bold text-label uppercase tracking-widest">
                                             <Bell size={14} />
                                             Notification System
                                         </div>
@@ -1838,13 +1838,13 @@ export const AdminPage = () => {
                                             <div className="text-xs font-black text-red-500">{notifStats?.failed ?? 0}</div>
                                         </div>
                                     </div>
-                                    <p className="text-[10px] text-slate-500 font-medium">
+                                    <p className="text-label text-slate-500 font-medium">
                                         Monitor Global Notification System health. If "Pending" is high, trigger a manual retry cycle.
                                     </p>
                                     <button
                                         onClick={handleRetryNotifications}
                                         disabled={isRefreshing || (notifStats?.pending ?? 0) === 0}
-                                        className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20"
+                                        className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-label font-black uppercase tracking-widest transition-all shadow-lg shadow-emerald-500/20"
                                     >
                                         {isRefreshing ? 'Retrying...' : 'Trigger Notif Retries'}
                                     </button>
@@ -1866,7 +1866,7 @@ export const AdminPage = () => {
                             <Search className="text-indigo-500 shrink-0 mt-0.5" size={16} />
                             <div>
                                 <h3 className="text-xs font-black text-indigo-500 uppercase tracking-widest">Global Partner Database</h3>
-                                <p className="text-[10px] text-slate-500 font-medium mt-1">Look up and analyze the dossier of any partner traversing the system. Used for manual support requests or direct metric mutation (adjusting XP/PRO status).</p>
+                                <p className="text-label text-slate-500 font-medium mt-1">Look up and analyze the dossier of any partner traversing the system. Used for manual support requests or direct metric mutation (adjusting XP/PRO status).</p>
                             </div>
                         </div>
 
@@ -1897,9 +1897,9 @@ export const AdminPage = () => {
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <div className="text-sm font-black text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">@{p.username || p.telegram_id}</div>
-                                                <div className="text-[10px] text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
+                                                <div className="text-label text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
                                             </div>
-                                            <div className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
+                                            <div className={`px-2 py-0.5 rounded-lg text-label font-black uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
                                                 {p.is_pro ? 'PRO MEMBER' : 'FREE USER'}
                                             </div>
                                         </div>
@@ -1964,7 +1964,7 @@ export const AdminPage = () => {
                                                 <h3 className="text-xl font-black text-slate-900 dark:text-slate-100 italic">
                                                     @{partnerDetails.username || 'Partner'}
                                                 </h3>
-                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                                                <p className="text-label font-bold text-slate-500 uppercase tracking-widest">
                                                     ID: {partnerDetails.telegram_id}
                                                 </p>
                                             </div>
@@ -1979,14 +1979,14 @@ export const AdminPage = () => {
 
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                                            <div className="text-[10px] font-black text-slate-500 uppercase">Account Rank</div>
+                                            <div className="text-label font-black text-slate-500 uppercase">Account Rank</div>
                                             <div className="text-xl font-black text-blue-500">
                                                 {(partnerDetails.is_pro && (partnerDetails.subscription_plan || "").includes('PLUS')) ? 'PRO+' : `Level ${partnerDetails.level}`}
                                             </div>
                                             <div className="text-[9px] font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
                                         </div>
                                         <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                                            <div className="text-[10px] font-black text-slate-500 uppercase">PRO Status</div>
+                                            <div className="text-label font-black text-slate-500 uppercase">PRO Status</div>
                                             <div className={`text-xl font-black ${partnerDetails.is_pro ? 'text-amber-500' : 'text-slate-400'}`}>
                                                 {partnerDetails.is_pro ? 'ACTIVE' : 'INACTIVE'}
                                             </div>
@@ -1996,11 +1996,11 @@ export const AdminPage = () => {
 
                                     {/* Admin Actions */}
                                     <div className="space-y-3">
-                                        <h4 className="text-[10px] font-black uppercase text-slate-500 tracking-widest px-1">Administrative Actions</h4>
+                                        <h4 className="text-label font-black uppercase text-slate-500 tracking-widest px-1">Administrative Actions</h4>
                                         <div className="grid grid-cols-2 gap-2">
                                             <button
                                                 onClick={() => updatePartner({ is_pro: !partnerDetails.is_pro })}
-                                                className={`py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${partnerDetails.is_pro
+                                                className={`py-4 rounded-2xl font-black text-label uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${partnerDetails.is_pro
                                                     ? 'bg-red-500/10 text-red-500 border border-red-500/20'
                                                     : 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
                                                     }`}
@@ -2013,7 +2013,7 @@ export const AdminPage = () => {
                                                     const xp = prompt('Enter XP amount to add (can be negative):', '500');
                                                     if (xp) updatePartner({ xp: parseFloat(xp) });
                                                 }}
-                                                className="py-4 rounded-2xl bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
+                                                className="py-4 rounded-2xl bg-blue-500 text-white font-black text-label uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
                                             >
                                                 <Plus size={14} /> Adjust XP
                                             </button>
@@ -2080,7 +2080,7 @@ export const AdminPage = () => {
                                         </div>
                                         <div>
                                             <div className="text-sm font-black text-white">System Event Ledger</div>
-                                            <div className="text-[10px] text-slate-500 font-medium">Immutable audit trail · {ledgerEvents.length} events loaded</div>
+                                            <div className="text-label text-slate-500 font-medium">Immutable audit trail · {ledgerEvents.length} events loaded</div>
                                         </div>
                                     </div>
                                     <button
@@ -2099,7 +2099,7 @@ export const AdminPage = () => {
                                         <button
                                             key={t}
                                             onClick={() => { setLedgerFilter(t); setLedgerNotifHistory(null); }}
-                                            className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${ledgerFilter === t
+                                            className={`px-3 py-1.5 rounded-xl text-label font-black uppercase tracking-widest transition-all border ${ledgerFilter === t
                                                 ? (t === 'ALL' ? 'bg-white/10 border-white/20 text-white' : `${getType(t).bg} ${getType(t).color}`)
                                                 : 'bg-transparent border-white/5 text-slate-500 hover:border-white/10'}`}
                                         >
@@ -2125,7 +2125,7 @@ export const AdminPage = () => {
                             {/* Event Feed */}
                             <div className="rounded-3xl bg-slate-900/60 border border-white/5 overflow-hidden">
                                 <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Latest Events</span>
+                                    <span className="text-label font-black text-slate-500 uppercase tracking-widest">Latest Events</span>
                                     {isLedgerLoading && <span className="text-[9px] text-emerald-400 animate-pulse">Loading…</span>}
                                 </div>
                                 <div className="divide-y divide-white/5 max-h-[480px] overflow-y-auto">
@@ -2170,7 +2170,7 @@ export const AdminPage = () => {
                                     <Bell size={14} className="text-violet-400" />
                                     <span className="text-[11px] font-black text-white uppercase tracking-widest">Notification History by Chat ID</span>
                                 </div>
-                                <p className="text-[10px] text-slate-500">Use to verify: "Was user X notified about event Y?"</p>
+                                <p className="text-label text-slate-500">Use to verify: "Was user X notified about event Y?"</p>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
@@ -2186,12 +2186,12 @@ export const AdminPage = () => {
                                 </div>
                                 {ledgerNotifHistory && (
                                     <div className="space-y-2 mt-1">
-                                        <div className="text-[10px] text-slate-500 font-medium">{ledgerNotifHistory.total} notifications found for {ledgerNotifHistory.chat_id}</div>
+                                        <div className="text-label text-slate-500 font-medium">{ledgerNotifHistory.total} notifications found for {ledgerNotifHistory.chat_id}</div>
                                         <div className="rounded-2xl overflow-hidden border border-white/5 divide-y divide-white/5 max-h-64 overflow-y-auto">
                                             {ledgerNotifHistory.events?.map((ev: any) => (
                                                 <div key={ev.id} className="px-3 py-2 flex items-start justify-between gap-2 hover:bg-white/3">
                                                     <div>
-                                                        <div className="text-[10px] font-semibold text-white/80">{ev.event_type || ev.action}</div>
+                                                        <div className="text-label font-semibold text-white/80">{ev.event_type || ev.action}</div>
                                                         <div className="text-[9px] text-slate-600">{ev.salt} · {ev.priority}</div>
                                                     </div>
                                                     <div className="flex flex-col items-end gap-1 shrink-0">
@@ -2215,11 +2215,11 @@ export const AdminPage = () => {
                                         <span className="text-[11px] font-black text-white uppercase tracking-widest">Live Reconciliation Check</span>
                                     </div>
                                     <button onClick={handleLiveReconcile} disabled={isReconciling}
-                                        className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isReconciling ? 'bg-red-500/5 text-red-400 animate-pulse' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}>
+                                        className={`px-4 py-2 rounded-xl text-label font-black uppercase tracking-widest flex items-center gap-1.5 transition-all ${isReconciling ? 'bg-red-500/5 text-red-400 animate-pulse' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}>
                                         {isReconciling ? <><Radio size={12} className="animate-spin" /> Running…</> : <><CheckSquare size={12} /> Run Check</>}
                                     </button>
                                 </div>
-                                <p className="text-[10px] text-slate-500">Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches.</p>
+                                <p className="text-label text-slate-500">Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches.</p>
                                 {reconcileResult && (
                                     <div className="space-y-2 mt-1">
                                         <div className={`flex items-center gap-2 text-xs font-black ${reconcileResult.status === 'healthy' ? 'text-emerald-400' : 'text-red-400'}`}>
@@ -2234,7 +2234,7 @@ export const AdminPage = () => {
                                                             <span className="text-[9px] font-black text-red-400 uppercase">{f.type}</span>
                                                             <span className="text-[9px] text-slate-500 ml-2">P#{f.partner_id} · {f.telegram_id}</span>
                                                         </div>
-                                                        <span className={`text-[10px] font-black ${f.diff > 0 ? 'text-amber-400' : 'text-red-400'}`}>{f.diff > 0 ? '+' : ''}{f.diff}</span>
+                                                        <span className={`text-label font-black ${f.diff > 0 ? 'text-amber-400' : 'text-red-400'}`}>{f.diff > 0 ? '+' : ''}{f.diff}</span>
                                                     </div>
                                                 ))}
                                             </div>

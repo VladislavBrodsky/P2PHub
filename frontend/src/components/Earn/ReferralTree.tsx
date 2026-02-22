@@ -24,7 +24,7 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
             <div className="flex items-center justify-between mb-6">
                 <div>
                     <h3 className="text-lg font-black text-white leading-none mb-1">{t('referral.tree.title')}</h3>
-                    <p className="text-[10px] font-bold text-slate-400 italic">{t('referral_matrix.nine_level')}</p>
+                    <p className="text-label font-bold text-slate-400 italic">{t('referral_matrix.nine_level')}</p>
                 </div>
                 <div className="flex items-center gap-1.5 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
                     <Users className="w-3.5 h-3.5 text-blue-500" />

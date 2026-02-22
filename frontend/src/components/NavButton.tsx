@@ -23,8 +23,8 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             onMouseEnter={onMouseEnter}
             onPointerEnter={onMouseEnter}
             className={`relative flex h-full min-w-0 flex-1 flex-col items-center justify-center gap-0.5 transition-colors duration-200 active:scale-90 ${active
-                ? 'text-blue-500'
-                : 'text-nav-inactive hover:text-nav-active'
+                ? 'text-brand-blue'
+                : 'text-(--color-text-secondary) hover:text-(--color-text-primary)'
                 }`}
             aria-label={label}
         >
@@ -33,7 +33,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                 {active && (
                     <m.div
                         layoutId="nav-active-pill"
-                        className="absolute inset-x-1 top-1.5 bottom-1.5 rounded-2xl bg-blue-500/10 border border-blue-500/20"
+                        className="absolute inset-x-1.5 top-2 bottom-2 rounded-2xl bg-brand-blue/10 border border-brand-blue/20"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
@@ -54,7 +54,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                     <m.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 blur-md bg-blue-500/40 -z-10 rounded-full scale-150"
+                        className="absolute inset-0 blur-md bg-brand-blue/40 -z-10 rounded-full scale-150"
                     />
                 )}
             </m.div>
@@ -63,7 +63,7 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             <m.span
                 animate={active ? { opacity: 1, y: 0 } : { opacity: 0.6, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className="text-[9px] font-black tracking-tight leading-tight relative z-10"
+                className="text-label font-black tracking-tight leading-tight relative z-10"
             >
                 {label}
             </m.span>

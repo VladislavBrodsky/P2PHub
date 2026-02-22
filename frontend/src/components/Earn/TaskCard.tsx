@@ -72,7 +72,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
             layout
             initial={false}
             whileHover={{ y: -2, scale: 1.01 }}
-            className={`relative rounded-[2rem] border transition-all duration-500 overflow-hidden ${variants[status]} ${isExpanded ? 'ring-2 ring-blue-500/20 shadow-xl' : ''}`}
+            className={`relative rounded-2xl border transition-all duration-500 overflow-hidden ${variants[status]} ${isExpanded ? 'ring-2 ring-blue-500/20 shadow-xl' : ''}`}
             onClick={handleCardClick}
         >
             {/* Premium Mesh Background - Visible on Hover */}
@@ -190,7 +190,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             {isClaimable ? (
                                 <button
                                     disabled={isClaiming}
-                                    className={`w-full bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
+                                    className={`w-full bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-3 rounded-xl text-label font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
                                     onClick={async (e) => {
                                         e.stopPropagation();
                                         setIsClaiming(true);
@@ -207,12 +207,12 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 </button>
                             ) : status === 'VERIFYING' ? (
                                 <div className="w-full flex items-center justify-center gap-2 bg-blue-500/10 border border-blue-500/20 py-3 rounded-xl backdrop-blur-md shadow-sm">
-                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-tighter animate-pulse">{t('tasks.verifying')}</span>
-                                    <span className="font-mono text-[10px] font-black text-blue-600 dark:text-blue-400 min-w-[2ch]">{countdown}s</span>
+                                    <span className="text-label font-black text-blue-500 uppercase tracking-tighter animate-pulse">{t('tasks.verifying')}</span>
+                                    <span className="font-mono text-label font-black text-blue-600 dark:text-blue-400 min-w-[2ch]">{countdown}s</span>
                                 </div>
                             ) : (
                                 <button
-                                    className={`w-full px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 group/btn ${isStarted
+                                    className={`w-full px-5 py-3 rounded-xl text-label font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 group/btn ${isStarted
                                         ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-none'
                                         : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg'
                                         }`}

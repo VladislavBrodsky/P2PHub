@@ -107,14 +107,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             tgUser = lp.initData?.user;
 
             // #comment: OPTIMISTIC UI FIX
-            // We apply the SDK data IMMEDIATELY so the user sees their photo/name during the API fetch.
-            if (tgUser && !user) {
-                setUser(prev => ({
-                    ...(prev || {} as any),
-                    first_name: tgUser.firstName,
-                    last_name: tgUser.lastName || null,
-                    photo_url: tgUser.photoUrl || null,
-                }));
+            // We apply the SDK data IMMEDIATELY if we don't have a user yet.
+            if (tgUser) {
+                setUser(prev => {
+                    if (prev && prev.telegram_id === String(tgUser.id)) return prev;
+                    return {
+                        ...(prev || {} as any),
+                        first_name: tgUser.firstName,
+                        last_name: tgUser.lastName || null,
+                        photo_url: tgUser.photoUrl || null,
+                    };
+                });
 
                 // Eagerly preload profile photo from SDK data
                 if (tgUser.photoUrl) {
@@ -149,11 +152,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 const img = new Image();
                 img.src = userData.photo_url;
                 img.loading = 'eager';
-                // No need to wait for load - browser will cache it
             }
         } catch (error) {
             console.error('[DEBUG] refreshUser: Failed:', error);
-            // Fallback: If backend fails, use Telegram SDK data for UI personalization (Optimistic UI)
+            // Fallback: If backend fails, use Telegram SDK data for UI personalization
             if (tgUser) {
                 setUser(prev => {
                     if (prev) return prev;
@@ -189,7 +191,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [updateProgress, user]);
+    }, [updateProgress]);
 
     useEffect(() => {
         const init = async () => {

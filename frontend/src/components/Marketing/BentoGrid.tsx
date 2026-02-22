@@ -126,7 +126,7 @@ export const BentoGrid = () => {
                     {shiftSteps.map((step, index) => (
                         <m.div
                             key={index}
-                            className={`relative group shrink-0 w-[85vw] md:w-[400px] h-[300px] snap-center perspective-1000 cursor-pointer`}
+                            className={`relative group shrink-0 w-[300px] h-[320px] snap-center perspective-1000 cursor-pointer`}
                             onClick={() => toggleFlip(index)}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
@@ -163,7 +163,7 @@ export const BentoGrid = () => {
                                         </div>
 
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                                            <p className="text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                 {t(`evolution.steps.${step.id}.title`)}
                                             </p>
                                             <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-slate-900 dark:text-white'}`}>
@@ -214,7 +214,7 @@ export const BentoGrid = () => {
                                             </p>
                                         </div>
 
-                                        <button className={`mt-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20' : 'bg-emerald-500 text-white shadow-emerald-500/20 hover:bg-emerald-600'}`}>
+                                        <button className={`mt-2 px-6 py-2.5 rounded-xl text-label font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500/20' : 'bg-emerald-500 text-white shadow-emerald-500/20 hover:bg-emerald-600'}`}>
                                             {index < 3 ? t('common.back') : t('income.cta.join')}
                                         </button>
                                     </div>

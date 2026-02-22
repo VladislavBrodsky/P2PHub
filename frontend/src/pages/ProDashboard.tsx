@@ -521,7 +521,7 @@ export const ProDashboard = () => {
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
+                            <p className="text-label font-black uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
                         </div>
                     ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
@@ -542,7 +542,7 @@ export const ProDashboard = () => {
                                 </p>
                                 <button
                                     onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
-                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
                                 >
                                     {t('pro_dashboard.locked.upgrade_btn')}
                                 </button>

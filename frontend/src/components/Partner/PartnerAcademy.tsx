@@ -11,7 +11,7 @@ export const PartnerAcademy = () => {
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700 pt-4">
             {/* Academy Elite Header */}
-            <div className="relative group overflow-hidden rounded-[2rem] p-1 shadow-xl">
+            <div className="relative group overflow-hidden rounded-2xl p-1 shadow-xl">
                 <div className="absolute inset-0 branding-liquid-gradient opacity-95 group-hover:opacity-100 transition-opacity" />
                 <div className="absolute inset-0 vibing-blue-animated opacity-10" />
 

@@ -60,7 +60,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                         <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
                                             AI Growth Strategist
                                         </h2>
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">
+                                        <p className="text-label font-bold text-slate-500 uppercase tracking-widest leading-none">
                                             Neural Network Analyzer v2.0
                                         </p>
                                     </div>
@@ -79,7 +79,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                             </div>
                                             <div>
                                                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1">Contextual Analysis</h3>
-                                                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">
+                                                <p className="text-caption font-medium text-slate-500 dark:text-slate-400">
                                                     I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.
                                                 </p>
                                             </div>
@@ -90,7 +90,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                             </div>
                                             <div>
                                                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1">Actionable Hacks</h3>
-                                                <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400">
+                                                <p className="text-caption font-medium text-slate-500 dark:text-slate-400">
                                                     Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.
                                                 </p>
                                             </div>
@@ -99,7 +99,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
 
                                     <div className="flex items-center gap-3 p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
                                         <Zap size={14} className="text-amber-500" />
-                                        <span className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">
+                                        <span className="text-label font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest">
                                             Cost: 5 Network Tokens
                                         </span>
                                     </div>
@@ -126,7 +126,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                     </div>
                                     <div className="text-center">
                                         <p className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">Synthesizing Growth Strategy</p>
-                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Accessing Global Market Data...</p>
+                                        <p className="text-label font-bold text-slate-500 uppercase tracking-widest mt-1">Accessing Global Market Data...</p>
                                     </div>
                                 </div>
                             )}
@@ -145,7 +145,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
 
                                     <button
                                         onClick={onClose}
-                                        className="w-full h-12 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-white/10"
+                                        className="w-full h-12 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white rounded-xl font-black text-label uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-white/10"
                                     >
                                         Execute Mission
                                         <TrendingUp size={14} />

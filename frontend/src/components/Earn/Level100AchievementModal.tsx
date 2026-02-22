@@ -163,7 +163,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                                 <h4 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
                                                     {b.title}
                                                 </h4>
-                                                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-500 leading-tight mt-0.5">
+                                                <p className="text-label font-bold text-slate-500 dark:text-slate-500 leading-tight mt-0.5">
                                                     {b.desc}
                                                 </p>
                                             </div>

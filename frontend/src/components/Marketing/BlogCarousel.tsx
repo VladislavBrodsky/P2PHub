@@ -75,7 +75,7 @@ export const BlogCarousel = () => {
                                     alt={post.title}
                                     loading="lazy"
                                 />
-                                <div className="absolute inset-0 bg-linear-to-t from-slate-50 via-slate-50/80 dark:from-slate-950 dark:via-slate-950/80 to-transparent z-10" />
+                                <div className="absolute inset-0 bg-linear-to-t from-bg-app via-bg-app/80 dark:from-bg-deep dark:via-bg-deep/80 to-transparent z-10" />
                             </>
                         ) : (
                             <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 to-indigo-500/10 z-0" />
@@ -103,10 +103,10 @@ export const BlogCarousel = () => {
 
                             <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-[10px] font-black text-blue-500 border border-blue-500/10 shadow-inner">
+                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-label font-black text-blue-500 border border-blue-500/10 shadow-inner">
                                         {post.author.charAt(0)}
                                     </div>
-                                    <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-wider">
+                                    <span className="text-label font-black text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-wider">
                                         {post.author}
                                     </span>
                                 </div>

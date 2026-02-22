@@ -14,13 +14,13 @@ export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
         <div className="mt-2 mb-4 relative w-full h-12">
             <button
                 onClick={onInvite}
-                className="w-full h-12 rounded-2xl flex items-center justify-center gap-2.5 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-[0_8px_20px_-5px_rgba(37,99,235,0.4)] bg-blue-600 hover:bg-blue-500 will-change-transform"
+                className="w-full h-12 rounded-2xl flex items-center justify-center gap-2.5 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-premium bg-brand-blue hover:brightness-110 will-change-transform"
             >
                 {/* Background Liquid Effect */}
-                <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-600 to-blue-600 bg-size-[200%_100%] animate-shimmer opacity-80" />
+                <div className="absolute inset-0 bg-linear-to-r from-brand-blue via-indigo-600 to-brand-blue bg-size-[200%_100%] animate-shimmer opacity-80" />
 
                 <Share2 className="w-5 h-5 relative z-10 opacity-90 group-hover:rotate-12 transition-transform duration-300" />
-                <span className="relative z-10 text-[12px] tracking-widest uppercase font-black">{t('referral.widget.invite')}</span>
+                <span className="relative z-10 text-caption tracking-widest uppercase font-black">{t('referral.widget.invite')}</span>
 
                 {/* Automated Attention Shimmer */}
                 <motion.div

@@ -226,7 +226,7 @@ export default function SubscriptionPage() {
                     >
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
+                    <span className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
                     <div className="w-10" /> {/* Spacer */}
                 </div>
 
@@ -346,7 +346,7 @@ export default function SubscriptionPage() {
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
                     <div className="flex flex-col items-center">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
+                        <span className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
                     </div>
                     <div className="w-10" />
                 </div>
@@ -521,7 +521,7 @@ export default function SubscriptionPage() {
                                     </div>
                                     <div className="flex flex-col min-w-0">
                                         <span className="text-[7px] font-black text-black/60 uppercase tracking-widest leading-none truncate">LIFETIME ACCESS</span>
-                                        <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-tight truncate">OFFER CLOSING</span>
+                                        <span className="text-label font-black text-black uppercase tracking-tighter leading-tight truncate">OFFER CLOSING</span>
                                     </div>
                                 </div>
 
@@ -531,7 +531,7 @@ export default function SubscriptionPage() {
                                             <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-[11px] font-black min-w-[28px] text-center shadow-xl">
                                                 {val.toString().padStart(2, '0')}
                                             </div>
-                                            {i < 2 && <span className="text-[10px] font-black text-black/80 animate-pulse">:</span>}
+                                            {i < 2 && <span className="text-label font-black text-black/80 animate-pulse">:</span>}
                                         </React.Fragment>
                                     ))}
                                 </div>
@@ -588,7 +588,7 @@ export default function SubscriptionPage() {
                             <div className="flex items-center justify-between mb-3 px-3">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-3 bg-blue-600 rounded-full" />
-                                    <h3 className="text-[10px] sm:text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
+                                    <h3 className="text-label sm:text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
                                         {t('subscription.comparison.title', 'Key Differences')}
                                     </h3>
                                 </div>
@@ -635,7 +635,7 @@ export default function SubscriptionPage() {
                                             <span className="text-[8px] font-black text-slate-500 dark:text-white/60 uppercase tracking-[0.2em]">{item.label}</span>
 
                                             <div className="flex items-center justify-center gap-1.5 mt-0.5 w-full">
-                                                <span className="text-[10px] font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-5 text-right">{inactiveValue}</span>
+                                                <span className="text-label font-black text-slate-400 dark:text-white/30 transition-all duration-500 w-5 text-right">{inactiveValue}</span>
                                                 <div className="w-px h-3 bg-slate-300 dark:bg-white/20 rounded-full shrink-0" />
                                                 <span className={`text-[15px] font-black tracking-tighter transition-all duration-500 w-7 text-left ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_10px_rgba(168,85,247,0.4)]' : 'vibing-yellow-text drop-shadow-[0_0_10px_rgba(234,179,8,0.4)]'}`}>
                                                     {activeValue}
@@ -698,14 +698,14 @@ export default function SubscriptionPage() {
                                                 className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
+                                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
                                                 className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
+                                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
                                             </button>
                                         </div>
                                     </motion.div>
@@ -897,7 +897,7 @@ export default function SubscriptionPage() {
                                             {formattedTime && (
                                                 <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
                                                     <Clock size={10} className="text-blue-600 dark:text-blue-400" />
-                                                    <span className="text-[10px] font-black font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
+                                                    <span className="text-label font-black font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -919,8 +919,8 @@ export default function SubscriptionPage() {
                                                         <div className="absolute -left-3 top-0 bottom-0 w-1 bg-emerald-500 rounded-full opacity-50" />
                                                         <div className="flex flex-col gap-2">
                                                             <div className="flex items-center gap-2 mb-1">
-                                                                <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg">1</div>
-                                                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.copy_address', 'Send USDT (TRC-20)')}</span>
+                                                                <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-black flex items-center justify-center shadow-lg">1</div>
+                                                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.copy_address', 'Send USDT (TRC-20)')}</span>
                                                             </div>
                                                             <div
                                                                 onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
@@ -928,7 +928,7 @@ export default function SubscriptionPage() {
                                                             >
                                                                 <p className="text-[7px] font-black text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
                                                                 <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
-                                                                    <code className="text-[10px] font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
+                                                                    <code className="text-label font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
                                                                     <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
                                                                         <Share2 size={14} />
                                                                     </div>
@@ -943,8 +943,8 @@ export default function SubscriptionPage() {
                                                         <div className="absolute -left-3 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-50" />
                                                         <div className="flex flex-col gap-2">
                                                             <div className="flex items-center gap-2 mb-1">
-                                                                <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-[10px] font-black flex items-center justify-center shadow-lg">2</div>
-                                                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION ID')}</span>
+                                                                <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-black flex items-center justify-center shadow-lg">2</div>
+                                                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION ID')}</span>
                                                             </div>
 
                                                             {/* CRITICAL INSTRUCTION ALERT */}
@@ -1088,7 +1088,7 @@ export default function SubscriptionPage() {
                                         </div>
                                         <h3 className={`text-[16px] font-black uppercase mb-2 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
                                         <div className="px-1 mb-6">
-                                            <p className="text-[10px] text-slate-600 dark:text-white/70 uppercase font-black tracking-widest leading-normal overflow-y-auto max-h-[100px] scrollbar-hide">{infoModal.desc}</p>
+                                            <p className="text-label text-slate-600 dark:text-white/70 uppercase font-black tracking-widest leading-normal overflow-y-auto max-h-[100px] scrollbar-hide">{infoModal.desc}</p>
                                         </div>
                                         <button
                                             onClick={() => { selection(); setInfoModal(null); }}
@@ -1109,7 +1109,7 @@ export default function SubscriptionPage() {
                                     <p className="text-[7px] text-slate-500 dark:text-white/40 uppercase font-black tracking-widest mb-6">
                                         {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
                                     </p>
-                                    <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-black text-[10px] uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">GOT IT</button>
+                                    <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-black text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">GOT IT</button>
                                 </div>
                             )}
                         </motion.div>

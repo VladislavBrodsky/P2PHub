@@ -72,7 +72,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                             />
                         )}
                         <option.icon className="h-3.5 w-3.5 relative z-10" style={{ color: user?.notifications_paused === option.isPaused ? option.iconColor : undefined }} />
-                        <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
+                        <span className="text-label font-black uppercase tracking-widest relative z-10">{option.label}</span>
                     </button>
                 ))}
             </div>
@@ -100,7 +100,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                             />
                         )}
                         <span className="text-xl filter drop-shadow-sm">{option.flag}</span>
-                        <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
+                        <span className="text-label font-black uppercase tracking-widest relative z-10">{option.label}</span>
                     </button>
                 ))}
             </div>
@@ -128,7 +128,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                             />
                         )}
                         <option.icon className="h-3.5 w-3.5 relative z-10" style={{ color: theme === option.id ? option.iconColor : undefined }} />
-                        <span className="text-[10px] font-black uppercase tracking-widest relative z-10">{option.label}</span>
+                        <span className="text-label font-black uppercase tracking-widest relative z-10">{option.label}</span>
                     </button>
                 ))}
             </div>

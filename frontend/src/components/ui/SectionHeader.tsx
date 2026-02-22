@@ -21,15 +21,15 @@ export const SectionHeader = ({
     align = 'center'
 }: SectionHeaderProps) => {
     return (
-        <div className={`space-y-3 flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'} ${className}`}>
+        <div className={`space-y-4 flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'} ${className}`}>
             {badge && (
                 <div className="flex items-center gap-2">
                     <m.div
-                        className="w-2 h-2 rounded-full bg-blue-500"
+                        className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                         animate={{ opacity: [1, 0.4, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                     />
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">
+                    <span className="text-label font-black uppercase tracking-[0.3em] text-blue-500">
                         {badge}
                     </span>
                 </div>
@@ -39,7 +39,7 @@ export const SectionHeader = ({
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-3xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.1] whitespace-pre-line"
+                className="text-display font-black tracking-tight text-text-primary leading-tight whitespace-pre-line"
             >
                 {title}
             </m.h2>
@@ -50,7 +50,7 @@ export const SectionHeader = ({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="text-sm text-slate-500 dark:text-slate-400 font-medium max-w-[280px]"
+                    className="text-body text-text-secondary font-medium max-w-[320px] leading-normal"
                 >
                     {description}
                 </m.p>

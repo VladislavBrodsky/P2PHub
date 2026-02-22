@@ -2,7 +2,29 @@
   /* === PINTOPAY DESIGN SYSTEM 2026 - v1.7.0 (Stable) === */
   /* Apple-esque Aesthetic - High Fidelity, Depth, Micro-interactions */
 
-  /* Spacing & Safe Areas */
+  /* #comment: Custom Z-Index Stacking - Explicitly mapped for Tailwind v4 utility generation */
+  --z-1: 1;
+  --z-5: 5;
+  --z-15: 15;
+  --z-25: 25;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-60: 60;
+  --z-100: 100;
+  --z-120: 120;
+  --z-150: 150;
+  --z-200: 200;
+  --z-300: 300;
+  --z-500: 500;
+  --z-999: 999;
+  --z-1000: 1000;
+  --z-1001: 1001;
+  --z-9998: 9998;
+  --z-9999: 9999;
+  --z-10000: 10000;
+
+  /* #comment: Spacing & Safe Areas - Integrated into design system for precise layout kontrol */
   --spacing-safe-top: env(safe-area-inset-top, 24px);
   --spacing-safe-bottom: env(safe-area-inset-bottom, 24px);
   --spacing-safe-left: env(safe-area-inset-left, 0px);
@@ -33,25 +55,28 @@
   --color-slate-900: #0f172a;
   /* Keep surface slightly lighter */
 
-  /* Map core CSS variables to Tailwind theme! */
+  /* #comment: Map semantic design system variables to Tailwind v4 class generation */
   --color-surface: var(--sys-surface);
   --color-bg-app: var(--sys-bg-app);
   --color-bg-deep: var(--sys-bg-deep);
-  --color-text-primary: var(--sys-text-primary);
-  --color-text-secondary: var(--sys-text-secondary);
-  --color-brand-primary: var(--sys-brand-primary);
-  --color-brand-blue: var(--sys-brand-blue);
-  --color-success: var(--sys-success);
-  --color-warning: var(--sys-warning);
-  --color-error: var(--sys-error);
-
+  --color-bg-surface: var(--sys-bg-surface);
   --color-bg-glass: var(--sys-bg-glass);
   --color-border-glass: var(--sys-border-glass);
   --color-glass-highlight: var(--sys-glass-highlight);
 
+  --color-text-primary: var(--sys-text-primary);
+  --color-text-secondary: var(--sys-text-secondary);
+  --color-brand-primary: var(--sys-brand-primary);
+  --color-brand-blue: var(--sys-brand-blue);
+
+  --color-success: var(--sys-success);
+  --color-warning: var(--sys-warning);
+  --color-error: var(--sys-error);
+
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
   --color-bg-secondary: var(--sys-bg-surface);
+
   --color-input-bg: var(--input-bg);
   --color-input-border: var(--input-border);
 
@@ -59,31 +84,46 @@
   --color-btn-primary-text: var(--btn-primary-text);
   --color-btn-primary-hover: var(--btn-primary-hover);
 
-  /* Typography Scale */
-  --font-sans: "Inter", "Onest", system-ui, -apple-system, sans-serif;
-  --font-display-family: "Inter", "Onest", system-ui, sans-serif;
+  --color-btn-secondary-bg: var(--btn-secondary-bg);
+  --color-btn-secondary-text: var(--btn-secondary-text);
+  --color-btn-secondary-hover: var(--btn-secondary-hover);
 
-  --font-display: 34px;
-  --font-heading: 20px;
-  --font-body: 15px;
-  --font-button: 16px;
-  --font-caption: 12px;
-  --font-label: 10px;
+  /* #comment: Typography Scale - Renamed to --text-* for Tailwind v4 auto-utility mapping */
+  --text-display: 34px;
+  --text-heading: 20px;
+  --text-body: 15px;
+  --text-button: 16px;
+  --text-caption: 12px;
+  --text-label: 10px;
 
-  /* Spacing Units */
-  --space-normal: 1rem;
-  --space-relaxed: 1.5rem;
-  --space-loose: 2rem;
+  --font-sans: "Inter",
+    "Onest",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  --font-display: "Inter",
+    "Onest",
+    system-ui,
+    sans-serif;
+
+  /* #comment: Spacing Units - Standardized for design consistency */
+  --spacing-normal: 1rem;
+  --spacing-relaxed: 1.5rem;
+  --spacing-loose: 2rem;
 
   /* Spacing Radii */
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
 
   /* Shadows - Layered for Depth */
-  --shadow-premium-sm: 0 2px 10px rgba(0, 0, 0, 0.05), 0 1px 4px rgba(0, 0, 0, 0.02);
-  --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 5px 15px -5px rgba(0, 0, 0, 0.02);
-  --shadow-premium-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(0, 0, 0, 0.05);
-  --shadow-premium-xl: 0 30px 60px -15px rgba(0, 102, 255, 0.15), 0 15px 30px -10px rgba(0, 0, 0, 0.05);
+  --shadow-premium-sm: 0 2px 10px rgba(0, 0, 0, 0.05),
+    0 1px 4px rgba(0, 0, 0, 0.02);
+  --shadow-premium: 0 10px 30px -5px rgba(0, 0, 0, 0.04),
+    0 5px 15px -5px rgba(0, 0, 0, 0.02);
+  --shadow-premium-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.1),
+    0 10px 20px -5px rgba(0, 0, 0, 0.05);
+  --shadow-premium-xl: 0 30px 60px -15px rgba(0, 102, 255, 0.15),
+    0 15px 30px -10px rgba(0, 0, 0, 0.05);
   --shadow-float: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
 
   @keyframes spring-up {

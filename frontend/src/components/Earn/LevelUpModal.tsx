@@ -77,7 +77,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <h2 className="text-[12px] font-black tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
+                                <h2 className="text-caption font-black tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
                                     {t('referral.levelup.title')}
                                 </h2>
                                 <h3 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white mt-2 relative inline-block">

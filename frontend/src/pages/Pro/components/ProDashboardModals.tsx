@@ -292,7 +292,7 @@ export const ProDashboardModals = ({
                                     <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-3xl border border-slate-200/60 dark:border-white/8 relative">
                                         <button
                                             onClick={() => { selection(); setSetupTab('pro'); }}
-                                            className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
+                                            className={`relative py-2.5 rounded-2xl text-label font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
                                                 ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
                                                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                         >
@@ -301,7 +301,7 @@ export const ProDashboardModals = ({
                                         </button>
                                         <button
                                             onClick={() => { selection(); setSetupTab('pro_plus'); }}
-                                            className={`relative py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
+                                            className={`relative py-2.5 rounded-2xl text-label font-black uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro_plus'
                                                 ? 'bg-white dark:bg-white/15 text-emerald-600 dark:text-white shadow-lg shadow-emerald-500/10'
                                                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                         >
@@ -415,7 +415,7 @@ export const ProDashboardModals = ({
                                                                 type={field.type || 'text'}
                                                                 value={field.value}
                                                                 onChange={(e) => field.setter(e.target.value)}
-                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                                className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                                 placeholder={field.placeholder}
                                                             />
                                                         </div>
@@ -458,7 +458,7 @@ export const ProDashboardModals = ({
                                                             Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                         </Trans>
                                                     </h4>
-                                                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
+                                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
                                                         {t('pro_dashboard.setup.teaser.desc')}
                                                     </p>
                                                 </div>
@@ -489,7 +489,7 @@ export const ProDashboardModals = ({
                                                         window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                                         setShowSetup(false);
                                                     }}
-                                                    className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                                    className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-label font-black uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                                 >
                                                     <Zap size={14} />
                                                     {t('pro_dashboard.setup.teaser.cta')}
@@ -512,7 +512,7 @@ export const ProDashboardModals = ({
                                                         <button
                                                             key={tab.id}
                                                             onClick={() => { selection(); setActivePlusPlatform(tab.id as any); }}
-                                                            className={`shrink-0 py-2 px-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 border ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-lg text-emerald-600 dark:text-white border-emerald-500/20' : 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
+                                                            className={`shrink-0 py-2 px-3 rounded-2xl text-label font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 border ${activePlusPlatform === tab.id ? 'bg-white dark:bg-white/10 shadow-lg text-emerald-600 dark:text-white border-emerald-500/20' : 'bg-slate-50 dark:bg-white/5 border-transparent text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10'}`}
                                                         >
                                                             <img src={tab.src} alt={tab.label} className={`w-4 h-4 object-contain ${(tab as any).invert ? 'dark:invert' : ''}`} />
                                                             {tab.label}
@@ -556,7 +556,7 @@ export const ProDashboardModals = ({
                                                                                 setTgChannels(nch);
                                                                             }}
                                                                             placeholder={`@channel_node_${idx + 1}`}
-                                                                            className={`w-full h-10 bg-white dark:bg-black/20 border rounded-xl px-4 pr-14 text-[10px] font-mono outline-none transition-all dark:text-white ${testSt === 'active' ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-400/10' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10'}`}
+                                                                            className={`w-full h-10 bg-white dark:bg-black/20 border rounded-xl px-4 pr-14 text-label font-mono outline-none transition-all dark:text-white ${testSt === 'active' ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-400/10' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10'}`}
                                                                         />
                                                                         {testSt && (
                                                                             <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-[7px] font-black uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -609,7 +609,7 @@ export const ProDashboardModals = ({
                                                                         type={field.type || 'text'}
                                                                         value={field.value}
                                                                         onChange={(e) => field.setter(e.target.value)}
-                                                                        className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                                        className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                                         placeholder={field.placeholder}
                                                                     />
                                                                 </div>
@@ -638,7 +638,7 @@ export const ProDashboardModals = ({
                                                                 onChange={(e) => setLinkedinToken(e.target.value)}
                                                                 placeholder={t('pro_dashboard.setup.linkedin.placeholder')}
                                                                 rows={3}
-                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 <Trans i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
@@ -669,7 +669,7 @@ export const ProDashboardModals = ({
                                                                 onChange={(e) => setPinterestToken(e.target.value)}
                                                                 placeholder={t('pro_dashboard.setup.pinterest.placeholder')}
                                                                 rows={3}
-                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-black">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
@@ -698,7 +698,7 @@ export const ProDashboardModals = ({
                                                                 onChange={(e) => setThreadsToken(e.target.value)}
                                                                 placeholder={t('pro_dashboard.setup.threads.placeholder')}
                                                                 rows={3}
-                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-black">Meta for Developers</a>. Require Threads API product activation.
@@ -727,7 +727,7 @@ export const ProDashboardModals = ({
                                                                 onChange={(e) => setFacebookToken(e.target.value)}
                                                                 placeholder={t('pro_dashboard.setup.facebook.placeholder')}
                                                                 rows={3}
-                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-black">Meta for Developers</a>. Select App and Generate Token.
@@ -756,7 +756,7 @@ export const ProDashboardModals = ({
                                                                 onChange={(e) => setDiscordToken(e.target.value)}
                                                                 placeholder={t('pro_dashboard.setup.discord.placeholder')}
                                                                 rows={3}
-                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-[10px] font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
+                                                                className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-[8px] text-slate-400 leading-relaxed px-0.5">
                                                                 Obtain Webhook URL via your <span className="text-[#5865F2] italic font-black">Discord Server Settings → Integrations → Webhooks</span>.
@@ -776,7 +776,7 @@ export const ProDashboardModals = ({
                                     <button
                                         onClick={handleSaveSetup}
                                         disabled={isSaving}
-                                        className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
+                                        className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-2xl font-black text-label uppercase tracking-[0.25em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                     >
                                         {isSaving ? (
                                             <><Loader2 className="animate-spin" size={16} /> SYNCHRONIZING...</>
@@ -877,11 +877,11 @@ export const ProDashboardModals = ({
                                         {/* Premium Bento Grid Sections */}
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {/* Executive Summary Card */}
-                                            <div className="col-span-1 sm:col-span-2 p-6 bg-linear-to-br from-indigo-500/10 to-purple-500/5 dark:bg-white/2 rounded-[2rem] border border-indigo-500/10 dark:border-white/5 relative overflow-hidden group shadow-sm">
+                                            <div className="col-span-1 sm:col-span-2 p-6 bg-linear-to-br from-indigo-500/10 to-purple-500/5 dark:bg-white/2 rounded-2xl border border-indigo-500/10 dark:border-white/5 relative overflow-hidden group shadow-sm">
                                                 <Quote className="absolute -top-4 -right-4 text-indigo-500/10 rotate-12" size={80} />
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                                    <h4 className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">Strategy Intelligence</h4>
+                                                    <h4 className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">Strategy Intelligence</h4>
                                                 </div>
                                                 <p className="text-[13px] sm:text-[14px] font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
                                                     {marketAudit.cmo_summary}
@@ -943,13 +943,13 @@ export const ProDashboardModals = ({
                                                                 {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-[7px] font-black text-amber-500 uppercase tracking-[0.2em] animate-bounce">Hot Now</span>}
                                                             </div>
 
-                                                            <h5 className="text-[15px] font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
+                                                            <h5 className="text-body font-black text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
                                                                 {news.title}
                                                             </h5>
 
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                                                                 <div className="p-2.5 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-100 dark:border-white/5">
-                                                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-snug">
+                                                                    <p className="text-label font-bold text-slate-500 dark:text-slate-400 leading-snug">
                                                                         {news.impact || news.motivation || 'Analyzing market entry points...'}
                                                                     </p>
                                                                 </div>
@@ -962,7 +962,7 @@ export const ProDashboardModals = ({
                                                             </div>
                                                         </div>
 
-                                                        <div className="sm:hidden absolute top-4 right-4 text-[10px] font-black text-slate-200 dark:text-white/5">
+                                                        <div className="sm:hidden absolute top-4 right-4 text-label font-black text-slate-200 dark:text-white/5">
                                                             #{(idx + 1)}
                                                         </div>
                                                     </motion.div>
@@ -971,7 +971,7 @@ export const ProDashboardModals = ({
                                         </div>
 
                                         {/* Viral Motivation Summary */}
-                                        <div className="p-6 bg-linear-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-[2rem] border border-white/20 space-y-4 relative overflow-hidden group shadow-xl">
+                                        <div className="p-6 bg-linear-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl border border-white/20 space-y-4 relative overflow-hidden group shadow-xl">
                                             <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />
                                             <div className="flex items-center gap-3 relative z-10">
                                                 <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
@@ -979,7 +979,7 @@ export const ProDashboardModals = ({
                                                 </div>
                                                 <h4 className="text-[13px] font-black text-white uppercase tracking-widest">Growth Imperative</h4>
                                             </div>
-                                            <p className="text-[12px] sm:text-[13px] font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
+                                            <p className="text-caption sm:text-[13px] font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
                                                 "{marketAudit.viral_motivation}"
                                             </p>
                                         </div>
@@ -991,7 +991,7 @@ export const ProDashboardModals = ({
                             <div className="p-6 sm:p-8 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-white/5 space-y-4 sticky bottom-0 z-20">
                                 <button
                                     onClick={() => { selection(); setShowAuditModal(false); setActiveTab('studio'); }}
-                                    className="w-full h-13 vibing-blue-animated rounded-2xl font-black text-white text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:gap-5 group"
+                                    className="w-full h-13 vibing-blue-animated rounded-2xl font-black text-white text-label uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3 hover:gap-5 group"
                                 >
                                     Initiate Viral Protocol <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                                 </button>
@@ -1140,7 +1140,7 @@ export const ProDashboardModals = ({
                                             return steps.map((step: any, i: number) => (
                                                 <div key={i} className="flex gap-5 items-start relative group">
                                                     {i < steps.length - 1 && <div className="absolute left-5 top-10 bottom-0 w-px bg-slate-100 dark:bg-white/10" />}
-                                                    <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-[10px] font-black text-indigo-500 dark:text-indigo-400 shrink-0 shadow-sm group-hover:border-indigo-500/30 transition-colors z-10">
+                                                    <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-label font-black text-indigo-500 dark:text-indigo-400 shrink-0 shadow-sm group-hover:border-indigo-500/30 transition-colors z-10">
                                                         {(i + 1).toString().padStart(2, '0')}
                                                     </div>
                                                     <div className="space-y-1.5 pt-1">
@@ -1160,7 +1160,7 @@ export const ProDashboardModals = ({
                                                 <h4 className="text-[11px] font-black text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
                                             </div>
                                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
-                                            <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                                            <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
                                                 {t('pro_dashboard.tools.headline.neural_desc')}
                                             </div>
                                         </div>
@@ -1170,26 +1170,26 @@ export const ProDashboardModals = ({
                                                 <h4 className="text-[11px] font-black text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
                                             </div>
                                             <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
-                                            <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                                            <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
                                                 {t('pro_dashboard.tools.bio.neural_desc')}
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="space-y-6">
-                                        <div className="p-6 bg-indigo-50 dark:bg-indigo-500/5 rounded-[2rem] border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-5">
+                                        <div className="p-6 bg-indigo-50 dark:bg-indigo-500/5 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-5">
                                             <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
                                                 <Sparkles className="text-white" size={24} />
                                             </div>
-                                            <p className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
+                                            <p className="text-caption font-black text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
                                                 <Trans i18nKey="pro_dashboard.academy.protocols.growth_promo">
                                                     PRO Members grow their network <span className="text-indigo-600 dark:text-indigo-400">x5 faster</span> using these elite protocols.
                                                 </Trans>
                                             </p>
                                         </div>
                                         <div className="space-y-4">
-                                            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">{t('pro_dashboard.academy.protocols.methodology_title')}</h4>
-                                            <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-white/5 p-5 rounded-3xl border border-slate-100 dark:border-white/5">
+                                            <h4 className="text-label font-black text-slate-400 uppercase tracking-widest px-1">{t('pro_dashboard.academy.protocols.methodology_title')}</h4>
+                                            <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-white/5 p-5 rounded-3xl border border-slate-100 dark:border-white/5">
                                                 {t('pro_dashboard.academy.protocols.methodology_desc')}
                                             </p>
                                         </div>
@@ -1238,13 +1238,13 @@ export const ProDashboardModals = ({
                                     <div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.headline.title')}</h3>
                                         <div className="flex items-center gap-2">
-                                            <p className="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
+                                            <p className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
                                                 Curiosity Loop Engineering
                                             </p>
                                             <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
                                             <div className="flex items-center gap-1.5">
                                                 <Zap size={10} className="text-indigo-500 animate-pulse" />
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
+                                                <span className="text-label font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1260,9 +1260,9 @@ export const ProDashboardModals = ({
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                                 <div className="space-y-3 relative group/field">
                                     <div className="flex justify-between items-center px-1">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.headline.label', 'Input Headline')}</label>
+                                        <label className="text-label font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.headline.label', 'Input Headline')}</label>
                                         {headlineInput && (
-                                            <button onClick={() => setHeadlineInput('')} className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
+                                            <button onClick={() => setHeadlineInput('')} className="text-label font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
                                                 <X size={10} /> {t('common.delete')}
                                             </button>
                                         )}
@@ -1284,7 +1284,7 @@ export const ProDashboardModals = ({
                                         <div className="absolute top-0 right-0 p-3">
                                             <CheckCircle2 size={16} className="text-emerald-500" />
                                         </div>
-                                        <h4 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Headline</h4>
+                                        <h4 className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Headline</h4>
                                         <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
                                             {headlineResult}
                                         </p>
@@ -1293,7 +1293,7 @@ export const ProDashboardModals = ({
                                                 navigator.clipboard.writeText(headlineResult);
                                                 showNotification({ title: 'Copied', message: 'Headline copied to clipboard.', type: 'success' });
                                             }}
-                                            className="text-[10px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors"
+                                            className="text-label font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors"
                                         >
                                             Copy to Clipboard
                                         </button>
@@ -1302,7 +1302,7 @@ export const ProDashboardModals = ({
 
                                 <div className="p-4 bg-indigo-50 dark:bg-indigo-500/5 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-start gap-3">
                                     <Sparkles className="w-5 h-5 text-indigo-500 mt-0.5" />
-                                    <p className="text-[10px] text-indigo-700 dark:text-indigo-400 leading-relaxed italic">
+                                    <p className="text-label text-indigo-700 dark:text-indigo-400 leading-relaxed italic">
                                         {t('pro_dashboard.tools.headline.neural_desc')}
                                     </p>
                                 </div>
@@ -1312,7 +1312,7 @@ export const ProDashboardModals = ({
                                 <button
                                     onClick={onFixHeadline}
                                     disabled={isFixingHeadline || !headlineInput}
-                                    className="w-full h-13 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                    className="w-full h-13 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-label uppercase tracking-[0.15em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
                                 >
                                     {isFixingHeadline ? (
                                         <>
@@ -1358,13 +1358,13 @@ export const ProDashboardModals = ({
                                     <div>
                                         <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
                                         <div className="flex items-center gap-2">
-                                            <p className="text-[10px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-80">
+                                            <p className="text-label font-black text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-80">
                                                 High-Conversion Persona Sync
                                             </p>
                                             <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
                                             <div className="flex items-center gap-1.5">
                                                 <Zap size={10} className="text-amber-500 animate-pulse" />
-                                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
+                                                <span className="text-label font-black text-slate-400 uppercase tracking-widest tabular-nums">{status?.pro_tokens ?? 0}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1380,9 +1380,9 @@ export const ProDashboardModals = ({
                             <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                                 <div className="space-y-3 relative group/field">
                                     <div className="flex justify-between items-center px-1">
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.label', 'Your Current Bio')}</label>
+                                        <label className="text-label font-black text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.label', 'Your Current Bio')}</label>
                                         {bioInput && (
-                                            <button onClick={() => setBioInput('')} className="text-[10px] font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
+                                            <button onClick={() => setBioInput('')} className="text-label font-black text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
                                                 <X size={10} /> {t('common.delete')}
                                             </button>
                                         )}
@@ -1404,7 +1404,7 @@ export const ProDashboardModals = ({
                                         <div className="absolute top-0 right-0 p-3">
                                             <CheckCircle2 size={16} className="text-emerald-500" />
                                         </div>
-                                        <h4 className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Bio</h4>
+                                        <h4 className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Synthesized Bio</h4>
                                         <p className="text-[14px] font-bold text-slate-900 dark:text-white leading-tight">
                                             {bioResult}
                                         </p>
@@ -1413,7 +1413,7 @@ export const ProDashboardModals = ({
                                                 navigator.clipboard.writeText(bioResult);
                                                 showNotification({ title: 'Copied', message: 'Bio copied to clipboard.', type: 'success' });
                                             }}
-                                            className="text-[10px] font-black text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors"
+                                            className="text-label font-black text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors"
                                         >
                                             Copy to Clipboard
                                         </button>
@@ -1422,7 +1422,7 @@ export const ProDashboardModals = ({
 
                                 <div className="p-4 bg-amber-50 dark:bg-amber-500/5 rounded-2xl border border-amber-100 dark:border-amber-500/10 flex items-start gap-3">
                                     <Sparkles className="w-5 h-5 text-amber-500 mt-0.5" />
-                                    <p className="text-[10px] text-amber-700 dark:text-amber-400 leading-relaxed italic">
+                                    <p className="text-label text-amber-700 dark:text-amber-400 leading-relaxed italic">
                                         {t('pro_dashboard.tools.bio.neural_desc')}
                                     </p>
                                 </div>
@@ -1432,7 +1432,7 @@ export const ProDashboardModals = ({
                                 <button
                                     onClick={onGenerateBio}
                                     disabled={isGeneratingBio || !bioInput}
-                                    className="w-full h-13 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.15em] shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                    className="w-full h-13 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl font-black text-label uppercase tracking-[0.15em] shadow-xl shadow-amber-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
                                 >
                                     {isGeneratingBio ? (
                                         <>

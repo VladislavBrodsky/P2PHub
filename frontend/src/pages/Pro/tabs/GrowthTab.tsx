@@ -116,14 +116,14 @@ export const GrowthTab = ({
                     </div>
 
                     <div className="flex flex-col items-start sm:items-end gap-0">
-                        <p className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1">
+                        <p className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1">
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
                             <div className="text-3xl sm:text-5xl font-black text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
-                                <span className="text-[10px] text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-0.5 font-bold">XP</span>
+                                <span className="text-label text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-0.5 font-bold">XP</span>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ export const GrowthTab = ({
                             <div className="flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
                                     <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.sync_status')}</span>
-                                    <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
+                                    <span className="text-label font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
                                         {progress}% {t('pro_dashboard.academy.deployed')}
                                     </span>
                                 </div>
@@ -218,7 +218,7 @@ export const GrowthTab = ({
                                 >
                                     <div className="flex items-center justify-between mb-5">
                                         <div className="flex items-center gap-3">
-                                            <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-[9px] sm:text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
+                                            <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-[9px] sm:text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
                                             <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.min_read')}</span>
                                         </div>
                                         {mockProgress === 100 && (
@@ -231,7 +231,7 @@ export const GrowthTab = ({
                                     <p className="text-[11px] sm:text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-4 flex-1 line-clamp-2">"{article.desc}"</p>
 
                                     <div className="flex items-center justify-between mt-auto">
-                                        <div className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
+                                        <div className="flex items-center gap-1.5 text-label font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
                                             {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
                                         </div>
                                         <div className="flex items-center gap-3">
@@ -272,7 +272,7 @@ export const GrowthTab = ({
                         </div>
                         <div>
                             <h4 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">{t('pro_dashboard.academy.growth_protocol')}</h4>
-                            <p className="text-[10px] font-black text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
+                            <p className="text-label font-black text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
                         </div>
                     </div>
                 </div>
@@ -351,7 +351,7 @@ export const GrowthTab = ({
                                                 </div>
                                                 {!isExpanded && (
                                                     <div className="flex items-center gap-3 opacity-60">
-                                                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
+                                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
                                                             {stage.description}
                                                         </span>
                                                     </div>
@@ -360,12 +360,12 @@ export const GrowthTab = ({
 
                                             <div className="flex items-center gap-3 shrink-0">
                                                 {isCompleted ? (
-                                                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
+                                                    <span className="text-label font-black text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
                                                 ) : isLocked ? (
                                                     <Lock size={14} className="text-slate-400" />
                                                 ) : (
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-[10px] font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
+                                                        <span className="text-label font-black text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
                                                     </div>
                                                 )}
                                                 <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
@@ -385,7 +385,7 @@ export const GrowthTab = ({
                                                         <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-[13px] sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                                                             <div className="flex items-center gap-2 mb-4">
                                                                 <CategoryIcon size={16} className="text-indigo-500" />
-                                                                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
+                                                                <span className="text-label font-black uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
                                                             </div>
                                                             {stage.content || stage.description}
                                                         </div>
@@ -429,7 +429,7 @@ export const GrowthTab = ({
                             <Flame size={14} className="text-pink-500" />
                         </div>
                         <div>
-                            <h4 className="text-[10px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
+                            <h4 className="text-label font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
                             <p className="text-[8px] font-black text-pink-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
                         </div>
                     </div>
@@ -450,7 +450,7 @@ export const GrowthTab = ({
                             >
                                 <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-black text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
                                 <div className="space-y-0.5 pr-6">
-                                    <h5 className="text-[10px] font-black uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
+                                    <h5 className="text-label font-black uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
                                     <p className="text-[9px] font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
                                 </div>
                                 <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
@@ -470,7 +470,7 @@ export const GrowthTab = ({
                             <Globe size={16} className="text-indigo-500" />
                         </div>
                         <div className="min-w-0">
-                            <h4 className="text-[9px] sm:text-[10px] font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
+                            <h4 className="text-[9px] sm:text-label font-black uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
                             <p className="text-[8px] font-black text-indigo-400 uppercase tracking-widest truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
@@ -513,7 +513,7 @@ export const GrowthTab = ({
 
                 <button
                     onClick={() => { selection(); setShowSetup(true); }}
-                    className="w-full h-10 vibing-blue-animated text-white font-black text-[10px] uppercase tracking-widest rounded-[1rem] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
+                    className="w-full h-10 vibing-blue-animated text-white font-black text-label uppercase tracking-widest rounded-[1rem] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
                 >
                     <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
                     {t('pro_dashboard.tab_setup')} <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -594,14 +594,14 @@ export const GrowthTab = ({
                                 <h4 className="text-xl font-black uppercase text-slate-900 dark:text-white tracking-widest leading-none italic">
                                     {t('pro_dashboard.academy.psych_strategies.title')}
                                 </h4>
-                                <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 max-w-[260px] mx-auto uppercase tracking-widest leading-relaxed">
+                                <p className="text-label font-bold text-slate-500 dark:text-slate-400 max-w-[260px] mx-auto uppercase tracking-widest leading-relaxed">
                                     {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
                                 </p>
                             </div>
 
                             <button
                                 onClick={() => { selection(); setShowSetup(true); }}
-                                className="w-full h-12 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all sm:active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 relative z-10 overflow-hidden group/btn border border-emerald-400/50"
+                                className="w-full h-12 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl font-black text-label uppercase tracking-widest transition-all sm:active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 relative z-10 overflow-hidden group/btn border border-emerald-400/50"
                             >
                                 <motion.div
                                     className="absolute inset-0 bg-white/20 -skew-x-12"
@@ -655,7 +655,7 @@ export const GrowthTab = ({
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="text-[7px] font-black text-emerald-500/60 uppercase tracking-widest leading-none mb-1">Direct Action</span>
-                                                <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
+                                                <span className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
                                                     {item.action}
                                                 </span>
                                             </div>

@@ -32,7 +32,7 @@ export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
         <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0, filter: 'blur(20px)' }}
-            className="fixed inset-0 z-300 bg-slate-950 flex flex-col items-center justify-center p-8 font-mono text-[10px] sm:text-xs"
+            className="fixed inset-0 z-300 bg-slate-950 flex flex-col items-center justify-center p-8 font-mono text-label sm:text-xs"
         >
             <div className="w-full max-w-xs space-y-1.5 h-48">
                 {lines.map((line, i) => (

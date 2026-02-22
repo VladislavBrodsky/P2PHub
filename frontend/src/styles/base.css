@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 html,
 body,
 #root {
@@ -97,24 +99,24 @@ body {
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Display Text - Large headings */
+  /* #comment: Large heading text - using display size from theme */
   .text-display {
-    font-size: var(--font-display);
+    font-size: var(--text-display);
     line-height: var(--leading-tight);
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.02em;
   }
 
-  /* Heading Text - Section headers */
+  /* #comment: Section header text - using heading size from theme */
   .text-heading {
-    font-size: var(--font-heading);
+    font-size: var(--text-heading);
     line-height: var(--leading-snug);
     font-weight: var(--font-weight-semibold);
   }
 
-  /* Caption Text - Metadata, labels */
+  /* #comment: Metadata and labels - using caption size from theme */
   .text-caption {
-    font-size: var(--font-caption);
+    font-size: var(--text-caption);
     line-height: var(--leading-loose);
     font-weight: var(--font-weight-medium);
   }

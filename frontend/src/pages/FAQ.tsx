@@ -191,7 +191,7 @@ export default function FAQPage() {
                     >
                         <ArrowLeft size={18} />
                     </button>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-500 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 backdrop-blur-sm">
+                    <span className="text-label font-black uppercase tracking-[0.2em] text-blue-500 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 backdrop-blur-sm">
                         {t('faq.knowledge_base')}
                     </span>
                 </div>
@@ -231,7 +231,7 @@ export default function FAQPage() {
                     <button
                         key={cat.id}
                         onClick={() => { selection(); setSelectedCategory(cat.id); }}
-                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-[10px] font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
+                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-label font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
                             : 'bg-card-bg border border-card-border text-text-secondary'
                             }`}
@@ -344,13 +344,13 @@ export default function FAQPage() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => { selection(); setSupportOpen(true); }}
-                            className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all"
+                            className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-black text-label uppercase tracking-widest active:scale-95 transition-all"
                         >
                             {t('faq.support_btn')}
                         </button>
                         <button
                             onClick={() => { selection(); window.open('https://t.me/+_T1pC14aVVYxYzJi', '_blank'); }}
-                            className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
+                            className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-label uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
                         >
                             {t('faq.community_btn')}
                         </button>

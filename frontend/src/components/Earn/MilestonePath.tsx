@@ -152,9 +152,9 @@ export const MilestonePath = () => {
                                 <span className={`text-[7px] sm:text-[8px] font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {t('common.lvl')} {item.level}
                                 </span>
-                                <h5 className={`text-[10px] sm:text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <h5 className={`text-label sm:text-[11px] font-black leading-tight line-clamp-2 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (
-                                        <span className="opacity-40 italic tracking-widest text-[9px] sm:text-[10px]">LOCKED</span>
+                                        <span className="opacity-40 italic tracking-widest text-[9px] sm:text-label">LOCKED</span>
                                     ) : (
                                         t(item.reward, { level: item.level })
                                     )}
@@ -279,7 +279,7 @@ export const MilestonePath = () => {
                                             selection();
                                             setIsLevel100ModalOpen(true);
                                         }}
-                                        className="mt-8 flex items-center gap-3 px-10 py-5 rounded-[1.5rem] bg-white text-blue-600 font-black text-xs shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all hover:bg-blue-50 active:shadow-none"
+                                        className="mt-8 flex items-center gap-3 px-10 py-5 rounded-xl bg-white text-blue-600 font-black text-xs shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all hover:bg-blue-50 active:shadow-none"
                                     >
                                         {t('level100.discover_btn')}
                                         <ArrowRight className="w-4 h-4 animate-bounce-x" />
@@ -318,7 +318,7 @@ export const MilestonePath = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center text-center">
-                                <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
+                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
                                     {t('achievements_path.reveal_part', { index: visibleChapters + 1 })}
                                 </span>
                                 <span className="text-[7px] font-bold text-slate-500 uppercase tracking-widest">
@@ -342,7 +342,7 @@ export const MilestonePath = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center text-center">
-                                <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
+                                <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
                                     {t('achievements_path.show_less')}
                                 </span>
                             </div>
@@ -435,7 +435,7 @@ export const MilestonePath = () => {
                                             <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                className="inline-flex items-center px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em]"
+                                                className="inline-flex items-center px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-label font-black text-indigo-500 uppercase tracking-[0.2em]"
                                             >
                                                 <Zap className="w-3 h-3 mr-2 animate-pulse" />
                                                 {t('achievements_path.mission', { level: selectedItem.level })}
@@ -456,9 +456,9 @@ export const MilestonePath = () => {
                                                     <div className="p-1.5 rounded-lg bg-indigo-500/10">
                                                         <Info className="w-4 h-4 text-indigo-500" />
                                                     </div>
-                                                    <span className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{t('achievements_path.how_to_unlock')}</span>
+                                                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{t('achievements_path.how_to_unlock')}</span>
                                                 </div>
-                                                <p className="text-[16px] font-bold text-slate-800 dark:text-slate-200 leading-relaxed italic relative z-10">
+                                                <p className="text-button font-bold text-slate-800 dark:text-slate-200 leading-relaxed italic relative z-10">
                                                     "{selectedItem.instruction ? t(selectedItem.instruction) : t('achievements_path.unlock_locked', { level: selectedItem.level })}"
                                                 </p>
                                             </div>
@@ -486,7 +486,7 @@ export const MilestonePath = () => {
                                                         {/* Shimmer Effect */}
                                                         <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover/btn:translate-y-[200%] transition-transform duration-700" />
                                                         <Share2 size={24} className="group-hover:scale-110 transition-transform" />
-                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('achievements_path.share_link')}</span>
+                                                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('achievements_path.share_link')}</span>
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -497,7 +497,7 @@ export const MilestonePath = () => {
                                                         className="h-18 rounded-[1.8rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/10 active:scale-95 text-slate-900 dark:text-white flex flex-col items-center justify-center gap-1 shadow-sm transition-all group/btn"
                                                     >
                                                         <UserPlus size={24} className="group-hover:scale-110 transition-transform" />
-                                                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('achievements_path.invite')}</span>
+                                                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('achievements_path.invite')}</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -507,7 +507,7 @@ export const MilestonePath = () => {
                                                 animate={{ y: 0, opacity: 1 }}
                                                 className="w-full flex justify-center pt-4"
                                             >
-                                                <div className="px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-[12px] uppercase tracking-[0.3em] flex items-center gap-3 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden group/success">
+                                                <div className="px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-caption uppercase tracking-[0.3em] flex items-center gap-3 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden group/success">
                                                     {/* Success Shimmer */}
                                                     <motion.div
                                                         animate={{ x: ['-100%', '200%'] }}

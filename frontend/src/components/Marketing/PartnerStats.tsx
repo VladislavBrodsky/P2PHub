@@ -32,7 +32,7 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
     }
 
     return (
-        <div className={`w-full h-full flex items-center justify-center text-[10px] font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][index % 4]}`}>
+        <div className={`w-full h-full flex items-center justify-center text-label font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][index % 4]}`}>
             {(partner.first_name?.[0] || partner.username?.[0] || '?')}
         </div>
     );
@@ -130,7 +130,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
     }, 5 * 60 * 1000);
 
     return (
-        <section className="px-4 py-4 relative overflow-hidden">
+        <section className="px-4 py-8 relative overflow-hidden">
             <div className="grid grid-cols-3 gap-3">
                 <m.div
                     initial={{ opacity: 0, scale: 0.95 }}

@@ -55,7 +55,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
             <div className="relative flex flex-col h-full w-full max-w-lg bg-bg-app sm:border-x sm:border-border-glass sm:shadow-premium-xl overflow-hidden">
                 {/* Staging Ribbon */}
                 {isStaging && (
-                    <div className="fixed top-0 left-0 z-[200] w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
+                    <div className="fixed top-0 left-0 z-200 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
                         🚧 STAGING ENVIRONMENT 🚧
                     </div>
                 )}
@@ -90,7 +90,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
 
                 {/* 3. Navigation Bar (Pinned to bottom) */}
                 {(isFooterVisible && !isKeyboardOpen) && (
-                    <div className="fixed bottom-0 left-0 right-0 z-[120] flex w-full flex-col items-center pointer-events-none">
+                    <div className="fixed bottom-0 left-0 right-0 z-120 flex w-full flex-col items-center pointer-events-none">
                         <div className="w-full max-w-lg flex justify-center pb-safe-bottom" style={{ paddingBottom: 'var(--spacing-safe-bottom, 24px)' }}>
                             <div className="flex w-full justify-center pb-4 pointer-events-auto">
                                 <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />

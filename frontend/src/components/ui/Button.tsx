@@ -15,16 +15,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         const baseStyles = "inline-flex items-center justify-center rounded-xl font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none";
 
         const variants = {
-            primary: "bg-slate-900 text-white dark:bg-white dark:text-slate-900 hover:bg-opacity-90 shadow-lg",
-            secondary: "bg-white text-slate-900 dark:bg-slate-900 dark:text-white border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-slate-800",
-            danger: "bg-red-500 text-white hover:bg-red-600",
-            ghost: "text-slate-900 dark:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
+            primary: "bg-(--color-btn-primary-bg) text-(--color-btn-primary-text) hover:bg-(--color-btn-primary-hover) shadow-premium",
+            secondary: "bg-(--color-btn-secondary-bg) text-(--color-btn-secondary-text) border border-(--color-card-border) hover:bg-(--color-btn-secondary-hover)",
+            danger: "bg-(--color-error) text-white hover:brightness-110",
+            ghost: "text-(--color-text-primary) hover:bg-(--color-bg-surface)"
         };
 
         const sizes = {
-            sm: "h-9 px-3 text-xs",
-            md: "h-12 px-5 text-sm",
-            lg: "h-14 px-8 text-base"
+            sm: "h-9 px-3 text-(--text-label)",
+            md: "h-12 px-5 text-(--text-caption)",
+            lg: "h-14 px-8 text-(--text-body)"
         };
 
         return (

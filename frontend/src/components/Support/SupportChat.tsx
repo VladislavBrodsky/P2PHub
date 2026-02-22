@@ -486,7 +486,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-0.5 mt-0.5">
                                                     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                                                    <span className="text-[10px] font-black text-emerald-500/90 uppercase tracking-[0.25em]">{t('support.online')}</span>
+                                                    <span className="text-label font-black text-emerald-500/90 uppercase tracking-[0.25em]">{t('support.online')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -626,7 +626,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                         <div className="shrink-0 p-1.5 rounded-lg bg-slate-50 dark:bg-white/5">
                                                             <Icon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         </div>
-                                                        <span className="text-[10px] font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">
+                                                        <span className="text-label font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">
                                                             {t(`support.categories.${key}`)}
                                                         </span>
                                                     </motion.button>

@@ -50,7 +50,7 @@ export const ToolsTab = ({
                     {/* Headline Fixer */}
                     <motion.div
                         whileHover={{ y: -3 }}
-                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
+                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
                     >
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         <div className="flex items-center justify-between mb-5">
@@ -67,7 +67,7 @@ export const ToolsTab = ({
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                         {t('pro_dashboard.tools.headline.info')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
@@ -78,7 +78,7 @@ export const ToolsTab = ({
                             </div>
                         </div>
                         <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.headline.title')}</h3>
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                        <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             {t('pro_dashboard.tools.headline.desc')}
                         </p>
                         <button
@@ -92,7 +92,7 @@ export const ToolsTab = ({
 
                     <motion.div
                         whileHover={{ y: -3 }}
-                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
+                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative flex flex-col shadow-xl h-full"
                     >
                         <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         <div className="flex items-center justify-between mb-5">
@@ -109,7 +109,7 @@ export const ToolsTab = ({
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-amber-500 transition-colors cursor-help" />
-                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
+                                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                         {t('pro_dashboard.tools.bio.neural_desc')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
@@ -120,7 +120,7 @@ export const ToolsTab = ({
                             </div>
                         </div>
                         <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.bio.title')}</h3>
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                        <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             {t('pro_dashboard.tools.bio.desc')}
                         </p>
                         <button
@@ -135,7 +135,7 @@ export const ToolsTab = ({
                     {/* AI Growth Strategist */}
                     <motion.div
                         whileHover={{ y: -3 }}
-                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-blue-500/20 group relative flex flex-col shadow-xl h-full"
+                        className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-blue-500/20 group relative flex flex-col shadow-xl h-full"
                     >
                         <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                         <div className="flex items-center justify-between mb-5">
@@ -149,7 +149,7 @@ export const ToolsTab = ({
                             </div>
                         </div>
                         <h3 className="text-base font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">Growth Strategist</h3>
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                        <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             Personalized neural advice to scale your network depth.
                         </p>
                         <button
@@ -165,7 +165,7 @@ export const ToolsTab = ({
                 {/* Trend Hunter Module */}
                 <motion.div
                     whileHover={{ y: -3 }}
-                    className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative h-full flex flex-col shadow-xl"
+                    className="pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-7 border border-slate-200 dark:border-white/10 group relative h-full flex flex-col shadow-xl"
                 >
                     <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     <div className="flex items-center justify-between mb-5 relative z-10">
@@ -182,7 +182,7 @@ export const ToolsTab = ({
                                 })}
                             >
                                 <Info size={14} className="text-slate-400 hover:text-orange-500 transition-colors cursor-help" />
-                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
+                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                     {t('pro_dashboard.tools.trends.info')}
                                     <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                 </div>
@@ -204,7 +204,7 @@ export const ToolsTab = ({
                             ))}
                         </div>
                     ) : (
-                        <p className="text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
+                        <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
                             {t('pro_dashboard.tools.trends.desc')}
                         </p>
                     )}
@@ -232,7 +232,7 @@ export const ToolsTab = ({
                             setShowAuditModal(true);
                         }
                     }}
-                    className={`pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-[1.5rem] sm:rounded-[2rem] p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2 ${marketAudit ? 'cursor-pointer' : ''}`}
+                    className={`pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2 ${marketAudit ? 'cursor-pointer' : ''}`}
                 >
                     <div className="absolute right-0 top-0 w-48 h-48 bg-indigo-500/5 blur-[80px] rounded-full pointer-events-none" />
 
@@ -256,7 +256,7 @@ export const ToolsTab = ({
                                         })}
                                     >
                                         <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
-                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
+                                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
                                             {t('pro_dashboard.tools.audit.info')}
                                             <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                         </div>
@@ -289,7 +289,7 @@ export const ToolsTab = ({
 
                     {/* Capability Description */}
                     <div className="p-4 bg-slate-50 dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/5 backdrop-blur-xl relative overflow-hidden shadow-inner">
-                        <p className="text-[11px] sm:text-[12px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed relative z-10">
+                        <p className="text-[11px] sm:text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed relative z-10">
                             {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
                         </p>
                     </div>

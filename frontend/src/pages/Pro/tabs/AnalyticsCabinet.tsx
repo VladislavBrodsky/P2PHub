@@ -73,7 +73,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
                 <BrainCircuit size={40} className="text-indigo-500 animate-pulse" />
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">{t('pro_dashboard.analytics.decrypting')}</p>
+                <p className="text-label font-black uppercase tracking-[0.2em] text-indigo-500">{t('pro_dashboard.analytics.decrypting')}</p>
             </div>
         );
     }
@@ -98,7 +98,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                         <div className={`p-2 rounded-lg bg-slate-100 dark:bg-white/5 w-fit mb-3 transition-transform group-hover:scale-110 duration-500 ${stat.color}`}>
                             <stat.icon size={16} />
                         </div>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{stat.label}</p>
+                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{stat.label}</p>
                         <div className="flex items-end gap-2">
                             <p className="text-xl font-black text-slate-900 dark:text-white tabular-nums leading-none">
                                 {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
@@ -132,7 +132,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                     <BrainCircuit size={24} className="animate-pulse" />
                                 </div>
                                 <div>
-                                    <h3 className="text-[14px] sm:text-[16px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
+                                    <h3 className="text-[14px] sm:text-button font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
                                         {t('pro_dashboard.analytics.resonance.title')}
                                     </h3>
                                     <div className="flex items-center gap-1.5 mt-1">
@@ -144,7 +144,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 </div>
                             </div>
                             <div className={`px-4 py-2 rounded-2xl border shrink-0 shadow-sm flex items-center justify-center ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-100 dark:border-amber-500/10' : 'bg-slate-50 dark:bg-indigo-500/5 border-slate-100 dark:border-indigo-500/10'}`}>
-                                <span className={`text-[10px] font-black uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                                <span className={`text-label font-black uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
                                     {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.needs_more_posts', { count: resonance?.generations_needed || 10 }) : t('pro_dashboard.analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
                                 </span>
                             </div>
@@ -154,8 +154,8 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                             {resonance?.resonance_engine_status === 'gathering_data' ? (
                                 <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl text-center">
                                     <Lock size={24} className="text-slate-400 mb-3" />
-                                    <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.analytics.resonance.insufficient_data')}</h4>
-                                    <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug max-w-[200px] mb-4">
+                                    <h4 className="text-caption font-black text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.analytics.resonance.insufficient_data')}</h4>
+                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug max-w-[200px] mb-4">
                                         {t('pro_dashboard.analytics.resonance.insufficient_data_desc', { count: resonance?.generations_needed || 10 })}
                                     </p>
 
@@ -181,11 +181,11 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                             {rec.type === 'scaling' ? <Target size={18} /> : <Sparkles size={18} />}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="text-[12px] font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 truncate">{rec.headline}</h4>
-                                            <p className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
+                                            <h4 className="text-caption font-black text-slate-900 dark:text-white uppercase tracking-tight mb-1 truncate">{rec.headline}</h4>
+                                            <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
                                         </div>
                                         <div className="text-right shrink-0 flex flex-col items-end">
-                                            <span className="text-[12px] font-black text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
+                                            <span className="text-caption font-black text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
                                             <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.analytics.raw_data.reach').slice(0, 4)}</p>
                                         </div>
                                     </motion.div>
@@ -206,7 +206,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                         window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail }));
                                     }
                                 }}
-                                className={`w-full h-12 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
+                                className={`w-full h-12 text-white rounded-xl font-black text-label uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
                             >
                                 < Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : 'animate-pulse'} />
                                 {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.goto_studio') : t('pro_dashboard.analytics.resonance.action_btn')}
@@ -223,7 +223,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-500">
                                     <BarChart3 size={14} />
                                 </div>
-                                <h3 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.title')}</h3>
+                                <h3 className="text-label font-black text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.title')}</h3>
                             </div>
 
                             <button
@@ -264,7 +264,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                                             <PlatformIcon size={12} className="scale-75 sm:scale-100" />
                                                         </div>
                                                         <div className="flex flex-col min-w-0">
-                                                            <span className="text-[10px] sm:text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[80px] sm:max-w-[140px]">
+                                                            <span className="text-label sm:text-[11px] font-black text-slate-900 dark:text-white uppercase tracking-tight truncate max-w-[80px] sm:max-w-[140px]">
                                                                 {parseChannelName(post.channel_name) || post.platform}
                                                             </span>
                                                             <div className="flex items-center gap-1">
@@ -291,11 +291,11 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                                         <div className="flex items-center gap-1 sm:gap-2">
                                                             <div className="flex items-center gap-0.5">
                                                                 <ThumbsUp size={8} className="text-emerald-500 shrink-0" />
-                                                                <span className="text-[9px] sm:text-[10px] font-black text-emerald-500 tabular-nums">{post.reactions !== undefined ? post.reactions : post.likes}</span>
+                                                                <span className="text-[9px] sm:text-label font-black text-emerald-500 tabular-nums">{post.reactions !== undefined ? post.reactions : post.likes}</span>
                                                             </div>
                                                             <div className="flex items-center gap-0.5">
                                                                 <Share2 size={8} className="text-purple-500 shrink-0" />
-                                                                <span className="text-[9px] sm:text-[10px] font-black text-purple-500 tabular-nums">{post.shares !== undefined ? post.shares : post.reposts}</span>
+                                                                <span className="text-[9px] sm:text-label font-black text-purple-500 tabular-nums">{post.shares !== undefined ? post.shares : post.reposts}</span>
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center gap-1.5 sm:gap-2">
@@ -347,7 +347,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                             <td colSpan={4} className="px-6 py-12 text-center">
                                                 <div className="flex flex-col items-center gap-3">
                                                     <Target size={24} className="text-slate-200 dark:text-slate-800" />
-                                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.empty')}</p>
+                                                    <p className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.empty')}</p>
                                                 </div>
                                             </td>
                                         </tr>

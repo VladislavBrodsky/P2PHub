@@ -117,7 +117,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                     <motion.div
                                         initial={{ scale: 0.8, rotate: -10 }}
                                         animate={{ scale: 1, rotate: 0 }}
-                                        className="w-24 h-24 bg-white/10 backdrop-blur-2xl rounded-[2rem] border border-white/20 flex items-center justify-center mx-auto shadow-2xl shadow-black/20"
+                                        className="w-24 h-24 bg-white/10 backdrop-blur-2xl rounded-2xl border border-white/20 flex items-center justify-center mx-auto shadow-2xl shadow-black/20"
                                     >
                                         {currentStory.icon}
                                     </motion.div>
@@ -138,7 +138,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                                 className="pt-4 space-y-3"
                                             >
                                                 <div className="h-px bg-white/10 w-12 mx-auto" />
-                                                <p className="text-[10px] text-white/40 font-medium leading-relaxed uppercase tracking-widest px-4">
+                                                <p className="text-label text-white/40 font-medium leading-relaxed uppercase tracking-widest px-4">
                                                     <Trans i18nKey="onboarding.terms">
                                                         By tapping get started, you confirm that you have read and agree to our{' '}
                                                         <span className="text-white/60 underline decoration-white/20 underline-offset-2 cursor-pointer hover:text-white transition-colors">Terms of Service</span>,{' '}
