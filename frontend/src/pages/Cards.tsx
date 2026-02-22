@@ -69,8 +69,8 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
     return (
         <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
-            <div className="px-6 pb-6 text-center">
-                <h2 className="text-slate-900 dark:text-white text-lg font-bold">{t('cards.title')}</h2>
+            <div className="px-6 pb-6 pt-6 text-center">
+                <h2 className="text-slate-900 dark:text-white text-2xl font-black uppercase tracking-tight">{t('cards.title')}</h2>
             </div>
 
             {/* Switcher Component */}
