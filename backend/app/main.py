@@ -196,7 +196,6 @@ async def lifespan(app: FastAPI):
         logger.error("\n⚠️  Application CANNOT start with invalid database credentials!")
         logger.error("=" * 70)
         # Exit with error code to prevent unhealthy deployment
-        import sys
         sys.exit(1)
     except asyncio.TimeoutError:
         logger.warning("⚠️ Database connection check timed out. Startup continues...")
