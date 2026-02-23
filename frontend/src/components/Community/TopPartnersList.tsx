@@ -111,7 +111,7 @@ export const TopPartnersList = () => {
                                         {partner.first_name} {partner.last_name}
                                     </span>
                                     <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
-                                        {t(`ranks.${partner.rank}`, partner.rank) as string}
+                                        {t(`ranks.${partner.rank.charAt(0).toUpperCase()}${partner.rank.slice(1).toLowerCase()}`, partner.rank) as string}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3">

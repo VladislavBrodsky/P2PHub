@@ -11,7 +11,7 @@ interface LevelUpModalProps {
 }
 
 export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('social');
     useTMALock(isOpen);
 
     return (

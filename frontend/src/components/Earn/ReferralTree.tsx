@@ -7,7 +7,7 @@ interface ReferralTreeProps {
 }
 
 export const ReferralTree = ({ stats }: ReferralTreeProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('social');
 
     // Sort keys and convert to array for rendering
     const levels = Object.entries(stats)
@@ -58,7 +58,7 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
                     >
                         <span className="absolute top-2 left-2 text-label font-black text-white/30 group-hover:text-blue-500 transition-colors">L{level}</span>
                         <span className="text-base sm:text-lg font-black text-white truncate">{count.toLocaleString()}</span>
-                        <span className="text-label font-bold text-slate-500 uppercase tracking-tighter">Partners</span>
+                        <span className="text-label font-bold text-slate-500 uppercase tracking-tighter">{t('referral.members')}</span>
                     </motion.div>
                 ))}
             </motion.div>

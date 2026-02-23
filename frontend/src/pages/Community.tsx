@@ -44,8 +44,8 @@ export default function CommunityPage() {
                         layout={false}
                         initial={false}
                         animate={{
-                            x: activeTab === 'dashboard' ? '0%' : '100.5%',
-                            width: 'calc(50% - 6px)'
+                            x: activeTab === 'dashboard' ? '0%' : '100%',
+                            width: 'calc(50% - 4px)'
                         }}
                         style={{
                             left: '4px'
@@ -61,7 +61,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
-                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-32 text-center truncate",
+                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-36 text-center",
                             activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
@@ -71,7 +71,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-32 text-center truncate",
+                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-36 text-center",
                             activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >

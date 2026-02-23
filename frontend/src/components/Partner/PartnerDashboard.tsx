@@ -535,7 +535,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                         : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
                 >
-                    {t('partner_dashboard.xp_tab')}
+                    {t('social:partner_dashboard.xp_tab')}
                 </button>
                 <button
                     onClick={() => setActiveTab('CRYPTO')}
@@ -544,7 +544,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                         : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
                 >
-                    {t('partner_dashboard.crypto_tab')}
+                    {t('social:partner_dashboard.crypto_tab')}
                 </button>
             </div>
 

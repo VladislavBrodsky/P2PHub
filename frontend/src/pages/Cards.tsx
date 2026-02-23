@@ -115,9 +115,63 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4 leading-relaxed">
                             {currentCard.description}
                         </p>
+
+                        {/* Terms Accordion - RELOCATED & ENHANCED */}
+                        <div className="w-full mt-4 px-4">
+                            <button
+                                onClick={() => {
+                                    setIsTermsOpen(!isTermsOpen);
+                                    selection();
+                                }}
+                                className="w-full py-3 px-4 flex items-center justify-between bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-premium-sm group cursor-pointer hover:border-emerald-500/30 transition-all duration-300"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                    <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                                        {t('cards.terms')}
+                                    </span>
+                                </div>
+                                <motion.div
+                                    animate={{ rotate: isTermsOpen ? 90 : 0 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <ChevronRight size={16} className="text-slate-400 group-hover:text-emerald-500 transition-colors" />
+                                </motion.div>
+                            </button>
+
+                            <AnimatePresence>
+                                {isTermsOpen && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.3 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="pt-4 pb-2 space-y-4 text-left">
+                                            <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 space-y-3.5 border border-slate-100 dark:border-white/5">
+                                                {[
+                                                    { label: `${currentCard.price} ${t('cards.fees.issue')}` },
+                                                    { label: `2.5% ${t('cards.fees.topup')}` },
+                                                    { label: `$0.25 ${t('cards.fees.auth')}` }
+                                                ].map((term, i) => (
+                                                    <div key={i} className="flex items-center gap-3">
+                                                        <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
+                                                        <span className="text-body font-bold text-slate-900 dark:text-white">
+                                                            {term.label}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
 
                     {/* Promo/Bonus Pill */}
+                    {/* (Moved Terms Accordion from here to below description) */}
                     <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
                         <div className="flex items-center gap-2 overflow-hidden">
                             <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
@@ -140,55 +194,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         </div>
                     </div>
 
-                    {/* Terms Accordion */}
-                    <div className="w-full">
-                        <button
-                            onClick={() => {
-                                setIsTermsOpen(!isTermsOpen);
-                                selection();
-                            }}
-                            className="w-full py-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10 group cursor-pointer"
-                        >
-                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                                {t('cards.terms')}
-                            </span>
-                            <motion.div
-                                animate={{ rotate: isTermsOpen ? 90 : 0 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <ChevronRight size={16} className="text-slate-400 opacity-30 group-hover:opacity-100 transition-colors" />
-                            </motion.div>
-                        </button>
 
-                        <AnimatePresence>
-                            {isTermsOpen && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="overflow-hidden"
-                                >
-                                    <div className="pb-6 space-y-6 text-left">
-                                        <div className="space-y-3">
-                                            {[
-                                                { label: `${currentCard.price} ${t('cards.fees.issue')}` },
-                                                { label: `2.5% ${t('cards.fees.topup')}` },
-                                                { label: `$0.25 ${t('cards.fees.auth')}` }
-                                            ].map((term, i) => (
-                                                <div key={i} className="flex items-center gap-3">
-                                                    <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
-                                                    <span className="text-sm text-slate-500 dark:text-slate-400">
-                                                        <strong className="text-slate-900 dark:text-white">{term.label}</strong>
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
 
                     {/* Action Button */}
                     <div className="pt-2 w-full">

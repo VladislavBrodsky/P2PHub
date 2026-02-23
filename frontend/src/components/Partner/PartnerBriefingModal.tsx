@@ -37,10 +37,10 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
         {
             id: 'mission',
             icon: Target,
-            title: t('referral.brief.goal_title'),
+            title: t('brief.goal_title'),
             content: (
                 <Trans
-                    i18nKey="referral.brief.goal_desc"
+                    i18nKey="brief.goal_desc"
                     components={{
                         1: <span className="text-slate-900 dark:text-white font-black" />,
                         3: <span className="text-blue-500 dark:text-blue-400 font-bold italic" />
@@ -53,11 +53,11 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
         {
             id: 'manual',
             icon: BookOpen,
-            title: t('referral.brief.manual_title'),
+            title: t('brief.manual_title'),
             steps: [
-                t('referral.brief.manual_step_1'),
-                t('referral.brief.manual_step_2'),
-                t('referral.brief.manual_step_3')
+                t('brief.manual_step_1'),
+                t('brief.manual_step_2'),
+                t('brief.manual_step_3')
             ],
             color: 'purple',
             glow: 'rgba(168, 85, 247, 0.15)'
@@ -65,26 +65,26 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
         {
             id: 'rules',
             icon: Shield,
-            title: t('referral.brief.rules_title'),
+            title: t('brief.rules_title'),
             points: [
                 {
-                    title: t('referral.brief.rule_1_title'),
-                    desc: t('referral.brief.rule_1_desc')
+                    title: t('brief.rule_1_title'),
+                    desc: t('brief.rule_1_desc')
                 },
                 {
-                    title: t('referral.brief.rule_2_title'),
-                    desc: t('referral.brief.rule_2_desc')
+                    title: t('brief.rule_2_title'),
+                    desc: t('brief.rule_2_desc')
                 }
             ],
             color: 'red',
-            badge: t('referral.brief.antibot_active'),
+            badge: t('brief.antibot_active'),
             glow: 'rgba(239, 68, 68, 0.1)'
         },
         {
             id: 'motivation',
             icon: Sparkles,
-            title: t('referral.brief.motivation_title'),
-            content: t('referral.brief.motivation_desc'),
+            title: t('brief.motivation_title'),
+            content: t('brief.motivation_desc'),
             color: 'emerald',
             glow: 'rgba(16, 185, 129, 0.15)'
         }
@@ -107,7 +107,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 40 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-[2.5rem] border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-2xl overscroll-none"
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-3xl border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-2xl overscroll-none"
                 style={{ overscrollBehavior: 'none' }}
             >
                 {/* Background Decoration Glows */}
@@ -124,10 +124,10 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                             </div>
                             <div className="flex flex-col">
                                 <h2 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white uppercase leading-none">
-                                    {t('referral.brief.title')}
+                                    {t('brief.title')}
                                 </h2>
                                 <p className="text-label font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.25em] mt-2 opacity-90">
-                                    {t('referral.brief.guide')}
+                                    {t('brief.guide')}
                                 </p>
                             </div>
                         </div>
@@ -249,7 +249,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
 
                         <div className="flex items-center justify-center gap-3 relative z-10 tracking-widest uppercase">
                             <CheckCircle2 className="w-5 h-5 group-hover:scale-110 transition-transform text-blue-500" />
-                            <span>{t('referral.brief.cta')}</span>
+                            <span>{t('brief.cta')}</span>
                         </div>
                     </Button>
                 </div>

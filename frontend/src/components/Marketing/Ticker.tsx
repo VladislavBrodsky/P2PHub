@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 export const Ticker = () => {
-    const { t } = useTranslation();
-    const tickerItems = t('dashboard.ticker', { returnObjects: true }) as string[];
+    const { t } = useTranslation('dashboard');
+    const tickerItems = t('ticker', { returnObjects: true }) as string[];
 
     // Create a long repeated array for smooth infinite scroll
     const items = [...tickerItems, "•", ...tickerItems, "•", ...tickerItems, "•"];
