@@ -127,8 +127,8 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute top-1/2 -translate-y-1/2 w-[130px] min-[375px]:w-[145px] sm:w-[160px] flex flex-col p-3.5 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
-                    isLeft ? "left-[calc(50%+42px)] text-left" : "right-[calc(50%+42px)] text-right items-end",
+                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[375px]:w-[130px] min-[400px]:w-[145px] sm:w-[160px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
+                    isLeft ? "left-[calc(50%+30px)] min-[375px]:left-[calc(50%+36px)] text-left" : "right-[calc(50%+30px)] min-[375px]:right-[calc(50%+36px)] text-right items-end",
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100 shadow-xl cursor-pointer"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(

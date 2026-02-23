@@ -59,34 +59,34 @@ export const PartnerAcademy = () => {
             {/* The 100-Stage Path Container */}
             <div className="relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-full bg-linear-to-b from-blue-500/20 via-slate-200 dark:via-white/5 to-transparent -z-10" />
-                <AcademyCareerStair />
-            </div>
 
-            {/* Sticky Bottom Footer (Educational Callout) */}
-            {(isFooterVisible && !isKeyboardOpen) && (
-                <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40 w-full max-w-[240px] px-2 pointer-events-none">
+                {/* Global Ranking / Active Status (Relocated from fixed footer for better responsiveness) */}
+                <div className="mb-8 flex justify-center px-4">
                     <motion.div
-                        initial={{ y: 50, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        className="glass-panel-premium rounded-2xl p-2 border-white/20 shadow-[0_15px_40px_rgba(0,0,0,0.3)] flex items-center justify-between gap-3 bg-white/80 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 pointer-events-auto"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="glass-panel-premium rounded-2xl p-2.5 border-white/20 shadow-xl flex items-center justify-between gap-4 bg-white/50 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 w-full max-w-[280px]"
                     >
-                        <div className="flex items-center gap-2 pl-2">
-                            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">
-                                <TrendingUp className="w-5 h-5" />
+                        <div className="flex items-center gap-2.5 pl-1.5">
+                            <div className="w-8.5 h-8.5 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white">
+                                <TrendingUp className="w-4.5 h-4.5" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-label font-bold text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">{t('academy.global_ranking')}</span>
-                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
+                                <span className="text-[10px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none mb-0.5">{t('academy.global_ranking')}</span>
+                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
-                        <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-label font-bold uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
-                            <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                        <div className="px-2.5 py-1.5 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-500 dark:text-orange-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_8px_rgba(249,115,22,0.1)] mr-1">
+                            <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
                             {t('academy.footer_status')}
                         </div>
                     </motion.div>
                 </div>
-            )}
+
+                <AcademyCareerStair />
+            </div>
+
 
             {/* Bottom Spacing - significantly reduced to avoid compounding with main Layout padding */}
             <div className="h-6 pointer-events-none" />
