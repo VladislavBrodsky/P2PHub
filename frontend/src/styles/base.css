@@ -15,12 +15,7 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
-  background-color: var(--color-bg-deep);
-  color: var(--color-text-primary);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  background-image: var(--bg-image);
   background-attachment: fixed;
   background-size: cover;
   scrollbar-width: none;

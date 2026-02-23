@@ -50,7 +50,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-start bg-bg-app selection:bg-blue-500/10 overflow-hidden">
+        <div className="fixed inset-0 flex flex-col items-center justify-start bg-transparent selection:bg-blue-500/10 overflow-hidden">
             {/* Main Content Hub - Precisely centered Max-W container */}
             <div className="relative flex flex-col h-full w-full max-w-lg bg-transparent sm:border-x sm:border-border-glass sm:shadow-premium-xl overflow-hidden">
                 {/* Staging Ribbon */}

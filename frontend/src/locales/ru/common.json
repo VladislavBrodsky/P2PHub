@@ -130,6 +130,22 @@
       "config_loaded": "Конфиг загружен",
       "ready": "Интерфейс готов"
     },
+    "features": {
+      "dashboard": "Панель",
+      "cards": "Карты",
+      "community": "Сообщество",
+      "academy": "Академия",
+      "wallet": "Кошелек",
+      "partner": "Партнер",
+      "pro": "Pro",
+      "referral": "Рефералы",
+      "leaderboard": "Лиги",
+      "subscription": "Подписка",
+      "blog": "Блог",
+      "admin": "Админ",
+      "pro_dashboard": "PRO Панель",
+      "faq": "FAQ"
+    },
     "coming_soon": {
       "title": "Скоро открытие",
       "desc": "Мы создаем нечто потрясающее для наших партнеров. Следите за обновлениями!"
