@@ -244,7 +244,7 @@ export default function LeaderboardPage() {
                                 selection();
                                 setShowAll(!showAll);
                             }}
-                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
+                            className="w-full mt-2 py-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
                         >
                             {showAll ? t('common:show_less') : `${t('common:show_more')} (${t('common:top_50')})`}
                         </button>
