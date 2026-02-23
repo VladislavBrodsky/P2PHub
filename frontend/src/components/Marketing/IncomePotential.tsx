@@ -763,6 +763,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                                     <button
                                                         onClick={() => {
+                                                            localStorage.setItem('auto_purchase_pro', 'true');
+                                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                                             setActiveModal(null);
                                                             onNavigateToPartner?.();
                                                         }}
@@ -781,6 +783,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     document.body
                 )
             }
-        </section >
+        </section>
     );
 };

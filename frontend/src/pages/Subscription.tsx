@@ -232,10 +232,10 @@ export default function SubscriptionPage() {
 
                 {/* Fixed Background Layer to prevent clipping - Changed to absolute to work with parent transforms */}
                 <div className="absolute inset-0 w-full h-full pointer-events-none z-0 bg-bg-app" />
-                <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-bg-app via-indigo-500/10 to-bg-deep' : 'bg-linear-to-b from-bg-app via-amber-500/8 to-bg-deep'}`} />
+                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isPlus ? 'bg-linear-to-b from-bg-app via-indigo-500/10 to-bg-deep' : 'bg-linear-to-b from-bg-app via-amber-500/8 to-bg-deep'}`} />
 
                 {/* Glow Effects - Changed to absolute to stay pinned to content if needed, or stayed fixed but relative to this container */}
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
+                <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${isPlus ? 'bg-yellow-500' : 'bg-blue-600'}`} />
                 <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${isPlus ? 'bg-yellow-400' : 'bg-blue-500'}`} />
 
                 <div className="relative z-10 w-full max-w-[300px] mx-auto flex flex-col items-center">
