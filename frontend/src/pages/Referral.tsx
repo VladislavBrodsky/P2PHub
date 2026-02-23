@@ -344,20 +344,23 @@ export default function ReferralPage() {
                                 <div className="relative h-40 sm:h-44 shrink-0">
                                     <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
                                     <img
-                                        src={`${getApiUrl()}/images/v3_referral_promo.jpg`}
+                                        src="/app_images/v3_referral_promo.jpg"
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="w-full h-full object-cover"
                                         onError={(e) => {
-                                            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1639762681485-074b7f4fc8bc?q=80&w=2832&auto=format&fit=crop";
+                                            // Hide broken image and let the gradient background show
+                                            (e.target as HTMLImageElement).style.display = 'none';
                                         }}
                                     />
+                                    {/* Gradient fallback background (always rendered under the image) */}
+                                    <div className="absolute inset-0 -z-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
                                     <div className="absolute bottom-3 left-5 z-20 right-5">
                                         <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-400 uppercase tracking-widest">
                                                 {t('referral.modal.limited_tier')}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tighter leading-none shadow-black drop-shadow-sm">
+                                        <h3 className="text-xl font-bold text-white tracking-tighter leading-none drop-shadow-sm">
                                             {t('referral.modal.recruit_title')}
                                         </h3>
                                     </div>
@@ -372,7 +375,7 @@ export default function ReferralPage() {
                                                 {VIRAL_HOOK}
                                             </h4>
                                             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                                                {VIRAL_TEXT}
+                                                {VIRAL_SUBTITLE}
                                             </p>
                                         </div>
                                     </div>

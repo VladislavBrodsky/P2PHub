@@ -125,27 +125,27 @@ export const BentoGrid = () => {
                     {shiftSteps.map((step, index) => (
                         <m.div
                             key={index}
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            whileInView={{
+                                opacity: 1,
+                                scale: 1,
+                                y: 0,
+                                transition: {
+                                    type: "spring",
+                                    stiffness: 260,
+                                    damping: 30,
+                                    delay: index * 0.05
+                                }
+                            }}
+                            viewport={{ once: true, margin: "-5%" }}
                             className={`relative group shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center perspective-1000 cursor-pointer ${flippedCards[index] ? 'z-50' : 'z-10'}`}
                             onClick={() => toggleFlip(index)}
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <m.div
-                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                whileInView={{
-                                    opacity: 1,
-                                    scale: 1,
-                                    y: 0,
-                                    transition: {
-                                        type: "spring",
-                                        stiffness: 260,
-                                        damping: 30,
-                                        delay: index * 0.05
-                                    }
-                                }}
-                                viewport={{ once: true, margin: "-5%" }}
+                            <div
                                 style={{ transformStyle: "preserve-3d" }}
-                                className={`w-full h-full relative duration-500 ease-out`}
+                                className="w-full h-full relative"
                             >
                                 {/* FRONT SIDE */}
                                 <div
@@ -226,7 +226,7 @@ export const BentoGrid = () => {
                                         </button>
                                     </div>
                                 </div>
-                            </m.div>
+                            </div>
                         </m.div>
                     ))}
                 </div>
