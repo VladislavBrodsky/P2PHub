@@ -61,7 +61,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
-                            "relative z-10 px-3 py-1 text-label font-bold uppercase tracking-wider transition-all w-28 text-center",
+                            "relative z-10 px-3 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all w-28 text-center",
                             activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
@@ -71,7 +71,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-3 py-1 text-label font-bold uppercase tracking-wider transition-all w-28 text-center",
+                            "relative z-10 px-3 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all w-28 text-center",
                             activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >

@@ -29,9 +29,11 @@ async def send_telegram_task(payload_dict: dict):
     High-capacity Telegram dispatcher.
     """
     from sqlalchemy.orm import sessionmaker
+    from sqlmodel import select
     from sqlmodel.ext.asyncio.session import AsyncSession
 
-    from app.models.partner import engine
+    from app.models.notification_retry import NotificationRetry
+    from app.models.partner import Partner, engine
     from app.services.audit_service import audit_service
     from bot import bot
 
@@ -70,11 +72,22 @@ async def send_telegram_task(payload_dict: dict):
             reply_markup=reply_markup
         )
         
-        # 4. Optimized Audit Log
-        async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-        async with async_session() as session:
+        # 3. Mark success in DB and Log
+        async_session_m = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+        async with async_session_m() as audit_session:
+            # Find the last pending retry for this user and mark as sent
+            stmt = select(NotificationRetry).where(
+                NotificationRetry.chat_id == str(payload.chat_id),
+                NotificationRetry.status == "pending"
+            ).order_by(NotificationRetry.created_at.desc()).limit(1)
+            res = await audit_session.execute(stmt)
+            retry = res.scalars().first()
+            if retry:
+                retry.status = "sent"
+                await audit_session.commit()
+
             await audit_service.log_event(
-                session=session,
+                session=audit_session,
                 entity_type="notification",
                 entity_id=str(payload.chat_id),
                 action="send_success",
@@ -84,7 +97,7 @@ async def send_telegram_task(payload_dict: dict):
                     "audit_v3": True
                 }
             )
-            await session.commit()
+            await audit_session.commit()
             
         return True
 
@@ -97,18 +110,15 @@ async def send_telegram_task(payload_dict: dict):
         logger.error(f"🚫 User {payload.chat_id} blocked the bot. Pausing notifications.")
         # Mark user as paused to stop redundant background tasks
         try:
-            from sqlmodel import select
-
-            from app.models.partner import Partner
-            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-            async with async_session() as session:
+            async_session_p = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session_p() as pause_session:
                 # chat_id in payload is str/int telegram_id
                 stmt = select(Partner).where(Partner.telegram_id == str(payload.chat_id))
-                user = (await session.exec(stmt)).first()
+                user = (await pause_session.exec(stmt)).first()
                 if user:
                     user.notifications_paused = True
-                    session.add(user)
-                    await session.commit()
+                    pause_session.add(user)
+                    await pause_session.commit()
                     # Cache in Redis for fast skipping in enqueue_notification
                     await rate_limit_service.mark_user_blocked(str(payload.chat_id))
         except Exception as ue:
@@ -126,21 +136,20 @@ async def send_telegram_task(payload_dict: dict):
         
         # Record dispatch error for persistent retry mechanism
         try:
-            from app.models.notification_retry import NotificationRetry
-            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-            async with async_session() as session:
+            async_session_e = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session_e() as error_session:
                 stmt = select(NotificationRetry).where(
                     NotificationRetry.chat_id == str(payload.chat_id),
                     NotificationRetry.status == "pending"
                 ).order_by(NotificationRetry.created_at.desc()).limit(1)
-                res = await session.execute(stmt)
+                res = await error_session.execute(stmt)
                 retry = res.scalars().first()
                 if retry:
                     retry.status = "pending" # Keep pending so scheduler can pick it up
                     retry.last_error = str(e)
                     retry.attempts += 1
-                    session.add(retry)
-                    await session.commit()
+                    error_session.add(retry)
+                    await error_session.commit()
         except Exception as de:
             logger.error(f"Failed to record dispatch error for {payload.chat_id}: {de}")
             

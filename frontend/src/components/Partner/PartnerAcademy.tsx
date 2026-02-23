@@ -26,12 +26,12 @@ export const PartnerAcademy = () => {
                         </div>
 
                         <div className="space-y-1">
-                            <h2 className="text-xl font-bold leading-none tracking-tight text-slate-900 dark:text-white uppercase italic">
-                                {t('academy.hero_title_1')} <span className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">{t('academy.hero_title_2')}</span>
+                            <h2 className="text-xl font-bold leading-none tracking-tight text-slate-900 dark:text-white uppercase italic drop-shadow-sm">
+                                {t('academy.hero_title_1')} <span className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent drop-shadow-md">{t('academy.hero_title_2')}</span>
                             </h2>
-                            <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 uppercase tracking-wide">
+                            <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 uppercase tracking-wide drop-shadow-sm">
                                 <Trans i18nKey="academy.hero_desc">
-                                    Master the 100-Stage roadmap to <span className="text-blue-800 dark:text-blue-100 font-bold">$1 Per Minute</span> with AI Automation.
+                                    Освойте пошаговую систему дохода <span className="text-blue-800 dark:text-blue-100 font-bold">$1 в минуту</span> с помощью ИИ.
                                 </Trans>
                             </p>
                         </div>

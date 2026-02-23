@@ -28,7 +28,7 @@ from app.models.partner import Earning, Partner, PartnerTask, XPTransaction
 
 # #comment: Use in-memory SQLite for ultra-fast tests.
 # Tests run 10x faster than with PostgreSQL and are completely isolated.
-TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+TEST_DATABASE_URL = "sqlite+aiosqlite:///./test_db.sqlite"
 
 
 @pytest.fixture(scope="session")
@@ -84,6 +84,13 @@ async def engine():
     referral_module.engine = original_referral_engine
     
     await test_engine.dispose()
+    
+    # Remove the test database file
+    if os.path.exists("./test_db.sqlite"):
+        try:
+            os.remove("./test_db.sqlite")
+        except:
+            pass
 
 
 @pytest.fixture(scope="function")

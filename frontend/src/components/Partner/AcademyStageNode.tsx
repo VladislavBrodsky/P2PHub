@@ -134,12 +134,14 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
                     "text-[10px] font-bold uppercase tracking-tight leading-tight",
-                    isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
+                    isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors",
+                    "drop-shadow-sm"
                 )}>{renderInline(title)}</h4>
 
                 <p className={cn(
                     "text-[9px] font-medium leading-snug mt-1.5 opacity-80 line-clamp-2",
-                    isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300"
+                    isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300",
+                    "drop-shadow-[0_1px_1px_rgba(0,0,0,0.1)]"
                 )}>{renderInline(description)}</p>
 
                 {stage.duration && !isLocked && (
