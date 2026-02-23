@@ -35,6 +35,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
     const { user } = useUser();
 
     const [copied, setCopied] = React.useState(false);
+    const [isAnimating, setIsAnimating] = React.useState(false);
 
     // Prevent body scroll and TMA swipes when drawer is open
     useTMALock(isOpen);
@@ -104,13 +105,15 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
+                            onAnimationStart={() => setIsAnimating(true)}
+                            onAnimationComplete={() => setIsAnimating(false)}
                             transition={{ type: 'spring', stiffness: 380, damping: 38, mass: 0.8 }}
                             className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-bg-app border-r border-border-glass shadow-2xl ml-0 mr-auto overscroll-none"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
                                 overscrollBehavior: 'none',
-                                willChange: 'transform',
+                                willChange: isAnimating ? 'transform' : 'auto',
                             }}
                         >
                             <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />

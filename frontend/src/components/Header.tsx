@@ -1,6 +1,5 @@
 import { m, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
-// #comment: Removed unused ChevronDown and X icons from lucide-react to clean up the import list
 import { Menu, Crown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../context/UserContext';
@@ -60,23 +59,25 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         </span>
                     </button>
 
+                    <div className="flex-1" /> {/* Spacer */}
+
                     <m.button
                         animate={controls}
-                        className="flex items-center gap-4 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-5 py-2.5 shadow-premium backdrop-blur-2xl transition-all shrink-0 hover:border-blue-500/30"
+                        className="flex items-center gap-3 rounded-2xl border border-border-glass bg-bg-glass px-4 py-2 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
-                        <div className="flex items-center gap-1.5 leading-none">
-                            <span className="text-label font-black uppercase tracking-wider text-slate-400 dark:text-blue-400">{t('common.lvl')}</span>
-                            <span className="text-caption font-black text-text-primary">
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-label font-black uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-caption font-black text-text-primary leading-none">
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
                                 <Crown size={12} className="text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
-                        <div className="h-3 w-px bg-slate-200 dark:bg-border-glass/50" />
-                        <div className="flex items-center gap-1.5 leading-none">
-                            <span className="text-caption font-black text-text-primary">
+                        <div className="h-3 w-px bg-border-glass" />
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-caption font-black text-text-primary leading-none">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
                             <span className="text-label font-black uppercase tracking-wider text-success dark:text-emerald-400">XP</span>

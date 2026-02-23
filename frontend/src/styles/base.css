@@ -21,11 +21,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  background-image: var(--bg-image);
   background-attachment: fixed;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  background-size: cover;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 /* Custom Scrollbar */
@@ -141,6 +144,16 @@ body {
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Global silence for scrollbars as requested */
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important;
   }
 }
 

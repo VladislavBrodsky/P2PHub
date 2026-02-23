@@ -9,20 +9,6 @@
   "dark": "Dark",
   "back": "Back",
   "hi": "Hi",
-  "system": {
-    "features": {
-      "dashboard": "Dashboard",
-      "cards": "Cards",
-      "partner": "Partner",
-      "pro": "Pro"
-    }
-  },
-  "community": {
-    "tab_dashboard": "Dashboard",
-    "tab_earn": "Earn",
-    "tab_partner": "Social",
-    "tab_cards": "Cards"
-  },
   "copy": "Copy",
   "close": "Close",
   "copied": "Copied",
@@ -44,7 +30,6 @@
   "save": "Save",
   "cancel": "Cancel",
   "delete": "Delete",
-  "hi": "Hi",
   "total": "Total",
   "next_lvl": "NEXT LEVEL",
   "admin": "ADMIN",
@@ -156,7 +141,15 @@
       "dashboard": "Dashboard",
       "academy": "Academy",
       "wallet": "Wallet",
-      "partner": "Partner"
+      "partner": "Partner",
+      "pro": "Pro",
+      "referral": "Referral",
+      "leaderboard": "Leagues",
+      "subscription": "Subscription",
+      "blog": "Blog",
+      "admin": "Admin",
+      "pro_dashboard": "PRO Dashboard",
+      "faq": "FAQ"
     }
   },
   "support": {

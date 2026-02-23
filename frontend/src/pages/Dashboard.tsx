@@ -49,7 +49,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <m.div
-            className="flex w-full flex-col px-4 min-h-dvh transition-colors duration-500 relative gap-14 pb-8 items-center"
+            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-14 pb-24"
             variants={container}
             initial="hidden"
             animate="show"
