@@ -558,65 +558,28 @@ async def nightly_reconciliation_task():
 
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     async with async_session() as session:
-        # Load all partners with their current values
-        result = await session.exec(select(Partner.id, Partner.telegram_id, Partner.xp, Partner.balance))
-        partners = result.all()
-
-        # Compute sums from XPTransaction
-        xp_sums_result = await session.exec(
-            select(XPTransaction.partner_id, func.sum(XPTransaction.amount).label("total"))
-            .group_by(XPTransaction.partner_id)
-        )
-        xp_sums = {row.partner_id: float(row.total or 0) for row in xp_sums_result.all()}
-
-        # Compute sums from Earning (USDT only)
-        bal_sums_result = await session.exec(
-            select(Earning.partner_id, func.sum(Earning.amount).label("total"))
-            .where(Earning.currency == "USDT")
-            .group_by(Earning.partner_id)
-        )
-        bal_sums = {row.partner_id: float(row.total or 0) for row in bal_sums_result.all()}
-
-        flag_count = 0
-        for p_id, p_tg_id, p_xp, p_balance in partners:
-            xp_sum = xp_sums.get(p_id, 0.0)
-            bal_sum = bal_sums.get(p_id, 0.0)
-            xp_diff = float(p_xp) - xp_sum
-            bal_diff = float(p_balance) - bal_sum
-
-            if abs(xp_diff) > 0.01:
-                await audit_service.log_reconciliation_flag(
-                    session=session,
-                    partner_id=p_id,
-                    flag_type="XP_MISMATCH",
-                    expected=xp_sum,
-                    actual=float(p_xp),
-                    diff=xp_diff,
-                    context={"telegram_id": str(p_tg_id)}
-                )
-                flag_count += 1
-
-            if abs(bal_diff) > 0.01:
-                await audit_service.log_reconciliation_flag(
-                    session=session,
-                    partner_id=p_id,
-                    flag_type="BALANCE_MISMATCH",
-                    expected=bal_sum,
-                    actual=float(p_balance),
-                    diff=bal_diff,
-                    context={"telegram_id": str(p_tg_id)}
-                )
-                flag_count += 1
+        # Utilize the enhanced shared audit logic
+        # We don't auto-fix in the nightly task unless triggered, 
+        # but we do alerts on discrepancies found.
+        res = await run_economy_audit(session, auto_fix=False)
+        
+        flag_count = res.get("discrepancies_found", 0)
+        total_checked = res.get("total_checked", 0)
 
         if flag_count > 0:
-            await session.commit()
-            logger.warning(f"⚠️ Reconciliation: {flag_count} discrepancies found and logged.")
+            logger.warning(f"⚠️ Nightly Reconciliation: {flag_count} discrepancies found.")
 
             # Alert admins if flags encountered
             if flag_count >= 5:
+                # Extract some anomaly info for the alert
+                anomalies_msg = ""
+                for a in res.get("anomalies", [])[:3]:
+                    anomalies_msg += f"\n• Partner {a['partner_id']}: {a['type']} Diff {a['diff']:+.2f}"
+
                 alert = (
                     f"⚠️ <b>NIGHTLY RECONCILIATION ALERT</b>\n\n"
-                    f"Found <b>{flag_count}</b> discrepancies in XP/USDT balances.\n\n"
+                    f"Found <b>{flag_count}</b> discrepancies in XP/USDT balances among {total_checked} partners.\n"
+                    f"{anomalies_msg}\n\n"
                     f"Check Admin Panel → Ledger → Reconciliation for details.\n"
                     f"Run <code>POST /admin/ledger/reconcile</code> for live data."
                 )
@@ -631,5 +594,5 @@ async def nightly_reconciliation_task():
                     except Exception as e:
                         logger.error(f"Failed to alert admin {admin_id}: {e}")
         else:
-            logger.info(f"✅ Nightly Reconciliation: All {len(partners)} partners healthy. No discrepancies.")
+            logger.info(f"✅ Nightly Reconciliation: All {total_checked} partners healthy. No discrepancies.")
 

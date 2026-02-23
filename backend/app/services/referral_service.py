@@ -273,7 +273,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     jumps to the next qualified upline leader.
     """
     partner = await session.get(Partner, partner_id)
-    if not partner or not partner.referrer_id:
+    if not partner:
         return
 
     # Deterministic Reference Prefix (Ensures Idempotency per Transaction)
