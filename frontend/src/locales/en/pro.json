@@ -11,6 +11,7 @@
     "tab_analytics": "Analytics",
     "tab_setup": "Setup",
     "tokens_left": "{{count}} TOKENS",
+    "tokens_label": "tokens",
     "system_offline": "System offline",
     "analytics": {
       "cabinet_title": "Analytics",

@@ -114,13 +114,13 @@ export const BentoGrid = () => {
     // #comment: Removed internal header logic as BentoGrid is now a pure-layout component. 
     // Hierarchy is now managed by the Dashboard's SectionHeader for better semantic control.
     return (
-        <section className="px-0 py-4 flex flex-col gap-6 overflow-hidden">
+        <section className="px-0 py-0 flex flex-col overflow-hidden relative">
             {/* Carousel Container */}
             <div className="relative">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex gap-4 overflow-x-auto pb-6 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
+                    className="flex gap-4 overflow-x-auto overflow-y-hidden pb-8 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
                         <m.div
@@ -222,9 +222,9 @@ export const BentoGrid = () => {
                     ))}
                 </div>
 
-                {/* Dashboard Indicators */}
-                <div className="flex items-center justify-center -mt-2">
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/40 dark:bg-white/5 border border-white/10 backdrop-blur-md shadow-sm">
+                {/* Dashboard Indicators - Absolutely positioned for zero-gap */}
+                <div className="absolute left-0 right-0 bottom-2 flex items-center justify-center z-20 pointer-events-none">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/40 border border-white/10 backdrop-blur-md shadow-sm">
                         {shiftSteps.map((_, i) => (
                             <m.div
                                 key={i}

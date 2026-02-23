@@ -449,7 +449,7 @@ export const ProDashboard = () => {
                                     {status?.pro_tokens ?? 0}
                                 </span>
                                 <span className="text-label font-black text-text-secondary uppercase tracking-widest leading-none">
-                                    {t('pro_dashboard.tokens_left').split(' ')[1] || 'tokens'}
+                                    {t('pro_dashboard.tokens_label')}
                                 </span>
                             </div>
                         </div>
@@ -489,17 +489,17 @@ export const ProDashboard = () => {
                             <button
                                 key={tab}
                                 onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                                className={`flex-1 relative py-3 rounded-[1.25rem] transition-all duration-500 ${activeTab === tab
+                                className={`flex-1 relative py-3 rounded-2xl transition-all duration-500 ${activeTab === tab
                                     ? 'text-white font-black'
                                     : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
                             >
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTabGlow"
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient-xy rounded-[1.25rem] ${tabConfig[tab].shadow}`}
+                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient-xy rounded-2xl ${tabConfig[tab].shadow}`}
                                         transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                     >
-                                        <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px] rounded-[1.25rem]" />
+                                        <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px] rounded-2xl" />
                                     </motion.div>
                                 )}
                                 <span className="relative z-10 flex flex-col items-center justify-center gap-0.5">
@@ -525,7 +525,7 @@ export const ProDashboard = () => {
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl max-w-xs w-full relative overflow-hidden"
+                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl max-w-xs w-full relative overflow-hidden"
                             >
                                 <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
                                 <div className="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 mx-auto mb-5 shadow-xl shadow-indigo-500/20">

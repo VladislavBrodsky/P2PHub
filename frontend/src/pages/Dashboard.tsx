@@ -49,7 +49,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <m.div
-            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-14 pb-24"
+            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-10 pb-24"
             variants={container}
             initial="hidden"
             animate="show"
@@ -134,7 +134,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 3. The Evolution - Bento Grid. */}
-            <m.div variants={item} className="flex flex-col gap-8 w-full">
+            <m.div variants={item} className="flex flex-col gap-4 w-full">
                 <div className="w-full">
                     <SectionHeader
                         badge={t('dashboard:evolution.badge')}
