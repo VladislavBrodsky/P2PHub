@@ -39,7 +39,7 @@ export const SectionHeader = ({
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-display font-black tracking-tight text-text-primary leading-tight whitespace-pre-line"
+                className="text-heading font-black tracking-tight text-text-primary leading-tight whitespace-pre-line"
             >
                 {title}
             </m.h2>
