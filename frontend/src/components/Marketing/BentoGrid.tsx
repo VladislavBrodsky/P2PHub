@@ -120,7 +120,7 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex items-start gap-4 overflow-x-auto overflow-y-hidden pt-4 pb-12 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000"
+                    className="flex items-center gap-4 overflow-x-auto overflow-y-hidden pt-4 pb-12 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000 max-h-[450px]"
                 >
                     {shiftSteps.map((step, index) => (
                         <div
@@ -142,7 +142,7 @@ export const BentoGrid = () => {
                                 viewport={{ once: true }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`w-full h-full relative transition-all duration-300 ${flippedCards[index] ? 'z-50' : 'z-10'}`}
+                                className={`w-full h-full relative ${flippedCards[index] ? 'z-50' : 'z-10'}`}
                                 style={{ transformStyle: "preserve-3d" }}
                             >
                                 {/* FRONT SIDE */}
