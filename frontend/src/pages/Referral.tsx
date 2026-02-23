@@ -538,7 +538,7 @@ export default function ReferralPage() {
                     className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
                 >
                     <FileText className="w-3 h-3" />
-                    {t('referral.brief.btn')}
+                    {t('brief.btn')}
                 </button>
             </div>
 

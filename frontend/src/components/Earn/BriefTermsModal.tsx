@@ -53,7 +53,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                             <div className="flex items-center justify-between">
                                 <h2 className="text-xl font-bold text-text-primary tracking-tight flex items-center gap-2">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
-                                    {t('referral.brief.title')}
+                                    {t('brief.title')}
                                 </h2>
                                 <button
                                     onClick={onClose}
@@ -71,11 +71,11 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                             <section className="space-y-3">
                                 <div className="flex items-center gap-2 text-blue-500">
                                     <Target className="w-4 h-4" />
-                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('referral.brief.goal_title')}</h3>
+                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('brief.goal_title')}</h3>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
                                     <p className="text-sm font-medium text-slate-900 dark:text-white leading-relaxed">
-                                        <Trans i18nKey="referral.brief.goal_desc">
+                                        <Trans i18nKey="brief.goal_desc">
                                             Our mission is to build the world's largest decentralized partner network.
                                             <span className="text-slate-900 dark:text-white font-bold"> Your goal is simple:</span> Expand the network, earn XP, and unlock the <span className="text-emerald-500 font-bold">$1/minute passive income stream.</span>
                                         </Trans>
@@ -87,7 +87,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                             <section className="space-y-3">
                                 <div className="flex items-center gap-2 text-violet-500">
                                     <BookOpen className="w-4 h-4" />
-                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('referral.brief.manual_title')}</h3>
+                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('brief.manual_title')}</h3>
                                 </div>
                                 <ul className="space-y-3">
                                     {[1, 2, 3].map((step) => (
@@ -96,7 +96,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                                 <span className="text-xs font-bold text-violet-500">{step}</span>
                                             </div>
                                             <p className="text-xs text-slate-500 dark:text-slate-400 leading-5">
-                                                {t(`referral.brief.manual_step_${step}`)}
+                                                {t(`brief.manual_step_${step}`)}
                                             </p>
                                         </li>
                                     ))}
@@ -107,7 +107,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                             <section className="space-y-3">
                                 <div className="flex items-center gap-2 text-rose-500">
                                     <AlertTriangle className="w-4 h-4" />
-                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('referral.brief.rules_title')}</h3>
+                                    <h3 className="text-xs font-bold uppercase tracking-wider">{t('brief.rules_title')}</h3>
                                 </div>
                                 <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 space-y-4">
                                     <div className="flex gap-3">
@@ -115,8 +115,8 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                             <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                                         </div>
                                         <p className="text-xs font-medium text-rose-600 dark:text-rose-200 leading-relaxed">
-                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('referral.brief.rule_1_title')}</span>
-                                            {t('referral.brief.rule_1_desc')}
+                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('brief.rule_1_title')}</span>
+                                            {t('brief.rule_1_desc')}
                                         </p>
                                     </div>
                                     <div className="h-px bg-rose-500/20" />
@@ -125,14 +125,14 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                             <div className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                                         </div>
                                         <p className="text-xs font-medium text-rose-600 dark:text-rose-200 leading-relaxed">
-                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('referral.brief.rule_2_title')}</span>
-                                            {t('referral.brief.rule_2_desc')}
+                                            <span className="text-slate-900 dark:text-white font-bold block mb-1">{t('brief.rule_2_title')}</span>
+                                            {t('brief.rule_2_desc')}
                                         </p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 px-3 py-2 bg-rose-500/5 rounded-lg border border-rose-500/20">
                                     <ShieldCheck className="w-3 h-3 text-rose-500" />
-                                    <p className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase">{t('referral.brief.antibot_active')}</p>
+                                    <p className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase">{t('brief.antibot_active')}</p>
                                 </div>
                             </section>
 
@@ -143,17 +143,17 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                         <Zap className="w-24 h-24 text-emerald-500" />
                                     </div>
                                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 relative z-10">
-                                        {t('referral.brief.motivation_title')}
+                                        {t('brief.motivation_title')}
                                     </h3>
                                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 relative z-10 leading-relaxed">
-                                        {renderInline(t('referral.brief.motivation_desc'))}
+                                        {renderInline(t('brief.motivation_desc'))}
                                     </p>
                                     <button
                                         onClick={onClose}
                                         className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl text-sm transition-colors shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 relative z-10"
                                     >
                                         <CheckCircle2 className="w-4 h-4" />
-                                        {t('referral.brief.cta')}
+                                        {t('brief.cta')}
                                     </button>
                                 </div>
                             </section>
