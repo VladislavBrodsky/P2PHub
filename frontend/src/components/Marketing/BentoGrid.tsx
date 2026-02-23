@@ -144,21 +144,16 @@ export const BentoGrid = () => {
                                     }
                                 }}
                                 viewport={{ once: true, margin: "-5%" }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 260,
-                                    damping: 30
-                                }}
-                                animate={{
-                                    rotateY: flippedCards[index] ? 180 : 0
-                                }}
                                 style={{ transformStyle: "preserve-3d" }}
-                                className={`w-full h-full relative`}
+                                className={`w-full h-full relative duration-500 ease-out`}
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
-                                    style={{ transform: 'rotateY(0deg)' }}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-all duration-500 ease-out ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    style={{
+                                        transform: flippedCards[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                                        opacity: flippedCards[index] ? 0 : 1
+                                    }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
 
@@ -203,8 +198,11 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
-                                    style={{ transform: 'rotateY(180deg)' }}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-all duration-500 ease-out ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    style={{
+                                        transform: flippedCards[index] ? 'rotateY(0deg)' : 'rotateY(-180deg)',
+                                        opacity: flippedCards[index] ? 1 : 0
+                                    }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
 

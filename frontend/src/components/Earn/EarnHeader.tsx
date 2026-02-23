@@ -119,7 +119,7 @@ export const EarnHeader = () => {
                             initial={{ opacity: 0, y: 4 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="relative px-2.5 py-1 sm:px-3 sm:py-[4px] rounded-full overflow-hidden shadow-lg"
+                            className="relative px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-full overflow-hidden shadow-lg mt-1 w-[110px] sm:w-[130px] flex justify-center"
                             style={{
                                 background: `linear-gradient(135deg, ${badgeColor}dd, ${badgeColor}99)`,
                                 boxShadow: `0 0 14px ${badgeColor}60`,
@@ -127,9 +127,9 @@ export const EarnHeader = () => {
                         >
                             {/* Shine overlay */}
                             <div className="absolute inset-0 bg-linear-to-r from-white/20 via-white/5 to-transparent pointer-events-none" />
-                            <div className="relative flex items-center gap-1">
-                                <Trophy className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white/90" />
-                                <span className="text-label sm:text-label font-bold uppercase tracking-[0.12em] sm:tracking-[0.14em] text-white/95 whitespace-nowrap">
+                            <div className="relative flex items-center justify-center gap-1.5 w-full">
+                                <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/90 shrink-0" />
+                                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/95 truncate text-center leading-none mt-px">
                                     {t(`ranks.${rank.name}`)}
                                 </span>
                             </div>
@@ -140,17 +140,17 @@ export const EarnHeader = () => {
                     <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 min-w-0">
 
                         {/* XP Progress header row */}
-                        <div className="flex items-baseline flex-wrap gap-x-2 gap-y-0.5 px-0.5 mb-0.5 sm:mb-0">
-                            <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-text-primary opacity-40 leading-none shrink-0">
+                        <div className="flex flex-row justify-between items-end px-0.5 mb-1 sm:mb-1.5 w-full">
+                            <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-primary opacity-50 shrink-0">
                                 {t('referral.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-label sm:text-xs font-bold text-text-primary transition-colors tabular-nums whitespace-nowrap ml-auto"
+                                className="text-xs sm:text-sm font-bold text-text-primary text-right tabular-nums ml-2 truncate"
                             >
-                                {Math.floor(progress.current).toLocaleString()} <span className="opacity-30">/</span> {Math.floor(progress.total).toLocaleString()} <span className="opacity-40 font-bold">XP</span>
+                                {Math.floor(progress.current).toLocaleString()} <span className="opacity-40 font-normal">/</span> {Math.floor(progress.total).toLocaleString()} <span className="text-[9px] sm:text-[10px] opacity-60 font-bold ml-0.5">XP</span>
                             </motion.span>
                         </div>
 
@@ -170,7 +170,7 @@ export const EarnHeader = () => {
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress.percent}%` }}
                                 transition={{ duration: 1.5, ease: 'circOut' }}
-                                className="absolute inset-0 rounded-full"
+                                className="absolute inset-y-0 left-0 rounded-full"
                                 style={{
                                     background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}cc, ${badgeColor}bb)`,
                                     boxShadow: `0 0 8px ${badgeColor}80`,
@@ -188,32 +188,35 @@ export const EarnHeader = () => {
                         </div>
 
                         {/* Stats grid */}
-                        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                        <div className="grid grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-1.5">
                             {/* Partners */}
                             <motion.div
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-input-bg border-input-border flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white/5 dark:border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-md flex flex-col justify-between min-h-[64px] sm:min-h-[76px] shadow-inner"
                             >
-                                <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
-                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
-                                        style={{ background: 'rgba(251,191,36,0.15)' }}>
-                                        <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
+                                <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1.5 sm:gap-2 w-full mb-1">
+                                    <div className="flex items-center justify-center shrink-0">
+                                        <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
                                     </div>
-                                    <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.12em] text-text-primary opacity-40 leading-tight min-w-0">
+                                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-primary opacity-60 truncate w-full">
                                         {t('referral.partners')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-1 min-w-0">
-                                    <span className="text-sm sm:text-xl font-bold text-text-primary leading-none tabular-nums">
+                                <div className="flex items-baseline gap-1 mt-auto">
+                                    <span className="text-base sm:text-xl font-bold text-text-primary leading-none tabular-nums">
                                         {partners.toLocaleString()}
                                     </span>
-                                    <TrendingUp className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-amber-500/60 mb-0.5 shrink-0" />
+                                    <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500/80 mb-0.5 shrink-0" />
                                 </div>
-                                {/* Corner glow */}
-                                <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
+                                {/* Subtle highlight */}
+                                <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-amber-500/20 to-transparent" />
+                                {/* Ambient glow */}
+                                <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full blur-xl opacity-10 pointer-events-none"
                                     style={{ background: '#fbbf24' }} />
+                                {/* Glass shine overlay */}
+                                <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
 
                             {/* Total XP */}
@@ -221,27 +224,30 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2 sm:p-3 border bg-input-bg border-input-border flex flex-col justify-center min-h-[56px] sm:min-h-[72px]"
+                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white/5 dark:border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-md flex flex-col justify-between min-h-[64px] sm:min-h-[76px] shadow-inner"
                             >
-                                <div className="flex items-center gap-1.5 sm:gap-2 mb-1 sm:mb-2">
-                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-md sm:rounded-lg flex items-center justify-center shrink-0"
-                                        style={{ background: `${badgeColor}22` }}>
-                                        <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: badgeColor }} />
+                                <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1.5 sm:gap-2 w-full mb-1">
+                                    <div className="flex items-center justify-center shrink-0">
+                                        <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.12em] text-text-primary opacity-40 leading-tight min-w-0">
+                                    <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-primary opacity-60 truncate w-full">
                                         {t('referral.total_xp')}
                                     </span>
                                 </div>
-                                <div className="flex items-baseline gap-0.5 sm:gap-1 min-w-0">
-                                    <span className="text-sm sm:text-xl font-bold leading-none tabular-nums text-text-primary">
+                                <div className="flex items-baseline gap-1 mt-auto">
+                                    <span className="text-base sm:text-xl font-bold leading-none tabular-nums text-text-primary">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
-                                    <span className="text-label sm:text-label font-bold uppercase mb-0.5 shrink-0"
-                                        style={{ color: `${badgeColor}cc` }}>xp</span>
+                                    <span className="text-[9px] sm:text-[10px] font-bold uppercase mb-0.5 shrink-0"
+                                        style={{ color: `${badgeColor}dd` }}>xp</span>
                                 </div>
-                                {/* Corner glow */}
-                                <div className="absolute -bottom-3 -right-3 w-10 h-10 sm:w-12 sm:h-12 rounded-full blur-xl opacity-20"
+                                {/* Subtle highlight */}
+                                <div className="absolute inset-x-0 top-0 h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${badgeColor}30, transparent)` }} />
+                                {/* Ambient glow */}
+                                <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full blur-xl opacity-10 pointer-events-none"
                                     style={{ background: badgeColor }} />
+                                {/* Glass shine overlay */}
+                                <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
                         </div>
                     </div>
