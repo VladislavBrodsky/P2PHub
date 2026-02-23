@@ -74,6 +74,9 @@ async def engine():
     partner_module.engine = test_engine
     referral_module.engine = test_engine
     
+    # Also patch the session maker bind
+    partner_module.async_session_maker.configure(bind=test_engine)
+    
     yield test_engine
     
     # Restore and cleanup

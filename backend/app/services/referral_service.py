@@ -10,6 +10,7 @@ from app.core.broker import broker
 from app.core.config import settings
 from app.core.i18n import get_msg
 from app.core.retry import async_retry
+from app.models.audit_log import ActionType
 from app.models.partner import Earning, Partner, XPTransaction, engine
 from app.services.audit_service import audit_service
 from app.services.leaderboard_service import leaderboard_service
@@ -19,6 +20,7 @@ from app.utils.ranking import get_level
 from app.utils.text import escape_markdown_v1
 
 logger = logging.getLogger(__name__)
+
 
 # #comment: Background tasks tracking to prevent garbage collection (RUF006)
 _background_tasks: set[asyncio.Task] = set()

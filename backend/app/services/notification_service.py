@@ -58,8 +58,13 @@ async def send_telegram_task(payload_dict: dict):
     try:
         reply_markup = notification_service._build_keyboard(payload.buttons) if payload.buttons else None
         
+        try:
+            target_chat_id = int(payload.chat_id)
+        except (ValueError, TypeError):
+            target_chat_id = payload.chat_id
+
         await bot.send_message(
-            chat_id=int(payload.chat_id),  # aiogram requires int; payload stores as str
+            chat_id=target_chat_id, 
             text=payload.text, 
             parse_mode=payload.parse_mode, 
             reply_markup=reply_markup
@@ -118,6 +123,27 @@ async def send_telegram_task(payload_dict: dict):
 
         logger.error(f"💥 Dispatch Error: {e}")
         sentry_sdk.capture_exception(e)
+        
+        # Record dispatch error for persistent retry mechanism
+        try:
+            from app.models.notification_retry import NotificationRetry
+            async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+            async with async_session() as session:
+                stmt = select(NotificationRetry).where(
+                    NotificationRetry.chat_id == str(payload.chat_id),
+                    NotificationRetry.status == "pending"
+                ).order_by(NotificationRetry.created_at.desc()).limit(1)
+                res = await session.execute(stmt)
+                retry = res.scalars().first()
+                if retry:
+                    retry.status = "pending" # Keep pending so scheduler can pick it up
+                    retry.last_error = str(e)
+                    retry.attempts += 1
+                    session.add(retry)
+                    await session.commit()
+        except Exception as de:
+            logger.error(f"Failed to record dispatch error for {payload.chat_id}: {de}")
+            
         return False # Let TaskIQ retry (up to 5 times)
 
 class NotificationService:
