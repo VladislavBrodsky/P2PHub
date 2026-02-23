@@ -107,17 +107,17 @@
   --text-caption: 12px;
   --text-label: 11px;
 
-  --font-sans: "Inter",
-    "Onest",
+  --font-sans: "Onest",
+    "Inter",
     system-ui,
     -apple-system,
     sans-serif;
-  --font-display: "Inter",
-    "Onest",
+  --font-display: "Onest",
+    "Inter",
     system-ui,
     sans-serif;
-  --font-heading: "Inter",
-    "Onest",
+  --font-heading: "Onest",
+    "Inter",
     system-ui,
     sans-serif;
 
