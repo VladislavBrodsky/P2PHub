@@ -394,15 +394,15 @@ export const GrowthTab = ({
                                                             <button
                                                                 onClick={() => handleCompleteAcademyStage(String(stage.id))}
                                                                 disabled={isLoading}
-                                                                className="w-full h-16 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-3 active:scale-95 transition-all"
+                                                                className="w-full h-11 sm:h-12 bg-slate-900 dark:bg-white/10 text-white dark:text-white border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 hover:bg-slate-800 dark:hover:bg-white/15 active:scale-[0.98] transition-all"
                                                             >
                                                                 {isLoading ? (
                                                                     <Loader2 className="w-5 h-5 animate-spin" />
                                                                 ) : (
                                                                     <>
-                                                                        <span>MARK AS ACCOMPLISHED</span>
+                                                                        <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
                                                                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                                        <span className="opacity-60">+{stage.rewardXp} XP</span>
+                                                                        <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
                                                                     </>
                                                                 )}
                                                             </button>

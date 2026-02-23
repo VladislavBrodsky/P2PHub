@@ -434,18 +434,11 @@ export const ProDashboard = () => {
                     <div className="w-7 sm:w-9 h-7 sm:h-9 shrink-0 pointer-events-none opacity-0" />
 
                     <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center">
-                        <motion.div
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                            className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl vibing-blue-animated flex items-center justify-center text-white shadow-2xl shadow-indigo-500/30 relative shrink-0"
-                        >
-                            <Zap size={20} className="relative z-10 w-4 h-4 sm:w-5 sm:h-5" />
-                        </motion.div>
-                        <div className="space-y-0.5 flex flex-col items-start text-left">
-                            <h1 className="text-[16px] sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
+                        <div className="space-y-1 flex flex-col items-center justify-center text-center">
+                            <h1 className="text-[16px] sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center justify-center gap-2 whitespace-nowrap">
                                 {t('pro_dashboard.studio_header_title')} <span className="vibing-crystal-text drop-shadow-sm">{t('pro_dashboard.studio_header_highlight')}</span>
                             </h1>
-                            <div className="flex items-center gap-1.5 px-0.5">
+                            <div className="flex items-center justify-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                 <Zap size={10} className="text-indigo-500 animate-pulse" />
                                 <span className="text-label font-bold text-text-primary tabular-nums leading-none tracking-tight">

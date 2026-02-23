@@ -120,7 +120,7 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex gap-4 overflow-x-auto overflow-y-hidden pb-6 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
+                    className="flex items-center gap-4 overflow-x-auto overflow-y-hidden pb-6 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
                         <m.div
@@ -132,19 +132,25 @@ export const BentoGrid = () => {
                         >
                             <m.div
                                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                                whileInView={{
+                                    opacity: 1,
+                                    scale: 1,
+                                    y: 0,
+                                    transition: {
+                                        type: "spring",
+                                        stiffness: 260,
+                                        damping: 30,
+                                        delay: index * 0.05
+                                    }
+                                }}
                                 viewport={{ once: true, margin: "-5%" }}
                                 transition={{
                                     type: "spring",
                                     stiffness: 260,
-                                    damping: 30,
-                                    delay: index * 0.05
+                                    damping: 30
                                 }}
                                 animate={{
-                                    rotateY: flippedCards[index] ? 180 : 0,
-                                    y: 0,
-                                    opacity: 1,
-                                    scale: 1
+                                    rotateY: flippedCards[index] ? 180 : 0
                                 }}
                                 style={{ transformStyle: "preserve-3d" }}
                                 className={`w-full h-full relative`}

@@ -577,7 +577,7 @@ export const ProDashboardModals = ({
                                                                     placeholder="https://t.me/pintopaybot?start=..."
                                                                 />
                                                                 <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                    Auto-inserts in Studio posts to credit your network.
+                                                                    {t('pro_dashboard.setup.personal_link_desc')}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -671,7 +671,9 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-bold">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
+                                                                <Trans i18nKey="pro_dashboard.setup.pinterest.dev_portal_desc">
+                                                                    Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-bold">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
+                                                                </Trans>
                                                             </p>
                                                         </div>
                                                     </motion.div>
@@ -700,7 +702,9 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-bold">Meta for Developers</a>. Require Threads API product activation.
+                                                                <Trans i18nKey="pro_dashboard.setup.threads.dev_portal_desc">
+                                                                    Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-bold">Meta for Developers</a>. Require Threads API product activation.
+                                                                </Trans>
                                                             </p>
                                                         </div>
                                                     </motion.div>
@@ -729,7 +733,9 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-bold">Meta for Developers</a>. Select App and Generate Token.
+                                                                <Trans i18nKey="pro_dashboard.setup.facebook.dev_portal_desc">
+                                                                    Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-bold">Meta for Developers</a>. Select App and Generate Token.
+                                                                </Trans>
                                                             </p>
                                                         </div>
                                                     </motion.div>
@@ -758,7 +764,9 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                Obtain Webhook URL via your <span className="text-[#5865F2] italic font-bold">Discord Server Settings → Integrations → Webhooks</span>.
+                                                                <Trans i18nKey="pro_dashboard.setup.discord.dev_portal_desc">
+                                                                    Obtain Webhook URL via your <span className="text-[#5865F2] italic font-bold">Discord Server Settings → Integrations → Webhooks</span>.
+                                                                </Trans>
                                                             </p>
                                                         </div>
                                                     </motion.div>

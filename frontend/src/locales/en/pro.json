@@ -182,6 +182,32 @@
     "setup": {
       "title": "Social Networks Setup",
       "subtitle": "Channel Management",
+      "tg_node": "Telegram Sync Node",
+      "pro_node_limit_desc": "Standard PRO supports 1 secure channel integration.",
+      "guide_btn": "GUIDE",
+      "channel_id": "Channel Username / ID",
+      "personal_link_desc": "Auto-inserts in Studio posts to credit your network.",
+      "x_broadcast_title": "X Broadcast Node",
+      "x_broadcast_desc": "Sync with X (Twitter) for global AI-driven posting.",
+      "x_broadcast_plus_desc": "Advanced multi-node broadcasting for PRO+ (X, LinkedIn, Threads).",
+      "api_key": "API Key",
+      "api_secret": "API Secret",
+      "access_token": "Access Token",
+      "access_token_secret": "Token Secret",
+      "syncing_btn": "SYNCING...",
+      "deploy_btn": "DEPLOY NODE",
+      "multi_sync": {
+        "title": "Telegram Multi-Sync",
+        "desc": "Sync up to 5 channels simultaneously (PRO+).",
+        "test": "TEST CONNECTION"
+      },
+      "referral_link_prefix_error": "Link must start with t.me/pintopaybot?start=",
+      "save_success_title": "Sync Protocol Active",
+      "save_success_text": "Neural nodes successfully configured.",
+      "save_error_title": "Sync Failed",
+      "save_error_text": "Error establishing connection. Verify keys.",
+      "tg_sync_success_msg": "Telegram nodes responding. All systems active.",
+      "tg_sync_error_msg": "Telegram sync failed. Verify bot permissions.",
       "sync_btn": "Sync Social Node",
       "active": "NODE ACTIVE",
       "not_synced": "UNSYNCED",
@@ -301,25 +327,29 @@
         "title": "Pinterest Visual",
         "desc": "High-engagement visual content node.",
         "placeholder": "Pinterest Access Token",
-        "guide": "Guide"
+        "guide": "Guide",
+        "dev_portal_desc": "Obtained via <1>Pinterest Developers</1>. Ensure 'pins:read,write' permissions."
       },
       "threads": {
         "title": "Threads Meta",
         "desc": "Direct access to Meta's newest viral node.",
         "placeholder": "Threads API Token",
-        "guide": "Guide"
+        "guide": "Guide",
+        "dev_portal_desc": "Connect via <1>Meta for Developers</1>. Require Threads API product activation."
       },
       "facebook": {
         "title": "Facebook Social",
         "desc": "Global network reach for maximum exposure.",
         "placeholder": "Facebook Access Token",
-        "guide": "Guide"
+        "guide": "Guide",
+        "dev_portal_desc": "Connect via <1>Meta for Developers</1>. Select App and Generate Token."
       },
       "discord": {
         "title": "Discord Community",
         "desc": "Direct notification channel for your core group.",
         "placeholder": "Discord Webhook URL",
-        "guide": "Guide"
+        "guide": "Guide",
+        "dev_portal_desc": "Obtain Webhook URL via your <1>Discord Server Settings → Integrations → Webhooks</1>."
       },
       "tg_sync_multi": {
         "title": "Telegram Multi-Sync",
@@ -469,8 +499,52 @@
       "node_capabilities": "Advanced Features",
       "bio_auth": "Authorization Required",
       "social_sync": "Connect Social Networks",
+      "mark_accomplished": "MARK AS ACCOMPLISHED",
       "live_signal": "ACTIVE",
       "synced": "CONNECTED",
+      "protocols": {
+        "title": "Viral Marketing Studio",
+        "subtitle": "Master the algorithm",
+        "difficulty_levels": {
+          "easy": "Apprentice",
+          "medium": "Specialist",
+          "hard": "Growth Hacker"
+        },
+        "stats_label": "EXPERIENCE POINTS",
+        "modules": [
+          {
+            "id": "1",
+            "title": "Growth Hacking 101"
+          },
+          {
+            "id": "2",
+            "title": "Engagement Metrics"
+          }
+        ],
+        "growth_promo": "Scale globally.",
+        "methodology_title": "Methodology",
+        "methodology_desc": "Based on millions of viral data points."
+      },
+      "articles": {
+        "title": "Intelligence Dossier",
+        "items": [
+          {
+            "id": "1",
+            "title": "The Hook System",
+            "category": "Copywriting",
+            "readTime": "3",
+            "desc": "Learn how to capture attention instantly."
+          },
+          {
+            "id": "2",
+            "title": "Algorithm Defense",
+            "category": "Strategy",
+            "readTime": "5",
+            "desc": "Protect your reach from algorithmic updates."
+          }
+        ],
+        "btn_read": "READ BRIEFING"
+      },
       "hook_rule": {
         "title": "The Hook Rule",
         "desc": "STOP THE SCROLL",
@@ -815,9 +889,43 @@
         }
       ],
       "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
-      "methodology_title": "Our Methodology",
       "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
     }
+  },
+  "growth_strategist": {
+    "title": "AI Growth Strategist",
+    "version": "Neural Network Analyzer v2.0",
+    "anal_label": "NETWORK ANALYTICS",
+    "analysis_title": "Contextual Analysis",
+    "analysis_desc": "I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.",
+    "hacks_title": "Actionable Hacks",
+    "hacks_desc": "Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.",
+    "cost": "Cost: {{count}} Network Tokens",
+    "btn_initiate": "Initiate Synthesis Protocol",
+    "synthesizing": "Synthesizing Growth Strategy",
+    "accessing_data": "Accessing Global Market Data...",
+    "btn_execute": "Execute Mission",
+    "btn": "Analyze Network",
+    "neural_desc": "Personalized neural advice to scale your network depth."
+  },
+  "viral_assets": {
+    "title": "Viral Design Assets",
+    "subtitle": "High-Conversion Prototypes",
+    "media_kit_btn": "ACCESS 2025-2026 MARKETING MEDIA KIT",
+    "cards": [
+      {
+        "id": "off_grid",
+        "title": "OFF-GRID ASSET",
+        "hook": "Looks like a card. Works like a card.",
+        "desc": "Connects directly to your crypto liquidity. No bank account required. Complete separation of state and money.",
+        "specs": [
+          "Resolution: 8K High Definition",
+          "Format: .PSD / .FIG (Layered)",
+          "Lighting: Realistic Ray-Tracing",
+          "License: Global Unrestricted"
+        ]
+      }
+    ]
   },
   "status": {
     "verifying": "Verifying...",
