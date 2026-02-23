@@ -195,10 +195,10 @@ export const PartnerDashboard = () => {
                                 </div>
                                 <div className="flex flex-col min-w-0">
                                     <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
-                                        {t('referral.brief.title')}
+                                        {t('brief.title')}
                                     </h3>
                                     <span className="text-label font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
-                                        {t('referral.brief.guide')}
+                                        {t('brief.guide')}
                                     </span>
                                 </div>
                             </div>
@@ -206,13 +206,13 @@ export const PartnerDashboard = () => {
                             <div className="flex items-center gap-2 shrink-0 pr-1">
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                                 <div className="flex flex-col text-right">
-                                    {t('referral.brief.read_line1') && (
+                                    {t('brief.read_line1') && (
                                         <span className="text-label font-bold uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
-                                            {t('referral.brief.read_line1')}
+                                            {t('brief.read_line1')}
                                         </span>
                                     )}
                                     <span className="text-label font-bold uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
-                                        {t('referral.brief.read_line2')}
+                                        {t('brief.read_line2')}
                                     </span>
                                 </div>
                             </div>
