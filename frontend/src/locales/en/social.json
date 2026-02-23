@@ -53,7 +53,8 @@
     "current_league": "Current League",
     "global_rank": "Global Rank",
     "xp_score": "XP Score",
-    "referrals": "Referrals"
+    "referrals": "Referrals",
+    "live_rankings": "Live Rankings"
   },
   "community": {
     "tabs": {
@@ -115,6 +116,8 @@
     "claim": "Claim XP",
     "start": "Initiate Mission",
     "status": "Status",
+    "review": "REVIEW",
+    "error_not_met": "Task requirement not met.",
     "level_short": "Lvl.",
     "pro_multiplier": "PRO x1.5 / PRO+ x3.0 XP Boost",
     "telegram_bot": {
@@ -219,6 +222,7 @@
     },
     "qr": {
       "title": "Achieve Your \nFinancial Independence",
+      "title_img": "Your Referral QR Code",
       "sovereignty": "Financial Independence",
       "desc": "Earn <1>$1/minute</1> from your network's activity. <br />\nStart growing your project today.",
       "copy": "Copy link",
@@ -294,7 +298,8 @@
       "btn": "Terms & Guide",
       "title": "Partner Guide",
       "guide": "Practical recommendations",
-      "read": "Read the guide",
+      "read_line1": "Read",
+      "read_line2": "Guide",
       "goal_title": "Our Goal",
       "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
       "manual_title": "Path to Success",
@@ -361,7 +366,9 @@
     "benefit_3_title": "0% Platform Fees",
     "benefit_3_desc": "Maximum income from all transactions in the network.",
     "benefit_4_title": "Executive Support",
-    "benefit_4_desc": "24/7 Personal Manager for your growing team."
+    "benefit_4_desc": "24/7 Personal Manager for your growing team.",
+    "share_text": "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀",
+    "share_title": "Join P2PHub"
   },
   "partner_dashboard": {
     "total_earned": "Total Earned",

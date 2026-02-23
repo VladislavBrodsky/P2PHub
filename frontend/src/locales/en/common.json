@@ -20,6 +20,8 @@
   "copied": "Copied",
   "show_more": "Show more",
   "show_less": "Show less",
+  "top_50": "TOP 50",
+  "locked": "LOCKED",
   "active": "Active",
   "muted": "Muted",
   "unlock_at": "Available at level",
@@ -261,7 +263,7 @@
       },
       {
         "q": "How to add Partner Center to my Home Screen?",
-        "a": "**For iPhone (iOS):**\n1. Open the **Partner Center** in *Safari*.\n2. Tap the **Share** icon (the square with an arrow pointing up) at the bottom of the screen.\n3. Scroll down and select **Add to Home Screen**.\n4. Tap **Add** in the top-right corner.\n*(This creates an app icon on your home screen for instant access.)*\n\n**For Android:**\n1. Open the **Partner Center** in *Chrome*.\n2. Tap the **three dots** menu icon in the top-right corner.\n3. Select **Install App** or **Add to Home Screen**.\n4. Confirm by tapping **Add**.\n*(Now you can launch the app directly without opening Telegram.)*"
+        "a": "**For iPhone (iOS):**\n1. Open the **Partner Center** in *Safari*.\n2. Tap the **Share** icon (the square with an arrow pointing up) at the bottom of the screen.\n3. Scroll down and select **Add to Home Screen**.\n4. Tap **Add in the top-right corner.**\n*(This creates an app icon on your home screen for instant access.)*\n\n**For Android:**\n1. Open the **Partner Center** in *Chrome*.\n2. Tap the **three dots** menu icon in the top-right corner.\n3. Select **Install App** or **Add to Home Screen**.\n4. Confirm by tapping **Add**.\n*(Now you can launch the app directly without opening Telegram.)*"
       }
     ],
     "categories": {

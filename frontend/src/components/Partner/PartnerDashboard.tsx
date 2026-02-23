@@ -206,11 +206,13 @@ export const PartnerDashboard = () => {
                             <div className="flex items-center gap-2 shrink-0 pr-1">
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                                 <div className="flex flex-col text-right">
-                                    <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
-                                        {t('referral.brief.read').split(' ')[0]}
-                                    </span>
+                                    {t('referral.brief.read_line1') && (
+                                        <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
+                                            {t('referral.brief.read_line1')}
+                                        </span>
+                                    )}
                                     <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
-                                        {t('referral.brief.read').split(' ')[1]}
+                                        {t('referral.brief.read_line2')}
                                     </span>
                                 </div>
                             </div>
@@ -304,7 +306,7 @@ export const PartnerDashboard = () => {
                             onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
                             className="text-slate-500 hover:text-white text-label font-black uppercase tracking-widest transition-colors"
                         >
-                            {isEarningsExpanded ? t('common.show_less') : t('common.view_all')}
+                            {isEarningsExpanded ? t('common:show_less') : t('common:view_all')}
                         </button>
                     </div>
 
@@ -570,7 +572,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         ) : item.currency === 'USDT' || item.type === 'COMMISSION' || item.type === 'PRO_COMMISSION' ? (
                                             <USDTLogo className="w-3.5 h-3.5" />
                                         ) : (
-                                            React.cloneElement(styles.icon as React.ReactElement, { className: 'w-3 h-3' })
+                                            React.cloneElement(styles.icon as React.ReactElement<{ className?: string }>, { className: 'w-3 h-3' })
                                         )}
                                     </div>
                                     <div className='flex flex-col'>
@@ -589,14 +591,14 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                             ? 'bg-amber-500/20 text-amber-500'
                                             : 'bg-red-500/20 text-red-500'
                                             }`}>
-                                            {item.status === 'manual_review' ? 'REVIEW' : item.status}
+                                            {item.status === 'manual_review' ? t('tasks.review') : item.status}
                                         </div>
                                     )}
                                     {item.level && (
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                                             <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                                <span className="text-label font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('lvl')}</span>
+                                                <span className="text-label font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
                                                 <span className="text-label font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
                                             </div>
                                         </div>

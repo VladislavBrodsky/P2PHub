@@ -15,7 +15,7 @@ interface Level100AchievementModalProps {
 }
 
 export const Level100AchievementModal = ({ isOpen, onClose }: Level100AchievementModalProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['social', 'common']);
     const { user } = useUser();
     const { impact } = useHaptic();
     const { setHeaderVisible, setFooterVisible } = useUI();
@@ -74,8 +74,8 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.switchInlineQuery(referralCode);
         } else if (navigator.share) {
-            const text = "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀";
-            navigator.share({ title: 'Join P2PHub', text, url: link });
+            const text = t('level100.share_text');
+            navigator.share({ title: t('level100.share_title'), text, url: link });
         } else {
             navigator.clipboard.writeText(link);
         }

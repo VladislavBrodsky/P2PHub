@@ -91,7 +91,7 @@ export default function LeaderboardPage() {
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                    <span className="text-label font-black uppercase tracking-[0.25em] text-emerald-500">Live Rankings</span>
+                    <span className="text-label font-black uppercase tracking-[0.25em] text-emerald-500">{t('leaderboard.live_rankings')}</span>
                 </div>
                 <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
                     {t('leaderboard.title')}
@@ -141,7 +141,7 @@ export default function LeaderboardPage() {
                 title={t('leaderboard.top_partners')}
             >
                 <div className="space-y-2">
-                    {visiblePartners.map((user, index) => (
+                    {visiblePartners.map((user: LeaderboardUser, index: number) => (
                         <motion.button
                             key={user.id}
                             initial={{ opacity: 0, y: 16 }}
@@ -214,7 +214,7 @@ export default function LeaderboardPage() {
                                         </div>
                                         <div className="flex items-center gap-1.5 flex-wrap">
                                             <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
-                                                <span>LVL {user.level}</span>
+                                                <span>{t('common:lvl')} {user.level}</span>
                                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                                                 <div className="flex items-center gap-1 text-blue-500/70">
                                                     <Crown size={8} className="stroke-3" />
@@ -246,7 +246,7 @@ export default function LeaderboardPage() {
                             }}
                             className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
                         >
-                            {showAll ? t('show_less') : `${t('show_more')} (TOP 50)`}
+                            {showAll ? t('common:show_less') : `${t('common:show_more')} (${t('common:top_50')})`}
                         </button>
                     )}
                 </div>

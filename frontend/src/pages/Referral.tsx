@@ -171,9 +171,9 @@ export default function ReferralPage() {
 
         } catch (e: any) {
             console.error("Failed to claim task reward", e);
-            const errorMsg = e.response?.data?.detail || "Task requirement not met.";
+            const errorMsg = e.response?.data?.detail || t('tasks.error_not_met');
             showNotification({
-                title: t('common.error', 'Security Check'),
+                title: t('common:error'),
                 message: errorMsg,
                 type: 'warning'
             });

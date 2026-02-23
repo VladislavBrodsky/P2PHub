@@ -13,7 +13,7 @@ interface PartnerBriefingModalProps {
 }
 
 export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['social', 'common']);
     const { setFooterVisible, setHeaderVisible } = useUI();
 
     useTMALock(isOpen);

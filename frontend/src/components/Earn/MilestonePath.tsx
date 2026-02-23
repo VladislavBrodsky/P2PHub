@@ -154,7 +154,7 @@ export const MilestonePath = () => {
                                 </span>
                                 <h5 className={`text-[11px] sm:text-caption font-black leading-tight line-clamp-3 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (
-                                        <span className="opacity-40 italic tracking-widest text-label sm:text-label">LOCKED</span>
+                                        <span className="opacity-40 italic tracking-widest text-label sm:text-label">{t('common:locked')}</span>
                                     ) : (
                                         t(item.reward, { level: item.level })
                                     )}

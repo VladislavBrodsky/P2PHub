@@ -14,7 +14,7 @@ interface AcademyStageNodeProps {
 }
 
 export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, status, onClick, index }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['academy', 'common']);
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
@@ -23,31 +23,15 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
     const isLeft = index % 2 === 0;
 
     const getStageContent = (id: number) => {
-        if (id <= 10 || (id >= 21 && id <= 24)) {
-            return {
-                titleKey: `academy_content.stage_${id}_title`,
-                descKey: `academy_content.stage_${id}_desc`,
-                params: {}
-            };
-        }
-        if (id >= 11 && id <= 20) {
-            return {
-                titleKey: `academy_content.stage_foundation_title`,
-                descKey: `academy_content.stage_foundation_desc`,
-                params: { phase: id }
-            };
-        }
-        // Default / Elite (25+)
         return {
-            titleKey: `academy_content.stage_elite_title`,
-            descKey: `academy_content.stage_elite_desc`,
-            params: { stage: id }
+            titleKey: `academy_content.stage_${id}_title`,
+            descKey: `academy_content.stage_${id}_desc`
         };
     };
 
-    const { titleKey, descKey, params } = getStageContent(stage.id);
-    const title = t(titleKey, { ...params, defaultValue: stage.title });
-    const description = t(descKey, { ...params, defaultValue: stage.description });
+    const { titleKey, descKey } = getStageContent(stage.id);
+    const title = t(titleKey, { defaultValue: stage.title });
+    const description = t(descKey, { defaultValue: stage.description });
 
     return (
         <motion.div

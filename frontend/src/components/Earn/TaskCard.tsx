@@ -120,7 +120,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 {(isPro || isProPlus) && (
                                     <div className="flex items-center gap-1">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className={`text-label font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} BOOST</span>
+                                        <span className={`text-label font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} {t('tasks.boost')}</span>
                                     </div>
                                 )}
                             </div>
@@ -128,7 +128,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                         {isCompleted && (
                             <span className="text-label font-black text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
                                 <CheckCircle2 className="w-2.5 h-2.5" />
-                                {t('tasks.done', 'Done')}
+                                {t('tasks.done')}
                             </span>
                         )}
                     </div>
@@ -166,7 +166,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {(task.type === 'referral' || task.type === 'action') && !isCompleted && (
                         <div className="space-y-1.5">
                             <div className="flex justify-between items-baseline text-label font-black uppercase tracking-widest px-0.5">
-                                <span className="text-slate-400">{t('tasks.progress', 'Progress')}</span>
+                                <span className="text-slate-400">{t('tasks.progress')}</span>
                                 <span className="text-slate-900 dark:text-white tracking-tighter opacity-80">
                                     {Math.min(currentProgress, task.requirement || 0)} / {task.requirement}
                                 </span>
@@ -203,7 +203,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                     }}
                                 >
                                     {isClaiming ? <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-                                    <span>{isClaiming ? (t('loading') || "Loading...") : t('tasks.claim')}</span>
+                                    <span>{isClaiming ? t('common:loading') : t('tasks.claim')}</span>
                                 </button>
                             ) : status === 'VERIFYING' ? (
                                 <div className="w-full flex items-center justify-center gap-2 bg-blue-500/10 border border-blue-500/20 py-3 rounded-xl backdrop-blur-md shadow-sm">
@@ -223,7 +223,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 >
                                     {status === 'STARTED' ? (
                                         <>
-                                            <span className="animate-pulse">{t('tasks.in_progress', 'In Progress')}</span>
+                                            <span className="animate-pulse">{t('tasks.in_progress')}</span>
                                             <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                                         </>
                                     ) : (
