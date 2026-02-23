@@ -17,6 +17,8 @@
     "footer_status": "Активен",
     "global_ranking": "Глобальный рейтинг",
     "stage": "УРОВЕНЬ {{stage}}",
+    "stage_title": "Этап {{stage}}",
+    "academy_label": "Академия",
     "progress_to_pro": "Прогресс до PRO",
     "expand_higher": "Открыть следующие уровни",
     "mastery": "Мастерство уровня {{stage}}",
@@ -30,6 +32,7 @@
       "Мастерство каналов 50k+ TG"
     ],
     "upgrade_btn": "Перейти в PRO-центр",
+    "upgrade_now": "Активировать PRO",
     "stage_completed": "Этап завершен!",
     "your_mission": "Ваша миссия",
     "apply_knowledge": "Я понял этот секрет и готов применить его.",

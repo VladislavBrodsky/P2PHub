@@ -17,7 +17,7 @@ interface AcademyContentPortalProps {
 }
 
 export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stage, onClose, onComplete, isLocked }) => {
-    const { t } = useTranslation('academy');
+    const { t } = useTranslation(['academy', 'common']);
     const { user } = useUser();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);
@@ -121,8 +121,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                     {/* Stage Badge - Centered specifically for better hierarchy */}
                     <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                        <span className="text-label font-bold text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">Academy</span>
-                        <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">Stage {stage.id}</h3>
+                        <span className="text-label font-bold text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">{t('academy.academy_label')}</span>
+                        <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('academy.stage_title', { stage: stage.id })}</h3>
                     </div>
 
                     {/* Stats Badge */}
@@ -132,7 +132,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         </div>
                         <div className="flex flex-col items-end">
                             <span className="text-label font-bold text-slate-900 dark:text-white leading-none">{Math.floor(user?.xp || 0)}</span>
-                            <span className="text-label font-bold text-green-500 uppercase tracking-widest">XP</span>
+                            <span className="text-label font-bold text-green-500 uppercase tracking-widest">{t('common:xp')}</span>
                         </div>
                     </div>
 
@@ -330,7 +330,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     <button
                         onClick={onClose}
                         className="w-14 h-auto rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 flex items-center justify-center active:scale-90 transition-all hover:bg-slate-200 dark:hover:bg-white/10"
-                        aria-label={t('common.close')}
+                        aria-label={t('common:close')}
                     >
                         <ArrowLeft className="w-6 h-6" />
                     </button>

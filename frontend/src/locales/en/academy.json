@@ -17,6 +17,8 @@
     "footer_rank": "Growth Hacker",
     "footer_status": "Active",
     "stage": "STAGE {{stage}}",
+    "stage_title": "Stage {{stage}}",
+    "academy_label": "Academy",
     "progress_to_pro": "Progress to PRO",
     "expand_higher": "Unlock Higher Stages",
     "mastery": "Stage {{stage}} Mastery",
@@ -30,6 +32,7 @@
       "50k+ TG Channel Mastery"
     ],
     "upgrade_btn": "Go to PRO Center",
+    "upgrade_now": "Upgrade Now",
     "stage_completed": "Stage Completed!",
     "your_mission": "Your Mission",
     "apply_knowledge": "I understand this secret and am ready to apply it.",
