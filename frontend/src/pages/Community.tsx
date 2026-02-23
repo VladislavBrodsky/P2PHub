@@ -36,7 +36,7 @@ export default function CommunityPage() {
 
 
             {/* Top Navigation / Switcher */}
-            <div className="relative z-20 mb-3 mt-3 flex justify-center">
+            <div className="relative z-20 mb-2 mt-0 flex justify-center">
                 <div className="p-1 rounded-3xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div
@@ -61,7 +61,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
-                            "relative z-10 px-4 py-1.5 text-label font-bold uppercase tracking-wider transition-all w-36 text-center",
+                            "relative z-10 px-3 py-1 text-label font-bold uppercase tracking-wider transition-all w-28 text-center",
                             activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
@@ -71,7 +71,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-4 py-1.5 text-label font-bold uppercase tracking-wider transition-all w-36 text-center",
+                            "relative z-10 px-3 py-1 text-label font-bold uppercase tracking-wider transition-all w-28 text-center",
                             activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >

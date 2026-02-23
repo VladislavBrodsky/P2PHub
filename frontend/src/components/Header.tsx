@@ -50,7 +50,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 <div className="w-full flex items-center justify-between gap-3 mx-auto relative">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-1.5 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-3.5 py-1.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
+                        className="group flex items-center gap-1.5 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-3 py-1 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-[18px] w-[18px] transition-transform group-hover:scale-110" />
@@ -63,7 +63,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <m.button
                         animate={controls}
-                        className="flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-2.5 py-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1">

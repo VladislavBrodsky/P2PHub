@@ -27,7 +27,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     return (
-        <div className={`relative overflow-visible pt-6 ${className}`}>
+        <div className={`relative overflow-visible pt-4 ${className}`}>
             {/* Premium Background Glow */}
             {/* Premium Background Glow - Disabled for compact variant to avoid glitches in menu */}
             {variant !== 'compact' && (
@@ -65,7 +65,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : ''}
             `}>
-                <div className="flex items-center gap-5 p-4 rounded-[inherit] overflow-hidden">
+                <div className="flex items-center gap-5 p-3.5 rounded-[inherit] overflow-hidden">
                     {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
                     {isProPlus && variant !== 'compact' && (
                         <motion.div

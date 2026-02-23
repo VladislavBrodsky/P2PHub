@@ -341,19 +341,21 @@ export default function ReferralPage() {
                             {/* Scrollable Content */}
                             <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto overscroll-none" style={{ overscrollBehavior: 'none' }}>
                                 {/* Visual Header */}
-                                <div className="relative h-40 sm:h-44 shrink-0">
-                                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
+                                <div className="relative h-40 sm:h-44 shrink-0 overflow-hidden">
+                                    {/* Gradient fallback background - always behind */}
+                                    <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
+                                    {/* Promo image on top of gradient */}
                                     <img
-                                        src="/app_images/v3_referral_promo.jpg"
+                                        src={`${getApiUrl()}/images/v3_referral_promo.jpg`}
                                         alt={t('referral.modal.invite_image_alt')}
-                                        className="w-full h-full object-cover"
+                                        className="absolute inset-0 w-full h-full object-cover"
                                         onError={(e) => {
-                                            // Hide broken image and let the gradient background show
+                                            // Hide broken image, gradient background shows through
                                             (e.target as HTMLImageElement).style.display = 'none';
                                         }}
                                     />
-                                    {/* Gradient fallback background (always rendered under the image) */}
-                                    <div className="absolute inset-0 -z-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
+                                    {/* Fade overlay */}
+                                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
                                     <div className="absolute bottom-3 left-5 z-20 right-5">
                                         <div className="flex items-center gap-1.5 mb-1.5">
                                             <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-400 uppercase tracking-widest">
