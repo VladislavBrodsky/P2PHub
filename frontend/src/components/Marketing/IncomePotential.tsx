@@ -483,7 +483,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             {liveCount.toLocaleString()}
                                                         </m.span>
                                                     </AnimatePresence>
-                                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">online</span>
+                                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{t('common:active')}</span>
                                                 </div>
                                             </div>
                                         </div>

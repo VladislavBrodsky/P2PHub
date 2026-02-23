@@ -467,7 +467,7 @@ export const ProDashboard = () => {
                 </div>
 
                 {/* Tab Switcher - Fixed Padding/Tracking and rounded-3xl */}
-                <div className="flex p-0.5 bg-slate-900/5 dark:bg-slate-900/20 backdrop-blur-3xl rounded-3xl border border-slate-900/5 dark:border-white/5 shadow-premium mt-3 mx-auto max-w-[420px] w-full relative">
+                <div className="flex p-0.5 bg-slate-900/5 dark:bg-slate-900/20 backdrop-blur-3xl rounded-3xl border border-slate-900/5 dark:border-white/5 shadow-premium mt-1 mx-auto max-w-[420px] w-full relative">
                     {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
@@ -492,7 +492,7 @@ export const ProDashboard = () => {
                             <button
                                 key={tab}
                                 onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                                className={`flex-1 relative py-3 rounded-2xl transition-all duration-500 ${activeTab === tab
+                                className={`flex-1 relative py-1.5 rounded-2xl transition-all duration-500 ${activeTab === tab
                                     ? 'text-white font-bold'
                                     : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
                             >

@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
                 initial={{ opacity: 0, y: -12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                className="flex flex-col items-center mb-6 gap-2"
+                className="flex flex-col items-center mb-3 gap-2"
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
@@ -107,7 +107,7 @@ export default function LeaderboardPage() {
                                 setTimeframe(tf);
                                 setShowAll(false);
                             }}
-                            className={`flex-1 py-2 text-label font-bold uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
+                            className={`flex-1 py-1.5 text-label font-bold uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
                                 ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
                                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                                 }`}

@@ -35,6 +35,7 @@
   "delete": "Delete",
   "total": "Total",
   "next_lvl": "NEXT LEVEL",
+  "xp": "XP",
   "admin": "ADMIN",
   "retry": "Retry",
   "view_all": "View all",
@@ -72,13 +73,6 @@
     "legal": "Legal",
     "admin_panel": "Admin Panel",
     "pro_panel": "PRO Panel"
-  },
-  "nav": {
-    "home": "Home",
-    "cards": "Cards",
-    "partner": "Partner",
-    "league": "Leagues",
-    "earn": "Growth"
   },
   "cta": {
     "upgrade_pro": "UPGRADE TO PRO",

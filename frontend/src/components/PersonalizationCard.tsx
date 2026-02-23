@@ -175,7 +175,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
                                     <span className="text-label font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
-                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} XP</span>
+                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} {t('xp')}</span>
                                 </motion.div>
                                 <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{xpProgress.current.toLocaleString()}</span>
