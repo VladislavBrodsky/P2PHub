@@ -658,41 +658,6 @@
           }
         ]
       },
-      "growth_strategist": {
-        "title": "AI Growth Strategist",
-        "version": "Neural Network Analyzer v2.0",
-        "anal_label": "NETWORK ANALYTICS",
-        "analysis_title": "Contextual Analysis",
-        "analysis_desc": "I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.",
-        "hacks_title": "Actionable Hacks",
-        "hacks_desc": "Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.",
-        "cost": "Cost: {{count}} Network Tokens",
-        "btn_initiate": "Initiate Synthesis Protocol",
-        "synthesizing": "Synthesizing Growth Strategy",
-        "accessing_data": "Accessing Global Market Data...",
-        "btn_execute": "Execute Mission",
-        "btn": "Analyze Network",
-        "neural_desc": "Personalized neural advice to scale your network depth."
-      },
-      "viral_assets": {
-        "title": "Viral Design Assets",
-        "subtitle": "High-Conversion Prototypes",
-        "media_kit_btn": "ACCESS 2025-2026 MARKETING MEDIA KIT",
-        "cards": [
-          {
-            "id": "off_grid",
-            "title": "OFF-GRID ASSET",
-            "hook": "Looks like a card. Works like a card.",
-            "desc": "Connects directly to your crypto liquidity. No bank account required. Complete separation of state and money.",
-            "specs": [
-              "Resolution: 8K High Definition",
-              "Format: .PSD / .FIG (Layered)",
-              "Lighting: Realistic Ray-Tracing",
-              "License: Global Unrestricted"
-            ]
-          }
-        ]
-      },
       "psych_strategies": {
         "title": "Marketing Psychology",
         "subtitle": "TOP 9 ENGAGEMENT TRIGGERS",
@@ -890,73 +855,73 @@
       ],
       "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
       "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
+    },
+    "growth_strategist": {
+      "title": "AI Growth Strategist",
+      "version": "Neural Network Analyzer v2.0",
+      "anal_label": "NETWORK ANALYTICS",
+      "analysis_title": "Contextual Analysis",
+      "analysis_desc": "I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.",
+      "hacks_title": "Actionable Hacks",
+      "hacks_desc": "Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.",
+      "cost": "Cost: {{count}} Network Tokens",
+      "btn_initiate": "Initiate Synthesis Protocol",
+      "synthesizing": "Synthesizing Growth Strategy",
+      "accessing_data": "Accessing Global Market Data...",
+      "btn_execute": "Execute Mission",
+      "btn": "Analyze Network",
+      "neural_desc": "Personalized neural advice to scale your network depth."
+    },
+    "viral_assets": {
+      "title": "Viral Design Assets",
+      "subtitle": "High-Conversion Prototypes",
+      "media_kit_btn": "ACCESS 2025-2026 MARKETING MEDIA KIT",
+      "cards": [
+        {
+          "id": "off_grid",
+          "title": "OFF-GRID ASSET",
+          "hook": "Looks like a card. Works like a card.",
+          "desc": "Connects directly to your crypto liquidity. No bank account required. Complete separation of state and money.",
+          "specs": [
+            "Resolution: 8K High Definition",
+            "Format: .PSD / .FIG (Layered)",
+            "Lighting: Realistic Ray-Tracing",
+            "License: Global Unrestricted"
+          ]
+        }
+      ]
+    },
+    "status": {
+      "verifying": "Verifying...",
+      "welcome_pro": "WELCOME TO ELITE",
+      "submitted": "SUBMITTED",
+      "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
+      "welcome_pro_p": "Your PRO status has been activated. The system is ready.",
+      "submitted_p": "Your request is under manual review. This usually takes 5-15 minutes.",
+      "got_it": "GOT IT"
+    },
+    "faq": {
+      "teaser_badge": "KNOWLEDGE BASE",
+      "header_pre": "YOUR",
+      "header_highlight": "QUESTIONS ANSWERED",
+      "q1": "Is the PRO+ really lifetime access?",
+      "a1": "Yes. The Lifetime option is a one-time payment — no recurring fees, ever. Once current slots sell out, all new subscriptions switch to an annual model at a higher price. Secure your permanent status before that happens.",
+      "q2": "How do tokens work?",
+      "a2": "Tokens power every AI action — content generation, headline rewrites, bio optimization, trend hunting, and global audits. PRO members receive 250 tokens monthly, PRO+ gets 500. All tokens reset on the 1st of each month.",
+      "q3": "Why pay with TON or USDT?",
+      "a3": "TON is Telegram's native blockchain — frictionless, instant, and nearly free. USDT (TRC20) is for partners who prefer stablecoins. Both methods are fully secure and activate your plan automatically.",
+      "q4": "How many Telegram accounts can I use?",
+      "a4": "One license per Telegram account. Your PRO status is bound to your unique Telegram ID for security. Each member of your team who wants PRO benefits must purchase their own license.",
+      "q5": "What is the Network Income Engine?",
+      "a5": "It's our multi-level passive income system. When anyone in your downline makes a card transaction, you earn a commission automatically. PRO unlocks 9 levels deep, PRO+ unlocks all 20 levels — meaning 20x more passive income reach.",
+      "q6": "How much faster will my team grow with PRO?",
+      "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence systems and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
+      "q7": "Can I upgrade from PRO to PRO+ later?",
+      "a7": "Yes. You can upgrade at any time from inside the app. Your existing PRO period is credited toward the PRO+ upgrade price. Upgrading sooner means more passive income earned while the price is still at the current level.",
+      "view_faq_center": "VIEW FULL FAQ CENTER"
+    },
+    "alerts": {
+      "expired": "Payment window expired. Please try again."
     }
-  },
-  "growth_strategist": {
-    "title": "AI Growth Strategist",
-    "version": "Neural Network Analyzer v2.0",
-    "anal_label": "NETWORK ANALYTICS",
-    "analysis_title": "Contextual Analysis",
-    "analysis_desc": "I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.",
-    "hacks_title": "Actionable Hacks",
-    "hacks_desc": "Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.",
-    "cost": "Cost: {{count}} Network Tokens",
-    "btn_initiate": "Initiate Synthesis Protocol",
-    "synthesizing": "Synthesizing Growth Strategy",
-    "accessing_data": "Accessing Global Market Data...",
-    "btn_execute": "Execute Mission",
-    "btn": "Analyze Network",
-    "neural_desc": "Personalized neural advice to scale your network depth."
-  },
-  "viral_assets": {
-    "title": "Viral Design Assets",
-    "subtitle": "High-Conversion Prototypes",
-    "media_kit_btn": "ACCESS 2025-2026 MARKETING MEDIA KIT",
-    "cards": [
-      {
-        "id": "off_grid",
-        "title": "OFF-GRID ASSET",
-        "hook": "Looks like a card. Works like a card.",
-        "desc": "Connects directly to your crypto liquidity. No bank account required. Complete separation of state and money.",
-        "specs": [
-          "Resolution: 8K High Definition",
-          "Format: .PSD / .FIG (Layered)",
-          "Lighting: Realistic Ray-Tracing",
-          "License: Global Unrestricted"
-        ]
-      }
-    ]
-  },
-  "status": {
-    "verifying": "Verifying...",
-    "welcome_pro": "WELCOME TO ELITE",
-    "submitted": "SUBMITTED",
-    "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
-    "welcome_pro_p": "Your PRO status has been activated. The system is ready.",
-    "submitted_p": "Your request is under manual review. This usually takes 5-15 minutes.",
-    "got_it": "GOT IT"
-  },
-  "faq": {
-    "teaser_badge": "KNOWLEDGE BASE",
-    "header_pre": "YOUR",
-    "header_highlight": "QUESTIONS ANSWERED",
-    "q1": "Is the PRO+ really lifetime access?",
-    "a1": "Yes. The Lifetime option is a one-time payment — no recurring fees, ever. Once current slots sell out, all new subscriptions switch to an annual model at a higher price. Secure your permanent status before that happens.",
-    "q2": "How do tokens work?",
-    "a2": "Tokens power every AI action — content generation, headline rewrites, bio optimization, trend hunting, and global audits. PRO members receive 250 tokens monthly, PRO+ gets 500. All tokens reset on the 1st of each month.",
-    "q3": "Why pay with TON or USDT?",
-    "a3": "TON is Telegram's native blockchain — frictionless, instant, and nearly free. USDT (TRC20) is for partners who prefer stablecoins. Both methods are fully secure and activate your plan automatically.",
-    "q4": "How many Telegram accounts can I use?",
-    "a4": "One license per Telegram account. Your PRO status is bound to your unique Telegram ID for security. Each member of your team who wants PRO benefits must purchase their own license.",
-    "q5": "What is the Network Income Engine?",
-    "a5": "It's our multi-level passive income system. When anyone in your downline makes a card transaction, you earn a commission automatically. PRO unlocks 9 levels deep, PRO+ unlocks all 20 levels — meaning 20x more passive income reach.",
-    "q6": "How much faster will my team grow with PRO?",
-    "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence systems and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
-    "q7": "Can I upgrade from PRO to PRO+ later?",
-    "a7": "Yes. You can upgrade at any time from inside the app. Your existing PRO period is credited toward the PRO+ upgrade price. Upgrading sooner means more passive income earned while the price is still at the current level.",
-    "view_faq_center": "VIEW FULL FAQ CENTER"
-  },
-  "alerts": {
-    "expired": "Payment window expired. Please try again."
   }
 }
