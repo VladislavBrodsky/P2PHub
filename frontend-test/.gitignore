@@ -1,0 +1,14 @@
+# System Junk & Corrupted Data
+frontend/public_corrupted/
+frontend/public_deprecated/
+frontend/dist_backup_*/
+frontend/local_npm_cache/
+
+# Node
+frontend/node_modules/
+node_modules/
+.eslintcache
+*.log
+
+# OS
+.DS_Store

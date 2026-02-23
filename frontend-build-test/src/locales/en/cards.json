@@ -1,0 +1,51 @@
+{
+  "cards": {
+    "title": "Choose your instrument",
+    "tabs": {
+      "virtual": "Virtual",
+      "physical": "Physical",
+      "platinum": "Platinum"
+    },
+    "virtual": {
+      "title": "Mastercard Virtual USD",
+      "desc": "Contactless payment in 180+ countries",
+      "bonus_text": "on balance after activation",
+      "back_title": "SECURE PRIVACY",
+      "back_desc": "Generate virtual cards for secure online subscriptions. Services like Netflix or Amazon never receive your primary data. Maintain complete control over your recurring payments."
+    },
+    "physical": {
+      "title": "Mastercard Physical",
+      "desc": "Premium PVC card with global delivery",
+      "bonus_text": "Standard shipping included",
+      "back_title": "FLEXIBLE ASSETS",
+      "back_desc": "A card that combines the convenience of traditional payments with the benefits of digital assets. Use your funds at merchants and ATMs globally with total independence."
+    },
+    "platinum": {
+      "title": "Platinum Metal",
+      "desc": "Solid metal card and concierge service",
+      "bonus_text": "Lounge access included",
+      "back_title": "PREMIUM STATUS",
+      "back_desc": "Access to 1200+ airport lounges, a personal concierge, and enhanced limits. This card signifies success and provides direct entry to exclusive global services."
+    },
+    "terms": "Card Issuance Terms",
+    "fees": {
+      "issue": "issuance price",
+      "topup": "reload fee",
+      "auth": "auth fee"
+    },
+    "action": "Initiate Issuance",
+    "premium_only": "Elite Partners Only",
+    "instant_delivery": "Priority Global Delivery",
+    "modal": {
+      "title": "Elite Status Required",
+      "desc": "Platinum tools are reserved for network architects. Increase your ecosystem value to unlock this status.",
+      "steps": [
+        "Achieve Global Partner level",
+        "Earn 5,000+ Network XP",
+        "Invite 10+ active referrals"
+      ],
+      "upgrade": "Upgrade Status",
+      "later": "Maybe later"
+    }
+  }
+}

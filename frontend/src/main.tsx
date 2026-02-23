@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import './i18n'; // Initialize i18n
+import { initializeI18n } from './i18n'; // Initialize i18n
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ConfigProvider, useConfig } from './context/ConfigContext'
@@ -50,50 +50,57 @@ if (typeof window !== 'undefined' && (window as any).__APP_STARTUP__) {
 
 console.log('[DEBUG] main.tsx: Startup execution beginning');
 
-try {
-    const rootElement = document.getElementById('root');
-    if (!rootElement) {
-        throw new Error('Root element #root not found in document');
+const startApp = async () => {
+    try {
+        const rootElement = document.getElementById('root');
+        if (!rootElement) {
+            throw new Error('Root element #root not found in document');
+        }
+
+        console.log('[DEBUG] main.tsx: Awaiting i18n initialization');
+        await initializeI18n().catch(e => console.error('i18n init error', e));
+
+        console.log('[DEBUG] main.tsx: Root element found, mounting React tree');
+
+        ReactDOM.createRoot(rootElement).render(
+            <ErrorBoundary>
+                <QueryClientProvider client={queryClient}>
+                    <StartupProgressProvider>
+                        <ConfigProvider>
+                            <AppContextProviders>
+                                <ThemeProvider>
+                                    <UserProvider>
+                                        <App />
+                                    </UserProvider>
+                                </ThemeProvider>
+                            </AppContextProviders>
+                        </ConfigProvider>
+                    </StartupProgressProvider>
+                </QueryClientProvider>
+            </ErrorBoundary>
+        );
+
+        if (typeof window !== 'undefined' && (window as any).__APP_STARTUP__) {
+            (window as any).__APP_STARTUP__.react_rendered = true;
+        }
+
+        console.log('[DEBUG] main.tsx: ReactDOM.render called successfully');
+    } catch (e) {
+        console.error('[FATAL] main.tsx: Failed to initialize application:', e);
+        // Attempt fallback UI if React mount fails completely
+        const root = document.getElementById('root');
+        if (root) {
+            root.innerHTML = `<div style="padding: 20px; color: white; background: #0c0f1d; height: 100vh; font-family: sans-serif;">
+                <h2 style="color: #ef4444;">System Error</h2>
+                <p>P2P Hub failed to initialize. Please try reloading the app.</p>
+                <button onclick="window.location.reload()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px;">Reload</button>
+                <pre style="margin-top: 20px; font-size: 11px; opacity: 0.5;">${String(e)}</pre>
+            </div>`;
+        }
     }
+};
 
-    console.log('[DEBUG] main.tsx: Root element found, mounting React tree');
-
-    ReactDOM.createRoot(rootElement).render(
-        <ErrorBoundary>
-            <QueryClientProvider client={queryClient}>
-                <StartupProgressProvider>
-                    <ConfigProvider>
-                        <AppContextProviders>
-                            <ThemeProvider>
-                                <UserProvider>
-                                    <App />
-                                </UserProvider>
-                            </ThemeProvider>
-                        </AppContextProviders>
-                    </ConfigProvider>
-                </StartupProgressProvider>
-            </QueryClientProvider>
-        </ErrorBoundary>
-    );
-
-    if (typeof window !== 'undefined' && (window as any).__APP_STARTUP__) {
-        (window as any).__APP_STARTUP__.react_rendered = true;
-    }
-
-    console.log('[DEBUG] main.tsx: ReactDOM.render called successfully');
-} catch (e) {
-    console.error('[FATAL] main.tsx: Failed to initialize application:', e);
-    // Attempt fallback UI if React mount fails completely
-    const root = document.getElementById('root');
-    if (root) {
-        root.innerHTML = `<div style="padding: 20px; color: white; background: #0c0f1d; height: 100vh; font-family: sans-serif;">
-            <h2 style="color: #ef4444;">System Error</h2>
-            <p>P2P Hub failed to initialize. Please try reloading the app.</p>
-            <button onclick="window.location.reload()" style="padding: 10px 20px; background: #2563eb; color: white; border: none; border-radius: 8px;">Reload</button>
-            <pre style="margin-top: 20px; font-size: 11px; opacity: 0.5;">${String(e)}</pre>
-        </div>`;
-    }
-}
+startApp();
 
 export function AppContextProviders({ children }: { children: React.ReactNode }) {
     const { config } = useConfig();

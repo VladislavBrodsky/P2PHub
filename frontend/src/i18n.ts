@@ -18,7 +18,8 @@ const loadResources = async (language: string, namespace: string) => {
     for (const locale of localesToTry) {
         try {
             const resources = await import(`./locales/${locale}/${namespace}.json`);
-            if (resources.default) return resources.default;
+            // Vite 5: JSON imports often return the object directly, but we keep .default for safety
+            return resources.default || resources;
         } catch (e) {
             // Continue to next fallback
             continue;
@@ -76,4 +77,4 @@ const initializeI18n = async () => {
 initializeI18n().catch(console.error);
 
 export default i18n;
-export { loadResources };
+export { loadResources, initializeI18n };

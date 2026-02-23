@@ -1,0 +1,66 @@
+{
+  "community": {
+    "title": "Partner Community",
+    "subtitle": "Join the Global Network",
+    "join_btn": "Enter Discord",
+    "members": "Total Partners",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "academy": "Academy"
+    }
+  },
+  "leaderboard": {
+    "title": "Elite Leaderboard",
+    "subtitle": "Global Performance Ranking",
+    "rank_label": "Rank",
+    "user_label": "Partner",
+    "score_label": "Points",
+    "top_partners": "Top Partners",
+    "timeframes": {
+      "all": "Overall",
+      "monthly": "Monthly",
+      "weekly": "Weekly"
+    },
+    "xp": "XP",
+    "global_rank": "GLOBAL RANK",
+    "xp_score": "XP SCORE",
+    "referrals": "REFERRALS",
+    "current_league": "CURRENT LEAGUE",
+    "levels": {
+      "wooden": "Bronze League",
+      "silver": "Silver League",
+      "metal": "Metal League",
+      "gold": "Gold League",
+      "platinum": "Platinum League"
+    }
+  },
+  "earn_header": {
+    "title": "Your Progress",
+    "subtitle": "Earn Rewards for Growth",
+    "level": "Level",
+    "xp_progress": "XP Progress",
+    "xp_to_next": "{{xp}} XP to next rewards",
+    "partners": "Partners",
+    "total_xp": "Total XP"
+  },
+  "level_100": {
+    "title": "Summit Achievement",
+    "desc": "Full automation and financial independence.",
+    "apex": "HIGHEST ACHIEVEMENT",
+    "fanocracy": "Fanocracy",
+    "status_quote": "Superior status for those building the future of P2P.",
+    "benefits": {
+      "card_title": "Platinum Physical Card",
+      "card_desc": "Exclusive vertical design with no monthly fees.",
+      "status_title": "Fanocracy Status",
+      "status_desc": "Priority management rights in the partner network.",
+      "fees_title": "0% Platform Fees",
+      "fees_desc": "Maximum income from all network transactions.",
+      "support_title": "Executive Support",
+      "support_desc": "Personal 24/7 manager for your growing team."
+    },
+    "claim_btn": "ACTIVATE LEVEL 100 FOCUS",
+    "elite_tier": "DON'T MISS YOUR SPOT IN THE ELITE TIER",
+    "share_text": "I'm heading to level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀"
+  }
+}
