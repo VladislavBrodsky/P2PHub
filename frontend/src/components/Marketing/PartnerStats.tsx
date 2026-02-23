@@ -208,10 +208,21 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 />
 
                 {/* Live Indicator */}
-                <div className="absolute top-1/2 -translate-y-1/2 right-4 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
+                <m.div
+                    animate={{
+                        scale: [1, 1.05, 1],
+                        opacity: [0.9, 1, 0.9]
+                    }}
+                    transition={{
+                        duration: 6, // 10 BPM = 1 beat per 6 seconds
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="absolute top-1/2 -translate-y-1/2 right-4 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20"
+                >
                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                     <span className="text-[8px] font-bold uppercase tracking-widest text-red-500">LIVE</span>
-                </div>
+                </m.div>
 
                 <div className="flex -space-x-2.5 shrink-0 relative z-10">
                     <AnimatePresence mode="popLayout">
