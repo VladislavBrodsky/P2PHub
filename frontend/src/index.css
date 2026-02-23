@@ -1,5 +1,7 @@
 /* Master CSS Entry Point for PintoPay v1.8.4 */
 @import "tailwindcss";
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
 
 @import "./styles/theme.css";
 
