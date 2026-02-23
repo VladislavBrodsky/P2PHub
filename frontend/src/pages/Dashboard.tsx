@@ -134,7 +134,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 3. The Evolution - Bento Grid. */}
-            <m.div variants={item} className="flex flex-col gap-4 w-full">
+            <div className="flex flex-col gap-4 w-full relative z-10">
                 <div className="w-full">
                     <SectionHeader
                         badge={t('dashboard:evolution.badge')}
@@ -145,7 +145,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
                     <BentoGrid />
                 </Suspense>
-            </m.div>
+            </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
             <m.div variants={item} className="w-full">

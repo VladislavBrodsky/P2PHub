@@ -141,15 +141,7 @@ body::-webkit-scrollbar {
     display: none;
   }
 
-  /* Global silence for scrollbars as requested */
-  * {
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  *::-webkit-scrollbar {
-    display: none !important;
-  }
+  /* Global silence for scrollbars as requested - REMOVED to allow custom scrollbars */
 }
 
 /* Base Tag Styles to Restore Typography */

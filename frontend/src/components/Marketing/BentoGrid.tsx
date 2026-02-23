@@ -118,8 +118,8 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex justify-start items-center gap-4 overflow-x-auto px-6 h-full scroll-smooth custom-scrollbar"
-                    style={{ alignItems: 'center' }}
+                    className="flex justify-start items-start gap-4 overflow-x-auto px-6 h-full scroll-smooth custom-scrollbar"
+                    style={{ alignItems: 'flex-start' }}
                 >
                     {shiftSteps.map((step, index) => (
                         <div
@@ -210,7 +210,7 @@ export const BentoGrid = () => {
                                             </div>
 
                                             <button className={`mt-2 px-6 py-2.5 rounded-xl text-label font-bold uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-error/10 text-error border border-error/20 hover:bg-error/20' : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'}`}>
-                                                {index < 3 ? t('common.back') : t('marketing:income.cta.join')}
+                                                {index < 3 ? t('common:back') : t('marketing:income.cta.join')}
                                             </button>
                                         </div>
                                     </div>

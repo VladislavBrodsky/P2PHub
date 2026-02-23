@@ -19,8 +19,8 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
 
-    // Alternating card position logic
-    const isLeft = index % 2 === 0;
+    // Alternating card position logic: Stage 1 (index 0), 3, 5 -> Right; Stage 2 (index 1), 4, 6 -> Left
+    const isRightSide = index % 2 === 0;
 
     const getStageContent = (id: number) => {
         return {
@@ -126,24 +126,26 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[390px]:w-[145px] sm:w-[175px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
-                    isLeft ? "left-[calc(50%+40px)] min-[390px]:left-[calc(50%+42px)] text-left" : "right-[calc(50%+40px)] min-[390px]:right-[calc(50%+42px)] text-right items-end",
-                    isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100 shadow-xl cursor-pointer"
+                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[390px]:w-[145px] sm:w-[175px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer shadow-xl",
+                    isRightSide
+                        ? "left-1/2 translate-x-[40px] text-left items-start"
+                        : "left-1/2 -translate-x-[calc(100%+40px)] text-right items-end",
+                    isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-label font-bold uppercase tracking-tight leading-tight",
+                    "text-[10px] font-bold uppercase tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{renderInline(title)}</h4>
 
                 <p className={cn(
-                    "text-label font-medium leading-snug mt-1.5 opacity-80 line-clamp-2",
+                    "text-[9px] font-medium leading-snug mt-1.5 opacity-80 line-clamp-2",
                     isLocked ? "text-slate-600" : "text-slate-600 dark:text-slate-300"
                 )}>{renderInline(description)}</p>
 
                 {stage.duration && !isLocked && (
                     <div className={cn(
                         "flex items-center gap-1.5 mt-2 px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/10 w-fit",
-                        !isLeft && "ml-auto"
+                        isRightSide ? "mr-auto" : "ml-auto"
                     )}>
                         <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
                         <span className="text-label font-bold text-blue-500 uppercase">{stage.duration}</span>
