@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://p2phub-frontend-production.up.railway.app/sitemap.xml

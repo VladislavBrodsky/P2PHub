@@ -15,6 +15,7 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+  background-color: var(--sys-bg-app);
   background-image: var(--bg-image);
   background-attachment: fixed;
   background-size: cover;

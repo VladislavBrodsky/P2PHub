@@ -54,35 +54,6 @@ def prepare_partner_response(partner: Partner, tg_id: str) -> dict:
     response.is_admin = tg_id in settings.ADMIN_USER_IDS
     return response.model_dump()
 
-def anonymize_display_name(first_name: str | None, last_name: str | None = None, username: str | None = None) -> str:
-    """
-    Helper to provide a display name for social proof components.
-    Prioritizes Full Name -> First Name -> Username -> Partner.
-    """
-    if first_name and last_name:
-        return f"{first_name} {last_name}"
-    if first_name:
-        return first_name
-    if username:
-        return username
-    return "Partner"
-
-def sanitize_notification_text(text: str | None) -> str:
-    """
-    Masks strings starting with '@' to protect privacy in public notifications.
-    Example: "New referral: @Denis_Doroganov" -> "New referral: @D***"
-    """
-    if not text:
-        return ""
-    words = text.split()
-    sanitized = []
-    for word in words:
-        if word.startswith("@") and len(word) > 2:
-            sanitized.append(f"{word[:2]}***")
-        else:
-            sanitized.append(word)
-    return " ".join(sanitized)
-
 @router.get("/activity")
 async def get_network_activity(
     limit: int = 20,
@@ -169,6 +140,12 @@ async def get_network_pulse(
 
     pulse = []
     for log, first_name, last_name in rows:
+        # Anonymize: "Vitaliy B." or "Anonymous"
+        name = "System"
+        if first_name:
+            initial = f" {last_name[0]}." if last_name else ""
+            name = f"{first_name}{initial}"
+        
         # Map logical type for frontend icon selection
         pulse_type = "info"
         if log.action_type == ActionType.UPGRADE: pulse_type = "upgrade"
@@ -179,8 +156,8 @@ async def get_network_pulse(
         pulse.append({
             "id": log.id,
             "type": pulse_type,
-            "name": anonymize_display_name(first_name, last_name),
-            "description": sanitize_notification_text(log.description),
+            "name": name,
+            "description": log.description,
             "timestamp": log.created_at.isoformat(),
             "details": log.details
         })
