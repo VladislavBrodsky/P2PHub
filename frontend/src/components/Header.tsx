@@ -43,9 +43,9 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     return (
         <header
             className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
-            style={{ paddingTop: 'calc(var(--spacing-safe-top, 24px) + 20px)' }}
+            style={{ paddingTop: 'calc(var(--spacing-safe-top, 24px) + 44px)' }}
         >
-            <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto relative z-10">
+            <div className="w-full max-w-lg flex flex-col gap-4 px-6 pointer-events-auto relative z-10">
                 {/* Navigation & Stats - Contained within a centered glass bar */}
                 <div className="w-full flex items-center justify-between gap-3 mx-auto relative">
                     <button
@@ -54,7 +54,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-[18px] w-[18px] transition-transform group-hover:scale-110" />
-                        <span className="text-label font-black uppercase tracking-[0.2em] text-text-primary">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary">
                             {t('common.menu')}
                         </span>
                     </button>
