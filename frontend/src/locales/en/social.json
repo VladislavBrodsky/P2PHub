@@ -294,41 +294,7 @@
         "milestone_100": "Summit: The Physical Platinum Card is yours."
       },
       "next_milestones": "Next Goals"
-    },
-    "brief": {
-      "btn": "Terms & Guide",
-      "title": "Partner Guide",
-      "guide": "Practical recommendations",
-      "read_line1": "Read",
-      "read_line2": "Guide",
-      "goal_title": "Our Goal",
-      "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
-      "manual_title": "Path to Success",
-      "manual_step_1": "Share your personal growth link or QR code.",
-      "manual_step_2": "Help partners activate cards and PRO status.",
-      "manual_step_3": "Track progress and scale with the Content Studio.",
-      "rules_title": "Growth Rules",
-      "rule_1_title": "Transparency First",
-      "rule_1_desc": "Be honest about the opportunities and risks.",
-      "rule_2_title": "Community Focus",
-      "rule_2_desc": "Support your partners on their journey.",
-      "antibot_active": "ANTI-BOT ACTIVE",
-      "motivation_title": "Start Building",
-      "motivation_desc": "Your future in the digital economy starts with the first member.",
-      "cta": "I UNDERSTAND"
-    },
-    "manual_step_1": "Share your referral link with potential partners.",
-    "manual_step_2": "Help new members start their learning journey.",
-    "manual_step_3": "Earn XP from every active participant in your 20-level network.",
-    "rules_title": "Community Guidelines",
-    "rule_1_title": "Fair Play",
-    "rule_1_desc": "We value honesty. Spam and fake accounts are not allowed. Our security system operates around the clock.",
-    "rule_2_title": "Quality & Engagement",
-    "rule_2_desc": "Focus on active participants. Real connections are the key to your network's long-term success.",
-    "antibot_active": "Security Verified",
-    "motivation_title": "Your Potential",
-    "motivation_desc": "Your activity determines your status. New levels unlock VIP privileges and the exclusive Platinum Card. Become a leader in our community.",
-    "cta": "GOT IT. LET'S START"
+    }
   },
   "ranks": {
     "Beginner": "Beginner",
@@ -422,5 +388,27 @@
       "outflow_short": "Out",
       "failed_load": "Failed to load stats."
     }
+  },
+  "brief": {
+    "btn": "Terms & Guide",
+    "title": "Partner Guide",
+    "guide": "Practical recommendations",
+    "read_line1": "Read",
+    "read_line2": "Guide",
+    "goal_title": "Our Goal",
+    "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
+    "manual_title": "Path to Success",
+    "manual_step_1": "Share your personal growth link or QR code.",
+    "manual_step_2": "Help partners activate cards and PRO status.",
+    "manual_step_3": "Track progress and scale with the Content Studio.",
+    "rules_title": "Growth Rules",
+    "rule_1_title": "Transparency First",
+    "rule_1_desc": "Be honest about the opportunities and risks.",
+    "rule_2_title": "Community Focus",
+    "rule_2_desc": "Support your partners on their journey.",
+    "antibot_active": "ANTI-BOT ACTIVE",
+    "motivation_title": "Start Building",
+    "motivation_desc": "Your future in the digital economy starts with the first member.",
+    "cta": "I UNDERSTAND"
   }
 }

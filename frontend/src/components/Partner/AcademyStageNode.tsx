@@ -120,15 +120,14 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 </div>
             </div>
 
-            {/* Stage Card Content (Alternating to side) */}
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[375px]:w-[130px] min-[400px]:w-[145px] sm:w-[160px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
-                    isLeft ? "left-[calc(50%+30px)] min-[375px]:left-[calc(50%+36px)] text-left" : "right-[calc(50%+30px)] min-[375px]:right-[calc(50%+36px)] text-right items-end",
+                    "absolute top-1/2 -translate-y-1/2 w-[120px] min-[400px]:w-[140px] sm:w-[170px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
+                    isLeft ? "left-[calc(50%+12px)] min-[400px]:left-[calc(50%+18px)] text-left" : "right-[calc(50%+12px)] min-[400px]:right-[calc(50%+18px)] text-right items-end",
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100 shadow-xl cursor-pointer"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
