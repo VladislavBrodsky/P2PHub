@@ -181,30 +181,31 @@ export default function LeaderboardPage() {
                                             <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
                                         </div>
                                     )}
-                                    {(user.subscription_plan || '').includes('PLUS') && (
-                                        <div className="absolute -bottom-1 -left-1 z-20">
-                                            <ProPlusBadge size="sm" />
-                                        </div>
-                                    )}
                                 </div>
 
                                 <div className="flex items-center gap-2.5">
-                                    {/* #comment Forced perfect circle with rounded-full and aspect-square. Removed rounded-2xl. */}
-                                    <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
-                                        } bg-slate-200 dark:bg-slate-700 aspect-square`}>
-                                        {(user.photo_file_id || user.photo_url) ? (
-                                            <LazyImage
-                                                src={user.photo_file_id
-                                                    ? `${getApiUrl()}/api/partner/photo/${user.photo_file_id}`
-                                                    : user.photo_url!
-                                                }
-                                                alt={user.username || user.first_name}
-                                                className="h-full w-full object-cover"
-                                            />
-                                        ) : (
-                                            <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
-                                                } text-white font-bold text-lg shadow-inner`}>
-                                                {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
+                                    <div className="relative">
+                                        <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
+                                            } bg-slate-200 dark:bg-slate-700 aspect-square`}>
+                                            {(user.photo_file_id || user.photo_url) ? (
+                                                <LazyImage
+                                                    src={user.photo_file_id
+                                                        ? `${getApiUrl()}/api/partner/photo/${user.photo_file_id}`
+                                                        : user.photo_url!
+                                                    }
+                                                    alt={user.username || user.first_name}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
+                                                    } text-white font-bold text-lg shadow-inner`}>
+                                                    {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {(user.subscription_plan || '').includes('PLUS') && (
+                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                                                <ProPlusBadge size="xs" />
                                             </div>
                                         )}
                                     </div>

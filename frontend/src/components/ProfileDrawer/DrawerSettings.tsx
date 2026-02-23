@@ -52,8 +52,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
             <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-card-bg backdrop-blur-md border border-card-border relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
-                    { id: false, icon: Bell, label: t('common.active'), activeColor: 'rgba(16,185,129,0.1)', iconColor: '#10B981', isPaused: false },
-                    { id: true, icon: BellOff, label: t('common.muted'), activeColor: 'rgba(239,68,68,0.1)', iconColor: '#EF4444', isPaused: true },
+                    { id: false, icon: Bell, label: t('active'), activeColor: 'rgba(16,185,129,0.1)', iconColor: '#10B981', isPaused: false },
+                    { id: true, icon: BellOff, label: t('muted'), activeColor: 'rgba(239,68,68,0.1)', iconColor: '#EF4444', isPaused: true },
                 ].map((option) => (
                     <button
                         key={String(option.id)}
@@ -109,8 +109,8 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
             <div className="flex items-center justify-between gap-2 p-1.5 rounded-2xl bg-card-bg backdrop-blur-md border border-card-border relative overflow-hidden">
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
-                    { id: 'light' as const, icon: Sun, label: 'Light', activeColor: 'rgba(251,191,36,0.1)', iconColor: '#FBBF24' },
-                    { id: 'dark' as const, icon: Moon, label: 'Dark', activeColor: 'rgba(59,130,246,0.1)', iconColor: '#3B82F6' },
+                    { id: 'light' as const, icon: Sun, label: t('light'), activeColor: 'rgba(251,191,36,0.1)', iconColor: '#FBBF24' },
+                    { id: 'dark' as const, icon: Moon, label: t('dark'), activeColor: 'rgba(59,130,246,0.1)', iconColor: '#3B82F6' },
                 ].map((option) => (
                     <button
                         key={option.id}
