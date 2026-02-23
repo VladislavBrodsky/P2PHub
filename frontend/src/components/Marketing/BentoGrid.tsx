@@ -111,23 +111,21 @@ export const BentoGrid = () => {
         }
     };
 
-    // #comment: Removed internal header logic as BentoGrid is now a pure-layout component. 
-    // Hierarchy is now managed by the Dashboard's SectionHeader for better semantic control.
     return (
-        <section className="px-0 py-0 flex flex-col relative" style={{ minHeight: '600px !important' }}>
+        <section className="px-0 py-0 flex flex-col relative" style={{ minHeight: '600px' }}>
             {/* Carousel Container */}
-            <div className="relative w-full" style={{ height: '520px !important' }}>
+            <div className="relative w-full" style={{ height: '520px' }}>
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
                     className="flex justify-start items-center gap-4 overflow-x-auto no-scrollbar px-6 scroll-smooth"
-                    style={{ height: '520px !important', display: 'flex', alignItems: 'center' }}
+                    style={{ height: '520px', display: 'flex', alignItems: 'center' }}
                 >
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
                             className="relative shrink-0 w-[300px] sm:w-[340px] snap-center cursor-pointer"
-                            style={{ height: '400px !important', perspective: '1000px', minWidth: '300px' }}
+                            style={{ height: '400px', perspective: '1000px', minWidth: '300px' }}
                             onClick={() => toggleFlip(index)}
                         >
                             <m.div
@@ -135,11 +133,11 @@ export const BentoGrid = () => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ duration: 0.4, delay: index * 0.05 }}
                                 className="w-full h-full relative"
-                                style={{ height: '400px !important' }}
+                                style={{ height: '400px' }}
                             >
                                 <div
                                     className={`w-full h-full relative ${flippedCards[index] ? 'z-50' : 'z-10'}`}
-                                    style={{ height: '400px !important', transformStyle: "preserve-3d", position: 'relative' }}
+                                    style={{ height: '400px', transformStyle: "preserve-3d", position: 'relative' }}
                                 >
                                     {/* FRONT SIDE */}
                                     <div
@@ -254,6 +252,6 @@ export const BentoGrid = () => {
                     </div>
                 </div>
             </div>
-        </section >
+        </section>
     );
 };
