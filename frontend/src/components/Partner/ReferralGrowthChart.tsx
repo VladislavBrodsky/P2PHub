@@ -193,10 +193,10 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 <div className="relative">
                     <button
                         onClick={() => { selection(); setIsDropdownOpen(!isDropdownOpen); }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-label font-bold text-slate-900 dark:text-white transition-all active:scale-95"
+                        className="flex items-center gap-1 px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-[10px] font-bold text-slate-900 dark:text-white transition-all active:scale-95"
                     >
                         {t(`timeframes.${timeframe}`, timeframe)}
-                        <ChevronDown className={cn("w-3 h-3 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
+                        <ChevronDown className={cn("w-2.5 h-2.5 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
                     </button>
 
                     <AnimatePresence>
@@ -218,7 +218,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                                 setIsDropdownOpen(false);
                                             }}
                                             className={cn(
-                                                "w-full px-2 py-1.5 text-label font-bold rounded-lg transition-colors text-left flex items-center justify-between",
+                                                "w-full px-2 py-1 text-[10px] font-bold rounded-lg transition-colors text-left flex items-center justify-between",
                                                 timeframe === tf
                                                     ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
                                                     : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5"
@@ -358,23 +358,23 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-label rounded-2xl p-2.5 shadow-2xl border border-white/20 z-30 flex flex-col gap-1.5 pointer-events-none min-w-[140px]"
+                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9.5px] rounded-2xl p-2 shadow-2xl border border-white/20 z-30 flex flex-col gap-1 pointer-events-none min-w-[140px]"
                             >
                                 <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
                                     <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
                                     <div className="flex items-center gap-1">
-                                        <Users className="w-2.5 h-2.5 text-blue-400" />
-                                        <span className="font-bold text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
+                                        <Users className="w-2 h-2 text-blue-400" />
+                                        <span className="font-bold text-[10px]">{chartData[hoveredIndex].total.toLocaleString()}</span>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-x-2 gap-y-1">
+                                <div className="grid grid-cols-3 gap-x-1.5 gap-y-0.5">
                                     {LEVEL_COLORS.map((color, i) => {
                                         // Fix: Use raw level count directly
                                         const count = chartData[hoveredIndex].levels[i] || 0;
                                         return (
                                             <div key={i} className="flex items-center gap-1 opacity-90">
-                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
+                                                <div className="w-1 h-1 rounded-full" style={{ backgroundColor: color }} />
                                                 <span className="font-bold text-slate-400">{t('lvl')}{i + 1}:</span>
                                                 <span className="font-bold">{count.toLocaleString()}</span>
                                             </div>
