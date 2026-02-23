@@ -192,7 +192,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
                                         <div className="flex flex-col gap-3">
                                             <div className="flex justify-between items-end">
-                                                <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
+                                                <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
                                                 <span className="text-xl font-bold text-blue-500">{activePartners}</span>
                                             </div>
                                             <div className="relative h-6 flex items-center">
@@ -208,7 +208,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
                                             <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
-                                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
+                                                <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
                                                 <span className="text-3xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">${estimatedMonthly}</span>
                                             </div>
 
@@ -237,12 +237,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="space-y-4">
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
+                                                <label className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
                                                 <div className="relative">
                                                     <select
                                                         value={selectedLevel.id}
                                                         onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
-                                                        className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
+                                                        className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
                                                     >
                                                         {JOB_LEVELS.map((level) => (
                                                             <option key={level.id} value={level.id}>
@@ -258,7 +258,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             <div className="space-y-2">
                                                 <div className="flex justify-between items-end">
-                                                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
+                                                    <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
                                                     <span className="text-label font-bold text-rose-500">{hoursWorked} Hours</span>
                                                 </div>
                                                 <input
@@ -327,7 +327,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                                         exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
                                         transition={{ duration: 0.5, ease: "easeOut" }}
-                                        className="text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
+                                        className="text-caption text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
                                     >
                                         {viralMessages[currentMessageIndex]}
                                     </m.p>
@@ -529,7 +529,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                         <div className="space-y-1 min-w-0">
                             <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">1.2B</div>
-                            <div className="text-[10px] sm:text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.global_target')}</div>
+                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.global_target')}</div>
                         </div>
                     </div>
 
@@ -544,7 +544,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                         <div className="space-y-1 min-w-0">
                             <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">24/7</div>
-                            <div className="text-[10px] sm:text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.revenue')}</div>
+                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.revenue')}</div>
                         </div>
                     </div>
                 </div>
@@ -559,7 +559,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="w-1.5 h-12 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_15px_rgba(244,63,94,0.4)] animate-vibing" />
                         </div>
                         <div className="space-y-1.5">
-                            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
+                            <h4 className="text-caption font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                                 {t('income.waiting.title')}
                             </h4>
