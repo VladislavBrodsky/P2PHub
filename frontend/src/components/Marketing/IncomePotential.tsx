@@ -506,7 +506,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                             onNavigateToPartner?.();
                                         }}
-                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-extrabold h-10 rounded-xl text-label tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
+                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-bold h-10 rounded-xl text-label tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
                                     >
                                         {t('income.math.cta_urgency')}
                                         <ArrowRight className="w-3.5 h-3.5" />
@@ -566,7 +566,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="text-label leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
                                 <Trans i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-black bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-bold bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
                                         Every minute you wait is a tax on your potential
                                     </span>
                                     <span className="block opacity-80 dark:text-slate-300">

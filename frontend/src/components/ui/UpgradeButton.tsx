@@ -58,7 +58,7 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                         {/* Text Container */}
                         <div className="flex flex-col items-start gap-0.5 min-w-0">
                             <div className="flex items-center gap-2">
-                                <h3 className="text-caption font-black text-white uppercase tracking-widest leading-none drop-shadow-sm whitespace-nowrap">
+                                <h3 className="text-caption font-bold text-white uppercase tracking-widest leading-none drop-shadow-sm whitespace-nowrap">
                                     {t('common.upgrade_pro')}
                                 </h3>
                                 <Sparkles size={10} className="text-amber-300 animate-pulse shrink-0" />
@@ -74,7 +74,7 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                         <div className="relative group/price shrink-0 ml-2">
                             <div className="absolute inset-0 bg-amber-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                             <div className="relative bg-white/5 dark:bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/10 flex items-center justify-center shadow-inner transition-colors">
-                                <span className="text-[13px] font-black text-amber-400 tracking-tighter drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)]">
+                                <span className="text-[13px] font-bold text-amber-400 tracking-tighter drop-shadow-[0_2px_8px_rgba(251,191,36,0.5)]">
                                     $39
                                 </span>
                             </div>

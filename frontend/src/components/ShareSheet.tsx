@@ -106,7 +106,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         style={{ overscrollBehavior: 'none' }}
                     >
                         <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-lg font-black text-slate-900 dark:text-white">Invite Friends</h3>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Invite Friends</h3>
                             <button
                                 onClick={onClose}
                                 className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500"
@@ -136,7 +136,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         >
                             <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                             <Sparkles className="w-5 h-5 text-amber-300" />
-                            <span className="font-black text-sm uppercase tracking-wider">Send Premium Viral Card</span>
+                            <span className="font-bold text-sm uppercase tracking-wider">Send Premium Viral Card</span>
                         </button>
 
                         {/* Share Grid */}

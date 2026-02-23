@@ -17,8 +17,6 @@ body {
     -apple-system,
     sans-serif;
   background-color: var(--sys-bg-app);
-  background-image: var(--bg-image);
-  background-attachment: fixed;
   background-size: cover;
   scrollbar-width: none;
   -ms-overflow-style: none;

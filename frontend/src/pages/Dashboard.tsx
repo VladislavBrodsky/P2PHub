@@ -106,12 +106,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-5">
-                        <h1 className="text-display font-bold tracking-tighter text-text-primary leading-[1.05] text-center max-w-[320px] mx-auto">
+                    <div className="flex flex-col gap-3 sm:gap-5 mt-2">
+                        <h1 className="text-[36px] sm:text-[46px] font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[360px] sm:max-w-[420px] mx-auto drop-shadow-sm">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-display font-bold tracking-tighter leading-tight text-center max-w-[320px] vibing-crystal-text mx-auto"
+                            className="text-[36px] sm:text-[46px] font-black tracking-tighter leading-tight text-center max-w-[360px] sm:max-w-[420px] vibing-crystal-text mx-auto drop-shadow-md"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],

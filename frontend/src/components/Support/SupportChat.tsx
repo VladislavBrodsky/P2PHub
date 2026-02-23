@@ -253,7 +253,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                 while ((match = boldRegex.exec(part)) !== null) {
                     result.push(part.substring(lastIndex, match.index));
                     result.push(
-                        <strong key={`bold-${idx}-${match.index}`} className={`font-black tracking-tight ${role === 'user' ? 'text-white' : 'text-slate-900 dark:text-blue-50'
+                        <strong key={`bold-${idx}-${match.index}`} className={`font-bold tracking-tight ${role === 'user' ? 'text-white' : 'text-slate-900 dark:text-blue-50'
                             }`}>
                             {match[1]}
                         </strong>
@@ -474,11 +474,11 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                             </div>
                                             <div className="flex flex-col">
                                                 <div className="flex items-center gap-2">
-                                                    <h3 className="text-sm font-black uppercase tracking-[0.15em] text-slate-900 dark:text-white">
+                                                    <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-slate-900 dark:text-white">
                                                         {t('support.manager')}
                                                     </h3>
                                                     {(user?.level || 0) >= 5 && (
-                                                        <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-label font-black uppercase tracking-widest text-blue-500 border border-blue-500/20 shadow-sm">
+                                                        <span className="flex items-center gap-1 rounded-full bg-blue-500/10 px-2 py-0.5 text-label font-bold uppercase tracking-widest text-blue-500 border border-blue-500/20 shadow-sm">
                                                             <BadgeCheck className="h-2.5 w-2.5" />
                                                             {t('support.priority_badge')}
                                                         </span>
@@ -486,7 +486,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                 </div>
                                                 <div className="flex items-center gap-2 pt-0.5 mt-0.5">
                                                     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                                                    <span className="text-label font-black text-emerald-500/90 uppercase tracking-[0.25em]">{t('support.online')}</span>
+                                                    <span className="text-label font-bold text-emerald-500/90 uppercase tracking-[0.25em]">{t('support.online')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -503,12 +503,12 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <div className="flex h-5 w-5 items-center justify-center rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <Terminal className="h-3 w-3 text-blue-400 opacity-70" />
                                         </div>
-                                        <span className="text-label font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 truncate">
+                                        <span className="text-label font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 truncate">
                                             {t('support.user_context', { name: user?.first_name || 'PARTNER', level: user?.level || 1 })}
                                         </span>
                                         <div className="ml-auto flex items-center gap-1">
                                             <Zap className="h-2.5 w-2.5 text-amber-400" />
-                                            <span className="text-label font-black text-amber-400/80 uppercase">{user?.balance?.toFixed(2) || '0.00'}</span>
+                                            <span className="text-label font-bold text-amber-400/80 uppercase">{user?.balance?.toFixed(2) || '0.00'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -545,7 +545,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                         <div className="text-body leading-relaxed font-medium">
                                             {renderMessageContent(msg.content, msg.role)}
                                         </div>
-                                        <div className={`mt-1.5 flex items-center gap-1.5 text-label font-black uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
+                                        <div className={`mt-1.5 flex items-center gap-1.5 text-label font-bold uppercase tracking-widest opacity-30 ${msg.role === 'user' ? 'justify-end text-blue-50' : 'text-slate-500 dark:text-slate-400'
                                             }`}>
                                             <Clock className="h-2.5 w-2.5" />
                                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -576,7 +576,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                     />
                                                 ))}
                                             </div>
-                                            <span className="text-label font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 animate-pulse">
+                                            <span className="text-label font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 animate-pulse">
                                                 {typingLabel}
                                             </span>
                                         </div>
@@ -595,7 +595,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                     >
                                         <div className="flex items-center gap-3 mb-4">
                                             <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
-                                            <p className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
+                                            <p className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 opacity-60">
                                                 {t('support.suggested_topics')}
                                             </p>
                                             <div className="h-px flex-1 bg-linear-to-r from-transparent via-slate-200 dark:via-white/10 to-transparent" />
@@ -626,7 +626,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                                                         <div className="shrink-0 p-1.5 rounded-lg bg-slate-50 dark:bg-white/5">
                                                             <Icon className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                                                         </div>
-                                                        <span className="text-label font-black uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">
+                                                        <span className="text-label font-bold uppercase tracking-tight text-slate-900 dark:text-white leading-tight truncate">
                                                             {t(`support.categories.${key}`)}
                                                         </span>
                                                     </motion.button>
@@ -680,7 +680,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                             </div>
 
                             <div className="mt-4 flex flex-col items-center gap-1.5 opacity-20 select-none">
-                                <p className="text-label font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
+                                <p className="text-label font-bold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
                                     {t('support.powered_by')}
                                 </p>
                                 <div className="h-[2px] w-6 rounded-full bg-linear-to-r from-blue-500/50 to-indigo-500/50" />

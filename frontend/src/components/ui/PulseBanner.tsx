@@ -77,14 +77,14 @@ export const PulseBanner = () => {
                             <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/5 border border-white/10 shrink-0">
                                 {getIcon(item.type)}
                             </span>
-                            <span className="text-label font-black text-white uppercase tracking-wider shrink-0">
+                            <span className="text-label font-bold text-white uppercase tracking-wider shrink-0">
                                 {item.name}
                             </span>
                         </div>
                         <span className="text-label font-bold text-slate-400 truncate">
                             {item.description}
                         </span>
-                        <span className="text-[8px] font-black text-slate-600 ml-2 shrink-0">
+                        <span className="text-[8px] font-bold text-slate-600 ml-2 shrink-0">
                             {new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                     </motion.div>

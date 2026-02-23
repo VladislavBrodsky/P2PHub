@@ -130,7 +130,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                             {!isProPlus && (
                                 <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-bg-app z-20`}>
-                                    <span className="text-label font-black">{user?.level || 1}</span>
+                                    <span className="text-label font-bold">{user?.level || 1}</span>
                                 </div>
                             )}
 
@@ -152,7 +152,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 const displayName = fullName.length > 20 ? firstName : fullName;
 
                                 return (
-                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-black tracking-tight text-text-primary truncate w-full`}>
+                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-bold tracking-tight text-text-primary truncate w-full`}>
                                         {t('hi')}, {displayName}!
                                     </h2>
                                 );
@@ -174,10 +174,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     }}
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
-                                    <span className="text-label font-black text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
+                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
                                     <span className="text-label font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} XP</span>
                                 </motion.div>
-                                <span className="text-label font-black text-text-primary whitespace-nowrap flex items-baseline gap-1">
+                                <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{xpProgress.current.toLocaleString()}</span>
                                     <span className="text-text-secondary font-medium">/</span>
                                     <span>{xpProgress.total.toLocaleString()}</span>

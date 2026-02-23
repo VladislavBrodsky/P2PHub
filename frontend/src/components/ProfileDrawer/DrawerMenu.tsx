@@ -57,7 +57,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <MessageCircle className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-label font-black uppercase text-text-primary">{t('navigation.channel')}</span>
+                            <span className="text-label font-bold uppercase text-text-primary">{t('navigation.channel')}</span>
                         </a>
                         <a
                             href="https://t.me/pintopayworld"
@@ -66,7 +66,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                             className="flex flex-col items-center gap-2 p-3 rounded-xl bg-card-bg hover:bg-blue-500/10 transition-colors border border-card-border"
                         >
                             <Users className="h-5 w-5 text-[#0088cc]" />
-                            <span className="text-label font-black uppercase text-text-primary">{t('navigation.chat')}</span>
+                            <span className="text-label font-bold uppercase text-text-primary">{t('navigation.chat')}</span>
                         </a>
                     </div>
                 );
@@ -79,9 +79,9 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 <div className="relative z-10 space-y-2">
                                     <div className="flex items-center gap-2">
                                         <Zap className="h-4 w-4 text-orange-500 animate-pulse" />
-                                        <span className="text-xs font-black text-text-primary uppercase tracking-wider">{t('faq.pro_promo.badge')}</span>
+                                        <span className="text-xs font-bold text-text-primary uppercase tracking-wider">{t('faq.pro_promo.badge')}</span>
                                     </div>
-                                    <h4 className="text-sm font-black text-text-primary leading-tight">
+                                    <h4 className="text-sm font-bold text-text-primary leading-tight">
                                         {t('faq.pro_promo.title')}
                                     </h4>
                                     <p className="text-label font-medium text-text-secondary leading-relaxed">
@@ -100,7 +100,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                             onClose();
                                             window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
                                         }}
-                                        className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-label font-black uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
+                                        className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-label font-bold uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
                                         {t('faq.pro_promo.cta')}
                                     </button>
                                 </div>
@@ -147,7 +147,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 onClose();
                                 setSupportOpen(true);
                             }}
-                            className="w-full py-4 rounded-xl bg-btn-primary-bg text-btn-primary-text hover:bg-btn-primary-hover text-xs font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
+                            className="w-full py-4 rounded-xl bg-btn-primary-bg text-btn-primary-text hover:bg-btn-primary-hover text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 active:scale-95 transition-all shadow-lg shadow-blue-500/10"
                         >
                             <Headphones className="h-4 w-4" />
                             {t('navigation.support')}

@@ -128,7 +128,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                 >
                                     <ArrowLeft className="h-5 w-5" />
                                 </button>
-                                <div className="text-label font-black uppercase tracking-[0.2em] text-text-secondary">
+                                <div className="text-label font-bold uppercase tracking-[0.2em] text-text-secondary">
                                     {t('common.menu')}
                                 </div>
                                 <div className="w-9" />
@@ -173,10 +173,10 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                                     <Wallet className={`h-3 w-3 ${wallet ? 'text-white' : 'text-brand-blue'}`} />
                                                 </div>
                                                 <div className="text-left">
-                                                    <div className="text-[7px] font-black uppercase tracking-widest opacity-70">
+                                                    <div className="text-[7px] font-bold uppercase tracking-widest opacity-70">
                                                         {t('common.wallet')}
                                                     </div>
-                                                    <div className="font-black text-label">
+                                                    <div className="font-bold text-label">
                                                         {wallet ? formattedAddress : t('common.connect_wallet')}
                                                     </div>
                                                 </div>
@@ -191,7 +191,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                 </div>
 
                                 <div className="mt-8 mb-4">
-                                    <p className="text-center text-label font-black uppercase tracking-[0.3em] text-text-secondary opacity-50">
+                                    <p className="text-center text-label font-bold uppercase tracking-[0.3em] text-text-secondary opacity-50">
                                         P2PHub v1.8.3 (Stable)
                                     </p>
                                 </div>

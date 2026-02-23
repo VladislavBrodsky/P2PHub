@@ -20,36 +20,36 @@ export const PartnerAcademy = () => {
                     <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-indigo-500/20 blur-[60px] rounded-full" />
 
                     <div className="relative z-20 flex flex-col items-center text-center space-y-5">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 text-label font-black uppercase tracking-[0.15em] text-blue-800 dark:text-white">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 text-label font-bold uppercase tracking-[0.15em] text-blue-800 dark:text-white">
                             <Sparkles className="w-3 h-3" />
                             {t('academy.hero_badge')}
                         </div>
 
                         <div className="space-y-1">
-                            <h2 className="text-xl font-black leading-none tracking-tight text-slate-900 dark:text-white uppercase italic">
+                            <h2 className="text-xl font-bold leading-none tracking-tight text-slate-900 dark:text-white uppercase italic">
                                 {t('academy.hero_title_1')} <span className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">{t('academy.hero_title_2')}</span>
                             </h2>
                             <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 uppercase tracking-wide">
                                 <Trans i18nKey="academy.hero_desc">
-                                    Master the 100-Stage roadmap to <span className="text-blue-800 dark:text-blue-100 font-black">$1 Per Minute</span> with AI Automation.
+                                    Master the 100-Stage roadmap to <span className="text-blue-800 dark:text-blue-100 font-bold">$1 Per Minute</span> with AI Automation.
                                 </Trans>
                             </p>
                         </div>
 
                         <div className="flex items-center gap-4 pt-1">
                             <div className="flex flex-col items-center">
-                                <span className="text-label font-black text-slate-900 dark:text-white">100</span>
-                                <span className="text-label font-black text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_levels')}</span>
+                                <span className="text-label font-bold text-slate-900 dark:text-white">100</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_levels')}</span>
                             </div>
                             <div className="w-px h-4 bg-slate-900/10 dark:bg-white/10" />
                             <div className="flex flex-col items-center">
-                                <span className="text-label font-black text-blue-600 dark:text-blue-400">20+</span>
-                                <span className="text-label font-black text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_free')}</span>
+                                <span className="text-label font-bold text-blue-600 dark:text-blue-400">20+</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_free')}</span>
                             </div>
                             <div className="w-px h-4 bg-slate-900/10 dark:bg-white/10" />
                             <div className="flex flex-col items-center">
-                                <span className="text-label font-black text-orange-600 dark:text-orange-400">PRO</span>
-                                <span className="text-label font-black text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_elite')}</span>
+                                <span className="text-label font-bold text-orange-600 dark:text-orange-400">PRO</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_elite')}</span>
                             </div>
                         </div>
                     </div>
@@ -75,12 +75,12 @@ export const PartnerAcademy = () => {
                                 <TrendingUp className="w-5 h-5" />
                             </div>
                             <div className="flex flex-col">
-                                <span className="text-label font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">{t('academy.global_ranking')}</span>
-                                <span className="text-label font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
+                                <span className="text-label font-bold text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">{t('academy.global_ranking')}</span>
+                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
-                        <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-label font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
+                        <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/30 text-orange-400 text-label font-bold uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_10px_rgba(249,115,22,0.1)]">
                             <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
                             {t('academy.footer_status')}
                         </div>

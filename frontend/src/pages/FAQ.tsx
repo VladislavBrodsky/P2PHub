@@ -298,7 +298,7 @@ export default function FAQPage() {
                                                     <div className="mt-4 flex gap-2">
                                                         <button
                                                             onClick={(e) => { e.stopPropagation(); notification('success'); }}
-                                                            className="text-[9px] font-black uppercase tracking-widest text-blue-500 flex items-center gap-1 p-2 bg-blue-500/5 rounded-lg border border-blue-500/10 active:scale-95 transition-all"
+                                                            className="text-[9px] font-bold uppercase tracking-widest text-blue-500 flex items-center gap-1 p-2 bg-blue-500/5 rounded-lg border border-blue-500/10 active:scale-95 transition-all"
                                                         >
                                                             {t('faq.helpful')}
                                                         </button>
@@ -325,7 +325,7 @@ export default function FAQPage() {
                         >
                             <Search size={24} className="text-slate-400" />
                         </motion.div>
-                        <h3 className="text-sm font-black text-text-primary uppercase mb-1">{t('faq.no_results')}</h3>
+                        <h3 className="text-sm font-bold text-text-primary uppercase mb-1">{t('faq.no_results')}</h3>
                         <p className="text-xs text-text-secondary">{t('faq.no_results_desc')}</p>
                     </motion.div>
                 )}
@@ -335,7 +335,7 @@ export default function FAQPage() {
             <div className="mt-12 px-6">
                 <div className="p-8 rounded-3xl bg-linear-to-br from-blue-600 to-blue-800 text-white relative overflow-hidden shadow-2xl shadow-blue-500/30">
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
-                    <h2 className="text-2xl font-black mb-2 uppercase tracking-tighter italic">
+                    <h2 className="text-2xl font-bold mb-2 uppercase tracking-tighter italic">
                         <Trans i18nKey="faq.still_have_questions" components={{ 0: <span className="text-white/60" /> }} />
                     </h2>
                     <p className="text-white/70 text-xs font-medium mb-6 leading-relaxed">
@@ -344,13 +344,13 @@ export default function FAQPage() {
                     <div className="flex gap-3">
                         <button
                             onClick={() => { selection(); setSupportOpen(true); }}
-                            className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-black text-label uppercase tracking-widest active:scale-95 transition-all"
+                            className="flex-1 h-12 bg-white text-blue-600 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all"
                         >
                             {t('faq.support_btn')}
                         </button>
                         <button
                             onClick={() => { selection(); window.open('https://t.me/+_T1pC14aVVYxYzJi', '_blank'); }}
-                            className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-black text-label uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
+                            className="flex-1 h-12 bg-white/10 text-white border border-white/20 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all backdrop-blur-sm"
                         >
                             {t('faq.community_btn')}
                         </button>

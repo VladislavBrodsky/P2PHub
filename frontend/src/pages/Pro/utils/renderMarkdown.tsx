@@ -37,7 +37,7 @@ export const renderMarkdown = (text: string, isInline = false) => {
                     return (
                         <h2
                             key={`h2-${index}`}
-                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
+                            className="text-lg font-bold mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^##\s+/, '')) }}
                         />
                     );
@@ -46,7 +46,7 @@ export const renderMarkdown = (text: string, isInline = false) => {
                     return (
                         <h2
                             key={`h1-${index}`}
-                            className="text-lg font-black mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
+                            className="text-lg font-bold mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
                         />
                     );
@@ -74,7 +74,7 @@ function processMarkdown(text: string): string {
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/\*([^*]+)\*/g, '<em>$1</em>')
         // Special CTA button - Allow spaces
-        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-label font-black uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30 no-underline">$1</a>')
+        .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-label font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30 no-underline">$1</a>')
         // Standard links - Allow spaces
         .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
 }

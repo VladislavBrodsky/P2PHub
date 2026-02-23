@@ -291,7 +291,7 @@
 }
 
 .text-pro-gradient {
-  @apply bg-clip-text text-transparent bg-linear-to-r from-indigo-400 via-white to-purple-400 font-black;
+  @apply bg-clip-text text-transparent bg-linear-to-r from-indigo-400 via-white to-purple-400 font-bold;
 }
 
 .premium-border-glow {

@@ -33,8 +33,8 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                    <span className="text-label font-black uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
-                    <span className="text-xs font-black text-slate-900 dark:text-white">{t(selectedLabel)}</span>
+                    <span className="text-label font-bold uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
+                    <span className="text-xs font-bold text-slate-900 dark:text-white">{t(selectedLabel)}</span>
                 </div>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
@@ -67,7 +67,7 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
                                 >
                                     <div className={`w-1.5 h-1.5 rounded-full transition-all ${selected === category.id ? 'bg-blue-500 scale-125' : 'bg-slate-300 dark:bg-slate-700'
                                         }`} />
-                                    <span className={`text-xs font-bold ${selected === category.id ? 'font-black' : ''}`}>
+                                    <span className={`text-xs font-bold ${selected === category.id ? 'font-bold' : ''}`}>
                                         {t(category.label)}
                                     </span>
                                 </button>

@@ -40,7 +40,7 @@ export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
                         key={i}
                         initial={{ opacity: 0, x: -5 }}
                         animate={{ opacity: 1, x: 0 }}
-                        className={i === lines.length - 1 ? "text-emerald-400 font-black" : "text-slate-500 font-bold"}
+                        className={i === lines.length - 1 ? "text-emerald-400 font-bold" : "text-slate-500 font-bold"}
                     >
                         {line}
                     </motion.div>
@@ -68,7 +68,7 @@ export const SystemLink = ({ onComplete }: { onComplete: () => void }) => {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.2 }}
-                className="absolute bottom-12 text-[8px] font-black uppercase tracking-[0.5em] text-white opacity-20"
+                className="absolute bottom-12 text-[8px] font-bold uppercase tracking-[0.5em] text-white opacity-20"
             >
                 Pintopay Intelligence Terminal
             </motion.div>

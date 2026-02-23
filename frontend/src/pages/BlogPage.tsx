@@ -283,10 +283,10 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                 </button>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h1 className="text-2xl font-black tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
+                                        <h1 className="text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
                                             <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-label font-black uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
+                                            <span className="text-label font-bold uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
                                         </div>
                                     </div>
                                     <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
@@ -306,7 +306,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full h-15 pl-13 pr-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5"
                                 />
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-label font-black uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
+                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-label font-bold uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
                                     {t('blog.navigation.search_label')}
                                 </div>
                             </div>
@@ -341,7 +341,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                             <div className="absolute top-6 left-6 z-20">
                                                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-600/90 backdrop-blur-md border border-white/20 shadow-xl">
                                                     <Zap className="w-3 h-3 text-white fill-current" />
-                                                    <span className="text-label font-black uppercase tracking-widest text-white">
+                                                    <span className="text-label font-bold uppercase tracking-widest text-white">
                                                         {t('blog.navigation.featured')}
                                                     </span>
                                                 </div>
@@ -356,7 +356,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                                 {currentFeaturedPost.date} • {t('blog.navigation.intelligence_hub')}
                                             </span>
                                         </div>
-                                        <h3 className="text-2xl sm:text-3xl font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
+                                        <h3 className="text-2xl sm:text-3xl font-bold leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-3">
                                             {currentFeaturedPost.title}
                                         </h3>
                                         <p
@@ -370,7 +370,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
-                                                    <span className="text-xs font-black text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
+                                                    <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
                                                 </div>
                                             </div>
                                             <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-all duration-500">
@@ -387,7 +387,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-label font-black uppercase tracking-widest shadow-xl flex items-center gap-2"
+                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-label font-bold uppercase tracking-widest shadow-xl flex items-center gap-2"
                                     >
                                         <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                         {t('blog.navigation.updating')}
@@ -405,7 +405,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                 {posts.length < total && (
                                     <div ref={sentinelRef} className="py-10 flex flex-col items-center justify-center gap-3">
                                         <div className="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-                                        <p className="text-label font-black uppercase tracking-widest text-slate-400 animate-pulse">
+                                        <p className="text-label font-bold uppercase tracking-widest text-slate-400 animate-pulse">
                                             {t('blog.navigation.scanning')}
                                         </p>
                                     </div>
@@ -416,7 +416,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto">
                                             <Search className="w-8 h-8 text-slate-400" />
                                         </div>
-                                        <h3 className="text-xl font-black">{t('blog.navigation.no_results')}</h3>
+                                        <h3 className="text-xl font-bold">{t('blog.navigation.no_results')}</h3>
                                         <p className="text-sm text-slate-500 dark:text-slate-400 max-w-[200px] mx-auto">
                                             {t('blog.navigation.no_results_desc')}
                                         </p>
@@ -503,7 +503,7 @@ const BlogDetail = ({
                     </div>
 
                     <div className="flex-1 min-w-0 py-0.5">
-                        <h5 className="text-white font-extrabold text-body leading-tight mb-0.5 tracking-tight">
+                        <h5 className="text-white font-bold text-body leading-tight mb-0.5 tracking-tight">
                             {isCard ? t('blog.marketing.get_card') : t('blog.marketing.upgrade_pro')}
                         </h5>
                         <p className="text-white/80 text-label font-medium leading-relaxed line-clamp-1">
@@ -548,13 +548,13 @@ const BlogDetail = ({
                         className="p-2 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
+                        <span className="text-label font-bold uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
                     </button>
 
                     <div className="flex items-center gap-3">
                         <div className="flex flex-col items-center mr-2">
-                            <div className="text-label font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
-                            <div className="text-label font-black text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
+                            <div className="text-label font-bold uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
+                            <div className="text-label font-bold text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
                             <button
@@ -588,13 +588,13 @@ const BlogDetail = ({
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent" />
                             <div className="absolute bottom-6 left-6 flex items-center gap-2">
                                 <div className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                                    <p className="text-label font-black text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
+                                    <p className="text-label font-bold text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
                                 </div>
                             </div>
                         </div>
                     )}
                     <div className="flex items-center gap-4">
-                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-label font-black uppercase tracking-widest shadow-lg shadow-blue-600/20">
+                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-label font-bold uppercase tracking-widest shadow-lg shadow-blue-600/20">
                             {t(getCategoryKey(post.category))}
                         </span>
                         <div className="flex items-center gap-2 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
@@ -604,18 +604,18 @@ const BlogDetail = ({
                     </div>
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
                     {post.title}
                 </h1>
 
                 <div className="flex items-center gap-4 py-5 border-y border-slate-200 dark:border-white/5">
                     <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
-                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-black text-lg text-blue-600 dark:text-blue-400">
+                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-bold text-lg text-blue-600 dark:text-blue-400">
                             {post.author?.[0] || 'A'}
                         </div>
                     </div>
                     <div>
-                        <p className="text-sm font-black text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
+                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
                         <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
@@ -625,7 +625,7 @@ const BlogDetail = ({
                                     <User className="w-4 h-4 text-slate-400" />
                                 </div>
                             ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-label font-black text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
+                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-label font-bold text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
                                 +12k
                             </div>
                         </div>
@@ -653,7 +653,7 @@ const BlogDetail = ({
                     ) : (
                         <div className="space-y-6">
                             <p
-                                className="text-lg font-medium leading-[1.8] text-slate-600 dark:text-slate-300 first-letter:text-6xl first-letter:font-black first-letter:mr-4 first-letter:float-left first-letter:text-blue-600 first-letter:leading-none first-letter:mt-2"
+                                className="text-lg font-medium leading-[1.8] text-slate-600 dark:text-slate-300 first-letter:text-6xl first-letter:font-bold first-letter:mr-4 first-letter:float-left first-letter:text-blue-600 first-letter:leading-none first-letter:mt-2"
                                 dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                             />
                             <MarketingBox type="card" />
@@ -675,8 +675,8 @@ const BlogDetail = ({
                         >
                             <Heart className={`w-6 h-6 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-label font-black uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
-                                <span className="font-black text-xl italic!">
+                                <span className="text-label font-bold uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
+                                <span className="font-bold text-xl italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
                             </div>
@@ -690,7 +690,7 @@ const BlogDetail = ({
                         </button>
                     </div>
 
-                    <p className="text-label font-black text-slate-400 uppercase tracking-[0.2em] animate-pulse">
+                    <p className="text-label font-bold text-slate-400 uppercase tracking-[0.2em] animate-pulse">
                         {t('blog.navigation.feedback_loop')}
                     </p>
                 </div>
@@ -698,7 +698,7 @@ const BlogDetail = ({
                 {/* Related Intelligence */}
                 <div className="pt-8 space-y-6">
                     <div className="flex items-center gap-4">
-                        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500 shrink-0">{t('blog.navigation.next_reports')}</h4>
+                        <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-blue-500 shrink-0">{t('blog.navigation.next_reports')}</h4>
                         <div className="h-px flex-1 bg-linear-to-r from-blue-500/20 to-transparent" />
                     </div>
                     <div className="grid grid-cols-1 gap-5">
@@ -718,11 +718,11 @@ const BlogDetail = ({
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0 py-1">
-                                        <p className="text-label font-black uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
+                                        <p className="text-label font-bold uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
                                             <div className="w-1 h-1 rounded-full bg-blue-500" />
                                             {t(getCategoryKey(relatedPost.category))}
                                         </p>
-                                        <h5 className="text-body font-black leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
+                                        <h5 className="text-body font-bold leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
                                             {relatedPost.title}
                                         </h5>
                                     </div>
@@ -744,8 +744,8 @@ const BlogDetail = ({
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
-                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
+                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
+                            <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
                         </div>
                     </button>
                     <button
@@ -753,8 +753,8 @@ const BlogDetail = ({
                         className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
-                            <span className="text-label font-black text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
-                            <span className="text-xs font-black truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
+                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
+                            <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
                         </div>
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
                             <ChevronRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />

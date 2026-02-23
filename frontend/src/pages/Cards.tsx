@@ -70,7 +70,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
             <div className="px-6 pb-6 pt-6 text-center">
-                <h2 className="text-slate-900 dark:text-white text-2xl font-black uppercase tracking-tight">{t('cards.title')}</h2>
+                <h2 className="text-slate-900 dark:text-white text-2xl font-bold uppercase tracking-tight">{t('cards.title')}</h2>
             </div>
 
             {/* Switcher Component */}
@@ -127,7 +127,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             >
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                    <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                                    <span className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                                         {t('cards.terms')}
                                     </span>
                                 </div>
@@ -176,7 +176,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                         <div className="flex items-center gap-2 overflow-hidden">
                             <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
                                 <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
-                                <span className="text-label font-black text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
+                                <span className="text-label font-bold text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
                                     {currentCard.bonus}
                                 </span>
                             </div>
@@ -190,7 +190,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
 
                         <div className="bg-white dark:bg-slate-900 px-3.5 py-2 rounded-[1rem] border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 active:bg-slate-50 dark:active:bg-slate-950 transition-colors">
                             <Apple size={16} strokeWidth={0} className="fill-slate-900 dark:fill-white" />
-                            <span className="text-caption font-extrabold text-slate-900 dark:text-white">Pay</span>
+                            <span className="text-caption font-bold text-slate-900 dark:text-white">Pay</span>
                         </div>
                     </div>
 
@@ -226,7 +226,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             )}
                         </motion.button>
 
-                        <p className="mt-4 text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                        <p className="mt-4 text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                             {t('cards.instant_delivery')}
                         </p>
                     </div>

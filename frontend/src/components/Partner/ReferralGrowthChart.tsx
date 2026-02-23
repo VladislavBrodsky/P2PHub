@@ -180,7 +180,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
             {/* Header - Compact */}
             <div className="flex items-center justify-between mb-2 relative z-20">
                 <div>
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white flex items-center gap-2 whitespace-nowrap">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2 whitespace-nowrap">
                         <TrendingUp className="w-4 h-4 text-blue-500" />
                         {t('metrics.network_growth')}
                     </h3>
@@ -193,7 +193,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 <div className="relative">
                     <button
                         onClick={() => { selection(); setIsDropdownOpen(!isDropdownOpen); }}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-label font-black text-slate-900 dark:text-white transition-all active:scale-95"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 text-label font-bold text-slate-900 dark:text-white transition-all active:scale-95"
                     >
                         {t(`timeframes.${timeframe}`, timeframe)}
                         <ChevronDown className={cn("w-3 h-3 transition-transform", isDropdownOpen ? "rotate-180" : "")} />
@@ -364,7 +364,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                     <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
                                     <div className="flex items-center gap-1">
                                         <Users className="w-2.5 h-2.5 text-blue-400" />
-                                        <span className="font-black text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
+                                        <span className="font-bold text-xs">{chartData[hoveredIndex].total.toLocaleString()}</span>
                                     </div>
                                 </div>
 
@@ -376,7 +376,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                             <div key={i} className="flex items-center gap-1 opacity-90">
                                                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
                                                 <span className="font-bold text-slate-400">{t('lvl')}{i + 1}:</span>
-                                                <span className="font-black">{count.toLocaleString()}</span>
+                                                <span className="font-bold">{count.toLocaleString()}</span>
                                             </div>
                                         );
                                     })}
@@ -385,7 +385,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                                 {chartData[hoveredIndex].joined_per_level && (
                                     <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-label">
                                         <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">{t('metrics.flow_power')}</span>
-                                        <span className="font-black text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
+                                        <span className="font-bold text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
                                     </div>
                                 )}
                             </motion.div>
@@ -409,7 +409,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     </div>
                     <div>
                         <div className="text-label text-slate-500 dark:text-slate-400 font-bold leading-tight">{t('metrics.growth_rate')}</div>
-                        <div className="text-xs font-black text-emerald-500">
+                        <div className="text-xs font-bold text-emerald-500">
                             {metrics.growth_pct >= 0 ? '+' : ''}{metrics.growth_pct}%
                         </div>
                     </div>

@@ -87,10 +87,10 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                         <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${config.textColor}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <span className="text-label sm:text-label font-black uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
+                        <span className="text-label sm:text-label font-bold uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-2xl sm:text-3xl font-black tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap truncate`}>{config.name}</h2>
+                        <h2 className={`text-2xl sm:text-3xl font-bold tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap truncate`}>{config.name}</h2>
                     </div>
                     {(subscription_plan || '').includes('PLUS') && (
                         <div className="ml-auto shrink-0 pl-2">
@@ -105,22 +105,22 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
 
                 <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/20 pt-8">
                     <div className="min-w-0">
-                        <p className="text-label font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.global_rank')}
                         </p>
-                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
+                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
-                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{Math.floor(score).toLocaleString()}</p>
+                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{Math.floor(score).toLocaleString()}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-black uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
                             {t('leaderboard.referrals')}
                         </p>
-                        <p className={`text-2xl font-black tracking-tighter ${config.textColor} drop-shadow-md`}>{referrals}</p>
+                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>{referrals}</p>
                     </div>
                 </div>
 
@@ -128,7 +128,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                     <div className="mt-6 flex items-center gap-2 rounded-xl bg-black/30 py-1.5 px-3 backdrop-blur-md border border-white/10 shadow-lg group overflow-hidden relative w-fit">
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                         <Zap className="h-3 w-3 shrink-0 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
-                        <span className="text-label font-black uppercase tracking-widest text-white whitespace-nowrap">
+                        <span className="text-label font-bold uppercase tracking-widest text-white whitespace-nowrap">
                             Competing for TOP 10 rewards
                         </span>
                     </div>

@@ -429,8 +429,11 @@ export const ProDashboard = () => {
         >
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-4 pb-12 min-h-[70vh]">
                 {/* Header Section - Mobile Optimized */}
-                <div className="flex flex-row items-center justify-between gap-2 mb-4">
-                    <div className="flex items-center gap-2 sm:gap-3">
+                <div className="flex flex-row items-center justify-between gap-2 mb-4 w-full">
+                    {/* Dummy spacer to perfectly center the core content block against right button */}
+                    <div className="w-7 sm:w-9 h-7 sm:h-9 shrink-0 pointer-events-none opacity-0" />
+
+                    <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center">
                         <motion.div
                             animate={{ rotate: [0, 10, -10, 0] }}
                             transition={{ duration: 4, repeat: Infinity }}
@@ -438,17 +441,17 @@ export const ProDashboard = () => {
                         >
                             <Zap size={20} className="relative z-10 w-4 h-4 sm:w-5 sm:h-5" />
                         </motion.div>
-                        <div className="space-y-0.5">
-                            <h1 className="text-sm sm:text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
-                                Viral Marketing <span className="vibing-crystal-text">Studio</span>
+                        <div className="space-y-0.5 flex flex-col items-start text-left">
+                            <h1 className="text-[16px] sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
+                                Viral Marketing <span className="vibing-crystal-text drop-shadow-sm">Studio</span>
                             </h1>
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                 <Zap size={10} className="text-indigo-500 animate-pulse" />
-                                <span className="text-label font-black text-text-primary tabular-nums leading-none tracking-tight">
+                                <span className="text-label font-bold text-text-primary tabular-nums leading-none tracking-tight">
                                     {status?.pro_tokens ?? 0}
                                 </span>
-                                <span className="text-label font-black text-text-secondary uppercase tracking-widest leading-none">
+                                <span className="text-label font-bold text-text-secondary uppercase tracking-widest leading-none">
                                     {t('pro_dashboard.tokens_label')}
                                 </span>
                             </div>
@@ -490,7 +493,7 @@ export const ProDashboard = () => {
                                 key={tab}
                                 onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
                                 className={`flex-1 relative py-3 rounded-2xl transition-all duration-500 ${activeTab === tab
-                                    ? 'text-white font-black'
+                                    ? 'text-white font-bold'
                                     : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
                             >
                                 {activeTab === tab && (
@@ -518,7 +521,7 @@ export const ProDashboard = () => {
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                            <p className="text-label font-black uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
+                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
                         </div>
                     ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
@@ -531,7 +534,7 @@ export const ProDashboard = () => {
                                 <div className="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 mx-auto mb-5 shadow-xl shadow-indigo-500/20">
                                     <Shield size={28} className="animate-pulse" />
                                 </div>
-                                <h2 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
                                     {t('pro_dashboard.locked.title')}
                                 </h2>
                                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
@@ -539,7 +542,7 @@ export const ProDashboard = () => {
                                 </p>
                                 <button
                                     onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
-                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
                                 >
                                     {t('pro_dashboard.locked.upgrade_btn')}
                                 </button>

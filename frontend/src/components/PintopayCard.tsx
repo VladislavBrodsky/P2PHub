@@ -123,7 +123,7 @@ export const PintopayCard = ({
 
                         {/* Logo Text */}
                         <div className="absolute bottom-6 left-6 z-20 transition-transform duration-300 group-hover:scale-110 drop-shadow-xl">
-                            <span className={`text-xl font-black tracking-tighter ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
+                            <span className={`text-xl font-bold tracking-tighter ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
                                 Pintopay
                             </span>
                         </div>
@@ -132,7 +132,7 @@ export const PintopayCard = ({
                         {variant === 'platinum' && (
                             <div className="absolute top-6 right-6 z-20">
                                 <div className="bg-slate-900/10 backdrop-blur-md border border-slate-900/10 rounded-full px-4 py-1.5 shadow-sm">
-                                    <span className="text-label font-black uppercase tracking-[0.2em] text-slate-900">
+                                    <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-900">
                                         Platinum
                                     </span>
                                 </div>
@@ -186,7 +186,7 @@ export const PintopayCard = ({
 
                         {/* Magnetic Strip Visual */}
                         <div className={`absolute top-6 left-0 right-0 h-10 z-20 flex items-center justify-center ${variant === 'platinum' ? 'bg-black' : 'bg-black/80'}`}>
-                            <span className="text-white font-black tracking-widest uppercase text-sm drop-shadow-md">
+                            <span className="text-white font-bold tracking-widest uppercase text-sm drop-shadow-md">
                                 {t(`cards.${variant}.back_title`)}
                             </span>
                         </div>

@@ -60,9 +60,6 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     </div>
                 )}
 
-                {/* Mesh Background Overlay */}
-                <div className="mesh-gradient-dark fixed inset-0 opacity-20 pointer-events-none dark:block hidden z-0" />
-                <div className="mesh-gradient-light fixed inset-0 opacity-40 pointer-events-none dark:hidden block z-0" />
 
                 {/* 1. Header (Fixed relative to viewport within main container) */}
                 {isHeaderVisible && (

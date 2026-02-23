@@ -106,14 +106,14 @@ export const AcademyCard = ({
                             </div>
                         )}
                         {badge && (
-                            <span className="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 shadow-sm">
+                            <span className="px-3 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400 shadow-sm">
                                 {badge}
                             </span>
                         )}
                     </div>
 
                     <div className="space-y-2.5">
-                        <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
+                        <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight group-hover:text-blue-600 dark:group-hover:text-blue-200 transition-colors">
                             {title}
                         </h3>
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed group-hover:text-slate-600 dark:group-hover:text-slate-300 transition-colors">
@@ -122,7 +122,7 @@ export const AcademyCard = ({
                     </div>
                 </div>
 
-                <div className="pt-6 flex items-center gap-2.5 text-label font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-all">
+                <div className="pt-6 flex items-center gap-2.5 text-label font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-all">
                     <span>{cta}</span>
                     <div className="w-7 h-7 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/10 group-hover:translate-x-1 group-hover:bg-blue-500/20 transition-all">
                         <ArrowRight className="w-3.5 h-3.5" />

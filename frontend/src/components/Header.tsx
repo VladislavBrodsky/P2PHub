@@ -45,7 +45,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
             className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{ paddingTop: 'calc(var(--spacing-safe-top, 24px) + 44px)' }}
         >
-            <div className="w-full max-w-lg flex flex-col gap-4 px-6 pointer-events-auto relative z-10">
+            <div className="w-full max-w-lg flex flex-col gap-4 px-4 pointer-events-auto relative z-10">
                 {/* Navigation & Stats - Contained within a centered glass bar */}
                 <div className="w-full flex items-center justify-between gap-3 mx-auto relative">
                     <button
@@ -63,7 +63,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <m.button
                         animate={controls}
-                        className="flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-3 py-1.5 mr-1 shadow-premium backdrop-blur-2xl transition-all shrink-0"
+                        className="flex items-center gap-2 rounded-2xl border border-border-glass bg-bg-glass px-3 py-1.5 shadow-premium backdrop-blur-2xl transition-all shrink-0"
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1">

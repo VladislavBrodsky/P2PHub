@@ -51,7 +51,7 @@ export const TopPartnersList = () => {
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                     {/* #comment: Renamed title to 'Top Partners' and matched casing */}
-                    <h3 className="text-sm font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-tight uppercase">
                         {t('leaderboard.top_partners')}
                     </h3>
                 </div>
@@ -107,7 +107,7 @@ export const TopPartnersList = () => {
 
                             <div className="flex flex-col">
                                 <div className="flex items-center gap-1.5">
-                                    <span className="text-sm font-black text-slate-900 dark:text-white">
+                                    <span className="text-sm font-bold text-slate-900 dark:text-white">
                                         {partner.first_name} {partner.last_name}
                                     </span>
                                     <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
@@ -132,8 +132,8 @@ export const TopPartnersList = () => {
                         </div>
 
                         <div className="flex flex-col items-end">
-                            <div className="text-label font-black text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
-                            <div className={`text-lg font-black ${index === 0 ? 'text-amber-500' :
+                            <div className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
+                            <div className={`text-lg font-bold ${index === 0 ? 'text-amber-500' :
                                 index === 1 ? 'text-slate-400' :
                                     index === 2 ? 'text-orange-400' :
                                         'text-slate-900 dark:text-white'

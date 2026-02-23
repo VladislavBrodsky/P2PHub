@@ -135,7 +135,7 @@ export const PremiumSelect = ({
     return (
         <div className="space-y-1.5">
             <div className="flex flex-col px-1 pb-1">
-                <label className={`text-[9px] font-black uppercase tracking-widest ${theme.text}`}>
+                <label className={`text-[9px] font-bold uppercase tracking-widest ${theme.text}`}>
                     {indexStr}. {label}
                 </label>
                 {instruction && (

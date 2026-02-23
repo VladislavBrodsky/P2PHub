@@ -56,7 +56,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                                 />
                             </div>
 
-                            <h2 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">
+                            <h2 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight">
                                 {t('cards.modal.title')}
                             </h2>
 
@@ -68,7 +68,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                             <div className="w-full space-y-3 mb-8 text-left">
                                 {(t('cards.modal.steps', { returnObjects: true }) as string[]).map((step, i) => (
                                     <div key={i} className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-white/10">
-                                        <div className="h-6 w-6 rounded-lg bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-label font-black text-indigo-500 border border-slate-100 dark:border-white/10">
+                                        <div className="h-6 w-6 rounded-lg bg-white dark:bg-slate-900 shadow-sm flex items-center justify-center text-label font-bold text-indigo-500 border border-slate-100 dark:border-white/10">
                                             {i + 1}
                                         </div>
                                         <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{step}</span>
@@ -78,7 +78,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
 
                             <button
                                 onClick={onUpgrade}
-                                className="w-full h-16 rounded-2xl bg-indigo-600 text-white font-black text-lg shadow-[0_15px_30px_-5px_rgba(79,70,229,0.3)] hover:bg-indigo-700 flex items-center justify-center gap-2 group transition-all active:scale-[0.98]"
+                                className="w-full h-16 rounded-2xl bg-indigo-600 text-white font-bold text-lg shadow-[0_15px_30px_-5px_rgba(79,70,229,0.3)] hover:bg-indigo-700 flex items-center justify-center gap-2 group transition-all active:scale-[0.98]"
                             >
                                 <span>{t('cards.modal.upgrade')}</span>
                                 <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
@@ -86,7 +86,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
 
                             <button
                                 onClick={onClose}
-                                className="mt-4 text-label font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
+                                className="mt-4 text-label font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
                             >
                                 {t('cards.modal.later')}
                             </button>

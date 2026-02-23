@@ -77,10 +77,10 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <h2 className="text-caption font-black tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
+                                <h2 className="text-caption font-bold tracking-[0.4em] text-yellow-600 dark:text-yellow-500 uppercase">
                                     {t('referral.levelup.title')}
                                 </h2>
-                                <h3 className="text-5xl font-black tracking-tighter text-slate-900 dark:text-white mt-2 relative inline-block">
+                                <h3 className="text-5xl font-bold tracking-tighter text-slate-900 dark:text-white mt-2 relative inline-block">
                                     {t('referral.levelup.rank')}
                                     <span className="text-yellow-500 relative ml-2">
                                         {level}
@@ -112,7 +112,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                             className="w-full py-5 rounded-2xl bg-linear-to-r from-yellow-500 via-orange-500 to-yellow-500 bg-size-[200%_100%] hover:bg-right transition-all duration-700 active:scale-95 shadow-[0_10px_25px_-5px_rgba(234,179,8,0.5)] relative overflow-hidden group/btn"
                         >
                             <div className="absolute inset-x-0 top-0 h-1/2 bg-white/20 -skew-y-12 -translate-y-full group-hover/btn:translate-y-[200%] transition-transform duration-700" />
-                            <span className="text-lg font-black text-white tracking-tight relative z-10">{t('referral.levelup.awesome')}</span>
+                            <span className="text-lg font-bold text-white tracking-tight relative z-10">{t('referral.levelup.awesome')}</span>
                         </motion.button>
 
                         {/* Close button (top right) */}

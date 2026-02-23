@@ -63,7 +63,7 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.1 }}
-                                    className="flex items-center justify-center gap-2 text-blue-400 font-black text-xs uppercase tracking-[0.3em]"
+                                    className="flex items-center justify-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-[0.3em]"
                                 >
                                     <Sparkles className="w-3 h-3" />
                                     Account Upgraded
@@ -73,7 +73,7 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 }}
-                                    className="text-3xl font-black text-white leading-tight"
+                                    className="text-3xl font-bold text-white leading-tight"
                                 >
                                     You are PRO Now!
                                 </motion.h2>
@@ -110,7 +110,7 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                             >
                                 <Button
                                     variant="primary"
-                                    className="w-full h-12 rounded-xl bg-white text-blue-900 font-black text-base shadow-xl active:scale-95 transition-all"
+                                    className="w-full h-12 rounded-xl bg-white text-blue-900 font-bold text-base shadow-xl active:scale-95 transition-all"
                                     onClick={onClose}
                                 >
                                     GET STARTED

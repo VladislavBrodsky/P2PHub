@@ -25,7 +25,7 @@ export const Ticker = () => {
                 {items.map((item, index) => (
                     <span
                         key={index}
-                        className="mx-4 text-xs font-black tracking-widest text-slate-900 dark:text-white opacity-80"
+                        className="mx-4 text-xs font-bold tracking-widest text-slate-900 dark:text-white opacity-80"
                     >
                         {item}
                     </span>

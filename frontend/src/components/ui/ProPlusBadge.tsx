@@ -11,7 +11,7 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
         xs: 'px-1.5 py-0.5 text-[7px] gap-0 rounded-[4px] border-[0.5px]',
         sm: 'px-2 py-0.5 text-[8px] gap-0.5 rounded-lg border-[1px]',
         md: 'px-3 py-1 text-[10px] gap-1 rounded-xl border-[1.5px]',
-        lg: 'px-4 py-1.5 text-[12px] gap-1.5 rounded-2xl border-[2px]'
+        lg: 'px-4 py-1.5 text-caption gap-1.5 rounded-2xl border-[2px]'
     };
 
     return (
@@ -19,7 +19,7 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className={`
-                relative flex items-center justify-center font-black uppercase tracking-tighter
+                relative flex items-center justify-center font-bold uppercase tracking-tighter
                 shadow-[0_4px_20px_rgba(168,85,247,0.4),0_0_15px_rgba(234,179,8,0.2)]
                 overflow-hidden select-none border-amber-400/50
                 ${sizeClasses[size]}
@@ -58,7 +58,7 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
             />
 
             {/* Metallic Text Effect */}
-            <span className="relative z-20 font-black italic tracking-widest bg-linear-to-b from-white via-slate-200 to-amber-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+            <span className="relative z-20 font-bold italic tracking-widest bg-linear-to-b from-white via-slate-200 to-amber-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
                 PRO+
             </span>
 

@@ -203,7 +203,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             <Users className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-sm font-black text-slate-900 dark:text-white leading-tight">
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
                                 {targetPartner ? `${targetPartner.first_name}'s Network` : t('network.explorer.title', 'Network')}
                             </h3>
                             <div className="text-label font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
@@ -238,7 +238,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             <button
                                 onClick={() => { impact('medium'); setIsGlobalMode(!isGlobalMode); setLevel(1); }}
                                 className={cn(
-                                    "px-2 py-1 rounded-lg text-label font-black uppercase transition-all border",
+                                    "px-2 py-1 rounded-lg text-label font-bold uppercase transition-all border",
                                     isGlobalMode
                                         ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
                                         : "bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"
@@ -294,7 +294,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                             transition={{ type: "spring", stiffness: 400, damping: 32 }}
                                         />
                                     )}
-                                    <span className={cn("text-xs font-black relative z-10", isActive ? "text-white" : "")}>
+                                    <span className={cn("text-xs font-bold relative z-10", isActive ? "text-white" : "")}>
                                         {isLocked ? <Lock size={10} className={isActive ? "text-white" : "text-slate-400 dark:text-white/20"} /> : l}
                                     </span>
                                     {count > 0 && !isActive && (
@@ -318,7 +318,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     exit={{ opacity: 0, x: -10 }}
                                     className="flex flex-col"
                                 >
-                                    <h4 className="text-label font-black text-slate-900 dark:text-white uppercase tracking-wider truncate">
+                                    <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-wider truncate">
                                         {getLevelName(level)}
                                     </h4>
                                     <p className="text-label font-bold text-slate-400 dark:text-slate-500">
@@ -335,7 +335,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     <div className="w-16 h-16 rounded-[1.8rem] bg-linear-to-br from-slate-400 to-slate-600 dark:from-slate-700 dark:to-slate-900 flex items-center justify-center shadow-xl mb-6 ring-4 ring-white dark:ring-white/5">
                                         <Lock size={28} className="text-white" />
                                     </div>
-                                    <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase italic mb-2 tracking-tighter">
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase italic mb-2 tracking-tighter">
                                         {t('network.explorer.unlock_more_streams')}
                                     </h3>
                                     <p className="text-label font-bold text-slate-500 dark:text-slate-400 mb-8 max-w-[220px] uppercase tracking-widest leading-relaxed">
@@ -350,7 +350,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                             window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
                                             if (onClose) onClose();
                                         }}
-                                        className="w-full max-w-[200px] h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-label uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2"
+                                        className="w-full max-w-[200px] h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-label uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2"
                                     >
                                         <Zap size={14} className="fill-white" />
                                         {t('network.explorer.upgrade_now')}
@@ -410,7 +410,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             </p>
                             <button
                                 onClick={() => queryClient.invalidateQueries({ queryKey: ['network', 'level', level] })}
-                                className="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-label font-black uppercase tracking-widest shadow-lg shadow-black/10"
+                                className="px-6 py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-label font-bold uppercase tracking-widest shadow-lg shadow-black/10"
                             >
                                 {t('network.explorer.try_refresh')}
                             </button>
@@ -427,7 +427,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     <div className="flex items-center justify-between relative z-10">
                                         <div className="flex items-center gap-2">
                                             <Award className="w-4 h-4 text-blue-500" />
-                                            <span className="text-label font-black uppercase tracking-wider text-blue-600 dark:text-blue-400">{t('network.explorer.level_performer')}</span>
+                                            <span className="text-label font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">{t('network.explorer.level_performer')}</span>
                                         </div>
                                         <div className="text-label font-bold text-slate-400 dark:text-slate-500">
                                             {t('network.explorer.avg_xp', { xp: levelInsights.avgXp })}
@@ -435,14 +435,14 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     </div>
                                     <div className="mt-2 flex items-center justify-between relative z-10">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-lg bg-blue-500/20 flex items-center justify-center text-label font-black text-blue-500">
+                                            <div className="w-6 h-6 rounded-lg bg-blue-500/20 flex items-center justify-center text-label font-bold text-blue-500">
                                                 ★
                                             </div>
                                             <span className="text-xs font-bold text-slate-900 dark:text-white">
                                                 {levelInsights.topPerformer.first_name} {levelInsights.topPerformer.last_name}
                                             </span>
                                         </div>
-                                        <span className="text-label font-black text-emerald-500">+{levelInsights.topPerformer.xp} XP</span>
+                                        <span className="text-label font-bold text-emerald-500">+{levelInsights.topPerformer.xp} XP</span>
                                     </div>
                                     <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/5 blur-xl group-hover:bg-blue-500/10 transition-colors" />
                                 </motion.div>
@@ -477,7 +477,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                                     }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-400 font-extrabold text-sm bg-linear-to-br from-slate-50 to-slate-100 dark:from-white/5 dark:to-white/10">
+                                                <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-sm bg-linear-to-br from-slate-50 to-slate-100 dark:from-white/5 dark:to-white/10">
                                                     {member.first_name?.charAt(0)}
                                                 </div>
                                             )}
@@ -496,7 +496,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-1.5 mb-0.5">
-                                            <h4 className="text-xs font-black text-slate-900 dark:text-white truncate">
+                                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
                                                 {member.first_name} {member.last_name}
                                             </h4>
                                             {member.xp > 5000 && <Zap className="w-3 h-3 text-blue-500" />}
@@ -511,7 +511,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                                         e.stopPropagation();
                                                         selection();
                                                     }}
-                                                    className="text-label font-black text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-0.5 shrink-0"
+                                                    className="text-label font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-0.5 shrink-0"
                                                 >
                                                     @{member.username}
                                                 </a>
@@ -523,7 +523,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     </div>
 
                                     <div className="text-right flex flex-col items-end">
-                                        <div className="text-label font-black text-blue-600 dark:text-blue-400 tabular-nums">
+                                        <div className="text-label font-bold text-blue-600 dark:text-blue-400 tabular-nums">
                                             {member.xp.toLocaleString()} XP
                                         </div>
                                         <div className="flex items-center gap-1 mt-0.5">
@@ -541,7 +541,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                 <div className="absolute inset-0 bg-blue-500/5 rounded-2xl blur-xl" />
                                 <UserPlus className="w-7 h-7 text-slate-300 dark:text-white/20 relative z-10" />
                             </div>
-                            <h4 className="text-sm font-black text-slate-900 dark:text-white mb-2">
+                            <h4 className="text-sm font-bold text-slate-900 dark:text-white mb-2">
                                 {searchQuery ? t('network.explorer.no_match') : t('network.explorer.quiet_on_level', { level })}
                             </h4>
                             <p className="text-label font-bold text-slate-400 dark:text-slate-500 max-w-[180px] mb-8 leading-relaxed">
@@ -550,7 +550,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             {!searchQuery && (
                                 <button
                                     onClick={() => { impact('heavy'); setIsShareOpen(true); }}
-                                    className="px-6 py-3 bg-linear-to-r from-blue-600 to-indigo-700 text-white rounded-2xl font-black text-label shadow-xl shadow-blue-500/20 active:scale-95 transition-all uppercase tracking-widest"
+                                    className="px-6 py-3 bg-linear-to-r from-blue-600 to-indigo-700 text-white rounded-2xl font-bold text-label shadow-xl shadow-blue-500/20 active:scale-95 transition-all uppercase tracking-widest"
                                 >
                                     {t('network.explorer.share_invitation')}
                                 </button>
@@ -566,14 +566,14 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                     <div>
                         <div className="flex items-center gap-2 mb-1">
                             <TrendingUp className="w-3 h-3 text-emerald-500" />
-                            <p className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('network.explorer.global_strength')}</p>
+                            <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('network.explorer.global_strength')}</p>
                         </div>
                         <div className="flex items-center gap-2.5">
-                            <h4 className="text-xl font-black text-slate-900 dark:text-white leading-none tabular-nums">
+                            <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-none tabular-nums">
                                 {displayTotal.toLocaleString()}
                             </h4>
                             <div className="px-1.5 py-0.5 bg-emerald-500/10 rounded-md border border-emerald-500/20">
-                                <span className="text-emerald-500 text-label font-black uppercase">{t('network.explorer.active_nodes')}</span>
+                                <span className="text-emerald-500 text-label font-bold uppercase">{t('network.explorer.active_nodes')}</span>
                             </div>
                         </div>
                     </div>
@@ -581,7 +581,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => { impact('medium'); setIsShareOpen(true); }}
-                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 h-11 rounded-2xl flex items-center gap-2 font-black text-label uppercase tracking-wider shadow-lg dark:shadow-white/5 active:scale-95 transition-all"
+                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 h-11 rounded-2xl flex items-center gap-2 font-bold text-label uppercase tracking-wider shadow-lg dark:shadow-white/5 active:scale-95 transition-all"
                         >
                             <UserPlus className="w-4 h-4" />
                             <span>{t('network.explorer.invite_btn')}</span>

@@ -81,10 +81,10 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                 <Activity className="w-4.5 h-4.5" />
                             </div>
                             <div>
-                                <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
+                                <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
                                     {t('partner_dashboard.finance_stats.title', 'Finance Intelligence')}
                                 </h4>
-                                <p className="text-label font-black text-indigo-500 uppercase tracking-[0.18em] opacity-80 leading-none mt-0.5">
+                                <p className="text-label font-bold text-indigo-500 uppercase tracking-[0.18em] opacity-80 leading-none mt-0.5">
                                     {t('partner_dashboard.finance_stats.live_data', 'Live Ledger Data')}
                                 </p>
                             </div>
@@ -136,28 +136,28 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             >
                                                 <USDTLogo className="w-3.5 h-3.5" />
                                             </motion.div>
-                                            <span className="text-label font-black uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
+                                            <span className="text-label font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400">
                                                 {t('partner_dashboard.finance_stats.usdt_stats', 'USDT Analytics')}
                                             </span>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
                                             <div>
-                                                <p className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
+                                                <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
                                                     {t('partner_dashboard.finance_stats.monthly_income', 'Monthly Income')}
                                                 </p>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-lg font-black text-emerald-500 tabular-nums leading-none">
+                                                    <span className="text-lg font-bold text-emerald-500 tabular-nums leading-none">
                                                         +${(stats.monthly_stats?.USDT?.income ?? 0).toFixed(2)}
                                                     </span>
                                                     <ArrowUpRight className="w-3 h-3 text-emerald-500 shrink-0" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
+                                                <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
                                                     {t('partner_dashboard.finance_stats.monthly_outcome', 'Monthly Spent')}
                                                 </p>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-lg font-black text-slate-500 dark:text-slate-400 tabular-nums leading-none">
+                                                    <span className="text-lg font-bold text-slate-500 dark:text-slate-400 tabular-nums leading-none">
                                                         -${(stats.monthly_stats?.USDT?.outcome ?? 0).toFixed(2)}
                                                     </span>
                                                     <ArrowDownRight className="w-3 h-3 text-slate-400 shrink-0" />
@@ -193,28 +193,28 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             >
                                                 <TONLogo className="w-3.5 h-3.5" />
                                             </motion.div>
-                                            <span className="text-label font-black uppercase tracking-widest text-blue-700 dark:text-blue-400">
+                                            <span className="text-label font-bold uppercase tracking-widest text-blue-700 dark:text-blue-400">
                                                 {t('partner_dashboard.finance_stats.ton_stats', 'TON Analytics')}
                                             </span>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
                                             <div>
-                                                <p className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
+                                                <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
                                                     {t('partner_dashboard.finance_stats.monthly_income', 'Monthly Income')}
                                                 </p>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-lg font-black text-blue-500 tabular-nums leading-none">
+                                                    <span className="text-lg font-bold text-blue-500 tabular-nums leading-none">
                                                         +{(stats.monthly_stats?.TON?.income ?? 0).toFixed(2)} TON
                                                     </span>
                                                     <ArrowUpRight className="w-3 h-3 text-blue-500 shrink-0" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
+                                                <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter mb-1">
                                                     {t('partner_dashboard.finance_stats.monthly_outcome', 'Monthly Spent')}
                                                 </p>
                                                 <div className="flex items-baseline gap-1">
-                                                    <span className="text-lg font-black text-slate-500 dark:text-slate-400 tabular-nums leading-none">
+                                                    <span className="text-lg font-bold text-slate-500 dark:text-slate-400 tabular-nums leading-none">
                                                         -{(stats.monthly_stats?.TON?.outcome ?? 0).toFixed(2)} TON
                                                     </span>
                                                     <ArrowDownRight className="w-3 h-3 text-slate-400 shrink-0" />
@@ -229,12 +229,12 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                     <div className="flex items-center justify-between px-0.5">
                                         <div className="flex items-center gap-2">
                                             <Clock className="w-3.5 h-3.5 text-blue-500" />
-                                            <h4 className="text-label font-black uppercase tracking-widest text-slate-900 dark:text-white">
+                                            <h4 className="text-label font-bold uppercase tracking-widest text-slate-900 dark:text-white">
                                                 {t('partner_dashboard.finance_stats.history_72h', 'Alpha Activity (72h)')}
                                             </h4>
                                         </div>
                                         <div className="px-2 py-0.5 bg-blue-500/10 rounded-full border border-blue-500/20">
-                                            <span className="text-label font-black text-blue-500 uppercase">
+                                            <span className="text-label font-bold text-blue-500 uppercase">
                                                 {stats.history_72h?.length ?? 0} {t('partner_dashboard.finance_stats.events', 'EVENTS')}
                                             </span>
                                         </div>
@@ -268,7 +268,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                         {item.description}
                                                                     </span>
                                                                     {item.status && item.status !== 'completed' && (
-                                                                        <span className={`px-1 rounded text-label font-black uppercase tracking-tighter shrink-0 ${item.status === 'pending' || item.status === 'manual_review'
+                                                                        <span className={`px-1 rounded text-label font-bold uppercase tracking-tighter shrink-0 ${item.status === 'pending' || item.status === 'manual_review'
                                                                             ? 'bg-amber-500/20 text-amber-500'
                                                                             : 'bg-red-500/20 text-red-500'}`}>
                                                                             {item.status === 'manual_review' ? 'REVIEW' : item.status}
@@ -284,11 +284,11 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                             </div>
                                                         </div>
                                                         <div className="text-right shrink-0 ml-3">
-                                                            <div className={`text-sm font-black tabular-nums ${isIncome ? 'text-emerald-500' : 'text-slate-400'}`}>
+                                                            <div className={`text-sm font-bold tabular-nums ${isIncome ? 'text-emerald-500' : 'text-slate-400'}`}>
                                                                 {isIncome ? '+' : '-'}{(item.amount ?? 0).toFixed(2)}
                                                                 <span className="text-label ml-0.5 uppercase opacity-60">{item.currency}</span>
                                                             </div>
-                                                            <div className="text-label font-black uppercase tracking-widest text-slate-400 mt-0.5">
+                                                            <div className="text-label font-bold uppercase tracking-widest text-slate-400 mt-0.5">
                                                                 {isIncome
                                                                     ? t('partner_dashboard.finance_stats.income', 'INFLOW')
                                                                     : t('partner_dashboard.finance_stats.outcome', 'OUTFLOW')
@@ -304,7 +304,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             <div className="w-10 h-10 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-3">
                                                 <Clock className="w-4.5 h-4.5 text-slate-300 dark:text-white/20" />
                                             </div>
-                                            <h5 className="text-label font-black text-slate-900 dark:text-white uppercase mb-1">
+                                            <h5 className="text-label font-bold text-slate-900 dark:text-white uppercase mb-1">
                                                 {t('partner_dashboard.finance_stats.no_activity', 'Quiet Perimeter')}
                                             </h5>
                                             <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-relaxed">
@@ -321,7 +321,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             <div className="w-5 h-5 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 ring-1 ring-indigo-500/20">
                                                 <Calendar className="w-3 h-3" />
                                             </div>
-                                            <h4 className="text-label font-black uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
+                                            <h4 className="text-label font-bold uppercase tracking-[0.18em] text-slate-800 dark:text-white/80">
                                                 {t('partner_dashboard.finance_stats.monthly_summary', 'Performance History')}
                                             </h4>
                                         </div>
@@ -335,13 +335,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                 className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white dark:bg-white/4 border border-slate-200 dark:border-white/8 hover:bg-slate-50 dark:hover:bg-white/7 transition-all active:scale-[0.98]"
                                             >
                                                 <div className="flex items-center gap-2.5">
-                                                    <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                                                    <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                                                         {stats.monthly_history[selectedMonthIdx]?.month}
                                                     </span>
                                                     {selectedMonthIdx === 0 && (
                                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
                                                             <div className="w-1 h-1 rounded-full bg-indigo-500 animate-pulse" />
-                                                            <span className="text-label font-black text-indigo-600 dark:text-indigo-400 uppercase">
+                                                            <span className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase">
                                                                 {t('partner_dashboard.finance_stats.current', 'Current')}
                                                             </span>
                                                         </div>
@@ -374,9 +374,9 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                 : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
                                                                 } ${idx > 0 ? 'border-t border-slate-100 dark:border-white/5' : ''}`}
                                                         >
-                                                            <span className="text-label font-black uppercase tracking-tight">{m.month}</span>
+                                                            <span className="text-label font-bold uppercase tracking-tight">{m.month}</span>
                                                             {idx === 0 && (
-                                                                <span className="text-label font-black text-indigo-500 uppercase tracking-wider">● {t('partner_dashboard.finance_stats.current', 'Current')}</span>
+                                                                <span className="text-label font-bold text-indigo-500 uppercase tracking-wider">● {t('partner_dashboard.finance_stats.current', 'Current')}</span>
                                                             )}
                                                         </button>
                                                     ))}
@@ -408,13 +408,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
 
                                                 {/* Net Summary row */}
                                                 <div className="flex items-center justify-between mb-4 relative z-10">
-                                                    <span className="text-label font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Net Balance</span>
+                                                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Net Balance</span>
                                                     <div className="flex items-center gap-3">
-                                                        <span className={`text-label font-black tabular-nums ${netUSDT >= 0 ? 'text-emerald-500' : 'text-red-400'
+                                                        <span className={`text-label font-bold tabular-nums ${netUSDT >= 0 ? 'text-emerald-500' : 'text-red-400'
                                                             }`}>
                                                             {netUSDT >= 0 ? '+' : ''}{netUSDT.toFixed(2)} USDT
                                                         </span>
-                                                        <span className={`text-label font-black tabular-nums ${netTON >= 0 ? 'text-blue-500' : 'text-red-400'
+                                                        <span className={`text-label font-bold tabular-nums ${netTON >= 0 ? 'text-blue-500' : 'text-red-400'
                                                             }`}>
                                                             {netTON >= 0 ? '+' : ''}{netTON.toFixed(2)} TON
                                                         </span>
@@ -426,18 +426,18 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
                                                             <USDTLogo className="w-3 h-3 text-emerald-500" />
-                                                            <span className="text-label font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">USDT</span>
+                                                            <span className="text-label font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">USDT</span>
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <div className="flex items-center justify-between">
                                                                 <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
-                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'
+                                                                <span className={`text-sm font-bold tabular-nums leading-none ${m.USDT.income > 0 ? 'text-emerald-500' : 'text-slate-400 opacity-50'
                                                                     }`}>+${m.USDT.income.toFixed(2)}</span>
                                                             </div>
                                                             <div className="h-px bg-slate-200 dark:bg-white/5" />
                                                             <div className="flex items-center justify-between">
                                                                 <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
-                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
+                                                                <span className={`text-sm font-bold tabular-nums leading-none ${m.USDT.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
                                                                     }`}>-${m.USDT.outcome.toFixed(2)}</span>
                                                             </div>
                                                         </div>
@@ -446,18 +446,18 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                     <div className="p-3 rounded-xl border bg-white/70 dark:bg-black/20 border-slate-100 dark:border-white/6 space-y-2">
                                                         <div className="flex items-center gap-1.5 opacity-70">
                                                             <TONLogo className="w-3 h-3 text-blue-500" />
-                                                            <span className="text-label font-black uppercase tracking-widest text-blue-600 dark:text-blue-400">TON</span>
+                                                            <span className="text-label font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400">TON</span>
                                                         </div>
                                                         <div className="space-y-1.5">
                                                             <div className="flex items-center justify-between">
                                                                 <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.inflow_short', 'In')}</span>
-                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'
+                                                                <span className={`text-sm font-bold tabular-nums leading-none ${m.TON.income > 0 ? 'text-blue-500' : 'text-slate-400 opacity-50'
                                                                     }`}>+{m.TON.income.toFixed(2)}</span>
                                                             </div>
                                                             <div className="h-px bg-slate-200 dark:bg-white/5" />
                                                             <div className="flex items-center justify-between">
                                                                 <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase">{t('partner_dashboard.finance_stats.outflow_short', 'Out')}</span>
-                                                                <span className={`text-sm font-black tabular-nums leading-none ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
+                                                                <span className={`text-sm font-bold tabular-nums leading-none ${m.TON.outcome > 0 ? 'text-slate-600 dark:text-slate-300' : 'text-slate-400 opacity-50'
                                                                     }`}>-{m.TON.outcome.toFixed(2)}</span>
                                                             </div>
                                                         </div>

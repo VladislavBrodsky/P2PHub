@@ -314,7 +314,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     {['coming_soon'].includes(activeTab) && (
                         <div className="flex flex-col items-center justify-center text-center px-10 h-full">
                             <div className="text-4xl mb-4">🚀</div>
-                            <h2 className="text-2xl font-black mb-2 uppercase text-text-primary">{t('system.coming_soon.title')}</h2>
+                            <h2 className="text-2xl font-bold mb-2 uppercase text-text-primary">{t('system.coming_soon.title')}</h2>
                             <p className="text-text-secondary font-medium">
                                 {t('system.coming_soon.desc')}
                             </p>

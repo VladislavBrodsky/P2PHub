@@ -105,14 +105,14 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     {stage.isPro && isLocked && (
                         <div className="bg-amber-500 px-1.5 py-0.5 rounded-lg shadow-lg flex items-center gap-1 border border-white/20">
                             <Zap className="w-2.5 h-2.5 text-white fill-white" />
-                            <span className="text-label font-black text-white uppercase">PRO</span>
+                            <span className="text-label font-bold text-white uppercase">PRO</span>
                         </div>
                     )}
                 </div>
 
                 {/* Stage Number Floating */}
                 <div className={cn(
-                    "absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-label font-black uppercase tracking-[0.2em] border z-30",
+                    "absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-label font-bold uppercase tracking-[0.2em] border z-30",
                     isCurrent ? "bg-blue-600 border-blue-400 text-white shadow-lg" :
                         "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-500"
                 )}>
@@ -132,7 +132,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100 shadow-xl cursor-pointer"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-label font-black uppercase tracking-tight leading-tight",
+                    "text-label font-bold uppercase tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors"
                 )}>{renderInline(title)}</h4>
 
@@ -147,7 +147,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                         !isLeft && "ml-auto"
                     )}>
                         <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
-                        <span className="text-label font-black text-blue-500 uppercase">{stage.duration}</span>
+                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration}</span>
                     </div>
                 )}
             </div>

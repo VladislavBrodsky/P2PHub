@@ -42,14 +42,14 @@ export class ErrorBoundary extends Component<Props, State> {
                     <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
                         <span className="text-4xl text-red-500">⚠️</span>
                     </div>
-                    <h1 className="text-2xl font-black mb-4 uppercase tracking-tighter">Something went wrong</h1>
+                    <h1 className="text-2xl font-bold mb-4 uppercase tracking-tighter">Something went wrong</h1>
                     <p className="text-slate-400 text-sm mb-8 max-w-xs leading-relaxed">
                         The mission encountered an unexpected error. Don't worry, your progress is safe.
                     </p>
 
                     <button
                         onClick={this.handleReload}
-                        className="w-full max-w-xs h-14 bg-blue-600 rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all mb-4"
+                        className="w-full max-w-xs h-14 bg-blue-600 rounded-2xl font-bold uppercase tracking-widest text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all mb-4"
                     >
                         Reload App
                     </button>

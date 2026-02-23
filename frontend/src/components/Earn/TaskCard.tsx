@@ -107,26 +107,26 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
                     {/* Title & Reward */}
                     <div className="flex flex-col min-w-0">
-                        <h4 className="text-caption font-black text-slate-900 dark:text-white tracking-tight truncate leading-tight">
+                        <h4 className="text-caption font-bold text-slate-900 dark:text-white tracking-tight truncate leading-tight">
                             {t(`tasks.${task.id}.title`, task.title)}
                         </h4>
                         {!isCompleted && (
                             <div className="flex items-center gap-1.5 mt-0.5">
                                 <div className={`px-1.5 py-0.5 rounded-md text-label tracking-wide uppercase ${isClaimable
-                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-black'
+                                    ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 font-bold'
                                     : 'xp-acid-badge'}`}>
                                     +{reward} XP
                                 </div>
                                 {(isPro || isProPlus) && (
                                     <div className="flex items-center gap-1">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className={`text-label font-black uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} {t('tasks.boost')}</span>
+                                        <span className={`text-label font-bold uppercase tracking-tighter ${isProPlus ? 'text-indigo-400' : 'text-emerald-500/80'}`}>x{multiplier} {t('tasks.boost')}</span>
                                     </div>
                                 )}
                             </div>
                         )}
                         {isCompleted && (
-                            <span className="text-label font-black text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
+                            <span className="text-label font-bold text-emerald-500 uppercase tracking-widest mt-0.5 flex items-center gap-1">
                                 <CheckCircle2 className="w-2.5 h-2.5" />
                                 {t('tasks.done')}
                             </span>
@@ -165,7 +165,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                     {/* Progress Bar for Referral/Action Tasks */}
                     {(task.type === 'referral' || task.type === 'action') && !isCompleted && (
                         <div className="space-y-1.5">
-                            <div className="flex justify-between items-baseline text-label font-black uppercase tracking-widest px-0.5">
+                            <div className="flex justify-between items-baseline text-label font-bold uppercase tracking-widest px-0.5">
                                 <span className="text-slate-400">{t('tasks.progress')}</span>
                                 <span className="text-slate-900 dark:text-white tracking-tighter opacity-80">
                                     {Math.min(currentProgress, task.requirement || 0)} / {task.requirement}
@@ -190,7 +190,7 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                             {isClaimable ? (
                                 <button
                                     disabled={isClaiming}
-                                    className={`w-full bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-3 rounded-xl text-label font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
+                                    className={`w-full bg-emerald-500 hover:bg-emerald-400 text-white px-5 py-3 rounded-xl text-label font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 active:scale-95 ${isClaiming ? 'opacity-80 cursor-wait' : ''}`}
                                     onClick={async (e) => {
                                         e.stopPropagation();
                                         setIsClaiming(true);
@@ -207,12 +207,12 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
                                 </button>
                             ) : status === 'VERIFYING' ? (
                                 <div className="w-full flex items-center justify-center gap-2 bg-blue-500/10 border border-blue-500/20 py-3 rounded-xl backdrop-blur-md shadow-sm">
-                                    <span className="text-label font-black text-blue-500 uppercase tracking-tighter animate-pulse">{t('tasks.verifying')}</span>
-                                    <span className="font-mono text-label font-black text-blue-600 dark:text-blue-400 min-w-[2ch]">{countdown}s</span>
+                                    <span className="text-label font-bold text-blue-500 uppercase tracking-tighter animate-pulse">{t('tasks.verifying')}</span>
+                                    <span className="font-mono text-label font-bold text-blue-600 dark:text-blue-400 min-w-[2ch]">{countdown}s</span>
                                 </div>
                             ) : (
                                 <button
-                                    className={`w-full px-5 py-3 rounded-xl text-label font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 group/btn ${isStarted
+                                    className={`w-full px-5 py-3 rounded-xl text-label font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 group/btn ${isStarted
                                         ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20 shadow-none'
                                         : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-lg'
                                         }`}

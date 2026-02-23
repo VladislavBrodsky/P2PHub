@@ -167,7 +167,7 @@ export const ReferralGraph = () => {
                             <m.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-black uppercase tracking-[0.2em] shadow-xl border border-white/10 dark:border-black/5"
+                                className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-1 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-bold uppercase tracking-[0.2em] shadow-xl border border-white/10 dark:border-black/5"
                             >
                                 {t('income.network.core', { defaultValue: 'CORE HUB ACTIVATED' })}
                             </m.div>
@@ -190,15 +190,15 @@ export const ReferralGraph = () => {
                             <div className="relative px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
 
-                                <span className="text-label font-black uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
+                                <span className="text-label font-bold uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
                                     {t('income.network.yield', { defaultValue: 'PROJECTED MONTHLY YIELD' })}
                                 </span>
 
                                 <div className="flex items-baseline justify-center gap-1">
-                                    <span className="text-4xl sm:text-5xl font-black tabular-nums tracking-tighter text-white">
+                                    <span className="text-4xl sm:text-5xl font-bold tabular-nums tracking-tighter text-white">
                                         ${count.toLocaleString()}
                                     </span>
-                                    <span className="text-lg font-black text-indigo-500">.00</span>
+                                    <span className="text-lg font-bold text-indigo-500">.00</span>
                                 </div>
 
                                 <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-px">
@@ -209,7 +209,7 @@ export const ReferralGraph = () => {
                                     />
                                 </div>
 
-                                <div className="mt-3 flex justify-between items-center text-label font-black text-white/30 uppercase tracking-widest">
+                                <div className="mt-3 flex justify-between items-center text-label font-bold text-white/30 uppercase tracking-widest">
                                     <span>{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
                                     <span>{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
                                 </div>
@@ -232,7 +232,7 @@ export const ReferralGraph = () => {
                                     repeat: Infinity,
                                     ease: "linear"
                                 }}
-                                className="absolute text-label sm:text-xs font-black text-emerald-500 pointer-events-none"
+                                className="absolute text-label sm:text-xs font-bold text-emerald-500 pointer-events-none"
                                 style={{
                                     top: `${20 + i * 15}%`,
                                     left: `${15 + (i * 17) % 70}%`
@@ -267,7 +267,7 @@ export const ReferralGraph = () => {
                                         {funnelStages[funnelStep].icon}
                                     </div>
 
-                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 uppercase tracking-tight">
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-tight">
                                         {funnelStages[funnelStep].title}
                                     </h3>
                                     <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-10 px-4">
@@ -282,14 +282,14 @@ export const ReferralGraph = () => {
                                         </div>
                                         <button
                                             onClick={nextStep}
-                                            className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
+                                            className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
                                         >
                                             {t('common.next', { defaultValue: 'Next' })}
                                             <ChevronRight className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
-                                            className="text-label font-black text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
+                                            className="text-label font-bold text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
                                         >
                                             {t('common.close', { defaultValue: 'Close' })}
                                         </button>
@@ -310,11 +310,11 @@ export const ReferralGraph = () => {
                                     </div>
 
                                     <div className="space-y-2 mb-10 text-center">
-                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white uppercase leading-tight pb-1">
+                                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white uppercase leading-tight pb-1">
                                             {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                         </h3>
                                         <div className="w-12 h-1.5 bg-emerald-500 mx-auto rounded-full" />
-                                        <p className="text-label font-black text-emerald-500 uppercase tracking-[0.2em]">
+                                        <p className="text-label font-bold text-emerald-500 uppercase tracking-[0.2em]">
                                             {t('viral_funnel.elite_users', { defaultValue: 'OFFER LIMITED TO FIRST 5,000 PARTNERS' })}
                                         </p>
                                     </div>
@@ -322,7 +322,7 @@ export const ReferralGraph = () => {
                                     <div className="w-full space-y-4">
                                         <button
                                             onClick={handleUpgrade}
-                                            className="w-full h-16 vibing-emerald-animated rounded-2xl text-white font-black text-sm uppercase tracking-widest shadow-[0_20px_60px_-10px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                            className="w-full h-16 vibing-emerald-animated rounded-2xl text-white font-bold text-sm uppercase tracking-widest shadow-[0_20px_60px_-10px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                         >
                                             {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                             <Zap className="w-5 h-5 group-hover:rotate-12 transition-transform" />
@@ -330,7 +330,7 @@ export const ReferralGraph = () => {
 
                                         <button
                                             onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
-                                            className="text-label font-black text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
+                                            className="text-label font-bold text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
                                             {t('common.close', { defaultValue: 'Close' })}
                                         </button>
