@@ -35,7 +35,7 @@ interface BlogPageProps {
 }
 
 export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation('marketing');
     const { selection, impact, notification } = useHaptic();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
 

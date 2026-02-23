@@ -29,7 +29,7 @@ export const SectionHeader = ({
                         animate={{ opacity: [1, 0.4, 1] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
                     />
-                    <span className="text-label font-black uppercase tracking-[0.3em] text-blue-500">
+                    <span className="text-label font-bold uppercase tracking-[0.3em] text-blue-500">
                         {badge}
                     </span>
                 </div>
@@ -39,7 +39,7 @@ export const SectionHeader = ({
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-heading font-black tracking-tight text-text-primary leading-tight whitespace-pre-line"
+                className="text-heading font-bold tracking-tight text-text-primary leading-tight whitespace-pre-line"
             >
                 {title}
             </m.h2>

@@ -31,7 +31,7 @@ const PartnerAvatar = ({ partner, index }: { partner: any; index: number }) => {
     }
 
     return (
-        <div className={`w-full h-full flex items-center justify-center text-label font-black text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][index % 4]}`}>
+        <div className={`w-full h-full flex items-center justify-center text-label font-bold text-white uppercase bg-linear-to-br ${['from-blue-500 to-indigo-600', 'from-purple-500 to-pink-600', 'from-emerald-500 to-teal-600', 'from-amber-500 to-orange-600'][index % 4]}`}>
             {(partner.first_name?.[0] || partner.username?.[0] || '?')}
         </div>
     );
@@ -137,7 +137,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-2xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
                 >
                     <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mb-1">
@@ -156,7 +156,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.05 }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-2xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
                 >
                     <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-1">
@@ -175,7 +175,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-2xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
                 >
                     <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-1">
@@ -195,7 +195,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-4 p-3.5 sm:p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-white/10 flex flex-row items-center justify-center gap-4 sm:gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] cursor-pointer hover:bg-white/80 dark:hover:bg-slate-900/80 transition-all active:scale-[0.98] relative group overflow-hidden w-full px-5"
+                className="mt-4 p-3.5 sm:p-4 rounded-2xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-white/10 flex flex-row items-center justify-center gap-4 sm:gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] cursor-pointer hover:bg-white/80 dark:hover:bg-slate-900/80 transition-all active:scale-[0.98] relative group overflow-hidden w-full px-5"
             >
                 {/* Viral Background Glow */}
                 <m.div
@@ -208,12 +208,12 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 />
 
                 {/* Live Indicator */}
-                <div className="absolute top-3 right-5 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
+                <div className="absolute top-2.5 right-4 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                    <span className="text-[8px] font-black uppercase tracking-widest text-red-500">LIVE</span>
+                    <span className="text-[8px] font-bold uppercase tracking-widest text-red-500">LIVE</span>
                 </div>
 
-                <div className="flex -space-x-2.5 shrink-0">
+                <div className="flex -space-x-2.5 shrink-0 relative z-10">
                     <AnimatePresence mode="popLayout">
                         {recentPartners.length > 0 ? (
                             recentPartners.slice(0, 3).map((partner, i) => (
@@ -238,7 +238,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
 
-                <div className="flex-1 min-w-0 relative z-10">
+                <div className="flex-1 min-w-0 relative z-10 pr-14">
                     <p className="text-label sm:text-caption font-semibold text-slate-600 dark:text-slate-300 leading-snug">
                         <Trans
                             i18nKey="stats.recent_join"

@@ -18,7 +18,7 @@ import { SectionHeader } from '../components/ui/SectionHeader';
 import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
 
 export default function SubscriptionPage() {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['pro', 'marketing', 'common']);
     const { user, refreshUser } = useUser();
     const { config: globalConfig } = useConfig();
     const { selection, notification, impact } = useHaptic();

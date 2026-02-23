@@ -18,7 +18,7 @@ const STORIES_LIST = [
 ];
 
 export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const [index, setIndex] = useState(() => {
         try {
             const saved = sessionStorage.getItem('p2p_onboarding_step');

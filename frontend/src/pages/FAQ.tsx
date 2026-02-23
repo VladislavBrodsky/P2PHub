@@ -39,7 +39,7 @@ const renderFormattedText = (text: string) => {
 };
 
 export default function FAQPage() {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { selection, notification } = useHaptic();
     const { setSupportOpen } = useUI();
 

@@ -115,7 +115,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-3xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-2xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
@@ -131,12 +131,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                     >
                         <TrendingUp className="w-3.5 h-3.5 text-blue-500" />
-                        <span className="text-label font-black uppercase tracking-[0.2em] text-blue-500">
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-500">
                             {t('income.badge')}
                         </span>
                     </m.div>
 
-                    <h3 className="text-3xl font-black tracking-tight leading-none max-w-[340px] mx-auto">
+                    <h3 className="text-3xl font-bold tracking-tight leading-none max-w-[340px] mx-auto">
                         {t('income.title')} <br />
                         <span className="text-blue-500 animate-text-shimmer dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400">{t('income.title_highlight')}</span>
                     </h3>
@@ -144,7 +144,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
                             <Trans i18nKey="income.desc">
                                 Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
-                                As a <span className="text-slate-900 dark:text-white font-black">Pintopay Partner</span>, you are the bridge.
+                                As a <span className="text-slate-900 dark:text-white font-bold">Pintopay Partner</span>, you are the bridge.
                                 Every global transaction becomes your dividends.
                             </Trans>
                         </p>
@@ -154,7 +154,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
-                    "p-6 rounded-2xl md:rounded-3xl relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
+                    "p-6 rounded-xl md:rounded-2xl relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
                     !isStrategyUnlocked
                         ? "bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
                         : "bg-white/40 dark:bg-[#020805]/80 border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)]"
@@ -165,13 +165,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-1.5 rounded-md text-label font-black uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-1.5 rounded-md text-label font-black uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
@@ -188,12 +188,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Calculator className="w-4 h-4 text-blue-500" />
-                                            <span className="text-label font-black uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
+                                            <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
                                         </div>
                                         <div className="flex flex-col gap-3">
                                             <div className="flex justify-between items-end">
                                                 <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
-                                                <span className="text-xl font-black text-blue-500">{activePartners}</span>
+                                                <span className="text-xl font-bold text-blue-500">{activePartners}</span>
                                             </div>
                                             <div className="relative h-6 flex items-center">
                                                 <input
@@ -209,12 +209,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
                                             <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-3xl font-black text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">${estimatedMonthly}</span>
+                                                <span className="text-3xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">${estimatedMonthly}</span>
                                             </div>
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-14 rounded-2xl font-black text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-blue-500/20"
+                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-14 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-blue-500/20"
                                             >
                                                 <Lock className="w-4 h-4 text-white" />
                                                 <span className="text-white uppercase">{t('income.profit.unlock_btn')}</span>
@@ -232,7 +232,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     >
                                         <div className="flex items-center gap-2 mb-2">
                                             <Clock className="w-4 h-4 text-rose-500" />
-                                            <span className="text-label font-black uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
+                                            <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
                                         </div>
 
                                         <div className="space-y-4">
@@ -259,7 +259,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <div className="space-y-2">
                                                 <div className="flex justify-between items-end">
                                                     <span className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
-                                                    <span className="text-label font-black text-rose-500">{hoursWorked} Hours</span>
+                                                    <span className="text-label font-bold text-rose-500">{hoursWorked} Hours</span>
                                                 </div>
                                                 <input
                                                     type="range"
@@ -274,10 +274,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="pt-6 text-center space-y-4">
                                             <div className="space-y-1">
-                                                <div className="text-label font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                                                <div className="text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                     {t('income.inaction.value_per_min')}
                                                 </div>
-                                                <div className={`text-4xl font-black transition-colors duration-300 ${currentValPerMin >= 1
+                                                <div className={`text-4xl font-bold transition-colors duration-300 ${currentValPerMin >= 1
                                                     ? 'text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]'
                                                     : 'text-rose-500 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]'
                                                     }`}>
@@ -286,10 +286,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
 
                                             <div className="p-3 rounded-2xl bg-[#1A103C] border border-white/5 shadow-inner">
-                                                <div className="text-label font-black uppercase tracking-[0.2em] text-white/60 mb-0.5">
+                                                <div className="text-label font-bold uppercase tracking-[0.2em] text-white/60 mb-0.5">
                                                     {t('income.inaction.daily_loss')}
                                                 </div>
-                                                <div className="text-2xl font-black text-white">
+                                                <div className="text-2xl font-bold text-white">
                                                     ${displayLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </div>
                                             </div>
@@ -307,7 +307,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <TrendingUp className="w-4 h-4 text-emerald-500" />
-                                    <span className="text-label font-black uppercase tracking-widest text-emerald-500">{t('income.network.title')}</span>
+                                    <span className="text-label font-bold uppercase tracking-widest text-emerald-500">{t('income.network.title')}</span>
                                 </div>
                                 <button
                                     onClick={() => setIsStrategyUnlocked(false)}
@@ -360,17 +360,17 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                                         </span>
-                                        <span className="text-label font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
+                                        <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
                                     </div>
 
                                     <div className="max-w-[85%] space-y-1.5">
                                         <div className="flex items-center justify-center gap-1.5">
                                             <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0" />
-                                            <span className="text-label font-black uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
+                                            <span className="text-label font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
                                                 {t('income.math.subheading')}
                                             </span>
                                         </div>
-                                        <h4 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-sm">
+                                        <h4 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-sm">
                                             {t('income.math.heading')}
                                         </h4>
                                     </div>
@@ -412,7 +412,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </div>
 
                                         {highlight && (
-                                            <div className="absolute -top-px -right-px bg-emerald-500 text-label font-black uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
+                                            <div className="absolute -top-px -right-px bg-emerald-500 text-label font-bold uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
                                                 TARGET
                                             </div>
                                         )}
@@ -478,7 +478,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             animate={{ y: 0, opacity: 1 }}
                                                             exit={{ y: 5, opacity: 0 }}
                                                             transition={{ duration: 0.2 }}
-                                                            className="text-xs font-black text-slate-900 dark:text-white leading-none"
+                                                            className="text-xs font-bold text-slate-900 dark:text-white leading-none"
                                                         >
                                                             {liveCount.toLocaleString()}
                                                         </m.span>
@@ -491,7 +491,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="flex flex-col items-end">
                                             <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
                                                 <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                                <span className="text-amber-600 dark:text-amber-500 font-black text-label tracking-tight">
+                                                <span className="text-amber-600 dark:text-amber-500 font-bold text-label tracking-tight">
                                                     {t('income.math.spots_left', { count: slotsLeft })}
                                                 </span>
                                             </div>
@@ -518,7 +518,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </AnimatePresence>
 
                 <div className="grid grid-cols-2 gap-4 relative z-0">
-                    <div className="glass-panel-premium p-5 rounded-3xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
+                    <div className="glass-panel-premium p-5 rounded-2xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                                 <Users className="w-5 h-5 text-blue-500 shrink-0" />
@@ -528,8 +528,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             </button>
                         </div>
                         <div className="space-y-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl font-black tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">1.2B</div>
-                            <div className="text-[10px] sm:text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.global_target')}</div>
+                            <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">1.2B</div>
+                            <div className="text-[10px] sm:text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.global_target')}</div>
                         </div>
                     </div>
 
@@ -543,8 +543,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             </button>
                         </div>
                         <div className="space-y-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl font-black tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">24/7</div>
-                            <div className="text-[10px] sm:text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.revenue')}</div>
+                            <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">24/7</div>
+                            <div className="text-[10px] sm:text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.revenue')}</div>
                         </div>
                     </div>
                 </div>
@@ -559,7 +559,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="w-1.5 h-12 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_15px_rgba(244,63,94,0.4)] animate-vibing" />
                         </div>
                         <div className="space-y-1.5">
-                            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
+                            <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-900 dark:text-white flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                                 {t('income.waiting.title')}
                             </h4>
@@ -586,7 +586,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                 onNavigateToPartner?.();
                             }}
-                            className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-black text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
+                            className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
                         >
                             <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
                                 {t('income.math.cta_urgency')}
@@ -606,7 +606,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <m.button
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-black text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
+                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
                         >
                             {t('income.cta.lead')}
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
@@ -629,7 +629,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     })}
                                 </div>
                                 <div className="text-left">
-                                    <div className="text-label font-black text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
+                                    <div className="text-label font-bold text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
                                     <div className="text-label font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
                                 </div>
                             </div>
@@ -657,7 +657,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ scale: 0.9, opacity: 0, y: 20 }}
                                         animate={{ scale: 1, opacity: 1, y: 0 }}
                                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                                        className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-3xl max-w-sm w-full shadow-2xl relative overflow-hidden"
+                                        className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full shadow-2xl relative overflow-hidden"
                                     >
                                         <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
                                         <div className="relative z-10 space-y-4">
@@ -675,7 +675,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         </div>
                                                     </div>
 
-                                                    <h3 className="text-xl font-black text-white leading-tight">
+                                                    <h3 className="text-xl font-bold text-white leading-tight">
                                                         <Trans i18nKey="income_details.market_title">
                                                             The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
                                                         </Trans>
@@ -715,7 +715,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         <DollarSign className="w-6 h-6 text-white" />
                                                     </div>
 
-                                                    <h3 className="text-xl font-black text-white leading-tight">
+                                                    <h3 className="text-xl font-bold text-white leading-tight">
                                                         <Trans i18nKey="income_details.revenue_title">
                                                             Unlock <span className="text-emerald-400">True Passive Income</span>
                                                         </Trans>
@@ -762,7 +762,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             setActiveModal(null);
                                                             onNavigateToPartner?.();
                                                         }}
-                                                        className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                                                        className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                                                     >
                                                         {t('income_details.start_earning')} <ArrowRight className="w-4 h-4" />
                                                     </button>

@@ -11,7 +11,7 @@ interface GrowthStrategistModalProps {
 }
 
 export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModalProps) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('common');
     const [isGenerating, setIsGenerating] = useState(false);
     const [advice, setAdvice] = useState<string | null>(null);
 
