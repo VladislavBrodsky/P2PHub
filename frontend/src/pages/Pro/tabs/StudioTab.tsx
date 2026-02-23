@@ -1140,13 +1140,15 @@ export const StudioTab = ({
                         {/* Action Area */}
                         <div className="space-y-3 pb-4 relative">
                             {status?.is_pro_plus && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="absolute -top-3 right-0 bg-emerald-500 text-white text-label font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg z-10 border border-white/20"
-                                >
-                                    <Blocks size={8} /> {t('pro_dashboard.studio.omni_enabled')}
-                                </motion.div>
+                                <div className="flex justify-center mb-4">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.2em] flex items-center gap-1.5 shadow-lg z-10 border border-white/20 whitespace-nowrap"
+                                    >
+                                        <Blocks size={10} /> {t('pro_dashboard.studio.omni_enabled')}
+                                    </motion.div>
+                                </div>
                             )}
                             <div className="grid grid-cols-2 gap-3">
                                 <button

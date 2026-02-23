@@ -440,6 +440,16 @@ class PaymentService:
                                 reward_xp=catalyst_xp,
                                 completed_at=now
                             ))
+                            
+                            from app.models.partner import XPTransaction
+                            session.add(XPTransaction(
+                                partner_id=referrer_partner.id,
+                                amount=float(catalyst_xp),
+                                type="MILESTONE",
+                                description=f"Completed Milestone: {catalyst_task_id}",
+                                reference_id=f"ms_{catalyst_task_id}_{partner.id}"
+                            ))
+                            
                             logger.info(f"✅ Network Catalyst awarded to referrer {referrer_partner.telegram_id}: +{catalyst_xp} XP")
                 except Exception as e:
                     logger.error(f"Network Catalyst trigger failed for referrer {partner.referrer_id}: {e}")

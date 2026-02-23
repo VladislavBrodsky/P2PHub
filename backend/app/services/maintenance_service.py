@@ -392,11 +392,14 @@ async def reset_monthly_pro_tokens():
         await session.commit()
         logger.info("✅ Monthly token reset complete for all active PRO users.")
 
-async def run_economy_audit(session: AsyncSession) -> dict[str, Any]:
-    """Runs the economy integrity logic and returns the results."""
+async def run_economy_audit(session: AsyncSession, auto_fix: bool = False) -> dict[str, Any]:
+    """
+    Runs the economy integrity logic and returns the results.
+    If auto_fix is True, it will align Partner.xp/balance with the ledger totals.
+    """
     from app.services.audit_service import audit_service
 
-    result = await session.exec(select(Partner.id, Partner.telegram_id, Partner.xp, Partner.balance))
+    result = await session.exec(select(Partner))
     partners = result.all()
 
     xp_sums_result = await session.exec(
@@ -415,36 +418,65 @@ async def run_economy_audit(session: AsyncSession) -> dict[str, Any]:
     flags = 0
     anomalies = []
     
-    for p_id, p_tg_id, p_xp, p_balance in partners:
+    for partner in partners:
+        p_id = partner.id
+        p_tg_id = partner.telegram_id
+        p_xp = partner.xp
+        p_balance = partner.balance
+
         xp_sum = xp_sums.get(p_id, 0.0)
         bal_sum = bal_sums.get(p_id, 0.0)
 
-        xp_diff = abs(float(p_xp) - xp_sum)
-        bal_diff = abs(float(p_balance) - bal_sum)
+        xp_diff = float(p_xp) - xp_sum
+        bal_diff = float(p_balance) - bal_sum
 
-        if xp_diff > 0.01:
+        if abs(xp_diff) > 0.01:
             logger.warning(f"⚠️ XP Discrepancy for {p_tg_id}: DB={p_xp}, Sum={xp_sum}")
             await audit_service.log_event(
                 session=session,
                 entity_type="system",
                 entity_id=str(p_tg_id),
                 action="integrity_discrepancy",
-                details={"type": "XP", "db_value": float(p_xp), "sum_value": xp_sum, "diff": float(p_xp) - xp_sum}
+                details={"type": "XP", "db_value": float(p_xp), "sum_value": xp_sum, "diff": xp_diff}
             )
-            flags += 1
-            anomalies.append({"type": "XP", "partner_id": p_tg_id, "diff": xp_diff})
+            
+            if auto_fix:
+                partner.xp = xp_sum
+                session.add(partner)
+                logger.info(f"✅ Fixed XP for {p_tg_id}: aligned to {xp_sum}")
 
-        if bal_diff > 0.01:
+            flags += 1
+            anomalies.append({
+                "type": "XP", 
+                "partner_id": p_tg_id, 
+                "expected": xp_sum, 
+                "actual": float(p_xp), 
+                "diff": xp_diff
+            })
+
+        if abs(bal_diff) > 0.01:
             logger.warning(f"⚠️ Balance Discrepancy for {p_tg_id}: DB={p_balance}, Sum={bal_sum}")
             await audit_service.log_event(
                 session=session,
                 entity_type="system",
                 entity_id=str(p_tg_id),
                 action="integrity_discrepancy",
-                details={"type": "BALANCE", "db_value": float(p_balance), "sum_value": bal_sum, "diff": float(p_balance) - bal_sum}
+                details={"type": "BALANCE", "db_value": float(p_balance), "sum_value": bal_sum, "diff": bal_diff}
             )
+
+            if auto_fix:
+                partner.balance = bal_sum
+                session.add(partner)
+                logger.info(f"✅ Fixed Balance for {p_tg_id}: aligned to {bal_sum}")
+
             flags += 1
-            anomalies.append({"type": "BALANCE", "partner_id": p_tg_id, "diff": bal_diff})
+            anomalies.append({
+                "type": "BALANCE", 
+                "partner_id": p_tg_id, 
+                "expected": bal_sum, 
+                "actual": float(p_balance), 
+                "diff": bal_diff
+            })
 
     if flags > 0:
         await session.commit()

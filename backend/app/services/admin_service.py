@@ -697,6 +697,8 @@ class AdminService:
                         action_val = "SYSTEM"
                     elif "fix" in log.action:
                         action_val = "SYSTEM"
+                    elif "reconciliation" in log.action or "integrity" in log.action:
+                        action_val = "RECONCILIATION"
 
                 feed.append({
                     "id": log.id,

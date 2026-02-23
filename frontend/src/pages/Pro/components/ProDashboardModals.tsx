@@ -521,31 +521,36 @@ export const ProDashboardModals = ({
 
                                                 {/* Multi-TG */}
                                                 {activePlusPlatform === 'tg' && (
-                                                    <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
-                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-emerald-500/5 border-b border-emerald-500/15">
-                                                            <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
-                                                                <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-contain scale-110" />
-                                                            </div>
-                                                            <div className="flex-1 min-w-0">
-                                                                <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
-                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.multi_sync.desc')}</p>
+                                                    <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[2.5rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 bg-emerald-500/5 border-b border-emerald-500/15">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center text-white shadow-xl shadow-emerald-600/20 shrink-0 overflow-hidden">
+                                                                    <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-contain scale-110" />
+                                                                </div>
+                                                                <div className="min-w-0">
+                                                                    <p className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
+                                                                    <p className="text-label text-slate-500 dark:text-slate-400 mt-1 leading-tight">{t('pro_dashboard.setup.multi_sync.desc')}</p>
+                                                                </div>
                                                             </div>
                                                             <button
                                                                 onClick={handleTestTG}
                                                                 disabled={isTesting}
-                                                                className="px-3 py-1.5 rounded-xl bg-emerald-500 text-white text-label font-bold uppercase tracking-widest flex items-center gap-1 shadow-md shadow-emerald-500/20 shrink-0"
+                                                                className="h-10 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-label font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 shrink-0 active:scale-95 transition-all disabled:opacity-50"
                                                             >
-                                                                {isTesting ? <Loader2 size={9} className="animate-spin" /> : <Zap size={9} />}
+                                                                {isTesting ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} className="fill-white" />}
                                                                 {t('pro_dashboard.setup.multi_sync.test')}
                                                             </button>
                                                         </div>
-                                                        <div className="p-4 sm:p-5 space-y-3 sm:space-y-4">
-                                                            <div className="space-y-2">
+                                                        <div className="p-5 sm:p-6 space-y-6">
+                                                            <div className="grid grid-cols-1 gap-2.5">
                                                                 {[0, 1, 2, 3, 4].map((idx) => {
                                                                     const val = tgChannels[idx] || '';
                                                                     const testSt = tgTestResults[val.trim()];
                                                                     return (
-                                                                        <div key={idx} className="relative">
+                                                                        <div key={idx} className="relative group">
+                                                                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 dark:text-white/20 font-bold text-[10px] tracking-widest uppercase transition-colors group-focus-within:text-emerald-500">
+                                                                                CH {idx + 1}
+                                                                            </div>
                                                                             <input
                                                                                 type="text"
                                                                                 value={val}
@@ -555,28 +560,29 @@ export const ProDashboardModals = ({
                                                                                     nch[idx] = e.target.value;
                                                                                     setTgChannels(nch);
                                                                                 }}
-                                                                                placeholder={`@channel_node_${idx + 1}`}
-                                                                                className={`w-full h-10 bg-white dark:bg-black/20 border rounded-xl px-4 pr-14 text-label font-mono outline-none transition-all dark:text-white ${testSt === 'active' ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-400/10' : 'border-slate-200 dark:border-white/10 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10'}`}
+                                                                                placeholder="@channel_username"
+                                                                                className={`w-full h-11 bg-white dark:bg-black/20 border rounded-xl pl-12 pr-14 text-label font-mono outline-none transition-all dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10 ${testSt === 'active' ? 'border-emerald-500/50 ring-2 ring-emerald-500/5' : 'border-slate-200 dark:border-white/10 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5'}`}
                                                                             />
                                                                             {testSt && (
-                                                                                <div className={`absolute right-3 top-1/2 -translate-y-1/2 text-label font-bold uppercase ${testSt === 'active' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                                                    {testSt === 'active' ? '● Live' : '● Error'}
+                                                                                <div className={`absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider ${testSt === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
+                                                                                    <div className={`w-1.5 h-1.5 rounded-full ${testSt === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                                                                                    {testSt === 'active' ? 'Live' : 'Error'}
                                                                                 </div>
                                                                             )}
                                                                         </div>
                                                                     );
                                                                 })}
                                                             </div>
-                                                            <div className="space-y-1.5 pt-3 border-t border-slate-100 dark:border-white/5 mt-3">
-                                                                <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                            <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-white/5">
+                                                                <label className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
                                                                 <input
                                                                     type="text"
                                                                     value={personalLink}
                                                                     onChange={(e) => setPersonalLink(e.target.value)}
-                                                                    className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                                    className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10"
                                                                     placeholder="https://t.me/pintopaybot?start=..."
                                                                 />
-                                                                <p className="text-label text-slate-400 leading-relaxed px-0.5">
+                                                                <p className="text-[10px] sm:text-label text-slate-400 leading-relaxed px-0.5 italic">
                                                                     {t('pro_dashboard.setup.personal_link_desc')}
                                                                 </p>
                                                             </div>

@@ -209,7 +209,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
                                             <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-3xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.2)]">${estimatedMonthly}</span>
+                                                <span className="text-2xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing">${estimatedMonthly}</span>
                                             </div>
 
                                             <button
@@ -352,165 +352,176 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
                                 <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
 
-                                {/* Header: Structured and Centered */}
-                                <div className="relative flex flex-col items-center text-center pt-2 mb-4">
-                                    {/* Pulsing live dot - Centered Above Subheading */}
-                                    <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 rounded-full px-2.5 py-0.5 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)] mb-3">
-                                        <span className="relative flex h-1.5 w-1.5">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
-                                        </span>
-                                        <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">LIVE</span>
-                                    </div>
-
-                                    <div className="max-w-[85%] space-y-1.5">
-                                        <div className="flex items-center justify-center gap-1.5">
-                                            <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0" />
-                                            <span className="text-label font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
-                                                {t('marketing:income.math.subheading')}
-                                            </span>
+                                {/* Header: Viral & Impactful */}
+                                <div className="relative p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-white/5 bg-linear-to-br from-emerald-500/10 via-transparent to-blue-500/5">
+                                    <div className="space-y-3 text-center sm:text-left">
+                                        <div className="flex items-center justify-center sm:justify-start gap-2">
+                                            <div className="flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-3 py-1 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+                                                <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse fill-emerald-400" />
+                                                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">
+                                                    {t('marketing:income.math.subheading')}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <h4 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-sm">
+                                        <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
-                                </div>
 
-                                {/* THE MATH ROWS */}
-                                {([
-                                    { key: 'per_min', amount: '$1', period: '/min', highlight: false, delay: 0 },
-                                    { key: 'per_hour', amount: '$60', period: '/hr', highlight: false, delay: 0.08 },
-                                    { key: 'per_day', amount: '$1,440', period: '/day', highlight: false, delay: 0.16 },
-                                    { key: 'per_month', amount: '$43,200', period: '/month', highlight: true, delay: 0.24 },
-                                    { key: 'per_year', amount: '$518,400', period: '/year', highlight: false, delay: 0.32 },
-                                ] as const).map(({ key, amount, period, highlight, delay }, idx, arr) => (
-                                    <m.div
-                                        key={key}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={mathVisible ? { opacity: 1, x: 0 } : {}}
-                                        transition={{ duration: 0.5, delay, ease: 'circOut' }}
-                                        className={clsx(
-                                            'relative flex items-center justify-between rounded-xl px-3 py-2 border transition-all',
-                                            highlight
-                                                ? 'bg-emerald-50 dark:bg-emerald-500/15 border-emerald-200 dark:border-emerald-500/40 shadow-sm dark:shadow-[0_0_15px_rgba(16,185,129,0.1)]'
-                                                : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/8'
-                                        )}
-                                    >
-                                        {/* Left: row label */}
-                                        <div className="flex items-center gap-2">
-                                            {highlight ? (
-                                                <Flame className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                                            ) : (
-                                                <ChevronRight className="w-3 h-3 text-slate-300 dark:text-white/20 shrink-0" />
-                                            )}
-                                            <span className={clsx(
-                                                'text-label font-bold',
-                                                highlight ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-white/50'
-                                            )}>
-                                                {t(`marketing:income.math.${key}`)}
+                                    <div className="flex flex-col items-center sm:items-end group">
+                                        <div className="relative">
+                                            <div className="absolute -inset-4 bg-emerald-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
+                                            <span className="relative text-5xl sm:text-6xl font-black text-emerald-400 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+                                                $43,200
                                             </span>
                                         </div>
+                                        <span className="text-xs font-bold text-emerald-400/60 uppercase tracking-[0.3em] mt-1">
+                                            {t('marketing:income.math.per_month')}
+                                        </span>
+                                    </div>
+                                </div>
 
-                                        {highlight && (
-                                            <div className="absolute -top-px -right-px bg-emerald-500 text-label font-bold uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
-                                                {t('marketing:income.math.target_badge')}
+                                {/* THE MATH GRID */}
+                                <div className="p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                    {([
+                                        { key: 'per_min', amount: '$1', period: 'Minute', highlight: false, delay: 0 },
+                                        { key: 'per_hour', amount: '$60', period: 'Hour', highlight: false, delay: 0.1 },
+                                        { key: 'per_day', amount: '$1,440', period: 'Day', highlight: false, delay: 0.2 },
+                                        { key: 'per_year', amount: '$518,400', period: 'Year', highlight: true, delay: 0.3 },
+                                    ] as const).map(({ key, amount, period, highlight, delay }) => (
+                                        <m.div
+                                            key={key}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={mathVisible ? { opacity: 1, y: 0 } : {}}
+                                            transition={{ duration: 0.5, delay, ease: 'backOut' }}
+                                            className={clsx(
+                                                'relative group overflow-hidden rounded-2xl p-4 transition-all duration-500 border',
+                                                highlight
+                                                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_10px_30px_-5px_rgba(16,185,129,0.2)]'
+                                                    : 'bg-white/5 border-white/5 hover:border-white/10'
+                                            )}
+                                        >
+                                            <div className="flex flex-col gap-1 relative z-10">
+                                                <span className={clsx(
+                                                    'text-[10px] font-black uppercase tracking-[0.2em] mb-1',
+                                                    highlight ? 'text-emerald-400' : 'text-white/40 group-hover:text-white/60'
+                                                )}>
+                                                    PER {period}
+                                                </span>
+                                                <span className={clsx(
+                                                    'text-xl sm:text-2xl font-black tracking-tight',
+                                                    highlight ? 'text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'text-white'
+                                                )}>
+                                                    {amount}
+                                                </span>
                                             </div>
-                                        )}
-                                    </m.div>
-                                ))}
+                                            {/* Decorative element */}
+                                            <div className={clsx(
+                                                "absolute -right-2 -bottom-2 w-12 h-12 blur-2xl rounded-full opacity-20 group-hover:opacity-40 transition-opacity",
+                                                highlight ? "bg-emerald-500" : "bg-blue-500"
+                                            )} />
+                                        </m.div>
+                                    ))}
+                                </div>
 
-                                {/* Formula note */}
-                                <m.div
-                                    initial={{ opacity: 0 }}
-                                    animate={mathVisible ? { opacity: 1 } : {}}
-                                    transition={{ delay: 0.5 }}
-                                    className="text-center -mt-1"
-                                >
-                                    <span className="text-label text-slate-400 dark:text-white/20 font-mono">{t('marketing:income.math.formula_note')}</span>
-                                </m.div>
+                                <div className="px-4 sm:px-6 pb-6 space-y-6">
+                                    {/* Formula & FOMO */}
+                                    <div className="flex flex-col gap-4">
+                                        <m.div
+                                            initial={{ opacity: 0 }}
+                                            animate={mathVisible ? { opacity: 1 } : {}}
+                                            transition={{ delay: 0.5 }}
+                                            className="text-center"
+                                        >
+                                            <span className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/5 text-[10px] text-white/30 font-mono tracking-widest uppercase">
+                                                Protocol Basis: {t('marketing:income.math.formula_note')}
+                                            </span>
+                                        </m.div>
 
-                                {/* FOMO red bar */}
-                                <m.div
-                                    initial={{ opacity: 0, y: 8 }}
-                                    animate={mathVisible ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ delay: 0.55 }}
-                                    className="flex items-start gap-2.5 p-3 rounded-2xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/25"
-                                >
-                                    <span className="relative flex h-2.5 w-2.5 mt-0.5 shrink-0">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
-                                    </span>
-                                    <p className="text-label font-bold text-rose-700 dark:text-rose-300 leading-snug">
-                                        {t('marketing:income.math.fomo_line')}
-                                    </p>
-                                </m.div>
-
-                                {/* Live social proof */}
-                                <div className="pt-1.5 flex flex-col gap-3">
-                                    <div className="flex items-center justify-between bg-slate-50 dark:bg-white/5 rounded-2xl px-3 py-2 border border-slate-200 dark:border-white/5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="flex -space-x-2">
-                                                {displayAvatars.map((avatar, i) => {
-                                                    const src = avatar.file_id
-                                                        ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}`
-                                                        : avatar.url;
-                                                    return (
-                                                        <div key={i} className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 dark:bg-slate-800 overflow-hidden shrink-0 shadow-lg">
-                                                            <img
-                                                                src={src}
-                                                                alt="Partner"
-                                                                className="w-full h-full object-cover"
-                                                                onError={(e) => {
-                                                                    // Fallback if image fails to load
-                                                                    e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`;
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )
-                                                })}
+                                        <m.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
+                                            transition={{ delay: 0.6 }}
+                                            className="relative overflow-hidden p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 group"
+                                        >
+                                            <div className="absolute inset-0 bg-linear-to-r from-rose-500/5 via-transparent to-rose-500/5 animate-pulse" />
+                                            <div className="flex items-center gap-3 relative z-10">
+                                                <div className="relative flex h-3 w-3 shrink-0">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600" />
+                                                </div>
+                                                <p className="text-xs sm:text-sm font-black text-rose-400 uppercase tracking-wide leading-tight group-hover:text-rose-300 transition-colors">
+                                                    {t('marketing:income.math.fomo_line')}
+                                                </p>
                                             </div>
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-1">
-                                                    <AnimatePresence mode="wait">
-                                                        <m.span
-                                                            key={liveCount}
-                                                            initial={{ y: -5, opacity: 0 }}
-                                                            animate={{ y: 0, opacity: 1 }}
-                                                            exit={{ y: 5, opacity: 0 }}
-                                                            transition={{ duration: 0.2 }}
-                                                            className="text-label font-bold text-slate-900 dark:text-white leading-none"
-                                                        >
-                                                            {liveCount.toLocaleString()}
-                                                        </m.span>
-                                                    </AnimatePresence>
-                                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{t('common:active')}</span>
+                                        </m.div>
+                                    </div>
+
+                                    {/* Live Social Proof & CTA */}
+                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                                        <div className="flex-1 flex items-center justify-between bg-white/5 backdrop-blur-md rounded-2xl px-5 py-3 border border-white/10">
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex -space-x-3">
+                                                    {displayAvatars.map((avatar, i) => {
+                                                        const src = avatar.file_id
+                                                            ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}`
+                                                            : avatar.url;
+                                                        return (
+                                                            <div key={i} className="w-9 h-9 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-2xl transition-transform hover:-translate-y-1 hover:z-20">
+                                                                <img
+                                                                    src={src}
+                                                                    alt="Partner"
+                                                                    className="w-full h-full object-cover"
+                                                                    onError={(e) => {
+                                                                        e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`;
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <div className="flex items-center gap-2">
+                                                        <AnimatePresence mode="wait">
+                                                            <m.span
+                                                                key={liveCount}
+                                                                initial={{ y: -5, opacity: 0 }}
+                                                                animate={{ y: 0, opacity: 1 }}
+                                                                exit={{ y: 5, opacity: 0 }}
+                                                                className="text-lg font-black text-white leading-none"
+                                                            >
+                                                                {liveCount.toLocaleString()}
+                                                            </m.span>
+                                                        </AnimatePresence>
+                                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">{t('common:active')}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className="hidden sm:flex flex-col items-end">
+                                                <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-1.5 rounded-xl border border-amber-500/30">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                                    <span className="text-amber-400 font-black text-[10px] tracking-widest uppercase">
+                                                        {t('marketing:income.math.spots_left', { count: slotsLeft })}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-col items-end">
-                                            <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
-                                                <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
-                                                <span className="text-amber-600 dark:text-amber-500 font-bold text-label tracking-tight">
-                                                    {t('marketing:income.math.spots_left', { count: slotsLeft })}
-                                                </span>
-                                            </div>
-                                        </div>
+                                        <m.button
+                                            whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => {
+                                                localStorage.setItem('auto_purchase_pro', 'true');
+                                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                                onNavigateToPartner?.();
+                                            }}
+                                            className="bg-linear-to-r from-emerald-500 to-blue-600 text-white font-black h-14 sm:h-auto sm:px-8 py-4 rounded-2xl text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/20 transition-all uppercase group"
+                                        >
+                                            {t('marketing:income.math.cta_urgency')}
+                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                                        </m.button>
                                     </div>
-
-                                    <m.button
-                                        whileHover={{ scale: 1.01 }}
-                                        whileTap={{ scale: 0.99 }}
-                                        onClick={() => {
-                                            localStorage.setItem('auto_purchase_pro', 'true');
-                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                            onNavigateToPartner?.();
-                                        }}
-                                        className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-bold h-10 rounded-xl text-label tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
-                                    >
-                                        {t('marketing:income.math.cta_urgency')}
-                                        <ArrowRight className="w-3.5 h-3.5" />
-                                    </m.button>
                                 </div>
                             </div>
                         </m.div>
@@ -578,69 +589,71 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                {!isStrategyUnlocked ? (
-                    <div className="pt-4 relative z-10">
-                        <button
-                            onClick={() => {
-                                localStorage.setItem('auto_purchase_pro', 'true');
-                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                onNavigateToPartner?.();
-                            }}
-                            className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
-                        >
-                            <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
-                                {t('income.math.cta_urgency')}
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
-                            </span>
-                            {/* Glass overlay */}
-                            <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
-                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
-                        </button>
-                        <p className="text-center mt-6 text-label font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
-                            {t('income.cta.beta')}
-                        </p>
-                    </div>
-                ) : (
-                    /* Post-Unlock Content: "Lead the Market" Button Redesign */
-                    <div className="pt-4 relative z-10 text-center">
-                        <m.button
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
-                        >
-                            {t('income.cta.lead')}
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
-                        </m.button>
-                        <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
-                            {t('income.cta.unlocked')}
-                        </p>
+                {
+                    !isStrategyUnlocked ? (
+                        <div className="pt-4 relative z-10">
+                            <button
+                                onClick={() => {
+                                    localStorage.setItem('auto_purchase_pro', 'true');
+                                    setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                    onNavigateToPartner?.();
+                                }}
+                                className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
+                            >
+                                <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
+                                    {t('income.math.cta_urgency')}
+                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                                </span>
+                                {/* Glass overlay */}
+                                <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
+                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                            </button>
+                            <p className="text-center mt-6 text-label font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
+                                {t('income.cta.beta')}
+                            </p>
+                        </div>
+                    ) : (
+                        /* Post-Unlock Content: "Lead the Market" Button Redesign */
+                        <div className="pt-4 relative z-10 text-center">
+                            <m.button
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
+                            >
+                                {t('income.cta.lead')}
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                            </m.button>
+                            <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
+                                {t('income.cta.unlocked')}
+                            </p>
 
-                        <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
-                            <div className="flex items-center justify-center gap-4">
-                                <div className="flex -space-x-2">
-                                    {[1, 2, 3, 4].map(i => {
-                                        const gender = i % 2 === 0 ? 'men' : 'women';
-                                        return (
-                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
-                                                <img src={`https://randomuser.me/api/portraits/${gender}/${i + 20}.jpg`} alt="user" className="w-full h-full object-cover" />
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                <div className="text-left">
-                                    <div className="text-label font-bold text-slate-900 dark:text-white leading-none">
-                                        {t('marketing:income.math.people_joining_count', '12,402+ PARTNERS', { val: '12,402+' })}
+                            <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
+                                <div className="flex items-center justify-center gap-4">
+                                    <div className="flex -space-x-2">
+                                        {[1, 2, 3, 4].map(i => {
+                                            const gender = i % 2 === 0 ? 'men' : 'women';
+                                            return (
+                                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
+                                                    <img src={`https://randomuser.me/api/portraits/${gender}/${i + 20}.jpg`} alt="user" className="w-full h-full object-cover" />
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                    <div className="text-label font-bold text-slate-500 uppercase tracking-wider">
-                                        {t('marketing:income.math.joined_protocol', 'JOINED THE $1/MIN PROTOCOL TODAY')}
+                                    <div className="text-left">
+                                        <div className="text-label font-bold text-slate-900 dark:text-white leading-none">
+                                            {t('marketing:income.math.people_joining_count', '12,402+ PARTNERS', { val: '12,402+' })}
+                                        </div>
+                                        <div className="text-label font-bold text-slate-500 uppercase tracking-wider">
+                                            {t('marketing:income.math.joined_protocol', 'JOINED THE $1/MIN PROTOCOL TODAY')}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )}
-            </m.div>
+                    )
+                }
+            </m.div >
             {/* Info Modals Portal */}
             {
                 typeof document !== 'undefined' && ReactDOM.createPortal(
@@ -783,6 +796,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     document.body
                 )
             }
-        </section>
+        </section >
     );
 };
