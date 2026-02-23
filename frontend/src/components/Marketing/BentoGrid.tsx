@@ -112,7 +112,7 @@ export const BentoGrid = () => {
     };
 
     return (
-        <section className="px-0 py-8 flex flex-col relative min-h-[400px]">
+        <section className="px-0 py-4 flex flex-col relative z-50 min-h-[400px]">
             {/* Carousel Container */}
             <div className="relative w-full h-[380px]">
                 <div
@@ -134,11 +134,10 @@ export const BentoGrid = () => {
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-900/90 shadow-2xl glass-panel-premium will-change-transform ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border-2 border-slate-700 dark:border-white/20 bg-[#1e293b] shadow-2xl will-change-transform ${step.featured ? 'border-blue-500/50' : ''}`}
                                     style={{
                                         transform: flippedCards[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                                        opacity: flippedCards[index] ? 0 : 1,
-                                        transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease-out'
+                                        transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'
                                     }}
                                 >
                                     <div className="absolute inset-0 p-7 h-full w-full">
@@ -186,11 +185,10 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-900/90 shadow-2xl glass-panel-premium will-change-transform ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border-2 border-slate-700 dark:border-white/20 bg-[#1e293b] shadow-2xl will-change-transform ${step.featured ? 'border-blue-500/50' : ''}`}
                                     style={{
                                         transform: flippedCards[index] ? 'rotateY(0deg)' : 'rotateY(-180deg)',
-                                        opacity: flippedCards[index] ? 1 : 0,
-                                        transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease-out'
+                                        transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'
                                     }}
                                 >
                                     <div className="absolute inset-0 p-7 flex flex-col text-center justify-center items-center h-full w-full">

@@ -410,7 +410,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     const [cryptoItems, setCryptoItems] = React.useState<any[]>([]);
     const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
-    const { t } = useTranslation(['common', 'social']);
+    const { t } = useTranslation(['social', 'common']);
 
     React.useEffect(() => {
         const fetchData = async () => {
