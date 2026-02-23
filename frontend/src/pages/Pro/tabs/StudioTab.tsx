@@ -347,8 +347,10 @@ export const StudioTab = ({
 
     const getCleanShareText = () => {
         if (!generatedResult) return '';
+        // Handle literal \n glitch
+        const sanitizedBody = generatedResult.body.replace(/\\n/g, '\n');
         // Convert Markdown links [text](url) to "text: url" for plain text sharing
-        const cleanBody = generatedResult.body.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
+        const cleanBody = sanitizedBody.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
 
         let text = `🔥 ${generatedResult.title} 🔥\n\n${cleanBody}`;

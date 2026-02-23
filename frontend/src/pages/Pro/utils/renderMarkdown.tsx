@@ -7,15 +7,18 @@ import React from 'react';
 export const renderMarkdown = (text: string, isInline = false) => {
     if (!text) return null;
 
+    // Pre-process to handle literal \n characters common in AI streamer content
+    const sanitizedText = text.replace(/\\n/g, '\n').replace(/\n\s*\n/g, '\n\n');
+
     // Inline mode: just return a span with minimal processing
     if (isInline) {
-        const html = processMarkdown(text).replace(/\n/g, ' ');
+        const html = processMarkdown(sanitizedText).replace(/\n/g, ' ');
         return <span dangerouslySetInnerHTML={{ __html: html }} />;
     }
 
     // Full mode: Split into blocks for proper paragraph/header handling
     // Split by ANY newline sequence to handle single-spaced content better
-    const blocks = text.trim().split(/\n+/);
+    const blocks = sanitizedText.trim().split(/\n+/);
 
     return (
         <div className="space-y-3 text-[13px] text-slate-600 dark:text-slate-400">
