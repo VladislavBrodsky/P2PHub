@@ -33,17 +33,23 @@
     animation: text-shimmer 4s linear infinite;
   }
 
-  /* Premium Shimmers */
-  /* Optimized Shimmer using Transform (GPU) */
-  @keyframes shimmer-swipe {
-    0% {
-      transform: translateX(-100%) skewX(-15deg);
-    }
+}
 
-    100% {
-      transform: translateX(200%) skewX(-15deg);
-    }
+/* Close @layer utilities */
+
+/* Premium Shimmers */
+/* Optimized Shimmer using Transform (GPU) */
+@keyframes shimmer-swipe {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
   }
+
+  100% {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+@layer utilities {
 
   .shimmer-platinum {
     position: relative;
@@ -89,42 +95,46 @@
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
     animation: pulse-glow-blue 2s infinite ease-in-out;
   }
+}
 
-  @keyframes pulse-glow-blue {
+/* Close @layer utilities */
 
-    0%,
-    100% {
-      opacity: 0.6;
-      transform: scale(1);
-    }
+@keyframes pulse-glow-blue {
 
-    50% {
-      opacity: 1;
-      transform: scale(1.05);
-    }
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
   }
 }
 
-.animate-scan {
-  animation: scan 2s linear infinite;
-}
+@layer utilities {
+  .animate-scan {
+    animation: scan 2s linear infinite;
+  }
 
-.animate-liquid {
-  animation: liquid 8s ease-in-out infinite;
-  background-size: 200% 200%;
-}
+  .animate-liquid {
+    animation: liquid 8s ease-in-out infinite;
+    background-size: 200% 200%;
+  }
 
-.animate-liquid-fast {
-  animation: liquid 4s linear infinite;
-  background-size: 200% 200%;
-}
+  .animate-liquid-fast {
+    animation: liquid 4s linear infinite;
+    background-size: 200% 200%;
+  }
 
-.animate-gradient-xy {
-  animation: liquid 3s ease infinite;
-  background-size: 200% 200%;
-}
+  .animate-gradient-xy {
+    animation: liquid 3s ease infinite;
+    background-size: 200% 200%;
+  }
 
-.animate-vibing {
-  /* Simplified vibing */
-  animation: pulse-glow 4s ease-in-out infinite;
+  .animate-vibing {
+    /* Simplified vibing */
+    animation: pulse-glow 4s ease-in-out infinite;
+  }
 }
