@@ -125,7 +125,8 @@ export const BentoGrid = () => {
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
-                            className={`relative shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center cursor-pointer transition-all duration-300 ${flippedCards[index] ? 'z-50' : 'z-10'}`}
+                            style={{ height: '380px' }}
+                            className={`relative shrink-0 w-[300px] sm:w-[340px] snap-center cursor-pointer ${flippedCards[index] ? 'z-50' : 'z-10'}`}
                             onClick={() => toggleFlip(index)}
                         >
                             <m.div
@@ -134,13 +135,11 @@ export const BentoGrid = () => {
                                     opacity: 1,
                                     scale: 1,
                                     transition: {
-                                        type: "spring",
-                                        stiffness: 260,
-                                        damping: 30,
+                                        duration: 0.4,
                                         delay: index * 0.05
                                     }
                                 }}
-                                viewport={{ once: true, margin: "-5%" }}
+                                viewport={{ once: true }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                                 className="w-full h-full relative"
