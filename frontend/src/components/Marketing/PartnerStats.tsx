@@ -234,7 +234,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         >
                             <span className="text-slate-900 dark:text-white font-black">
                                 +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
-                            </span> joined the community in the past 60 minutes
+                            </span> joined Partner Center in the past 60 minutes
                         </Trans>
                     </p>
                 </div>
