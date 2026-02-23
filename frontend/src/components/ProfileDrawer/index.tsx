@@ -129,7 +129,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                     <ArrowLeft className="h-5 w-5" />
                                 </button>
                                 <div className="text-label font-bold uppercase tracking-[0.2em] text-text-secondary">
-                                    {t('common.menu')}
+                                    {t('menu')}
                                 </div>
                                 <div className="w-9" />
                             </div>

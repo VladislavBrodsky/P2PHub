@@ -13,6 +13,9 @@
     "tokens_left": "{{count}} TOKENS",
     "tokens_label": "tokens",
     "system_offline": "System offline",
+    "syncing_nodes": "Syncing with Global Nodes...",
+    "studio_header_title": "Viral Marketing",
+    "studio_header_highlight": "Studio",
     "analytics": {
       "cabinet_title": "Analytics",
       "decrypting": "Collecting performance data...",
@@ -205,6 +208,13 @@
       "channel_id": "Channel ID (TG)",
       "test_btn": "Test Signal",
       "save_btn": "SAVE SETTINGS",
+      "referral_link_prefix_error": "Referral link must start with 'https://t.me/pintopaybot?start='",
+      "tg_sync_success_msg": "Telegram sync verified.",
+      "tg_sync_error_msg": "Failed to verify Telegram status.",
+      "pro_node_limit_desc": "Single channel on PRO. Upgrade to PRO+ for 5-channel sync.",
+      "x_broadcast_title": "X Global Broadcast",
+      "x_broadcast_desc": "Autonomous API integration for persistent profile presence.",
+      "x_broadcast_plus_desc": "High-impact viral distribution. PRO+ supports up to 3 accounts.",
       "global_integration": "Global Integration",
       "instructions_title": "Setup Instructions",
       "protocol_title": "Setup Protocol",
@@ -453,7 +463,9 @@
       "audit_success_msg": "Market intelligence dossier updated.",
       "audit_force_success_msg": "Fresh intelligence acquired (-3 Tokens).",
       "module_complete_title": "Module Complete",
-      "module_complete_msg": "XP Earned! Tokens updated."
+      "module_complete_msg": "XP Earned! Tokens updated.",
+      "headline_copied": "Headline copied to clipboard.",
+      "bio_copied": "Bio copied to clipboard."
     },
     "tools": {
       "headline": {
@@ -463,7 +475,9 @@
         "placeholder": "e.g., How to buy Bitcoin",
         "btn": "Rewrite Headline",
         "neural_desc": "Our neural engine analyzes current high-performing hooks and adapts your headline to trigger curiosity loops.",
-        "info": "Advanced linguistic patterns and curiosity loop engineering."
+        "info": "Advanced linguistic patterns and curiosity loop engineering.",
+        "synthesized_title": "Synthesized Headline",
+        "curiosity_loop": "Curiosity Loop Engineering"
       },
       "bio": {
         "title": "Viral Bio Generator",
@@ -471,8 +485,12 @@
         "label": "Your Current Bio",
         "placeholder": "Enter your current bio or short description...",
         "btn": "Synthesize Bio",
-        "neural_desc": "Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'."
+        "neural_desc": "Optimizes your social identity for conversion. High-converters focus on the 'Benefit' first, not the 'Feature'.",
+        "synthesized_title": "Synthesized Bio",
+        "persona_sync": "High-Conversion Persona Sync"
       },
+      "copy_btn": "Copy to Clipboard",
+      "processing": "Synthesizing...",
       "trends": {
         "title": "2026 Trend Hunter",
         "desc": "Top 3 viral topics right now. (3 Tokens)",

@@ -150,7 +150,7 @@ export const MilestonePath = () => {
 
                             <div className="text-center space-y-0.5 sm:space-y-1 relative z-10 w-full">
                                 <span className={`text-label sm:text-label font-bold uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
-                                    {t('common.lvl')} {item.level}
+                                    {t('lvl')} {item.level}
                                 </span>
                                 <h5 className={`text-label sm:text-caption font-bold leading-tight line-clamp-3 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (

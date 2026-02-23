@@ -443,7 +443,7 @@ export const ProDashboard = () => {
                         </motion.div>
                         <div className="space-y-0.5 flex flex-col items-start text-left">
                             <h1 className="text-[16px] sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center gap-2 whitespace-nowrap">
-                                Viral Marketing <span className="vibing-crystal-text drop-shadow-sm">Studio</span>
+                                {t('pro_dashboard.studio_header_title')} <span className="vibing-crystal-text drop-shadow-sm">{t('pro_dashboard.studio_header_highlight')}</span>
                             </h1>
                             <div className="flex items-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
@@ -521,7 +521,7 @@ export const ProDashboard = () => {
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">Syncing with Global Nodes...</p>
+                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">{t('pro_dashboard.syncing_nodes')}</p>
                         </div>
                     ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">

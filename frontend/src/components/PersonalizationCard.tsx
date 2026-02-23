@@ -107,7 +107,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 {user?.photo_url && !imgError ? (
                                     <img
                                         src={user.photo_url}
-                                        alt={`${user.first_name || 'Partner'}'s avatar`}
+                                        alt={`${user.first_name || t('partner_fallback')}'s avatar`}
                                         className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-110' : ''}`}
                                         onLoad={() => setImageLoaded(true)}
                                         loading="eager"
@@ -146,7 +146,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                     <div className="flex flex-col items-start gap-1 flex-1 min-w-0 overflow-hidden">
                         <div className="flex items-center gap-2 w-full">
                             {(() => {
-                                const firstName = user?.first_name || 'Partner';
+                                const firstName = user?.first_name || t('partner_fallback');
                                 const lastName = user?.last_name || '';
                                 const fullName = `${firstName} ${lastName}`.trim();
                                 const displayName = fullName.length > 20 ? firstName : fullName;

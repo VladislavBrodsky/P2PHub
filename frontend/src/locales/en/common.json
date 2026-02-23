@@ -9,6 +9,7 @@
   "dark": "Dark",
   "back": "Back",
   "hi": "Hi",
+  "partner_fallback": "Partner",
   "copy": "Copy",
   "close": "Close",
   "copied": "Copied",
@@ -308,9 +309,5 @@
     "cta": {
       "join": "JOIN NOW"
     }
-  },
-  "common": {
-    "menu": "Menu",
-    "lvl": "Lvl"
   }
 }

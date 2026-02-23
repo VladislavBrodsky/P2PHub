@@ -55,7 +55,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     >
                         <Menu className="text-text-primary h-[18px] w-[18px] transition-transform group-hover:scale-110" />
                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-primary">
-                            {t('common.menu')}
+                            {t('menu')}
                         </span>
                     </button>
 
@@ -67,7 +67,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1">
-                            <span className="text-label font-bold uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('common.lvl')}</span>
+                            <span className="text-label font-bold uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('lvl')}</span>
                             <span className="text-caption font-bold text-text-primary leading-none">
                                 {user?.level ?? 1}
                             </span>

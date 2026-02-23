@@ -100,7 +100,7 @@ export const EarnHeader = () => {
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
                                 <span className="text-label font-bold uppercase tracking-[0.18em] text-text-primary opacity-40 leading-none mb-0.5">
-                                    {t('common.lvl')}
+                                    {t('lvl')}
                                 </span>
                                 <motion.span
                                     key={level}
@@ -140,15 +140,15 @@ export const EarnHeader = () => {
                     <div className="flex-1 flex flex-col gap-2 sm:gap-2.5 min-w-0">
 
                         {/* XP Progress header row */}
-                        <div className="flex items-baseline justify-between px-0.5 mb-0.5 sm:mb-0 gap-2">
-                            <span className="text-label sm:text-label font-bold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-none shrink-0">
+                        <div className="flex items-baseline flex-wrap gap-x-2 gap-y-0.5 px-0.5 mb-0.5 sm:mb-0">
+                            <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.14em] text-text-primary opacity-40 leading-none shrink-0">
                                 {t('referral.xp_progress')}
                             </span>
                             <motion.span
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-label sm:text-xs font-bold text-text-primary transition-colors tabular-nums whitespace-nowrap"
+                                className="text-label sm:text-xs font-bold text-text-primary transition-colors tabular-nums whitespace-nowrap ml-auto"
                             >
                                 {Math.floor(progress.current).toLocaleString()} <span className="opacity-30">/</span> {Math.floor(progress.total).toLocaleString()} <span className="opacity-40 font-bold">XP</span>
                             </motion.span>
@@ -201,7 +201,7 @@ export const EarnHeader = () => {
                                         style={{ background: 'rgba(251,191,36,0.15)' }}>
                                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
                                     </div>
-                                    <span className="text-label sm:text-label font-bold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
+                                    <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.12em] text-text-primary opacity-40 leading-tight min-w-0">
                                         {t('referral.partners')}
                                     </span>
                                 </div>
@@ -228,7 +228,7 @@ export const EarnHeader = () => {
                                         style={{ background: `${badgeColor}22` }}>
                                         <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" style={{ color: badgeColor }} />
                                     </div>
-                                    <span className="text-label sm:text-label font-bold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-text-primary opacity-40 leading-tight truncate">
+                                    <span className="text-label font-bold uppercase tracking-[0.08em] sm:tracking-[0.12em] text-text-primary opacity-40 leading-tight min-w-0">
                                         {t('referral.total_xp')}
                                     </span>
                                 </div>
