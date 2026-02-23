@@ -31,7 +31,7 @@ interface ProfileDrawerProps {
 
 export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDrawerProps) {
     const { selection } = useHaptic();
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { user } = useUser();
 
     const [copied, setCopied] = React.useState(false);

@@ -15,7 +15,7 @@ interface PulseItem {
 }
 
 export const PulseBanner = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { isFooterVisible, isKeyboardOpen } = useUI();
     const [pulse, setPulse] = useState<PulseItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);

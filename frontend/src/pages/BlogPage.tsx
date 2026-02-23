@@ -463,7 +463,7 @@ const BlogDetail = ({
     post, allPosts, engagement, isLoading, onBack, onLike, onShare,
     onNext, onPrev, setActiveTab, onPostClick
 }: BlogDetailProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('marketing');
     const { selection } = useHaptic();
     const [scrollProgress, setScrollProgress] = useState(0);
 

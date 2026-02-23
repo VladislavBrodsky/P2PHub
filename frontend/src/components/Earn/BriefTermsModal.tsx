@@ -12,7 +12,7 @@ interface BriefTermsModalProps {
 }
 
 export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation('social');
     const { setFooterVisible, setHeaderVisible } = useUI();
 
     useTMALock(isOpen);

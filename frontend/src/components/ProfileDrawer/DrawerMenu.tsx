@@ -24,7 +24,7 @@ interface DrawerMenuProps {
 }
 
 export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('common');
     const { user } = useUser();
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);

@@ -5,7 +5,7 @@ import { X, Shield, FileText, Scale } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 
 export const Footer = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const [activeDoc, setActiveDoc] = useState<'terms' | 'privacy' | null>(null);
 
     const docContent = {

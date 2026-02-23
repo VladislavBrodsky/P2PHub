@@ -45,7 +45,7 @@ import { useUI } from './context/UIContext';
 const DashboardSkeleton = lazy(() => import('./components/Skeletons/DashboardSkeleton').then(m => ({ default: m.DashboardSkeleton })));
 
 function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { config } = useConfig();
     const { isSupportOpen, setSupportOpen } = useUI();
     const [activeTab, setActiveTab] = useState('home');

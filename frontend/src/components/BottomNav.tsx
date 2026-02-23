@@ -9,7 +9,7 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ activeTab, setActiveTab, prefetchPages }: BottomNavProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
 
     const prefetch = (tab: string) => {
         if (prefetchPages && prefetchPages[tab]) {

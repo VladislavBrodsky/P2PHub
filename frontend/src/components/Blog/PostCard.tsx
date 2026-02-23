@@ -33,7 +33,7 @@ function renderExcerpt(text: string): string {
 }
 
 export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogEngagement; index: number; onClick: () => void }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('marketing');
 
     return (
         <motion.div
