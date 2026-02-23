@@ -120,32 +120,31 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex items-center gap-4 overflow-x-auto overflow-y-hidden pb-6 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
+                    className="flex items-start gap-4 overflow-x-auto overflow-y-hidden pt-4 pb-12 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000"
                 >
                     {shiftSteps.map((step, index) => (
-                        <m.div
+                        <div
                             key={index}
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            whileInView={{
-                                opacity: 1,
-                                scale: 1,
-                                y: 0,
-                                transition: {
-                                    type: "spring",
-                                    stiffness: 260,
-                                    damping: 30,
-                                    delay: index * 0.05
-                                }
-                            }}
-                            viewport={{ once: true, margin: "-5%" }}
-                            className={`relative group shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center perspective-1000 cursor-pointer ${flippedCards[index] ? 'z-50' : 'z-10'}`}
+                            className={`relative shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center cursor-pointer transition-all duration-300 ${flippedCards[index] ? 'z-50' : 'z-10'}`}
                             onClick={() => toggleFlip(index)}
-                            whileHover={{ scale: 1.01 }}
-                            whileTap={{ scale: 0.98 }}
                         >
-                            <div
-                                style={{ transformStyle: "preserve-3d" }}
+                            <m.div
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                whileInView={{
+                                    opacity: 1,
+                                    scale: 1,
+                                    transition: {
+                                        type: "spring",
+                                        stiffness: 260,
+                                        damping: 30,
+                                        delay: index * 0.05
+                                    }
+                                }}
+                                viewport={{ once: true, margin: "-5%" }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 className="w-full h-full relative"
+                                style={{ transformStyle: "preserve-3d" }}
                             >
                                 {/* FRONT SIDE */}
                                 <div
@@ -226,8 +225,8 @@ export const BentoGrid = () => {
                                         </button>
                                     </div>
                                 </div>
-                            </div>
-                        </m.div>
+                            </m.div>
+                        </div>
                     ))}
                 </div>
 
