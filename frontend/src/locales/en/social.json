@@ -294,6 +294,28 @@
         "milestone_100": "Summit: The Physical Platinum Card is yours."
       },
       "next_milestones": "Next Goals"
+    },
+    "brief": {
+      "btn": "Terms & Guide",
+      "title": "Partner Guide",
+      "guide": "Practical recommendations",
+      "read_line1": "Read",
+      "read_line2": "Guide",
+      "goal_title": "Our Goal",
+      "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
+      "manual_title": "Path to Success",
+      "manual_step_1": "Share your personal growth link or QR code.",
+      "manual_step_2": "Help partners activate cards and PRO status.",
+      "manual_step_3": "Track progress and scale with the Content Studio.",
+      "rules_title": "Growth Rules",
+      "rule_1_title": "Transparency First",
+      "rule_1_desc": "Be honest about the opportunities and risks.",
+      "rule_2_title": "Community Focus",
+      "rule_2_desc": "Support your partners on their journey.",
+      "antibot_active": "ANTI-BOT ACTIVE",
+      "motivation_title": "Start Building",
+      "motivation_desc": "Your future in the digital economy starts with the first member.",
+      "cta": "I UNDERSTAND"
     }
   },
   "ranks": {
@@ -388,27 +410,5 @@
       "outflow_short": "Out",
       "failed_load": "Failed to load stats."
     }
-  },
-  "brief": {
-    "btn": "Terms & Guide",
-    "title": "Partner Guide",
-    "guide": "Practical recommendations",
-    "read_line1": "Read",
-    "read_line2": "Guide",
-    "goal_title": "Our Goal",
-    "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
-    "manual_title": "Path to Success",
-    "manual_step_1": "Share your personal growth link or QR code.",
-    "manual_step_2": "Help partners activate cards and PRO status.",
-    "manual_step_3": "Track progress and scale with the Content Studio.",
-    "rules_title": "Growth Rules",
-    "rule_1_title": "Transparency First",
-    "rule_1_desc": "Be honest about the opportunities and risks.",
-    "rule_2_title": "Community Focus",
-    "rule_2_desc": "Support your partners on their journey.",
-    "antibot_active": "ANTI-BOT ACTIVE",
-    "motivation_title": "Start Building",
-    "motivation_desc": "Your future in the digital economy starts with the first member.",
-    "cta": "I UNDERSTAND"
   }
 }

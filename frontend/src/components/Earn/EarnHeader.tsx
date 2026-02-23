@@ -23,7 +23,7 @@ export const EarnHeader = () => {
     const badgeColor = rank.badgeColor;
 
     return (
-        <section className="relative overflow-hidden rounded-2xl p-px shadow-xl z-30">
+        <section className="relative rounded-2xl p-px shadow-xl z-30">
             {/* Outer border gradient ring */}
             <div
                 className="absolute inset-0 rounded-2xl opacity-70"
@@ -33,7 +33,7 @@ export const EarnHeader = () => {
             />
 
             {/* Card body */}
-            <div className="relative rounded-[0.95rem] bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass">
+            <div className="relative rounded-[0.95rem] bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass h-full">
 
                 {/* ── Ambient glows ── */}
                 <div
@@ -148,7 +148,7 @@ export const EarnHeader = () => {
                                 key={progress.current}
                                 initial={{ opacity: 0, x: 6 }}
                                 animate={{ opacity: 1, x: 0 }}
-                                className="text-xs sm:text-sm font-bold text-text-primary text-right tabular-nums ml-2 truncate"
+                                className="text-xs sm:text-sm font-bold text-text-primary text-right tabular-nums ml-2 whitespace-nowrap"
                             >
                                 {Math.floor(progress.current).toLocaleString()} <span className="opacity-40 font-normal">/</span> {Math.floor(progress.total).toLocaleString()} <span className="text-[9px] sm:text-[10px] opacity-60 font-bold ml-0.5">XP</span>
                             </motion.span>

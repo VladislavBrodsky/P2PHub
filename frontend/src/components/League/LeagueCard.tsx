@@ -87,10 +87,10 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                         <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${config.textColor}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <span className="text-label sm:text-label font-bold uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap truncate">
+                        <span className="text-[10px] sm:text-label font-bold uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-2xl sm:text-3xl font-bold tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap truncate`}>{config.name}</h2>
+                        <h2 className={`text-xl sm:text-3xl font-bold tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap`}>{config.name}</h2>
                     </div>
                     {(subscription_plan || '').includes('PLUS') && (
                         <div className="ml-auto shrink-0 pl-2">

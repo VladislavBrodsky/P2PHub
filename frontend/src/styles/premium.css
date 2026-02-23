@@ -423,7 +423,7 @@
 }
 
 .dark .circuit-decor {
-  opacity: 0.15;
+  opacity: 0.25;
 }
 
 @keyframes pulse-ring {

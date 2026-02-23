@@ -196,6 +196,21 @@
       "access_token_secret": "Token Secret",
       "syncing_btn": "SYNCING...",
       "deploy_btn": "DEPLOY NODE",
+      "teaser": {
+        "title": "Elite <1>Sync</1> Ecosystem",
+        "desc": "Upgrade to PRO+ to unlock the full neural broadcasting stack.",
+        "feat_tg": "5x TG Channels",
+        "feat_tg_detail": "Mass-syncing",
+        "feat_omni": "Omni-Channel",
+        "feat_omni_detail": "7+ Networks",
+        "feat_li": "LinkedIn",
+        "feat_li_detail": "Authority Node",
+        "feat_ai": "Ultra AI",
+        "feat_ai_detail": "Advanced Models",
+        "feat_dc": "Discord",
+        "feat_dc_detail": "Community Node",
+        "cta": "GET PRO+ STATUS"
+      },
       "multi_sync": {
         "title": "Telegram Multi-Sync",
         "desc": "Sync up to 5 channels simultaneously (PRO+).",
@@ -290,6 +305,64 @@
           {
             "title": "Step 4: Long-Lived Token",
             "desc": "Exchange your short-lived token for a long-lived one (60 days) in the Access Token Tool. Paste it into the Facebook Node field."
+          }
+        ]
+      },
+      "linkedin_manual": {
+        "title": "LinkedIn Professional Sync",
+        "subtitle": "Authority Node Access",
+        "steps": [
+          {
+            "title": "Step 1: Developer Account",
+            "desc": "Go to the [LinkedIn Developer Portal](https://developers.linkedin.com/ ) and create a new 'P2PHub Elite' application."
+          },
+          {
+            "title": "Step 2: Product Request",
+            "desc": "In app settings, go to 'Products' and request 'Share on LinkedIn' and 'Sign In with LinkedIn'. Usually approved instantly."
+          },
+          {
+            "title": "Step 3: Token Generation",
+            "desc": "Go to the 'Auth' tab. Use the [Token Generator Tool](https://www.linkedin.com/developers/tools/oauth/token-generator ), select your app and required scopes."
+          },
+          {
+            "title": "Step 4: Integration",
+            "desc": "Copy the 'Access Token' and paste it into the LinkedIn field in the [PRO+ Setup] window."
+          }
+        ]
+      },
+      "pinterest_manual": {
+        "title": "Pinterest Visual Sync",
+        "subtitle": "Global Creative Node",
+        "steps": [
+          {
+            "title": "Step 1: Pinterest Developers",
+            "desc": "Log in to the [Pinterest Developer Portal](https://developers.pinterest.com/ ) and create a new application."
+          },
+          {
+            "title": "Step 2: App Permissions",
+            "desc": "Go to 'Apps' > 'Click your App' > 'Tokens'. Ensure `pins:read` and `pins:write` are enabled."
+          },
+          {
+            "title": "Step 3: Generate Token",
+            "desc": "Click 'Generate Token'. Copy the resulting string and paste it into the Pinterest field."
+          }
+        ]
+      },
+      "threads_manual": {
+        "title": "Threads Viral Sync",
+        "subtitle": "Meta Ecosystem Access",
+        "steps": [
+          {
+            "title": "Step 1: Meta for Developers",
+            "desc": "Go to [Meta for Developers](https://developers.facebook.com/ ) and create a 'Threads' type application."
+          },
+          {
+            "title": "Step 2: Threads API Setup",
+            "desc": "Configure the 'Threads API' product. Add your Threads account as a 'Tester' in the app dashboard."
+          },
+          {
+            "title": "Step 3: Access Token",
+            "desc": "Follow the 'User Token' flow in the Threads API documentation to create a long-lived access token. Paste it here to sync."
           }
         ]
       },
@@ -887,7 +960,47 @@
             "Format: .PSD / .FIG (Layered)",
             "Lighting: Realistic Ray-Tracing",
             "License: Global Unrestricted"
-          ]
+          ],
+          "usage": "Use this as a background in your lifestyle photos or videos to showcase instant liquidity without traditional banks."
+        },
+        {
+          "id": "logos",
+          "title": "2026 LOGO SYSTEM",
+          "hook": "High-Visibility Vectors",
+          "desc": "Master logos in Platinum, Gold, and 0xBlack. Optimized for social profiles and elite print.",
+          "specs": [
+            "Formats: .SVG / .PNG (Alpha)",
+            "Variations: Main / Simple / Text",
+            "Grid: 8px Pixel-Perfect",
+            "Safe Zone: 20px Clearance"
+          ],
+          "usage": "Maintain 20px of clear space around the logo. Do not alter the aspect ratio of 'P2PHub'."
+        },
+        {
+          "id": "identity",
+          "title": "IDENTITY SUITE",
+          "hook": "Inter & Onest Typefaces",
+          "desc": "The typography of decentralized power. Clean, mathematical, and authoritative. Built for 2026 readability.",
+          "specs": [
+            "Weights: Thin to Black",
+            "Languages: Latin & Cyrillic",
+            "Type: Variable OpenType",
+            "Optimization: Mobile Display Phase 4"
+          ],
+          "usage": "Use Inter for body text and Onest for headlines to achieve the Elite Network signature style."
+        },
+        {
+          "id": "palette",
+          "title": "COLOR STANDARD",
+          "hook": "Acid Yellow & Deep Slate",
+          "desc": "A high-contrast palette designed to signal authority and momentum in modern FinTech.",
+          "specs": [
+            "Primary: #D9FF00 (Acid)",
+            "Surface: #0F172A (Slate)",
+            "Accent: #6366F1 (Indigo)",
+            "Success: #10B981 (Emerald)"
+          ],
+          "usage": "Use Acid Yellow sparingly for Call-to-Actions. Slate should remain the primary surface for dark mode."
         }
       ]
     },

@@ -90,4 +90,29 @@
       pointer-events: none;
     }
   }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #3b82f6 rgba(255, 255, 255, 0.05);
+
+    &::-webkit-scrollbar {
+      height: 6px !important;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border-radius: 10px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #3b82f6 !important;
+      border-radius: 10px !important;
+      border: 2px solid transparent !important;
+      background-clip: content-box !important;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: #60a5fa !important;
+    }
+  }
 }

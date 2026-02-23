@@ -317,7 +317,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </button>
                             </div>
 
-                            <ReferralGraph />
+                            <ReferralGraph targetAmount={estimatedMonthlyRaw} />
 
                             <div className="text-center h-12 flex items-center justify-center">
                                 <AnimatePresence mode="wait">

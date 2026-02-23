@@ -8,7 +8,7 @@ import { useNotificationStore } from '../../store/useNotificationStore';
 import { useHaptic } from '../../hooks/useHaptic';
 import clsx from 'clsx';
 
-export const ReferralGraph = () => {
+export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number }) => {
     const { t } = useTranslation(['marketing', 'common']);
     const { user } = useUser();
     const { selection, impact } = useHaptic();
@@ -30,7 +30,7 @@ export const ReferralGraph = () => {
 
         const duration = 4000; // 4 seconds total
         const startTime = Date.now();
-        const target = 43200;
+        const target = targetAmount;
 
         const update = () => {
             const now = Date.now();
@@ -53,7 +53,7 @@ export const ReferralGraph = () => {
         };
 
         requestAnimationFrame(update);
-    }, [isCalculating, impact]);
+    }, [isCalculating, impact, targetAmount]);
 
     const handleUpgrade = () => {
         impact('heavy');
@@ -97,35 +97,35 @@ export const ReferralGraph = () => {
     return (
         <div className={clsx(
             "relative w-full h-[460px] md:h-[520px] flex items-center justify-center overflow-hidden rounded-3xl md:rounded-[2rem] border transition-all duration-700",
-            "bg-white dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl",
+            "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl",
             "group"
         )}>
             {/* ── PREMIUM NEURAL BACKGROUND ── */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40 dark:opacity-60">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.08),transparent_70%)]" />
-                <div className="circuit-decor" />
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60 dark:opacity-80">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)]" />
+                <div className="circuit-decor opacity-40 dark:opacity-60" />
 
                 {/* Visual Neural Connections */}
-                <svg className="absolute inset-0 w-full h-full opacity-30">
+                <svg className="absolute inset-0 w-full h-full opacity-50">
                     <m.path
                         d="M100,250 Q250,100 400,250 T700,250"
                         stroke="currentColor"
-                        strokeWidth="1"
+                        strokeWidth="1.5"
                         fill="none"
-                        className="text-indigo-500/30"
+                        className="text-indigo-500/40"
                         animate={{ strokeDashoffset: [0, 100] }}
                         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "5, 5" }}
+                        style={{ strokeDasharray: "8, 8" }}
                     />
                     <m.path
                         d="M-50,400 Q200,550 450,400 T950,400"
                         stroke="currentColor"
-                        strokeWidth="1"
+                        strokeWidth="1.5"
                         fill="none"
-                        className="text-emerald-500/30"
+                        className="text-emerald-500/40"
                         animate={{ strokeDashoffset: [100, 0] }}
                         transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "5, 5" }}
+                        style={{ strokeDasharray: "8, 8" }}
                     />
                 </svg>
             </div>

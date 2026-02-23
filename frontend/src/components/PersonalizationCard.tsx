@@ -152,7 +152,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 const displayName = fullName.length > 20 ? firstName : fullName;
 
                                 return (
-                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-bold tracking-tight text-text-primary truncate w-full`}>
+                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-bold tracking-tight text-text-primary whitespace-nowrap`}>
                                         {t('hi')}, {displayName}!
                                     </h2>
                                 );

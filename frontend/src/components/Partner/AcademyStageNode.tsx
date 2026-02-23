@@ -43,7 +43,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             style={{}}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
-                "relative group cursor-pointer w-full flex justify-center py-5",
+                "relative group cursor-pointer w-full h-[100px]",
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
@@ -63,19 +63,19 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 </div>
             )}
 
-            {/* Central Node (Always centered for perfect proportions) */}
+            {/* Central Node (Forced absolute center for precision) */}
             <div
                 onClick={(e) => {
                     e.stopPropagation();
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "relative z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 cursor-pointer",
+                    "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 cursor-pointer",
                     isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
                         isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
                             isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 cursor-not-allowed" :
                                 "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
-                )} style={{}}>
+                )}>
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
                     <motion.div
@@ -126,8 +126,8 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute top-1/2 -translate-y-1/2 w-[120px] min-[400px]:w-[140px] sm:w-[170px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
-                    isLeft ? "left-[calc(50%+12px)] min-[400px]:left-[calc(50%+18px)] text-left" : "right-[calc(50%+12px)] min-[400px]:right-[calc(50%+18px)] text-right items-end",
+                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[390px]:w-[145px] sm:w-[175px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer",
+                    isLeft ? "left-[calc(50%+40px)] min-[390px]:left-[calc(50%+42px)] text-left" : "right-[calc(50%+40px)] min-[390px]:right-[calc(50%+42px)] text-right items-end",
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100 shadow-xl cursor-pointer"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
