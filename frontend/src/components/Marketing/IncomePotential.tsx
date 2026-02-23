@@ -523,7 +523,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         </m.button>
                                     </div>
                                 </div>
-                            </div>
                         </m.div>
                     )}
                 </AnimatePresence>
