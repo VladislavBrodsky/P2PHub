@@ -99,6 +99,7 @@
       "ai_generated_badge": "AI Generated",
       "publish_btn": "PUBLISH",
       "share_btn": "SHARE",
+      "language_placeholder": "Select Language",
       "post_types": {
         "launch": "Strategic Launch",
         "fomo": "Market Resonance",
@@ -152,201 +153,95 @@
         "partners": "Looking for inside edges and premium yields"
       },
       "share_modal": {
-        "title": "Publish",
-        "subtitle": "Select platform to share",
-        "more": "More Options"
+        "title": "Viral Share",
+        "subtitle": "Node Distribution",
+        "more": "More Platforms"
       },
-      "add_personal_link": "Your personal link",
-      "personal_link_subtitle": "Automatic link insertion",
-      "personal_link_warning": "Supported format:",
-      "link_saved": "Link updated successfully",
+      "add_personal_link": "Add Referral Link",
+      "personal_link_subtitle": "Embed your referral link directly in posts.",
+      "personal_link_warning": "Link must start with",
+      "hashtags_refreshed": "Viral hashtags optimized",
+      "link_saved": "Referral link updated successfully",
       "link_error": "Invalid link format",
+      "generate_new_btn": "Generate New Post",
       "partners_strategy": {
         "title": "Active: Growth Strategy",
         "mode": "PRO mode",
         "desc": "Using advanced algorithms and partner links for <1>maximum reach</1>."
       },
-      "hashtags_refreshed": "Viral hashtags optimized",
-      "generate_new_btn": "Generate New Post"
+      "stepper": {
+        "frame": "Frame",
+        "synthes": "Synthes",
+        "deploy": "Deploy"
+      },
+      "processing_viral": "SYNTHESIZING VIRAL CORE",
+      "processing_eta": "{{count}}s ETA",
+      "processing_msg": "Architecting narrative resonance...",
+      "omni_enabled": "Omni-Channel Enabled"
     },
     "setup": {
       "title": "Social Networks Setup",
       "subtitle": "Channel Management",
-      "professional_network": "Professional Network",
-      "save_success_title": "Successfully Connected",
-      "save_success_text": "Your channels are connected and ready to use.",
-      "teaser": {
-        "title": "Elite <1>Sync</1> Ecosystem",
-        "desc": "Upgrade to PRO+ to unlock the complete neural broadcasting stack.",
-        "feat_tg": "5x TG Channels",
-        "feat_tg_detail": "Mass Sync",
-        "feat_omni": "Omni-Channel",
-        "feat_omni_detail": "7+ Networks",
-        "feat_li": "LinkedIn",
-        "feat_li_detail": "Authority Node",
-        "feat_ai": "Ultra AI",
-        "feat_ai_detail": "Advanced Models",
-        "cta": "CLAIM PRO+ STATUS"
+      "sync_btn": "Sync Social Node",
+      "active": "NODE ACTIVE",
+      "not_synced": "UNSYNCED",
+      "manual_btn": "Manual Key Configuration",
+      "auto_sync_btn": "Instant OAuth Protocol",
+      "x": {
+        "title": "Network X Authority",
+        "desc": "Access the global viral stream.",
+        "placeholder": "API Key / OAuth String",
+        "guide": "Guide",
+        "dev_portal_desc": "Generated in <1>X Developer Portal</1>. Requires Pro API access for auto-posting."
       },
-      "multi_sync": {
-        "title": "Multi-Channel Sync",
-        "desc": "Up to 5 channels simultaneously.",
-        "test": "Test"
+      "telegram": {
+        "title": "Telegram HQ Sync",
+        "desc": "Direct broadcast to your community.",
+        "placeholder": "Bot Token / Channel ID",
+        "guide": "Guide",
+        "instruction": "Add @pintopay_bot as Admin to your channel/group."
       },
-      "x_broadcast": "Post to X",
-      "tg_sync": "Connect TG",
-      "omni_sync": "Multi-Channel",
-      "direct_protocol": "Direct API connection",
-      "global_matrix": "Multi-platform posting",
-      "save_error_title": "Connection Error",
-      "save_error_text": "Failed to connect channels. Please verify your credentials.",
-      "social_title": "Your Social Networks",
-      "api_key": "API Key",
-      "api_secret": "API Secret",
-      "access_token": "Access Token",
-      "access_token_secret": "Token Secret",
-      "channel_id": "Channel ID (TG)",
-      "test_btn": "Test Signal",
-      "node_status_sync": "Global Sync Enabled",
-      "update_btn": "Update (-3)",
-      "scanning": "Scanning...",
-      "error_title": "Intelligence Error",
-      "force_sync_btn": "Force Re-Sync (-3 Tokens)",
-      "summary_title": "Strategy Intelligence",
-      "live_tracker": "Global Live Tracker",
-      "live_timeframe": "Last 180 Minutes",
-      "relevance": "Relevance",
-      "hot_now": "Hot Now",
-      "analyzing": "Analyzing market entry points...",
-      "action_required": "Action Protocol Required",
-      "imperative": "Growth Imperative",
-      "initiate_btn": "Initiate Viral Protocol",
-      "verified_status": "Audit Verified for 60m Dominance",
-      "syncing": "Syncing...",
-      "sync_node_btn": "Sync Global Node (-3 Tokens)",
-      "save_btn": "SAVE SETTINGS",
-      "referral_link_prefix_error": "Referral link must start with 'https://t.me/pintopaybot?start='",
-      "tg_sync_success_msg": "Telegram sync verified.",
-      "tg_sync_error_msg": "Failed to verify Telegram status.",
-      "pro_node_limit_desc": "Single channel on PRO. Upgrade to PRO+ for 5-channel sync.",
-      "tg_node": "Telegram Primary Node",
-      "personal_link_desc": "Auto-inserts in Studio posts to credit your network.",
-      "guide_btn": "Guide",
-      "syncing_btn": "SYNCHRONIZING...",
-      "deploy_btn": "DEPLOY CONFIGURATION",
-      "x_broadcast_title": "X Global Broadcast",
-      "x_broadcast_desc": "Autonomous API integration for persistent profile presence.",
-      "x_broadcast_plus_desc": "High-impact viral distribution. PRO+ supports up to 3 accounts.",
-      "global_integration": "Global Integration",
-      "instructions_title": "Setup Instructions",
-      "protocol_title": "Setup Protocol",
       "x_manual": {
-        "title": "X (Twitter) Setup Guide",
-        "subtitle": "Step-by-step Connection",
+        "title": "X Manual Configuration",
+        "subtitle": "Protocol v1.2",
         "steps": [
           {
-            "title": "Step 1: Open X Developer Portal",
-            "desc": "Access your [X Developer Dashboard](https://developer.x.com/en/portal/dashboard). Log in and select 'Products' > 'Twitter API v2'."
+            "title": "Step 1: Developer Account",
+            "desc": "Create a Project in the X Developer Portal."
           },
           {
-            "title": "Step 2: Create a Project",
-            "desc": "Click 'Create Project' and name it 'P2PHub Studio'. Then create an 'App' inside this project to generate your credentials."
+            "title": "Step 2: App Permissions",
+            "desc": "Enable 'Read and Write' permissions and OAuth 1.0a."
           },
           {
-            "title": "Step 3: App Permissions",
-            "desc": "Crucial: Go to App Settings > User Authentication. Choose 'OAuth 1.0a'. Enable 'Read and Write' permissions. Set Callback URL to: `https://t.me/pintopay_probot`"
+            "title": "Step 3: Protocol Keys",
+            "desc": "Copy your API Key, Secret, Access Token, and Token Secret."
           },
           {
-            "title": "Step 4: Extract Credentials",
-            "desc": "In the 'Keys and Tokens' tab, regenerate 'Consumer Keys' and 'Access Tokens'. Copy all 4: API Key, API Secret, Access Token, and Token Secret."
-          },
-          {
-            "title": "Step 5: Direct Integration",
-            "desc": "Paste these 4 codes in the [PRO Setup] window and click SAVE. Your profile is now synced with our neural engine."
-          },
-          {
-            "title": "Step 6: Unlimited Content (Pro Tip)",
-            "desc": "X limits free accounts to very short posts. To publish powerful AI-generated content (300+ characters), we strongly recommend X Premium. This also activates the Basic API tier, which guarantees maximum speed for your viral machine."
+            "title": "Step 4: Sync Node",
+            "desc": "Paste the unified connection string into the field above."
           }
         ]
       },
       "tg_manual": {
-        "title": "Telegram Node Connection",
-        "subtitle": "Step-by-step Connection",
+        "title": "Telegram Manual Sync",
+        "subtitle": "Secure Channel Protocol",
         "steps": [
           {
-            "title": "Step 1: Create Your Hub",
-            "desc": "Open [Telegram](https://t.me) and create a New Channel. This will be your primary broadcasting node."
+            "title": "Step 0: Preparation",
+            "desc": "Make sure you have a Telegram Channel or Group where you are an Admin."
           },
           {
-            "title": "Step 2: Authorize Assistant",
-            "desc": "Add [@{{bot_username}}](https://t.me/{{bot_username}}) as an Administrator in your channel settings."
+            "title": "Step 1: Bot Activation",
+            "desc": "Add @pintopaybot to your channel as an Administrator."
           },
           {
-            "title": "Step 3: Grant Broadcast Power",
-            "desc": "Ensure the 'Post Messages' permission is toggled ON. This allows the AI bridge to send content."
+            "title": "Step 2: ID Discovery",
+            "desc": "Forward any message from your channel to @userinfobot to get your Channel ID (usually starts with -100)."
           },
           {
-            "title": "Step 4: Link Verification",
-            "desc": "Copy your channel's public handle (e.g., @mychannel) and paste it into the Telegram Node field below."
-          }
-        ]
-      },
-      "linkedin_manual": {
-        "title": "LinkedIn Authority Sync",
-        "subtitle": "Professional Node Access",
-        "steps": [
-          {
-            "title": "Step 1: Developer Account",
-            "desc": "Go to the [LinkedIn Developer Portal](https://www.linkedin.com/developers/) and create a new App named 'P2PHub Elite'."
-          },
-          {
-            "title": "Step 2: Product Request",
-            "desc": "In your app settings, go to 'Products' and request access to 'Share on LinkedIn' and 'Sign In with LinkedIn'. These are usually approved instantly."
-          },
-          {
-            "title": "Step 3: Token Generation",
-            "desc": "Navigate to the 'Auth' tab. Use the [Token Generator Tool](https://www.linkedin.com/developers/tools/oauth/token-generator) to select your app and requested scopes."
-          },
-          {
-            "title": "Step 4: Persistence",
-            "desc": "Copy the 'Access Token' (a long string) and paste it into the LinkedIn Node field in the [PRO+ Setup] window."
-          }
-        ]
-      },
-      "pinterest_manual": {
-        "title": "Pinterest Visual Sync",
-        "subtitle": "Global Creative Node",
-        "steps": [
-          {
-            "title": "Step 1: Pinterest Developers",
-            "desc": "Log in to the [Pinterest Developer Portal](https://developers.pinterest.com/) and create a new application."
-          },
-          {
-            "title": "Step 2: App Permissions",
-            "desc": "Go to 'Apps' > 'Click your App' > 'Tokens'. Ensure you have `pins:read` and `pins:write` scopes enabled."
-          },
-          {
-            "title": "Step 3: Generate Token",
-            "desc": "Click 'Generate Token'. Copy the resulting string and paste it into our Pinterest field."
-          }
-        ]
-      },
-      "threads_manual": {
-        "title": "Threads Viral Sync",
-        "subtitle": "Meta Ecosystem Access",
-        "steps": [
-          {
-            "title": "Step 1: Meta for Developers",
-            "desc": "Access [Meta for Developers](https://developers.facebook.com/) and create a 'Threads' type application."
-          },
-          {
-            "title": "Step 2: Threads API Setup",
-            "desc": "Configure the 'Threads API' product. Add your Threads account as a 'Tester' in the App Dashboard."
-          },
-          {
-            "title": "Step 3: Access Token",
-            "desc": "Follow the 'User Token' flow in the Threads API documentation to generate a long-lived access token. Paste it here to sync."
+            "title": "Step 3: Final Sync",
+            "desc": "Paste your Channel ID into the field and click Sync Social Node."
           }
         ]
       },
@@ -487,7 +382,12 @@
       "module_complete_title": "Module Complete",
       "module_complete_msg": "XP Earned! Tokens updated.",
       "headline_copied": "Headline copied to clipboard.",
-      "bio_copied": "Bio copied to clipboard."
+      "bio_copied": "Bio copied to clipboard.",
+      "sync_error": "Sync Error",
+      "trends_synced_title": "Trends Synced",
+      "trends_synced_msg": "Global viral patterns updated.",
+      "trends_failed_title": "Sync Failed",
+      "trends_failed_msg": "Could not fetch global trends."
     },
     "tools": {
       "headline": {
@@ -513,6 +413,7 @@
       },
       "copy_btn": "Copy to Clipboard",
       "processing": "Synthesizing...",
+      "synthesizing": "Synthesizing...",
       "trends": {
         "title": "2026 Trend Hunter",
         "desc": "Top 3 viral topics right now. (3 Tokens)",
@@ -520,7 +421,11 @@
         "btn_refresh": "Refresh Trends",
         "scanning": "Scanning",
         "node_id": "Global Node 1",
-        "info": "Real-time volatility and memetic momentum tracking."
+        "info": "Real-time volatility and memetic momentum tracking.",
+        "synced_title": "Trends Synced",
+        "synced_msg": "Global viral patterns updated.",
+        "failed_title": "Sync Failed",
+        "failed_msg": "Could not fetch global trends."
       },
       "audit": {
         "title": "Global Marketing Audit",
@@ -535,7 +440,12 @@
         "live_feed": "LIVE FEED",
         "info": "Full scan of global news, social signals, and market sentiment.",
         "status": "Protocol 2.5 Active",
-        "capability": "Scans **500+ sources** (RSS, X, Telegram). Finds TOP 20 trends in FinTech & Web3. Updates every 60m."
+        "capability": "Scans **500+ sources** (RSS, X, Telegram). Finds TOP 20 trends in FinTech & Web3. Updates every 60m.",
+        "error_title": "Intelligence Error",
+        "error_desc": "Global intelligence node unreachable. Check your network.",
+        "relevance": "Relevance",
+        "relevance_high": "High",
+        "relevance_massive": "Massive"
       }
     },
     "academy": {
@@ -549,6 +459,7 @@
       "sync_node": "SYNC NODE",
       "insufficient_tokens_plus": "Earn more tokens or upgrade to PRO+",
       "understand_btn": "Start Training",
+      "understand_protocol_btn": "I Understand the Protocol",
       "read_time": "{{time}} min read",
       "protocol_rank": "Course Rating: 98.4%",
       "rank_name": "EXPERT",
@@ -586,52 +497,20 @@
           },
           {
             "category": "AUTHORITY",
-            "template": "How I built [Result] in [Time] without [Pain]...",
-            "explanation": "Creates instant trust and social proof."
+            "template": "I spent 100 hours researching [Topic] so you don't have to...",
+            "explanation": "Establishes expertise and offers high value for low effort."
           },
           {
-            "category": "INCOME",
-            "template": "This simple [Task] generates [Amount] on autopilot...",
-            "explanation": "Direct, result-oriented hook for financial interest."
+            "category": "CURIOSITY",
+            "template": "The secret method nobody is talking about when it comes to [Goal]...",
+            "explanation": "Creates an information gap that scrollers must close."
           }
         ]
       },
-      "studio_manual": {
-        "title": "Studio User Guide",
-        "subtitle": "Content Creation Automation",
-        "steps": [
-          {
-            "title": "Define Your Strategy",
-            "desc": "Select the post type (FOMO, Launch, Tutorial) to configure the AI persona for your current growth goal."
-          },
-          {
-            "title": "Audience Calibration",
-            "desc": "Choose your target market. The AI will adjust tone, vocabulary, and cultural references for best results."
-          },
-          {
-            "title": "Create & Refine",
-            "desc": "Generate content. Use the 'Rewrite' button for a different angle. The best results come from 2-3 iterations."
-          },
-          {
-            "title": "One-Click Publishing",
-            "desc": "Share content across all connected channels simultaneously. Consistency is the key to network success."
-          }
-        ]
-      },
-      "social_setup": {
-        "title": "Channel Setup",
-        "subtitle": "Step-by-step Guide",
-        "platforms": [
-          {
-            "name": "Telegram Channel",
-            "icon": "Send",
-            "steps": [
-              "Create a public channel",
-              "Add @{{bot_username}} as admin",
-              "Enable 'Post Messages' permission",
-              "Sync your channel ID in API Settings"
-            ]
-          },
+      "manuals": {
+        "title": "Viral Manuals 2026",
+        "subtitle": "STEP-BY-STEP NODES",
+        "items": [
           {
             "name": "X (Twitter) Reach",
             "icon": "Twitter",
@@ -668,7 +547,7 @@
           },
           {
             "title": "The Curiosity Loop",
-            "desc": "Don't sell in the headline. Tease the result. Force them to type 'INFO' or click the link out of pure interest."
+            "desc": "Don't sell in the headline. Tease the result. Force them to type 'INFO' or click the link out of interest."
           }
         ]
       },
@@ -705,6 +584,22 @@
           }
         ]
       },
+      "growth_strategist": {
+        "title": "AI Growth Strategist",
+        "version": "Neural Network Analyzer v2.0",
+        "anal_label": "NETWORK ANALYTICS",
+        "analysis_title": "Contextual Analysis",
+        "analysis_desc": "I will analyze your 20-level network tree, growth velocity, and earning patterns to synthesize specific strategic advice.",
+        "hacks_title": "Actionable Hacks",
+        "hacks_desc": "Get 3-4 precise actions you can take today to scale your depth and unlock more commissions.",
+        "cost": "Cost: {{count}} Network Tokens",
+        "btn_initiate": "Initiate Synthesis Protocol",
+        "synthesizing": "Synthesizing Growth Strategy",
+        "accessing_data": "Accessing Global Market Data...",
+        "btn_execute": "Execute Mission",
+        "btn": "Analyze Network",
+        "neural_desc": "Personalized neural advice to scale your network depth."
+      },
       "viral_assets": {
         "title": "Viral Design Assets",
         "subtitle": "High-Conversion Prototypes",
@@ -720,183 +615,9 @@
               "Format: .PSD / .FIG (Layered)",
               "Lighting: Realistic Ray-Tracing",
               "License: Global Unrestricted"
-            ],
-            "usage": "Use this as a background in your lifestyle photos or videos to demonstrate instant liquidity without traditional banks."
-          },
-          {
-            "id": "logos",
-            "title": "2026 LOGO SYSTEM",
-            "hook": "High-Visibility Vectors",
-            "desc": "Master logos in Platinum, Gold, and 0xBlack. Optimized for social profiles and elite print.",
-            "specs": [
-              "Formats: .SVG / .PNG (Alpha)",
-              "Variations: Primary / Simplified / Text",
-              "Grid: 8px Pixel-Perfect",
-              "Safe Area: 20px Clearance"
-            ],
-            "usage": "Maintain 20px of clear space around the logo. Do not alter 'Pintopay' aspect ratio."
-          },
-          {
-            "id": "identity",
-            "title": "IDENTITY SUITE",
-            "hook": "Inter & Onest Fonts",
-            "desc": "Typography of decentralized power. Clean, mathematical, and authoritative. Designed for 2026 readability.",
-            "specs": [
-              "Weights: Thin to Black",
-              "Languages: Latin & Cyrillic",
-              "Type: Variable OpenType",
-              "Optimization: Mobile Display Phase 4"
-            ],
-            "usage": "Use Inter for body text and Onest for headlines to achieve the signature Elite Network look."
-          },
-          {
-            "id": "palette",
-            "title": "COLOR SYSTEM",
-            "hook": "Acid Yellow & Deep Slate",
-            "desc": "High-contrast palette designed for psychological authority and speed triggers in fintech.",
-            "specs": [
-              "Primary: #D9FF00 (Acid)",
-              "Surface: #0F172A (Slate)",
-              "Accent: #6366F1 (Indigo)",
-              "Success: #10B981 (Emerald)"
-            ],
-            "usage": "Use Acid Yellow sparingly for Call-to-Actions. Slate should remain the primary surface for dark mode."
+            ]
           }
         ]
-      },
-      "articles": {
-        "title": "Strategy Library",
-        "subtitle": "GROWTH INSIGHTS",
-        "read_time": "min read",
-        "btn_read": "Read Article",
-        "items": [
-          {
-            "id": "a1",
-            "title": "24/7 Growth via AI Agents",
-            "desc": "How to automate your lead funnel using P2PHub agents.",
-            "content": "In 2026, manual outreach is dead. You need to deploy AI agents that handle the 'Initial Spark'. Use the Viral Studio to generate content that prompts comments. Set up automation that DMs your referral link to anyone who comments 'P2P'. This creates a perpetual traffic loop while you sleep.",
-            "category": "Automation",
-            "readTime": 5
-          },
-          {
-            "id": "a2",
-            "title": "Algorithmic Authority",
-            "desc": "Bypassing shadowbans and maximizing reach on X and Telegram.",
-            "content": "Algorithms hate external links. To reach the $1/min level, you must use 'Link-stacking'. Post a high-value thread/thought first. Only in the 4th or 5th message mention the Pintopay card. This maintains a high 'Reach Score', converting users at the end of the funnel.",
-            "category": "Algorithms",
-            "readTime": 7
-          },
-          {
-            "id": "a3",
-            "title": "Psychological Triggers 2.0",
-            "desc": "Why the 'Digital Gold Rush' narrative resonates at 42%.",
-            "content": "The desire to stay current with financial trends is a strong motivator in 2026. Position Pintopay not as a 'crypto card' but as a tool for adapting to new financial realities. Use concepts like asset management freedom and ownership of modern financial solutions.",
-            "category": "Psychology",
-            "readTime": 4
-          },
-          {
-            "id": "a4",
-            "title": "High-Velocity Hooks",
-            "desc": "Crafting lines that stop 99% of scrollers immediately.",
-            "content": "A high-velocity hook must create a 'Curiosity Gap'. Example: 'I found a legal way to separate state and my money.' This forces people to click 'See More' to close the loop in their brain.",
-            "category": "Copywriting",
-            "readTime": 3
-          },
-          {
-            "id": "a5",
-            "title": "Mastering Network Scale",
-            "desc": "Turning 10 referrals into 10,000 via deep motivation.",
-            "content": "Your earning potential is locked by your partners' success. Give your Level 1 partners the 'Growth Toolkit'. Show them how to use the Viral Studio. When they scale, your passive transaction cashback grows exponentially.",
-            "category": "Scaling",
-            "readTime": 8
-          }
-        ]
-      },
-      "protocols": {
-        "title": "Learning Programs",
-        "subtitle": "TRAINING MATERIALS",
-        "stats_label": "ACADEMIC SCORE",
-        "progress_label": "MASTERY",
-        "difficulty_levels": {
-          "easy": "Foundation",
-          "medium": "Growth Engineering",
-          "hard": "Ecosystem Leadership"
-        },
-        "modules": [
-          {
-            "id": "m1",
-            "diff": "easy",
-            "title": "The Digital Gold Rush 2026",
-            "hook": "Why $1 per minute is the new standard.",
-            "content": "Welcome to the Digital Gold Rush. In 2026, money is moving from banks to decentralized systems. Pintopay is the bridge. Every time someone uses a Pintopay card, a micro-transaction fee is generated. As a TOP partner, you own a piece of this global financial shift. Your goal isn't to sell, but to educate people on financial sovereignty.",
-            "task": "Join the Pintopay Partner Network bot and get your referral link.",
-            "link": "https://t.me/pintopay_probot?start=P2P-425DA3DB",
-            "cta": "Get Link",
-            "points": 500,
-            "tokens": 1,
-            "xp_cost": 0
-          },
-          {
-            "id": "m2",
-            "diff": "easy",
-            "title": "The Pintopay Card Utility",
-            "hook": "Complete separation of state and money.",
-            "content": "Pintopay crypto cards work everywhere Visa/Mastercard are accepted. No bank account required. You spend directly from your crypto wallet. This is the ultimate product because it solves a real problem: using crypto in the real world every day.",
-            "task": "Order or view the card in the main bot to understand the UX you are promoting.",
-            "link": "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3",
-            "cta": "Explore Cards",
-            "points": 500,
-            "tokens": 1,
-            "xp_cost": 0
-          },
-          {
-            "id": "m3",
-            "diff": "medium",
-            "title": "Viral Hook Engineering",
-            "hook": "Stop the scroll or lose.",
-            "content": "In 2026, attention is the only currency. Your posts must stop a thumb in 0.5 seconds. Use 'The Gap' technique: show the result (e.g., $1/min earnings) and the hidden method. Use content from our Viral Assets section.",
-            "task": "Create a post using one of the 'Acid Yellow' assets and a hook from our library.",
-            "points": 2000,
-            "tokens": -1,
-            "xp_cost": 20
-          },
-          {
-            "id": "m4",
-            "diff": "medium",
-            "title": "AI-Powered Growth Autopilot",
-            "hook": "Grow your network while you sleep.",
-            "content": "Stop posting manually. Use the Viral Studio to schedule posts for the next 7 days. AI handles the target market research. Set and forget. Focus on responding to DMs, not creating content.",
-            "task": "Schedule 3 posts in the Viral Studio for different platforms.",
-            "points": 5000,
-            "tokens": -2,
-            "xp_cost": 500
-          },
-          {
-            "id": "m5",
-            "diff": "hard",
-            "title": "Ecosystem Dominance",
-            "hook": "Scaling your network to 10,000+ users.",
-            "content": "Real wealth comes from depth, not width. Focus on training your Level 1 partners to become TOP partners like you. If they earn, you earn more. This is ecosystem engineering. Use the leaderboards to find top performers and provide support.",
-            "task": "Find your top 3 referrals and send them a private message with a strategy.",
-            "points": 10000,
-            "tokens": -3,
-            "xp_cost": 2000
-          },
-          {
-            "id": "m6",
-            "diff": "hard",
-            "title": "ADVANCED SYNCHRONIZATION",
-            "hook": "Advanced analytics for your entire network.",
-            "content": "You've reached the top of the Growth Program. You now have mastery of content branding and network growth strategy. Apply cross-channel insights to lead effectively across your network.",
-            "task": "Request a Global Marketing Audit and execute the recommended CMO strategy.",
-            "points": 50000,
-            "tokens": -5,
-            "xp_cost": 10000
-          }
-        ],
-        "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
-        "methodology_title": "Our Methodology",
-        "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
       },
       "psych_strategies": {
         "title": "Marketing Psychology",
@@ -968,190 +689,166 @@
           }
         ]
       }
+    },
+    "academy_items": [
+      {
+        "id": "a1",
+        "title": "24/7 Growth via AI Agents",
+        "desc": "How to automate your lead funnel using P2PHub agents.",
+        "content": "In 2026, manual outreach is dead. You need to deploy AI agents that handle the 'Initial Spark'. Use the Viral Studio to generate content that prompts comments. Set up automation that DMs your referral link to anyone who comments 'P2P'. This creates a perpetual traffic loop while you sleep.",
+        "category": "Automation",
+        "readTime": 5
+      },
+      {
+        "id": "a2",
+        "title": "Algorithmic Authority",
+        "desc": "Bypassing shadowbans and maximizing reach on X and Telegram.",
+        "content": "Algorithms hate external links. To reach the $1/min level, you must use 'Link-stacking'. Post a high-value thread/thought first. Only in the 4th or 5th message mention the Pintopay card. This maintains a high 'Reach Score', converting users at the end of the funnel.",
+        "category": "Algorithms",
+        "readTime": 7
+      },
+      {
+        "id": "a3",
+        "title": "Psychological Triggers 2.0",
+        "desc": "Why the 'Digital Gold Rush' narrative resonates at 42%.",
+        "content": "The desire to stay current with financial trends is a strong motivator in 2026. Position Pintopay not as a 'crypto card' but as a tool for adapting to new financial realities. Use concepts like asset management freedom and ownership of modern financial solutions.",
+        "category": "Psychology",
+        "readTime": 4
+      },
+      {
+        "id": "a4",
+        "title": "High-Velocity Hooks",
+        "desc": "Crafting lines that stop 99% of scrollers immediately.",
+        "content": "A high-velocity hook must create a 'Curiosity Gap'. Example: 'I found a legal way to separate state and my money.' This forces people to click 'See More' to close the loop in their brain.",
+        "category": "Copywriting",
+        "readTime": 3
+      },
+      {
+        "id": "a5",
+        "title": "Mastering Network Scale",
+        "desc": "Turning 10 referrals into 10,000 via deep motivation.",
+        "content": "Your earning potential is locked by your partners' success. Give your Level 1 partners the 'Growth Toolkit'. Show them how to use the Viral Studio. When they scale, your passive transaction cashback grows exponentially.",
+        "category": "Scaling",
+        "readTime": 8
+      }
+    ],
+    "protocols": {
+      "title": "Learning Programs",
+      "subtitle": "TRAINING MATERIALS",
+      "stats_label": "ACADEMIC SCORE",
+      "progress_label": "MASTERY",
+      "difficulty_levels": {
+        "easy": "Foundation",
+        "medium": "Growth Engineering",
+        "hard": "Ecosystem Leadership"
+      },
+      "modules": [
+        {
+          "id": "m1",
+          "diff": "easy",
+          "title": "The Digital Gold Rush 2026",
+          "hook": "Why $1 per minute is the new standard.",
+          "content": "Welcome to the Digital Gold Rush. In 2026, money is moving from banks to decentralized systems. Pintopay is the bridge. Every time someone uses a Pintopay card, a micro-transaction fee is generated. As a TOP partner, you own a piece of this global financial shift. Your goal isn't to sell, but to educate people on financial sovereignty.",
+          "task": "Join the Pintopay Partner Network bot and get your referral link.",
+          "link": "https://t.me/pintopay_probot?start=P2P-425DA3DB",
+          "cta": "Get Link",
+          "points": 500,
+          "tokens": 1,
+          "xp_cost": 0
+        },
+        {
+          "id": "m2",
+          "diff": "easy",
+          "title": "The Pintopay Card Utility",
+          "hook": "Complete separation of state and money.",
+          "content": "Pintopay crypto cards work everywhere Visa/Mastercard are accepted. No bank account required. You spend directly from your crypto wallet. This is the ultimate product because it solves a real problem: using crypto in the real world every day.",
+          "task": "Order or view the card in the main bot to understand the UX you are promoting.",
+          "link": "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3",
+          "cta": "Explore Cards",
+          "points": 500,
+          "tokens": 1,
+          "xp_cost": 0
+        },
+        {
+          "id": "m3",
+          "diff": "medium",
+          "title": "Viral Hook Engineering",
+          "hook": "Stop the scroll or lose.",
+          "content": "In 2026, attention is the only currency. Your posts must stop a thumb in 0.5 seconds. Use 'The Gap' technique: show the result (e.g., $1/min earnings) and the hidden method. Use content from our Viral Assets section.",
+          "task": "Create a post using one of the 'Acid Yellow' assets and a hook from our library.",
+          "points": 2000,
+          "tokens": -1,
+          "xp_cost": 20
+        },
+        {
+          "id": "m4",
+          "diff": "medium",
+          "title": "AI-Powered Growth Autopilot",
+          "hook": "Grow your network while you sleep.",
+          "content": "Stop posting manually. Use the Viral Studio to schedule posts for the next 7 days. AI handles the target market research. Set and forget. Focus on responding to DMs, not creating content.",
+          "task": "Schedule 3 posts in the Viral Studio for different platforms.",
+          "points": 5000,
+          "tokens": -2,
+          "xp_cost": 500
+        },
+        {
+          "id": "m5",
+          "diff": "hard",
+          "title": "Ecosystem Dominance",
+          "hook": "Scaling your network to 10,000+ users.",
+          "content": "Real wealth comes from depth, not width. Focus on training your Level 1 partners to become TOP partners like you. If they earn, you earn more. This is ecosystem engineering. Use the leaderboards to find top performers and provide support.",
+          "task": "Find your top 3 referrals and send them a private message with a strategy.",
+          "points": 10000,
+          "tokens": -3,
+          "xp_cost": 2000
+        },
+        {
+          "id": "m6",
+          "diff": "hard",
+          "title": "ADVANCED SYNCHRONIZATION",
+          "hook": "Advanced analytics for your entire network.",
+          "content": "You've reached the top of the Growth Program. You now have mastery of content branding and network growth strategy. Apply cross-channel insights to lead effectively across your network.",
+          "task": "Request a Global Marketing Audit and execute the recommended CMO strategy.",
+          "points": 50000,
+          "tokens": -5,
+          "xp_cost": 10000
+        }
+      ],
+      "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
+      "methodology_title": "Our Methodology",
+      "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
     }
+  },
+  "status": {
+    "verifying": "Verifying...",
+    "welcome_pro": "WELCOME TO ELITE",
+    "submitted": "SUBMITTED",
+    "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
+    "welcome_pro_p": "Your PRO status has been activated. The system is ready.",
+    "submitted_p": "Your request is under manual review. This usually takes 5-15 minutes.",
+    "got_it": "GOT IT"
   },
   "faq": {
-    "title": "Frequently Asked Questions",
-    "q1": "Is it really lifetime?",
-    "a1": "Yes. Pay once, use forever. No monthly fees, no hidden costs.",
+    "teaser_badge": "KNOWLEDGE BASE",
+    "header_pre": "YOUR",
+    "header_highlight": "QUESTIONS ANSWERED",
+    "q1": "Is the PRO+ really lifetime access?",
+    "a1": "Yes. The Lifetime option is a one-time payment — no recurring fees, ever. Once current slots sell out, all new subscriptions switch to an annual model at a higher price. Secure your permanent status before that happens.",
     "q2": "How do tokens work?",
-    "a2": "You get 250 tokens (PRO) or 500 tokens (PRO+) monthly. Tokens reset on the 1st of every month.",
-    "q3": "Can I use multiple accounts?",
-    "a3": "The license is tied to your Telegram ID. One purchase per account."
+    "a2": "Tokens power every AI action — content generation, headline rewrites, bio optimization, trend hunting, and global audits. PRO members receive 250 tokens monthly, PRO+ gets 500. All tokens reset on the 1st of each month.",
+    "q3": "Why pay with TON or USDT?",
+    "a3": "TON is Telegram's native blockchain — frictionless, instant, and nearly free. USDT (TRC20) is for partners who prefer stablecoins. Both methods are fully secure and activate your plan automatically.",
+    "q4": "How many Telegram accounts can I use?",
+    "a4": "One license per Telegram account. Your PRO status is bound to your unique Telegram ID for security. Each member of your team who wants PRO benefits must purchase their own license.",
+    "q5": "What is the Network Income Engine?",
+    "a5": "It's our multi-level passive income system. When anyone in your downline makes a card transaction, you earn a commission automatically. PRO unlocks 9 levels deep, PRO+ unlocks all 20 levels — meaning 20x more passive income reach.",
+    "q6": "How much faster will my team grow with PRO?",
+    "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence systems and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
+    "q7": "Can I upgrade from PRO to PRO+ later?",
+    "a7": "Yes. You can upgrade at any time from inside the app. Your existing PRO period is credited toward the PRO+ upgrade price. Upgrading sooner means more passive income earned while the price is still at the current level.",
+    "view_faq_center": "VIEW FULL FAQ CENTER"
   },
-  "subscription": {
-    "pro_active": {
-      "title": "PRO ACTIVE",
-      "title_plus": "PRO+ EMPIRE",
-      "desc": "Your professional tools and 9-level network are ready. Scale your influence to the next level.",
-      "desc_plus": "You have reached the ultimate status. Your 20-level network and AI Content Factory are fully active.",
-      "plan_pro_monthly": "30-DAY PRO PLAN",
-      "plan_pro_plus": "PRO+ EMPIRE",
-      "plan_pro_lifetime": "LIFETIME PRO PLAN",
-      "lifetime": "YOUR PLAN",
-      "command_center": "OPEN PRO DASHBOARD",
-      "lifetime_access": "LIFETIME ACCESS",
-      "extend_membership": "EXTEND MEMBERSHIP"
-    },
-    "plan_headline": "WHAT YOU UNLOCK",
-    "plan_desc_pro": "Your competitive advantage starts now. PRO gives you the AI content tools, 9-level passive income, and everything to grow your team ×10 faster than free members.",
-    "plan_desc_plus": "The ultimate viral growth engine. PRO+ accelerates your network expansion x100 with 20-level deep rewards, elite AI models, and total multi-platform dominance.",
-    "benefits": {
-      "ai_studio": "AI CONTENT STUDIO",
-      "ai_studio_desc_pro": "Deploy your personal AI content assistant 24/7. Generate professional posts, magnetic hooks, and high-conversion copy in seconds. 250 tokens/month — enough to post daily across your network.",
-      "ai_studio_desc_plus": "Priority access to premium AI models with extended capacity. The same intelligence stack used by top partners — now fully yours. 500 tokens/month for maximum content output.",
-      "network_levels": "NETWORK REVENUE SYSTEM",
-      "network_levels_desc_pro": "Earn passive rewards from 9 levels of your network. Every time a partner in your structure completes a transaction, you receive an automated reward.",
-      "network_levels_desc_plus": "Unlock the complete 20-level revenue system. Your passive income potential scales exponentially as your team grows — providing a solid foundation for long-term growth.",
-      "tokens": "AI CONTENT TOKENS",
-      "tokens_desc_pro": "250 tokens reset every month. Each token powers a content generation, headline rewrite, bio optimization, or market analysis. Stay consistent with your content.",
-      "tokens_desc_plus": "500 tokens monthly — double the capacity. Trend research, content creation, and bio optimization every day. Stay ahead of the curve.",
-      "cashback": "CASHBACK REWARDS",
-      "cashback_desc_pro": "Earn cashback on every transaction your network makes. Combine with referral rewards for a growing income stream.",
-      "cashback_desc_plus": "Maximum cashback rates across all 20 levels. PRO+ partners consistently achieve top results — the math works in your favor.",
-      "tools": "PROFESSIONAL MARKETING TOOLKIT",
-      "tools_desc_pro": "Headline Generator, Bio Optimizer, Trend Hunter, Global Marketing Audit — all unlocked. These tools help any partner create engaging, high-quality content.",
-      "tools_desc_plus": "All PRO tools + priority access to new features as they launch. Always stay ahead with the most advanced toolkit on the platform.",
-      "growth_intel": "GROWTH KNOWLEDGE CENTER",
-      "growth_intel_desc": "Access the full Academy — 100+ growth strategies, marketing psychology insights, daily action plans, and proven methods for scaling your network.",
-      "omni_sync": "MULTI-PLATFORM BROADCASTING",
-      "omni_sync_desc": "Broadast simultaneously to up to 5 Telegram channels, X (Twitter), and more with one click. Save hours of manual work and reach your entire audience in seconds.",
-      "priority_ai": "PRIORITY AI PROCESSING",
-      "priority_ai_desc": "PRO+ members bypass queues. Your content generation and analysis are prioritized even during peak hours, ensuring your workflow remains seamless.",
-      "empire_access": "LIFETIME ACCESS",
-      "empire_access_desc": "One-time payment for permanent access. PRO+ is a lifetime investment that grows with the platform — every new feature and AI update is automatically yours forever.",
-      "tg_multi_channel": "5 TELEGRAM CHANNELS",
-      "tg_multi_channel_desc": "Add up to 5 Telegram channels and auto-broadcast to all of them simultaneously from one dashboard — grow multiple audiences at once.",
-      "multi_broadcast": "MULTI-CHANNEL BROADCASTING",
-      "multi_broadcast_desc": "Schedule and blast posts across all your connected channels in one click — maximum reach, zero manual effort. One post, five audiences.",
-      "content_analytics": "CONTENT PERFORMANCE ANALYTICS",
-      "content_analytics_desc": "Track reach, engagement, and conversion rates for every post across all channels with real-time data. Know exactly what's working and double down."
-    },
-    "comparison": {
-      "title": "Key Differences",
-      "levels": "Levels",
-      "tokens": "Tokens",
-      "channels": "Nodes",
-      "tap_to_explore": "TAP TO EXPLORE"
-    },
-    "stats": {
-      "partners": "ACTIVE PARTNERS",
-      "growth": "FASTER GROWTH",
-      "ai_active": "AI ACTIVE"
-    },
-    "upgrade": {
-      "protocol_initialized": "SECURE CONNECTION",
-      "badge": "SCALE YOUR INCOME",
-      "limited_offer": "LIMITED OFFER",
-      "subheadline": "Accelerate your network growth and passive income with elite-level tools.",
-      "dominate_network": "GET THE MOST FROM YOUR NETWORK",
-      "desc": "Lifetime access is closing FOREVER. The system switches to annual subscriptions next week.",
-      "final_call": "FINAL WINDOW OPEN",
-      "live_demand": "CURRENT DEMAND",
-      "selling_fast": "SELLING EXTREMELY FAST",
-      "lifetime_slots": "LIFETIME SLOTS",
-      "left_label": "LEFT",
-      "pro_title": "PRO ACCESS",
-      "pro_plus_title": "PRO+ ACCESS",
-      "pro_plus_upgrade_title": "PRO+ UPGRADE",
-      "viral_badge": "x100 FASTER",
-      "best_badge": "TOP CHOICE",
-      "upgrade_label": "ONE-TIME UPGRADE",
-      "lifetime_pro": "LIFETIME ALPHA STATUS",
-      "tokens_info_pro": "250 TOKENS / MO",
-      "tokens_info_pro_plus": "500 TOKENS / MO",
-      "levels_info_pro": "9-LEVEL REWARDS",
-      "levels_info_pro_plus": "20-LEVEL NETWORK",
-      "viral_studio_label": "VIRAL STUDIO",
-      "viral_studio_desc_pro": "Deploy AI agents to craft hyper-viral content 24/7. 250 tokens monthly.",
-      "viral_studio_desc_pro_plus": "Unlimited Elite AI models + Cross-Platform OMNI-Sync. 500 tokens monthly.",
-      "benefits_pro": [
-        "250 Power Tokens",
-        "9-Level Deep Income",
-        "Viral Studio AI",
-        "Headline Engineer",
-        "Trend Hunter",
-        "Growth Academy",
-        "30-Day Access",
-        "Elite Marketing Audit"
-      ],
-      "benefits_pro_plus": [
-        "500 Elite Tokens",
-        "20-Level Network Income",
-        "OMNI-Sync 5 Channels",
-        "Priority AI Compute",
-        "Lifetime Access Forever",
-        "All Elite AI Models",
-        "Multi-Platform Broadcast",
-        "VIP Growth Strategies"
-      ],
-      "secure_slot_btn": "SECURE MY SLOT NOW",
-      "buy_pro_btn": "BUY PRO",
-      "buy_pro_plus_btn": "BUY PRO+",
-      "upgrade_to_pro_plus_btn": "UPGRADE TO PRO+",
-      "initialize_studio": "START AI ASSISTANT",
-      "content_factory_label": "GROWTH FACTORY",
-      "content_factory_desc_pro": "Activate passive revenue streams from 9 levels of your network.",
-      "content_factory_desc_pro_plus": "Maximum Scale. Unlock passive rewards from all 20 levels of your network.",
-      "deploy_factory": "START GROWTH",
-      "complete_payment": "ACTIVATE STATUS",
-      "monthly_label": "30 DAYS",
-      "lifetime_label": "FOREVER",
-      "ton_wallet": "PAY WITH TON",
-      "help_title": "Stuck or Need Help?",
-      "help_desc": "Verification normally takes 1-5 minutes after one block confirmation.",
-      "select_currency": "SELECT CURRENCY",
-      "secure_encryption_active": "PRO ACTIVE",
-      "change_method": "CHANGE METHOD",
-      "connect_and_pay": "Connect & Finalize",
-      "usdt_trc20_address": "PAY WITH USDT",
-      "tap_to_copy": "TAP ADDRESS TO COPY",
-      "open_wallet_app": "OPEN SYSTEM WALLET",
-      "then_verify": "VERIFY SIGNAL",
-      "paste_tx_hash": "PASTE YOUR TRANSACTION HASH",
-      "final_instruction": "IMPORTANT: You MUST paste the TxID below and click \"I PAID\" to finalize activation.",
-      "verify_transaction": "I PAID",
-      "pending_review": "PENDING REVIEW",
-      "hash_help": "Copy Transaction ID from your history.",
-      "trc20_warning": "USE TRC20 NETWORK ONLY",
-      "transfer_exact": "TRANSFER EXACTLY ${{amount}} USDT",
-      "extend_membership": "EXTEND MEMBERSHIP",
-      "steps": {
-        "copy_address": "Send USDT (TRC-20)",
-        "paste_hash": "PASTE TRANSACTION ID"
-      }
-    },
-    "status": {
-      "verifying": "Verifying...",
-      "welcome_pro": "WELCOME TO ELITE",
-      "submitted": "SUBMITTED",
-      "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
-      "welcome_pro_p": "Your PRO status has been activated. The system is ready.",
-      "submitted_p": "Your request is under manual review. This usually takes 5-15 minutes.",
-      "got_it": "GOT IT"
-    },
-    "faq": {
-      "teaser_badge": "KNOWLEDGE BASE",
-      "header_pre": "YOUR",
-      "header_highlight": "QUESTIONS ANSWERED",
-      "q1": "Is the PRO+ really lifetime access?",
-      "a1": "Yes. The Lifetime option is a one-time payment — no recurring fees, ever. Once current slots sell out, all new subscriptions switch to an annual model at a higher price. Secure your permanent status before that happens.",
-      "q2": "How do tokens work?",
-      "a2": "Tokens power every AI action — content generation, headline rewrites, bio optimization, trend hunting, and global audits. PRO members receive 250 tokens monthly, PRO+ gets 500. All tokens reset on the 1st of each month.",
-      "q3": "Why pay with TON or USDT?",
-      "a3": "TON is Telegram's native blockchain — frictionless, instant, and nearly free. USDT (TRC20) is for partners who prefer stablecoins. Both methods are fully secure and activate your plan automatically.",
-      "q4": "How many Telegram accounts can I use?",
-      "a4": "One license per Telegram account. Your PRO status is bound to your unique Telegram ID for security. Each member of your team who wants PRO benefits must purchase their own license.",
-      "q5": "What is the Network Income Engine?",
-      "a5": "It's our multi-level passive income system. When anyone in your downline makes a card transaction, you earn a commission automatically. PRO unlocks 9 levels deep, PRO+ unlocks all 20 levels — meaning 20x more passive income reach.",
-      "q6": "How much faster will my team grow with PRO?",
-      "a6": "PRO partners consistently grow their networks ×5-10 faster using the Viral Studio alone. Add the Growth Intelligence systems and OMNI-Sync publishing, and PRO+ partners report ×100 faster team scaling compared to free members.",
-      "q7": "Can I upgrade from PRO to PRO+ later?",
-      "a7": "Yes. You can upgrade at any time from inside the app. Your existing PRO period is credited toward the PRO+ upgrade price. Upgrading sooner means more passive income earned while the price is still at the current level.",
-      "view_faq_center": "VIEW FULL FAQ CENTER"
-    },
-    "alerts": {
-      "expired": "Payment window expired. Please try again."
-    }
+  "alerts": {
+    "expired": "Payment window expired. Please try again."
   }
 }

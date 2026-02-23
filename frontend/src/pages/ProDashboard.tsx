@@ -118,7 +118,7 @@ export const ProDashboard = () => {
             console.error(error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Global intelligence node unreachable. Check your network.';
             showNotification({
-                title: 'Sync Error',
+                title: t('pro_dashboard.notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });
@@ -172,16 +172,16 @@ export const ProDashboard = () => {
             const data = await proService.fetchTrends();
             setTrends(data.trends);
             showNotification({
-                title: 'Trends Synced',
-                message: 'Global viral patterns updated.',
+                title: t('pro_dashboard.notifications.trends_synced_title'),
+                message: t('pro_dashboard.notifications.trends_synced_msg'),
                 type: 'success'
             });
             hapticNotification('success');
         } catch (error) {
             console.error(error);
             showNotification({
-                title: 'Sync Failed',
-                message: 'Could not fetch global trends.',
+                title: t('pro_dashboard.notifications.trends_failed_title'),
+                message: t('pro_dashboard.notifications.trends_failed_msg'),
                 type: 'warning'
             });
             hapticNotification('error');
@@ -204,7 +204,7 @@ export const ProDashboard = () => {
             console.error('Failed to fix headline', error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize headline.';
             showNotification({
-                title: 'Sync Error',
+                title: t('pro_dashboard.notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });
@@ -230,7 +230,7 @@ export const ProDashboard = () => {
             console.error('Failed to generate bio', error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize bio.';
             showNotification({
-                title: 'Sync Error',
+                title: t('pro_dashboard.notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });

@@ -939,7 +939,7 @@ export const ProDashboardModals = ({
                                                                     <span className={`px-2 py-0.5 rounded-md text-label font-bold uppercase tracking-[0.2em] ${news.impact === 'Massive'
                                                                         ? 'bg-rose-500/10 text-rose-500'
                                                                         : 'bg-emerald-500/10 text-emerald-500'
-                                                                        }`}>{news.relevance || 'High'} {t('pro_dashboard.tools.audit.relevance')}</span>
+                                                                        }`}>{news.relevance === 'Massive' ? t('pro_dashboard.tools.audit.relevance_massive') : t('pro_dashboard.tools.audit.relevance_high')} {t('pro_dashboard.tools.audit.relevance')}</span>
                                                                     {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-label font-bold text-amber-500 uppercase tracking-[0.2em] animate-bounce">{t('pro_dashboard.tools.audit.hot_now')}</span>}
                                                                 </div>
 
@@ -1206,7 +1206,7 @@ export const ProDashboardModals = ({
                                         onClick={() => { selection(); setShowManual(null); }}
                                         className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                                     >
-                                        {t('pro_dashboard.academy.understand_btn') || 'I Understand the Protocol'}
+                                        {t('pro_dashboard.academy.understand_protocol_btn')}
                                         <ArrowRight size={16} />
                                     </button>
                                 </div>
@@ -1323,7 +1323,7 @@ export const ProDashboardModals = ({
                                         {isFixingHeadline ? (
                                             <>
                                                 <Loader2 className="animate-spin" size={16} />
-                                                Synthesizing...
+                                                {t('pro_dashboard.tools.processing')}
                                             </>
                                         ) : (
                                             <>
@@ -1445,7 +1445,7 @@ export const ProDashboardModals = ({
                                         {isGeneratingBio ? (
                                             <>
                                                 <Loader2 className="animate-spin" size={16} />
-                                                Synthesizing...
+                                                {t('pro_dashboard.tools.processing')}
                                             </>
                                         ) : (
                                             <>

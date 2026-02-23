@@ -144,19 +144,19 @@ export const ToolsTab = ({
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="px-2.5 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
-                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">NETWORK ANALYTICS</span>
+                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">{t('pro_dashboard.growth_strategist.anal_label')}</span>
                                 </span>
                             </div>
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">Growth Strategist</h3>
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.growth_strategist.title')}</h3>
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
-                            Personalized neural advice to scale your network depth.
+                            {t('pro_dashboard.growth_strategist.neural_desc')}
                         </p>
                         <button
                             onClick={() => { selection(); setShowGrowthModal?.(true); }}
                             className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-blue-500/20 shrink-0 relative z-20 shadow-premium-sm"
                         >
-                            Analyze Network
+                            {t('pro_dashboard.growth_strategist.btn')}
                             <ChevronRight size={10} />
                         </button>
                     </motion.div>

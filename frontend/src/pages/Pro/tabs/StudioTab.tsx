@@ -631,7 +631,7 @@ export const StudioTab = ({
                             </motion.div>
                             <span className={`text-label font-bold uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${externalStep === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
                                 }`}>
-                                {s === 1 ? 'Frame' : s === 2 ? 'Synthes' : 'Deploy'}
+                                {s === 1 ? t('pro_dashboard.studio.stepper.frame') : s === 2 ? t('pro_dashboard.studio.stepper.synthes') : t('pro_dashboard.studio.stepper.deploy')}
                             </span>
                         </div>
                     ))}
@@ -916,7 +916,7 @@ export const StudioTab = ({
                                         <div className="inline-flex items-center gap-2 bg-purple-500/10 py-1.5 px-4 rounded-full border border-purple-500/20">
                                             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
                                             <h3 className="text-label font-bold uppercase tracking-[0.2em] text-purple-500">
-                                                SYNTHESIZING VIRAL CORE
+                                                {t('pro_dashboard.studio.processing_viral')}
                                             </h3>
                                         </div>
                                     </div>
@@ -928,7 +928,7 @@ export const StudioTab = ({
                                                 <span className="text-[28px] font-bold text-slate-900 dark:text-white leading-none tabular-nums">
                                                     {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-base opacity-30">%</span>
                                                 </span>
-                                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{countdown}s ETA</span>
+                                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.studio.processing_eta', { count: countdown })}</span>
                                             </div>
                                             <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden relative">
                                                 <motion.div
@@ -941,7 +941,7 @@ export const StudioTab = ({
                                     </div>
 
                                     <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
-                                        Architecting narrative resonance...
+                                        {t('pro_dashboard.studio.processing_msg')}
                                     </p>
                                 </div>
                             </div>
@@ -1143,7 +1143,7 @@ export const StudioTab = ({
                                     animate={{ opacity: 1, y: 0 }}
                                     className="absolute -top-3 right-0 bg-emerald-500 text-white text-label font-bold px-2 py-0.5 rounded-full uppercase tracking-widest flex items-center gap-1 shadow-lg z-10 border border-white/20"
                                 >
-                                    <Blocks size={8} /> Omni-Channel Enabled
+                                    <Blocks size={8} /> {t('pro_dashboard.studio.omni_enabled')}
                                 </motion.div>
                             )}
                             <div className="grid grid-cols-2 gap-3">
