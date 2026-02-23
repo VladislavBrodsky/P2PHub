@@ -525,7 +525,7 @@ export const AdminPage = () => {
     return (
         <div className="p-4 pb-[calc(var(--spacing-safe-bottom,20px)+80px)] space-y-6">
             {/* Header */}
-            <div className="flex flex-col items-center justify-center w-full py-6 space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center w-full py-3 space-y-4 text-center">
                 <div className="flex items-center justify-center w-full">
                     <div className="w-14 h-14 rounded-3xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-lg shadow-blue-500/5">
                         <ShieldCheck className="text-blue-500" size={28} />
@@ -572,7 +572,7 @@ export const AdminPage = () => {
                     <button
                         key={mode}
                         onClick={() => setViewMode(mode)}
-                        className={`px-3 py-2 text-label font-bold uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${viewMode === mode
+                        className={`px-3 py-1.5 text-label font-bold uppercase tracking-widest rounded-xl transition-all whitespace-nowrap flex items-center gap-1 ${viewMode === mode
                             ? 'bg-white dark:bg-white/10 shadow-sm text-blue-500'
                             : 'text-slate-500 hover:bg-white/5'
                             }`}
