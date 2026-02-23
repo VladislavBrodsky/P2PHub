@@ -143,10 +143,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mb-1">
                         <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
                         <CountUp value={stats.total} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.global_partners')}
                     </span>
                 </m.div>
@@ -162,10 +162,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-1">
                         <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
                         <CountUp value={stats.volume} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.volume_shifted')}
                     </span>
                 </m.div>
@@ -181,10 +181,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-1">
                         <Globe2 className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
                         <CountUp value={stats.countries} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.countries_active')}
                     </span>
                 </m.div>
@@ -195,10 +195,23 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-4 p-3 sm:p-4 rounded-2xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 flex flex-row items-center justify-center gap-3 sm:gap-6 shadow-premium-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden w-full px-4"
+                className="mt-4 p-3.5 sm:p-4 rounded-3xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-2xl border border-white/40 dark:border-white/10 flex flex-row items-center justify-center gap-4 sm:gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] cursor-pointer hover:bg-white/80 dark:hover:bg-slate-900/80 transition-all active:scale-[0.98] relative group overflow-hidden w-full px-5"
             >
+                {/* Viral Background Glow */}
+                <m.div
+                    animate={{
+                        opacity: [0.3, 0.6, 0.3],
+                        scale: [1, 1.2, 1]
+                    }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -inset-20 bg-radial from-blue-500/10 via-transparent to-transparent pointer-events-none"
+                />
+
                 {/* Live Indicator */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/80 animate-pulse" />
+                <div className="absolute top-3 right-5 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
+                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                    <span className="text-[8px] font-black uppercase tracking-widest text-red-500">LIVE</span>
+                </div>
 
                 <div className="flex -space-x-2.5 shrink-0">
                     <AnimatePresence mode="popLayout">
@@ -225,14 +238,14 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
 
-                <div className="flex-1 min-w-0">
-                    <p className="text-label sm:text-caption font-bold text-slate-900 dark:text-white leading-snug">
+                <div className="flex-1 min-w-0 relative z-10">
+                    <p className="text-label sm:text-caption font-semibold text-slate-600 dark:text-slate-300 leading-snug">
                         <Trans
                             i18nKey="stats.recent_join"
                             ns="dashboard"
                             values={{ count: stats.lastHourCount }}
                         >
-                            <span className="text-slate-900 dark:text-white font-black">
+                            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300 font-bold">
                                 +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
                             </span> joined Partner Center in the past 60 minutes
                         </Trans>
