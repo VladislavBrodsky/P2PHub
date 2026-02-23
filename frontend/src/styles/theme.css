@@ -314,7 +314,7 @@
 :root,
 .light {
   /* Core Colors */
-  --sys-surface: #FFFFFF;
+  --sys-surface: #F9FAFB;
   --sys-bg-app: #F9FAFB;
   --sys-bg-deep: #F9FAFB;
   --sys-text-primary: #0F172A;
@@ -330,14 +330,14 @@
 
   /* Semantic - Light */
   --raw-brand-border: rgba(15, 23, 42, 0.08);
-  --sys-bg-surface: #FFFFFF;
-  --sys-bg-glass: rgba(255, 255, 255, 0.75);
+  --sys-bg-surface: #F9FAFB;
+  --sys-bg-glass: rgba(249, 250, 251, 0.75);
   --sys-border-glass: rgba(0, 0, 0, 0.08);
   /* Darker for better definition in light mode */
   --sys-glass-highlight: rgba(255, 255, 255, 0.5);
 
   /* Card Semantic */
-  --card-bg: rgba(255, 255, 255, 0.85);
+  --card-bg: rgba(249, 250, 251, 0.85);
   --card-border: rgba(0, 0, 0, 0.05);
   --card-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 5px 15px -5px rgba(0, 0, 0, 0.02);
 
@@ -381,8 +381,8 @@
   --sys-bg-deep: #030712;
   /* Deeper slate for elite feel */
   --sys-bg-app: #030712;
-  --sys-surface: #0f172a;
-  --sys-bg-surface: #0f172a;
+  --sys-surface: #030712;
+  --sys-bg-surface: #030712;
   --sys-text-primary: #F9FAFB;
   --sys-text-secondary: #cbd5e1;
   /* Increased contrast for WCAG (formerly #94a3b8) */
