@@ -40,7 +40,7 @@ export const BlogCarousel = () => {
     if (isLoading) return null;
 
     return (
-        <section className="py-8 space-y-6">
+        <section className="py-2 space-y-2">
             <div className="flex items-center justify-between px-4">
                 <SectionHeader
                     title={t('blog.latest')}
@@ -56,7 +56,7 @@ export const BlogCarousel = () => {
                 </button>
             </div>
 
-            <div className="flex gap-4 overflow-x-auto px-4 pb-6 no-scrollbar snap-x snap-mandatory">
+            <div className="flex gap-4 overflow-x-auto overflow-y-hidden px-4 pb-2 no-scrollbar snap-x snap-mandatory">
                 {posts.map((post, index) => (
                     <m.div
                         key={post.id}
@@ -65,7 +65,7 @@ export const BlogCarousel = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, type: "spring", bounce: 0.2 }}
                         onClick={() => navigateToBlog(post.id)}
-                        className="min-w-[300px] max-w-[300px] group flex flex-col gap-4 p-7 rounded-[2rem] border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
+                        className="min-w-[300px] max-w-[300px] group flex flex-col gap-4 p-7 rounded-3xl border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                     >
                         {(post.image) ? (
                             <>

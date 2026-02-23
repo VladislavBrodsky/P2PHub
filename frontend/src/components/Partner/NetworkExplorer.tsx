@@ -45,7 +45,7 @@ const MemberSkeleton = () => (
 );
 
 export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplorerProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('social');
     const { selection, impact, notification } = useHaptic();
     const { user } = useUser();
     const queryClient = useQueryClient();

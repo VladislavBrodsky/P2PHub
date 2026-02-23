@@ -177,7 +177,8 @@ body::-webkit-scrollbar {
 
   h3,
   .h3 {
-    font-size: 1.25rem;
+    font-family: var(--font-heading);
+    font-size: var(--text-subheading, 20px);
     font-weight: var(--font-weight-bold, 700);
     line-height: var(--leading-snug, 1.3);
   }

@@ -109,13 +109,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const displayLoss = dailyLoss > 0 ? dailyLoss : 0;
 
     return (
-        <section className="px-4 py-8">
+        <section className="px-4 py-2">
             <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-[2.5rem] md:rounded-[3rem] bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-3xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
@@ -154,7 +154,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
-                    "p-6 rounded-2xl md:rounded-[2.5rem] relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
+                    "p-6 rounded-2xl md:rounded-3xl relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
                     !isStrategyUnlocked
                         ? "bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
                         : "bg-white/40 dark:bg-[#020805]/80 border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)]"
