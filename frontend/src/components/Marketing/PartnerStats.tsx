@@ -208,7 +208,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 />
 
                 {/* Live Indicator */}
-                <div className="absolute top-2.5 right-4 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
+                <div className="absolute top-2 right-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20">
                     <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
                     <span className="text-[8px] font-bold uppercase tracking-widest text-red-500">LIVE</span>
                 </div>
@@ -238,7 +238,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
 
-                <div className="flex-1 min-w-0 relative z-10 pr-14">
+                <div className="flex-1 min-w-0 relative z-10 pr-20">
                     <p className="text-label sm:text-caption font-semibold text-slate-600 dark:text-slate-300 leading-snug">
                         <Trans
                             i18nKey="stats.recent_join"
