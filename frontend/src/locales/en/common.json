@@ -9,12 +9,6 @@
   "dark": "Dark",
   "back": "Back",
   "hi": "Hi",
-  "community": {
-    "tab_dashboard": "Dashboard",
-    "tab_earn": "Earn",
-    "tab_partner": "Social",
-    "tab_cards": "Cards"
-  },
   "copy": "Copy",
   "close": "Close",
   "copied": "Copied",
@@ -148,10 +142,18 @@
     "features": {
       "dashboard": "Dashboard",
       "cards": "Cards",
+      "community": "Community",
+      "academy": "Academy",
+      "wallet": "Wallet",
       "partner": "Partner",
       "pro": "Pro",
-      "academy": "Academy",
-      "wallet": "Wallet"
+      "referral": "Referral",
+      "leaderboard": "Leagues",
+      "subscription": "Subscription",
+      "blog": "Blog",
+      "admin": "Admin",
+      "pro_dashboard": "PRO Dashboard",
+      "faq": "FAQ"
     }
   },
   "support": {

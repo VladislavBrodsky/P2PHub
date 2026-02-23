@@ -229,9 +229,10 @@ class NetworkStats(BaseModel):
     level_19: int = 0
     level_20: int = 0
 
-    class Config:
-        from_attributes = True
-        extra = "allow" # Allow dynamic levels in the future
+    model_config = {
+        "from_attributes": True,
+        "extra": "allow" # Allow dynamic levels in the future
+    }
 
 class GrowthMetrics(BaseModel):
     growth_pct: float
@@ -264,6 +265,8 @@ class PartnerTopResponse(BaseModel):
     referrals_count: int
     rank: str
     subscription_plan: str | None = None
+
+    model_config = {"from_attributes": True}
 
 class OrbitMemberResponse(BaseModel):
     id: int

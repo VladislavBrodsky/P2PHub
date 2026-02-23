@@ -50,9 +50,9 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-start bg-bg-app selection:bg-blue-500/10 overflow-hidden">
+        <div className="fixed inset-0 flex flex-col items-center justify-start bg-transparent selection:bg-blue-500/10 overflow-hidden">
             {/* Main Content Hub - Precisely centered Max-W container */}
-            <div className="relative flex flex-col min-h-dvh h-full w-full max-w-lg bg-bg-app sm:border-x sm:border-border-glass sm:shadow-premium-xl overflow-hidden">
+            <div className="relative flex flex-col h-full w-full max-w-lg bg-transparent sm:border-x sm:border-border-glass sm:shadow-premium-xl overflow-hidden">
                 {/* Staging Ribbon */}
                 {isStaging && (
                     <div className="fixed top-0 left-0 z-200 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">
@@ -71,11 +71,11 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                 {/* 2. Main content area (Scrollable) */}
                 <main
                     id="main-scroll-root"
-                    className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch]"
+                    className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch] no-scrollbar"
                     style={{
                         overscrollBehaviorY: 'none',
                         paddingTop: !isHeaderVisible ? '0px' : 'var(--header-total-height, 160px)',
-                        paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 24px) + 64px)'
+                        paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 24px) + 20px)'
                     }}
                 >
                     <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg px-4'}`}>
