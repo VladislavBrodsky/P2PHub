@@ -114,37 +114,36 @@ export const BentoGrid = () => {
     // #comment: Removed internal header logic as BentoGrid is now a pure-layout component. 
     // Hierarchy is now managed by the Dashboard's SectionHeader for better semantic control.
     return (
-        <section className="px-0 py-0 flex flex-col relative">
+        <section className="px-0 py-0 flex flex-col relative" style={{ minHeight: '600px' }}>
             {/* Carousel Container */}
-            <div className="relative" style={{ minHeight: '600px' }}>
+            <div className="relative w-full">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex items-start gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000 pt-[60px] pb-[60px]"
-                    style={{ height: '520px' }}
+                    className="flex items-center gap-4 overflow-x-auto no-scrollbar px-6 scroll-smooth"
+                    style={{ height: '520px', alignItems: 'center' }}
                 >
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
-                            className="relative shrink-0 w-[300px] sm:w-[340px] h-[400px] snap-center cursor-pointer"
+                            className="relative shrink-0 w-[300px] sm:w-[340px] snap-center cursor-pointer"
+                            style={{ height: '400px', perspective: '1000px' }}
                             onClick={() => toggleFlip(index)}
                         >
                             <m.div
-                                initial={{ opacity: 0, scale: 0.95, y: 0 }}
-                                whileInView={{
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{
                                     opacity: 1,
                                     scale: 1,
-                                    y: 0,
                                     transition: {
                                         duration: 0.4,
                                         delay: index * 0.05
                                     }
                                 }}
-                                viewport={{ once: true }}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className={`w-full h-full relative ${flippedCards[index] ? 'z-50' : 'z-10'}`}
-                                style={{ transformStyle: "preserve-3d" }}
+                                className={`w-full relative ${flippedCards[index] ? 'z-50' : 'z-10'}`}
+                                style={{ height: '400px', transformStyle: "preserve-3d" }}
                             >
                                 {/* FRONT SIDE */}
                                 <div
