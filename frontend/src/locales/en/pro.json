@@ -1034,7 +1034,15 @@
       "verify_transaction": "I PAID",
       "trc20_warning": "WARNING: TRC20 NETWORK ONLY",
       "transfer_exact": "TRANSFER EXACTLY ${amount} USDT",
-      "extend_membership": "EXTEND OR UPGRADE"
+      "extend_membership": "EXTEND OR UPGRADE",
+      "left_label": "LEFT",
+      "help_title": "Need Help?",
+      "help_desc": "Contact our support node for assistance with activation.",
+      "pending_review": "Pending Review",
+      "steps": {
+        "copy_address": "Copy Address",
+        "paste_hash": "Paste Hash"
+      }
     },
     "status": {
       "verifying": "Verifying...",

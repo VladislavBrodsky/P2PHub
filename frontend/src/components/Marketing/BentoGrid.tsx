@@ -116,11 +116,11 @@ export const BentoGrid = () => {
     return (
         <section className="px-0 py-0 flex flex-col overflow-hidden relative">
             {/* Carousel Container */}
-            <div className="relative">
+            <div className="relative h-[460px]">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex items-center gap-4 overflow-x-auto overflow-y-hidden pt-4 pb-12 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000"
+                    className="flex items-start gap-4 overflow-x-auto overflow-y-hidden pt-4 pb-12 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth perspective-1000 h-full"
                 >
                     {shiftSteps.map((step, index) => (
                         <div
@@ -129,10 +129,11 @@ export const BentoGrid = () => {
                             onClick={() => toggleFlip(index)}
                         >
                             <m.div
-                                initial={{ opacity: 0, scale: 0.95 }}
+                                initial={{ opacity: 0, scale: 0.95, y: 0 }}
                                 whileInView={{
                                     opacity: 1,
                                     scale: 1,
+                                    y: 0,
                                     transition: {
                                         duration: 0.4,
                                         delay: index * 0.05

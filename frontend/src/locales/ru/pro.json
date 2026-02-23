@@ -1020,7 +1020,8 @@
       "title": "РАЗРЫВ В ВОЗМОЖНОСТЯХ",
       "levels": "ГЛУБИНА ДОХОДА",
       "tokens": "МОЩЬ ИИ",
-      "channels": "МЕДИА-УЗЛЫ"
+      "channels": "МЕДИА-УЗЛЫ",
+      "tap_to_explore": "НАЖМИТЕ ДЛЯ ПОДРОБНОСТЕЙ"
     },
     "stats": {
       "partners": "ЛИДЕРОВ В СЕТИ",
@@ -1098,7 +1099,15 @@
       "verify_transaction": "Я ОПЛАТИЛ(А)",
       "trc20_warning": "ВНИМАНИЕ: ТОЛЬКО СЕТЬ TRC20",
       "transfer_exact": "ПЕРЕВЕДИТЕ РОВНО ${{amount}} USDT",
-      "extend_membership": "ПРОДЛИТЬ ИЛИ УЛУЧШИТЬ"
+      "extend_membership": "ПРОДЛИТЬ ИЛИ УЛУЧШИТЬ",
+      "left_label": "ОСТАЛОСЬ",
+      "help_title": "Нужна помощь?",
+      "help_desc": "Свяжитесь с нашим узлом поддержки для помощи с активацией.",
+      "pending_review": "На проверке",
+      "steps": {
+        "copy_address": "Копировать адрес",
+        "paste_hash": "Вставить хеш"
+      }
     },
     "status": {
       "verifying": "Проверка...",
