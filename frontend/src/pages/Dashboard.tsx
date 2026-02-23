@@ -77,7 +77,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className={`text-label font-black uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                                <p className={`text-label font-bold uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard:open_pro_dashboard')}
                                 </p>
                             </m.button>
@@ -87,7 +87,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className="text-label font-black uppercase tracking-[0.2em] text-white">
+                                <p className="text-label font-bold uppercase tracking-[0.2em] text-white">
                                     {t('dashboard:hero_badge')}
                                 </p>
                             </m.div>
@@ -101,17 +101,17 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 className="p-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-5 transition-transform active:scale-90"
                             >
                                 <ShieldCheck size={14} className="text-blue-500" />
-                                <span className="text-label font-black uppercase tracking-widest">Admin</span>
+                                <span className="text-label font-bold uppercase tracking-widest">Admin</span>
                             </m.button>
                         )}
                     </div>
 
                     <div className="flex flex-col gap-5">
-                        <h1 className="text-display font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[320px] mx-auto">
+                        <h1 className="text-display font-bold tracking-tighter text-text-primary leading-[1.05] text-center max-w-[320px] mx-auto">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-display font-black tracking-tighter leading-tight text-center max-w-[320px] vibing-crystal-text mx-auto"
+                            className="text-display font-bold tracking-tighter leading-tight text-center max-w-[320px] vibing-crystal-text mx-auto"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -163,10 +163,10 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* #comment: 6. Final CTA - Clear conversion point. */}
             <m.div variants={item} className="w-full flex flex-col items-center text-center py-12 gap-8">
-                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-black uppercase tracking-[0.3em] w-fit border border-blue-500/20 shadow-lg">
+                <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-bold uppercase tracking-[0.3em] w-fit border border-blue-500/20 shadow-lg">
                     {t('dashboard:movement_active')}
                 </div>
-                <h4 className="text-display font-black tracking-tight text-text-primary whitespace-pre-line leading-tight">
+                <h4 className="text-display font-bold tracking-tight text-text-primary whitespace-pre-line leading-tight">
                     {t('dashboard:cta_title')}
                 </h4>
                 <p className="text-body text-text-secondary max-w-[280px] leading-relaxed font-medium">

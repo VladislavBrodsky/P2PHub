@@ -166,7 +166,7 @@ export const BentoGrid = () => {
                                                 {t(`evolution.steps.${step.id}.title`)}
                                             </p>
                                             <h4 className={`text-xl font-bold leading-tight ${step.featured ? 'text-blue-500' : 'text-text-primary'}`}>
-                                                {t(`evolution.steps.${step.id}.subtitle`)}
+                                                {t(`dashboard:evolution.steps.${step.id}.subtitle`)}
                                             </h4>
                                         </div>
 
@@ -176,7 +176,7 @@ export const BentoGrid = () => {
 
                                         <div className="pt-2 flex justify-end opacity-40 group-hover:opacity-100 transition-opacity">
                                             <span className="text-[9px] font-bold text-blue-500 flex items-center gap-1 uppercase tracking-widest">
-                                                {t('tap_to_flip')} <RotateCcw size={10} />
+                                                {t('common:tap_to_flip')} <RotateCcw size={10} />
                                             </span>
                                         </div>
                                     </div>
@@ -204,7 +204,7 @@ export const BentoGrid = () => {
 
                                         <div className="flex flex-col gap-2">
                                             <h4 className="text-sm font-bold uppercase text-text-primary tracking-widest leading-tight">
-                                                {t(`evolution.steps.${step.id}.back_title`)}
+                                                {t(`dashboard:evolution.steps.${step.id}.back_title`)}
                                             </h4>
 
                                             <p className="text-caption font-medium text-text-secondary leading-relaxed max-w-[260px] mx-auto">

@@ -50,7 +50,7 @@ export const BlogCarousel = () => {
                 />
                 <button
                     onClick={() => navigateToBlog()}
-                    className="flex items-center gap-1 text-label font-black uppercase tracking-wider text-blue-500 bg-blue-500/5 px-4 py-2 rounded-full border border-blue-500/20 active:scale-95 transition-transform"
+                    className="flex items-center gap-1 text-label font-bold uppercase tracking-wider text-blue-500 bg-blue-500/5 px-4 py-2 rounded-full border border-blue-500/20 active:scale-95 transition-transform"
                 >
                     {t('blog.view_all')} <ChevronRight className="w-3.5 h-3.5 ml-0.5" />
                 </button>
@@ -83,7 +83,7 @@ export const BlogCarousel = () => {
                         <div className="relative z-20 flex flex-col h-full gap-4">
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-label font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
+                                    <span className="text-label font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/10">
                                         {post.category}
                                     </span>
                                     <span className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
@@ -93,7 +93,7 @@ export const BlogCarousel = () => {
                                 </div>
 
                                 <div className="flex flex-col gap-2 pt-1">
-                                    <h4 className="text-lg font-black leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-2">
+                                    <h4 className="text-lg font-bold leading-tight text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors line-clamp-2">
                                         {post.title}
                                     </h4>
 
@@ -105,10 +105,10 @@ export const BlogCarousel = () => {
 
                             <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-label font-black text-blue-500 border border-blue-500/10 shadow-inner">
+                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-label font-bold text-blue-500 border border-blue-500/10 shadow-inner">
                                         {post.author.charAt(0)}
                                     </div>
-                                    <span className="text-label font-black text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-wider">
+                                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-wider">
                                         {post.author}
                                     </span>
                                 </div>

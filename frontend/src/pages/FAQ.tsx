@@ -191,7 +191,7 @@ export default function FAQPage() {
                     >
                         <ArrowLeft size={18} />
                     </button>
-                    <span className="text-label font-black uppercase tracking-[0.2em] text-blue-500 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 backdrop-blur-sm">
+                    <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-500 bg-blue-500/10 px-3 py-1.5 rounded-full border border-blue-500/20 backdrop-blur-sm">
                         {t('faq.knowledge_base')}
                     </span>
                 </div>
@@ -199,7 +199,7 @@ export default function FAQPage() {
                 <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-4xl font-black text-text-primary tracking-tighter leading-none mb-4 uppercase"
+                    className="text-4xl font-bold text-text-primary tracking-tighter leading-none mb-4 uppercase"
                 >
                     <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-blue-500" /> }} />
                 </motion.h1>
@@ -231,7 +231,7 @@ export default function FAQPage() {
                     <button
                         key={cat.id}
                         onClick={() => { selection(); setSelectedCategory(cat.id); }}
-                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-label font-black uppercase tracking-widest transition-all ${selectedCategory === cat.id
+                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-label font-bold uppercase tracking-widest transition-all ${selectedCategory === cat.id
                             ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
                             : 'bg-card-bg border border-card-border text-text-secondary'
                             }`}
@@ -265,11 +265,11 @@ export default function FAQPage() {
                                             {faq.icon}
                                         </div>
                                         <div className="flex-1 pt-1">
-                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-black uppercase tracking-widest text-blue-500/60">
+                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-bold uppercase tracking-widest text-blue-500/60">
                                                 <Clock size={10} />
                                                 {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
                                             </div>
-                                            <h3 className="text-sm font-black text-text-primary leading-snug group-hover:text-blue-500 transition-colors">
+                                            <h3 className="text-sm font-bold text-text-primary leading-snug group-hover:text-blue-500 transition-colors">
                                                 {faq.q}
                                             </h3>
                                         </div>

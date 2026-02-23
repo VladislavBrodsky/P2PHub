@@ -226,7 +226,7 @@ export default function SubscriptionPage() {
                     >
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
-                    <span className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
+                    <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
                     <div className="w-10" /> {/* Spacer */}
                 </div>
 
@@ -245,7 +245,7 @@ export default function SubscriptionPage() {
                         </div>
                     </motion.div>
 
-                    <h1 className="text-heading font-black mb-1.5 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[240px]">
+                    <h1 className="text-heading font-bold mb-1.5 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[240px]">
                         {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
                     </h1>
 
@@ -260,8 +260,8 @@ export default function SubscriptionPage() {
                                     <Sparkles size={16} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-label font-black text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
-                                    <p className="text-caption font-black text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
+                                    <p className="text-label font-bold text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
+                                    <p className="text-caption font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-md">
@@ -271,7 +271,7 @@ export default function SubscriptionPage() {
 
                         <button
                             onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
-                            className={`w-full h-11 rounded-full font-black text-label tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
+                            className={`w-full h-11 rounded-full font-bold text-label tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
                             <Trophy size={13} />
                             {t('subscription.pro_active.command_center', 'OPEN PRO DASHBOARD')}
@@ -285,7 +285,7 @@ export default function SubscriptionPage() {
                                     setShowPaymentOptionsForPro(true);
                                     scrollToPayment();
                                 }}
-                                className="w-full h-12 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-black text-caption tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-2"
+                                className="w-full h-12 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-bold text-caption tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-2"
                             >
                                 <Sparkles size={14} fill="currentColor" />
                                 {t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE')}
@@ -293,7 +293,7 @@ export default function SubscriptionPage() {
                         )}
 
                         {!isLifetime && (
-                            <button onClick={() => setShowPaymentOptionsForPro(true)} className="text-label font-black text-white/40 uppercase tracking-widest hover:text-white transition-colors block mx-auto mt-6">
+                            <button onClick={() => setShowPaymentOptionsForPro(true)} className="text-label font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors block mx-auto mt-6">
                                 {t('subscription.upgrade.extend_membership', 'EXTEND MEMBERSHIP')}
                             </button>
                         )}
@@ -346,7 +346,7 @@ export default function SubscriptionPage() {
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
                     <div className="flex flex-col items-center">
-                        <span className="text-label font-black uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
                     </div>
                     <div className="w-10" />
                 </div>
@@ -388,23 +388,23 @@ export default function SubscriptionPage() {
 
                                     <div className="flex flex-row items-center justify-between gap-4 mb-3 relative z-10 px-1">
                                         <div className="flex flex-col items-start min-w-0">
-                                            <div className="flex items-center gap-1 text-label font-black text-slate-400 dark:text-white/30 uppercase tracking-[0.2em] whitespace-nowrap">
+                                            <div className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-white/30 uppercase tracking-[0.2em] whitespace-nowrap">
                                                 <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shrink-0" />
                                                 {t('subscription.upgrade.live_demand', 'LIVE DEMAND')}
                                             </div>
-                                            <div className="text-caption font-black text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
+                                            <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
                                                 {t('subscription.upgrade.lifetime_slots', 'LIFETIME SLOTS')}
                                             </div>
                                         </div>
 
                                         <div className="flex flex-col items-end shrink-0">
                                             <div className="flex items-baseline gap-1">
-                                                <span className="text-heading font-black text-slate-900 dark:text-white tabular-nums leading-none">
+                                                <span className="text-heading font-bold text-slate-900 dark:text-white tabular-nums leading-none">
                                                     {proStats.total - proStats.sold}
                                                 </span>
-                                                <span className="text-label text-slate-400 dark:text-white/30 font-black uppercase tracking-widest">LEFT</span>
+                                                <span className="text-label text-slate-400 dark:text-white/30 font-bold uppercase tracking-widest">LEFT</span>
                                             </div>
-                                            <div className="text-label font-black text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
+                                            <div className="text-label font-bold text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
                                                 {t('subscription.upgrade.selling_fast', 'SELLING FAST')}
                                             </div>
                                         </div>
@@ -434,10 +434,10 @@ export default function SubscriptionPage() {
                                     className="inline-flex items-center justify-center gap-2 mb-2 px-2.5 py-1 bg-blue-500/5 border border-blue-500/10 rounded-full"
                                 >
                                     <div className="w-1 h-1 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)] animate-pulse" />
-                                    <span className="text-label font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
+                                    <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
                                 </motion.div>
 
-                                <h2 className="text-heading sm:text-[24px] font-black tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
+                                <h2 className="text-heading sm:text-[24px] font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
                                     {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
                                 </h2>
 
@@ -460,16 +460,16 @@ export default function SubscriptionPage() {
                                     onClick={() => { selection(); setSelectedPlan('PRO'); }}
                                     className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                                 >
-                                    <span className={`text-label font-black tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
+                                    <span className={`text-label font-bold tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
                                         {t('subscription.upgrade.pro_title', 'PRO ACCESS')}
                                     </span>
                                     <div className="flex items-baseline gap-0.5">
                                         <span className={`text-caption font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
-                                        <span className={`text-3xl font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                        <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
                                             39
                                         </span>
                                     </div>
-                                    <span className={`text-label font-black uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                    <span className={`text-label font-bold uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
                                         {t('subscription.upgrade.monthly_label', '30 DAYS')}
                                     </span>
                                 </button>
@@ -485,7 +485,7 @@ export default function SubscriptionPage() {
                                                 initial={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
                                                 exit={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
-                                                className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-label sm:text-label font-black rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
+                                                className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-label sm:text-label font-bold rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
                                             >
                                                 <Zap size={10} className="fill-white animate-pulse" />
                                                 {t('subscription.upgrade.viral_badge', 'x100 FASTER')}
@@ -493,7 +493,7 @@ export default function SubscriptionPage() {
                                         )}
                                     </AnimatePresence>
 
-                                    <span className={`text-label font-black tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
+                                    <span className={`text-label font-bold tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
                                         {isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE') : t('subscription.upgrade.pro_plus_title', 'PRO+ ACCESS')}
                                     </span>
                                     <div className="flex items-baseline gap-0.5">

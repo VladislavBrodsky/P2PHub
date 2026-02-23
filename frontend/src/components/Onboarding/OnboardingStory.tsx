@@ -123,7 +123,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                     </motion.div>
 
                                     <div className="space-y-4">
-                                        <h2 className="text-4xl font-black text-white tracking-tighter">
+                                        <h2 className="text-4xl font-bold text-white tracking-tighter">
                                             {t(`onboarding.stories.${index}.title`)}
                                         </h2>
                                         <p className="text-lg text-white/80 font-bold leading-relaxed px-4">
@@ -157,7 +157,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                         <div className="absolute left-6 right-6 z-30" style={{ bottom: 'calc(env(safe-area-inset-bottom) + 2rem)' }}>
                             <button
                                 onClick={next}
-                                className="group w-full h-16 rounded-2xl bg-white text-slate-900 font-black flex items-center justify-center gap-2 active:scale-95 transition-all shadow-2xl shadow-black/20 relative overflow-hidden"
+                                className="group w-full h-16 rounded-2xl bg-white text-slate-900 font-bold flex items-center justify-center gap-2 active:scale-95 transition-all shadow-2xl shadow-black/20 relative overflow-hidden"
                             >
                                 <div className="relative z-10 flex items-center gap-2">
                                     {index === STORIES_LIST.length - 1 ? t('onboarding.get_started') : t('onboarding.next')}
