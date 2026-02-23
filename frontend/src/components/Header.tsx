@@ -54,7 +54,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-[18px] w-[18px] transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-primary">
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-text-primary">
                             {t('menu')}
                         </span>
                     </button>

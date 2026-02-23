@@ -367,11 +367,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="flex items-center justify-center gap-1.5">
                                             <Zap className="w-3 h-3 text-emerald-500 dark:text-emerald-400 animate-pulse shrink-0" />
                                             <span className="text-label font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 leading-tight">
-                                                {t('income.math.subheading')}
+                                                {t('marketing:income.math.subheading')}
                                             </span>
                                         </div>
                                         <h4 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight drop-shadow-sm">
-                                            {t('income.math.heading')}
+                                            {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
                                 </div>
@@ -407,13 +407,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 'text-label font-bold',
                                                 highlight ? 'text-emerald-700 dark:text-emerald-300' : 'text-slate-500 dark:text-white/50'
                                             )}>
-                                                {t(`income.math.${key}`)}
+                                                {t(`marketing:income.math.${key}`)}
                                             </span>
                                         </div>
 
                                         {highlight && (
                                             <div className="absolute -top-px -right-px bg-emerald-500 text-label font-bold uppercase tracking-wider text-white px-1.5 py-0.5 rounded-tr-xl rounded-bl-lg">
-                                                TARGET
+                                                {t('marketing:income.math.target_badge')}
                                             </div>
                                         )}
                                     </m.div>
@@ -426,7 +426,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     transition={{ delay: 0.5 }}
                                     className="text-center -mt-1"
                                 >
-                                    <span className="text-label text-slate-400 dark:text-white/20 font-mono">{t('income.math.formula_note')}</span>
+                                    <span className="text-label text-slate-400 dark:text-white/20 font-mono">{t('marketing:income.math.formula_note')}</span>
                                 </m.div>
 
                                 {/* FOMO red bar */}
@@ -441,7 +441,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
                                     </span>
                                     <p className="text-label font-bold text-rose-700 dark:text-rose-300 leading-snug">
-                                        {t('income.math.fomo_line')}
+                                        {t('marketing:income.math.fomo_line')}
                                     </p>
                                 </m.div>
 
@@ -478,7 +478,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             animate={{ y: 0, opacity: 1 }}
                                                             exit={{ y: 5, opacity: 0 }}
                                                             transition={{ duration: 0.2 }}
-                                                            className="text-xs font-bold text-slate-900 dark:text-white leading-none"
+                                                            className="text-label font-bold text-slate-900 dark:text-white leading-none"
                                                         >
                                                             {liveCount.toLocaleString()}
                                                         </m.span>
@@ -492,7 +492,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <div className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-500/10 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-500/20">
                                                 <div className="w-1 h-1 rounded-full bg-amber-500 animate-pulse" />
                                                 <span className="text-amber-600 dark:text-amber-500 font-bold text-label tracking-tight">
-                                                    {t('income.math.spots_left', { count: slotsLeft })}
+                                                    {t('marketing:income.math.spots_left', { count: slotsLeft })}
                                                 </span>
                                             </div>
                                         </div>
@@ -508,7 +508,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         }}
                                         className="bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-900 font-bold h-10 rounded-xl text-label tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transition-all uppercase"
                                     >
-                                        {t('income.math.cta_urgency')}
+                                        {t('marketing:income.math.cta_urgency')}
                                         <ArrowRight className="w-3.5 h-3.5" />
                                     </m.button>
                                 </div>
@@ -629,8 +629,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     })}
                                 </div>
                                 <div className="text-left">
-                                    <div className="text-label font-bold text-slate-900 dark:text-white leading-none">12,402+ PARTNERS</div>
-                                    <div className="text-label font-bold text-slate-500 uppercase tracking-wider">JOINED THE $1/MIN PROTOCOL TODAY</div>
+                                    <div className="text-label font-bold text-slate-900 dark:text-white leading-none">
+                                        {t('marketing:income.math.people_joining_count', '12,402+ PARTNERS', { val: '12,402+' })}
+                                    </div>
+                                    <div className="text-label font-bold text-slate-500 uppercase tracking-wider">
+                                        {t('marketing:income.math.joined_protocol', 'JOINED THE $1/MIN PROTOCOL TODAY')}
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -226,7 +226,7 @@ export default function SubscriptionPage() {
                     >
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
-                    <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('subscription.pro_active.title')}</span>
+                    <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('pro:subscription.pro_active.title')}</span>
                     <div className="w-10" /> {/* Spacer */}
                 </div>
 
@@ -246,11 +246,11 @@ export default function SubscriptionPage() {
                     </motion.div>
 
                     <h1 className="text-heading font-bold mb-1.5 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[240px]">
-                        {isPlus ? t('subscription.pro_active.title_plus', 'PRO+ EMPIRE') : t('subscription.pro_active.title', 'PRO ACTIVE')}
+                        {isPlus ? t('pro:subscription.pro_active.title_plus') : t('pro:subscription.pro_active.title')}
                     </h1>
 
                     <p className="text-slate-500 dark:text-slate-400 text-label font-medium max-w-[240px] mx-auto leading-relaxed mb-6">
-                        {isPlus ? t('subscription.pro_active.desc_plus') : t('subscription.pro_active.desc')}
+                        {isPlus ? t('pro:subscription.pro_active.desc_plus') : t('pro:subscription.pro_active.desc')}
                     </p>
 
                     <div className="w-full space-y-3">
@@ -260,8 +260,8 @@ export default function SubscriptionPage() {
                                     <Sparkles size={16} />
                                 </div>
                                 <div className="text-left">
-                                    <p className="text-label font-bold text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('subscription.pro_active.lifetime', 'YOUR PLAN')}</p>
-                                    <p className="text-caption font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? 'LIFETIME ACCESS' : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
+                                    <p className="text-label font-bold text-slate-500 dark:text-white/50 uppercase tracking-widest mb-0.5 whitespace-nowrap">{t('pro:subscription.pro_active.lifetime')}</p>
+                                    <p className="text-caption font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap">{isLifetime ? t('pro:subscription.pro_active.lifetime_access') : new Date(user.pro_expires_at!).toLocaleDateString()}</p>
                                 </div>
                             </div>
                             <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30 shrink-0 shadow-md">
@@ -274,7 +274,7 @@ export default function SubscriptionPage() {
                             className={`w-full h-11 rounded-full font-bold text-label tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${isPlus ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                         >
                             <Trophy size={13} />
-                            {t('subscription.pro_active.command_center', 'OPEN PRO DASHBOARD')}
+                            {t('pro:subscription.pro_active.command_center')}
                         </button>
 
                         {!isPlus && (
@@ -288,13 +288,13 @@ export default function SubscriptionPage() {
                                 className="w-full h-12 bg-black/40 backdrop-blur-xl border border-yellow-500/50 text-yellow-500 hover:text-yellow-400 hover:border-yellow-400 rounded-full font-bold text-caption tracking-widest uppercase flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-sm mt-2"
                             >
                                 <Sparkles size={14} fill="currentColor" />
-                                {t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE')}
+                                {t('pro:subscription.upgrade.pro_plus_upgrade_title')}
                             </button>
                         )}
 
                         {!isLifetime && (
                             <button onClick={() => setShowPaymentOptionsForPro(true)} className="text-label font-bold text-white/40 uppercase tracking-widest hover:text-white transition-colors block mx-auto mt-6">
-                                {t('subscription.upgrade.extend_membership', 'EXTEND MEMBERSHIP')}
+                                {t('pro:subscription.upgrade.extend_membership')}
                             </button>
                         )}
                     </div>
@@ -303,35 +303,34 @@ export default function SubscriptionPage() {
         );
     }
 
-    // ─── PLAN BENEFITS ────────────────────────────────────────────────────────
     const proBenefits = [
-        { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { id: 'tokens', icon: Zap, label: t('subscription.benefits.tokens'), desc: t('subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'cashback', icon: TrendingUp, label: t('subscription.benefits.cashback'), desc: t('subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
-        { id: 'tools', icon: Bot, label: t('subscription.benefits.tools'), desc: t('subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'intel', icon: Target, label: t('subscription.benefits.growth_intel'), desc: t('subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'tokens', icon: Zap, label: t('pro:subscription.benefits.tokens'), desc: t('pro:subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'cashback', icon: TrendingUp, label: t('pro:subscription.benefits.cashback'), desc: t('pro:subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
+        { id: 'tools', icon: Bot, label: t('pro:subscription.benefits.tools'), desc: t('pro:subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'intel', icon: Target, label: t('pro:subscription.benefits.growth_intel'), desc: t('pro:subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
     ];
 
     const proPlusBenefits = [
-        { id: 'ai', icon: Brain, label: t('subscription.benefits.ai_studio'), desc: t('subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'network', icon: Network, label: t('subscription.benefits.network_levels'), desc: t('subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { id: 'omni', icon: InfinityIcon, label: t('subscription.benefits.omni_sync'), desc: t('subscription.benefits.omni_sync_desc') + " " + t('subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
-        { id: 'priority', icon: Star, label: t('subscription.benefits.priority_ai'), desc: t('subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'analytics', icon: BarChart2, label: t('subscription.benefits.content_analytics'), desc: t('subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
-        { id: 'empire', icon: Rocket, label: t('subscription.benefits.empire_access'), desc: t('subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'omni', icon: InfinityIcon, label: t('pro:subscription.benefits.omni_sync'), desc: t('pro:subscription.benefits.omni_sync_desc') + " " + t('pro:subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
+        { id: 'priority', icon: Star, label: t('pro:subscription.benefits.priority_ai'), desc: t('pro:subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'analytics', icon: BarChart2, label: t('pro:subscription.benefits.content_analytics'), desc: t('pro:subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
+        { id: 'empire', icon: Rocket, label: t('pro:subscription.benefits.empire_access'), desc: t('pro:subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
     ];
 
     const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
 
     const faqs = [
-        { icon: Clock, iconColor: 'text-blue-500 dark:text-blue-400', q: t('subscription.faq.q1'), a: t('subscription.faq.a1') },
-        { icon: Zap, iconColor: 'text-amber-500 dark:text-amber-400', q: t('subscription.faq.q2'), a: t('subscription.faq.a2') },
-        { icon: Globe, iconColor: 'text-emerald-500 dark:text-emerald-400', q: t('subscription.faq.q3'), a: t('subscription.faq.a3') },
-        { icon: Shield, iconColor: 'text-purple-500 dark:text-purple-400', q: t('subscription.faq.q4'), a: t('subscription.faq.a4') },
-        { icon: Network, iconColor: 'text-blue-500 dark:text-blue-400', q: t('subscription.faq.q5'), a: t('subscription.faq.a5') },
-        { icon: TrendingUp, iconColor: 'text-rose-500 dark:text-rose-400', q: t('subscription.faq.q6'), a: t('subscription.faq.a6') },
-        { icon: Share2, iconColor: 'text-fuchsia-500 dark:text-fuchsia-400', q: t('subscription.faq.q7'), a: t('subscription.faq.a7') },
+        { icon: Clock, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q1'), a: t('pro:subscription.faq.a1') },
+        { icon: Zap, iconColor: 'text-amber-500 dark:text-amber-400', q: t('pro:subscription.faq.q2'), a: t('pro:subscription.faq.a2') },
+        { icon: Globe, iconColor: 'text-emerald-500 dark:text-emerald-400', q: t('pro:subscription.faq.q3'), a: t('pro:subscription.faq.a3') },
+        { icon: Shield, iconColor: 'text-purple-500 dark:text-purple-400', q: t('pro:subscription.faq.q4'), a: t('pro:subscription.faq.a4') },
+        { icon: Network, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q5'), a: t('pro:subscription.faq.a5') },
+        { icon: TrendingUp, iconColor: 'text-rose-500 dark:text-rose-400', q: t('pro:subscription.faq.q6'), a: t('pro:subscription.faq.a6') },
+        { icon: Share2, iconColor: 'text-fuchsia-500 dark:text-fuchsia-400', q: t('pro:subscription.faq.q7'), a: t('pro:subscription.faq.a7') },
     ];
 
     return (
@@ -346,7 +345,7 @@ export default function SubscriptionPage() {
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
                     <div className="flex flex-col items-center">
-                        <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('subscription.upgrade.badge')}</span>
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('pro:subscription.upgrade.badge')}</span>
                     </div>
                     <div className="w-10" />
                 </div>
@@ -390,10 +389,10 @@ export default function SubscriptionPage() {
                                         <div className="flex flex-col items-start min-w-0">
                                             <div className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-white/30 uppercase tracking-[0.2em] whitespace-nowrap">
                                                 <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shrink-0" />
-                                                {t('subscription.upgrade.live_demand', 'LIVE DEMAND')}
+                                                {t('pro:subscription.upgrade.live_demand')}
                                             </div>
                                             <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
-                                                {t('subscription.upgrade.lifetime_slots', 'LIFETIME SLOTS')}
+                                                {t('pro:subscription.upgrade.lifetime_slots')}
                                             </div>
                                         </div>
 
@@ -402,10 +401,10 @@ export default function SubscriptionPage() {
                                                 <span className="text-heading font-bold text-slate-900 dark:text-white tabular-nums leading-none">
                                                     {proStats.total - proStats.sold}
                                                 </span>
-                                                <span className="text-label text-slate-400 dark:text-white/30 font-bold uppercase tracking-widest">LEFT</span>
+                                                <span className="text-label text-slate-400 dark:text-white/30 font-bold uppercase tracking-widest">{t('pro:subscription.upgrade.left_label')}</span>
                                             </div>
                                             <div className="text-label font-bold text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
-                                                {t('subscription.upgrade.selling_fast', 'SELLING FAST')}
+                                                {t('pro:subscription.upgrade.selling_fast')}
                                             </div>
                                         </div>
                                     </div>
@@ -434,15 +433,15 @@ export default function SubscriptionPage() {
                                     className="inline-flex items-center justify-center gap-2 mb-2 px-2.5 py-1 bg-blue-500/5 border border-blue-500/10 rounded-full"
                                 >
                                     <div className="w-1 h-1 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)] animate-pulse" />
-                                    <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
+                                    <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                                 </motion.div>
 
                                 <h2 className="text-heading sm:text-heading font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
-                                    {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
+                                    {t('pro:subscription.upgrade.dominate_network')}
                                 </h2>
 
                                 <p className="text-label sm:text-caption text-slate-500 dark:text-slate-400 font-bold leading-tight max-w-[280px] mx-auto opacity-70">
-                                    {t('subscription.upgrade.subheadline', 'Accelerate your network growth and passive income with elite-level tools.')}
+                                    {t('pro:subscription.upgrade.subheadline')}
                                 </p>
                             </div>
 
@@ -461,7 +460,7 @@ export default function SubscriptionPage() {
                                     className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                                 >
                                     <span className={`text-label font-bold tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
-                                        {t('subscription.upgrade.pro_title', 'PRO ACCESS')}
+                                        {t('pro:subscription.upgrade.pro_title')}
                                     </span>
                                     <div className="flex items-baseline gap-0.5">
                                         <span className={`text-caption font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
@@ -470,7 +469,7 @@ export default function SubscriptionPage() {
                                         </span>
                                     </div>
                                     <span className={`text-label font-bold uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                        {t('subscription.upgrade.monthly_label', '30 DAYS')}
+                                        {t('pro:subscription.upgrade.monthly_label')}
                                     </span>
                                 </button>
 
@@ -488,13 +487,13 @@ export default function SubscriptionPage() {
                                                 className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-label sm:text-label font-bold rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
                                             >
                                                 <Zap size={10} className="fill-white animate-pulse" />
-                                                {t('subscription.upgrade.viral_badge', 'x100 FASTER')}
+                                                {t('pro:subscription.upgrade.viral_badge')}
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
 
                                     <span className={`text-label font-bold tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
-                                        {isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title', 'PRO+ UPGRADE') : t('subscription.upgrade.pro_plus_title', 'PRO+ ACCESS')}
+                                        {isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title')}
                                     </span>
                                     <div className="flex items-baseline gap-0.5">
                                         <span className={`text-caption font-bold ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/30'}`}>$</span>
@@ -503,7 +502,7 @@ export default function SubscriptionPage() {
                                         </span>
                                     </div>
                                     <span className={`text-label font-bold uppercase tracking-widest ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                        {isStandardPro ? t('subscription.upgrade.upgrade_label', 'ONE-TIME') : t('subscription.upgrade.lifetime_label', 'FOREVER')}
+                                        {isStandardPro ? t('pro:subscription.upgrade.upgrade_label') : t('pro:subscription.upgrade.lifetime_label')}
                                     </span>
                                 </button>
                             </div>
@@ -520,8 +519,8 @@ export default function SubscriptionPage() {
                                         <Clock size={16} className="animate-pulse" />
                                     </div>
                                     <div className="flex flex-col min-w-0">
-                                        <span className="text-label font-bold text-black/60 uppercase tracking-widest leading-none truncate">LIFETIME ACCESS</span>
-                                        <span className="text-label font-bold text-black uppercase tracking-tighter leading-tight truncate">OFFER CLOSING</span>
+                                        <span className="text-label font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                        <span className="text-label font-bold text-black uppercase tracking-tighter leading-tight truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                                     </div>
                                 </div>
 
@@ -549,32 +548,32 @@ export default function SubscriptionPage() {
                                         <div className="flex items-center gap-1 mb-0.5">
                                             <Zap className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400" />
                                             <span className="text-label font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 opacity-80">
-                                                {t('income.math.subheading')}
+                                                {t('marketing:income.math.subheading')}
                                             </span>
                                         </div>
                                         <h4 className="text-label font-bold text-slate-900 dark:text-white leading-tight">
-                                            {t('income.math.heading')}
+                                            {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
                                     <div className="text-right">
                                         <div className="text-button font-bold text-emerald-600 dark:text-emerald-400 tracking-tighter mb-0.5">$43,200</div>
-                                        <div className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('income.math.per_month')}</div>
+                                        <div className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('marketing:income.math.per_month')}</div>
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2">
                                     <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('income.math.per_day')}</div>
+                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_day')}</div>
                                         <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$1,440</div>
                                     </div>
                                     <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('income.math.per_year')}</div>
+                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_year')}</div>
                                         <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$518,400</div>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center justify-between text-label">
-                                    <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('income.math.formula_note')}</span>
+                                    <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('marketing:income.math.formula_note')}</span>
                                     <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
                                         <Flame className="w-2 h-2 text-rose-500 animate-pulse" />
                                         <span className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
@@ -589,19 +588,19 @@ export default function SubscriptionPage() {
                                 <div className="flex items-center gap-2">
                                     <div className="w-1 h-3 bg-blue-600 rounded-full" />
                                     <h3 className="text-label sm:text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
-                                        {t('subscription.comparison.title', 'Key Differences')}
+                                        {t('pro:subscription.comparison.title')}
                                     </h3>
                                 </div>
                                 <div className="text-label font-bold text-blue-500/80 uppercase tracking-widest animate-pulse">
-                                    TAP TO EXPLORE
+                                    {t('pro:subscription.comparison.tap_to_explore')}
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-2 px-2">
                                 {[
-                                    { icon: Network, label: t('subscription.comparison.levels', 'Levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('subscription.benefits.network_levels_desc_plus'), accent: 'emerald' },
-                                    { icon: Zap, label: t('subscription.comparison.tokens', 'Tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('subscription.benefits.tokens_desc_plus'), accent: 'amber' },
-                                    { icon: Send, label: t('subscription.comparison.channels', 'Nodes'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('subscription.benefits.tg_multi_channel_desc'), accent: 'blue' },
+                                    { icon: Network, label: t('pro:subscription.comparison.levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('pro:subscription.benefits.network_levels_desc_plus'), accent: 'emerald' },
+                                    { icon: Zap, label: t('pro:subscription.comparison.tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('pro:subscription.benefits.tokens_desc_plus'), accent: 'amber' },
+                                    { icon: Send, label: t('pro:subscription.comparison.channels'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('pro:subscription.benefits.tg_multi_channel_desc'), accent: 'blue' },
                                 ].map((item, idx) => {
                                     const activeValue = selectedPlan === 'PRO' ? item.pro : item.plus;
                                     const inactiveValue = selectedPlan === 'PRO' ? item.plus : item.pro;
@@ -623,7 +622,7 @@ export default function SubscriptionPage() {
                                                     >
                                                         <span className="text-label font-bold bg-linear-to-r from-rose-500 to-pink-500 text-white px-1 py-0.5 tracking-widest rounded-full shadow-[0_2px_8px_rgba(244,63,94,0.5)] uppercase flex items-center gap-0.5">
                                                             <Zap size={5} className="fill-white animate-pulse" />
-                                                            TURBO
+                                                            {t('marketing:income.math.turbo_badge', 'TURBO')}
                                                         </span>
                                                     </motion.div>
                                                 )}
@@ -671,8 +670,8 @@ export default function SubscriptionPage() {
                                         <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
                                         <span className="relative z-10">
                                             {selectedPlan === 'PRO'
-                                                ? t('subscription.upgrade.buy_pro_btn', 'BUY PRO')
-                                                : (isStandardPro ? t('subscription.upgrade.upgrade_to_pro_plus_btn', 'UPGRADE TO PRO+') : t('subscription.upgrade.buy_pro_plus_btn', 'BUY PRO+'))}
+                                                ? t('pro:subscription.upgrade.buy_pro_btn')
+                                                : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn'))}
                                         </span>
                                     </motion.button>
                                 ) : (
@@ -684,7 +683,7 @@ export default function SubscriptionPage() {
                                         className="space-y-4"
                                     >
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('subscription.upgrade.select_currency', 'Select Currency')}</span>
+                                            <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
                                             <button
                                                 onClick={() => setIsSelectingCurrency(false)}
                                                 className="text-label font-bold text-blue-500 uppercase tracking-widest"
@@ -698,14 +697,14 @@ export default function SubscriptionPage() {
                                                 className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
                                             </button>
                                             <button
                                                 onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
                                                 className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                             >
                                                 <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
                                             </button>
                                         </div>
                                     </motion.div>
@@ -748,10 +747,10 @@ export default function SubscriptionPage() {
                                     <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 ${selectedPlan === 'PRO' ? 'bg-blue-500' : 'bg-yellow-500'} transition-colors duration-500`} />
                                     <div className="relative z-10">
                                         <div className={`text-label font-bold uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-blue-600 dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`}>
-                                            {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : t('subscription.upgrade.pro_plus_title')} — {t('subscription.plan_headline')}
+                                            {selectedPlan === 'PRO' ? t('pro:subscription.upgrade.pro_title') : t('pro:subscription.upgrade.pro_plus_title')} — {t('pro:subscription.plan_headline')}
                                         </div>
                                         <p className="text-caption font-bold text-slate-700 dark:text-white/80 leading-snug">
-                                            {selectedPlan === 'PRO' ? t('subscription.plan_desc_pro') : t('subscription.plan_desc_plus')}
+                                            {selectedPlan === 'PRO' ? t('pro:subscription.plan_desc_pro') : t('pro:subscription.plan_desc_plus')}
                                         </p>
                                     </div>
                                 </div>
@@ -920,7 +919,7 @@ export default function SubscriptionPage() {
                                                         <div className="flex flex-col gap-2">
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-bold flex items-center justify-center shadow-lg">1</div>
-                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.copy_address', 'Send USDT (TRC-20)')}</span>
+                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.copy_address')}</span>
                                                             </div>
                                                             <div
                                                                 onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
@@ -933,7 +932,7 @@ export default function SubscriptionPage() {
                                                                         <Share2 size={14} />
                                                                     </div>
                                                                 </div>
-                                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">CLICK TO COPY</span>
+                                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:marketing:studio.publish_modal.more', { defaultValue: 'CLICK TO COPY' })}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -944,14 +943,14 @@ export default function SubscriptionPage() {
                                                         <div className="flex flex-col gap-2">
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-bold flex items-center justify-center shadow-lg">2</div>
-                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.steps.paste_hash', 'PASTE TRANSACTION ID')}</span>
+                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.paste_hash')}</span>
                                                             </div>
 
                                                             {/* CRITICAL INSTRUCTION ALERT */}
                                                             <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
                                                                 <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
                                                                 <p className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
-                                                                    {t('subscription.upgrade.final_instruction', 'IMPORTANT: You MUST paste the TxID below and click "I PAID" to finalize activation.')}
+                                                                    {t('pro:subscription.upgrade.final_instruction')}
                                                                 </p>
                                                             </div>
 
@@ -970,7 +969,7 @@ export default function SubscriptionPage() {
                                                                 <div className="flex items-center gap-2 px-2">
                                                                     <HelpCircle size={10} className="text-slate-400 shrink-0" />
                                                                     <p className="text-label text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
-                                                                        {t('subscription.upgrade.hash_help', 'Copy Transaction ID from your history.')}
+                                                                        {t('pro:subscription.upgrade.hash_help')}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -987,7 +986,7 @@ export default function SubscriptionPage() {
                                                             {isLoading ? <Loader2 className="animate-spin" /> : (
                                                                 <>
                                                                     <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                                                    <span>{status === 'manual_review' ? t('subscription.upgrade.pending_review', 'PENDING REVIEW') : t('subscription.upgrade.verify_transaction', 'I PAID')}</span>
+                                                                    <span>{status === 'manual_review' ? t('pro:subscription.upgrade.pending_review') : t('pro:subscription.upgrade.verify_transaction')}</span>
                                                                 </>
                                                             )}
                                                         </div>
@@ -995,8 +994,8 @@ export default function SubscriptionPage() {
 
                                                     {/* HELP SECTION */}
                                                     <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
-                                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">Stuck or Need Help?</p>
-                                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">Verification normally takes 1-5 minutes after one block confirmation.</p>
+                                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('pro:subscription.upgrade.help_title')}</p>
+                                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('pro:subscription.upgrade.help_desc')}</p>
                                                     </div>
                                                 </div>
                                             )}
@@ -1094,7 +1093,7 @@ export default function SubscriptionPage() {
                                             onClick={() => { selection(); setInfoModal(null); }}
                                             className={`w-full h-10 rounded-full font-bold text-label uppercase tracking-[0.2em] transition-all active:scale-95 shadow-xl border border-white/10 ${infoModal.color === 'emerald' ? 'vibing-emerald-animated text-white' : infoModal.color === 'amber' ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                                         >
-                                            {t('common.close', 'CLOSE')}
+                                            {t('common:close')}
                                         </button>
                                     </div>
                                 </div>
@@ -1104,12 +1103,12 @@ export default function SubscriptionPage() {
                                     {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
                                     {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}
                                     <h2 className="text-md font-bold text-slate-900 dark:text-white uppercase mb-2">
-                                        {status === 'pending' ? 'VERIFYING...' : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? 'YOU ARE PRO+ NOW!' : 'WELCOME TO PRO') : 'SUBMITTED'}
+                                        {status === 'pending' ? t('pro:subscription.status.verifying') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro') : t('pro:subscription.status.welcome_pro')) : t('pro:subscription.status.submitted')}
                                     </h2>
                                     <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6">
-                                        {status === 'pending' ? 'SCANNING BLOCKCHAIN FOR TRANSACTION' : 'YOUR ACCOUNT ACCESS IS BEING PROVISIONED'}
+                                        {status === 'pending' ? t('pro:subscription.status.verifying_p') : t('pro:subscription.status.welcome_pro_p')}
                                     </p>
-                                    <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">GOT IT</button>
+                                    <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">{t('pro:subscription.status.got_it')}</button>
                                 </div>
                             )}
                         </motion.div>

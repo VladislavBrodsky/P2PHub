@@ -71,6 +71,8 @@
       "formula_note": "1 min × 60 × 24 × 30 = 43,200",
       "fomo_line": "Every minute you're NOT in this — someone else is earning $1 in your place.",
       "people_joining": "{{count}} people joined the $1/min strategy in the last hour",
+      "people_joining_count": "{{val}} PARTNERS",
+      "joined_protocol": "JOINED THE $1/MIN PROTOCOL TODAY",
       "spots_left": "{{count}} Elite slots left today",
       "cta_urgency": "CLAIM YOUR SLOT NOW",
       "target_badge": "TARGET",
