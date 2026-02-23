@@ -146,7 +146,7 @@ export const BentoGrid = () => {
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(0deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
@@ -156,16 +156,16 @@ export const BentoGrid = () => {
                                             <div className="p-2.5 w-fit rounded-xl bg-white/40 dark:bg-black/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/10 shadow-sm transition-transform group-hover:scale-110">
                                                 {step.icon}
                                             </div>
-                                            <span className={`text-[10px] sm:text-label font-black px-3 py-1.5 rounded-full ${step.statusColor} tracking-[0.1em] uppercase shadow-sm`}>
+                                            <span className={`text-[10px] sm:text-label font-bold px-3 py-1.5 rounded-full ${step.statusColor} tracking-[0.1em] uppercase shadow-sm`}>
                                                 {t(`evolution.steps.${step.id}.status`)}
                                             </span>
                                         </div>
 
                                         <div className="space-y-1">
-                                            <p className="text-label font-black uppercase tracking-[0.2em] text-text-secondary opacity-60">
+                                            <p className="text-label font-bold uppercase tracking-[0.2em] text-text-secondary opacity-60">
                                                 {t(`evolution.steps.${step.id}.title`)}
                                             </p>
-                                            <h4 className={`text-xl font-black leading-tight ${step.featured ? 'text-blue-500' : 'text-text-primary'}`}>
+                                            <h4 className={`text-xl font-bold leading-tight ${step.featured ? 'text-blue-500' : 'text-text-primary'}`}>
                                                 {t(`evolution.steps.${step.id}.subtitle`)}
                                             </h4>
                                         </div>
@@ -175,7 +175,7 @@ export const BentoGrid = () => {
                                         </p>
 
                                         <div className="pt-2 flex justify-end opacity-40 group-hover:opacity-100 transition-opacity">
-                                            <span className="text-[9px] font-black text-blue-500 flex items-center gap-1 uppercase tracking-widest">
+                                            <span className="text-[9px] font-bold text-blue-500 flex items-center gap-1 uppercase tracking-widest">
                                                 {t('tap_to_flip')} <RotateCcw size={10} />
                                             </span>
                                         </div>
@@ -192,7 +192,7 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(180deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
@@ -203,7 +203,7 @@ export const BentoGrid = () => {
                                         </div>
 
                                         <div className="flex flex-col gap-2">
-                                            <h4 className="text-sm font-black uppercase text-text-primary tracking-widest leading-tight">
+                                            <h4 className="text-sm font-bold uppercase text-text-primary tracking-widest leading-tight">
                                                 {t(`evolution.steps.${step.id}.back_title`)}
                                             </h4>
 
@@ -212,7 +212,7 @@ export const BentoGrid = () => {
                                             </p>
                                         </div>
 
-                                        <button className={`mt-2 px-6 py-2.5 rounded-xl text-label font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-error/10 text-error border border-error/20 hover:bg-error/20' : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'}`}>
+                                        <button className={`mt-2 px-6 py-2.5 rounded-xl text-label font-bold uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg ${index < 3 ? 'bg-error/10 text-error border border-error/20 hover:bg-error/20' : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'}`}>
                                             {index < 3 ? t('common.back') : t('marketing:income.cta.join')}
                                         </button>
                                     </div>

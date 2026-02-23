@@ -17,7 +17,7 @@ interface AcademyContentPortalProps {
 }
 
 export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stage, onClose, onComplete, isLocked }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy');
     const { user } = useUser();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);

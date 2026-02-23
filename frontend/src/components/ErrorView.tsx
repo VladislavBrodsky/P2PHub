@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { RefreshCcw, AlertTriangle } from 'lucide-react';
 
 export const ErrorView = ({ featureName, onRetry, error }: { featureName: string; onRetry: () => void; error: Error | null }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-slate-900/50 rounded-2xl border border-slate-800 backdrop-blur-sm min-h-[300px]">

@@ -14,7 +14,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ onOpenMenu }: HeaderProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { user } = useUser();
     const controls = useAnimation();
 

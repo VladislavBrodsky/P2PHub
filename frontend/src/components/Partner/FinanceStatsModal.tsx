@@ -17,7 +17,7 @@ interface FinanceStatsProps {
 }
 
 export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('social');
     const { selection } = useHaptic();
     const [stats, setStats] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);

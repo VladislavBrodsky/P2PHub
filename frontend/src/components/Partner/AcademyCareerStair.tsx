@@ -9,7 +9,7 @@ import { useUser } from '../../context/UserContext';
 import { useNotificationStore } from '../../store/useNotificationStore';
 
 export const AcademyCareerStair = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy');
     const { user, completeStage, refreshUser, updateUser } = useUser();
     const { showNotification } = useNotificationStore();
     const [visibleStages, setVisibleStages] = useState(10);

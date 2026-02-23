@@ -37,7 +37,7 @@ interface SupportChatProps {
 }
 
 export function SupportChat({ isOpen, onClose }: SupportChatProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation('common');
     const { selection, notification } = useHaptic();
     const { user } = useUser();
     const [messages, setMessages] = React.useState<Message[]>([]);
