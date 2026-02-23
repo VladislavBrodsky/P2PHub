@@ -225,17 +225,19 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
 
-                <p className="text-[10px] sm:text-caption font-black text-slate-900 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis flex-1">
-                    <Trans
-                        i18nKey="stats.recent_join"
-                        ns="dashboard"
-                        values={{ count: stats.lastHourCount }}
-                    >
-                        <span className="text-slate-900 dark:text-white font-black">
-                            +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> partners
-                        </span> joined
-                    </Trans>
-                </p>
+                <div className="flex-1 min-w-0">
+                    <p className="text-label sm:text-caption font-bold text-slate-900 dark:text-white leading-snug">
+                        <Trans
+                            i18nKey="stats.recent_join"
+                            ns="dashboard"
+                            values={{ count: stats.lastHourCount }}
+                        >
+                            <span className="text-slate-900 dark:text-white font-black">
+                                +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
+                            </span> joined the community in the past 60 minutes
+                        </Trans>
+                    </p>
+                </div>
 
                 <m.div
                     className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full pointer-events-none"
