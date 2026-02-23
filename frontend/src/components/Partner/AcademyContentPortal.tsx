@@ -108,7 +108,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 }}
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
-                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-6 pb-4 pt-[calc(var(--spacing-safe-top)+2.5rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
+                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 pb-4 pt-[calc(var(--spacing-safe-top,32px)+3rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
 
                     {/* Close Button */}
                     <button

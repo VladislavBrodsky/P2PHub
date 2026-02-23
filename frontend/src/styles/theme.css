@@ -34,7 +34,7 @@
   --z-10000: 10000;
 
   /* #comment: Spacing & Safe Areas - Integrated into design system for precise layout kontrol */
-  --spacing-safe-top: env(safe-area-inset-top, 24px);
+  --spacing-safe-top: env(safe-area-inset-top, 32px);
   --spacing-safe-bottom: env(safe-area-inset-bottom, 24px);
   --spacing-safe-left: env(safe-area-inset-left, 0px);
   --spacing-safe-right: env(safe-area-inset-right, 0px);
