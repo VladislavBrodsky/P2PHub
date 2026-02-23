@@ -174,10 +174,10 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                                 </div>
                                                 <div className="text-left">
                                                     <div className="text-[7px] font-bold uppercase tracking-widest opacity-70">
-                                                        {t('common.wallet')}
+                                                        {t('wallet')}
                                                     </div>
                                                     <div className="font-bold text-label">
-                                                        {wallet ? formattedAddress : t('common.connect_wallet')}
+                                                        {wallet ? formattedAddress : t('connect_wallet')}
                                                     </div>
                                                 </div>
                                             </div>

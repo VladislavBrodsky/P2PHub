@@ -48,7 +48,7 @@ export const StudioTab = ({
     historyIndex,
     setHistoryIndex
 }: StudioTabProps) => {
-    const { t, i18n } = useTranslation('pro');
+    const { t, i18n } = useTranslation(['pro', 'common']);
     const [postType, setPostType] = useState('');
     const [audience, setAudience] = useState('');
     const [language, setLanguage] = useState(() => {

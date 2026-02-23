@@ -16,6 +16,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
     const [count, setCount] = useState(0);
+    const [baseCount, setBaseCount] = useState(0);
     const [isCalculating, setIsCalculating] = useState(true);
 
     const partnersCount = useMemo(() => {
@@ -24,36 +25,68 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
         return Math.floor(pseudoRandom * (765 - 333 + 1)) + 333;
     }, []);
 
-    // ── HIGH-VELOCITY CALCULATION LOGIC ──
+    // ── HIGH-VELOCITY CALCULATION & CONTINUOUS TICKER ──
     useEffect(() => {
-        if (!isCalculating) return;
+        if (isCalculating) {
+            const duration = 4000;
+            const startTime = Date.now();
+            const startVal = count;
 
-        const duration = 4000; // 4 seconds total
-        const startTime = Date.now();
-        const target = targetAmount;
+            const animate = () => {
+                const now = Date.now();
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
 
-        const update = () => {
-            const now = Date.now();
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(startVal + (targetAmount - startVal) * easeOutCubic);
+                setCount(current);
+                setBaseCount(current);
 
-            // Ease out cubic for more 'anticipation' at the end
-            const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-            setCount(Math.floor(easeOutCubic * target));
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    impact('medium');
+                    setTimeout(() => {
+                        setIsCalculating(false);
+                        setShowFunnel(true);
+                    }, 800);
+                }
+            };
+            requestAnimationFrame(animate);
+        } else {
+            // Smoothly transition to new target if it changes after initial calculation
+            let current = count;
+            const step = () => {
+                if (Math.abs(targetAmount - current) < 1) {
+                    setCount(targetAmount);
+                    setBaseCount(targetAmount);
+                    return;
+                }
+                current += (targetAmount - current) * 0.1;
+                setCount(Math.floor(current));
+                setBaseCount(Math.floor(current));
+                requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+    }, [isCalculating, targetAmount, impact]);
 
-            if (progress < 1) {
-                requestAnimationFrame(update);
-            } else {
-                impact('medium');
-                setTimeout(() => {
-                    setIsCalculating(false);
-                    setShowFunnel(true);
-                }, 800);
-            }
+    // Live Ticker Effect: Increment by small random amounts for "rising digits" feel
+    useEffect(() => {
+        if (isCalculating) return;
+
+        const tick = () => {
+            const extra = Number((Math.random() * 0.05).toFixed(2));
+            setCount(prev => prev + extra);
+
+            // Random interval between 1-3 seconds
+            const nextTick = 1000 + Math.random() * 2000;
+            setTimeout(tick, nextTick);
         };
 
-        requestAnimationFrame(update);
-    }, [isCalculating, impact, targetAmount]);
+        const timeoutId = setTimeout(tick, 2000);
+        return () => clearTimeout(timeoutId);
+    }, [isCalculating]);
 
     const handleUpgrade = () => {
         impact('heavy');
@@ -196,9 +229,11 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
 
                                 <div className="flex items-baseline justify-center gap-1">
                                     <span className="text-4xl sm:text-5xl font-bold tabular-nums tracking-tighter text-white">
-                                        ${count.toLocaleString()}
+                                        ${Math.floor(count).toLocaleString()}
                                     </span>
-                                    <span className="text-lg font-bold text-indigo-500">.00</span>
+                                    <span className="text-lg font-bold text-indigo-500">
+                                        .{Math.floor((count % 1) * 100).toString().padStart(2, '0')}
+                                    </span>
                                 </div>
 
                                 <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-px">

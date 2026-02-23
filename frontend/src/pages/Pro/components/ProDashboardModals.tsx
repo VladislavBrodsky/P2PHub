@@ -1013,7 +1013,7 @@ export const ProDashboardModals = ({
                                             disabled={isAuditing}
                                             className="text-label font-bold text-indigo-500 uppercase tracking-widest hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5"
                                         >
-                                            {isAuditing ? t('pro_dashboard.tools.audit.syncing') : t('pro_dashboard.tools.audit.sync_node_btn')}
+                                            {isAuditing ? t('pro_dashboard.tools.audit.scanning') : t('pro_dashboard.tools.audit.sync_node_btn')}
                                         </button>
                                     </div>
                                 </div>

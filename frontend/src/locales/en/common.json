@@ -13,6 +13,7 @@
   "copy": "Copy",
   "close": "Close",
   "copied": "Copied",
+  "copied_to_clipboard": "Copied to clipboard",
   "show_more": "Show more",
   "show_less": "Show less",
   "top_50": "TOP 50",
@@ -303,5 +304,12 @@
     "cta": {
       "join": "JOIN NOW"
     }
+  },
+  "admin_portal": {
+    "command_center": "Advanced Admin Command Center",
+    "performance_control": "Performance control",
+    "system_optimal": "System Optimal",
+    "attention_required": "Attention Required",
+    "refresh_data": "Refresh Data"
   }
 }

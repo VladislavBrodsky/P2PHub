@@ -79,7 +79,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
         } else {
             // Fallback to clipboard
             navigator.clipboard.writeText(text);
-            alert(t('common.copied_to_clipboard', 'Copied to clipboard!'));
+            alert(t('common:copied_to_clipboard'));
         }
     };
 

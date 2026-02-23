@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 import { apiClient } from '../api/client';
 import { useUser } from '../context/UserContext';
+import { useTranslation } from 'react-i18next';
 
 interface GrowthStat {
     count: number;
@@ -131,6 +132,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 export const AdminPage = () => {
     // #comment: Removed unused user variable from useUser as it is not needed in the AdminPage component
     useUser();
+    const { t } = useTranslation('common');
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -534,16 +536,16 @@ export const AdminPage = () => {
 
                 <div className="space-y-4">
                     <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-                        Advanced Admin Command Center
+                        {t('admin_portal.command_center')}
                     </h1>
 
                     <div className="flex flex-col items-center justify-center gap-4 pt-1">
                         <div className="flex items-center gap-2">
-                            <p className="text-slate-500 text-label font-bold uppercase tracking-[0.2em] whitespace-nowrap">Performance control</p>
+                            <p className="text-slate-500 text-label font-bold uppercase tracking-[0.2em] whitespace-nowrap">{t('admin_portal.performance_control')}</p>
                             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
                                 <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
                                 <span className="text-label font-bold uppercase text-slate-500 dark:text-slate-300">
-                                    {stats?.events.audit?.is_healthy ? 'System Optimal' : 'Attention Required'}
+                                    {stats?.events.audit?.is_healthy ? t('admin_portal.system_optimal') : t('admin_portal.attention_required')}
                                 </span>
                             </div>
                         </div>
@@ -551,7 +553,7 @@ export const AdminPage = () => {
                         <button
                             onClick={() => { setIsRefreshing(true); fetchData(true, true); }}
                             className={`w-14 h-14 rounded-3xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/5 dark:shadow-black/20 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}
-                            title="Refresh Data"
+                            title={t('admin_portal.refresh_data')}
                         >
                             <RefreshCw size={24} className="text-blue-500 dark:text-blue-400" />
                         </button>
