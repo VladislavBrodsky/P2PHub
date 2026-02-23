@@ -23,12 +23,12 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
 
             <div className="flex items-center justify-between mb-6">
                 <div>
-                    <h3 className="text-lg font-black text-white leading-none mb-1">{t('referral.tree.title')}</h3>
+                    <h3 className="text-lg font-bold text-white leading-none mb-1">{t('referral.tree.title')}</h3>
                     <p className="text-label font-bold text-slate-400 italic">{t('referral_matrix.nine_level')}</p>
                 </div>
                 <div className="flex items-center gap-1.5 bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">
                     <Users className="w-3.5 h-3.5 text-blue-500" />
-                    <span className="text-xs font-black text-blue-500">{totalPartners.toLocaleString()}</span>
+                    <span className="text-xs font-bold text-blue-500">{totalPartners.toLocaleString()}</span>
                 </div>
             </div>
 
@@ -56,8 +56,8 @@ export const ReferralTree = ({ stats }: ReferralTreeProps) => {
                         }}
                         className="glass-panel border-0 bg-white/5 rounded-2xl p-3 flex flex-col items-center justify-center relative group hover:bg-white/10 transition-colors"
                     >
-                        <span className="absolute top-2 left-2 text-label font-black text-white/30 group-hover:text-blue-500 transition-colors">L{level}</span>
-                        <span className="text-base sm:text-lg font-black text-white truncate">{count.toLocaleString()}</span>
+                        <span className="absolute top-2 left-2 text-label font-bold text-white/30 group-hover:text-blue-500 transition-colors">L{level}</span>
+                        <span className="text-base sm:text-lg font-bold text-white truncate">{count.toLocaleString()}</span>
                         <span className="text-label font-bold text-slate-500 uppercase tracking-tighter">{t('referral.members')}</span>
                     </motion.div>
                 ))}

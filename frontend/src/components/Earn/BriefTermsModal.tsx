@@ -51,7 +51,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         {/* Header */}
                         <div className="p-6 pb-4 border-b border-border-glass bg-bg-glass backdrop-blur-md sticky top-0 z-10">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-xl font-black text-text-primary tracking-tight flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-text-primary tracking-tight flex items-center gap-2">
                                     <ShieldCheck className="w-5 h-5 text-emerald-500" />
                                     {t('referral.brief.title')}
                                 </h2>
@@ -142,7 +142,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                     <div className="absolute top-0 right-0 p-3 opacity-10">
                                         <Zap className="w-24 h-24 text-emerald-500" />
                                     </div>
-                                    <h3 className="text-lg font-black text-slate-900 dark:text-white mb-2 relative z-10">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 relative z-10">
                                         {t('referral.brief.motivation_title')}
                                     </h3>
                                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 relative z-10 leading-relaxed">

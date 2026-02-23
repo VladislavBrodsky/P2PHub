@@ -271,7 +271,7 @@ const FractalProfits = memo(() => {
                                 <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
                             </div>
                         </div>
-                        <span className={`text-caption font-black tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
+                        <span className={`text-caption font-bold tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
                             +{isTon ? `${amount} TON` : `$${amount}.00`}
                         </span>
                     </m.div>

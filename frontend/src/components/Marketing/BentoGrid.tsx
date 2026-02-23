@@ -157,13 +157,13 @@ export const BentoGrid = () => {
                                                 {step.icon}
                                             </div>
                                             <span className={`text-[10px] sm:text-label font-bold px-3 py-1.5 rounded-full ${step.statusColor} tracking-[0.1em] uppercase shadow-sm`}>
-                                                {t(`evolution.steps.${step.id}.status`)}
+                                                {t(`dashboard:evolution.steps.${step.id}.status`)}
                                             </span>
                                         </div>
 
                                         <div className="space-y-1">
                                             <p className="text-label font-bold uppercase tracking-[0.2em] text-text-secondary opacity-60">
-                                                {t(`evolution.steps.${step.id}.title`)}
+                                                {t(`dashboard:evolution.steps.${step.id}.title`)}
                                             </p>
                                             <h4 className={`text-xl font-bold leading-tight ${step.featured ? 'text-blue-500' : 'text-text-primary'}`}>
                                                 {t(`dashboard:evolution.steps.${step.id}.subtitle`)}
@@ -171,7 +171,7 @@ export const BentoGrid = () => {
                                         </div>
 
                                         <p className="text-caption font-semibold leading-relaxed text-text-secondary line-clamp-4 grow">
-                                            {t(`evolution.steps.${step.id}.desc`)}
+                                            {t(`dashboard:evolution.steps.${step.id}.desc`)}
                                         </p>
 
                                         <div className="pt-2 flex justify-end opacity-40 group-hover:opacity-100 transition-opacity">
@@ -208,7 +208,7 @@ export const BentoGrid = () => {
                                             </h4>
 
                                             <p className="text-caption font-medium text-text-secondary leading-relaxed max-w-[260px] mx-auto">
-                                                {t(`evolution.steps.${step.id}.back_desc`)}
+                                                {t(`dashboard:evolution.steps.${step.id}.back_desc`)}
                                             </p>
                                         </div>
 
