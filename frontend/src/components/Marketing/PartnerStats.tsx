@@ -94,7 +94,9 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
 
             if (recentRes.status === 200 && recentRes.data) {
                 const { partners, last_hour_count } = recentRes.data;
-                const adjustedLastHour = (last_hour_count || 0) + 342;
+                const baseCount = last_hour_count || 0;
+                // Ensure count is between 333 and 582
+                const adjustedLastHour = 333 + (baseCount % (582 - 333 + 1));
                 setRecentPartners(partners || []);
                 setStats(prev => ({ ...prev, lastHourCount: adjustedLastHour }));
             }
@@ -193,37 +195,37 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-6 p-4 sm:p-5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 shadow-premium-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden w-full"
+                className="mt-4 p-3 sm:p-4 rounded-2xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 flex flex-row items-center justify-center gap-3 sm:gap-6 shadow-premium-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden w-full"
             >
                 {/* Live Indicator */}
                 <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/80 animate-pulse" />
 
-                <div className="flex -space-x-2 shrink-0 self-center">
+                <div className="flex -space-x-2.5 shrink-0">
                     <AnimatePresence mode="popLayout">
                         {recentPartners.length > 0 ? (
-                            recentPartners.slice(0, 4).map((partner, i) => (
+                            recentPartners.slice(0, 3).map((partner, i) => (
                                 <m.div
                                     key={partner.id || i}
                                     initial={{ opacity: 0, scale: 0.8 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: i * 0.05 }}
-                                    className="w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 relative z-10"
+                                    className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-800 flex items-center justify-center overflow-hidden shadow-premium-sm transition-transform hover:scale-110 relative z-10"
                                 >
                                     <PartnerAvatar partner={partner} index={i} />
                                 </m.div>
                             ))
                         ) : (
-                            [1, 2, 3, 4].map((i) => (
-                                <div key={i} className="w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-200/20 dark:bg-white/5 animate-pulse" />
+                            [1, 2, 3].map((i) => (
+                                <div key={i} className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] rounded-full border-2 border-white dark:border-slate-800 bg-slate-200/20 dark:bg-white/5 animate-pulse" />
                             ))
                         )}
                     </AnimatePresence>
-                    <div className="w-[32px] h-[32px] sm:w-[36px] sm:h-[36px] rounded-full border-2 border-white dark:border-slate-800 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0">
-                        <Zap size={12} className="animate-[pulse-glow_1.5s_infinite]" />
+                    <div className="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px] rounded-full border-2 border-white dark:border-white/10 bg-blue-600 text-white flex items-center justify-center shadow-premium-sm relative z-0">
+                        <Zap size={10} className="animate-[pulse-glow_1.5s_infinite]" />
                     </div>
                 </div>
 
-                <p className="text-[11px] sm:text-[13px] font-bold text-slate-600 dark:text-slate-300 leading-snug text-center sm:text-left min-w-0 max-w-sm">
+                <p className="text-[10px] sm:text-caption font-bold text-slate-600 dark:text-slate-300 leading-none whitespace-nowrap">
                     <Trans
                         i18nKey="stats.recent_join"
                         ns="dashboard"
@@ -231,7 +233,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     >
                         <span className="text-slate-900 dark:text-white font-black">
                             +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
-                        </span> joined the movement
+                        </span> joined
                     </Trans>
                 </p>
 

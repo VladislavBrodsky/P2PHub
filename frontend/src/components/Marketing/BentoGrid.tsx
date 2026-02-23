@@ -146,7 +146,7 @@ export const BentoGrid = () => {
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2rem] border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(0deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
@@ -192,7 +192,7 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-[2rem] border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 p-7 glass-panel-premium flex flex-col text-center justify-center items-center shadow-2xl transition-colors duration-300 ${step.featured ? 'border-blue-500/30' : ''}`}
                                     style={{ transform: 'rotateY(180deg)' }}
                                 >
                                     <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
@@ -223,7 +223,7 @@ export const BentoGrid = () => {
                 </div>
 
                 {/* Dashboard Indicators */}
-                <div className="flex flex-col items-center gap-4 mt-2">
+                <div className="flex items-center justify-center -mt-2">
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/40 dark:bg-white/5 border border-white/10 backdrop-blur-md shadow-sm">
                         {shiftSteps.map((_, i) => (
                             <m.div
