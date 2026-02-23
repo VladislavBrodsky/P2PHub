@@ -73,7 +73,7 @@ export const PartnerAcademy = () => {
                             </div>
                             <div className="flex items-baseline gap-1.5 overflow-hidden">
                                 <span className="text-[9px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest whitespace-nowrap opacity-80">{t('academy.global_ranking')}</span>
-                                <span className="text-[11px] font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
+                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
