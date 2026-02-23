@@ -37,10 +37,10 @@ export default function CommunityPage() {
 
             {/* Top Navigation / Switcher */}
             <div className="relative z-20 mb-6 mt-6 flex justify-center">
-                <div className="p-1 rounded-2xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
+                <div className="p-1 rounded-3xl bg-slate-100/50 dark:bg-black/20 border border-white/5 backdrop-blur-2xl flex items-center relative gap-1 shadow-inner overflow-hidden">
                     {/* Sliding Background */}
                     <motion.div
-                        className="absolute inset-y-1 rounded-xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0 pointer-events-none"
+                        className="absolute inset-y-1 rounded-2xl bg-white dark:bg-white/10 shadow-[0_2px_10px_rgba(0,0,0,0.1)] dark:shadow-premium border border-white/10 z-0 pointer-events-none"
                         layout={false}
                         initial={false}
                         animate={{
@@ -61,7 +61,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('dashboard')}
                         className={cn(
-                            "relative z-10 px-4 py-3.5 text-label font-black uppercase tracking-widest transition-all w-28 text-center",
+                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-32 text-center truncate",
                             activeTab === 'dashboard' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >
@@ -71,7 +71,7 @@ export default function CommunityPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleTabChange('academy')}
                         className={cn(
-                            "relative z-10 px-4 py-3.5 text-label font-black uppercase tracking-widest transition-all w-28 text-center",
+                            "relative z-10 px-4 py-3 text-label font-black uppercase tracking-wider transition-all w-32 text-center truncate",
                             activeTab === 'academy' ? "text-slate-900 dark:text-white" : "text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
                         )}
                     >

@@ -518,7 +518,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </AnimatePresence>
 
                 <div className="grid grid-cols-2 gap-4 relative z-0">
-                    <div className="glass-panel-premium p-5 rounded-[2rem] flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
+                    <div className="glass-panel-premium p-5 rounded-3xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                                 <Users className="w-5 h-5 text-blue-500 shrink-0" />
@@ -533,7 +533,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                     </div>
 
-                    <div className="glass-panel-premium p-5 rounded-[2rem] flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
+                    <div className="glass-panel-premium p-5 rounded-3xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
                                 <DollarSign className="w-5 h-5 text-emerald-500 shrink-0" />
