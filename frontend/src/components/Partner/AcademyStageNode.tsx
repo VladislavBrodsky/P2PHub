@@ -150,7 +150,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                         isRightSide ? "mr-auto" : "ml-auto"
                     )}>
                         <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
-                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration}</span>
+                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration?.replace('min', 'мин')}</span>
                     </div>
                 )}
             </div>

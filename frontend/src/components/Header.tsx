@@ -76,7 +76,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
-                                <Crown size={10} className="sm:h-[12px] sm:w-[12px] text-amber-500 fill-amber-500/20" />
+                                <Crown size={4} className="sm:size-5 text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
                         <div className="h-3 w-px bg-border-glass" />
