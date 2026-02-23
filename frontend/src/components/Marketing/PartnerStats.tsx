@@ -98,7 +98,10 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 // Ensure count is between 333 and 582
                 const adjustedLastHour = 333 + (baseCount % (582 - 333 + 1));
                 setRecentPartners(partners || []);
-                setStats(prev => ({ ...prev, lastHourCount: adjustedLastHour }));
+                setStats(prev => ({
+                    ...prev,
+                    lastHourCount: prev.lastHourCount === 342 ? adjustedLastHour : Math.max(prev.lastHourCount, adjustedLastHour)
+                }));
             }
 
             if (statsRes.status === 200 && statsRes.data) {
@@ -129,6 +132,25 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
             console.error("Failed to fetch dashboard stats", error);
         }
     }, 5 * 60 * 1000);
+
+    // Simulate real-time growth for the LIVE feel
+    useEffect(() => {
+        let timeoutId: number;
+
+        const scheduleNextIncrement = () => {
+            // Random interval between 4 and 10 seconds
+            const nextInterval = Math.floor(Math.random() * 6000) + 4000;
+            timeoutId = window.setTimeout(() => {
+                setStats(prev => ({ ...prev, lastHourCount: prev.lastHourCount + 1 }));
+                scheduleNextIncrement();
+            }, nextInterval);
+        };
+
+        scheduleNextIncrement();
+
+        return () => window.clearTimeout(timeoutId);
+    }, []);
+
 
     return (
         <section className="px-4 py-8 relative w-full max-w-2xl mx-auto">
