@@ -86,7 +86,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
 
                             <button
                                 onClick={onClose}
-                                className="mt-4 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
+                                className="mt-4 text-label font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white transition-colors"
                             >
                                 {t('cards.modal.later')}
                             </button>

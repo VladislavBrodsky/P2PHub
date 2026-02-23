@@ -91,9 +91,9 @@ export default function LeaderboardPage() {
             >
                 <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                    <span className="text-label font-black uppercase tracking-[0.25em] text-emerald-500">{t('leaderboard.live_rankings')}</span>
+                    <span className="text-label font-bold uppercase tracking-[0.25em] text-emerald-500">{t('leaderboard.live_rankings')}</span>
                 </div>
-                <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
                     {t('leaderboard.title')}
                 </h1>
 
@@ -107,7 +107,7 @@ export default function LeaderboardPage() {
                                 setTimeframe(tf);
                                 setShowAll(false);
                             }}
-                            className={`flex-1 py-2 text-label font-black uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
+                            className={`flex-1 py-2 text-label font-bold uppercase tracking-widest rounded-lg transition-all relative ${timeframe === tf
                                 ? 'bg-white dark:bg-white/10 text-slate-900 dark:text-white shadow-sm'
                                 : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'
                                 }`}
@@ -162,7 +162,7 @@ export default function LeaderboardPage() {
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="relative">
                                     {/* #comment Switched to rounded-full for the rank circle to satisfy the "perfect circle" aesthetic requested. */}
-                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-black shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
+                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-bold shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
                                         index === 1 ? 'bg-slate-300 text-slate-700' :
                                             index === 2 ? 'bg-orange-300 text-orange-800' :
                                                 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
@@ -203,14 +203,14 @@ export default function LeaderboardPage() {
                                             />
                                         ) : (
                                             <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
-                                                } text-white font-black text-lg shadow-inner`}>
+                                                } text-white font-bold text-lg shadow-inner`}>
                                                 {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
                                             </div>
                                         )}
                                     </div>
                                     <div className="text-left">
                                         <div className="flex items-center gap-1.5">
-                                            <p className="text-xs font-black text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
+                                            <p className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
                                         </div>
                                         <div className="flex items-center gap-1.5 flex-wrap">
                                             <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
@@ -218,7 +218,7 @@ export default function LeaderboardPage() {
                                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
                                                 <div className="flex items-center gap-1 text-blue-500/70">
                                                     <Crown size={8} className="stroke-3" />
-                                                    <span className="font-black">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
+                                                    <span className="font-bold">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,10 +227,10 @@ export default function LeaderboardPage() {
                             </div>
 
                             <div className="flex flex-col items-end gap-0.5 relative z-10">
-                                <span className="text-xs font-black text-slate-900 dark:text-white font-mono tracking-tighter">
+                                <span className="text-xs font-bold text-slate-900 dark:text-white font-mono tracking-tighter">
                                     {Math.floor(user.xp).toLocaleString()}
                                 </span>
-                                <span className="text-label font-black uppercase tracking-widest text-emerald-500/80 leading-none">
+                                <span className="text-label font-bold uppercase tracking-widest text-emerald-500/80 leading-none">
                                     {t('leaderboard.xp')}
                                 </span>
                             </div>
@@ -244,7 +244,7 @@ export default function LeaderboardPage() {
                                 selection();
                                 setShowAll(!showAll);
                             }}
-                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
+                            className="w-full mt-2 py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-all active:scale-95"
                         >
                             {showAll ? t('common:show_less') : `${t('common:show_more')} (${t('common:top_50')})`}
                         </button>

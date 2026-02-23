@@ -76,7 +76,7 @@ export const PartnerAcademy = () => {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-label font-black text-blue-500 dark:text-blue-400 uppercase tracking-[0.2em] leading-none">{t('academy.global_ranking')}</span>
-                                <span className="text-[11px] font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
+                                <span className="text-label font-black text-slate-900 dark:text-white uppercase leading-none mt-1 group-hover:text-blue-600 transition-colors">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 

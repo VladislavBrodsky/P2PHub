@@ -132,7 +132,7 @@ export const PintopayCard = ({
                         {variant === 'platinum' && (
                             <div className="absolute top-6 right-6 z-20">
                                 <div className="bg-slate-900/10 backdrop-blur-md border border-slate-900/10 rounded-full px-4 py-1.5 shadow-sm">
-                                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900">
+                                    <span className="text-label font-black uppercase tracking-[0.2em] text-slate-900">
                                         Platinum
                                     </span>
                                 </div>

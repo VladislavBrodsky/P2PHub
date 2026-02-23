@@ -48,10 +48,10 @@ export const Footer = () => {
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">
-                    <h5 className="text-label font-black uppercase tracking-[0.2em] text-slate-400/80">
+                    <h5 className="text-label font-bold uppercase tracking-[0.2em] text-slate-400/80">
                         {t('legal.disclaimer_title')}
                     </h5>
-                    <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
+                    <p className="text-label leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
                         <Trans i18nKey="legal.disclaimer_desc">
                             We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
                         </Trans>
@@ -115,7 +115,7 @@ export const Footer = () => {
                                                     </div>
                                                 );
                                             })()}
-                                            <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider">
+                                            <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                                                 {activeDoc && docContent[activeDoc].title}
                                             </h3>
                                         </div>

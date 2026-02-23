@@ -120,12 +120,12 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex gap-4 overflow-x-auto overflow-y-hidden pb-8 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
+                    className="flex gap-4 overflow-x-auto overflow-y-hidden pb-6 snap-x snap-mandatory no-scrollbar px-6 scroll-smooth"
                 >
                     {shiftSteps.map((step, index) => (
                         <m.div
                             key={index}
-                            className={`relative group shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center perspective-1000 cursor-pointer`}
+                            className={`relative group shrink-0 w-[300px] sm:w-[340px] h-[380px] snap-center perspective-1000 cursor-pointer ${flippedCards[index] ? 'z-50' : 'z-10'}`}
                             onClick={() => toggleFlip(index)}
                             whileHover={{ scale: 1.01 }}
                             whileTap={{ scale: 0.98 }}
@@ -140,7 +140,12 @@ export const BentoGrid = () => {
                                     damping: 30,
                                     delay: index * 0.05
                                 }}
-                                animate={{ rotateY: flippedCards[index] ? 180 : 0 }}
+                                animate={{
+                                    rotateY: flippedCards[index] ? 180 : 0,
+                                    y: 0,
+                                    opacity: 1,
+                                    scale: 1
+                                }}
                                 style={{ transformStyle: "preserve-3d" }}
                                 className={`w-full h-full relative`}
                             >
@@ -223,7 +228,7 @@ export const BentoGrid = () => {
                 </div>
 
                 {/* Dashboard Indicators - Absolutely positioned for zero-gap */}
-                <div className="absolute left-0 right-0 bottom-2 flex items-center justify-center z-20 pointer-events-none">
+                <div className="absolute left-0 right-0 bottom-0 flex items-center justify-center z-20 pointer-events-none">
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/40 border border-white/10 backdrop-blur-md shadow-sm">
                         {shiftSteps.map((_, i) => (
                             <m.div

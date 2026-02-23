@@ -106,7 +106,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
 
                                     <button
                                         onClick={handleGenerate}
-                                        className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 shadow-premium active:scale-95 transition-all"
+                                        className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-label uppercase tracking-widest flex items-center justify-center gap-3 shadow-premium active:scale-95 transition-all"
                                     >
                                         Initiate Synthesis Protocol
                                         <Sparkles size={16} className="text-blue-500" />

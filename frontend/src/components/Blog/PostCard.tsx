@@ -26,8 +26,8 @@ const getCategoryKey = (cat: string) => {
 function renderExcerpt(text: string): string {
     if (!text) return '';
     return text
-        .replace(/\*\*\s*(.*?)\s*\*\*/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
-        .replace(/__(.*?)__/g, '<strong class="font-black text-slate-900 dark:text-white">$1</strong>')
+        .replace(/\*\*\s*(.*?)\s*\*\*/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
+        .replace(/__(.*?)__/g, '<strong class="font-bold text-slate-900 dark:text-white">$1</strong>')
         .replace(/_(.*?)_/g, '<em>$1</em>')
         .replace(/`([^`]+)`/g, '<code>$1</code>');
 }
@@ -58,7 +58,7 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
             )}
             <div className="relative flex-1 min-w-0 space-y-1.5 sm:space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-label font-black uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] sm:max-w-none">
+                    <span className="text-label font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] sm:max-w-none">
                         {t(getCategoryKey(post.category))}
                     </span>
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -77,7 +77,7 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                     </div>
                 </div>
                 <div>
-                    <h4 className="text-sm sm:text-body font-black leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
+                    <h4 className="text-sm sm:text-body font-bold leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                         {post.title}
                     </h4>
                     <p

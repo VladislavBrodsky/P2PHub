@@ -350,11 +350,11 @@ export default function ReferralPage() {
                                     />
                                     <div className="absolute bottom-3 left-5 z-20 right-5">
                                         <div className="flex items-center gap-1.5 mb-1.5">
-                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-black text-blue-400 uppercase tracking-widest">
+                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-400 uppercase tracking-widest">
                                                 {t('referral.modal.limited_tier')}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter leading-none shadow-black drop-shadow-sm">
+                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white tracking-tighter leading-none shadow-black drop-shadow-sm">
                                             {t('referral.modal.recruit_title')}
                                         </h3>
                                     </div>
@@ -365,7 +365,7 @@ export default function ReferralPage() {
                                     <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-white/5 relative overflow-hidden group">
                                         <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <div className="relative z-10">
-                                            <h4 className="text-sm font-black text-slate-900 dark:text-white leading-tight mb-2">
+                                            <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-2">
                                                 {VIRAL_HOOK}
                                             </h4>
                                             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
@@ -378,7 +378,7 @@ export default function ReferralPage() {
                                     <div className="grid grid-cols-1 gap-2.5">
                                         <button
                                             onClick={handleShareTelegram}
-                                            className="w-full h-11 rounded-xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-black text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
+                                            className="w-full h-11 rounded-xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-bold text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
                                         >
                                             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                                             <Send className="w-4 h-4 -rotate-45 mb-0.5" />
@@ -389,7 +389,7 @@ export default function ReferralPage() {
                                             {window.Telegram?.WebApp && (
                                                 <button
                                                     onClick={handleShareViralCard}
-                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-black text-caption border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
+                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-bold text-caption border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
                                                 >
                                                     <Sparkles className="w-3.5 h-3.5" />
                                                     <span>{t('referral.modal.viral_btn')}</span>
@@ -397,7 +397,7 @@ export default function ReferralPage() {
                                             )}
                                             <button
                                                 onClick={handleNativeShare}
-                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-black text-caption border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
+                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-bold text-caption border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
                                             >
                                                 <ExternalLink className="w-3.5 h-3.5" />
                                                 <span>{t('referral.modal.share_more')}</span>
@@ -447,7 +447,7 @@ export default function ReferralPage() {
 
                             <div className="text-center space-y-6">
                                 <div className="space-y-2 pt-2">
-                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white leading-none tracking-tight">
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">
                                         <Trans i18nKey="referral.qr.title">
                                             Claim Your <br />
                                             <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>

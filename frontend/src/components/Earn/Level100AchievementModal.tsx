@@ -133,10 +133,10 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
 
                             <div className="space-y-2 mb-6 text-left">
                                 <div className="text-center">
-                                    <h2 className="text-label font-black tracking-[0.4em] text-blue-600 dark:text-blue-400 uppercase">
+                                    <h2 className="text-label font-bold tracking-[0.4em] text-blue-600 dark:text-blue-400 uppercase">
                                         {t('level100.apex_achievement')}
                                     </h2>
-                                    <h3 className="text-2xl font-black text-slate-900 dark:text-white mt-0.5">
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
                                         <Trans i18nKey="level100.fanocracy_title">
                                             LvL 100 <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Fanocracy</span>
                                         </Trans>
@@ -160,7 +160,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                                 <b.icon className="w-4 h-4" />
                                             </div>
                                             <div>
-                                                <h4 className="text-xs font-black text-slate-900 dark:text-white leading-tight">
+                                                <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
                                                     {b.title}
                                                 </h4>
                                                 <p className="text-label font-bold text-slate-500 dark:text-slate-500 leading-tight mt-0.5">
@@ -178,11 +178,11 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                     onClick={handleShare}
                                     className="w-full h-12 rounded-xl bg-blue-600 active:scale-95 transition-all shadow-[0_10px_30px_-5px_rgba(37,99,235,0.4)] flex items-center justify-center gap-2 group"
                                 >
-                                    <span className="text-xs font-black text-white tracking-widest">{t('level100.claim_btn')}</span>
+                                    <span className="text-xs font-bold text-white tracking-widest">{t('level100.claim_btn')}</span>
                                     <Share2 className="w-3.5 h-3.5 text-white group-hover:rotate-12 transition-transform" />
                                 </button>
 
-                                <p className="text-label font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest animate-pulse">
+                                <p className="text-label font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest animate-pulse">
                                     {t('level100.limited_slots')}
                                 </p>
                             </div>

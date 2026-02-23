@@ -132,15 +132,15 @@ export const PartnerDashboard = () => {
                         onClick={() => { selection(); setIsFinanceOpen(true); }}
                         className="p-3 rounded-2xl bg-bg-glass border border-border-glass backdrop-blur-md shadow-sm flex flex-col cursor-pointer active:scale-[0.98] transition-all hover:bg-white/80 dark:hover:bg-slate-800/50"
                     >
-                        <div className="text-label font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                        <div className="text-label font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>{t('partner_dashboard.total_earned')}</span>
                             <ChevronRight className="w-3 h-3 opacity-30" />
                         </div>
-                        <div className="text-2xl font-black text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
+                        <div className="text-2xl font-bold text-slate-900 dark:text-white">${(user?.total_earned || 0).toFixed(2)}</div>
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-label font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-label font-bold uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
                             >
                                 {t('partner_dashboard.upgrade_pro_btn')}
                             </button>
@@ -148,7 +148,7 @@ export const PartnerDashboard = () => {
                         {user?.is_pro && user?.subscription_plan !== 'PRO_PLUS_MONTHLY' && (user?.balance || 0) >= 69 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO_PLUS'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-label font-black uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
+                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-label font-bold uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
                             >
                                 {t('partner_dashboard.upgrade_plus_btn')}
                             </button>
@@ -159,11 +159,11 @@ export const PartnerDashboard = () => {
                         onClick={handleExplorerOpen}
                     >
                         <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors" />
-                        <div className="text-label font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
+                        <div className="text-label font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-1 flex items-center justify-between">
                             <span>{t('partner_dashboard.network_size')}</span>
                             <ExternalLink className="w-3 h-3 opacity-50" />
                         </div>
-                        <div className="text-2xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                        <div className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                             {totalNetworkSize}
                             <span className="text-label bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded-sm">
                                 {growthPct >= 0 ? '+' : ''}{growthPct}%
@@ -194,7 +194,7 @@ export const PartnerDashboard = () => {
                                     <BookOpen className="w-3.5 h-3.5" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <h3 className="text-xs font-black uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
+                                    <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight truncate">
                                         {t('referral.brief.title')}
                                     </h3>
                                     <span className="text-label font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
@@ -207,11 +207,11 @@ export const PartnerDashboard = () => {
                                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                                 <div className="flex flex-col text-right">
                                     {t('referral.brief.read_line1') && (
-                                        <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
+                                        <span className="text-label font-bold uppercase tracking-widest text-slate-400 italic leading-none group-hover:text-blue-500 transition-colors">
                                             {t('referral.brief.read_line1')}
                                         </span>
                                     )}
-                                    <span className="text-label font-black uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
+                                    <span className="text-label font-bold uppercase tracking-widest text-slate-400 italic leading-none mt-0.5 group-hover:text-blue-500 transition-colors">
                                         {t('referral.brief.read_line2')}
                                     </span>
                                 </div>
@@ -228,7 +228,7 @@ export const PartnerDashboard = () => {
                                 <Users className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="font-black text-slate-900 dark:text-white text-xs uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
+                                <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
                                 <p className="text-label font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
                             </div>
                         </div>
@@ -260,7 +260,7 @@ export const PartnerDashboard = () => {
                                     <QrCode className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.qr_title')}</span>
+                                    <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.qr_title')}</span>
                                     <span className="text-label font-bold text-slate-500 dark:text-slate-400 opacity-80">{t('partner_dashboard.qr_desc')}</span>
                                 </div>
                             </div>
@@ -278,7 +278,7 @@ export const PartnerDashboard = () => {
                                     <div className="w-5 h-5 flex items-center justify-center text-base">🔗</div>
                                 </div>
                                 <div className="flex flex-col gap-0.5 overflow-hidden">
-                                    <span className="font-black text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.link_title')}</span>
+                                    <span className="font-bold text-slate-900 dark:text-white text-sm tracking-tight">{t('partner_dashboard.link_title')}</span>
                                     <span className="text-label text-slate-500 dark:text-slate-400 truncate max-w-[180px] font-mono font-medium opacity-60 leading-none py-0.5">{referralLink}</span>
                                 </div>
                             </div>
@@ -304,7 +304,7 @@ export const PartnerDashboard = () => {
                         <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
                         <button
                             onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
-                            className="text-slate-500 hover:text-white text-label font-black uppercase tracking-widest transition-colors"
+                            className="text-slate-500 hover:text-white text-label font-bold uppercase tracking-widest transition-colors"
                         >
                             {isEarningsExpanded ? t('common:show_less') : t('common:view_all')}
                         </button>
@@ -317,7 +317,7 @@ export const PartnerDashboard = () => {
                 <div className="pt-2">
                     <Button
                         variant="primary"
-                        className="w-full h-15 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-black text-sm shadow-premium flex flex-col items-center justify-center gap-0.5 active:scale-[0.98] transition-all relative overflow-hidden group"
+                        className="w-full h-15 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-bold text-sm shadow-premium flex flex-col items-center justify-center gap-0.5 active:scale-[0.98] transition-all relative overflow-hidden group"
                         onClick={() => {
                             notification('success');
                             setIsBriefingOpen(true);
@@ -530,7 +530,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
             <div className="flex p-1 bg-slate-100 dark:bg-white/5 rounded-xl w-fit mx-auto shadow-inner border border-slate-200/50 dark:border-white/5">
                 <button
                     onClick={() => setActiveTab('XP')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'XP'
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'XP'
                         ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-sm'
                         : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
@@ -539,7 +539,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                 </button>
                 <button
                     onClick={() => setActiveTab('CRYPTO')}
-                    className={`px-4 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'CRYPTO'
+                    className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${activeTab === 'CRYPTO'
                         ? 'bg-white dark:bg-slate-800 text-emerald-600 dark:text-emerald-400 shadow-sm'
                         : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
                         }`}
@@ -587,7 +587,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
 
                                 <div className="flex items-center gap-2">
                                     {item.status && item.status !== 'completed' && (
-                                        <div className={`px-1 rounded text-label font-black uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                                        <div className={`px-1 rounded text-label font-bold uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
                                             ? 'bg-amber-500/20 text-amber-500'
                                             : 'bg-red-500/20 text-red-500'
                                             }`}>
@@ -598,16 +598,16 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                                         <div className="relative group">
                                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                                             <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                                <span className="text-label font-black uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
-                                                <span className="text-label font-black bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
+                                                <span className="text-label font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
+                                                <span className="text-label font-bold bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
                                             </div>
                                         </div>
                                     )}
                                     <div className="flex items-center gap-1">
-                                        <span className={`font-black ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
+                                        <span className={`font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
                                             {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                                         </span>
-                                        <span className={`text-label font-black ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                                        <span className={`text-label font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                                             {item.currency}
                                         </span>
                                     </div>

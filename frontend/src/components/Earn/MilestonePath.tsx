@@ -70,7 +70,7 @@ export const MilestonePath = () => {
         <div className="space-y-4">
             <div className="flex items-center gap-3 px-1">
                 <div className={`w-1.5 h-4 rounded-full ${color} shadow-[0_0_10px_rgba(0,0,0,0.1)]`} />
-                <span className="text-label font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 whitespace-nowrap">{typeLabel}</span>
+                <span className="text-label font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 whitespace-nowrap">{typeLabel}</span>
                 <div className="h-px w-full bg-linear-to-r from-slate-200 dark:from-white/10 to-transparent" />
             </div>
 
@@ -149,10 +149,10 @@ export const MilestonePath = () => {
                             </div>
 
                             <div className="text-center space-y-0.5 sm:space-y-1 relative z-10 w-full">
-                                <span className={`text-label sm:text-label font-black uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <span className={`text-label sm:text-label font-bold uppercase tracking-[0.25em] block transition-colors duration-300 ${isUnlocked ? 'text-indigo-500/80 group-hover:text-indigo-600' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {t('common.lvl')} {item.level}
                                 </span>
-                                <h5 className={`text-[11px] sm:text-caption font-black leading-tight line-clamp-3 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
+                                <h5 className={`text-label sm:text-caption font-bold leading-tight line-clamp-3 w-full px-0.5 transition-colors duration-300 ${isUnlocked ? 'text-slate-900 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-indigo-500 group-hover:to-purple-500' : 'text-slate-400 dark:text-slate-700'}`}>
                                     {isLocked ? (
                                         <span className="opacity-40 italic tracking-widest text-label sm:text-label">{t('common:locked')}</span>
                                     ) : (
@@ -199,7 +199,7 @@ export const MilestonePath = () => {
                             )}
                         </div>
                         <div className="flex flex-col">
-                            <h4 className={`text-caption font-black uppercase tracking-tight ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
+                            <h4 className={`text-caption font-bold uppercase tracking-tight ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                 {t('milestones.part_label', { part: idx + 1 })}: {t(chapter.title)}
                             </h4>
                             <div className="flex items-center gap-2 mt-0.5">
@@ -259,16 +259,16 @@ export const MilestonePath = () => {
                                 <div className="relative z-10 flex flex-col items-center">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-5">
                                         <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
-                                        <span className="text-label font-black text-white uppercase tracking-[0.25em]">{t('level100.ultimate_horizon')}</span>
+                                        <span className="text-label font-bold text-white uppercase tracking-[0.25em]">{t('level100.ultimate_horizon')}</span>
                                     </div>
 
-                                    <h3 className="text-2xl sm:text-3xl font-black text-white leading-[0.9] tracking-tight uppercase">
+                                    <h3 className="text-2xl sm:text-3xl font-bold text-white leading-[0.9] tracking-tight uppercase">
                                         {t('level100.achievements_title')}
                                     </h3>
 
                                     <p className="text-label font-bold text-blue-100/70 leading-relaxed mt-4 max-w-[240px]">
                                         <Trans i18nKey="level100.achievements_desc">
-                                            Unlock your <span className="text-white font-black underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
+                                            Unlock your <span className="text-white font-bold underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
                                         </Trans>
                                     </p>
 
@@ -279,7 +279,7 @@ export const MilestonePath = () => {
                                             selection();
                                             setIsLevel100ModalOpen(true);
                                         }}
-                                        className="mt-8 flex items-center gap-3 px-10 py-5 rounded-xl bg-white text-blue-600 font-black text-xs shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all hover:bg-blue-50 active:shadow-none"
+                                        className="mt-8 flex items-center gap-3 px-10 py-5 rounded-xl bg-white text-blue-600 font-bold text-xs shadow-[0_20px_40px_rgba(0,0,0,0.2)] transition-all hover:bg-blue-50 active:shadow-none"
                                     >
                                         {t('level100.discover_btn')}
                                         <ArrowRight className="w-4 h-4 animate-bounce-x" />
@@ -293,7 +293,7 @@ export const MilestonePath = () => {
                                                 </div>
                                             ))}
                                         </div>
-                                        <span className="text-label font-black text-blue-200/50 uppercase tracking-widest">
+                                        <span className="text-label font-bold text-blue-200/50 uppercase tracking-widest">
                                             {t('achievements_path.elite_recognition')}
                                         </span>
                                     </div>
@@ -318,7 +318,7 @@ export const MilestonePath = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center text-center">
-                                <span className="text-label font-black text-slate-900 dark:text-white uppercase tracking-[0.2em]">
+                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-[0.2em]">
                                     {t('achievements_path.reveal_part', { index: visibleChapters + 1 })}
                                 </span>
                                 <span className="text-label font-bold text-slate-500 uppercase tracking-widest">
@@ -342,7 +342,7 @@ export const MilestonePath = () => {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center text-center">
-                                <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
+                                <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">
                                     {t('achievements_path.show_less')}
                                 </span>
                             </div>
@@ -435,12 +435,12 @@ export const MilestonePath = () => {
                                             <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
-                                                className="inline-flex items-center px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-label font-black text-indigo-500 uppercase tracking-[0.2em]"
+                                                className="inline-flex items-center px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-label font-bold text-indigo-500 uppercase tracking-[0.2em]"
                                             >
                                                 <Zap className="w-3 h-3 mr-2 animate-pulse" />
                                                 {t('achievements_path.mission', { level: selectedItem.level })}
                                             </motion.div>
-                                            <h3 className="text-3xl sm:text-4xl font-black tracking-tighter uppercase leading-[0.95] text-transparent bg-clip-text bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white">
+                                            <h3 className="text-3xl sm:text-4xl font-bold tracking-tighter uppercase leading-[0.95] text-transparent bg-clip-text bg-linear-to-b from-slate-900 via-slate-800 to-slate-900 dark:from-white dark:via-slate-200 dark:to-white">
                                                 {currentLevel >= selectedItem.level ? t(selectedItem.reward, { level: selectedItem.level }) : '???'}
                                             </h3>
                                         </div>
@@ -456,7 +456,7 @@ export const MilestonePath = () => {
                                                     <div className="p-1.5 rounded-lg bg-indigo-500/10">
                                                         <Info className="w-4 h-4 text-indigo-500" />
                                                     </div>
-                                                    <span className="text-label font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{t('achievements_path.how_to_unlock')}</span>
+                                                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em]">{t('achievements_path.how_to_unlock')}</span>
                                                 </div>
                                                 <p className="text-button font-bold text-slate-800 dark:text-slate-200 leading-relaxed italic relative z-10">
                                                     "{selectedItem.instruction ? t(selectedItem.instruction) : t('achievements_path.unlock_locked', { level: selectedItem.level })}"
@@ -469,7 +469,7 @@ export const MilestonePath = () => {
                                             <div className="w-full space-y-6">
                                                 <div className="flex items-center gap-3 px-1">
                                                     <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-[0_0_12px_rgba(79,70,229,0.8)] animate-pulse" />
-                                                    <span className="text-label font-black text-indigo-500 uppercase tracking-[0.2em]">{t('achievements_path.pro_tip')}</span>
+                                                    <span className="text-label font-bold text-indigo-500 uppercase tracking-[0.2em]">{t('achievements_path.pro_tip')}</span>
                                                 </div>
                                                 <div className="grid grid-cols-2 gap-4">
                                                     <button
@@ -486,7 +486,7 @@ export const MilestonePath = () => {
                                                         {/* Shimmer Effect */}
                                                         <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover/btn:translate-y-[200%] transition-transform duration-700" />
                                                         <Share2 size={24} className="group-hover:scale-110 transition-transform" />
-                                                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('achievements_path.share_link')}</span>
+                                                        <span className="text-label font-bold uppercase tracking-[0.2em]">{t('achievements_path.share_link')}</span>
                                                     </button>
                                                     <button
                                                         onClick={() => {
@@ -497,7 +497,7 @@ export const MilestonePath = () => {
                                                         className="h-18 rounded-[1.8rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/10 active:scale-95 text-slate-900 dark:text-white flex flex-col items-center justify-center gap-1 shadow-sm transition-all group/btn"
                                                     >
                                                         <UserPlus size={24} className="group-hover:scale-110 transition-transform" />
-                                                        <span className="text-label font-black uppercase tracking-[0.2em]">{t('achievements_path.invite')}</span>
+                                                        <span className="text-label font-bold uppercase tracking-[0.2em]">{t('achievements_path.invite')}</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -507,7 +507,7 @@ export const MilestonePath = () => {
                                                 animate={{ y: 0, opacity: 1 }}
                                                 className="w-full flex justify-center pt-4"
                                             >
-                                                <div className="px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-black text-caption uppercase tracking-[0.3em] flex items-center gap-3 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden group/success">
+                                                <div className="px-10 py-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 font-bold text-caption uppercase tracking-[0.3em] flex items-center gap-3 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden group/success">
                                                     {/* Success Shimmer */}
                                                     <motion.div
                                                         animate={{ x: ['-100%', '200%'] }}

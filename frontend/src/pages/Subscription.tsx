@@ -437,7 +437,7 @@ export default function SubscriptionPage() {
                                     <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('subscription.upgrade.badge', 'SCALE YOUR INCOME')}</span>
                                 </motion.div>
 
-                                <h2 className="text-heading sm:text-[24px] font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
+                                <h2 className="text-heading sm:text-heading font-bold tracking-tight text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase px-4 max-w-[340px] mx-auto">
                                     {t('subscription.upgrade.dominate_network', 'GET THE MOST FROM YOUR NETWORK')}
                                 </h2>
 
