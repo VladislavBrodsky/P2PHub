@@ -1,0 +1,3357 @@
+UP035 `typing.List` is deprecated, use `list` instead
+ --> app/api/endpoints/blog.py:2:1
+  |
+1 | import secrets
+2 | from typing import List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | from fastapi import APIRouter, Depends, Header, HTTPException, Query
+  |
+
+C901 `get_my_profile` is too complex (30 > 10)
+   --> app/api/endpoints/partner.py:105:11
+    |
+104 | @router.get("/me", response_model=PartnerResponse)
+105 | async def get_my_profile(
+    |           ^^^^^^^^^^^^^^
+106 |     background_tasks: BackgroundTasks,
+107 |     user_data: dict = Depends(get_current_user),
+    |
+
+C901 `get_orbit_members` is too complex (11 > 10)
+   --> app/api/endpoints/partner.py:440:11
+    |
+439 | @router.get("/orbit-members", response_model=list[OrbitMemberResponse])
+440 | async def get_orbit_members(
+    |           ^^^^^^^^^^^^^^^^^
+441 |     background_tasks: BackgroundTasks,
+442 |     session: AsyncSession = Depends(get_session)
+    |
+
+N806 Variable `DEMO_AVATARS` in function should be lowercase
+   --> app/api/endpoints/partner.py:454:5
+    |
+453 |     # Demo avatars to ensure the orbit looks "peopled" even if no photos in DB
+454 |     DEMO_AVATARS = [
+    |     ^^^^^^^^^^^^
+455 |         "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=128&h=128&fit=crop",
+456 |         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop",
+    |
+
+C901 `get_recent_partners` is too complex (16 > 10)
+   --> app/api/endpoints/partner.py:535:11
+    |
+534 | @router.get("/recent")
+535 | async def get_recent_partners(
+    |           ^^^^^^^^^^^^^^^^^^^
+536 |     background_tasks: BackgroundTasks,
+537 |     limit: int = 10,
+    |
+
+SIM102 Use a single `if` statement instead of nested `if` statements
+   --> app/api/endpoints/partner.py:569:5
+    |
+567 |       # Combined check for refresh (every 5m to keep UI "live")
+568 |       refresh_needed = True
+569 | /     if snapshot_setting and count_setting:
+570 | |         if (now - snapshot_setting.updated_at < partners_refresh_window) and \
+571 | |            (now - count_setting.updated_at < count_refresh_window):
+    | |___________________________________________________________________^
+572 |               refresh_needed = False
+573 |               try:
+    |
+help: Combine `if` statements using `and`
+
+C901 `claim_task_reward` is too complex (17 > 10)
+   --> app/api/endpoints/partner.py:973:11
+    |
+972 | @router.post("/tasks/{task_id}/claim", response_model=PartnerResponse)
+973 | async def claim_task_reward(
+    |           ^^^^^^^^^^^^^^^^^
+974 |     task_id: str,
+975 |     payload: TaskClaimRequest,
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+    --> app/api/endpoints/partner.py:1461:9
+     |
+1459 |         elapsed = (time.time() - start_time) * 1000
+1460 |         logger.error(f"❌ Error in get_partner_photo for {file_id[:12]}...: {e} (took {elapsed:.0f}ms)")
+1461 |         raise HTTPException(status_code=500, detail="Internal server error fetching photo")
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1462 |
+1463 | @router.post("/notification/seen")
+     |
+
+C901 `get_finance_stats` is too complex (18 > 10)
+    --> app/api/endpoints/partner.py:1492:11
+     |
+1491 | @router.get("/finance/stats")
+1492 | async def get_finance_stats(
+     |           ^^^^^^^^^^^^^^^^^
+1493 |     user_data: dict = Depends(get_current_user),
+1494 |     session: AsyncSession = Depends(get_session)
+     |
+
+PERF401 Use a list comprehension to create a transformed list
+    --> app/api/endpoints/partner.py:1540:13
+     |
+1538 |       for e in earnings:
+1539 |           if e.created_at >= threshold_72h:
+1540 | /             history_72h.append({
+1541 | |                 "type": "INCOME",
+1542 | |                 "amount": e.amount,
+1543 | |                 "currency": e.currency,
+1544 | |                 "description": e.description,
+1545 | |                 "created_at": e.created_at.isoformat()
+1546 | |             })
+     | |______________^
+1547 |               
+1548 |       # Add Spent Transactions
+     |
+help: Replace for loop with list comprehension
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/api/endpoints/payment.py:52:9
+   |
+50 |     except Exception as e:
+51 |         logger.warning(f"Invalid user data in create_invoice: {e}")
+52 |         raise HTTPException(status_code=400, detail="Invalid user data")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+53 |
+54 |     statement = select(Partner).where(Partner.telegram_id == tg_id)
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/api/endpoints/payment.py:88:9
+   |
+86 |     except Exception as e:
+87 |         logger.warning(f"Invalid user data in create_payment_session: {e}")
+88 |         raise HTTPException(status_code=400, detail="Invalid user data")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+89 |
+90 |     statement = select(Partner).where(Partner.telegram_id == tg_id)
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> app/api/endpoints/payment.py:141:9
+    |
+139 |     except Exception as e:
+140 |         logger.warning(f"Invalid user data in verify_ton: {e}")
+141 |         raise HTTPException(status_code=400, detail="Invalid user data")
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+142 |
+143 |     statement = select(Partner).where(Partner.telegram_id == tg_id)
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> app/api/endpoints/payment.py:199:9
+    |
+197 |     except Exception as e:
+198 |         logger.warning(f"Invalid user data in submit_manual_payment: {e}")
+199 |         raise HTTPException(status_code=400, detail="Invalid user data")
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+200 |
+201 |     try:
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> app/api/endpoints/payment.py:260:9
+    |
+258 |     except Exception as e:
+259 |         logger.error(f"Error in submit_manual_payment: {e}")
+260 |         raise HTTPException(status_code=500, detail="Internal server error processing payment")
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+261 |
+262 | @router.get("/my-transactions")
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> app/api/endpoints/payment.py:273:9
+    |
+271 |     except Exception as e:
+272 |         logger.warning(f"Invalid user data in get_my_transactions: {e}")
+273 |         raise HTTPException(status_code=400, detail="Invalid user data")
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+274 |     
+275 |     partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> app/api/endpoints/payment.py:316:9
+    |
+314 |     except Exception as e:
+315 |         logger.warning(f"Invalid user data in upgrade_from_balance: {e}")
+316 |         raise HTTPException(status_code=400, detail="Invalid user data")
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+317 |
+318 |     statement = select(Partner).where(Partner.telegram_id == tg_id)
+    |
+
+C901 `setup_social_api` is too complex (13 > 10)
+   --> app/api/endpoints/pro.py:168:11
+    |
+167 | @router.post("/setup")
+168 | async def setup_social_api(
+    |           ^^^^^^^^^^^^^^^^
+169 |     payload: PROSetupRequest,
+170 |     partner: Partner = Depends(get_current_partner),
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/api/endpoints/tools.py:33:9
+   |
+31 |         return Response(content=out.read(), media_type="image/png")
+32 |     except Exception as e:
+33 |         raise HTTPException(status_code=500, detail=str(e))
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:23:16
+    |
+ 21 |       """Deep psychological profile for each target audience."""
+ 22 |       
+ 23 |       PROFILES = {
+    |  ________________^
+ 24 | |         "traders": {
+ 25 | |             "name": "Alpha Strategists & Crypto Whales",
+ 26 | |             "performing_keywords_2026": ["Sovereign Velocity", "Liquidity Density", "Asymmetric Alpha", "Basis-Point Dominance"],
+ 27 | |             "psychographics": {
+ 28 | |                 "pain_points": [
+ 29 | |                     "High slippage and execution tax",
+ 30 | |                     "Institutional KYC barriers",
+ 31 | |                     "Off-ramp bottleneck fatigue",
+ 32 | |                     "Regulatory overreach",
+ 33 | |                     "Missing the exponential curve"
+ 34 | |                 ],
+ 35 | |                 "desires": [
+ 36 | |                     "Elite financial sovereignty",
+ 37 | |                     "Frictionless asset mobility",
+ 38 | |                     "Stealth wealth execution",
+ 39 | |                     "High-status peer networks",
+ 40 | |                     "Absolute capital autonomy"
+ 41 | |                 ],
+ 42 | |                 "values": ["Decentralization", "Capital Efficiency", "Privacy", "Velocity"],
+ 43 | |                 "language_patterns": ["Technical precision", "Minimalist authority", "Data-centric", "Skeptical of hype"],
+ 44 | |                 "triggers": ["Exponential Alpha", "Institutional bypass", "Liquidity leaks", "Elite social proof"]
+ 45 | |             },
+ 46 | |             "tov": {
+ 47 | |                 "style": "Sharp, authoritative, minimal",
+ 48 | |                 "formality": "Professional mastery",
+ 49 | |                 "humor": "Dry, insider wit",
+ 50 | |                 "emojis": "💎♟️🌊⚡",
+ 51 | |                 "sentence_length": "Short. Lethal. Data-packed.",
+ 52 | |                 "power_words": ["velocity", "density", "sovereign", "asymmetric", "alpha", "execution"]
+ 53 | |             },
+ 54 | |             "hooks": [
+ 55 | |                 "The 3% liquidity leak most whales are ignoring.",
+ 56 | |                 "Why the elite 1% move their assets outside the 'Legacy Box'.",
+ 57 | |                 "Sovereign Velocity: The standard for 2026 capital execution.",
+ 58 | |                 "Your asymmetric alpha isn't in the chart; it's in the infrastructure."
+ 59 | |             ],
+ 60 | |             "visual_base": "An elite Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blaze…
+ 61 | |             "cta_style": "Stealth, authoritative, high-stakes",
+ 62 | |             "viral_hashtags": ["#CryptoAlpha", "#WhaleStrategy", "#AsymmetricBeta", "#CapitalMobility"]
+ 63 | |         },
+ 64 | |         
+ 65 | |         "nomads": {
+ 66 | |             "name": "Global Mobility Sovereigns",
+ 67 | |             "performing_keywords_2026": ["Borderless Wealth", "Lifestyle Arbitrage", "Digital Sovereignty", "Global Mobility Nodes"],
+ 68 | |             "psychographics": {
+ 69 | |                 "pain_points": [
+ 70 | |                     "Banking geofencing",
+ 71 | |                     "Currency conversion erosion",
+ 72 | |                     "Lack of high-status financial tools",
+ 73 | |                     "Travel friction and blocked access",
+ 74 | |                     "Disconnected community hubs"
+ 75 | |                 ],
+ 76 | |                 "desires": [
+ 77 | |                     "Unrestricted global movement",
+ 78 | |                     "Seamless multi-currency liquidity",
+ 79 | |                     "Elite digital nomad status",
+ 80 | |                     "Financial independence 2.0",
+ 81 | |                     "Belonging to a sovereign elite"
+ 82 | |                 ],
+ 83 | |                 "values": ["Freedom", "Mobility", "Experiences", "Autonomy"],
+ 84 | |                 "language_patterns": ["Inspirational", "Sophisticated", "Global-aware", "Minimalist"],
+ 85 | |                 "triggers": ["Lifestyle arbitrage", "Freedom metrics", "Private travel hacks", "Status signals"]
+ 86 | |             },
+ 87 | |             "tov": {
+ 88 | |                 "style": "Sophisticated, global, magnetic",
+ 89 | |                 "formality": "Elevated and casual",
+ 90 | |                 "humor": "Cultured, world-traveler wit",
+ 91 | |                 "emojis": "🌍✈️🏝️✨",
+ 92 | |                 "sentence_length": "Rhythmic. Evocative.",
+ 93 | |                 "power_words": ["borderless", "sovereign", "mobility", "freedom", "global", "arbitrage"]
+ 94 | |             },
+ 95 | |             "hooks": [
+ 96 | |                 "The borderless protocol for the new global elite.",
+ 97 | |                 "How I unlocked 100% financial mobility across 5 continents.",
+ 98 | |                 "Lifestyle Arbitrage: The hidden math of the modern sovereign.",
+ 99 | |                 "Chapter 7: Why your current bank is anchoring your global potential."
+100 | |             ],
+101 | |             "visual_base": "A high-status 'Global Sovereign' in the ultra-private lounge of a first-class aviation hub. Natural golde…
+102 | |             "cta_style": "Inspirational, high-status",
+103 | |             "viral_hashtags": ["#SovereignNomad", "#GlobalMobility", "#WealthArbitrage", "#DigitalEmpire"]
+104 | |         },
+105 | |         
+106 | |         "affiliates": {
+107 | |             "name": "Affiliate Marketers",
+108 | |             "performing_keywords_2026": ["Commission Scale", "Payout Infrastructure", "Traffic Sovereignty", "Conversion Alpha"],
+109 | |             "psychographics": {
+110 | |                 "pain_points": [
+111 | |                     "Payment processor holds/delays",
+112 | |                     "High payout thresholds",
+113 | |                     "Cannot receive crypto commissions",
+114 | |                     "Scaling limitations",
+115 | |                     "Compliance complexity"
+116 | |                 ],
+117 | |                 "desires": [
+118 | |                     "Instant commission access",
+119 | |                     "Higher profit margins",
+120 | |                     "Scalable infrastructure",
+121 | |                     "Tax efficiency",
+122 | |                     "Competitive advantage"
+123 | |                 ],
+124 | |                 "values": ["ROI", "Optimization", "Leverage", "Automation"],
+125 | |                 "language_patterns": ["Metrics-heavy", "Conversion-focused", "Strategic", "Tactical"],
+126 | |                 "triggers": ["Revenue increase", "Efficiency gains", "Competitive edge", "Case studies"]
+127 | |             },
+128 | |             "tov": {
+129 | |                 "style": "Results-driven, tactical, no-BS",
+130 | |                 "formality": "Professional but direct",
+131 | |                 "humor": "Minimal, sarcastic if any",
+132 | |                 "emojis": "📊💰🎯🔥💡",
+133 | |                 "sentence_length": "Short. Action-oriented.",
+134 | |                 "power_words": ["convert", "scale", "ROI", "margin", "optimize", "funnel"]
+135 | |             },
+136 | |             "hooks": [
+137 | |                 "I was looking at my margin leakage last quarter, and it was brutal. Until I switched the architecture.",
+138 | |                 "The payment infrastructure that the top 1% of our network quietly uses. Let's talk about it.",
+139 | |                 "Most people are still losing 5% on payout friction. We completely eliminated it.",
+140 | |                 "I tested every payment rail out there. Only one actually scaled without holding my liquidity hostage."
+141 | |             ],
+142 | |             "visual_base": "A charismatic marketing visionary in a sun-drenched, high-ceiling urban loft. Modern casual-luxury attire…
+143 | |             "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Pa…
+144 | |             "cta_style": "ROI-focused, A/B tested language",
+145 | |             "viral_hashtags": ["#AffiliateMarketing", "#ROIHunter", "#ScalableIncome", "#ConversionMaster"]
+146 | |         },
+147 | |         
+148 | |         "builders": {
+149 | |             "name": "Network Builders",
+150 | |             "performing_keywords_2026": ["Duplication Velocity", "Network Architecture", "Sovereign Yield", "Exponential Nodes"],
+151 | |             "psychographics": {
+152 | |                 "pain_points": [
+153 | |                     "Slow team payments",
+154 | |                     "Trust issues with centralized platforms",
+155 | |                     "Commission tracking complexity",
+156 | |                     "Retention challenges",
+157 | |                     "Market saturation"
+158 | |                 ],
+159 | |                 "desires": [
+160 | |                     "Exponential growth",
+161 | |                     "Passive income systems",
+162 | |                     "Team empowerment",
+163 | |                     "Legacy building",
+164 | |                     "Recognition and status"
+165 | |                 ],
+166 | |                 "values": ["Relationships", "Leverage", "Leadership", "Abundance mindset"],
+167 | |                 "language_patterns": ["Motivational", "Visionary", "Team-centric", "Growth metaphors"],
+168 | |                 "triggers": ["Duplication", "Team success stories", "Rank advancement", "Passive income"]
+169 | |             },
+170 | |             "tov": {
+171 | |                 "style": "Visionary, empowering, magnetic",
+172 | |                 "formality": "Motivational speaker energy",
+173 | |                 "humor": "Uplifting, positive",
+174 | |                 "emojis": "🚀🌟💎👑🔥⚡",
+175 | |                 "sentence_length": "Varied. Rhythm for emphasis.",
+176 | |                 "power_words": ["team", "empire", "legacy", "duplicate", "residual", "exponential"]
+177 | |             },
+178 | |             "hooks": [
+179 | |                 "You can't build a massive network on fragile infrastructure. Here is what we changed.",
+180 | |                 "Retention used to be our biggest bottleneck. Then we upgraded the financial base.",
+181 | |                 "Why the strongest leaders in my circle are migrating their entire structure to sovereign rails.",
+182 | |                 "From a scattered team to a synchronized global architecture. Here is the exact blueprint."
+183 | |             ],
+184 | |             "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Captured in a high-level strategy s…
+185 | |             "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architectur…
+186 | |             "cta_style": "Vision-driven, team-focused",
+187 | |             "viral_hashtags": ["#NetworkEmpire", "#GrowthLeader", "#LegacyWealth", "#P2PRevolution"]
+188 | |         },
+189 | |         
+190 | |         "parents": {
+191 | |             "name": "Legacy Matriarchs & Patriarchs",
+192 | |             "performing_keywords_2026": ["Generational Wealth", "Legacy Yield", "Family Sovereignty", "Automated Abundance"],
+193 | |             "psychographics": {
+194 | |                 "pain_points": [
+195 | |                     "Financial dependence fragility",
+196 | |                     "Time poverty",
+197 | |                     "Security concerns for the future",
+198 | |                     "Complex systems overwhelm",
+199 | |                     "Identity erosion in domestic roles"
+200 | |                 ],
+201 | |                 "desires": [
+202 | |                     "Generational financial security",
+203 | |                     "Simple, autonomous wealth systems",
+204 | |                     "High-status contribution to family",
+205 | |                     "Legacy building for children",
+206 | |                     "Personal professional awakening"
+207 | |                 ],
+208 | |                 "values": ["Legacy", "Security", "Simplicity", "Connection"],
+209 | |                 "language_patterns": ["Empathetic", "Graceful", "Visionary", "Clear"],
+210 | |                 "triggers": ["Future security", "Simplicity hacks", "Quiet confidence", "Legacy stories"]
+211 | |             },
+212 | |             "tov": {
+213 | |                 "style": "Graceful, supportive, visionary",
+214 | |                 "formality": "Elegant and warm",
+215 | |                 "humor": "Gentle, wise",
+216 | |                 "emojis": "✨🏡🤍🧸",
+217 | |                 "sentence_length": "Balanced. Flowing.",
+218 | |                 "power_words": ["legacy", "abundance", "secure", "generations", "simple", "sovereign"]
+219 | |             },
+220 | |             "hooks": [
+221 | |                 "The quiet system I use to architect my family's financial legacy.",
+222 | |                 "Simple, autonomous, and generational. This is the new family standard.",
+223 | |                 "How to build a financial fortress for your children while staying present.",
+224 | |                 "Chapter 3: The transition from domestic stability to financial sovereignty."
+225 | |             ],
+226 | |             "visual_base": "A sophisticated 'Legacy Architect' parent in a serene, sun-drenched minimalist estate. Soft, ethereal lig…
+227 | |             "lead_magnets": ["The Family Sovereign Trust Setup", "Generational Yield: A Legacy Masterclass", "The 15-Minute Passive A…
+228 | |             "cta_style": "Graceful, empowering, trust-focused",
+229 | |             "viral_hashtags": ["#FamilyLegacy", "#PassiveWealth", "#SecureFuture", "#LegacyBuilding"]
+230 | |         },
+231 | |         
+232 | |         "hustlers": {
+233 | |             "name": "Student Hustlers",
+234 | |             "performing_keywords_2026": ["Side Hustle Alpha", "Student Wealth", "Independent Income", "Hustle Protocol"],
+235 | |             "psychographics": {
+236 | |                 "pain_points": [
+237 | |                     "Student loan debt",
+238 | |                     "Limited credit history",
+239 | |                     "Side hustle payment friction",
+240 | |                     "Traditional banks rejecting them",
+241 | |                     "Need to move fast on opportunities"
+242 | |                 ],
+243 | |                 "desires": [
+244 | |                     "Financial independence from parents",
+245 | |                     "Build wealth early",
+246 | |                     "Status among peers",
+247 | |                     "Escape the 'broke student' trap",
+248 | |                     "Future-proof career"
+249 | |                 ],
+250 | |                 "values": ["Ambition", "Speed", "Street smarts", "Hustle culture"],
+251 | |                 "language_patterns": ["Energetic", "Trendy", "Rebellious", "Peer-influenced"],
+252 | |                 "triggers": ["Early advantage", "Peer success", "Anti-establishment", "Future wealth"]
+253 | |             },
+254 | |             "tov": {
+255 | |                 "style": "Energetic, rebellious, future-focused",
+256 | |                 "formality": "Very casual, Gen-Z coded",
+257 | |                 "humor": "Meme-heavy, self-aware",
+258 | |                 "emojis": "🔥💸🎓📚⚡🚀",
+259 | |                 "sentence_length": "Short. Fast-paced.",
+260 | |                 "power_words": ["hustle", "grind", "stack", "escape", "future", "retire early"]
+261 | |             },
+262 | |             "hooks": [
+263 | |                 "My peers are taking on debt to buy time. I bought the infrastructure to buy my freedom.",
+264 | |                 "They tell you to wait your turn. The network told me to build my own.",
+265 | |                 "The new financial reality is already here. We are just the first ones to realize it.",
+266 | |                 "I didn't want a side hustle. I wanted absolute sovereign territory. Here is how it started."
+267 | |             ],
+268 | |             "visual_base": "An ambitious Gen-Z visionary in premium streetwear-luxe. Collaborating in a vibrant, futuristic innovatio…
+269 | |             "lead_magnets": ["The Student Hustle Stack (2026)", "From Loan to Legacy: The Early Wealth Guide", "The 1-Click Independe…
+270 | |             "cta_style": "Visionary, inclusive, community-proof",
+271 | |             "viral_hashtags": ["#StudentHustle", "#WealthCreation", "#FinancialIndependence", "#FutureCEO"]
+272 | |         },
+273 | |         
+274 | |         "burnouts": {
+275 | |             "name": "Corporate Escape Architects",
+276 | |             "performing_keywords_2026": ["Autonomy Pivot", "Sovereign Exit", "Identity Decoupling", "Liquidity Bridges"],
+277 | |             "psychographics": {
+278 | |                 "pain_points": [
+279 | |                     "Golden handcuff suffocation",
+280 | |                     "Soul-eroding corporate cycles",
+281 | |                     "Upside stagnation",
+282 | |                     "Identity tied to a title, not a person",
+283 | |                     "Fear of the bridge into freedom"
+284 | |                 ],
+285 | |                 "desires": [
+286 | |                     "Full autonomy exit strategy",
+287 | |                     "Purpose-driven entrepreneurship",
+288 | |                     "High-status second act",
+289 | |                     "Liquidity bridge to independence",
+290 | |                     "Legacy beyond the boardroom"
+291 | |                 ],
+292 | |                 "values": ["Autonomy", "Purpose", "Courage", "Strategic Mastery"],
+293 | |                 "language_patterns": ["Strategic", "Reflective", "Analytical", "Liberation-focused"],
+294 | |                 "triggers": ["Exit blueprints", "Second acts", "Autonomy metrics", "Identity shifts"]
+295 | |             },
+296 | |             "tov": {
+297 | |                 "style": "Strategic, reflective, magnetic",
+298 | |                 "formality": "Senior leadership energy",
+299 | |                 "humor": "Dry, boardroom wit",
+300 | |                 "emojis": "🚪🗝️🌅✨",
+301 | |                 "sentence_length": "Deliberate. Powerful.",
+302 | |                 "power_words": ["exit", "sovereign", "autonomy", "bridge", "identity", "pivot"]
+303 | |             },
+304 | |             "hooks": [
+305 | |                 "I decoupling my identity from my title. Here is the liquidity bridge I used.",
+306 | |                 "The Corporate Exit: How to flip the script on golden handcuffs.",
+307 | |                 "Why strategic autonomy is the ultimate 2026 career luxury.",
+308 | |                 "Chapter 5: The blueprint for your high-status second act."
+309 | |             ],
+310 | |             "visual_base": "A serene former executive in premium weekend-luxe (cashmere and silk). Enjoying a moment of absolute auto…
+311 | |             "lead_magnets": ["The 18-Month Sovereign Exit Blueprint", "Identity Decoupling: The Boardroom to Freedom Guide", "Corpora…
+312 | |             "cta_style": "Strategic, empowering, elite",
+313 | |             "viral_hashtags": ["#CorporateExit", "#FreedomProtocol", "#SovereignIdentity", "#ExitStrategy"]
+314 | |         },
+315 | |         
+316 | |         "partners": {
+317 | |             "name": "Global Network Architects",
+318 | |             "performing_keywords_2026": ["Geometric Network", "Viral Infrastructure", "Global Sovereignty", "Team Duplication"],
+319 | |             "psychographics": {
+320 | |                 "pain_points": [
+321 | |                     "Manual marketing limitations",
+322 | |                     "Network stagnation",
+323 | |                     "Low duplication velocity",
+324 | |                     "Lack of global viral infrastructure",
+325 | |                     "Centralized payment bottlenecks"
+326 | |                 ],
+327 | |                 "desires": [
+328 | |                     "Geometric network expansion",
+329 | |                     "Global team authority",
+330 | |                     "Automated viral growth loops",
+331 | |                     "High-status leadership positioning",
+332 | |                     "Synergistic revenue acceleration"
+333 | |                 ],
+334 | |                 "values": ["Universal Growth", "Velocity of Trust", "Leveraged Leadership", "Visionary Abundance"],
+335 | |                 "language_patterns": ["Professional Native Mastery", "Authoritative yet Inspiring", "Global Context", "Viral Dynamics…
+336 | |                 "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery"]
+337 | |             },
+338 | |             "tov": {
+339 | |                 "style": "Global Leader, Professional Native Speaker, Viral Influencer",
+340 | |                 "formality": "High-status professional with magnetic visionary energy",
+341 | |                 "humor": "Sophisticated, global, empowering",
+342 | |                 "emojis": "✨🌍🤝💎👑",
+343 | |                 "sentence_length": "Rhythmic, powerful, and impeccably structured.",
+344 | |                 "power_words": ["velocity", "transformation", "geometric", "synergy", "global", "ecosystem"]
+345 | |             },
+346 | |             "hooks": [
+347 | |                 "The Global Financial Shift isn't a challenge; it's our greatest shared opportunity.",
+348 | |                 "How to architect a viral powerhouse that scales across borders while you inspire.",
+349 | |                 "The 100x Growth Blueprint: Turning geometric networking into a global standard.",
+350 | |                 "Universal Abundance: The leadership strategy for the Digital Gold Rush."
+351 | |             ],
+352 | |             "visual_base": "A world-class Global Network Architect embodying the 'Investment Banking Traveler' aesthetic. Dressed in …
+353 | |             "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach …
+354 | |             "cta_style": "High-status, visionary, collaborative",
+355 | |             "viral_hashtags": ["#NetworkArchitect", "#GlobalGrowth", "#ViralLeadership", "#GeometricWealth"]
+356 | |         },
+357 | |         
+358 | |         "passive_seekers": {
+359 | |             "name": "Liquidity Sovereigns",
+360 | |             "performing_keywords_2026": ["Passive Density", "Autonomous Yield", "Geometric Cashflow", "Velocity of Trust"],
+361 | |             "psychographics": {
+362 | |                 "pain_points": ["Time-exchange friction", "Inflationary decay", "Systemic complexity", "Manual outreach burnout"],
+363 | |                 "desires": ["Sleep-velocity income", "Unrestricted time-wealth", "Systemic automation", "Resilient capital abundance"…
+364 | |                 "values": ["Freedom", "Efficiency", "Logic", "Legacy"],
+365 | |                 "language_patterns": ["Ease-focused", "Metrics-driven", "Visionary"],
+366 | |                 "triggers": ["Geometric scaling", "Autonomous yield", "Life-optimization", "Quiet wealth"]
+367 | |             },
+368 | |             "tov": {
+369 | |                 "style": "Calm, magnetic, logical",
+370 | |                 "formality": "Casual mastery",
+371 | |                 "humor": "Minimalist, effortless",
+372 | |                 "emojis": "🌊🏖️💎⛲",
+373 | |                 "sentence_length": "Clear. Flowing. Rhythmic.",
+374 | |                 "power_words": ["sovereign", "autonomous", "geometric", "velocity", "yield", "density"]
+375 | |             },
+376 | |             "hooks": [
+377 | |                 "The protocol for building passive density in an inflationary era.",
+378 | |                 "How to decouple your time from your wealth velocity.",
+379 | |                 "Geometric cashflow: Why the new elite don't trade hours for dollars.",
+380 | |                 "Chapter 2: The architecture of an autonomous wealth machine."
+381 | |             ],
+382 | |             "visual_base": "A world-class 'Liquidity Sovereign' relaxed in a high-end minimalist setting. Natural light casting soft …
+383 | |             "lead_magnets": ["The Autonomous Yield Protocol", "Geometric Cashflow: The 2026 Architecture", "Quiet Wealth: The 1-Click…
+384 | |             "cta_style": "Effortless, logical, high-value",
+385 | |             "viral_hashtags": ["#PassiveIncome", "#FinancialAutonomy", "#WealthDensity", "#SleepVelocity"]
+386 | |         },
+387 | |         
+388 | |         "growth_masters": {
+389 | |             "name": "Growth Masters",
+390 | |             "performing_keywords_2026": ["Scale Velocity", "Algorithmic Leverage", "Conversion Optimization", "Growth Protocol"],
+391 | |             "psychographics": {
+392 | |                 "pain_points": ["Saturation", "Low conversion rates", "Manual outreach burnout", "Ineffective funnels"],
+393 | |                 "desires": ["Extreme scale", "Algorithmic advantage", "Market dominance", "Efficient duplication"],
+394 | |                 "values": ["Efficiency", "Metrics", "Speed", "Innovation"],
+395 | |                 "language_patterns": ["Data-driven", "Strategic", "Direct"],
+396 | |                 "triggers": ["Scale", "Optimization", "Competitive edge", "Viral loops"]
+397 | |             },
+398 | |             "tov": {
+399 | |                 "style": "Tactical, sharp, results-obsessed",
+400 | |                 "formality": "Direct and semi-formal",
+401 | |                 "humor": "Minimal, focused on 'winning'",
+402 | |                 "emojis": "📊🔥🚀🎯💎",
+403 | |                 "sentence_length": "Short and action-heavy.",
+404 | |                 "power_words": ["scale", "optimize", "dominate", "leverage", "metrics", "velocity"]
+405 | |             },
+406 | |             "hooks": [
+407 | |                 "The algorithmic hack for 100x team growth",
+408 | |                 "Scale your partner network with surgical precision",
+409 | |                 "Why manual outreach is dead (and what replaced it)",
+410 | |                 "The blueprint for market dominance in the P2P space"
+411 | |             ],
+412 | |             "visual_base": "A sharp, modern growth strategist analyzing high-resolution data visualizations on a sleek holographic in…
+413 | |             "lead_magnets": ["The High-Conversion Funnel Blueprint", "Algorithmic Advantage: The Viral Loop Setup", "The 100x Growth …
+414 | |             "cta_style": "Data-backed, high-conversion",
+415 | |             "viral_hashtags": ["#GrowthMaster", "#ScaleExpert", "#MarketingAlpha", "#VelocityGrowth"]
+416 | |         },
+417 | |         
+418 | |         "automation_kings": {
+419 | |             "name": "Automation Kings",
+420 | |             "performing_keywords_2026": ["Autonomous Systems", "Neural Protocols", "Set-and-Forget Wealth", "Systemic Autonomy"],
+421 | |             "psychographics": {
+422 | |                 "pain_points": ["Manual overhead", "Human error", "Inconsistency", "Time drain"],
+423 | |                 "desires": ["Full autonomy", "Perfect systems", "Set and forget income", "Infinite scalability"],
+424 | |                 "values": ["Logic", "Productivity", "Freedom", "Consistency"],
+425 | |                 "language_patterns": ["Technical", "Logical", "System-oriented"],
+426 | |                 "triggers": ["Hands-free", "Systematic", "Zero effort", "Infinite scale"]
+427 | |             },
+428 | |             "tov": {
+429 | |                 "style": "Cool, logical, precise",
+430 | |                 "formality": "Semi-formal",
+431 | |                 "humor": "Irony about 'working hard'",
+432 | |                 "emojis": "🤖⚙️📡💎🔋",
+433 | |                 "sentence_length": "Logical steps, concise.",
+434 | |                 "power_words": ["automate", "system", "autonomy", "hands-free", "logic", "protocol"]
+435 | |             },
+436 | |             "hooks": [
+437 | |                 "Build a partner empire that runs 100% on autopilot",
+438 | |                 "Zero manual work. Infinite referral growth.",
+439 | |                 "The 'Set and Forget' system for global network expansion",
+440 | |                 "How I automated the growth of 1,000+ partners"
+441 | |             ],
+442 | |             "visual_base": "A tech-savvy entrepreneur relaxing in a futuristic high-tech lounge, while autonomous systems glow softly…
+443 | |             "lead_magnets": ["The Hands-Free Wealth Protocol", "Infinite Scale: The Automation Stack", "The Set and Forget Setup Guid…
+444 | |             "cta_style": "System-focused, efficiency-driven",
+445 | |             "viral_hashtags": ["#AutomationKing", "#PassiveAutopilot", "#WealthTech", "#SystemMastery"]
+446 | |         },
+447 | |         
+448 | |         "empire_builders": {
+449 | |             "name": "Empire Builders",
+450 | |             "performing_keywords_2026": ["Global Empire", "Financial Dynasty", "Legacy Architecture", "Sovereign Dominance"],
+451 | |             "psychographics": {
+452 | |                 "pain_points": ["Small thinking", "Slow progression", "Lack of legacy", "Weak infrastructure"],
+453 | |                 "desires": ["Generational wealth", "Global influence", "Massive team legacy", "The $1/minute lifestyle"],
+454 | |                 "values": ["Legacy", "Power", "Ambition", "Sustainability"],
+455 | |                 "language_patterns": ["Visionary", "Grand", "Inspirational"],
+456 | |                 "triggers": ["Legacy", "Empire", "Financial Dynasty", "Global Reach"]
+457 | |             },
+458 | |             "tov": {
+459 | |                 "style": "Grand, authoritative, magnetic",
+460 | |                 "formality": "Formal and inspiring",
+461 | |                 "humor": "Sophisticated",
+462 | |                 "emojis": "👑🏰🌍💎🔥",
+463 | |                 "sentence_length": "Varied, powerful cadence.",
+464 | |                 "power_words": ["empire", "legacy", "dynasty", "global", "unlimited", "sovereign"]
+465 | |             },
+466 | |             "hooks": [
+467 | |                 "Stop building a business. Start architecting an empire.",
+468 | |                 "The architecture of a global $1/minute financial dynasty",
+469 | |                 "How the new elite are building legacies through P2P networks",
+470 | |                 "Transform your network into an unstoppable global powerhouse"
+471 | |             ],
+472 | |             "visual_base": "A powerful and visionary leader overlooking a vast, modern city at dusk from a private infinity pool deck…
+473 | |             "lead_magnets": ["The Empire Architecture Blueprint", "Generational Wealth Dynasty Guide", "The $1/Minute Roadmap"],
+474 | |             "cta_style": "Legacy-themed, visionary",
+475 | |             "viral_hashtags": ["#EmpireBuilder", "#DynastyWealth", "#GlobalLegacy", "#SovereignPower"]
+476 | |         },
+477 | |     }
+    | |_____^
+    |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:484:18
+    |
+482 |       """Strategic frameworks for each post category."""
+483 |       
+484 |       STRATEGIES = {
+    |  __________________^
+485 | |         "launch": {
+486 | |             "name": "Product Launch",
+487 | |             "technique": CopywritingTechnique.AIDA,
+488 | |             "structure": {
+489 | |                 "hook": "NEW + EXCLUSIVE + SCARCITY",
+490 | |                 "body": "Feature transformation + Social proof + Limited availability",
+491 | |                 "close": "Strong CTA with deadline"
+492 | |             },
+493 | |             "psychological_triggers": [
+494 | |                 "Novelty bias",
+495 | |                 "Fear of missing out",
+496 | |                 "Social proof",
+497 | |                 "Scarcity principle"
+498 | |             ],
+499 | |             "formatting_rules": {
+500 | |                 "bold": ["NEW", "EXCLUSIVE", "LAUNCH", "LIMITED", "key benefits"],
+501 | |                 "italic": ["Subtle urgency phrases", "timestamps"],
+502 | |                 "hyperlink": ["Product link", "Waitlist", "Early access"]
+503 | |             },
+504 | |             "visual_scene": "In a moment of profound success, holding the matte-black, laser-etched Pintopay card. Warm lighting catc…
+505 | |             "viral_hashtags": ["#PostLaunch", "#NewAlpha", "#P2PRevolution"],
+506 | |             "seo_keywords": ["Product Launch", "Exclusive Access", "Financial Innovation"]
+507 | |         },
+508 | |         
+509 | |         "fomo": {
+510 | |             "name": "FOMO Builder",
+511 | |             "technique": CopywritingTechnique.PAS,
+512 | |             "structure": {
+513 | |                 "hook": "SHOCKING STAT or MISSED OPPORTUNITY",
+514 | |                 "body": "Amplify the pain + Reveal the secret others use",
+515 | |                 "close": "Act now or lose out forever"
+516 | |             },
+517 | |             "psychological_triggers": [
+518 | |                 "Loss aversion",
+519 | |                 "Regret avoidance",
+520 | |                 "Herd behavior",
+521 | |                 "Temporal scarcity"
+522 | |             ],
+523 | |             "formatting_rules": {
+524 | |                 "bold": ["WARNING", "stats", "DON'T WAIT", "CLOSING SOON"],
+525 | |                 "italic": ["Whispers of insider info"],
+526 | |                 "hyperlink": ["Join now", "Secure spot", "Limited access"]
+527 | |             },
+528 | |             "visual_scene": "Observing a surge of geometric growth on a minimalist display. Cinematic side-lighting and a sense of hi…
+529 | |             "viral_hashtags": ["#CryptoFOMO", "#AlphaLeak", "#LimitedSlots"],
+530 | |             "seo_keywords": ["FOMO Marketing", "Urgent Opportunity", "Crypto Growth"]
+531 | |         },
+532 | |         
+533 | |         "authority": {
+534 | |             "name": "System Authority",
+535 | |             "technique": CopywritingTechnique.PASTOR,
+536 | |             "structure": {
+537 | |                 "hook": "INDUSTRY PROBLEM everyone accepts",
+538 | |                 "body": "Why you're right to question it + The better way + Proof",
+539 | |                 "close": "Join the revolution"
+540 | |             },
+541 | |             "psychological_triggers": [
+542 | |                 "Authority bias",
+543 | |                 "Contrarian appeal",
+544 | |                 "Social proof from experts",
+545 | |                 "Thought leadership"
+546 | |             ],
+547 | |             "formatting_rules": {
+548 | |                 "bold": ["TRUTH", "statistics", "expert quotes", "THE REAL PROBLEM"],
+549 | |                 "italic": ["Industry myths", "common assumptions"],
+550 | |                 "hyperlink": ["Case study", "Whitepaper", "Proof"]
+551 | |             },
+552 | |             "visual_scene": "Sharing elite insights within a sophisticated digital sanctuary. Surrounded by clean, architectural data…
+553 | |             "viral_hashtags": ["#ExpertInsight", "#SystemMastry", "#ThoughtLeader"],
+554 | |             "seo_keywords": ["Industry Trends", "Market Analysis", "Strategic Authority"]
+555 | |         },
+556 | |         
+557 | |         "lifestyle": {
+558 | |             "name": "Lifestyle Flex",
+559 | |             "technique": CopywritingTechnique.BAB,
+560 | |             "structure": {
+561 | |                 "hook": "BEFORE: relatable struggle",
+562 | |                 "body": "AFTER: aspirational result + BRIDGE: the tool",
+563 | |                 "close": "Your transformation starts here"
+564 | |             },
+565 | |             "psychological_triggers": [
+566 | |                 "Aspiration trigger",
+567 | |                 "Relatability",
+568 | |                 "Transformation promise",
+569 | |                 "Social comparison"
+570 | |             ],
+571 | |             "formatting_rules": {
+572 | |                 "bold": ["FROM", "TO", "transformation keywords", "lifestyle benefits"],
+573 | |                 "italic": ["Personal reflections", "quotes"],
+574 | |                 "hyperlink": ["Start your journey", "See how", "Transform now"]
+575 | |             },
+576 | |             "visual_scene": "Embodying modern freedom; a sunset reflection on the polished surfaces of a luxury environment, signifyi…
+577 | |             "viral_hashtags": ["#EliteLifestyle", "#FreedomGoals", "#WealthPivot"],
+578 | |             "seo_keywords": ["Financial Freedom", "Lifestyle Design", "Success Stories"]
+579 | |         },
+580 | |         
+581 | |         "income": {
+582 | |             "name": "Passive Income Proof",
+583 | |             "technique": CopywritingTechnique.FAB,
+584 | |             "structure": {
+585 | |                 "hook": "SPECIFIC INCOME CLAIM with proof",
+586 | |                 "body": "Features that enable it + Advantages over alternatives + Benefits to you",
+587 | |                 "close": "Start earning today"
+588 | |             },
+589 | |             "psychological_triggers": [
+590 | |                 "Greed (in healthy sense)",
+591 | |                 "Proof and credibility",
+592 | |                 "Passive income dream",
+593 | |                 "Concrete results"
+594 | |             ],
+595 | |             "formatting_rules": {
+596 | |                 "bold": ["Income figures", "PASSIVE", "MONTHLY", "RECURRING", "key mechanisms"],
+597 | |                 "italic": ["Disclaimers", "personal journey"],
+598 | |                 "hyperlink": ["See my results", "Start earning", "Join network"]
+599 | |             },
+600 | |             "visual_scene": "A subtle, high-status notification on a premium device. The background is a blurred, sun-drenched sanctu…
+601 | |             "viral_hashtags": ["#PassiveIncome", "#CryptoEarnings", "#WealthVelocity"],
+602 | |             "seo_keywords": ["Passive Income", "Crypto ROI", "Earning Potential"]
+603 | |         },
+604 | |         
+605 | |         "network": {
+606 | |             "name": "Network Growth",
+607 | |             "technique": CopywritingTechnique.QUEST,
+608 | |             "structure": {
+609 | |                 "hook": "QUALIFY: Are you ready to scale?",
+610 | |                 "body": "UNDERSTAND the bottleneck + EDUCATE on leverage + STIMULATE vision",
+611 | |                 "close": "TRANSITION: Join the winning team"
+612 | |             },
+613 | |             "psychological_triggers": [
+614 | |                 "Qualification (exclusivity)",
+615 | |                 "Leverage principle",
+616 | |                 "Team/tribe belonging",
+617 | |                 "Exponential thinking"
+618 | |             ],
+619 | |             "formatting_rules": {
+620 | |                 "bold": ["SCALE", "growth metrics", "TEAM", "EXPONENTIAL", "multiplication factors"],
+621 | |                 "italic": ["Visionary statements"],
+622 | |                 "hyperlink": ["Build your network", "Join movement", "Partner program"]
+623 | |             },
+624 | |             "visual_scene": "Inside a world-class architectural co-working space. An atmosphere of shared elite achievement and magne…
+625 | |             "viral_hashtags": ["#TeamGrowth", "#NetworkScale", "#LeverageWealth"],
+626 | |             "seo_keywords": ["Network Marketing", "Team Building", "Exponential Growth"]
+627 | |         },
+628 | |         
+629 | |         "tutorial": {
+630 | |             "name": "Web3 Tutorial",
+631 | |             "technique": CopywritingTechnique.SSS,
+632 | |             "structure": {
+633 | |                 "hook": "STAR: This changed everything for [audience]",
+634 | |                 "body": "STORY: How they did it (tutorial) + SOLUTION: You can too",
+635 | |                 "close": "Get started in 5 minutes"
+636 | |             },
+637 | |             "psychological_triggers": [
+638 | |                 "Social proof via story",
+639 | |                 "Educational value",
+640 | |                 "Simplification of complex topic",
+641 | |                 "Empowerment"
+642 | |             ],
+643 | |             "formatting_rules": {
+644 | |                 "bold": ["STEP 1", "STEP 2", "action items", "key concepts"],
+645 | |                 "italic": ["Pro tips", "warnings"],
+646 | |                 "hyperlink": ["Tutorial", "Resources", "Start here", "Guide"]
+647 | |             },
+648 | |             "visual_scene": "Effortlessly navigating a sleek, 1-click wealth protocol on a high-end interface. The aesthetic is clean…
+649 | |             "viral_hashtags": ["#Web3Tutorial", "#CryptoGuide", "#WealthProtocol"],
+650 | |             "seo_keywords": ["Web3 Education", "Crypto How-To", "Financial Literacy"]
+651 | |         },
+652 | |         
+653 | |         "partners_cards": {
+654 | |             "name": "Card Authority (Product Focus)",
+655 | |             "technique": CopywritingTechnique.BAB,
+656 | |             "structure": {
+657 | |                 "hook": "THE LIQUIDITY REVOLUTION",
+658 | |                 "body": "Daily crypto spending reality + Freedom from banks + The physical card flex",
+659 | |                 "close": "Join the Elite Cardholders"
+660 | |             },
+661 | |             "storytelling": {
+662 | |                 "arc": "The Journey to Financial Sovereignty",
+663 | |                 "chapter_focus": "Eliminating the middleman and holding the keys to your own liquidity.",
+664 | |                 "episodes": [
+665 | |                     {"en": "Chapter 1: The Liquidity Escape", "ru": "Глава 1: Побег в Ликвидность"},
+666 | |                     {"en": "Chapter 2: No Banks, No Limits", "ru": "Глава 2: Без Банков, Без Границ"},
+667 | |                     {"en": "Chapter 3: Holding the Master Key", "ru": "Глава 3: Владение Мастер-Ключом"},
+668 | |                     {"en": "Chapter 4: Global Spending Power", "ru": "Глава 4: Глобальная Покупательная Способность"},
+669 | |                     {"en": "Chapter 5: Absolute Sovereignty", "ru": "Глава 5: Абсолютный Суверенитет"}
+670 | |                 ]
+671 | |             },
+672 | |             "psychological_triggers": [
+673 | |                 "Status",
+674 | |                 "Utility",
+675 | |                 "Freedom",
+676 | |                 "Tangibility"
+677 | |             ],
+678 | |             "formatting_rules": {
+679 | |                 "bold": ["FINANCIAL SOVEREIGNTY", "NO BANKS", "INSTANT PAYMENTS", "CRYPTO CARD", "GLOBAL ACCEPTANCE"],
+680 | |                 "italic": ["Chapter 1: The Escape", "Total control of your money"],
+681 | |                 "hyperlink": ["Order Your Elite Card", "Get Early Access", "Secure My Card"]
+682 | |             },
+683 | |             "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catc…
+684 | |             "viral_hashtags": ["#CryptoCard", "#LiquidityFreedom", "#PintopayElite"],
+685 | |             "seo_keywords": ["Crypto Debit Card", "Financial Freedom", "Legacy Banking Exit"]
+686 | |         },
+687 | |         "partners_network": {
+688 | |             "name": "Empire Scaling (Network Focus)",
+689 | |             "technique": CopywritingTechnique.PASTOR,
+690 | |             "structure": {
+691 | |                 "hook": "THE GEOMETRIC GROWTH PROTOCOL",
+692 | |                 "body": "Viral loops reveal + Automated team scaling + The $1/minute vision",
+693 | |                 "close": "Initiate My Partner Empire"
+694 | |             },
+695 | |             "storytelling": {
+696 | |                 "arc": "The Architect's Blueprint",
+697 | |                 "chapter_focus": "Building an autonomous wealth machine that outlives your effort.",
+698 | |                 "episodes": [
+699 | |                     {"en": "Episode 1: The Architecture of Wealth", "ru": "Эпизод 1: Архитектура Богатства"},
+700 | |                     {"en": "Episode 2: Geometric Scaling Protocol", "ru": "Эпизод 2: Протокол Геометрического Масштабирования"},
+701 | |                     {"en": "Episode 3: The $1/Minute Vision", "ru": "Эпизод 3: Видение $1 в Минуту"},
+702 | |                     {"en": "Episode 4: Autonomous Empire", "ru": "Эпизод 4: Автономная Империя"},
+703 | |                     {"en": "Episode 5: The Legacy Protocol", "ru": "Эпизод 5: Протокол Наследия"}
+704 | |                 ]
+705 | |             },
+706 | |             "psychological_triggers": [
+707 | |                 "Leverage",
+708 | |                 "Exponential scaling",
+709 | |                 "Legacy",
+710 | |                 "Wealth velocity"
+711 | |             ],
+712 | |             "formatting_rules": {
+713 | |                 "bold": ["GEOMETRIC SCALING", "VIRAL LOOPS", "RESIDUAL INCOME", "NETWORK EMPIRE", "AUTOMATED GROWTH"],
+714 | |                 "italic": ["Episode 1: The Architecture", "Grow while you sleep"],
+715 | |                 "hyperlink": ["Build My Empire", "Join Elite Partners", "Scale My Network"]
+716 | |             },
+717 | |             "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a …
+718 | |             "viral_hashtags": ["#EmpireScaling", "#ViralLoops", "#WealthMachine"],
+719 | |             "seo_keywords": ["Network Architecture", "Passive Income Systems", "Geometric Scaling"]
+720 | |         }
+721 | |     }
+    | |_____^
+    |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:729:13
+    |
+727 |       """Psychological and viral markers for each Tone of Voice."""
+728 |       
+729 |       TONES = {
+    |  _____________^
+730 | |         "provocative": {
+731 | |             "viral_hashtags": ["#GameChanger", "#MarketShift", "#UnpopularOpinion", "#RealityCheck"],
+732 | |             "seo_keywords": ["Transformation", "Market Disruption", "Shocking Truth"]
+733 | |         },
+734 | |         "authoritative": {
+735 | |             "viral_hashtags": ["#MarketInsights", "#ExpertAnalysis", "#FinancialStability", "#MarketAlpha"],
+736 | |             "seo_keywords": ["Strategic Analysis", "Data-Driven Wealth", "Institutional Quality"]
+737 | |         },
+738 | |         "empathetic": {
+739 | |             "viral_hashtags": ["#PersonalGrowth", "#CommunityFirst", "#SharedSuccess", "#HumanSide"],
+740 | |             "seo_keywords": ["Community Value", "Personal Journey", "Empowerment"]
+741 | |         },
+742 | |         "cynical": {
+743 | |             "viral_hashtags": ["#AntiHype", "#NoBS", "#MarketFilter", "#RealValue"],
+744 | |             "seo_keywords": ["Zero Fluff", "Market Integrity", "Transparent Finance"]
+745 | |         },
+746 | |         "minimalist": {
+747 | |             "viral_hashtags": ["#EliteStatus", "#PureAlpha", "#MinimalistWealth", "#HighSignal"],
+748 | |             "seo_keywords": ["Quiet Luxury", "High Signal Wealth", "Minimalist Success"]
+749 | |         },
+750 | |         "aggressive": {
+751 | |             "viral_hashtags": ["#DirectResults", "#ScaleNow", "#WealthVelocity", "#Execute"],
+752 | |             "seo_keywords": ["High Pressure Success", "Rapid Scaling", "Immediate Results"]
+753 | |         }
+754 | |     }
+    | |_____^
+    |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:761:20
+    |
+759 |       """Native-speaker quality for each language."""
+760 |       
+761 |       LANGUAGE_DNA = {
+    |  ____________________^
+762 | |         "English": {
+763 | |             "rhythm": "Direct, action-oriented, conversational",
+764 | |             "idioms": ["game-changer", "no-brainer", "level up", "crack the code"],
+765 | |             "cultural_refs": "Western business culture, Silicon Valley mindset",
+766 | |             "formatting": "Bold for emphasis, em-dashes for rhythm",
+767 | |             "sentence_structure": "SVO (Subject-Verb-Object), active voice preferred"
+768 | |         },
+769 | |         
+770 | |         "Russian": {
+771 | |             "rhythm": "Authoritative, technical precision, status-aware",
+772 | |             "idioms": ["ключ к успеху", "золотая жила", "прорыв года", "инсайдерская информация"],
+773 | |             "cultural_refs": "Post-Soviet entrepreneurial spirit, crypto-forward",
+774 | |             "formatting": "Bold for key facts, less emoji, more data",
+775 | |             "sentence_structure": "Flexible word order, uses cases for emphasis"
+776 | |         },
+777 | |         
+778 | |         "Spanish": {
+779 | |             "rhythm": "Warm, relationship-driven, passionate",
+780 | |             "idioms": ["cambiar el juego", "oportunidad de oro", "revolución financiera"],
+781 | |             "cultural_refs": "Latin American hustle culture, family values",
+782 | |             "formatting": "Emoji-friendly, exclamation marks for energy",
+783 | |             "sentence_structure": "SVO but allows flexibility, descriptive adjectives"
+784 | |         },
+785 | |         
+786 | |         "French": {
+787 | |             "rhythm": "Sophisticated, nuanced, slightly formal even when casual",
+788 | |             "idioms": ["occasion en or", "révolution", "l'avenir de la finance"],
+789 | |             "cultural_refs": "European financial elegance, intellectual appeal",
+790 | |             "formatting": "Subtle emphasis, less bold, more italics",
+791 | |             "sentence_structure": "Precise grammar, complex sentences acceptable"
+792 | |         },
+793 | |         
+794 | |         "German": {
+795 | |             "rhythm": "Efficient, technical, trust-building",
+796 | |             "idioms": ["Durchbruch", "Zukunft des Geldes", "revolutionäres System"],
+797 | |             "cultural_refs": "Engineering mindset, security-focused",
+798 | |             "formatting": "Clear structure, bold for data, minimal emoji",
+799 | |             "sentence_structure": "V2 word order, compound words, detailed precision"
+800 | |         }
+801 | |     }
+    | |_____^
+    |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:807:22
+    |
+805 |       """Proven viral content patterns."""
+806 |       
+807 |       HOOK_TEMPLATES = {
+    |  ______________________^
+808 | |         "stat_shock": "I was looking at the data on {topic}, and {audience} are quietly losing their edge because of this...",
+809 | |         "secret_reveal": "There’s a shift happening in {industry} that most people won't notice until 2027.",
+810 | |         "transformation": "It took me {timeframe} to get out of the {pain point} trap. The turning point was understanding {tool}.",
+811 | |         "contrarian": "I stopped believing in {common belief} when I realized it was built to keep us stuck. Here is what I do instea…
+812 | |         "insider": "My private network has been quietly deploying {tool} to {achieve result}. Let me show you the architecture.",
+813 | |         "question": "If you had absolute autonomy over your {provocative scenario}, what would you build next?",
+814 | |         "personal": "A few months ago, I was dealing with {struggle}. I didn't want a quick fix, I wanted a systemic solution. And I …
+815 | |     }
+    | |_____^
+816 |       
+817 |       CTA_FORMULAS = {
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> app/core/cmo_intelligence.py:809:32
+    |
+807 |     HOOK_TEMPLATES = {
+808 |         "stat_shock": "I was looking at the data on {topic}, and {audience} are quietly losing their edge because of this...",
+809 |         "secret_reveal": "There’s a shift happening in {industry} that most people won't notice until 2027.",
+    |                                ^
+810 |         "transformation": "It took me {timeframe} to get out of the {pain point} trap. The turning point was understanding {tool}.",
+811 |         "contrarian": "I stopped believing in {common belief} when I realized it was built to keep us stuck. Here is what I do instea…
+    |
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+   --> app/core/cmo_intelligence.py:817:20
+    |
+815 |       }
+816 |       
+817 |       CTA_FORMULAS = {
+    |  ____________________^
+818 | |         "scarcity": "⚡ **[Join the Network]({link})** — The window for this specific architecture won't stay open.",
+819 | |         "social_proof": "🚀 **[Join the Network]({link})** — We are building something unstoppable.",
+820 | |         "risk_reversal": "✅ **[Join the Network]({link})** | Step into absolute financial autonomy.",
+821 | |         "exclusivity": "💎 **[Join the Network]({link})** — An elite circle reserved for visionaries.",
+822 | |         "urgency": "⏰ **[Join the Network]({link})** — The Global Shift is happening. Choose your side."
+823 | |     }
+    | |_____^
+    |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> app/core/config.py:6:1
+  |
+4 | import time
+5 | from pathlib import Path
+6 | from typing import Dict, List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 |
+8 | from dotenv import load_dotenv
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> app/core/config.py:6:1
+  |
+4 | import time
+5 | from pathlib import Path
+6 | from typing import Dict, List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 |
+8 | from dotenv import load_dotenv
+  |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> app/core/config.py:72:23
+   |
+71 |     if not loaded_any:
+72 |         logger.debug("ℹ️ No .env file loaded from standard locations. Relying on shell environment variables.")
+   |                       ^
+73 |
+74 | # Execute environment loading
+   |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+ --> app/core/i18n.py:7:17
+  |
+5 | …     "🔥 *Transition from consumer to architect.*\n\n"
+6 | …     "You are officially a **Core Partner**! You are early 🚀\n\n"
+7 | …     "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\…
+  |           ^
+8 | …     "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
+9 | …     "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
+  |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+ --> app/core/i18n.py:7:98
+  |
+5 | …     "🔥 *Transition from consumer to architect.*\n\n"
+6 | …     "You are officially a **Core Partner**! You are early 🚀\n\n"
+7 | …     "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\…
+  |                                                                                            ^
+8 | …     "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
+9 | …     "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
+  |
+
+RUF001 String contains ambiguous `С` (CYRILLIC CAPITAL LETTER ES). Did you mean `C` (LATIN CAPITAL LETTER C)?
+   --> app/core/i18n.py:207:18
+    |
+205 | …     ),
+206 | …     "welcome_back": (
+207 | …         "👋 **С возвращением, {name}!**\n\n"
+    |                 ^
+208 | …         "Узлы вашей сети функционируют стабильно. Проверьте новые вехи и показатели вашей структуры в приложении!\n\n"
+209 | …         "🚀 Время достичь новых стратегических вершин."
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:235:23
+    |
+233 | …     ),
+234 | …     "level_up": (
+235 | …         "🏆 *Новая Веха Достигнута!* 🏆\n\n"
+    |                      ^
+236 | …         "Вы достигли *Уровня {level}*!\n\n"
+237 | …         "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:235:24
+    |
+233 | …     ),
+234 | …     "level_up": (
+235 | …         "🏆 *Новая Веха Достигнута!* 🏆\n\n"
+    |                       ^
+236 | …         "Вы достигли *Уровня {level}*!\n\n"
+237 | …         "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+    |
+
+RUF001 String contains ambiguous `х` (CYRILLIC SMALL LETTER HA). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> app/core/i18n.py:235:25
+    |
+233 | …     ),
+234 | …     "level_up": (
+235 | …         "🏆 *Новая Веха Достигнута!* 🏆\n\n"
+    |                        ^
+236 | …         "Вы достигли *Уровня {level}*!\n\n"
+237 | …         "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+    |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+   --> app/core/i18n.py:235:26
+    |
+233 | …     ),
+234 | …     "level_up": (
+235 | …         "🏆 *Новая Веха Достигнута!* 🏆\n\n"
+    |                         ^
+236 | …         "Вы достигли *Уровня {level}*!\n\n"
+237 | …         "Продолжайте развитие, чтобы открыть премиальные тиры и оптимизировать свои награды! 🚀"
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:246:34
+    |
+244 | …     "share_text": "🚀 Присоединяйся ко мне в Pintopay и зарабатывай $1 в минуту! Стань частью революции децентрализованных платежей.…
+245 | …     "pro_welcome": (
+246 | …         "👑 *ДОБРО ПОЖАЛОВАТЬ В ЭЛИТУ!* 👑\n\n"
+    |                                 ^
+247 | …         "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
+248 | …         "🚀 *Почему это меняет правила игры для вас:*\n"
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:249:62
+    |
+247 | …     "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
+248 | …     "🚀 *Почему это меняет правила игры для вас:*\n"
+249 | …     "• *Сеть до 20 уровней:* Теперь вы зарабатываете с каждого человека в вашей структуре до 20-го уровня. Масштаб просто сумасшедш…
+    |                                                        ^
+250 | …     "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
+251 | …     "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
+    |
+
+RUF001 String contains ambiguous `г` (CYRILLIC SMALL LETTER GHE). Did you mean `r` (LATIN SMALL LETTER R)?
+   --> app/core/i18n.py:249:105
+    |
+247 | …     "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
+248 | …     "🚀 *Почему это меняет правила игры для вас:*\n"
+249 | …     "• *Сеть до 20 уровней:* Теперь вы зарабатываете с каждого человека в вашей структуре до 20-го уровня. Масштаб просто сумасшедш…
+    |                                                                                                   ^
+250 | …     "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
+251 | …     "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:249:106
+    |
+247 | …     "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
+248 | …     "🚀 *Почему это меняет правила игры для вас:*\n"
+249 | …     "• *Сеть до 20 уровней:* Теперь вы зарабатываете с каждого человека в вашей структуре до 20-го уровня. Масштаб просто сумасшедш…
+    |                                                                                                    ^
+250 | …     "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
+251 | …     "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
+    |
+
+RUF001 String contains ambiguous `А` (CYRILLIC CAPITAL LETTER A). Did you mean `A` (LATIN CAPITAL LETTER A)?
+   --> app/core/i18n.py:255:22
+    |
+253 | …     ),
+254 | …     "pro_viral_announcement": (
+255 | …         "🔥 *МЕГА АНОНС!* 🔥\n\n"
+    |                     ^
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:255:23
+    |
+253 | …     ),
+254 | …     "pro_viral_announcement": (
+255 | …         "🔥 *МЕГА АНОНС!* 🔥\n\n"
+    |                      ^
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+    |
+
+RUF001 String contains ambiguous `О` (CYRILLIC CAPITAL LETTER O). Did you mean `O` (LATIN CAPITAL LETTER O)?
+   --> app/core/i18n.py:255:24
+    |
+253 | …     ),
+254 | …     "pro_viral_announcement": (
+255 | …         "🔥 *МЕГА АНОНС!* 🔥\n\n"
+    |                       ^
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:255:25
+    |
+253 | …     ),
+254 | …     "pro_viral_announcement": (
+255 | …         "🔥 *МЕГА АНОНС!* 🔥\n\n"
+    |                        ^
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+    |
+
+RUF001 String contains ambiguous `С` (CYRILLIC CAPITAL LETTER ES). Did you mean `C` (LATIN CAPITAL LETTER C)?
+   --> app/core/i18n.py:255:26
+    |
+253 | …     ),
+254 | …     "pro_viral_announcement": (
+255 | …         "🔥 *МЕГА АНОНС!* 🔥\n\n"
+    |                         ^
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:258:14
+    |
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+258 | …         "Не оставайся в стороне, пока мы строим будущее платежей. 🚀\n\n"
+    |            ^
+259 | …         "🔗 *Присоединяйся к моей структуре:* {referral_link}"
+260 | …     ),
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:258:15
+    |
+256 | …         "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
+257 | …         "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n…
+258 | …         "Не оставайся в стороне, пока мы строим будущее платежей. 🚀\n\n"
+    |             ^
+259 | …         "🔗 *Присоединяйся к моей структуре:* {referral_link}"
+260 | …     ),
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:268:25
+    |
+266 | …     ),
+267 | …     "viral_share_caption": (
+268 | …         "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
+    |                        ^
+269 | …         "Присоединяйся к Глобальной Сети и достигни финансового суверенитета. $1 в минуту. 🚀"
+270 | …     ),
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:268:26
+    |
+266 | …     ),
+267 | …     "viral_share_caption": (
+268 | …         "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
+    |                         ^
+269 | …         "Присоединяйся к Глобальной Сети и достигни финансового суверенитета. $1 в минуту. 🚀"
+270 | …     ),
+    |
+
+RUF001 String contains ambiguous `Е` (CYRILLIC CAPITAL LETTER IE). Did you mean `E` (LATIN CAPITAL LETTER E)?
+   --> app/core/i18n.py:268:27
+    |
+266 | …     ),
+267 | …     "viral_share_caption": (
+268 | …         "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
+    |                          ^
+269 | …         "Присоединяйся к Глобальной Сети и достигни финансового суверенитета. $1 в минуту. 🚀"
+270 | …     ),
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:273:94
+    |
+271 | …     "pro_fomo_missed": (
+272 | …         "🚀 *Обнаружен потенциал роста!* (Уровень {level})\n\n"
+273 | …         "Новый участник присоединился к вашей сети, но ваши расширенные награды сейчас **НЕ АКТИВИРОВАНЫ** 🔒.\n\n"
+    |                                                                                            ^
+274 | …         "👑 *Перейдите на PRO/PRO+, чтобы:* \n"
+275 | …         "• Открыть **все 20 уровней** стратегических наград\n"
+    |
+
+RUF001 String contains ambiguous `Е` (CYRILLIC CAPITAL LETTER IE). Did you mean `E` (LATIN CAPITAL LETTER E)?
+   --> app/core/i18n.py:273:95
+    |
+271 | …     "pro_fomo_missed": (
+272 | …         "🚀 *Обнаружен потенциал роста!* (Уровень {level})\n\n"
+273 | …         "Новый участник присоединился к вашей сети, но ваши расширенные награды сейчас **НЕ АКТИВИРОВАНЫ** 🔒.\n\n"
+    |                                                                                             ^
+274 | …         "👑 *Перейдите на PRO/PRO+, чтобы:* \n"
+275 | …         "• Открыть **все 20 уровней** стратегических наград\n"
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:276:30
+    |
+274 |             "👑 *Перейдите на PRO/PRO+, чтобы:* \n"
+275 |             "• Открыть **все 20 уровней** стратегических наград\n"
+276 |             "• Получать USDT с PRO-апгрейдов в вашем сообществе\n"
+    |                              ^
+277 |             "• Активировать ускорение **Fast XP**\n\n"
+278 |             "Обеспечьте свой будущий рост уже сегодня! 🏰"
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:282:70
+    |
+280 | …     "commission_fomo_missed": (
+281 | …         "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+282 | …         "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+    |                                                                    ^
+283 | …         "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
+284 | …         "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! …
+    |
+
+RUF001 String contains ambiguous `г` (CYRILLIC SMALL LETTER GHE). Did you mean `r` (LATIN SMALL LETTER R)?
+   --> app/core/i18n.py:282:80
+    |
+280 | …     "commission_fomo_missed": (
+281 | …         "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+282 | …         "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+    |                                                                              ^
+283 | …         "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
+284 | …         "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! …
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:282:81
+    |
+280 | …     "commission_fomo_missed": (
+281 | …         "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+282 | …         "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+    |                                                                               ^
+283 | …         "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
+284 | …         "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! …
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:283:14
+    |
+281 | …         "⚠️ *НЕПОДТВЕРЖДЕННОЕ ВОЗНАГРАЖДЕНИЕ!* ⚠️\n\n"
+282 | …         "Вы упустили вознаграждение в размере **${amount} USDT** с {level}-го уровня!\n\n"
+283 | …         "В вашей сети произошел апгрейд, но ваш текущий план не включает уровни на этой глубине.\n\n"
+    |            ^
+284 | …         "🚀 *Перейдите на PRO/PRO+* прямо сейчас, чтобы оптимизировать структуру наград и раскрыть весь потенциал вашей экосистемы! …
+285 | …     ),
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:288:26
+    |
+286 | …     "upgrade_xp_bonus": (
+287 | …         "⚡️ *XP БУСТ АКТИВИРОВАН!* ⚡️\n\n"
+288 | …         "Поздравляем с апгрейдом! Вам начислено **+{xp} XP** для ускорения вашего ранга.\n\n"
+    |                        ^
+289 | …         "Вы стали ещё ближе к легендарной *Платиновой Карте*! 🏆"
+290 | …     ),
+    |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+   --> app/core/i18n.py:298:119
+    |
+297 | …     "sub_warning_title": "⚠️ *Внимание: Подписка*",
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+    |                                                                                                                      ^
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:298:120
+    |
+297 | …     "sub_warning_title": "⚠️ *Внимание: Подписка*",
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+    |                                                                                                                       ^
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:298:125
+    |
+297 | …     "sub_warning_title": "⚠️ *Внимание: Подписка*",
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+    |                                                                                                                            ^
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |
+
+RUF001 String contains ambiguous `А` (CYRILLIC CAPITAL LETTER A). Did you mean `A` (LATIN CAPITAL LETTER A)?
+   --> app/core/i18n.py:300:102
+    |
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |                                                                                                    ^
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+   --> app/core/i18n.py:300:108
+    |
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |                                                                                                          ^
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |
+
+RUF001 String contains ambiguous `у` (CYRILLIC SMALL LETTER U). Did you mean `y` (LATIN SMALL LETTER Y)?
+   --> app/core/i18n.py:300:109
+    |
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |                                                                                                           ^
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:300:112
+    |
+298 | …     "sub_warning_body": "Ваш статус PRO изменится через *{days} дн.*\n\n💰 *Цена сохранения статуса:* ${price}\n\nПродлите сейчас, ч…
+299 | …     "sub_expired_title": "❌ *Статус Изменен*",
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+    |                                                                                                              ^
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:302:66
+    |
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |                                                                 ^
+303 | …     "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сум  …
+304 | …     "admin_payment_success_parse_mode": "HTML",
+    |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+   --> app/core/i18n.py:302:67
+    |
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |                                                                  ^
+303 | …     "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сум  …
+304 | …     "admin_payment_success_parse_mode": "HTML",
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:302:68
+    |
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |                                                                   ^
+303 | …     "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сум  …
+304 | …     "admin_payment_success_parse_mode": "HTML",
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:302:73
+    |
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |                                                                        ^
+303 | …     "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сум  …
+304 | …     "admin_payment_success_parse_mode": "HTML",
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:302:107
+    |
+300 | …     "sub_expired_body": "Ваш статус PRO был сброшен. Доступ к расширенным функциям ограничен.\n\nАктивируйте PRO снова, чтобы восст…
+301 | …     
+302 | …     "viralkit_intro": "🎁 *ВИРУСНЫЙ НАБОР РАЗБЛОКИРОВАН!*\n\nПерешлите это сообщение, чтобы рассказать о статусе PRO и привлечь боль…
+    |                                                                                                          ^
+303 | …     "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>Сум  …
+304 | …     "admin_payment_success_parse_mode": "HTML",
+    |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+   --> app/core/i18n.py:303:260
+    |
+302 | …
+303 | …<b>План:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | … <b>Хеш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в А  …
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:303:261
+    |
+302 | …
+303 | …b>План:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | …<b>Хеш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Адм …
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:303:263
+    |
+302 | …
+303 | …План:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | …>Хеш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Админ …
+    |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+   --> app/core/i18n.py:303:264
+    |
+302 | …
+303 | …лан:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | …Хеш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Админ  …
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:303:265
+    |
+302 | …
+303 | …ан:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | …еш:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Админ П …
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:303:267
+    |
+302 | …
+303 | …:</b> {plan_type}\n⌛ <b>Истекает:</b> {expires}\n\nПроверено и комиссии распределены.",
+    |                                                              ^
+304 | …
+305 | …:</b> <code>{hash}</code>\n\n🆔 <b>ID Транзакции:</b> <code>{trans_id}</code>\n\n👉 <b>Действие:</b> Проверьте транзакцию в Админ Пан …
+    |
+
+RUF001 String contains ambiguous `Н` (CYRILLIC CAPITAL LETTER EN). Did you mean `H` (LATIN CAPITAL LETTER H)?
+   --> app/core/i18n.py:305:59
+    |
+303 |         "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>С  …
+304 |         "admin_payment_success_parse_mode": "HTML",
+305 |         "admin_manual_payment": "🚨 <b>НОВЫЙ РУЧНОЙ ПЛАТЕЖ НА ПРОВЕРКЕ</b> 🚨\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code  …
+    |                                                            ^
+306 |
+307 |         # Bot Commands & Messages
+    |
+
+RUF001 String contains ambiguous `А` (CYRILLIC CAPITAL LETTER A). Did you mean `A` (LATIN CAPITAL LETTER A)?
+   --> app/core/i18n.py:305:60
+    |
+303 |         "admin_payment_success": "✅ <b>УСПЕШНАЯ ОПЛАТА {plan}</b>\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code>)\n💰 <b>С  …
+304 |         "admin_payment_success_parse_mode": "HTML",
+305 |         "admin_manual_payment": "🚨 <b>НОВЫЙ РУЧНОЙ ПЛАТЕЖ НА ПРОВЕРКЕ</b> 🚨\n\n👤 <b>Пользователь:</b> {user} (<code>{user_id}</code  …
+    |                                                             ^
+306 |
+307 |         # Bot Commands & Messages
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:311:30
+    |
+309 | …     "fetch_stats_error": "⚠️ Ошибка при получении статистики: {e}",
+310 | …     "my_network_title": "🌳 *Ваша Партнерская Сеть*",
+311 | …     "my_network_total": "Всего Партнеров: *{count}*",
+    |                            ^
+312 | …     "my_network_level_count": "Уровень {level}: {count} партнеров",
+313 | …     "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:311:31
+    |
+309 | …     "fetch_stats_error": "⚠️ Ошибка при получении статистики: {e}",
+310 | …     "my_network_title": "🌳 *Ваша Партнерская Сеть*",
+311 | …     "my_network_total": "Всего Партнеров: *{count}*",
+    |                             ^
+312 | …     "my_network_level_count": "Уровень {level}: {count} партнеров",
+313 | …     "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:311:32
+    |
+309 | …     "fetch_stats_error": "⚠️ Ошибка при получении статистики: {e}",
+310 | …     "my_network_title": "🌳 *Ваша Партнерская Сеть*",
+311 | …     "my_network_total": "Всего Партнеров: *{count}*",
+    |                              ^
+312 | …     "my_network_level_count": "Уровень {level}: {count} партнеров",
+313 | …     "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
+    |
+
+RUF001 String contains ambiguous `г` (CYRILLIC SMALL LETTER GHE). Did you mean `r` (LATIN SMALL LETTER R)?
+   --> app/core/i18n.py:311:33
+    |
+309 | …     "fetch_stats_error": "⚠️ Ошибка при получении статистики: {e}",
+310 | …     "my_network_title": "🌳 *Ваша Партнерская Сеть*",
+311 | …     "my_network_total": "Всего Партнеров: *{count}*",
+    |                               ^
+312 | …     "my_network_level_count": "Уровень {level}: {count} партнеров",
+313 | …     "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:311:34
+    |
+309 | …     "fetch_stats_error": "⚠️ Ошибка при получении статистики: {e}",
+310 | …     "my_network_title": "🌳 *Ваша Партнерская Сеть*",
+311 | …     "my_network_total": "Всего Партнеров: *{count}*",
+    |                                ^
+312 | …     "my_network_level_count": "Уровень {level}: {count} партнеров",
+313 | …     "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
+    |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+   --> app/core/i18n.py:354:34
+    |
+352 |             "📝 *Шаг Проверки*\n\n"
+353 |             "Пожалуйста, вставьте *Хеш Транзакции* (TX ID) вашего платежа ниже. "
+354 |             "Я мгновенно проверю его в блокчейне TON."
+    |                                  ^
+355 |         ),
+356 |         "verifying_transaction": "⏳ *Проверка транзакции...* Пожалуйста, подождите.",
+    |
+
+RUF001 String contains ambiguous `г` (CYRILLIC SMALL LETTER GHE). Did you mean `r` (LATIN SMALL LETTER R)?
+   --> app/core/i18n.py:354:35
+    |
+352 |             "📝 *Шаг Проверки*\n\n"
+353 |             "Пожалуйста, вставьте *Хеш Транзакции* (TX ID) вашего платежа ниже. "
+354 |             "Я мгновенно проверю его в блокчейне TON."
+    |                                   ^
+355 |         ),
+356 |         "verifying_transaction": "⏳ *Проверка транзакции...* Пожалуйста, подождите.",
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+   --> app/core/i18n.py:354:36
+    |
+352 |             "📝 *Шаг Проверки*\n\n"
+353 |             "Пожалуйста, вставьте *Хеш Транзакции* (TX ID) вашего платежа ниже. "
+354 |             "Я мгновенно проверю его в блокчейне TON."
+    |                                    ^
+355 |         ),
+356 |         "verifying_transaction": "⏳ *Проверка транзакции...* Пожалуйста, подождите.",
+    |
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+   --> app/core/i18n.py:358:34
+    |
+356 | …     "verifying_transaction": "⏳ *Проверка транзакции...* Пожалуйста, подождите.",
+357 | …     "welcome_pro_verified": (
+358 | …         "🎉 *ДОБРО ПОЖАЛОВАТЬ В PRO!*\n\n"
+    |                                 ^
+359 | …         "Ваш платеж подтвержден. Теперь у вас есть полный доступ ко всем премиум функциям!"
+360 | …     ),
+    |
+
+RUF001 String contains ambiguous `у` (CYRILLIC SMALL LETTER U). Did you mean `y` (LATIN SMALL LETTER Y)?
+   --> app/core/i18n.py:359:45
+    |
+357 | …     "welcome_pro_verified": (
+358 | …         "🎉 *ДОБРО ПОЖАЛОВАТЬ В PRO!*\n\n"
+359 | …         "Ваш платеж подтвержден. Теперь у вас есть полный доступ ко всем премиум функциям!"
+    |                                           ^
+360 | …     ),
+361 | …     "what_next": "Что вы хотите сделать дальше?",
+    |
+
+RUF001 String contains ambiguous `с` (CYRILLIC SMALL LETTER ES). Did you mean `c` (LATIN SMALL LETTER C)?
+   --> app/core/i18n.py:367:74
+    |
+365 | …         "Если вы только что оплатили, подождите 30 секунд и попробуйте снова. Если сессия истекла, пожалуйста, начните новую."
+366 | …     ),
+367 | …     "verification_error": "⚠️ Ошибка проверки. Пожалуйста, свяжитесь с поддержкой.",
+    |                                                                       ^
+368 | …     "payment_cancelled": "❌ Платеж отменен. Вы можете улучшить план до PRO в любое время, введя /pro.",
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> app/core/retry.py:31:17
+   |
+29 |                   try:
+30 |                       return await func(*args, **kwargs)
+31 | /                 except exceptions as e:
+32 | |                     last_exception = e
+33 | |                     if attempt == max_attempts - 1:
+34 | |                         logger.error(f"❌ Final attempt {attempt + 1}/{max_attempts} failed for {func.__name__}: {e}")
+35 | |                         raise
+36 | |                     
+37 | |                     delay = min(base_delay * (exponential_base ** attempt), max_delay)
+38 | |                     logger.warning(
+39 | |                         f"⚠️ Retry {attempt + 1}/{max_attempts} for {func.__name__} in {delay:.2f}s due to: {e}"
+40 | |                     )
+41 | |                     await asyncio.sleep(delay)
+   | |______________________________________________^
+42 |               # This line should theoretically never be reached because of the raise in the loop
+43 |               if last_exception:
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/core/security.py:49:9
+   |
+47 |         from bot import logger
+48 |         logger.error(f"[AUTH] Unexpected authentication error: {e}")
+49 |         raise HTTPException(status_code=401, detail="Authentication failed")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+50 |
+51 | async def get_current_user(x_telegram_init_data: str | None = Header(None, alias="X-Telegram-Init-Data")):
+   |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+  --> app/core/security.py:68:9
+   |
+66 |         return json.loads(user_json)
+67 |     except Exception:
+68 |         raise HTTPException(status_code=400, detail="Malformed user data")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+69 |
+70 | async def get_current_admin(user_data: dict = Depends(get_current_user)):
+   |
+
+UP035 `typing.Type` is deprecated, use `type` instead
+ --> app/core/shadow.py:3:1
+  |
+1 | import functools
+2 | import logging
+3 | from typing import Any, Type, TypeVar, Union
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | from pydantic import BaseModel, ValidationError
+  |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> app/main.py:67:18
+   |
+65 |     logger.info(f"✅ Sentry initialized (Environment: {settings.SENTRY_ENVIRONMENT}, Sample Rate: {settings.SENTRY_TRACES_SAMPLE_RATE})…
+66 | else:
+67 |     logger.info("ℹ️  Sentry disabled (SENTRY_DSN not set)")
+   |                  ^
+   |
+
+C901 `lifespan` is too complex (12 > 10)
+  --> app/main.py:72:11
+   |
+71 | @asynccontextmanager
+72 | async def lifespan(app: FastAPI):
+   |           ^^^^^^^^
+73 |     from app.models.partner import create_db_and_tables
+74 |     from app.services.warmup_service import warmup_redis
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+   --> app/main.py:119:30
+    |
+117 |                 logger.info(f"🚀 Webhook successfully set to: {webhook_url}")
+118 |             else:
+119 |                 logger.info("ℹ️ Webhook already registered by leader worker. Skipping...")
+    |                              ^
+120 |         except Exception as e:
+121 |             # Ignore flood control if it's already being handled by another worker
+    |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+   --> app/main.py:202:26
+    |
+200 |         except asyncio.CancelledError:
+201 |             # #comment: Expected behavior when cancelling the polling task during shutdown.
+202 |             logger.info("ℹ️ Polling task cancelled successfully.")
+    |                          ^
+203 |         except Exception as e:
+204 |             logger.error(f"❌ Error cancelling polling task: {e}")
+    |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> app/schemas/notification.py:1:1
+  |
+1 | from typing import Any, List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | from pydantic import BaseModel, ConfigDict, Field
+  |
+
+F821 Undefined name `settings`
+   --> app/services/admin_service.py:338:40
+    |
+337 |         # Theoretical target sum based on config (should be 56%)
+338 |         theoretical_payout = round(sum(settings.COMMISSION_MAP_EMPIRE.values()) * 100, 1)
+    |                                        ^^^^^^^^
+339 |
+340 |         return {
+    |
+
+PERF401 Use a list comprehension to create a transformed list
+   --> app/services/admin_service.py:385:13
+    |
+383 |           recent = []
+384 |           for tx in txs:
+385 | /             recent.append({
+386 | |                 "id": tx.id, "amount": tx.amount, "currency": tx.currency, "tx_hash": tx.tx_hash,
+387 | |                 "created_at": tx.created_at.isoformat(), 
+388 | |                 "username": tx.partner.username if tx.partner else None,
+389 | |                 "telegram_id": tx.partner.telegram_id if tx.partner else "Unknown"
+390 | |             })
+    | |______________^
+391 |           return recent
+    |
+help: Replace for loop with list comprehension
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> app/services/audit_service.py:1:1
+  |
+1 | / import logging
+2 | |
+3 | | from sqlmodel.ext.asyncio.session import AsyncSession
+4 | |
+5 | | from app.models.audit_log import ActionType, AuditLog
+6 | | from app.core.retry import async_retry
+  | |______________________________________^
+7 |
+8 |   logger = logging.getLogger(__name__)
+  |
+help: Organize imports
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+  --> app/services/copywriter.py:25:18
+   |
+23 |       # variety in the content strategy. Each category targets a different psychological trigger
+24 |       # (e.g., Fear of Missing Out, Authority, Relatability) to maximize engagement across user segments.
+25 |       CATEGORIES = {
+   |  __________________^
+26 | |         "brand_awareness": {
+27 | |             "goal": "Brand Awareness",
+28 | |             "tone": "Visionary, Authoritative, Inspiring",
+29 | |             "focus": "Establish Pintopay as the inevitable future of finance.",
+30 | |             "hook_style": "The world is changing fast. Are you ready?",
+31 | |         },
+32 | |         "problem_solution": {
+33 | |             "goal": "Problem Solution",
+34 | |             "tone": "Empathetic, Analytical, Solution-Oriented",
+35 | |             "focus": "Highlight pain points (blocked crypto, high fees) and present Pintopay Card as the only improved solution.",
+36 | |             "hook_style": "Stop losing money to banks.",
+37 | |         },
+38 | |         "global_trends": {
+39 | |             "goal": "Global FinTech & Crypto Mass Adoption",
+40 | |             "tone": "Urgent, Data-Driven, Insider",
+41 | |             "focus": "Show the massive shift to digital finance and how early adopters win.",
+42 | |             "hook_style": "Trillions are moving on-chain. Here's what it means for you.",
+43 | |         },
+44 | |         "promotional": {
+45 | |             "goal": "Promotional (Sale/PRO)",
+46 | |             "tone": "Exciting, Exclusive, Limited-Time",
+47 | |             "focus": "Directly sell the benefits of PRO membership and the Card.",
+48 | |             "hook_style": "This offer disappears in 24 hours.",
+49 | |         },
+50 | |         "entertainment": {
+51 | |             "goal": "Entertainment & Engagement",
+52 | |             "tone": "Fun, Relatable, Meme-friendly",
+53 | |             "focus": "Crypto culture, relatable struggles, quizzes, and fun facts.",
+54 | |             "hook_style": "You won't believe what just happened.",
+55 | |         },
+56 | |         "hype_viral": {
+57 | |             "goal": "Hype, Viral & FOMO",
+58 | |             "tone": "Electric, Secretive, Urgent",
+59 | |             "focus": "Create massive fear of missing out (FOMO) and social proof.",
+60 | |             "hook_style": "Everyone is talking about this secret strategy.",
+61 | |         }
+62 | |     }
+   | |_____^
+63 |
+64 |       # Hardcoded referral link to ensure attribution for all generated content
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> app/services/maintenance_service.py:84:17
+   |
+82 |                   try:
+83 |                       await notification_service.send_critical(chat_id=int(admin_id), text=alert_msg, bypass_dedup=True)
+84 | /                 except Exception as e:
+85 | |                     logger.error(f"Failed to send health alert to admin {admin_id}: {e}")
+   | |_________________________________________________________________________________________^
+86 |           else:
+87 |               logger.info(f"✅ Notification health check: {stuck_count} stuck messages. Status: Healthy.")
+   |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> app/services/maintenance_service.py:390:67
+    |
+388 |     Flags discrepancies in the audit log for manual review.
+389 |     
+390 |     #comment: FIX H-3 — Replaced N+1 pattern (1 query per partner × 2 = 2N queries) with
+    |                                                                   ^
+391 |     3 bulk aggregation queries total. For 5000 users this goes from ~10,000 DB round-trips
+392 |     to 3, reducing audit time from minutes to seconds.
+    |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> app/services/notification_service.py:5:1
+  |
+3 | import logging
+4 | import time
+5 | from typing import List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 |
+7 | import sentry_sdk
+  |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+   --> app/services/notification_service.py:405:13
+    |
+403 |                   # Admin alerts are HIGH priority — send with HTML parse mode to avoid Markdown entity errors
+404 |                   await notification_service.send_critical(chat_id=int(chat_id), text=msg, parse_mode="HTML")
+405 | /             except Exception as e:
+406 | |                 logger.error(f"Failed to enqueue admin notify: {e}")
+    | |____________________________________________________________________^
+    |
+
+C901 `upgrade_to_pro` is too complex (24 > 10)
+   --> app/services/payment_service.py:224:15
+    |
+223 |     @async_retry(max_attempts=3, base_delay=1.0)
+224 |     async def upgrade_to_pro(
+    |               ^^^^^^^^^^^^^^
+225 |         self,
+226 |         session: AsyncSession,
+    |
+
+F821 Undefined name `asyncio`
+   --> app/services/payment_service.py:489:23
+    |
+487 |             await _check_level_up(partner, temp_notifs, xp_after)
+488 |             if temp_notifs:
+489 |                 await asyncio.gather(*temp_notifs, return_exceptions=True)
+    |                       ^^^^^^^
+490 |
+491 |             # 4.2 Viral Congrats Message (Instruction to user to share)
+    |
+
+C901 `_process_referral_awards` is too complex (11 > 10)
+  --> app/services/referral_service.py:97:11
+   |
+95 |     return {p.id: p for p in result.all()}
+96 |
+97 | async def _process_referral_awards(session: AsyncSession, partner: Partner, ancestor_map: dict[int, Partner]) -> tuple[list[XPTransac…
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^
+98 |     xp_txs = []
+99 |     deferred_tasks = []
+   |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> app/services/referral_service.py:198:38
+    |
+196 |     XP per referral level by plan:
+197 |       Free  → flat 35 XP (for qualified levels L1-L3)
+198 |       PRO   → REFERRAL_XP_MAP[level] × 1.5
+    |                                      ^
+199 |       PRO+  → REFERRAL_XP_MAP[level] × 3.0
+200 |     """
+    |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> app/services/referral_service.py:199:38
+    |
+197 |       Free  → flat 35 XP (for qualified levels L1-L3)
+198 |       PRO   → REFERRAL_XP_MAP[level] × 1.5
+199 |       PRO+  → REFERRAL_XP_MAP[level] × 3.0
+    |                                      ^
+200 |     """
+201 |     if partner.is_pro_plus:
+    |
+
+C901 `distribute_pro_commissions` is too complex (28 > 10)
+   --> app/services/referral_service.py:265:11
+    |
+264 | @async_retry(max_attempts=3, base_delay=1.0)
+265 | async def distribute_pro_commissions(session: AsyncSession, partner_id: int, total_amount: float, plan_type: str | None = None):
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+266 |     """
+267 |     Distributes commissions for PRO ($39) or PRO+ ($69) subscription purchase.
+    |
+
+C901 `_get_cached_kb` is too complex (12 > 10)
+   --> app/services/support_service.py:201:15
+    |
+199 |         return None
+200 |
+201 |     async def _get_cached_kb(self) -> dict[str, str]:
+    |               ^^^^^^^^^^^^^^
+202 |         """
+203 |         Retrieves KB with dual-layer caching (Memory -> Redis -> Google Sheets).
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> app/services/viral_analytics_service.py:49:13
+   |
+48 |                   await session.commit()
+49 | /             except Exception as e:
+50 | |                 logger.error(f"Failed to update metrics for post {post.id} ({post.platform}): {e}")
+   | |___________________________________________________________________________________________________^
+51 |
+52 |       async def fetch_post_metrics(self, post: SocialPost, session: AsyncSession) -> dict[str, Any] | None:
+   |
+
+F821 Undefined name `partner`
+   --> app/services/viral_analytics_service.py:167:43
+    |
+165 |                 post_link = f"https://x.com/i/status/{post.external_id}"
+166 |             elif post.platform == "telegram":
+167 |                 chan = post.channel_id or partner.telegram_channel_id
+    |                                           ^^^^^^^
+168 |                 if chan and chan.startswith("@"):
+169 |                     channel_name = chan[1:]
+    |
+
+RUF001 String contains ambiguous `о` (CYRILLIC SMALL LETTER O). Did you mean `o` (LATIN SMALL LETTER O)?
+  --> app/services/viral_studio/constants.py:75:54
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                      ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> app/services/viral_studio/constants.py:75:57
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                         ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+RUF001 String contains ambiguous `р` (CYRILLIC SMALL LETTER ER). Did you mean `p` (LATIN SMALL LETTER P)?
+  --> app/services/viral_studio/constants.py:75:58
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                          ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> app/services/viral_studio/constants.py:75:59
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                           ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+RUF001 String contains ambiguous `у` (CYRILLIC SMALL LETTER U). Did you mean `y` (LATIN SMALL LETTER Y)?
+  --> app/services/viral_studio/constants.py:75:64
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                                ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+RUF001 String contains ambiguous `у` (CYRILLIC SMALL LETTER U). Did you mean `y` (LATIN SMALL LETTER Y)?
+  --> app/services/viral_studio/constants.py:75:66
+   |
+73 | 5. **MANDATORY HASHTAGS:** 
+74 |    - English: #GrowthHack #1dollarperminute #ViralNetwork #GrowthStrategy
+75 |    - Russian: #СтратегияРоста #ВиральнаяСтратегия #1долларавминуту #GrowthHack #1dollarperminute
+   |                                                                  ^
+76 | 6. **PLATFORM OPTIMIZATION:**
+77 |    - Telegram: Clean rhythmic spacing, bold headers, and absolute HTML integrity.
+   |
+
+PERF401 Use a list comprehension to create a transformed list
+   --> app/services/viral_studio/logging.py:129:17
+    |
+127 |               now_str = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
+128 |               for item in news_items:
+129 | /                 rows.append([
+130 | |                     now_str,
+131 | |                     item.get('source', 'Unknown'),
+132 | |                     item.get('title', 'N/A'),
+133 | |                     item.get('link', 'N/A'),
+134 | |                     item.get('pub_date', 'N/A')
+135 | |                 ])
+    | |__________________^
+136 |               
+137 |               if rows:
+    |
+help: Replace for loop with list comprehension
+
+F821 Undefined name `story_context`
+   --> app/services/viral_studio/prompts.py:173:2
+    |
+171 | Arc: {category_strategy.get('storytelling', {}).get('arc', 'General Transformation')}
+172 | Focus: {category_strategy.get('storytelling', {}).get('chapter_focus', 'None')}
+173 | {story_context if story_history is not None else ''}
+    |  ^^^^^^^^^^^^^
+174 |
+175 | **CONTENT REQUIREMENTS (2026 HUMANIZED PROTOCOL):**
+    |
+
+C901 `generate_viral_content` is too complex (28 > 10)
+  --> app/services/viral_studio/studio.py:93:15
+   |
+91 |         return partner.pro_tokens >= min_tokens
+92 |
+93 |     async def generate_viral_content(self, partner: Partner, post_type: str, target_audience: str, language: str,
+   |               ^^^^^^^^^^^^^^^^^^^^^^
+94 |                                    tone_of_voice: str | None = "authoritative", referral_link: str | None = None,
+95 |                                    session: AsyncSession | None = None) -> dict[str, Any]:
+   |
+
+RUF006 Store a reference to the return value of `asyncio.create_task`
+   --> app/services/viral_studio/studio.py:233:17
+    |
+231 | …     ep_num = (len(story_history) + 1) if story_history is not None else 1
+232 | …     # Run in background to avoid blocking return
+233 | …     asyncio.create_task(viral_log.viral_logger.append_user_story_history(partner.id, ep_num, output["title"], output["body"]))
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+234 | … except Exception as e:
+235 | …     logger.warning(f"Failed to append story history: {e}")
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+   --> app/services/viral_studio/studio.py:281:17
+    |
+279 |                       self._last_used_text_model = model_name
+280 |                       return json.loads(res.choices[0].message.content), res.usage.total_tokens
+281 | /                 except: 
+282 | |                     continue
+    | |____________________________^
+283 |           
+284 |           # SECONDARY/EMERGENCY: Google Gemini Tier
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+   --> app/services/viral_studio/studio.py:296:17
+    |
+294 |                       self._last_used_text_model = model
+295 |                       return json.loads(res.text), 0
+296 | /                 except: 
+297 | |                     continue
+    | |____________________________^
+298 |                   
+299 |           return None, 0
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+   --> app/services/viral_studio/studio.py:328:17
+    |
+326 |                           self._last_used_image_model = m
+327 |                           return url
+328 | /                 except Exception as e:
+329 | |                     logger.warning(f"Imagen model {m} failed: {e}")
+    | |___________________________________________________________________^
+330 |           
+331 |           # 2. Emergency Alternative: OpenAI DALL-E 3
+    |
+
+PERF401 Use `list.extend` to create a transformed list
+   --> app/services/viral_studio/studio.py:451:29
+    |
+449 |                         soup = BeautifulSoup(res.text, 'xml')
+450 |                         for item in soup.find_all('item')[:5]:
+451 |                             news_items.append({"title": item.title.text, "link": item.link.text, "source": url.split('/')[2]})
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+452 |                 except: continue
+453 |         return news_items
+    |
+help: Replace for loop with list.extend
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+   --> app/services/viral_studio/studio.py:452:17
+    |
+450 |                         for item in soup.find_all('item')[:5]:
+451 |                             news_items.append({"title": item.title.text, "link": item.link.text, "source": url.split('/')[2]})
+452 |                 except: continue
+    |                 ^^^^^^^^^^^^^^^^
+453 |         return news_items
+    |
+
+C901 `cmd_start` is too complex (11 > 10)
+  --> bot.py:44:11
+   |
+43 | @dp.message(CommandStart())
+44 | async def cmd_start(message: types.Message):
+   |           ^^^^^^^^^
+45 |     logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/_bootstrap.py:50:9
+   |
+48 |                   logger.info(f"✅ Loaded env from: {p}")
+49 |                   return
+50 | /         except (PermissionError, FileNotFoundError, OSError):
+51 | |             continue
+   | |____________________^
+52 |
+53 |       # ── Hardcoded fallback (sandbox / CI environments) ──────────────────────
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/archive/backfill_photos.py:55:35
+   |
+53 |                     logger.info(f"✅ Updated photo_file_id for {partner.first_name}: {file_id[:20]}...")
+54 |                 else:
+55 |                     logger.info(f"ℹ️  No profile photo available for {partner.first_name}")
+   |                                   ^
+56 |                     skipped_count += 1
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/archive/backfill_photos.py:58:13
+   |
+56 |                       skipped_count += 1
+57 |
+58 | /             except Exception as e:
+59 | |                 logger.error(f"❌ Error processing partner {partner.id}: {e}")
+60 | |                 skipped_count += 1
+61 | |                 continue
+   | |________________________^
+62 |
+63 |           await session.commit()
+   |
+
+C901 `check_recent_users` is too complex (15 > 10)
+  --> scripts/archive/check_recent_users.py:60:11
+   |
+60 | async def check_recent_users():
+   |           ^^^^^^^^^^^^^^^^^^
+61 |     """Check the last users who joined the bot"""
+62 |     print("=" * 70)
+   |
+
+RUF059 Unpacked variable `telegram_id` is never used
+  --> scripts/archive/check_recent_users.py:84:22
+   |
+83 | …     for user in recent_users:
+84 | …         user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = us…
+   |                    ^^^^^^^^^^^
+85 | …         username_str = f"@{username}" if username else "N/A"
+86 | …         name = f"{first_name or ''} {last_name or ''}".strip() or "N/A"
+   |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+RUF059 Unpacked variable `xp` is never used
+  --> scripts/archive/check_recent_users.py:84:87
+   |
+83 | …     for user in recent_users:
+84 | …         user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = us…
+   |                                                                                     ^^
+85 | …         username_str = f"@{username}" if username else "N/A"
+86 | …         name = f"{first_name or ''} {last_name or ''}".strip() or "N/A"
+   |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+RUF059 Unpacked variable `level` is never used
+  --> scripts/archive/check_recent_users.py:84:91
+   |
+83 | …     for user in recent_users:
+84 | …         user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = us…
+   |                                                                                         ^^^^^
+85 | …         username_str = f"@{username}" if username else "N/A"
+86 | …         name = f"{first_name or ''} {last_name or ''}".strip() or "N/A"
+   |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+RUF059 Unpacked variable `is_pro` is never used
+  --> scripts/archive/check_recent_users.py:84:98
+   |
+83 | …     for user in recent_users:
+84 | …         user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = us…
+   |                                                                                                ^^^^^^
+85 | …         username_str = f"@{username}" if username else "N/A"
+86 | …         name = f"{first_name or ''} {last_name or ''}".strip() or "N/A"
+   |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+RUF059 Unpacked variable `referral_count` is never used
+  --> scripts/archive/check_recent_users.py:84:118
+   |
+83 | …     for user in recent_users:
+84 | …         user_id, telegram_id, username, first_name, last_name, referrer_id, path, xp, level, is_pro, created_at, referral_count = us…
+   |                                                                                                                    ^^^^^^^^^^^^^^
+85 | …         username_str = f"@{username}" if username else "N/A"
+86 | …         name = f"{first_name or ''} {last_name or ''}".strip() or "N/A"
+   |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+N806 Variable `XP_MAP` in function should be lowercase
+   --> scripts/archive/check_recent_users.py:136:21
+    |
+135 |                     # Calculate XP that should have been awarded
+136 |                     XP_MAP = {1: 35, 2: 10, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
+    |                     ^^^^^^
+137 |                     xp_gain = XP_MAP.get(lvl, 0)
+138 |                     if ref_is_pro:
+    |
+
+N806 Variable `XP_MAP` in function should be lowercase
+   --> scripts/archive/create_real_referral.py:116:9
+    |
+115 |         # Expected Rewards
+116 |         XP_MAP = {1: 35.0, 2: 10.0, 3: 1.0, 4: 1.0, 5: 1.0, 6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0}
+    |         ^^^^^^
+117 |
+118 |         for level in range(1, 10):
+    |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/archive/fetch_photos.py:73:13
+   |
+71 |                       failed_count += 1
+72 |                       
+73 | /             except Exception as e:
+74 | |                 print(f"❌ {user.first_name} (@{user.username}): {e}")
+75 | |                 failed_count += 1
+   | |_________________________________^
+76 |           
+77 |           await session.commit()
+   |
+
+N806 Variable `USERS_TO_UPDATE` in function should be lowercase
+   --> scripts/archive/finalize_avatar_fixes.py:106:9
+    |
+104 |         # 2. Assign the NEW accounts (30, 40 etc) to users who have None
+105 |         # Mapping specific users from my dump
+106 |         USERS_TO_UPDATE = {
+    |         ^^^^^^^^^^^^^^^
+107 |             "SuperhumanRyzn": 30, # Ryan Conley (Web3)
+108 |             "PAO_web3": 40,       # Paola (Female)
+    |
+
+RUF001 String contains ambiguous `➕` (HEAVY PLUS SIGN). Did you mean `+` (PLUS SIGN)?
+  --> scripts/archive/fix_earning_schema.py:26:23
+   |
+24 |         # Add 'type' if missing
+25 |         if 'type' not in cols:
+26 |             print("   ➕ Adding 'type' column...")
+   |                       ^^
+27 |             await conn.execute(text("ALTER TABLE earning ADD COLUMN type VARCHAR DEFAULT 'COMMISSION'"))
+28 |             await conn.execute(text("CREATE INDEX ix_earning_type ON earning (type)"))
+   |
+
+RUF001 String contains ambiguous `➕` (HEAVY PLUS SIGN). Did you mean `+` (PLUS SIGN)?
+  --> scripts/archive/fix_earning_schema.py:32:23
+   |
+30 |         # Add 'level' if missing
+31 |         if 'level' not in cols:
+32 |             print("   ➕ Adding 'level' column...")
+   |                       ^^
+33 |             await conn.execute(text("ALTER TABLE earning ADD COLUMN level INTEGER"))
+   |
+
+RUF001 String contains ambiguous `➕` (HEAVY PLUS SIGN). Did you mean `+` (PLUS SIGN)?
+  --> scripts/archive/fix_earning_schema.py:37:23
+   |
+35 |         # Add 'currency' if missing
+36 |         if 'currency' not in cols:
+37 |             print("   ➕ Adding 'currency' column...")
+   |                       ^^
+38 |             await conn.execute(text("ALTER TABLE earning ADD COLUMN currency VARCHAR DEFAULT 'USDT'"))
+   |
+
+C901 `main` is too complex (12 > 10)
+   --> scripts/archive/globalize_users.py:131:11
+    |
+129 | ]
+130 |
+131 | async def main():
+    |           ^^^^
+132 |     try:
+133 |         from sqlalchemy.ext.asyncio import create_async_engine
+    |
+
+N806 Variable `CRYPTO_SUFFIXES` in function should be lowercase
+   --> scripts/archive/globalize_users.py:175:13
+    |
+174 |             # Web3 flavor text
+175 |             CRYPTO_SUFFIXES = ["_eth", "_btc", "_sol", "_nft", "_dao", "_defi", "_web3", "_hodl", "_gm", "_wagmi", "_alpha", "_degne"]
+    |             ^^^^^^^^^^^^^^^
+176 |
+177 |             # Comprehensive Avatar Pools
+    |
+
+N806 Variable `MALE_POOL` in function should be lowercase
+   --> scripts/archive/globalize_users.py:178:13
+    |
+177 |             # Comprehensive Avatar Pools
+178 |             MALE_POOL = [
+    |             ^^^^^^^^^
+179 |                 "/avatars/m1.webp", "/avatars/m2.webp", "/avatars/m3.webp", "/avatars/m4.webp",
+180 |                 "/avatars/us_m_1.webp", "/avatars/ca_m_1.webp", "/avatars/de_m_1.webp",
+    |
+
+N806 Variable `FEMALE_POOL` in function should be lowercase
+   --> scripts/archive/globalize_users.py:183:13
+    |
+181 |                 "/avatars/es_m_1.webp", "/avatars/in_m_1.webp", "/avatars/ng_m_1.webp", "/avatars/ru_m_1.webp"
+182 |             ]
+183 |             FEMALE_POOL = [
+    |             ^^^^^^^^^^^
+184 |                 "/avatars/f1.webp", "/avatars/f2.webp", "/avatars/f3.webp",
+185 |                 "/avatars/us_f_1.webp", "/avatars/ae_f_1.webp", "/avatars/br_f_1.webp",
+    |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/archive/migrate_referral_codes.py:85:23
+   |
+83 |             print(f"\n✅ Successfully committed {updated_count} updates.")
+84 |         elif dry_run:
+85 |             print(f"\nℹ️ Dry run completed. {updated_count} users would be updated, {skipped_count} users already up-to-date.")
+   |                       ^
+86 |         else:
+87 |             print(f"\nℹ️ No updates needed. {skipped_count} users already up-to-date.")
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/archive/migrate_referral_codes.py:87:23
+   |
+85 |             print(f"\nℹ️ Dry run completed. {updated_count} users would be updated, {skipped_count} users already up-to-date.")
+86 |         else:
+87 |             print(f"\nℹ️ No updates needed. {skipped_count} users already up-to-date.")
+   |                       ^
+88 |
+89 |     await engine.dispose()
+   |
+
+C901 `restore_names_from_telegram` is too complex (15 > 10)
+  --> scripts/archive/restore_names_from_telegram.py:18:11
+   |
+18 | async def restore_names_from_telegram():
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+19 |     """
+20 |     This function should be called from within the running application
+   |
+
+C901 `main` is too complex (16 > 10)
+  --> scripts/archive/restore_real_users.py:18:11
+   |
+18 | async def main():
+   |           ^^^^
+19 |     db_url = os.environ.get("DATABASE_URL")
+20 |     if not db_url:
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/archive/seed_partners.py:33:13
+   |
+31 |                   await session.commit()
+32 |                   print(f"Added {p.username}")
+33 | /             except Exception as e:
+34 | |                 await session.rollback()
+35 | |                 print(f"Skipped {p.username}: {e}")
+   | |___________________________________________________^
+36 |
+37 |   if __name__ == "__main__":
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/archive/verify_and_refresh_leaderboard.py:73:31
+   |
+71 |                     print(f"  ✅ Cleared: {key}")
+72 |                 else:
+73 |                     print(f"  ℹ️  Not found: {key}")
+   |                               ^
+74 |             
+75 |             # Also sync the Redis sorted set with current XP values
+   |
+
+C901 `verify_connection` is too complex (15 > 10)
+  --> scripts/archive/verify_db_connection.py:22:11
+   |
+22 | async def verify_connection():
+   |           ^^^^^^^^^^^^^^^^^
+23 |     """Verify database connection with detailed diagnostics."""
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/audit_user_stats.py:64:20
+   |
+63 |         if partner.referral_count == direct_count:
+64 |             print("ℹ️ referral_count matches Direct count (L1).")
+   |                    ^
+65 |         elif partner.referral_count == total_network:
+66 |             print("ℹ️ referral_count matches Total Network (L1-L20).")
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/audit_user_stats.py:66:20
+   |
+64 |             print("ℹ️ referral_count matches Direct count (L1).")
+65 |         elif partner.referral_count == total_network:
+66 |             print("ℹ️ referral_count matches Total Network (L1-L20).")
+   |                    ^
+67 |         else:
+68 |             print(f"⚠️ referral_count ({partner.referral_count}) is inconsistent with both!")
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/clear_all_caches.py:39:9
+   |
+37 |                   print(f"  ✅ Cleared: {key}")
+38 |                   cleared_count += 1
+39 | /         except Exception as e:
+40 | |             print(f"  ⚠️  Error clearing {key}: {e}")
+   | |____________________________________________________^
+41 |               
+42 |       # Also clear patterns
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/clear_all_caches.py:61:9
+   |
+59 |                   print(f"  ✅ Cleared pattern: {pattern} ({len(keys)} keys)")
+60 |                   cleared_count += len(keys)
+61 | /         except Exception as e:
+62 | |             print(f"  ⚠️  Error clearing pattern {pattern}: {e}")
+   | |________________________________________________________________^
+63 |       
+64 |       # Rebuild Redis sorted set from database
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/clear_all_caches.py:76:13
+   |
+74 |                   await leaderboard_service.update_score(user.id, user.xp)
+75 |                   sync_count += 1
+76 | /             except Exception as e:
+77 | |                 print(f"  ⚠️  Error syncing user {user.id}: {e}")
+   | |________________________________________________________________^
+78 |           
+79 |           print(f"  ✅ Synced {sync_count} users to Redis")
+   |
+
+PERF401 Use `list.extend` to create a transformed list
+  --> scripts/clear_user_cache.py:19:9
+   |
+17 |     # Also level members if any
+18 |     for i in range(1, 10):
+19 |         keys.append(f"ref_tree_members:{partner_id}:{i}")
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+20 |
+21 |     for k in keys:
+   |
+help: Replace for loop with list.extend
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+ --> scripts/data/blog_content_en.py:5:91
+  |
+3 |     "1": """# The $1/Minute Blueprint: Mastering the Physics of Exponential Scale
+4 |
+5 | In the quiet corners of the digital economy, a new class of wealth is being formed. It isn’t built on the "hustle culture" of trading 1…
+  |                                                                                           ^
+6 |
+7 | This guide isn't just a manual; it's a structural rethink of how you interact with capital. We call it the $1/Minute Blueprint.
+  |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+ --> scripts/data/blog_content_en.py:5:234
+  |
+3 | …
+4 | …
+5 | … is built on the understanding of **Network Physics**. If you aren’t earning while you sleep, you are fundamentally misaligned with th…
+  |                                                                    ^
+6 | …
+7 | …
+  |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+  --> scripts/data/blog_content_en.py:68:86
+   |
+66 |     "2": """# Banks are Dead: Decoding the Technical Collapse of Legacy Finance
+67 |
+68 | The traditional banking system is currently experiencing a "silent collapse. " It isn’t happening with a loud bank run, but through **…
+   |                                                                                      ^
+   |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+  --> scripts/data/blog_content_en.py:96:9
+   |
+94 | Card numbers are a security flaw. Every time you give a merchant your 16-digit card number, you are giving them the "keys" to push cha…
+95 |
+96 | Pintopay’s **QR Payment System** flips this. You scan a merchant’s QR code, and *you* push the exact amount to *them*. **Privacy**: Th…
+   |         ^
+   |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+  --> scripts/data/blog_content_en.py:96:65
+   |
+94 | Card numbers are a security flaw. Every time you give a merchant your 16-digit card number, you are giving them the "keys" to push cha…
+95 |
+96 | Pintopay’s **QR Payment System** flips this. You scan a merchant’s QR code, and *you* push the exact amount to *them*. **Privacy**: Th…
+   |                                                                 ^
+   |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> scripts/data/blog_content_en.py:200:140
+    |
+198 | …
+199 | …
+200 | … that digital technology would allow citizens to bypass the state’s monopoly on power. We are seeing this prediction come true.
+    |                                                                   ^
+201 | …
+202 | …from a global network. **Spending**: Using a virtual or physical card anywhere in the world. **Life**: Uncoupled from the local econ…
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> scripts/data/blog_content_en.py:212:48
+    |
+210 | Don't just recruit in your neighborhood. Use the **Pintopay AI Studios** to generate content in multiple languages. Reach out to the …
+211 |
+212 | Your network is your safety net. If one country’s economy dips, your nodes in another country keep the cash flow steady.
+    |                                                ^
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> scripts/data/blog_content_en.py:316:150
+    |
+314 | …
+315 | …
+316 | …to a rank breakthrough. When your leaders win, the entire network’s value increases. This is the beauty of the Pintopay reward struc…
+    |                                                                   ^
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> scripts/data/blog_content_en.py:706:293
+    |
+704 | …
+705 | …
+706 | …o approve the transaction, and finally use your legacy card. That’s four steps and three days too many.
+    |                                                                   ^
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+   --> scripts/data/blog_content_en.py:718:5
+    |
+716 | 2. **The Execution**: Tap your phone at any of the 100 million Mastercard terminals worldwide.
+717 |
+718 | That’s it. Your Bitcoin bought your latte. Ваша USDT paid for your Uber. Your rewards paid for your flight. We have successfully brid…
+    |     ^
+    |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:1100:9
+     |
+1098 | In a linear model, your growth looks like a straight line up. In a geometric model, your growth looks like a hockey stick.
+1099 |
+1100 | Metcalfe’s Law states that the value of a network is proportional to the square of its users. **Linear**: You find 10 people. You ha…
+     |         ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:1681:81
+     |
+1679 | * Can you sell your "good reputation" at a traditional bank? No.
+1680 |
+1681 | * Can you transfer the "rights" to a high-volume network in the legacy world? It’s a legal nightmare.
+     |                                                                                 ^
+1682 |
+1683 | * In Web3? Your network rights are your property. They are encapsulated in code.
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:1746:191
+     |
+1744 | …
+1745 | …
+1746 | …ou make increases the value of your personal financial empire. It’s time to stop scrolling for free and start building for freedom.
+     |                                                                   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:1828:3
+     |
+1826 | ## Conclusion: Audit Your Bank, Or Join Us
+1827 |
+1828 | It’s time to move your capital out of the shadows and into the light. Join the movement for transparent, honest finance. The era of …
+     |   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:2079:200
+     |
+2077 | …
+2078 | …
+2079 | … were unconscious, your net worth increased. This isn't magic; it’s **Infrastructure**. It’s the result of building pipes that othe…
+     |                                                                   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:2079:225
+     |
+2077 | …
+2078 | …
+2079 | …et worth increased. This isn't magic; it’s **Infrastructure**. It’s the result of building pipes that others use to transport their…
+     |                                                                   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:2120:159
+     |
+2118 | …
+2119 | …
+2120 | …he only limit is the size of the vision you have in your head. It’s time to think bigger.
+     |                                                                   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:2147:166
+     |
+2145 | …
+2146 | …
+2147 | … doing it to capture the infrastructure. Pintopay is the **People’s Infrastructure**. We give you the chance to own a slice of the …
+     |                                                                   ^
+     |
+
+RUF001 String contains ambiguous `’` (RIGHT SINGLE QUOTATION MARK). Did you mean ``` (GRAVE ACCENT)?
+    --> scripts/data/blog_content_en.py:2284:3
+     |
+2282 | The era of the "lonely individual" is over. To thrive in the new economy, you need a grid. You need a team. You need a sovereign inf…
+2283 |
+2284 | It’s time to stop watching the revolution and start leading it. Welcome to the Elite. Welcome to Pintopay.
+     |   ^
+     |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/flush_social_cache.py:22:9
+   |
+20 |               await redis_service.delete(key)
+21 |               print(f'✅ Cleared: {key}')
+22 | /         except Exception as e:
+23 | |             print(f'⚠️ Failed to clear {key}: {e}')
+   | |__________________________________________________^
+24 |       
+25 |       # Also delete pattern for general leaderboard keys
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> scripts/generate_blog_expansion.py:6:1
+  |
+4 | import re
+5 | import sys
+6 | from typing import Dict
+  | ^^^^^^^^^^^^^^^^^^^^^^^
+7 |
+8 | # Add backend to path
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> scripts/live_gtm_monitor.py:5:1
+  |
+3 | import sys
+4 | from datetime import UTC, datetime, timedelta
+5 | from typing import List
+  | ^^^^^^^^^^^^^^^^^^^^^^^
+6 |
+7 | # Add parent directory to sys.path to import app
+  |
+
+C901 `migrate` is too complex (18 > 10)
+  --> scripts/migrate_blog.py:53:11
+   |
+51 |         await conn.run_sync(SQLModel.metadata.create_all)
+52 |
+53 | async def migrate():
+   |           ^^^^^^^
+54 |     print("Creating tables...")
+55 |     await create_tables()
+   |
+
+PERF203 `try`-`except` within a loop incurs performance overhead
+  --> scripts/rotate_logs.py:37:9
+   |
+35 |                       total_freed_bytes += size
+36 |                       print(f"Deleted {file.name} ({size} bytes)")
+37 | /         except (ValueError, OSError) as e:
+38 | |             print(f"Error processing {file.name}: {e}")
+   | |_______________________________________________________^
+39 |
+40 |       print(f"Rotation complete. Deleted {deleted_count} files. Freed {total_freed_bytes / 1024:.2f} KB.")
+   |
+
+C901 `aggressive_polish` is too complex (11 > 10)
+ --> scripts/sanitize_blog.py:7:5
+  |
+7 | def aggressive_polish(text):
+  |     ^^^^^^^^^^^^^^^^^
+8 |     """
+9 |     Final Master Polishing for Pintopay Blog.
+  |
+
+E741 Ambiguous variable name: `l`
+  --> scripts/sanitize_blog.py:47:28
+   |
+46 |     # 6. Final paragraph normalization
+47 |     lines = [l.strip() for l in text.split('\n')]
+   |                            ^
+48 |     cleaned_lines = []
+49 |     for l in lines:
+   |
+
+E741 Ambiguous variable name: `l`
+  --> scripts/sanitize_blog.py:49:9
+   |
+47 |     lines = [l.strip() for l in text.split('\n')]
+48 |     cleaned_lines = []
+49 |     for l in lines:
+   |         ^
+50 |         if not l: continue
+51 |         # If it's a structural point or header, keep it separate
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v5.py:28:29
+   |
+26 |     # Ensure space BEFORE opening ** if preceded by an alphanumeric character
+27 |     # Use explicit character classes to avoid matching spaces
+28 |     text = re.sub(r"([a-zA-Zа-яА-Я0-9])(\*\*)", r"\1 \2", text)
+   |                             ^
+29 |     
+30 |     # Ensure space AFTER closing ** if followed by an alphanumeric character
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v5.py:31:35
+   |
+30 |     # Ensure space AFTER closing ** if followed by an alphanumeric character
+31 |     text = re.sub(r"(\*\*)([a-zA-Zа-яА-Я0-9])", r"\1 \2", text)
+   |                                   ^
+32 |     
+33 |     # Remove INTERNAL spaces in bolds: ** text ** -> **text**
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v5.py:44:41
+   |
+42 |     text = re.sub(r" +([.,!?;:])", r"\1", text)
+43 |     # Exactly one space after punctuation
+44 |     text = re.sub(r"([.,!?;:])(?=[a-zA-Zа-яА-Я])", r"\1 ", text)
+   |                                         ^
+45 |     
+46 |     # Fix double spaces
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v6.py:38:33
+   |
+36 |     text = re.sub(r" +([.,!?;:])", r"\1", text)
+37 |     # Ensure space after punctuation if followed by a letter
+38 |     text = re.sub(r"([.,!?;:])([а-яА-Яa-zA-Z])", r"\1 \2", text)
+   |                                 ^
+39 |     
+40 |     # 4. Russian Typography
+   |
+
+C901 `professional_polish` is too complex (11 > 10)
+ --> scripts/sanitize_blog_v7.py:7:5
+  |
+7 | def professional_polish(text, lang="en"):
+  |     ^^^^^^^^^^^^^^^^^^^
+8 |     """
+9 |     Elite Polishing for Pintopay Blog (v7).
+  |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v7.py:44:33
+   |
+42 |     text = re.sub(r" +([.,!?;:])", r"\1", text)
+43 |     # Ensure space after punctuation if followed by a letter (Russian and English)
+44 |     text = re.sub(r"([.,!?;:])([а-яА-Яa-zA-Z])", r"\1 \2", text)
+   |                                 ^
+45 |     
+46 |     # 6. Specific word glitches reported
+   |
+
+PERF401 Use `list.extend` to create a transformed list
+  --> scripts/sanitize_blog_v7.py:68:34
+   |
+66 |             parts = re.split(r"(###.*)", p)
+67 |             for part in parts:
+68 |                 if part.strip(): cleaned_paragraphs.append(part.strip())
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+69 |         elif "##" in p and not p.startswith("##"):
+70 |             parts = re.split(r"(##.*)", p)
+   |
+help: Replace for loop with list.extend
+
+PERF401 Use `list.extend` to create a transformed list
+  --> scripts/sanitize_blog_v7.py:72:34
+   |
+70 |             parts = re.split(r"(##.*)", p)
+71 |             for part in parts:
+72 |                 if part.strip(): cleaned_paragraphs.append(part.strip())
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+73 |         else:
+74 |             cleaned_paragraphs.append(p)
+   |
+help: Replace for loop with list.extend
+
+C901 `professional_polish` is too complex (11 > 10)
+ --> scripts/sanitize_blog_v8.py:7:5
+  |
+7 | def professional_polish(text, lang="en"):
+  |     ^^^^^^^^^^^^^^^^^^^
+8 |     """
+9 |     Elite Polishing for Pintopay Blog (v8).
+  |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v8.py:27:29
+   |
+25 |     # Touch-up: If ** is touching a character (especially words), insert a space
+26 |     # Fix "word**Bold**" -> "word **Bold**"
+27 |     text = re.sub(r"([a-zA-Zа-яА-Я])(\*\*)", r"\1 \2", text)
+   |                             ^
+28 |     # Fix "**Bold**word" -> "**Bold** word"
+29 |     text = re.sub(r"(\*\*)([a-zA-Zа-яА-Я])", r"\1 \2", text)
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v8.py:29:35
+   |
+27 |     text = re.sub(r"([a-zA-Zа-яА-Я])(\*\*)", r"\1 \2", text)
+28 |     # Fix "**Bold**word" -> "**Bold** word"
+29 |     text = re.sub(r"(\*\*)([a-zA-Zа-яА-Я])", r"\1 \2", text)
+   |                                   ^
+30 |     
+31 |     # 3. Header Structural Fixes (Crucial for the "glitch" reported)
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> scripts/sanitize_blog_v8.py:46:33
+   |
+44 |     text = re.sub(r" +([.,!?;:])", r"\1", text)
+45 |     # Ensure space after punctuation if followed by a letter
+46 |     text = re.sub(r"([.,!?;:])([а-яА-Яa-zA-Z])", r"\1 \2", text)
+   |                                 ^
+47 |     
+48 |     # 6. Specific word glitches reported
+   |
+
+PERF401 Use `list.extend` to create a transformed list
+  --> scripts/sanitize_blog_v8.py:71:34
+   |
+69 |             parts = re.split(r"(###.*)", p)
+70 |             for part in parts:
+71 |                 if part.strip(): cleaned_paragraphs.append(part.strip())
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+72 |         elif "##" in p and not p.startswith("##"):
+73 |             parts = re.split(r"(##.*)", p)
+   |
+help: Replace for loop with list.extend
+
+PERF401 Use `list.extend` to create a transformed list
+  --> scripts/sanitize_blog_v8.py:75:34
+   |
+73 |             parts = re.split(r"(##.*)", p)
+74 |             for part in parts:
+75 |                 if part.strip(): cleaned_paragraphs.append(part.strip())
+   |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+76 |         else:
+77 |             cleaned_paragraphs.append(p)
+   |
+help: Replace for loop with list.extend
+
+C901 `simulate_join` is too complex (12 > 10)
+  --> scripts/simulate_referral_check.py:30:11
+   |
+28 | logger = logging.getLogger(__name__)
+29 |
+30 | async def simulate_join():
+   |           ^^^^^^^^^^^^^
+31 |     try:
+32 |         # 2. Get the owner baseline
+   |
+
+N806 Variable `REFERRAL_CODE` in function should be lowercase
+  --> scripts/simulate_referral_check.py:33:9
+   |
+31 |     try:
+32 |         # 2. Get the owner baseline
+33 |         REFERRAL_CODE = "P2P-425DA3DB"
+   |         ^^^^^^^^^^^^^
+34 |         TEST_TG_ID = "999999999" # Large dummy ID
+   |
+
+N806 Variable `TEST_TG_ID` in function should be lowercase
+  --> scripts/simulate_referral_check.py:34:9
+   |
+32 |         # 2. Get the owner baseline
+33 |         REFERRAL_CODE = "P2P-425DA3DB"
+34 |         TEST_TG_ID = "999999999" # Large dummy ID
+   |         ^^^^^^^^^^
+35 |         
+36 |         async for session in get_session():
+   |
+
+RUF001 String contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+   --> scripts/simulate_referral_check.py:114:24
+    |
+112 |                     print(f"Notification text: {call.kwargs.get('text')[:100]}...")
+113 |             else:
+114 |                 print("ℹ️ Notification not sent directly (likely enqueued to Redis).")
+    |                        ^
+115 |                 print("In production, this is correct behavior as it runs in the background.")
+    |
+
+N806 Variable `PREMIUM_CATEGORIES` in function should be lowercase
+  --> scripts/sync_blog_locales.py:33:5
+   |
+31 |     # For now, let's use the premium categories we defined.
+32 |     
+33 |     PREMIUM_CATEGORIES = {
+   |     ^^^^^^^^^^^^^^^^^^
+34 |         "20": "Geopolitical Shifts",
+35 |         "21": "Financial Shift",
+   |
+
+RUF003 Comment contains ambiguous `ℹ` (INFORMATION SOURCE). Did you mean `i` (LATIN SMALL LETTER I)?
+  --> scripts/verify_imports.py:50:19
+   |
+48 |         if STRICT:
+49 |             raise
+50 |         # print(f"ℹ️ {name} not found, mocking...")
+   |                   ^
+51 |         mock_module(name, attributes)
+52 |         if sub_modules:
+   |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> test_notif.py:2:1
+  |
+1 | import asyncio
+2 | from typing import List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | from pydantic import BaseModel
+  |
+
+C901 `audit_admin_scenarios` is too complex (13 > 10)
+  --> tests/audit_admin_stats_v2.py:23:11
+   |
+21 | logger = logging.getLogger(__name__)
+22 |
+23 | async def audit_admin_scenarios():
+   |           ^^^^^^^^^^^^^^^^^^^^^
+24 |     """
+25 |     Simulates PRO and PRO+ sales scenarios to verify Admin Dashboard tracking.
+   |
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+  --> tests/test_localization_account.py:52:5
+   |
+50 |       # Use MagicMock for kiq because it might need to be awaitable or not depending on taskiq version, 
+51 |       # but usually kiq is async.
+52 | /     with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
+53 | |         
+54 | |         # We also need to mock rate_limit_service because enqueue checks it
+55 | |         with patch("app.services.notification_service.rate_limit_service.is_duplicate", new_callable=AsyncMock) as mock_dedup, \
+56 | |              patch("app.services.notification_service.rate_limit_service.is_blocked", new_callable=AsyncMock) as mock_blocked:
+   | |______________________________________________________________________________________________________________________________^
+57 |               mock_dedup.return_value = False
+58 |               mock_blocked.return_value = False
+   |
+help: Combine `with` statements
+
+RUF001 String contains ambiguous `В` (CYRILLIC CAPITAL LETTER VE). Did you mean `B` (LATIN CAPITAL LETTER B)?
+  --> tests/test_localization_account.py:81:27
+   |
+79 |             # Verify it matches
+80 |             assert sent_text == expected_text
+81 |             assert "Новая Веха" in sent_text
+   |                           ^
+82 |             assert "You've reached" not in sent_text
+   |
+
+RUF001 String contains ambiguous `е` (CYRILLIC SMALL LETTER IE). Did you mean `e` (LATIN SMALL LETTER E)?
+  --> tests/test_localization_account.py:81:28
+   |
+79 |             # Verify it matches
+80 |             assert sent_text == expected_text
+81 |             assert "Новая Веха" in sent_text
+   |                            ^
+82 |             assert "You've reached" not in sent_text
+   |
+
+RUF001 String contains ambiguous `х` (CYRILLIC SMALL LETTER HA). Did you mean `x` (LATIN SMALL LETTER X)?
+  --> tests/test_localization_account.py:81:29
+   |
+79 |             # Verify it matches
+80 |             assert sent_text == expected_text
+81 |             assert "Новая Веха" in sent_text
+   |                             ^
+82 |             assert "You've reached" not in sent_text
+   |
+
+RUF001 String contains ambiguous `а` (CYRILLIC SMALL LETTER A). Did you mean `a` (LATIN SMALL LETTER A)?
+  --> tests/test_localization_account.py:81:30
+   |
+79 |             # Verify it matches
+80 |             assert sent_text == expected_text
+81 |             assert "Новая Веха" in sent_text
+   |                              ^
+82 |             assert "You've reached" not in sent_text
+   |
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+  --> tests/test_notification_flow_v2.py:46:9
+   |
+44 |           text = "Batch test message"
+45 |           
+46 | /         with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
+47 | |             with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
+   | |______________________________________________________________________________________________________________^
+48 |                   with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+49 |                       tasks = [
+   |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+  --> tests/test_notification_flow_v2.py:67:9
+   |
+65 |           await session.refresh(retry_item)
+66 |
+67 | /         with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
+68 | |             with patch("app.services.rate_limit_service.rate_limit_service.is_allowed", return_value=True):
+   | |___________________________________________________________________________________________________________^
+69 |                   await notification_service.process_retries()
+   |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+  --> tests/test_notification_flow_v2.py:83:9
+   |
+81 |           text = "Emergency fallback test"
+82 |
+83 | /         with patch("app.services.notification_service.send_telegram_task.kiq", side_effect=Exception("Redis Down")):
+84 | |             with patch("bot.bot.send_message", new_callable=AsyncMock) as mock_send:
+   | |____________________________________________________________________________________^
+85 |                   with patch("app.services.audit_service.audit_service.log_event", new_callable=AsyncMock):
+86 |                       with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
+   |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:129:9
+    |
+127 |           text = "Dedup conflict test"
+128 |           
+129 | /         with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
+130 | |             with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate") as mock_dup:
+    | |______________________________________________________________________________________________________^
+131 |                   with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+132 |                       mock_dup.side_effect = [False, True]
+    |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:147:9
+    |
+145 |           text = "Fallback bug test"
+146 |
+147 | /         with patch("app.services.notification_service.send_telegram_task.kiq", side_effect=Exception("Broker Dead")):
+148 | |             with patch("bot.bot.send_message", new_callable=AsyncMock):
+    | |_______________________________________________________________________^
+149 |                   with patch("app.services.rate_limit_service.rate_limit_service.is_duplicate", return_value=False):
+150 |                       with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=False):
+    |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:174:9
+    |
+173 |           from aiogram.exceptions import TelegramBadRequest
+174 | /         with patch("bot.bot.send_message", side_effect=TelegramBadRequest(method=MagicMock(), message="can't parse entities")):
+175 | |             with patch("app.services.rate_limit_service.rate_limit_service.is_allowed", return_value=True):
+    | |___________________________________________________________________________________________________________^
+176 |                   from app.services.notification_service import NotificationPayload
+177 |                   payload = NotificationPayload(chat_id=chat_id, text=text, priority="medium")
+    |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:204:9
+    |
+203 |   …     # 1. Simulate a send that fails with Forbidden (User blocked Bot)
+204 | / …     with patch("bot.bot.send_message", side_effect=TelegramForbiddenError(method=MagicMock(), message="forbidden")):
+205 | | …         # Mock rate_limit_service to avoid redis and set dummy state
+206 | | …         with patch("app.services.rate_limit_service.rate_limit_service.is_allowed", return_value=True):
+    | |_________________________________________________________________________________________________________^
+207 |   …             with patch("app.services.rate_limit_service.rate_limit_service.mark_user_blocked", new_callable=AsyncMock) as mock_mark:
+    |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:219:21
+    |
+218 |                       # 3. Verify subsequent enqueue is skipped
+219 | /                     with patch("app.services.rate_limit_service.rate_limit_service.is_blocked", return_value=True):
+220 | |                         with patch("app.services.notification_service.send_telegram_task.kiq", new_callable=AsyncMock) as mock_kiq:
+    | |___________________________________________________________________________________________________________________________________^
+221 |                               await notification_service.enqueue_notification(chat_id, "Silent skip")
+222 |                               assert mock_kiq.call_count == 0
+    |
+help: Combine `with` statements
+
+SIM117 Use a single `with` statement with multiple contexts instead of nested `with` statements
+   --> tests/test_notification_flow_v2.py:256:13
+    |
+254 |   … with patch("bot.bot.get_me", new_callable=AsyncMock) as mock_get_me:
+255 |   …     mock_get_me.return_value.username = "test_bot"
+256 | / …     with patch("app.services.partner_service.create_partner", return_value=(partner, False)):
+257 | | …         with patch("app.services.rate_limit_service.rate_limit_service.unmark_user_blocked", new_callable=AsyncMock) as mock_unmark:
+    | |______________________________________________________________________________________________________________________________________^
+258 |   …             with patch("bot.get_session", new=get_test_session):
+259 |   …                 await cmd_start(mock_msg)
+    |
+help: Combine `with` statements
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+ --> tests/test_xp_system.py:2:60
+  |
+1 | """
+2 | Comprehensive XP Distribution System Tests — All 20 Levels × All 3 Plans.
+  |                                                            ^
+3 |
+4 | XP Rules (config.py):
+  |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+ --> tests/test_xp_system.py:6:34
+  |
+4 | XP Rules (config.py):
+5 |   Free  → flat 35 XP per qualified referral (L1-L3 only, no multiplier)
+6 |   PRO   → REFERRAL_XP_MAP[level] × 1.5  (L1-L9)
+  |                                  ^
+7 |   PRO+  → REFERRAL_XP_MAP[level] × 3.0  (L1-L20)
+  |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+ --> tests/test_xp_system.py:7:34
+  |
+5 |   Free  → flat 35 XP per qualified referral (L1-L3 only, no multiplier)
+6 |   PRO   → REFERRAL_XP_MAP[level] × 1.5  (L1-L9)
+7 |   PRO+  → REFERRAL_XP_MAP[level] × 3.0  (L1-L20)
+  |                                  ^
+8 |
+9 | REFERRAL_XP_MAP:
+  |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> tests/test_xp_system.py:99:34
+    |
+ 98 | class TestPROXPDistribution:
+ 99 |     """PRO plan: REFERRAL_XP_MAP × 1.5, levels L1-L9."""
+    |                                  ^
+100 |
+101 |     async def test_pro_l1_xp(self, session, create_referral_chain):
+    |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> tests/test_xp_system.py:109:59
+    |
+108 |     async def test_pro_all_9_levels_xp(self, session: AsyncSession, create_referral_chain):
+109 |         """PRO users at L1-L9 all receive correct XP (map × 1.5)."""
+    |                                                           ^
+110 |         chain = await create_referral_chain(levels=10, make_pro=list(range(10)))
+111 |         before = {u.id: u.xp for u in chain}
+    |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> tests/test_xp_system.py:145:35
+    |
+144 | class TestProPlusXPDistribution:
+145 |     """PRO+ plan: REFERRAL_XP_MAP × 3.0, all 20 levels unlocked."""
+    |                                   ^
+146 |
+147 |     async def test_pro_plus_l1_xp(self, session: AsyncSession, create_referral_chain):
+    |
+
+RUF002 Docstring contains ambiguous `×` (MULTIPLICATION SIGN). Did you mean `x` (LATIN SMALL LETTER X)?
+   --> tests/test_xp_system.py:157:57
+    |
+156 |     async def test_pro_plus_all_20_levels_xp(self, session: AsyncSession, create_referral_chain):
+157 |         """PRO+ users at all 20 levels each receive map × 3.0."""
+    |                                                         ^
+158 |         chain = await create_referral_chain(levels=21)
+159 |         await _make_pro_plus(session, chain)
+    |
+
+Found 234 errors.
+[*] 1 fixable with the `--fix` option.
