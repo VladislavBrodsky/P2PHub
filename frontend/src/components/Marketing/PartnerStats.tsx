@@ -195,7 +195,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 onClick={onNavigateToEarn}
-                className="mt-4 p-3 sm:p-4 rounded-2xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 flex flex-row items-center justify-center gap-3 sm:gap-6 shadow-premium-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden w-full"
+                className="mt-4 p-3 sm:p-4 rounded-2xl bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200/50 dark:border-white/5 flex flex-row items-center justify-center gap-3 sm:gap-6 shadow-premium-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-900/60 transition-all active:scale-[0.98] relative group overflow-hidden w-full px-4"
             >
                 {/* Live Indicator */}
                 <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/80 animate-pulse" />
@@ -225,14 +225,14 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     </div>
                 </div>
 
-                <p className="text-[10px] sm:text-caption font-bold text-slate-600 dark:text-slate-300 leading-none whitespace-nowrap">
+                <p className="text-[10px] sm:text-caption font-black text-slate-900 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis flex-1">
                     <Trans
                         i18nKey="stats.recent_join"
                         ns="dashboard"
                         values={{ count: stats.lastHourCount }}
                     >
                         <span className="text-slate-900 dark:text-white font-black">
-                            +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> new partners
+                            +<CountUp value={stats.lastHourCount.toString()} duration={1.5} /> partners
                         </span> joined
                     </Trans>
                 </p>

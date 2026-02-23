@@ -15,6 +15,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     const { t } = useTranslation(['common']);
     const { user, isLoading: isUserLoading } = useUser();
     const [imageLoaded, setImageLoaded] = React.useState(false);
+    const [imgError, setImgError] = React.useState(false);
 
     const stats = user || {
         balance: 0,
@@ -103,7 +104,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     </div>
                                 )}
 
-                                {user?.photo_url ? (
+                                {user?.photo_url && !imgError ? (
                                     <img
                                         src={user.photo_url}
                                         alt={`${user.first_name || 'Partner'}'s avatar`}
@@ -114,10 +115,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                         decoding="async"
                                         width={variant === 'compact' ? 56 : 64}
                                         height={variant === 'compact' ? 56 : 64}
-                                        onError={(e) => {
-                                            // Fallback on error
-                                            e.currentTarget.style.display = 'none';
-                                        }}
+                                        onError={() => setImgError(true)}
                                         style={{
                                             imageRendering: '-webkit-optimize-contrast',
                                             transform: 'translateZ(0)', // Force GPU acceleration
