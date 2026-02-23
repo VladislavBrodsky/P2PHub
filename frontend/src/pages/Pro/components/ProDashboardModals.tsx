@@ -348,8 +348,8 @@ export const ProDashboardModals = ({
 
                                         {/* Telegram (PRO) */}
                                         {activeProPlatform === 'tg' && (
-                                            <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                <div className="flex items-center gap-3 p-4 bg-sky-500/5 rounded-2xl border border-sky-500/15">
+                                            <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                <div className="flex items-center gap-3 p-4 sm:p-5 bg-sky-500/5 border-b border-sky-500/15">
                                                     <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 shrink-0">
                                                         <Send size={18} className="-ml-0.5" />
                                                     </div>
@@ -386,13 +386,14 @@ export const ProDashboardModals = ({
                                                         Auto-inserts in Studio posts to credit your network.
                                                     </p>
                                                 </div>
+                                                </div>
                                             </motion.div>
                                         )}
 
                                         {/* X (PRO) */}
                                         {activeProPlatform === 'x' && (
-                                            <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                            <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
                                                     <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
                                                         <Network size={18} />
                                                     </div>
@@ -420,6 +421,7 @@ export const ProDashboardModals = ({
                                                             />
                                                         </div>
                                                     ))}
+                                                </div>
                                                 </div>
                                             </motion.div>
                                         )}
@@ -522,8 +524,8 @@ export const ProDashboardModals = ({
 
                                                 {/* Multi-TG */}
                                                 {activePlusPlatform === 'tg' && (
-                                                    <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
+                                                    <motion.div key="plus-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-emerald-500/5 border-b border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-emerald-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-contain scale-110" />
                                                             </div>
@@ -540,7 +542,8 @@ export const ProDashboardModals = ({
                                                                 {t('pro_dashboard.setup.multi_sync.test')}
                                                             </button>
                                                         </div>
-                                                        <div className="space-y-2">
+                                                        <div className="p-4 sm:p-5 space-y-3 sm:space-y-4">
+                                                            <div className="space-y-2">
                                                             {[0, 1, 2, 3, 4].map((idx) => {
                                                                 const val = tgChannels[idx] || '';
                                                                 const testSt = tgTestResults[val.trim()];
@@ -580,13 +583,14 @@ export const ProDashboardModals = ({
                                                                 Auto-inserts in Studio posts to credit your network.
                                                             </p>
                                                         </div>
+                                                        </div>
                                                     </motion.div>
                                                 )}
 
                                                 {/* X (Twitter) PRO+ */}
                                                 {activePlusPlatform === 'x' && (
-                                                    <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                                    <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
                                                             </div>
@@ -615,13 +619,14 @@ export const ProDashboardModals = ({
                                                                 </div>
                                                             ))}
                                                         </div>
+                                                        </div>
                                                     </motion.div>
                                                 )}
 
                                                 {/* LinkedIn */}
                                                 {activePlusPlatform === 'linkedin' && (
-                                                    <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-indigo-500/5 rounded-2xl border border-indigo-500/15">
+                                                    <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-contain p-1" />
                                                             </div>
@@ -646,13 +651,14 @@ export const ProDashboardModals = ({
                                                                 </Trans>
                                                             </p>
                                                         </div>
+                                                        </div>
                                                     </motion.div>
                                                 )}
 
                                                 {/* Pinterest */}
                                                 {activePlusPlatform === 'pinterest' && (
-                                                    <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-rose-500/5 rounded-2xl border border-rose-500/15">
+                                                    <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-rose-500/5 border-b border-rose-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#BD081C] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.pinterest} alt="Pinterest" className="w-full h-full object-contain p-1" />
                                                             </div>
@@ -680,8 +686,8 @@ export const ProDashboardModals = ({
 
                                                 {/* Threads */}
                                                 {activePlusPlatform === 'threads' && (
-                                                    <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/15">
+                                                    <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-emerald-500/5 border-b border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5 dark:invert" />
                                                             </div>
@@ -709,8 +715,8 @@ export const ProDashboardModals = ({
 
                                                 {/* Facebook */}
                                                 {activePlusPlatform === 'facebook' && (
-                                                    <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-blue-500/5 rounded-2xl border border-blue-500/15">
+                                                    <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-blue-500/5 border-b border-blue-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.facebook} alt="Facebook" className="w-full h-full object-contain p-1" />
                                                             </div>
@@ -738,8 +744,8 @@ export const ProDashboardModals = ({
 
                                                 {/* Discord */}
                                                 {activePlusPlatform === 'discord' && (
-                                                    <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                                                        <div className="flex items-center gap-3 p-4 bg-[#5865F2]/5 rounded-2xl border border-[#5865F2]/15">
+                                                    <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                        <div className="flex items-center gap-3 p-4 sm:p-5 bg-[#5865F2]/5 border-b border-[#5865F2]/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.discord} alt="Discord" className="w-full h-full object-contain p-1" />
                                                             </div>
