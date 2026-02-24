@@ -10,6 +10,8 @@ interface BlogPost {
     image?: string;
     category: string;
     published_at?: string;
+    author: string;
+    authorImage?: string;
 }
 
 interface BlogEngagement {
@@ -84,6 +86,16 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                         className="mt-0.5 text-[10px] font-medium text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed opacity-80"
                         dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                     />
+                    <div className="mt-2 flex items-center gap-1.5 opacity-80">
+                        <div className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center overflow-hidden">
+                            {post.authorImage ? (
+                                <img src={post.authorImage} className="w-full h-full object-cover" alt="" />
+                            ) : (
+                                <span className="text-[8px] font-bold text-blue-500">{post.author?.[0] || 'P'}</span>
+                            )}
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{post.author}</span>
+                    </div>
                 </div>
             </div>
             <div className="relative shrink-0 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-500 transition-all duration-500 shadow-xs group-hover:shadow-lg group-hover:shadow-blue-500/30">

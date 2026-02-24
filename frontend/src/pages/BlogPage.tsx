@@ -12,6 +12,7 @@ import { BlogPost } from '../data/blogPosts';
 import { useUI } from '../context/UIContext';
 import { BlogSkeleton } from '../components/Skeletons/BlogSkeleton';
 import { Skeleton } from '../components/Skeleton';
+import { authorAvatars } from '../data/authorAvatars';
 import React from 'react';
 
 // New Extracted Components
@@ -364,14 +365,16 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                             dangerouslySetInnerHTML={{ __html: renderExcerpt(currentFeaturedPost.excerpt) }}
                                         />
                                         <div className="pt-6 flex items-center justify-between border-t border-slate-200 dark:border-white/5">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner">
+                                            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner overflow-hidden">
+                                                {currentFeaturedPost.authorImage ? (
+                                                    <img src={currentFeaturedPost.authorImage} className="w-full h-full object-cover" alt={currentFeaturedPost.author} />
+                                                ) : (
                                                     <BookOpen className="w-4 h-4 text-blue-500" />
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
-                                                    <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author}</span>
-                                                </div>
+                                                )}
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
+                                                <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author || 'Marcus Vance'}</span>
                                             </div>
                                             <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-all duration-500">
                                                 <ArrowUpRight className="w-6 h-6" />
@@ -622,8 +625,12 @@ const BlogDetail = ({
                 <div className="flex items-center gap-3 py-4 border-y border-slate-200 dark:border-white/5">
                     <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500 via-indigo-500 to-blue-600 p-px shadow-lg shadow-blue-500/30 flex items-center justify-center relative overflow-hidden group">
                         <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        <div className="w-full h-full rounded-[calc(1rem-1px)] bg-bg-app flex items-center justify-center font-bold text-base text-blue-500 relative z-10 border border-white/5">
-                            {post.author?.[0] || 'P'}
+                        <div className="w-full h-full rounded-[calc(1rem-1px)] bg-bg-app flex items-center justify-center font-bold text-base text-blue-500 relative z-10 border border-white/5 overflow-hidden">
+                            {post.authorImage ? (
+                                <img src={post.authorImage} className="w-full h-full object-cover" alt={post.author} />
+                            ) : (
+                                post.author?.[0] || 'P'
+                            )}
                         </div>
                     </div>
                     <div>
@@ -633,8 +640,11 @@ const BlogDetail = ({
                     <div className="ml-auto">
                         <div className="flex -space-x-4">
                             {[1, 2, 3].map(i => (
-                                <div key={i} style={{ zIndex: 10 - i }} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative`}>
-                                    <User className="w-4 h-4 text-slate-400 opacity-60" />
+                                <div key={i} style={{ zIndex: 10 - i }} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative overflow-hidden`}>
+                                    <img src={authorAvatars[`user_${i}` as keyof typeof authorAvatars]} className="w-full h-full object-cover" alt="" onError={(e) => {
+                                        (e.target as HTMLImageElement).style.display = 'none';
+                                        (e.target as HTMLImageElement).parentElement!.innerHTML = '<svg class="w-4 h-4 text-slate-400 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+                                    }} />
                                 </div>
                             ))}
                             <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold backdrop-blur-md shadow-lg z-10 relative">
@@ -680,15 +690,15 @@ const BlogDetail = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={onLike}
-                            className={`group h-16 px-10 rounded-2xl flex items-center gap-4 transition-all duration-500 ${engagement.liked
+                            className={`group h-12 px-8 rounded-2xl flex items-center gap-3 transition-all duration-500 ${engagement.liked
                                 ? 'bg-red-500 text-white scale-105 shadow-2xl shadow-red-500/40'
                                 : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-900 dark:text-white hover:shadow-xl'
                                 }`}
                         >
-                            <Heart className={`w-6 h-6 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
+                            <Heart className={`w-5 h-5 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
                             <div className="flex flex-col items-start leading-none">
-                                <span className="text-label font-bold uppercase tracking-widest opacity-60 mb-1">{t('blog.navigation.impact')}</span>
-                                <span className="font-bold text-xl italic!">
+                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-0.5">{t('blog.navigation.impact')}</span>
+                                <span className="font-bold text-lg italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
                             </div>
@@ -696,9 +706,9 @@ const BlogDetail = ({
 
                         <button
                             onClick={onShare}
-                            className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
+                            className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
                         >
-                            <Share2 className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                            <Share2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                         </button>
                     </div>
 

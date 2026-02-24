@@ -1,3 +1,5 @@
+import { authorAvatars } from './authorAvatars';
+
 export interface BlogPost {
     id: string;
     slug?: string;
@@ -6,6 +8,7 @@ export interface BlogPost {
     category: string;
     date: string;
     author: string;
+    authorImage?: string;
     image?: string;
     content?: string;
     published_at?: string;
@@ -18,7 +21,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover the exact mechanics of high-velocity P2P settlements and why speed is the ultimate currency of 2026.",
         category: "Wealth Strategy",
         date: "Feb 7, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '2',
@@ -26,7 +30,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Old systems are collapsing under their own weight. We explore the frictionless future of QR-based payments.",
         category: "Financial Shift",
         date: "Feb 6, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '3',
@@ -34,7 +39,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Understanding the mindset shift required to move from physical hoarding to digital liquidity and ownership.",
         category: "Growth Mindset",
         date: "Feb 5, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     },
     {
         id: '4',
@@ -42,7 +48,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How Pintopay is bypassing geographic restrictions to provide equal access to global markets for everyone.",
         category: "Freedom",
         date: "Feb 4, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '5',
@@ -50,7 +57,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why carrying paper money is becoming a liability in a digital-first world and how to transition safely.",
         category: "Financial Evolution",
         date: "Feb 3, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '6',
@@ -58,7 +66,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Analyzing the hidden costs and delays of traditional banking systems in 2026.",
         category: "Banking Reform",
         date: "Feb 2, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     },
     {
         id: '7',
@@ -66,7 +75,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Apple Pay and Google Pay are just masks for old systems. Discover the true digital native infrastructure.",
         category: "Tech Analysis",
         date: "Feb 1, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '8',
@@ -74,7 +84,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How Web3 and Crypto are finally delivering on the promise of true financial sovereignty.",
         category: "Web3",
         date: "Jan 31, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '9',
@@ -82,7 +93,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Mastering the Pintopay QR system to achieve maximum settlement speed and network growth.",
         category: "Elite Strategy",
         date: "Jan 30, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '10',
@@ -90,7 +102,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why half the world is still unbanked and how Pintopay is building the bridge to the global financial system.",
         category: "Global Impact",
         date: "Jan 29, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     },
     {
         id: '11',
@@ -98,7 +111,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Discover how the barrier between crypto and fiat is finally dissolving, creating a new era of financial freedom.",
         category: "Innovation",
         date: "Jan 28, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '12',
@@ -106,7 +120,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Access a premium banking card that works in 180+ countries, managed entirely within the world's most secure messenger.",
         category: "Adoption",
         date: "Jan 27, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '13',
@@ -114,7 +129,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "The era of physical branches is over. Your financial empire is now controlled from your smartphone.",
         category: "Future",
         date: "Jan 26, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     },
     {
         id: '14',
@@ -122,7 +138,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Connect your Pintopay card to your mobile wallet and spend your crypto assets as fiat anywhere in the world.",
         category: "Payments",
         date: "Jan 25, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '15',
@@ -130,7 +147,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Real-time settlement meets global liquidity. Spend your digital wealth without the wait or the hassle.",
         category: "Wealth",
         date: "Jan 24, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '16',
@@ -138,7 +156,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Why being a Pintopay Partner is the ultimate ticket to the largest wealth redistribution in human history.",
         category: "Partnership",
         date: "Jan 23, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     },
     {
         id: '17',
@@ -146,7 +165,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "How to stop trading time for money and start earning continuous revenue by sharing the future of finance.",
         category: "Income",
         date: "Jan 22, 2026",
-        author: "Alex Rivera"
+        author: "Alex Rivera",
+        authorImage: authorAvatars.alex_rivera
     },
     {
         id: '18',
@@ -154,7 +174,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Unlock 24/7 automated marketing tools that do the selling for you. This is how the elites grow their network.",
         category: "PRO Benefits",
         date: "Jan 21, 2026",
-        author: "Intelligence Unit"
+        author: "Marcus Vance",
+        authorImage: authorAvatars.marcus_vance
     },
     {
         id: '19',
@@ -162,7 +183,8 @@ export const blogPosts: BlogPost[] = [
         excerpt: "Take control of your destiny by leveraging the ultimate bridge between traditional finance and the decentralized future.",
         category: "Vision",
         date: "Jan 20, 2026",
-        author: "Sarah Chen"
+        author: "Sarah Chen",
+        authorImage: authorAvatars.sarah_chen
     }
 ];
 
