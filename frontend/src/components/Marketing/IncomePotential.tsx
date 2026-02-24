@@ -348,181 +348,144 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             className="overflow-hidden"
                         >
                             <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-4 space-y-2 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
-                                {/* Ambient glow */}
-                                <div className="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/10 dark:bg-emerald-500/20 blur-[60px] rounded-full pointer-events-none" />
-                                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
-
-                                {/* Header: Viral & Impactful */}
-                                <div className="relative p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-white/5 bg-linear-to-br from-emerald-500/10 via-transparent to-blue-500/5">
-                                    <div className="space-y-3 text-center sm:text-left">
-                                        <div className="flex items-center justify-center sm:justify-start gap-2">
-                                            <div className="flex items-center gap-1.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-3 py-1 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                                                <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse fill-emerald-400" />
-                                                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">
-                                                    {t('marketing:income.math.subheading')}
-                                                </span>
-                                            </div>
+                                {/* LIVE Indicator & Header */}
+                                <div className="flex flex-col items-center pt-2">
+                                    <div className="flex items-center gap-2 bg-[#F0FFFA]/5 rounded-full px-4 py-1.5 border border-emerald-500/10 mb-6 group hover:bg-emerald-500/5 transition-colors">
+                                        <div className="relative flex h-2 w-2">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                                         </div>
-                                        <h4 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight">
+                                        <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('blog:navigation.live')}</span>
+                                    </div>
+
+                                    <div className="text-center space-y-2 mb-8">
+                                        <div className="flex items-center justify-center gap-1.5">
+                                            <Zap className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                                            <span className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.2em]">
+                                                {t('marketing:income.math.subheading')}
+                                            </span>
+                                        </div>
+                                        <h4 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
-
-                                    <div className="flex flex-col items-center sm:items-end group">
-                                        <div className="relative">
-                                            <div className="absolute -inset-4 bg-emerald-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity animate-pulse" />
-                                            <span className="relative text-5xl sm:text-6xl font-black text-emerald-400 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                                                $43,200
-                                            </span>
-                                        </div>
-                                        <span className="text-xs font-bold text-emerald-400/60 uppercase tracking-[0.3em] mt-1">
-                                            {t('marketing:income.math.per_month')}
-                                        </span>
-                                    </div>
                                 </div>
 
-                                {/* THE MATH GRID */}
-                                <div className="p-4 sm:p-6 grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                                {/* THE COMPACT MATH LIST */}
+                                <div className="space-y-2.5 px-4 mb-8">
                                     {([
-                                        { key: 'per_min', amount: '$1', period: 'Minute', highlight: false, delay: 0 },
-                                        { key: 'per_hour', amount: '$60', period: 'Hour', highlight: false, delay: 0.1 },
-                                        { key: 'per_day', amount: '$1,440', period: 'Day', highlight: false, delay: 0.2 },
-                                        { key: 'per_year', amount: '$518,400', period: 'Year', highlight: true, delay: 0.3 },
+                                        { key: 'per_min', amount: '$1', period: t('marketing:income.math.per_min'), highlight: false, delay: 0 },
+                                        { key: 'per_hour', amount: '$60', period: t('marketing:income.math.per_hour'), highlight: false, delay: 0.1 },
+                                        { key: 'per_day', amount: '$1,440', period: t('marketing:income.math.per_day'), highlight: false, delay: 0.2 },
+                                        { key: 'per_month', amount: '$43,200', period: t('marketing:income.math.per_month'), highlight: true, delay: 0.3 },
+                                        { key: 'per_year', amount: '$518,400', period: t('marketing:income.math.per_year'), highlight: false, delay: 0.4 },
                                     ] as const).map(({ key, amount, period, highlight, delay }) => (
                                         <m.div
                                             key={key}
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={mathVisible ? { opacity: 1, y: 0 } : {}}
-                                            transition={{ duration: 0.5, delay, ease: 'backOut' }}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={mathVisible ? { opacity: 1, x: 0 } : {}}
+                                            transition={{ duration: 0.4, delay }}
                                             className={clsx(
-                                                'relative group overflow-hidden rounded-2xl p-4 transition-all duration-500 border',
+                                                'relative group flex items-center justify-between h-14 px-6 rounded-full border transition-all duration-300',
                                                 highlight
-                                                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-[0_10px_30px_-5px_rgba(16,185,129,0.2)]'
-                                                    : 'bg-white/5 border-white/5 hover:border-white/10'
+                                                    ? 'bg-emerald-500/10 border-emerald-400/30'
+                                                    : 'bg-white/[0.03] border-white/5'
                                             )}
                                         >
-                                            <div className="flex flex-col gap-1 relative z-10">
-                                                <span className={clsx(
-                                                    'text-[10px] font-black uppercase tracking-[0.2em] mb-1',
-                                                    highlight ? 'text-emerald-400' : 'text-white/40 group-hover:text-white/60'
-                                                )}>
-                                                    PER {period}
-                                                </span>
-                                                <span className={clsx(
-                                                    'text-xl sm:text-2xl font-black tracking-tight',
-                                                    highlight ? 'text-white drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'text-white'
-                                                )}>
-                                                    {amount}
+                                            <div className="flex items-center gap-3">
+                                                <ChevronRight className={clsx("w-4 h-4", highlight ? "text-emerald-400" : "text-white/20")} />
+                                                <span className={clsx("text-sm font-bold", highlight ? "text-emerald-500" : "text-white/60")}>
+                                                    {period}
                                                 </span>
                                             </div>
-                                            {/* Decorative element */}
-                                            <div className={clsx(
-                                                "absolute -right-2 -bottom-2 w-12 h-12 blur-2xl rounded-full opacity-20 group-hover:opacity-40 transition-opacity",
-                                                highlight ? "bg-emerald-500" : "bg-blue-500"
-                                            )} />
+
+                                            <div className="flex items-center gap-3">
+                                                <span className={clsx("text-lg font-black tracking-tight", highlight ? "text-emerald-400" : "text-white")}>
+                                                    {amount}
+                                                </span>
+                                                {highlight && (
+                                                    <div className="bg-emerald-500 text-[10px] font-black text-white px-2 py-0.5 rounded-md tracking-widest shadow-lg shadow-emerald-500/40">
+                                                        {t('marketing:income.math.target_badge')}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </m.div>
                                     ))}
                                 </div>
 
-                                <div className="px-4 sm:px-6 pb-6 space-y-6">
-                                    {/* Formula & FOMO */}
-                                    <div className="flex flex-col gap-4">
-                                        <m.div
-                                            initial={{ opacity: 0 }}
-                                            animate={mathVisible ? { opacity: 1 } : {}}
-                                            transition={{ delay: 0.5 }}
-                                            className="text-center"
-                                        >
-                                            <span className="inline-block px-4 py-1 rounded-full bg-white/5 border border-white/5 text-[10px] text-white/30 font-mono tracking-widest uppercase">
-                                                Protocol Basis: {t('marketing:income.math.formula_note')}
-                                            </span>
-                                        </m.div>
+                                {/* Formula */}
+                                <div className="flex flex-col items-center gap-6 px-4 mb-10">
+                                    <m.div
+                                        initial={{ opacity: 0 }}
+                                        animate={mathVisible ? { opacity: 1 } : {}}
+                                        transition={{ delay: 0.6 }}
+                                        className="text-[11px] text-white/20 font-mono tracking-widest"
+                                    >
+                                        {t('marketing:income.math.formula_note')}
+                                    </m.div>
 
-                                        <m.div
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
-                                            transition={{ delay: 0.6 }}
-                                            className="relative overflow-hidden p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 group"
-                                        >
-                                            <div className="absolute inset-0 bg-linear-to-r from-rose-500/5 via-transparent to-rose-500/5 animate-pulse" />
-                                            <div className="flex items-center gap-3 relative z-10">
-                                                <div className="relative flex h-3 w-3 shrink-0">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600" />
-                                                </div>
-                                                <p className="text-xs sm:text-sm font-black text-rose-400 uppercase tracking-wide leading-tight group-hover:text-rose-300 transition-colors">
-                                                    {t('marketing:income.math.fomo_line')}
-                                                </p>
-                                            </div>
-                                        </m.div>
-                                    </div>
+                                    {/* Red FOMO Alert */}
+                                    <m.div
+                                        initial={{ opacity: 0, scale: 0.95 }}
+                                        animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
+                                        transition={{ delay: 0.7 }}
+                                        className="w-full bg-rose-500/5 border border-rose-500/20 rounded-[28px] p-5 flex items-center gap-4 group"
+                                    >
+                                        <div className="relative flex h-3 w-3 shrink-0">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600" />
+                                        </div>
+                                        <p className="text-xs sm:text-sm font-black text-rose-400 uppercase leading-relaxed tracking-wide group-hover:text-rose-300 transition-colors">
+                                            {t('marketing:income.math.fomo_line')}
+                                        </p>
+                                    </m.div>
+                                </div>
 
-                                    {/* Live Social Proof & CTA */}
-                                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                                        <div className="flex-1 flex items-center justify-between bg-white/5 backdrop-blur-md rounded-2xl px-5 py-3 border border-white/10">
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex -space-x-3">
-                                                    {displayAvatars.map((avatar, i) => {
-                                                        const src = avatar.file_id
-                                                            ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}`
-                                                            : avatar.url;
-                                                        return (
-                                                            <div key={i} className="w-9 h-9 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-2xl transition-transform hover:-translate-y-1 hover:z-20">
-                                                                <img
-                                                                    src={src}
-                                                                    alt="Partner"
-                                                                    className="w-full h-full object-cover"
-                                                                    onError={(e) => {
-                                                                        e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`;
-                                                                    }}
-                                                                />
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
-                                                <div className="flex flex-col">
-                                                    <div className="flex items-center gap-2">
-                                                        <AnimatePresence mode="wait">
-                                                            <m.span
-                                                                key={liveCount}
-                                                                initial={{ y: -5, opacity: 0 }}
-                                                                animate={{ y: 0, opacity: 1 }}
-                                                                exit={{ y: 5, opacity: 0 }}
-                                                                className="text-lg font-black text-white leading-none"
-                                                            >
-                                                                {liveCount.toLocaleString()}
-                                                            </m.span>
-                                                        </AnimatePresence>
-                                                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em]">{t('common:active')}</span>
+                                {/* Social Proof & CTA */}
+                                <div className="px-4 pb-6 space-y-5">
+                                    <div className="bg-white/[0.02] border border-white/5 rounded-full py-2.5 px-6 flex items-center justify-between">
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex -space-x-3">
+                                                {displayAvatars.map((avatar, i) => (
+                                                    <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                                        <img
+                                                            src={avatar.file_id ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}` : avatar.url}
+                                                            alt="Partner"
+                                                            className="w-full h-full object-cover"
+                                                            onError={(e) => { e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`; }}
+                                                        />
                                                     </div>
-                                                </div>
+                                                ))}
                                             </div>
-
-                                            <div className="hidden sm:flex flex-col items-end">
-                                                <div className="flex items-center gap-2 bg-amber-500/20 px-3 py-1.5 rounded-xl border border-amber-500/30">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                                    <span className="text-amber-400 font-black text-[10px] tracking-widest uppercase">
-                                                        {t('marketing:income.math.spots_left', { count: slotsLeft })}
-                                                    </span>
-                                                </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-base font-black text-white">{liveCount}</span>
+                                                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{t('marketing:income.math.online_badge')}</span>
                                             </div>
                                         </div>
 
-                                        <m.button
-                                            whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => {
-                                                localStorage.setItem('auto_purchase_pro', 'true');
-                                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                                onNavigateToPartner?.();
-                                            }}
-                                            className="bg-linear-to-r from-emerald-500 to-blue-600 text-white font-black h-14 sm:h-auto sm:px-8 py-4 rounded-2xl text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl shadow-emerald-500/20 transition-all uppercase group"
-                                        >
-                                            {t('marketing:income.math.cta_urgency')}
-                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
-                                        </m.button>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                                            <span className="text-amber-500/80 font-black text-[10px] tracking-widest uppercase">
+                                                {t('marketing:income.math.spots_left', { count: slotsLeft })}
+                                            </span>
+                                        </div>
                                     </div>
+
+                                    <m.button
+                                        whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={() => {
+                                            localStorage.setItem('auto_purchase_pro', 'true');
+                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                            onNavigateToPartner?.();
+                                        }}
+                                        className="w-full bg-linear-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-[200%_auto] hover:bg-pos-right text-white font-black h-14 rounded-full text-xs tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/30 transition-all duration-500 uppercase group"
+                                    >
+                                        {t('marketing:income.math.cta_urgency')}
+                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+                                    </m.button>
                                 </div>
+
                             </div>
                         </m.div>
                     )}
