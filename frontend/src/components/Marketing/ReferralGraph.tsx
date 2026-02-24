@@ -227,7 +227,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                             />
 
                             {/* Neural & Energy SVG Layer */}
-                            <div className="absolute inset-0 flex items-center justify-center top-[-10%]">
+                            <div className="absolute inset-0 flex items-center justify-center -top-10 sm:top-[-5%]">
                                 <svg className="w-full h-[400px] max-w-lg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                                     {/* Neural Connectivity Lines */}
                                     <m.path
@@ -367,7 +367,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                         </div>
 
                         {/* ── VIRAL CORE HUB (USER) ── */}
-                        <div className="absolute inset-0 flex items-center justify-center top-[-10%] pointer-events-none z-10">
+                        <div className="absolute inset-x-0 top-6 sm:top-8 flex justify-center pointer-events-none z-10">
                             <div className="relative pointer-events-auto">
                                 {/* Pulsing Outer Glow */}
                                 <m.div
@@ -447,7 +447,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                 <m.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-2 bg-white border-2 border-blue-500/20 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center overflow-hidden group/badge animate-vibe-shift"
+                                    className="absolute -bottom-9 left-1/2 -translate-x-1/2 whitespace-nowrap px-4 py-2 bg-white border-2 border-blue-500/20 rounded-2xl shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center overflow-hidden group/badge animate-vibe-shift z-30"
                                 >
                                     {/* High-Energy Fusion Pulse Border */}
                                     <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 via-indigo-500/20 to-cyan-500/20 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-500" />
@@ -469,7 +469,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 text-center z-30 w-full max-w-[300px]"
+                            className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center z-20 w-full max-w-[300px] px-4"
                         >
                             <div className="relative px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
                                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
