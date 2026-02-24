@@ -345,15 +345,23 @@ export const StudioTab = ({
         };
     }, [handleGenerate, setExternalStep]);
 
-    const getCleanShareText = () => {
+    const getCleanShareText = (platform?: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
         if (!generatedResult) return '';
 
         const sanitizedBody = sanitizeAIGeneratedText(generatedResult.body);
 
-        // Convert Markdown links [text](url) to "text: url"
+        // Convert Markdown links [text](url)
         const cleanBody = sanitizedBody.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
-            if (text.toLowerCase() === 'here' || text.toLowerCase() === 'link') return url;
-            return `${text}: ${url}`;
+            const cleanText = text.replace(/^CTA:\s*/i, '');
+
+            if (platform === 'telegram') {
+                // Telegram supports HTML/Markdown links
+                return `[${cleanText}](${url})`;
+            }
+
+            // X and others get plain text "text: url"
+            if (cleanText.toLowerCase() === 'here' || cleanText.toLowerCase() === 'link') return url;
+            return `${cleanText}: ${url}`;
         });
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
 
@@ -380,7 +388,7 @@ export const StudioTab = ({
     };
 
     const handleCopyText = () => {
-        const text = getCleanShareText();
+        const text = getCleanShareText('x');
         if (!text) return;
 
         navigator.clipboard.writeText(text);
@@ -540,7 +548,7 @@ export const StudioTab = ({
         setIsPublishing(true);
         impact('heavy');
         try {
-            const fullContent = getCleanShareText();
+            const fullContent = getCleanShareText(platform);
             // Pass specific TG channel if user chose one
             const channelOverride = platform === 'telegram' && selectedTgChannel ? selectedTgChannel : undefined;
             await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id, channelOverride);
@@ -559,7 +567,7 @@ export const StudioTab = ({
         impact('heavy');
 
         const results: { success: string[], fail: string[] } = { success: [], fail: [] };
-        const fullContent = getCleanShareText();
+        const fullContent = getCleanShareText('telegram');
 
         for (const platform of selectedPublishPlatforms) {
             try {
