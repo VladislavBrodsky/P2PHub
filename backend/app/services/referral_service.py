@@ -105,8 +105,14 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
     audit_logs = []
     earnings = []
     current_referrer_id = partner.referrer_id
-    chain_list = ["You"]
     new_partner_name = format_partner_name(partner)
+    
+    # Pre-calculate full ancestry for accurate chain slicing
+    # path_ids: [root_id, L1_id, L2_id, ..., L(N-1)_id]
+    path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
+    full_lineage_ids = [*path_ids, partner.referrer_id] if partner.referrer_id else path_ids
+    # full_lineage_names: names corresponding to full_lineage_ids
+    full_lineage_names = [format_partner_name(ancestor_map[aid]) for aid in full_lineage_ids if aid in ancestor_map]
     
     for level in range(1, 21):
         if not current_referrer_id: break
@@ -180,7 +186,17 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             await _check_level_up(referrer, deferred_tasks, xp_after)
             await _stage_redis_invalidation(referrer, level, xp_gain=xp_gain, pipe=redis_pipe)
             
-            msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, chain_list, salt=str(partner.id))
+            # Chain for the referrer starts with "You" and then lists children down to the new partner
+            # Example for L3 parent: You (L3) <- L2_parent <- L1_parent <- New_Partner
+            # The children are the elements in full_lineage_names AFTER the referrer
+            try:
+                ref_idx = full_lineage_ids.index(referrer.id)
+                children_names = full_lineage_names[ref_idx + 1:]
+                msg_chain = ["You", *children_names]
+            except (ValueError, IndexError):
+                msg_chain = ["You"]
+
+            msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, msg_chain, salt=str(partner.id))
             deferred_tasks.append(msg_task)
 
         except Exception as e:
@@ -248,7 +264,6 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
 
 def _prepare_referral_notification(referrer: Partner, level: int, xp: float, name: str, chain: list, salt: str = ""):
     chain_text = " ← ".join([*chain, name])
-    chain.append(format_partner_name(referrer))
     lang = referrer.language_code or "en"
     clean_xp = int(xp) if xp.is_integer() else round(xp, 2)
     buttons = [[
