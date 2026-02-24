@@ -25,7 +25,7 @@ import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import referralPromoImage from '/images/v3_referral_promo.jpg';
+// import referralPromoImage from '/images/v3_referral_promo.jpg';
 
 export default function ReferralPage() {
     const { t } = useTranslation(['social', 'common', 'marketing']);
@@ -347,7 +347,7 @@ export default function ReferralPage() {
                                     <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
                                     {/* Promo image on top of gradient */}
                                     <img
-                                        src={referralPromoImage}
+                                        src="/images/v3_referral_promo.jpg"
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="absolute inset-0 w-full h-full object-cover"
                                         onError={(e) => {
