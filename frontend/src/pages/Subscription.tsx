@@ -517,10 +517,10 @@ export default function SubscriptionPage() {
                                                 initial={{ opacity: 0, y: -10, scale: 0.5 }}
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -10, scale: 0.5 }}
-                                                className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.5 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-[9px] font-black rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
+                                                className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-[8px] font-black rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
                                             >
-                                                <Zap size={8} className="fill-white animate-pulse" />
-                                                {t('pro:subscription.upgrade.viral_badge')}
+                                                <Zap size={7} className="fill-white animate-pulse" />
+                                                <span className="leading-none">{t('pro:subscription.upgrade.viral_badge')}</span>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -544,24 +544,24 @@ export default function SubscriptionPage() {
 
                     {/* ── DEADLINE STICKY HEADER ── */}
                     <div className="mb-4 mt-1 px-1">
-                        <div className="rounded-xl overflow-hidden px-4 py-3 bg-yellow-400 border border-yellow-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 relative group shadow-sm">
+                        <div className="rounded-xl overflow-hidden px-3 py-2 bg-yellow-400 border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-sm">
                             <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                             <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
-                            <div className="relative z-10 flex items-center gap-3 w-full sm:w-auto">
-                                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
-                                    <Clock size={16} className="animate-pulse" />
+                            <div className="relative z-10 flex items-center gap-2 min-w-0">
+                                <div className="w-7 h-7 rounded-lg bg-black/10 flex items-center justify-center text-black shrink-0">
+                                    <Clock size={14} className="animate-pulse" />
                                 </div>
                                 <div className="flex flex-col min-w-0">
-                                    <span className="text-[10px] sm:text-label font-bold text-black/60 uppercase tracking-widest leading-tight">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                    <span className="text-label sm:text-caption font-bold text-black uppercase tracking-tighter leading-tight">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                    <span className="text-[9px] font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                    <span className="text-label font-black text-black uppercase tracking-tighter leading-normal truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                                 </div>
                             </div>
 
-                            <div className="relative z-10 flex items-center gap-1.5 font-mono shrink-0 bg-black/5 p-1 rounded-xl">
+                            <div className="relative z-10 flex items-center gap-1 font-mono shrink-0 bg-black/5 p-1 rounded-lg">
                                 {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
                                     <React.Fragment key={i}>
-                                        <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-label font-bold min-w-[32px] text-center shadow-lg">
+                                        <div className="bg-black text-yellow-400 rounded-md px-1.5 py-0.5 text-label font-bold min-w-[28px] text-center shadow-lg">
                                             {val.toString().padStart(2, '0')}
                                         </div>
                                         {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
