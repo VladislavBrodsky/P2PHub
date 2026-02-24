@@ -371,7 +371,7 @@ export default function SubscriptionPage() {
         <>
             <div className="flex flex-col px-3 pb-24 pt-0 max-w-lg mx-auto overflow-x-hidden">
                 {/* Main Navigation Header */}
-                <div className="sticky top-0 w-full flex items-center justify-between py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-3 -mx-3 w-[calc(100%+1.5rem)]">
+                <div className="sticky top-0 w-full flex items-center justify-between py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
                         className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform shadow-sm"
@@ -482,8 +482,8 @@ export default function SubscriptionPage() {
                                 <motion.div
                                     layoutId="plan-selector-bg"
                                     className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.1)] ${selectedPlan === 'PRO'
-                                        ? 'left-0 w-[calc(50%-0.375rem)] vibing-yellow-animated border border-yellow-400/30 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
-                                        : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] vibing-crystal-purple-animated border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
+                                        ? 'left-1.5 w-[calc(50%-0.75rem)] vibing-yellow-animated border border-yellow-400/30 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
+                                        : 'left-[calc(50%+0.15rem)] w-[calc(50%-0.6rem)] vibing-crystal-purple-animated border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
                                         }`}
                                 />
 
