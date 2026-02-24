@@ -118,7 +118,7 @@ export const BentoGrid = () => {
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex justify-start items-start gap-4 overflow-x-auto px-6 h-full scroll-smooth custom-scrollbar"
+                    className="flex justify-start items-start gap-4 overflow-x-auto px-6 h-full scroll-smooth no-scrollbar"
                     style={{ alignItems: 'flex-start' }}
                 >
                     {shiftSteps.map((step, index) => (
