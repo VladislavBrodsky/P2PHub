@@ -56,8 +56,8 @@ i18n
     });
 
 // #comment: Parallel Resource Injection - Pre-populates i18next to avoid "key-as-value" flicker during hydration
-const initializeI18n = async () => {
-    const currentLang = i18n.language || initLang;
+const initializeI18n = async (lang?: string) => {
+    const currentLang = lang || i18n.language || initLang;
     const baseLang = currentLang.split('-')[0];
 
     // Load all namespaces for the current language in parallel
@@ -72,6 +72,11 @@ const initializeI18n = async () => {
         })
     );
 };
+
+// Listen for language changes and load resources dynamically
+i18n.on('languageChanged', (lang) => {
+    initializeI18n(lang).catch(console.error);
+});
 
 // Start initialization immediately
 initializeI18n().catch(console.error);
