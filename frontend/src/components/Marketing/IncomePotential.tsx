@@ -138,7 +138,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                     <h3 className="text-3xl font-bold tracking-tight leading-none max-w-[340px] mx-auto">
                         {t('income.title')} <br />
-                        <span className="text-blue-500 animate-text-shimmer dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-emerald-400 dark:to-blue-400">{t('income.title_highlight')}</span>
+                        <span className="vibing-crystal-text animate-text-shimmer">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
                         <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
@@ -164,8 +164,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             {/* Mode Toggle */}
                             <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
                                 <button
-                                    onClick={() => setMode('profit')}
-                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-blue-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
@@ -214,7 +213,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-2 acid-blue-liquid h-14 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-blue-500/20"
+                                                className="w-full group relative flex items-center justify-center gap-2 vibing-emerald-animated h-14 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/20"
                                             >
                                                 <Lock className="w-4 h-4 text-white" />
                                                 <span className="text-white uppercase">{t('income.profit.unlock_btn')}</span>
@@ -355,7 +354,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                                         </div>
-                                        <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('blog:navigation.live')}</span>
+                                        <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                     </div>
 
                                     <div className="text-center space-y-2 mb-8">
@@ -561,7 +560,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                     onNavigateToPartner?.();
                                 }}
-                                className="group relative w-full flex items-center justify-center gap-2 vibing-blue-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] hover:brightness-110"
+                                className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
                             >
                                 <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
                                     {t('income.math.cta_urgency')}
