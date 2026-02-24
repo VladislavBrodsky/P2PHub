@@ -468,16 +468,27 @@ const BlogDetail = ({
     const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
-        const main = document.querySelector('main');
+        const main = document.querySelector('main') || document.documentElement;
         const handleScroll = () => {
-            if (!main) return;
-            const scrolled = main.scrollTop;
-            const height = main.scrollHeight - main.clientHeight;
-            const progress = (scrolled / height) * 100;
+            const scrolled = main === document.documentElement ? window.scrollY : main.scrollTop;
+            const height = (main === document.documentElement ? document.documentElement.scrollHeight - window.innerHeight : main.scrollHeight - main.clientHeight) || 1;
+            const progress = Math.min(100, Math.max(0, (scrolled / height) * 100));
             setScrollProgress(progress);
         };
-        main?.addEventListener('scroll', handleScroll);
-        return () => main?.removeEventListener('scroll', handleScroll);
+
+        if (main === document.documentElement) {
+            window.addEventListener('scroll', handleScroll, { passive: true });
+        } else {
+            main.addEventListener('scroll', handleScroll, { passive: true });
+        }
+
+        // Initial check
+        handleScroll();
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            main.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     const MarketingBox = ({ type }: { type: 'card' | 'pro' }) => {
@@ -532,7 +543,7 @@ const BlogDetail = ({
             exit={{ opacity: 0 }}
             className="flex flex-col min-h-screen bg-bg-app relative"
         >
-            <div className="fixed top-0 left-0 w-full h-1.5 z-100 bg-slate-100 dark:bg-white/5">
+            <div className="fixed top-0 left-0 w-full h-1.5 z-1001 bg-slate-100/10 dark:bg-white/5 pointer-events-none">
                 <motion.div
                     className="h-full bg-linear-to-r from-blue-500 to-indigo-600 shadow-[0_0_15px_rgba(59,130,246,0.6)]"
                     initial={{ width: 0 }}
@@ -575,7 +586,7 @@ const BlogDetail = ({
                 </div>
             </div>
 
-            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto relative z-10 text-justify!">
+            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto relative z-10">
                 <div className="space-y-6">
                     {post.image && (
                         <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-3xl group">
@@ -609,8 +620,9 @@ const BlogDetail = ({
                 </h1>
 
                 <div className="flex items-center gap-3 py-4 border-y border-slate-200 dark:border-white/5">
-                    <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
-                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-bold text-base text-blue-600 dark:text-blue-400">
+                    <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500 via-indigo-500 to-blue-600 p-px shadow-lg shadow-blue-500/30 flex items-center justify-center relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="w-full h-full rounded-[calc(1rem-1px)] bg-bg-app flex items-center justify-center font-bold text-base text-blue-500 relative z-10 border border-white/5">
                             {post.author?.[0] || 'P'}
                         </div>
                     </div>
@@ -619,13 +631,13 @@ const BlogDetail = ({
                         <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
-                        <div className="flex -space-x-2.5">
+                        <div className="flex -space-x-4">
                             {[1, 2, 3].map(i => (
-                                <div key={i} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-sm`}>
-                                    <User className="w-4 h-4 text-slate-400" />
+                                <div key={i} style={{ zIndex: 10 - i }} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative`}>
+                                    <User className="w-4 h-4 text-slate-400 opacity-60" />
                                 </div>
                             ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-blue-500/10 flex items-center justify-center text-label font-bold text-blue-600 dark:text-blue-400 backdrop-blur-md shadow-sm">
+                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold backdrop-blur-md shadow-lg z-10 relative">
                                 +12k
                             </div>
                         </div>

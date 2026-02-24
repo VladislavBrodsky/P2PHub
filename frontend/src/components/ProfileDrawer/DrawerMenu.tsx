@@ -220,7 +220,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         >
                             <div className="flex items-center gap-3">
                                 <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
-                                    ? 'bg-black/10 dark:bg-white/30 border border-black/10 dark:border-white/40 text-black dark:text-white group-hover:scale-110 group-hover:rotate-12 shadow-lg shadow-white/10'
+                                    ? 'bg-black/10 dark:bg-black/20 border border-black/10 dark:border-black/30 text-black group-hover:scale-110 group-hover:rotate-12 shadow-md shadow-black/5'
                                     : 'bg-card-bg border border-card-border text-text-secondary group-hover:text-text-primary'
                                     }`}>
                                     {React.cloneElement(item.icon as React.ReactElement, {
