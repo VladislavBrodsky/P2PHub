@@ -18,6 +18,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
     const [count, setCount] = useState(0);
     const [baseCount, setBaseCount] = useState(0);
     const [isCalculating, setIsCalculating] = useState(true);
+    const [isDoneCalculating, setIsDoneCalculating] = useState(false);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
@@ -25,10 +26,10 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
         return Math.floor(pseudoRandom * (765 - 333 + 1)) + 333;
     }, []);
 
-    // ── HIGH-VELOCITY CALCULATION & CONTINUOUS TICKER ──
+    // ── COUNT UP TO $43,200 OVER 10 SECONDS, THEN STOP ──
     useEffect(() => {
         if (isCalculating) {
-            const duration = 4000;
+            const duration = 10000; // 10s so users can watch it climb
             const startTime = Date.now();
             const startVal = count;
 
@@ -36,9 +37,12 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                 const now = Date.now();
                 const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+                // easeInOutCubic for a satisfying build-up
+                const ease = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
-                const current = Math.floor(startVal + (targetAmount - startVal) * easeOutCubic);
+                const current = Math.floor(startVal + (targetAmount - startVal) * ease);
                 setCount(current);
                 setBaseCount(current);
 
@@ -46,47 +50,19 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                     requestAnimationFrame(animate);
                 } else {
                     impact('medium');
+                    setCount(targetAmount);
+                    setBaseCount(targetAmount);
                     setTimeout(() => {
                         setIsCalculating(false);
-                        setShowFunnel(true);
-                    }, 800);
+                        setIsDoneCalculating(true);
+                        // Do NOT auto-show funnel — user taps CTA
+                    }, 400);
                 }
             };
             requestAnimationFrame(animate);
-        } else {
-            // Smoothly transition to new target if it changes after initial calculation
-            let current = count;
-            const step = () => {
-                if (Math.abs(targetAmount - current) < 1) {
-                    setCount(targetAmount);
-                    setBaseCount(targetAmount);
-                    return;
-                }
-                current += (targetAmount - current) * 0.1;
-                setCount(Math.floor(current));
-                setBaseCount(Math.floor(current));
-                requestAnimationFrame(step);
-            };
-            requestAnimationFrame(step);
         }
     }, [isCalculating, targetAmount, impact]);
 
-    // Live Ticker Effect: Increment by small random amounts for "rising digits" feel
-    useEffect(() => {
-        if (isCalculating) return;
-
-        const tick = () => {
-            const extra = Number((Math.random() * 0.05).toFixed(2));
-            setCount(prev => prev + extra);
-
-            // Random interval between 1-3 seconds
-            const nextTick = 1000 + Math.random() * 2000;
-            setTimeout(tick, nextTick);
-        };
-
-        const timeoutId = setTimeout(tick, 2000);
-        return () => clearTimeout(timeoutId);
-    }, [isCalculating]);
 
     const handleUpgrade = () => {
         impact('heavy');
@@ -469,36 +445,52 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                         <m.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="absolute bottom-5 left-1/2 -translate-x-1/2 text-center z-20 w-full max-w-[300px] px-4"
+                            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-xs px-4"
                         >
-                            <div className="relative px-5 py-4 md:px-6 md:py-5 rounded-2xl bg-slate-950/90 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden">
-                                <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/10" />
+                            <div className="relative rounded-2xl bg-slate-950/95 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden px-4 py-3">
+                                <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/5 pointer-events-none" />
 
-                                <span className="text-label font-bold uppercase tracking-[0.3em] text-indigo-400 mb-2 block">
-                                    {t('income.network.yield', { defaultValue: 'PROJECTED MONTHLY YIELD' })}
-                                </span>
+                                {/* Label */}
+                                <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-indigo-400 text-center mb-1.5">
+                                    {t('income.network.yield', { defaultValue: 'ESTIMATED NETWORK YIELD' })}
+                                </p>
 
-                                <div className="flex items-baseline justify-center gap-1">
-                                    <span className="text-4xl sm:text-5xl font-bold tabular-nums tracking-tighter text-white">
+                                {/* Dollar amount — single row, scales with screen */}
+                                <div className="flex items-baseline justify-center gap-0.5">
+                                    <span className="text-3xl sm:text-4xl font-black tabular-nums tracking-tight text-white leading-none">
                                         ${Math.floor(count).toLocaleString()}
                                     </span>
-                                    <span className="text-lg font-bold text-indigo-500">
+                                    <span className="text-base sm:text-lg font-bold text-indigo-400 leading-none">
                                         .{Math.floor((count % 1) * 100).toString().padStart(2, '0')}
                                     </span>
                                 </div>
 
-                                <div className="mt-4 h-1.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5 p-px">
+                                {/* Progress bar */}
+                                <div className="mt-2.5 h-1 w-full bg-white/5 rounded-full overflow-hidden">
                                     <m.div
                                         initial={{ width: 0 }}
-                                        animate={{ width: `${(count / 43200) * 100}%` }}
+                                        animate={{ width: `${Math.min((count / 43200) * 100, 100)}%` }}
                                         className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
                                     />
                                 </div>
 
-                                <div className="mt-3 flex justify-between items-center text-label font-bold text-white/30 uppercase tracking-widest">
-                                    <span>{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
-                                    <span>{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
+                                {/* Footer labels */}
+                                <div className="mt-1.5 flex justify-between items-center">
+                                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
+                                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
                                 </div>
+
+                                {/* CTA — only visible after count reaches $43,200 */}
+                                {isDoneCalculating && (
+                                    <m.button
+                                        initial={{ opacity: 0, y: 6 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        onClick={() => setShowFunnel(true)}
+                                        className="mt-3 w-full h-9 rounded-xl vibing-emerald-animated text-white font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-1.5 shadow-[0_8px_24px_-6px_rgba(16,185,129,0.5)] active:scale-95 transition-transform"
+                                    >
+                                        Reveal Strategy <ChevronRight className="w-3.5 h-3.5" />
+                                    </m.button>
+                                )}
                             </div>
                         </m.div>
                     </m.div>
