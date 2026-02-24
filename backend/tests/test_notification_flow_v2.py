@@ -184,6 +184,9 @@ class TestNotificationStructuredSuite:
 
                 await send_telegram_task(payload.model_dump())
                 
+                # Clear session cache to see updates made by a different session in the worker
+                session.expire_all()
+                
                 stmt = select(NotificationRetry).where(NotificationRetry.chat_id == chat_id)
                 res = await session.execute(stmt)
                 item = res.scalars().first()
