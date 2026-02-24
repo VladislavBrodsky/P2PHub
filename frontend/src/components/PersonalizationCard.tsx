@@ -5,6 +5,7 @@ import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress, getRankGradient } from '../utils/ranking';
 import { ProPlusBadge } from './ui/ProPlusBadge';
+import { getSafeLaunchParams } from '../utils/tma';
 
 interface PersonalizationCardProps {
     className?: string;
@@ -16,6 +17,26 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     const { user, isLoading: isUserLoading } = useUser();
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [imgError, setImgError] = React.useState(false);
+
+    // 3-tier avatar fallback strategy:
+    // 1. Telegram SDK photoUrl (always fresh, best for instant display)
+    // 2. Backend proxy via photo_file_id (cached WebP, robust)
+    // 3. Stored photo_url from DB
+    const tgPhotoUrl = React.useMemo(() => {
+        try {
+            const lp = getSafeLaunchParams();
+            return lp.initData?.user?.photoUrl || null;
+        } catch {
+            return null;
+        }
+    }, []);
+
+    const avatarSrc = React.useMemo(() => {
+        if (tgPhotoUrl) return tgPhotoUrl;
+        if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+        if (user?.photo_url) return user.photo_url;
+        return null;
+    }, [tgPhotoUrl, user?.photo_file_id, user?.photo_url]);
 
     const stats = user || {
         balance: 0,
@@ -96,18 +117,18 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 bg-bg-app 
                             `}
                             >
-                                {/* Skeleton/Placeholder while loading */}
-                                {(isUserLoading || (user && !user.photo_url && !user.photo_file_id && !imageLoaded)) && (
+                                {/* Skeleton while loading */}
+                                {(isUserLoading || (avatarSrc && !imageLoaded && !imgError)) && (
                                     <div className="absolute inset-0 bg-btn-secondary-bg flex items-center justify-center">
                                         <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent animate-pulse"></div>
                                         <User size={variant === 'compact' ? 24 : 32} className="text-text-secondary opacity-40" />
                                     </div>
                                 )}
 
-                                {(user?.photo_file_id || user?.photo_url) && !imgError ? (
+                                {avatarSrc && !imgError ? (
                                     <img
-                                        src={user.photo_file_id ? `/api/partner/photo/${user.photo_file_id}` : (user.photo_url || undefined)}
-                                        alt={`${user.first_name || t('partner_fallback')}'s avatar`}
+                                        src={avatarSrc}
+                                        alt={`${user?.first_name || t('partner_fallback')}'s avatar`}
                                         className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-110' : ''}`}
                                         onLoad={() => setImageLoaded(true)}
                                         loading="eager"
@@ -118,7 +139,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                         onError={() => setImgError(true)}
                                         style={{
                                             imageRendering: '-webkit-optimize-contrast',
-                                            transform: 'translateZ(0)', // Force GPU acceleration
+                                            transform: 'translateZ(0)',
                                         }}
                                     />
                                 ) : !isUserLoading && (
