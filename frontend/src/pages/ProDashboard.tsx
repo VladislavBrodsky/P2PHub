@@ -46,7 +46,9 @@ export const ProDashboard = () => {
     const [showAuditModal, setShowAuditModal] = useState(false);
     const [academyScore, setAcademyScore] = useState(0);
     const [completedStages, setCompletedStages] = useState<string[]>([]);
+    const [unlockedStages, setUnlockedStages] = useState<string[]>([]);
     const [isCompletingStage, setIsCompletingStage] = useState<string | null>(null);
+    const [isUnlockingStage, setIsUnlockingStage] = useState<string | null>(null);
     const [selectedArticle, setSelectedArticle] = useState<any>(null);
     const [selectedAsset, setSelectedAsset] = useState<any>(null);
     const [showHeadlineModal, setShowHeadlineModal] = useState(false);
@@ -78,6 +80,14 @@ export const ProDashboard = () => {
                     setCompletedStages(Array.isArray(parsed) ? parsed : []);
                 } catch (e) {
                     setCompletedStages([]);
+                }
+            }
+            if (data?.unlocked_stages) {
+                try {
+                    const parsed = typeof data.unlocked_stages === 'string' ? JSON.parse(data.unlocked_stages) : data.unlocked_stages;
+                    setUnlockedStages(Array.isArray(parsed) ? parsed : []);
+                } catch (e) {
+                    setUnlockedStages([]);
                 }
             }
         } catch (error) {
@@ -163,6 +173,44 @@ export const ProDashboard = () => {
             setIsCompletingStage(null);
         }
     }, [completedStages, impact, status, hapticNotification, showNotification]);
+
+    const handleUnlockAcademyStage = useCallback(async (stage_id: string) => {
+        if (unlockedStages.includes(stage_id)) return;
+        setIsUnlockingStage(stage_id);
+        impact('medium');
+        try {
+            const data = await proService.unlockAcademyStage(stage_id);
+            setUnlockedStages((prev: string[]) => [...prev, stage_id]);
+
+            // Update status with new XP
+            if (status) {
+                setStatus({ ...status, xp: data.new_xp } as any);
+                // Note: PROStatus interface might need update for 'xp', 
+                // but we primarily use it for tokens/setup. 
+                // We should probably rely on a more global user state if it exists.
+                // For now, let's just trigger a reload to be safe.
+                loadStatus();
+            }
+
+            hapticNotification('success');
+            showNotification({
+                title: t('pro_dashboard.notifications.unlock_success_title'),
+                message: t('pro_dashboard.notifications.unlock_success_msg', { cost: 'XP' }),
+                type: 'success'
+            });
+        } catch (error: any) {
+            console.error('Failed to unlock academy stage', error);
+            const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to unlock stage. Insufficient XP?';
+            showNotification({
+                title: t('pro_dashboard.notifications.insufficient_xp_title'),
+                message: msg,
+                type: 'warning'
+            });
+            hapticNotification('error');
+        } finally {
+            setIsUnlockingStage(null);
+        }
+    }, [unlockedStages, impact, status, hapticNotification, showNotification, t]);
 
     const handleFetchTrends = async () => {
         if (isFetchingTrends) return;
@@ -590,8 +638,11 @@ export const ProDashboard = () => {
                                         status={status}
                                         academyScore={academyScore}
                                         completedStages={completedStages}
+                                        unlockedStages={unlockedStages}
                                         isCompletingStage={isCompletingStage}
+                                        isUnlockingStage={isUnlockingStage}
                                         handleCompleteAcademyStage={handleCompleteAcademyStage}
+                                        handleUnlockAcademyStage={handleUnlockAcademyStage}
                                         setSelectedArticle={setSelectedArticle}
                                         setShowSetup={setShowSetup}
                                         setShowManual={setShowManual}

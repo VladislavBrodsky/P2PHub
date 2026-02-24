@@ -39,6 +39,7 @@ class Partner(SQLModel, table=True):
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), index=True) # Optimized for sorting
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None), sa_column_kwargs={"onupdate": lambda: datetime.now(UTC).replace(tzinfo=None)}, index=True)
     completed_stages: str = Field(default="[]") # Store Academy stage IDs as JSON string
+    unlocked_stages: str = Field(default="[]") # Store paid/unlocked Academy stage IDs as JSON string
     academy_score: float = Field(default=0.0) # Track Academy points
 
     # PRO Subscription Status

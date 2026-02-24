@@ -16,8 +16,11 @@ interface GrowthTabProps {
     status: PROStatus | null;
     academyScore: number;
     completedStages: string[];
+    unlockedStages: string[];
     isCompletingStage: string | null;
+    isUnlockingStage: string | null;
     handleCompleteAcademyStage: (stageId: string) => Promise<void>;
+    handleUnlockAcademyStage: (stageId: string) => Promise<void>;
     setSelectedArticle: (article: any) => void;
     setShowSetup: (show: boolean) => void;
     setShowManual: (manual: string | null) => void;
@@ -29,8 +32,11 @@ export const GrowthTab = ({
     status,
     academyScore,
     completedStages,
+    unlockedStages,
     isCompletingStage,
+    isUnlockingStage,
     handleCompleteAcademyStage,
+    handleUnlockAcademyStage,
     setSelectedArticle,
     setShowSetup,
     setShowManual,
@@ -311,13 +317,22 @@ export const GrowthTab = ({
                                         ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
                                         : isLocked
                                             ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
-                                            : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                                            : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr)
+                                                ? 'bg-amber-500/10 text-amber-500 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+                                                : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
                                         }`}>
                                         <span className="font-bold text-xs italic">{stage.id}</span>
-                                        {!isCompleted && !isLocked && (
+                                        {!isCompleted && !isLocked && (unlockedStages.includes(stageIdStr) || stage.xpCost === 0) && (
                                             <motion.div
                                                 className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
                                                 animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                            />
+                                        )}
+                                        {!isCompleted && !isLocked && stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) && (
+                                            <motion.div
+                                                className="absolute inset-0 rounded-full bg-amber-500 -z-10"
+                                                animate={{ scale: [1, 1.4], opacity: [0.3, 0] }}
                                                 transition={{ duration: 2, repeat: Infinity }}
                                             />
                                         )}
@@ -362,6 +377,11 @@ export const GrowthTab = ({
                                                     <span className="text-label font-bold text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
                                                 ) : isLocked ? (
                                                     <Lock size={14} className="text-slate-400" />
+                                                ) : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <Lock size={12} className="text-amber-500/60" />
+                                                        <span className="text-label font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-1 rounded-md">{stage.xpCost} XP</span>
+                                                    </div>
                                                 ) : (
                                                     <div className="flex items-center gap-2">
                                                         <span className="text-label font-bold text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
@@ -386,25 +406,61 @@ export const GrowthTab = ({
                                                                 <CategoryIcon size={16} className="text-indigo-500" />
                                                                 <span className="text-label font-bold uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
                                                             </div>
-                                                            {stage.content || stage.description}
+                                                            {stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
+                                                                <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">
+                                                                    <Lock size={32} className="text-amber-500/40" />
+                                                                    <p className="text-label font-bold uppercase tracking-widest text-center">
+                                                                        {t('pro_dashboard.academy.insufficient_xp_msg')}
+                                                                    </p>
+                                                                </div>
+                                                            ) : (
+                                                                stage.content || stage.description
+                                                            )}
                                                         </div>
 
                                                         {!isCompleted && (
-                                                            <button
-                                                                onClick={() => handleCompleteAcademyStage(String(stage.id))}
-                                                                disabled={isLoading}
-                                                                className="w-full h-11 sm:h-12 bg-slate-900 dark:bg-white/10 text-white dark:text-white border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 hover:bg-slate-800 dark:hover:bg-white/15 active:scale-[0.98] transition-all"
-                                                            >
-                                                                {isLoading ? (
-                                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                            <>
+                                                                {stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
+                                                                    <div className="space-y-4">
+                                                                        <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+                                                                            <p className="text-caption font-medium text-slate-500 dark:text-slate-400 italic text-center">
+                                                                                "{t('pro_dashboard.academy.motivate_msg')}"
+                                                                            </p>
+                                                                        </div>
+                                                                        <button
+                                                                            onClick={() => handleUnlockAcademyStage(stageIdStr)}
+                                                                            disabled={isUnlockingStage === stageIdStr}
+                                                                            className="w-full h-11 sm:h-12 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                                                                        >
+                                                                            {isUnlockingStage === stageIdStr ? (
+                                                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                                            ) : (
+                                                                                <>
+                                                                                    <span>{t('pro_dashboard.academy.unlock_for', { cost: stage.xpCost })}</span>
+                                                                                    <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
+                                                                                    <Lock size={14} />
+                                                                                </>
+                                                                            )}
+                                                                        </button>
+                                                                    </div>
                                                                 ) : (
-                                                                    <>
-                                                                        <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
-                                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                                        <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
-                                                                    </>
+                                                                    <button
+                                                                        onClick={() => handleCompleteAcademyStage(String(stage.id))}
+                                                                        disabled={isLoading}
+                                                                        className="w-full h-11 sm:h-12 bg-slate-900 dark:bg-white/10 text-white dark:text-white border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 hover:bg-slate-800 dark:hover:bg-white/15 active:scale-[0.98] transition-all"
+                                                                    >
+                                                                        {isLoading ? (
+                                                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                                                        ) : (
+                                                                            <>
+                                                                                <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
+                                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                                                <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
+                                                                            </>
+                                                                        )}
+                                                                    </button>
                                                                 )}
-                                                            </button>
+                                                            </>
                                                         )}
                                                     </div>
                                                 </motion.div>

@@ -86,5 +86,9 @@ function processMarkdown(text: string): string {
         // Special CTA button - Allow spaces
         .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="inline-block my-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-label font-bold uppercase tracking-wider rounded-xl transition-all shadow-lg hover:shadow-indigo-500/30 no-underline">$1</a>')
         // Standard links - Allow spaces
-        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
+        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>')
+        // Autolink raw URLs (not already in a markdown link)
+        // This looks for URLs starting with http/https that are not preceded by `href="` or `">` or `](`
+        // and ensures they are not already wrapped in <a> tags.
+        .replace(/(?<!href="|">|\]\()((https?:\/\/[^\s<]+[^.,\s<)]))(?![^<]*<\/a>)/g, '<a href="$1" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
 }

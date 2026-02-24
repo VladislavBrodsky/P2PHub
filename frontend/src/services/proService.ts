@@ -18,6 +18,7 @@ export interface PROStatus {
     personal_referral_link?: string;
     academy_score?: number;
     completed_stages?: string; // JSON string from backend
+    unlocked_stages?: string; // JSON string from backend
     bot_username?: string;
     setup?: {
         x_api_key: string;
@@ -120,7 +121,12 @@ export const proService = {
     },
 
     completeAcademyStage: async (stage_id: string): Promise<{ status: string, academy_score: number, tokens_remaining?: number }> => {
-        const response = await apiClient.post(`/api/pro/academy/complete?stage_id=${stage_id}`, {});
+        const response = await apiClient.post(`/api/pro/academy/complete/${stage_id}`, {});
+        return response.data;
+    },
+
+    unlockAcademyStage: async (stage_id: string): Promise<{ status: string, new_xp: number, unlocked_stages: string[] }> => {
+        const response = await apiClient.post(`/api/pro/academy/unlock/${stage_id}`, {});
         return response.data;
     },
 

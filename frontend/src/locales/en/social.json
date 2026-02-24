@@ -220,7 +220,7 @@
       "viral_btn": "Send Card",
       "share_more": "Share...",
       "copy_link": "Copy link",
-      "boost_desc": "Each referral boosts your Viral Network and moves you closer to the **$1 per minute strategy**."
+      "boost_desc": "Each referral boosts your Viral Network and moves you closer to the <1>$1 per minute strategy</1>."
     },
     "qr": {
       "title": "Achieve Your \nFinancial Independence",
@@ -304,7 +304,7 @@
     "read_line1": "Read",
     "read_line2": "Guide",
     "goal_title": "Our Goal",
-    "goal_desc": "Our mission is to build the world's largest international partner community. <1>Your role:</1> Grow your network, support new members, and reach an income of <3>$1 per minute.</3>",
+    "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1>Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream.</3>",
     "manual_title": "Path to Success",
     "manual_step_1": "Share your personal growth link or QR code.",
     "manual_step_2": "Help partners activate cards and PRO status.",

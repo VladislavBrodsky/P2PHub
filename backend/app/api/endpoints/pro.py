@@ -225,7 +225,80 @@ ACADEMY_RULES = {
     "m6": {"tokens": -5, "xp_cost": 10000, "xp_reward": 50000},
 }
 
-@router.post("/academy/complete")
+@router.post("/academy/unlock/{stage_id}")
+async def unlock_academy_stage(
+    stage_id: str,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Handles XP-based unlocking of Academy stages after level 20.
+    """
+    import json
+    unlocked = json.loads(partner.unlocked_stages or "[]")
+    
+    stage_key = stage_id
+    if stage_id.isdigit():
+        stage_key = int(stage_id)
+
+    if stage_key in unlocked:
+        return {"status": "already_unlocked", "unlocked_stages": unlocked}
+
+    # Determine cost based on stage ID
+    xp_cost = 0
+    try:
+        if stage_id in MODULE_DETAILS:
+            xp_cost = MODULE_DETAILS[stage_id].get("xp_cost", 0)
+        elif stage_id.isdigit():
+            s_id = int(stage_id)
+            if s_id > 20:
+                # Replicating frontend academyData.ts scaling logic
+                if s_id <= 30: xp_cost = (s_id - 20) * 100
+                elif s_id <= 40: xp_cost = (s_id - 30) * 200 + 1000
+                elif s_id <= 50: xp_cost = (s_id - 40) * 200 + 3000
+                elif s_id <= 60: xp_cost = (s_id - 50) * 500 + 5000 # Correcting to match intended curve
+                elif s_id <= 80: xp_cost = (s_id - 60) * 500 + 10000
+                elif s_id <= 100: xp_cost = (s_id - 80) * 1000 + 30000
+                if s_id == 100: xp_cost = 200000
+    except ValueError:
+        pass
+
+    if partner.xp < xp_cost:
+        return {
+            "status": "insufficient_xp", 
+            "required": xp_cost, 
+            "current": partner.xp
+        }
+
+    # Deduct XP
+    partner.xp -= xp_cost
+    
+    from app.services.audit_service import audit_service
+    await audit_service.log_event(
+        session=session,
+        partner_id=partner.id,
+        action_type="XP_SPEND",
+        description=f"Academy Stage {stage_id} Unlocked",
+        entity_type="academy",
+        entity_id=stage_id,
+        action="stage_unlock",
+        details={"xp_cost": xp_cost}
+    )
+
+    unlocked.append(stage_key)
+    partner.unlocked_stages = json.dumps(unlocked)
+    
+    session.add(partner)
+    await session.commit()
+    await session.refresh(partner)
+    
+    return {
+        "status": "success",
+        "new_xp": partner.xp,
+        "unlocked_stages": unlocked
+    }
+
+@router.post("/academy/complete/{stage_id}")
 async def complete_academy_stage(
     stage_id: str,
     partner: Partner = Depends(get_current_partner),
@@ -233,12 +306,11 @@ async def complete_academy_stage(
 ):
     """
     Handles completion of Academy stages. 
-    Stages can be numeric (1-100) or slug-based (m1, m2...).
     """
     import json
     completed = json.loads(partner.completed_stages or "[]")
+    unlocked = json.loads(partner.unlocked_stages or "[]")
     
-    # Handle both string slugs and numeric IDs
     stage_key = stage_id
     if stage_id.isdigit():
         stage_key = int(stage_id)
@@ -246,18 +318,30 @@ async def complete_academy_stage(
     if stage_key in completed:
         return {"status": "already_completed", "academy_score": partner.academy_score}
 
-    # Dynamic Reward Strategy for the 100-Stage Vertical Roadmap
-    # Default reward escalates with stage progression
+    # Verification for levels > 20
+    if stage_id.isdigit():
+        s_id = int(stage_id)
+        if s_id > 20 and stage_key not in unlocked:
+            return {"status": "locked", "msg": "Stage must be unlocked first"}
+    elif stage_id in MODULE_DETAILS and MODULE_DETAILS[stage_id].get("xp_cost", 0) > 0:
+        if stage_key not in unlocked:
+            return {"status": "locked", "msg": "Module must be unlocked first"}
+
+    # Dynamic Reward Strategy
     xp_reward = 100
     try:
-        s_id = int(stage_id)
-        # Base reward follows a curve: 100 + (id * 10) + (if id > 50, extra bonus)
-        xp_reward = 100 + (s_id * 10)
-        if s_id > 20: xp_reward += 500
-        if s_id > 50: xp_reward += 2000
-        if s_id == 100: xp_reward = 100000 # Fanocracy Ascension
+        if stage_id in MODULE_DETAILS:
+            xp_reward = MODULE_DETAILS[stage_id].get("xp_reward", 500)
+            tokens_reward = MODULE_DETAILS[stage_id].get("tokens", 0)
+            if tokens_reward != 0:
+                partner.pro_tokens += tokens_reward
+        elif stage_id.isdigit():
+            s_id = int(stage_id)
+            xp_reward = 100 + (s_id * 10)
+            if s_id > 20: xp_reward += 500
+            if s_id > 50: xp_reward += 2000
+            if s_id == 100: xp_reward = 100000
     except ValueError:
-        # Fallback for slug-based legacy stages
         xp_reward = 500
 
     # Verification: Some stages require a "Mission Task" result

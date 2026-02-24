@@ -484,13 +484,17 @@
       "audit_force_success_msg": "Fresh intelligence acquired (-3 Tokens).",
       "module_complete_title": "Module Complete",
       "module_complete_msg": "XP Earned! Tokens updated.",
+      "unlock_success_title": "Lesson Unlocked",
+      "unlock_success_msg": "{{cost}} XP deducted. Knowledge node active.",
       "headline_copied": "Headline copied to clipboard.",
       "bio_copied": "Bio copied to clipboard.",
       "sync_error": "Sync Error",
       "trends_synced_title": "Trends Synced",
       "trends_synced_msg": "Global viral patterns updated.",
       "trends_failed_title": "Sync Failed",
-      "trends_failed_msg": "Could not fetch global trends."
+      "trends_failed_msg": "Could not fetch global trends.",
+      "insufficient_xp_title": "INSUFFICIENT XP",
+      "insufficient_xp_msg": "Keep studying to unlock advanced lessons!"
     },
     "tools": {
       "headline": {
@@ -573,6 +577,9 @@
       "min_read": "MIN READ",
       "access_granted": "Access granted upon synchronization.",
       "claim_xp": "CLAIM XP REWARD",
+      "unlock_btn": "UNLOCK LESSON",
+      "unlock_for": "Unlock for {{cost}} XP",
+      "motivate_msg": "Complete tasks or invite friends to get more XP and keep studying the mastery of digital marketing and AI powerhouse!",
       "sync_node": "SYNC NODE",
       "insufficient_tokens_plus": "Earn more tokens or upgrade to PRO+",
       "understand_btn": "Start Training",
@@ -616,18 +623,44 @@
         "title": "Intelligence Dossier",
         "items": [
           {
-            "id": "1",
-            "title": "The Hook System",
-            "category": "Copywriting",
-            "readTime": "3",
-            "desc": "Learn how to capture attention instantly."
+            "id": "a1",
+            "title": "24/7 Growth via AI Agents",
+            "desc": "How to automate your lead funnel using P2PHub agents.",
+            "content": "In 2026, manual outreach is dead. You need to deploy AI agents that handle the 'Initial Spark'. Use the Viral Studio to generate content that prompts comments. Set up automation that DMs your referral link to anyone who comments 'P2P'. This creates a perpetual traffic loop while you sleep.",
+            "category": "Automation",
+            "readTime": 5
           },
           {
-            "id": "2",
-            "title": "Algorithm Defense",
-            "category": "Strategy",
-            "readTime": "5",
-            "desc": "Protect your reach from algorithmic updates."
+            "id": "a2",
+            "title": "Algorithmic Authority",
+            "desc": "Bypassing shadowbans and maximizing reach on X and Telegram.",
+            "content": "Algorithms hate external links. To reach the $1/min level, you must use 'Link-stacking'. Post a high-value thread/thought first. Only in the 4th or 5th message mention the Pintopay card. This maintains a high 'Reach Score', converting users at the end of the funnel.",
+            "category": "Algorithms",
+            "readTime": 7
+          },
+          {
+            "id": "a3",
+            "title": "Psychological Triggers 2.0",
+            "desc": "Why the 'Digital Gold Rush' narrative resonates at 42%.",
+            "content": "The desire to stay current with financial trends is a strong motivator in 2026. Position Pintopay not as a 'crypto card' but as a tool for adapting to new financial realities. Use concepts like asset management freedom and ownership of modern financial solutions.",
+            "category": "Psychology",
+            "readTime": 4
+          },
+          {
+            "id": "a4",
+            "title": "High-Velocity Hooks",
+            "desc": "Crafting lines that stop 99% of scrollers immediately.",
+            "content": "A high-velocity hook must create a 'Curiosity Gap'. Example: 'I found a legal way to separate state and my money.' This forces people to click 'See More' to close the loop in their brain.",
+            "category": "Copywriting",
+            "readTime": 3
+          },
+          {
+            "id": "a5",
+            "title": "Mastering Network Scale",
+            "desc": "Turning 10 referrals into 10,000 via deep motivation.",
+            "content": "Your earning potential is locked by your partners' success. Give your Level 1 partners the 'Growth Toolkit'. Show them how to use the Viral Studio. When they scale, your passive transaction cashback grows exponentially.",
+            "category": "Scaling",
+            "readTime": 8
           }
         ],
         "btn_read": "READ BRIEFING"

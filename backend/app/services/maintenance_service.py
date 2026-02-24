@@ -131,6 +131,8 @@ async def reconcile_network_stats(session_override: AsyncSession = None) -> dict
     """
     Unified high-performance network reconciliation.
     Fixes path, depth, and referral_count across the entire platform.
+    Note: referral_count represents the Total Network Size (L1-L20) for 
+    consistency with Leaderboard and Tasks systems.
     
     #comment: Implementing Distributed Locking via Redis (600s TTL).
     # This prevents multiple workers from attempting structural fixes simultaneously,

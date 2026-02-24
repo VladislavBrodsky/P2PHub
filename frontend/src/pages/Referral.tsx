@@ -25,6 +25,7 @@ import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import referralPromoImage from '/images/v3_referral_promo.jpg';
 
 export default function ReferralPage() {
     const { t } = useTranslation(['social', 'common', 'marketing']);
@@ -346,7 +347,7 @@ export default function ReferralPage() {
                                     <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
                                     {/* Promo image on top of gradient */}
                                     <img
-                                        src="/images/v3_referral_promo.jpg"
+                                        src={referralPromoImage}
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="absolute inset-0 w-full h-full object-cover"
                                         onError={(e) => {
@@ -424,7 +425,7 @@ export default function ReferralPage() {
                                     {/* Footer Info */}
                                     <div className="text-center pb-2">
                                         <p className="text-label text-slate-400 font-medium">
-                                            <Trans t={t} i18nKey="referral.modal.boost_desc">
+                                            <Trans t={t} i18nKey="referral.modal.boost_desc" ns="social">
                                                 Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>.
                                             </Trans>
                                         </p>

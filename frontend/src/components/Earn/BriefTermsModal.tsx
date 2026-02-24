@@ -75,10 +75,14 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                                 </div>
                                 <div className="p-4 rounded-2xl bg-blue-500/10 border border-blue-500/20">
                                     <p className="text-sm font-medium text-slate-900 dark:text-white leading-relaxed">
-                                        <Trans t={t} i18nKey="brief.goal_desc">
-                                            Our mission is to build the world's largest decentralized partner network.
-                                            <span className="text-slate-900 dark:text-white font-bold"> Your goal is simple:</span> Expand the network, earn XP, and unlock the <span className="text-emerald-500 font-bold">$1/minute passive income stream.</span>
-                                        </Trans>
+                                        <Trans
+                                            t={t}
+                                            i18nKey="brief.goal_desc"
+                                            components={{
+                                                1: <span className="text-slate-900 dark:text-white font-bold" />,
+                                                3: <span className="text-emerald-500 font-bold" />
+                                            }}
+                                        />
                                     </p>
                                 </div>
                             </section>

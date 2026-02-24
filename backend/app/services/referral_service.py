@@ -148,8 +148,9 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             xp_before = float(referrer.xp)
             xp_after = xp_before + xp_gain
             
-            # Atomic Increment
+            # Atomic Increments (XP and Total Network Count)
             referrer.xp = Partner.xp + xp_gain
+            referrer.referral_count = Partner.referral_count + 1
             
             xp_txs.append(XPTransaction(
                 partner_id=referrer.id, amount=xp_gain,

@@ -107,10 +107,6 @@ async def create_partner(
     referrer = await _resolve_referrer(session, referrer_code, partner.id if partner else None)
     
     if partner and referrer:
-        # Increment L1 referrer count synchronously for immediate UI updates
-        referrer.referral_count = Partner.referral_count + 1
-        session.add(referrer)
-        
         await _update_existing_partner_referrer(session, partner, referrer)
         
         # Move side effects (Level 2-9 awards, notifications) to background task
@@ -122,13 +118,6 @@ async def create_partner(
     if referrer:
         path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
         depth = referrer.depth + 1
-        
-        # #comment: CRITICAL FIX for Task System Reliability
-        # We increment the direct (L1) referrer's referral_count SYNCHRONOUSLY here.
-        # This ensures that "Invite 1 friend" tasks and UI stats are updated immediately
-        # even if background workers are busy or delayed.
-        referrer.referral_count = Partner.referral_count + 1
-        session.add(referrer)
     else:
         path, depth = None, 0
 
