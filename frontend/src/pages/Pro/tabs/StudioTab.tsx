@@ -1112,7 +1112,7 @@ export const StudioTab = ({
                                             <Copy size={12} />
                                         </button>
                                     </div>
-                                    <div className="text-label sm:text-caption font-medium leading-relaxed text-slate-600 dark:text-slate-300 whitespace-pre-wrap">
+                                    <div className="text-label sm:text-caption font-medium leading-relaxed text-slate-600 dark:text-slate-300">
                                         {renderMarkdown(generatedResult.body)}
                                     </div>
                                 </div>
