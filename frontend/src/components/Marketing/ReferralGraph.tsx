@@ -269,7 +269,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
     const [isDoneCalculating, setIsDoneCalculating] = useState(false);
 
     useEffect(() => {
-        const duration = 10000;
+        const duration = 3000; // Snappier animation
         const startTime = Date.now();
         let rafId: number;
 
@@ -277,9 +277,11 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
             const now = Date.now();
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
+
+            // Smoother easeInOutQuad
             const ease = progress < 0.5
-                ? 4 * progress * progress * progress
-                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                ? 2 * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
             const current = targetAmount * ease;
             setCount(current);
@@ -351,7 +353,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
     );
 });
 
-export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number }) => {
+export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmount?: number }) => {
     const { t } = useTranslation(['marketing', 'common']);
     const { user } = useUser();
     const { selection, impact } = useHaptic();
@@ -647,7 +649,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
             </AnimatePresence>
         </div>
     );
-};
+});
 
 
 
