@@ -59,7 +59,7 @@ class AudienceProfile:
                 "Sovereign Velocity: Why the elite move assets outside the 'Legacy Box'.",
                 "The institutional bypass for the new crypto aristocracy."
             ],
-            "visual_base": "An elite Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blazer. Captured in a moody, high-contrast private executive suite with a panoramic view of a foggy financial district. Atmosphere is thick with focus and strategic power. Shot on Leica M11, 35mm f/1.4.",
+            "visual_base": "A world-class Crypto Strategist and Alpha Whale, mid-30s, embodying 'Quiet Luxury' in a bespoke charcoal blazer. A look of profound strategic focus; the subject is captured mid-thought, radiating strategic power. Shot on Leica M11, 35mm f/1.4.",
             "cta_style": "Stealth, authoritative, high-stakes",
             "scene_pool": ["fintech_bank", "luxury_car", "rooftop_dubai", "conference"],
             "viral_hashtags": ["#CryptoAlpha", "#WhaleStrategy", "#AsymmetricBeta", "#CapitalMobility"]
@@ -103,7 +103,7 @@ class AudienceProfile:
                 "Lifestyle Arbitrage: The hidden math of the modern sovereign.",
                 "Chapter 7: Why your current bank is anchoring your global potential."
             ],
-            "visual_base": "A high-status 'Global Sovereign' in the ultra-private lounge of a first-class aviation hub. Natural golden-hour light streaming through architectural windows, illuminating sophisticated neutral textures (cashmere, brushed aluminum). Expensive silence and absolute freedom.",
+            "visual_base": "A high-status 'Global Sovereign' in premium, wrinkle-free leisure wear (cashmere and neutral tones). The subject is poised, looking towards the horizon with a sense of absolute calm and purposeful mobility. Natural light highlighting high-status accessories.",
             "cta_style": "Inspirational, high-status",
             "scene_pool": ["airport_lounge", "cafe_nomad", "luxury_train", "rooftop_dubai"],
             "viral_hashtags": ["#SovereignNomad", "#GlobalMobility", "#WealthArbitrage", "#DigitalEmpire"]
@@ -147,7 +147,7 @@ class AudienceProfile:
                 "Most people are still losing 5% on payout friction. We completely eliminated it.",
                 "I tested every payment rail out there. Only one actually scaled without holding my liquidity hostage."
             ],
-            "visual_base": "A charismatic marketing visionary in a sun-drenched, high-ceiling urban loft. Modern casual-luxury attire, holding a sleek titanium smartphone. The background is a blurred tapestry of a vibrant, thriving metropolis.",
+            "visual_base": "A charismatic marketing visionary in modern casual-luxury attire, holding a sleek titanium smartphone. The subject radiates energy and analytical mastery, with a posture of confident command over their digital empire.",
             "lead_magnets": ["The 2026 Conversion Cheat-Sheet", "Affiliate Alpha: The Margin Optimization Blueprint", "The Instant Payout Protocol"],
             "cta_style": "ROI-focused, A/B tested language",
             "scene_pool": ["coworking", "luxury_life", "conference", "luxury_car"],
@@ -192,7 +192,7 @@ class AudienceProfile:
                 "Why the strongest leaders in my circle are migrating their entire structure to sovereign rails.",
                 "From a scattered team to a synchronized global architecture. Here is the exact blueprint."
             ],
-            "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Captured in a high-level strategy session on a private luxury terrace overlooking a metropolitan financial district at twilight. Deep shadows, warm highlights, and an aura of visionary command. Shot on Leica M11.",
+            "visual_base": "An elite FinTech leader and Community Architect with magnetic energy. Dressed in sharp, bespoke attire; the subject is captured in a moment of visionary command, gesturing towards an unseen display of growth. Aura of high-status leadership.",
             "lead_magnets": ["The Duplication Masterclass: 0 to 10k", "The Team Retention Blueprint", "The Legacy Network Architecture (Video)"],
             "cta_style": "Vision-driven, team-focused",
             "scene_pool": ["conference", "coworking", "luxury_life", "rooftop_dubai"],
@@ -237,7 +237,7 @@ class AudienceProfile:
                 "How to build a financial fortress for your children while staying present.",
                 "Chapter 3: The transition from domestic stability to financial sovereignty."
             ],
-            "visual_base": "A sophisticated 'Legacy Architect' parent in a serene, sun-drenched minimalist estate. Soft, ethereal lighting hitting expensive organic textures (linen, oak, marble). A moment of profound peace, control, and generational success. Shot on Leica M11.",
+            "visual_base": "A sophisticated 'Legacy Architect' parent in premium organic textures (linen, silk). A moment of profound peace and control; a look of 'reached the finish line' satisfaction. Representing calm generational success.",
             "lead_magnets": ["The Family Sovereign Trust Setup", "Generational Yield: A Legacy Masterclass", "The 15-Minute Passive Abundance Guide"],
             "cta_style": "Graceful, empowering, trust-focused",
             "scene_pool": ["luxury_life", "cafe_nomad", "rooftop_dubai", "luxury_car"],
@@ -282,7 +282,7 @@ class AudienceProfile:
                 "Alpha Stacking: How to build a financial fortress before your first interview.",
                 "Chapter 1: Decoupling your potential from your credentials."
             ],
-            "visual_base": "A high-status 'Emerging Alpha' in a futuristic urban tech-hub. Clean, architectural streetwear, focused on a sleek data-overlay. High-contrast, high-energy lighting reflecting the dawn of a new empire. Shot on Leica M11.",
+            "visual_base": "A high-status 'Emerging Alpha' in clean, architectural streetwear. A look of high-velocity ambition and technical focus; checking a premium device with a sense of rebellious mastery. Raw energy meets tactical precision.",
             "lead_magnets": ["The Asymmetric Income Protocol", "Status Stacking: The Early Wealth Blueprint", "The 1-Click Sovereign Setup"],
             "cta_style": "High-velocity, action-oriented",
             "scene_pool": ["luxury_car", "airport_lounge", "conference", "luxury_life"],
@@ -327,7 +327,7 @@ class AudienceProfile:
                 "Why strategic autonomy is the ultimate 2026 career luxury.",
                 "Chapter 5: The blueprint for your high-status second act."
             ],
-            "visual_base": "A serene former executive in premium weekend-luxe (cashmere and silk). Enjoying a moment of absolute autonomy in a lush Mediterranean garden at the peak of the golden hour. A sense of ultimate liberation and quiet wealth. Shot on Leica M11.",
+            "visual_base": "A serene former executive in premium weekend-luxe (cashmere and silk). A sense of ultimate liberation and quiet wealth; a subtle, knowing smile of absolute autonomy. Decoupled from the corporate cycle.",
             "lead_magnets": ["The 18-Month Sovereign Exit Blueprint", "Identity Decoupling: The Boardroom to Freedom Guide", "Corporate Escape: The Liquidity Bridge Protocol"],
             "cta_style": "Strategic, empowering, elite",
             "scene_pool": ["luxury_life", "cafe_nomad", "rooftop_dubai", "airport_lounge"],
@@ -372,7 +372,7 @@ class AudienceProfile:
                 "The 100x Growth Blueprint: Turning geometric networking into a global standard.",
                 "Universal Abundance: The leadership strategy for the Digital Gold Rush."
             ],
-            "visual_base": "A world-class Global Network Architect embodying the 'Investment Banking Traveler' aesthetic. Dressed in bespoke, sun-drenched luxury. Captured in a cinematic moment inside a sleek, futuristic private terminal. Atmosphere is international, elite, and expanding.",
+            "visual_base": "A world-class Global Network Architect embodying 'Investment Banking' status. Dressed in bespoke, sun-drenched luxury. A posture of international authority and expansive vision, looking towards a global future.",
             "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach Guide"],
             "cta_style": "High-status, visionary, collaborative",
             "scene_pool": ["airport_lounge", "conference", "fintech_bank", "luxury_car"],
@@ -438,7 +438,7 @@ class AudienceProfile:
                 "Why manual outreach is dead (and what replaced it)",
                 "The blueprint for market dominance in the P2P space"
             ],
-            "visual_base": "A sharp, modern growth strategist analyzing high-resolution data visualizations on a sleek holographic interface in a luxury penthouse office.",
+            "visual_base": "A sharp, modern growth strategist embodying 'Results Mastery'. Dressed in minimalist, high-status office-luxe; leaning forward with a sense of analytical obsession and tactical command.",
             "lead_magnets": ["The High-Conversion Funnel Blueprint", "Algorithmic Advantage: The Viral Loop Setup", "The 100x Growth Screener"],
             "cta_style": "Data-backed, high-conversion",
             "scene_pool": ["coworking", "fintech_bank", "conference", "rooftop_dubai"],
@@ -471,7 +471,7 @@ class AudienceProfile:
                 "The 'Set and Forget' system for global network expansion",
                 "How I automated the growth of 1,000+ partners"
             ],
-            "visual_base": "A tech-savvy entrepreneur relaxing in a futuristic high-tech lounge, while autonomous systems glow softly around them representing a network in motion.",
+            "visual_base": "A tech-savvy entrepreneur and 'Magician of Systems'. Captured relaxed in a high-tech setting, reflecting the spirit of 'set and forget' wealth. A sense of cool, effortless command over complex systems.",
             "lead_magnets": ["The Hands-Free Wealth Protocol", "Infinite Scale: The Automation Stack", "The Set and Forget Setup Guide"],
             "cta_style": "System-focused, efficiency-driven",
             "scene_pool": ["luxury_life", "coworking", "airport_lounge", "rooftop_dubai"],
@@ -504,7 +504,7 @@ class AudienceProfile:
                 "How the new elite are building legacies through P2P networks",
                 "Transform your network into an unstoppable global powerhouse"
             ],
-            "visual_base": "A powerful and visionary leader overlooking a vast, modern city at dusk from a private infinity pool deck, embodying ultimate status and success.",
+            "visual_base": "A powerful and visionary 'Ruler' of a global dynasty. Captured overlooking a vast metropolitan landscape; embodying ultimate status, power, and generational success. High-status, commanding posture.",
             "lead_magnets": ["The Empire Architecture Blueprint", "Generational Wealth Dynasty Guide", "The $1/Minute Roadmap"],
             "cta_style": "Legacy-themed, visionary",
             "scene_pool": ["luxury_life", "luxury_car", "rooftop_dubai", "fintech_bank"],
@@ -549,7 +549,7 @@ class AudienceProfile:
                 "Your assets should be as mobile as you are. Here is the protocol.",
                 "Building a dollarized bridge to support my family from any continent."
             ],
-            "visual_base": "A poised and determined 'Global Sovereign' in a high-contrast luxury transit setting. Minimalist yet premium travel gear, natural light hitting architectural windows, a sense of absolute calm and purposeful mobility.",
+            "visual_base": "A poised and determined 'Pioneer' in a high-contrast transit setting. Premium travel gear, a sense of absolute calm and purposeful mobility. The embodiment of border-free financial identity.",
             "lead_magnets": ["The Sovereign Traveler's Financial Toolkit", "Zero-Fee Remittance: The 2026 Guide", "The Portable Wealth Blueprint"],
             "cta_style": "Safety-focused, empowering",
             "scene_pool": ["luxury_train", "airport_lounge", "cafe_nomad", "luxury_life"],

@@ -173,3 +173,13 @@ LUXURY_SCENE_POOL: Final[dict[str, str]] = {
     "cafe_nomad": "At a high-end oceanfront café in Lisbon or Bali. The subject in premium casual wear, MacBook open with financial tools, turquoise sea in the background. Professional but completely free.",
     "luxury_train": "Inside a wood-paneled, high-status luxury train compartment (e.g., Orient Express style but modern). Looking at a smartphone with financial charts, a view of the Swiss Alps rushing by through the window."
 }
+
+# Tone-Specific Visual Grading for high-resonance images
+VISUAL_GRADING_MAP: Final[dict[str, str]] = {
+    "provocative": "LIGHTING: Chiaroscuro style. Hard rim lighting, deep shadows, and high contrast. MOOD: Rebellious and intense. COLOR: Desaturated with cold highlights.",
+    "authoritative": "LIGHTING: Sophisticated and balanced. Soft northern light with minimal shadows. MOOD: Calm, architectural, and serious. COLOR: Neutral, monochromatic, and expensive-looking.",
+    "empathetic": "LIGHTING: Warm golden hour glow. Natural lens flares and soft diffuse light. MOOD: Compassionate, human, and inviting. COLOR: Warm color temperature, rich organic tones.",
+    "cynical": "LIGHTING: Raw, candid DSLR flash or harsh midday sun shadows. MOOD: Analytical and unfiltered. COLOR: Natural, raw, slightly gritty analog film vibes.",
+    "minimalist": "LIGHTING: High-key, clean, and ethereal. Soft shadows and bright, airy atmosphere. MOOD: Pure and essential. COLOR: Whites, greys, and subtle pastel accents.",
+    "aggressive": "LIGHTING: Dynamic and punchy. High-energy contrast, side-lighting that emphasizes texture. MOOD: Relentless and forward-leaning. COLOR: Vibrant but natural saturations.",
+}

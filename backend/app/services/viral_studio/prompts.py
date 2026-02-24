@@ -15,6 +15,7 @@ from .constants import (
     LUXURY_SCENE_POOL,
     STORYTELLING_PROTOCOL,
     TEXT_RULES,
+    VISUAL_GRADING_MAP,
 )
 
 
@@ -215,54 +216,69 @@ _GENDER_VARIANTS = [
 ]
 
 
-def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
+def build_viral_image_prompt(intel: dict, tone: str | None = None, post_content: str = "") -> str:
+    """
+    Builds a high-status, photorealistic image prompt using a Layered Architecture.
+    Layers: Foundation (Rules) -> Environment (Scene) -> Subject (Audience) -> Grading (Tone) -> Detail (Strategy)
+    """
     audience_intel = intel.get("audience", {})
     category_strategy = intel.get("strategy", {})
+    
+    # ── 1. FOUNDATION LAYER (Global Rules) ──────────────────────────────────
+    foundation = f"{IMAGE_RULES}\n"
 
-    # 🎯 DYNAMIC LUXURY SCENE SELECTION ENGINE
+    # ── 2. ENVIRONMENT LAYER (Strategic Scene) ──────────────────────────────
     audience_scenes = audience_intel.get("scene_pool", ["coworking"])
     strategy_scenes = category_strategy.get("scene_bias", ["luxury_life"])
-
-    # First priority: Intersection of audience preference and strategy bias
     preferred_pool = [s for s in audience_scenes if s in strategy_scenes]
-    # Fallback: Combine both lists
     fallback_pool = list(set(audience_scenes + strategy_scenes))
-    # Final pool to pick from
     final_pool = preferred_pool if preferred_pool else fallback_pool
-    # Choose a random scene
+    
     selected_scene_key = random.choice(final_pool)
     scene_description = LUXURY_SCENE_POOL.get(selected_scene_key, "An authoritative and sophisticated setting.")
+    environment_layer = f"SCENE SETUP: {scene_description}\n"
 
-    audience_desc = audience_intel.get(
+    # ── 3. SUBJECT LAYER (Audience Identity) ────────────────────────────────
+    audience_visual = audience_intel.get(
         "visual_base",
         "An authoritative and sophisticated individual of undeniable status.",
     )
-
-    # ── Gender diversity injection ─────────────────────────────────────────────
+    
+    # Gender diversity injection
     gender = random.choice(_GENDER_VARIANTS)
     gender_directive = (
         f"SUBJECT GENDER (MANDATORY): The central human subject MUST be {gender['subject']} "
         f"({gender['descriptors']}). This is a strict requirement — do not substitute "
-        f"with the opposite gender or a group of people."
+        f"with the opposite gender or a group of people.\n"
     )
-    # ──────────────────────────────────────────────────────────────────────────
+    subject_layer = f"SUBJECT DESCRIPTION: {audience_visual}\n{gender_directive}"
 
-    # Extract core theme from content if provided
-    theme_context = ""
+    # ── 4. GRADING & MOOD LAYER (Tone Resonance) ────────────────────────────
+    # Fallback to 'authoritative' grading if tone is unknown
+    tone_key = (tone or "authoritative").lower().split()[0] # Get first word (e.g. 'empathetic' from 'Empath')
+    grading_instruction = VISUAL_GRADING_MAP.get(tone_key, VISUAL_GRADING_MAP["authoritative"])
+    grading_layer = f"VISUAL DNA: {grading_instruction}\n"
+
+    # ── 5. DETAIL LAYER (Contextual Strategy Hook) ─────────────────────────
+    # Subtly inject the strategy-specific visual scene
+    strategy_hook = category_strategy.get("visual_scene", "")
+    detail_layer = f"CONTEXTUAL DETAIL: {strategy_hook}\n" if strategy_hook else ""
+    
     if post_content:
         clean_content = post_content.replace("\n", " ")[:250]
-        theme_context = f"CONTEXTUAL THEME: {clean_content}\n"
+        detail_layer += f"CONTENT THEME: {clean_content}\n"
 
+    # ── ASSEMBLY ───────────────────────────────────────────────────────────
     return (
-        f"{IMAGE_RULES}\n\n"
-        f"{gender_directive}\n"
-        f"SCENE SETUP: {scene_description} {audience_desc}\n"
-        f"{theme_context}"
-        f"EMOTION: Deep empathy, authenticity, and high-status human resonance. The image must feel like a soul-to-soul transmission, not just a professional shot. \n"
-        f"ATMOSPHERE: Visionary breakthrough, calm authority, and a sense of 'reached a finish line' freedom. \n"
-        f"LIGHTING: Masterful cinematic lighting with natural depth and warmth. \n"
-        f"SPECS: Photorealistic 8K, depth of field, sharp focus on eyes (the windows to the soul), rich organic textures, award-winning photography.\n"
-        f"CRITICAL: DO NOT render any text, words, letters, logos, or titles in the image. The image must be completely TEXT-FREE."
+        f"{foundation}\n"
+        f"{environment_layer}"
+        f"{subject_layer}"
+        f"{grading_layer}"
+        f"{detail_layer}\n"
+        f"EMOTION: High-status human resonance and deep authenticity. \n"
+        f"ATMOSPHERE: Visionary breakthrough, calm authority, and absolute freedom. \n"
+        f"SPECS: Photorealistic 8K, shallow depth of field, sharp focus on eyes, rich organic textures, award-winning photography.\n"
+        f"CRITICAL: DO NOT render any text, words, letters, logos, or titles. The image must be completely TEXT-FREE."
     )
 
 

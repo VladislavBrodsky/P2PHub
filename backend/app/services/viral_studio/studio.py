@@ -155,12 +155,11 @@ class ViralMarketingStudio:
             system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)
             user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history)
             
-            # Baseline image prompt recorded for logging (even if generated in parallel)
-            baseline_image_prompt = prompts.build_viral_image_prompt(intel, "") 
-            image_prompt = baseline_image_prompt
+            # 🖼️ GENERATE IMAGE PROMPT (Baseline for parallel execution)
+            image_prompt = prompts.build_viral_image_prompt(intel, tone=tone_of_voice, post_content="")
 
             text_task = self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
-            image_task = self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus)
+            image_task = self._generate_image(image_prompt, partner.id, is_pro_plus=is_pro_plus)
             
             # Fire both engines in parallel with a strict global cutoff
             (res_json, tokens_openai), image_url = await asyncio.wait_for(
