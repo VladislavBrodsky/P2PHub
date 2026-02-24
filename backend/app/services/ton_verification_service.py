@@ -115,15 +115,15 @@ class TonVerificationService:
                             partner = res_p.first()
                             
                             if partner:
-                                    await payment_service.upgrade_to_pro(
-                                        session=session,
-                                        partner=partner,
-                                        amount=_ptx.amount,
-                                        currency=_ptx.currency,
-                                        network=_ptx.network,
-                                        tx_hash=_btx_hash,
-                                        transaction_id=_ptx.id
-                                    )
+                                await payment_service.upgrade_to_pro(
+                                    session=session,
+                                    partner=partner,
+                                    amount=_ptx.amount,
+                                    currency=_ptx.currency,
+                                    network=_ptx.network,
+                                    tx_hash=_btx_hash,
+                                    transaction_id=_ptx.id
+                                )
                                 logger.info(f"🚀 Auto-upgraded Partner {partner.id} via Observer")
                                 break # Move to next pending transaction
 
@@ -154,6 +154,11 @@ class TonVerificationService:
         # For now, we assume standard normalization to lowercase.
         return address.strip().lower()
 
+    async def _verify_via_toncenter(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str) -> bool:
+        try:
+            client = await http_client.get_client()
+            params = {"tx_hash": tx_hash, "api_key": self.api_key}
+            response = await client.get(f"{self.base_url}/getTransaction", params=params, timeout=10.0)
             if response.status_code == 200:
                 data = response.json()
                 if data.get("ok"):
@@ -194,6 +199,12 @@ class TonVerificationService:
             logger.error(f"Heuristic Verification Failed: {e}")
             return False
 
+    async def _verify_via_tonapi(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str) -> bool:
+        try:
+            # Note: TonAPI often uses different URL structure, but for this fallback 
+            # we'll assume a similar pattern or a proxy if configured.
+            client = await http_client.get_client()
+            response = await client.get(f"https://tonapi.io/v2/blockchain/transactions/{tx_hash}", timeout=10.0)
             if response.status_code == 200:
                 tx = response.json()
                 
