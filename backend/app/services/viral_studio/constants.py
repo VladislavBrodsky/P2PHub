@@ -64,10 +64,10 @@ FORMATTING_MASTERY: Final[str] = """
    - Limit: 4-6 instances per post maximum
    - Examples: **WARNING**, **3X faster**, **Join 10,000+ members**
 
-2. *ITALIC TEXT* syntax: _text_
-   - Use for: Subtle emphasis, insider whispers, personal asides
-   - Limit: 2-3 instances per post
-   - Examples: _This changed everything_, _not many people know this_
+2. **ITALIC TEXT / EMPHASIS:** 
+   - CRITICAL: **NEVER use _underscore_ formatting** for italics. It renders literally on social platforms.
+   - For word-level emphasis, use ALL CAPS instead (e.g., "This changed EVERYTHING").
+   - NEVER wrap brand names in underscores (e.g., write 'Pintopay' NOT '_Pintopay_').
 
 3. **HYPERLINKS** syntax: [Anchor Text](URL)
    - PRIMARY CTA: Must appear in final paragraph with action-oriented anchor
@@ -161,3 +161,15 @@ ULTRA-REALISTIC PHOTOGRAPHIC SPECIFICATION (2026 ELITE CMO STANDARD):
 """
 
 
+# Luxury Scene Library for Dynamic Image Generation
+LUXURY_SCENE_POOL: Final[dict[str, str]] = {
+    "fintech_bank": "Inside a high-stakes investment bank trading floor. Multiple glowing Bloomberg terminals, a sleek mahogany desk, and the city skyline visible through floor-to-ceiling glass at dusk. Shot on Leica M11, 35mm f/1.4.",
+    "coworking": "Inside an ultra-modern, minimalist co-working sanctuary with exposed concrete, lush indoor plants, premium Herman Miller seating, and soft, natural overhead lighting. Rhythmic and focused atmosphere.",
+    "conference": "The backstage keynote speakers' lounge at a global Web3 summit. High-resolution holographic displays in the background, cinematic side-lighting, name lanyard subtly visible. Atmosphere of elite intellectual mastery.",
+    "airport_lounge": "The private upper deck of a quiet international aviation hub (VIP Business Lounge). Golden hour light hitting champagne flutes and premium leather seating. A sense of absolute calm and global mobility.",
+    "luxury_life": "A high-end urban environment at night. Evening light reflecting off sleek glass and steel. The subject stepping out of a high-status establishment (e.g., a private club or Michelin-star restaurant).",
+    "luxury_car": "Leaning against a polished black Porsche Cayenne or high-performance electric SUV in a private, well-lit underground facility or outside a minimalist modern villa. High-status and powerful.",
+    "rooftop_dubai": "On a private rooftop terrace in Dubai Marina at sunset. Luxury high-rises surrounding, a sleek glass table with a laptop, warm amber light giving a cinematic editorial feel.",
+    "cafe_nomad": "At a high-end oceanfront café in Lisbon or Bali. The subject in premium casual wear, MacBook open with financial tools, turquoise sea in the background. Professional but completely free.",
+    "luxury_train": "Inside a wood-paneled, high-status luxury train compartment (e.g., Orient Express style but modern). Looking at a smartphone with financial charts, a view of the Swiss Alps rushing by through the window."
+}

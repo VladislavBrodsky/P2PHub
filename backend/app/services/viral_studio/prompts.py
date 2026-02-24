@@ -12,6 +12,7 @@ from .constants import (
     CMO_PERSONA,
     FORMATTING_MASTERY,
     IMAGE_RULES,
+    LUXURY_SCENE_POOL,
     STORYTELLING_PROTOCOL,
     TEXT_RULES,
 )
@@ -211,18 +212,26 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
     audience_intel = intel.get("audience", {})
     category_strategy = intel.get("strategy", {})
 
+    # 🎯 DYNAMIC LUXURY SCENE SELECTION ENGINE
+    audience_scenes = audience_intel.get("scene_pool", ["coworking"])
+    strategy_scenes = category_strategy.get("scene_bias", ["luxury_life"])
+
+    # First priority: Intersection of audience preference and strategy bias
+    preferred_pool = [s for s in audience_scenes if s in strategy_scenes]
+    # Fallback: Combine both lists
+    fallback_pool = list(set(audience_scenes + strategy_scenes))
+    # Final pool to pick from
+    final_pool = preferred_pool if preferred_pool else fallback_pool
+    # Choose a random scene
+    selected_scene_key = random.choice(final_pool)
+    scene_description = LUXURY_SCENE_POOL.get(selected_scene_key, "An authoritative and sophisticated setting.")
+
     audience_desc = audience_intel.get(
         "visual_base",
         "An authoritative and sophisticated individual of undeniable status.",
     )
-    scene_desc = category_strategy.get(
-        "visual_scene",
-        "navigating a moment of high-stakes breakthrough in a private, ultra-modern setting.",
-    )
 
     # ── Gender diversity injection ─────────────────────────────────────────────
-    # Randomly pick between a man and an attractive woman so the generated images
-    # are diverse across sessions instead of always defaulting to a male subject.
     gender = random.choice(_GENDER_VARIANTS)
     gender_directive = (
         f"SUBJECT GENDER (MANDATORY): The central human subject MUST be {gender['subject']} "
@@ -234,14 +243,13 @@ def build_viral_image_prompt(intel: dict, post_content: str = "") -> str:
     # Extract core theme from content if provided
     theme_context = ""
     if post_content:
-        # Use a short snippet to guide the AI without over-complicating
         clean_content = post_content.replace("\n", " ")[:250]
         theme_context = f"CONTEXTUAL THEME: {clean_content}\n"
 
     return (
         f"{IMAGE_RULES}\n\n"
         f"{gender_directive}\n"
-        f"SCENE SETUP: {audience_desc} {scene_desc} \n"
+        f"SCENE SETUP: {scene_description} {audience_desc}\n"
         f"{theme_context}"
         f"EMOTION: Deep empathy, authenticity, and high-status human resonance. The image must feel like a soul-to-soul transmission, not just a professional shot. \n"
         f"ATMOSPHERE: Visionary breakthrough, calm authority, and a sense of 'reached a finish line' freedom. \n"
