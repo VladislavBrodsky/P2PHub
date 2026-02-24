@@ -9,7 +9,7 @@ import {
 import { useTranslation, Trans } from 'react-i18next';
 import { proService, PROStatus } from '../../../services/proService';
 import { getApiUrl } from '../../../utils/api';
-import { renderMarkdown } from '../utils/renderMarkdown';
+import { renderMarkdown, sanitizeAIGeneratedText } from '../utils/renderMarkdown';
 import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages as defaultLanguages, tones as defaultTones } from '../utils/constants';
 import { socialLogos } from '../utils/socialLogos';
 import { PremiumSelect } from '../components/PremiumSelect';
@@ -347,9 +347,11 @@ export const StudioTab = ({
 
     const getCleanShareText = () => {
         if (!generatedResult) return '';
-        // Handle literal \n glitch
-        const sanitizedBody = generatedResult.body.replace(/\\n/g, '\n');
+
+        const sanitizedBody = sanitizeAIGeneratedText(generatedResult.body);
+
         // Convert Markdown links [text](url) to "text: url" for plain text sharing
+        // We do this AFTER sanitizing to maintain consistency
         const cleanBody = sanitizedBody.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
 
@@ -525,8 +527,7 @@ export const StudioTab = ({
         setIsPublishing(true);
         impact('heavy');
         try {
-            const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
-            const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+            const fullContent = getCleanShareText();
             // Pass specific TG channel if user chose one
             const channelOverride = platform === 'telegram' && selectedTgChannel ? selectedTgChannel : undefined;
             await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id, channelOverride);
@@ -545,8 +546,7 @@ export const StudioTab = ({
         impact('heavy');
 
         const results: { success: string[], fail: string[] } = { success: [], fail: [] };
-        const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
-        const fullContent = `${generatedResult.title}\n\n${generatedResult.body}\n\n${hashtagsStr}`;
+        const fullContent = getCleanShareText();
 
         for (const platform of selectedPublishPlatforms) {
             try {

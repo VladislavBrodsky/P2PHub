@@ -31,7 +31,7 @@ export const PartnerAcademy = () => {
                             </h2>
                             <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 uppercase tracking-wide drop-shadow-sm">
                                 <Trans i18nKey="academy.hero_desc">
-                                    Освойте пошаговую систему дохода <span className="text-blue-800 dark:text-blue-100 font-bold">$1 в минуту</span> с помощью ИИ.
+                                    Master the step-by-step income system <span className="text-blue-800 dark:text-blue-100 font-bold">$1 per minute</span> with AI.
                                 </Trans>
                             </p>
                         </div>

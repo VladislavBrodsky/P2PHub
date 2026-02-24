@@ -20,6 +20,7 @@
     "stage": "STAGE {{stage}}",
     "stage_title": "Stage {{stage}}",
     "academy_label": "Academy",
+    "unit_min": "min",
     "progress_to_pro": "Progress to PRO",
     "expand_higher": "Unlock Higher Stages",
     "mastery": "Stage {{stage}} Mastery",

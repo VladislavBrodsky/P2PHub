@@ -1,13 +1,13 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft } from 'lucide-react';
+import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft, Users } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useTMALock } from '../../hooks/useTMALock';
-import { renderMarkdown, renderInline } from '../../utils/renderMarkdown';
+import { renderMarkdown, renderInline, sanitizeAIGeneratedText } from '../../utils/renderMarkdown';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -69,7 +69,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
     const handleShareSecret = () => {
         const secret = t(`academy_content.stage_${stage.id}_lesson_secret`);
-        const text = `🔥 P2P Secret from Academy Stage ${stage.id}:\n\n"${secret}"\n\nJoin the elite floor with me: https://t.me/pintopay_bot?start=r_${user?.id}`;
+        const sanitizedSecret = sanitizeAIGeneratedText(secret);
+        const text = `🔥 P2P Secret from Academy Stage ${stage.id}:\n\n"${sanitizedSecret}"\n\nJoin the elite floor with me: https://t.me/pintopay_bot?start=r_${user?.id}`;
 
         if (navigator.share) {
             navigator.share({
@@ -208,25 +209,108 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                             /* Lesson Content View */
                             <div className="space-y-10">
-                                {/* Hero Image */}
-                                <div className="relative h-40 rounded-xl overflow-hidden -mx-1 shrink-0">
-                                    <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
-                                    <img
-                                        src="/images/academy_hero.webp"
-                                        alt=""
-                                        className="absolute inset-0 w-full h-full object-cover opacity-60"
-                                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                {/* Viral Network Core - Dynamic Hero Section */}
+                                <div className="relative h-56 rounded-2xl overflow-hidden -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
+                                    {/* Dot Grid Background */}
+                                    <div className="absolute inset-0 opacity-20"
+                                        style={{
+                                            backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
+                                            backgroundSize: '16px 16px'
+                                        }}
                                     />
-                                    <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-white dark:to-[#030712]" />
-                                    <div className="absolute bottom-3 left-4 right-4 z-10">
-                                        <div className="flex items-center gap-1.5 mb-1">
-                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/30 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-200 uppercase tracking-widest">
-                                                {t('academy.academy_label')} · {t('academy.stage_title', { stage: stage.id })}
-                                            </span>
+
+                                    {/* Animated Glow Curves */}
+                                    <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 200">
+                                        <motion.path
+                                            d="M -50 150 Q 100 50 250 150 T 450 100"
+                                            fill="none"
+                                            stroke="url(#blue-gradient)"
+                                            strokeWidth="2"
+                                            initial={{ pathLength: 0, opacity: 0 }}
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                        />
+                                        <motion.path
+                                            d="M -50 100 Q 150 180 300 80 T 450 150"
+                                            fill="none"
+                                            stroke="url(#purple-gradient)"
+                                            strokeWidth="1.5"
+                                            initial={{ pathLength: 0, opacity: 0 }}
+                                            animate={{ pathLength: 1, opacity: 1 }}
+                                            transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+                                        />
+                                        <defs>
+                                            <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+                                                <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+                                                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                                            </linearGradient>
+                                            <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+                                                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
+                                                <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+
+                                    {/* Central Avatar Container */}
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="relative">
+                                            {/* Pulsing Outer Glow */}
+                                            <motion.div
+                                                className="absolute -inset-4 rounded-full bg-blue-500/20 blur-2xl"
+                                                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+                                                transition={{ duration: 3, repeat: Infinity }}
+                                            />
+
+                                            {/* Avatar Frame */}
+                                            <motion.div
+                                                initial={{ scale: 0.8, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                className="relative w-28 h-28 rounded-2xl p-1 bg-linear-to-br from-blue-500 to-indigo-600 shadow-2xl"
+                                            >
+                                                <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-white/20">
+                                                    <img
+                                                        src={user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop"}
+                                                        alt="Partner"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                            </motion.div>
+
+                                            {/* Floating Nodes */}
+                                            <motion.div
+                                                className="absolute -left-12 top-4 px-3 py-1.5 rounded-full bg-emerald-500/90 backdrop-blur-md border border-emerald-400 flex items-center gap-2 shadow-lg z-20"
+                                                animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                            >
+                                                <div className="p-1 rounded-full bg-white/20">
+                                                    <Users className="w-3 h-3 text-white" />
+                                                </div>
+                                                <span className="text-[10px] font-black text-white tracking-wider">+$8.64</span>
+                                            </motion.div>
+
+                                            <motion.div
+                                                className="absolute -right-10 bottom-6 w-10 h-10 rounded-full bg-indigo-500/90 backdrop-blur-md border border-indigo-400 flex items-center justify-center shadow-lg z-20"
+                                                animate={{ y: [0, 10, 0], x: [0, -6, 0] }}
+                                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                            >
+                                                <Zap className="w-4 h-4 text-white fill-white" />
+                                            </motion.div>
                                         </div>
-                                        <h2 className="text-xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
-                                            {title}
-                                        </h2>
+                                    </div>
+
+                                    {/* Viral Core Badge */}
+                                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-8">
+                                        <motion.div
+                                            initial={{ y: 20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            className="w-full bg-white rounded-2xl py-3 px-4 shadow-2xl flex items-center justify-center border border-white/50 backdrop-blur-sm"
+                                        >
+                                            <span className="text-label font-black text-slate-900 uppercase tracking-[0.25em] whitespace-nowrap">
+                                                Viral Network Core
+                                            </span>
+                                        </motion.div>
                                     </div>
                                 </div>
 
@@ -238,6 +322,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 uppercase tracking-widest">
                                             {category}
                                         </div>
+                                        {stage.duration && (
+                                            <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 uppercase tracking-widest">
+                                                {stage.duration.replace('min', t('academy.unit_min', 'min'))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

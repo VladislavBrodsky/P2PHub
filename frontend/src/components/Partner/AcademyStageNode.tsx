@@ -43,7 +43,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             style={{}}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
-                "relative group cursor-pointer w-full h-[100px]",
+                "relative group cursor-pointer w-full h-[85px]",
                 isLocked && "cursor-not-allowed opacity-60"
             )}
         >
@@ -70,8 +70,8 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 cursor-pointer",
-                    isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.4)]" :
+                    "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-500 border-2 cursor-pointer",
+                    isCurrent ? "branding-liquid-gradient border-blue-400 shadow-[0_0_15px_rgba(37,99,235,0.4)]" :
                         isCompleted ? "bg-emerald-500/10 border-emerald-500/30" :
                             isLocked ? "bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 cursor-not-allowed" :
                                 "bg-white dark:bg-white/10 border-slate-200 dark:border-white/20 shadow-md"
@@ -92,7 +92,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                         isCompleted ? "text-emerald-500" :
                             isLocked ? "text-slate-400/50" : "text-blue-500"
                 )}>
-                    {isLocked ? <Lock className="w-6 h-6" /> : <stage.icon className="w-7 h-7" />}
+                    {isLocked ? <Lock className="w-4 h-4" /> : <stage.icon className="w-5 h-5" />}
                 </div>
 
                 {/* Status Badges */}
@@ -112,7 +112,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
 
                 {/* Stage Number Floating */}
                 <div className={cn(
-                    "absolute -bottom-1.5 left-1/2 -translate-x-1/2 whitespace-nowrap px-2 py-0.5 rounded-full text-label font-bold uppercase tracking-[0.2em] border z-30",
+                    "absolute -bottom-1 -left-1/2 translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-[0.15em] border z-30",
                     isCurrent ? "bg-blue-600 border-blue-400 text-white shadow-lg" :
                         "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-500"
                 )}>
@@ -126,10 +126,10 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                     if (!isLocked) onClick(stage);
                 }}
                 className={cn(
-                    "absolute top-1/2 -translate-y-1/2 w-[115px] min-[390px]:w-[145px] sm:w-[175px] flex flex-col p-3 rounded-2xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer shadow-xl",
+                    "absolute top-1/2 -translate-y-1/2 w-[110px] min-[390px]:w-[130px] sm:w-[155px] flex flex-col p-2.5 rounded-xl glass-panel-premium border-white/5 transition-all duration-500 group-hover:border-blue-500/30 group-hover:bg-white/10 dark:group-hover:bg-white/5 z-30 pointer-events-auto cursor-pointer shadow-xl",
                     isRightSide
-                        ? "left-1/2 translate-x-[40px] text-left items-start"
-                        : "left-1/2 -translate-x-[calc(100%+40px)] text-right items-end",
+                        ? "left-1/2 translate-x-[25px] text-left items-start"
+                        : "left-1/2 -translate-x-[calc(100%+25px)] text-right items-end",
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
@@ -150,7 +150,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                         isRightSide ? "mr-auto" : "ml-auto"
                     )}>
                         <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
-                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration?.replace('min', 'мин')}</span>
+                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration?.replace('min', t('academy.unit_min', 'min'))}</span>
                     </div>
                 )}
             </div>

@@ -4,6 +4,14 @@ import React from 'react';
  * Lightweight inline-markdown renderer.
  * Supports: **bold**, _italic_, `code`, and plain text.
  */
+export function sanitizeAIGeneratedText(text: string): string {
+    if (!text) return '';
+    return text
+        .replace(/\\n/g, '\n') // Handle literal \n
+        .replace(/\n\s*\n/g, '\n\n') // Normalize double newlines
+        .trim();
+}
+
 export function renderInline(text: string): React.ReactNode[] {
     const parts: React.ReactNode[] = [];
     // Regex that matches **bold**, _italic_, or `code`
@@ -46,8 +54,9 @@ export function renderInline(text: string): React.ReactNode[] {
 export function renderMarkdown(text: string | undefined | null): React.ReactNode {
     if (!text) return null;
 
+    const sanitizedText = sanitizeAIGeneratedText(text);
     // Split by double newlines (paragraph breaks)
-    const blocks = text.split(/\n\n+/);
+    const blocks = sanitizedText.split(/\n\n+/);
 
     return (
         <div className="space-y-4">

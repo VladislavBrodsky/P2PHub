@@ -20,6 +20,7 @@
     "stage": "УРОВЕНЬ {{stage}}",
     "stage_title": "Этап {{stage}}",
     "academy_label": "Академия",
+    "unit_min": "мин",
     "progress_to_pro": "Прогресс до PRO",
     "expand_higher": "Открыть следующие уровни",
     "mastery": "Мастерство уровня {{stage}}",

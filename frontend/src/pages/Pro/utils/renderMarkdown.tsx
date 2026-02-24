@@ -4,11 +4,18 @@
  */
 import React from 'react';
 
+export const sanitizeAIGeneratedText = (text: string) => {
+    if (!text) return '';
+    return text
+        .replace(/\\n/g, '\n') // Handle literal \n
+        .replace(/\n\s*\n/g, '\n\n') // Normalize double newlines
+        .trim();
+};
+
 export const renderMarkdown = (text: string, isInline = false) => {
     if (!text) return null;
 
-    // Pre-process to handle literal \n characters common in AI streamer content
-    const sanitizedText = text.replace(/\\n/g, '\n').replace(/\n\s*\n/g, '\n\n');
+    const sanitizedText = sanitizeAIGeneratedText(text);
 
     // Inline mode: just return a span with minimal processing
     if (isInline) {
