@@ -114,7 +114,7 @@ export const BentoGrid = () => {
     return (
         <section className="px-0 py-4 flex flex-col relative z-50 min-h-[400px]">
             {/* Carousel Container */}
-            <div className="relative w-full h-[380px]">
+            <div className="relative w-full h-[410px]">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
@@ -124,7 +124,7 @@ export const BentoGrid = () => {
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
-                            className="relative shrink-0 w-[280px] sm:w-[300px] h-[340px] snap-center cursor-pointer"
+                            className="relative shrink-0 w-[280px] sm:w-[320px] h-[360px] snap-center cursor-pointer"
                             style={{ perspective: '1000px' }}
                             onClick={() => toggleFlip(index)}
                         >
@@ -140,7 +140,7 @@ export const BentoGrid = () => {
                                         transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'
                                     }}
                                 >
-                                    <div className="absolute inset-0 p-7 h-full w-full">
+                                    <div className="absolute inset-0 p-5 sm:p-7 h-full w-full">
                                         <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
 
                                         <div className="relative z-10 flex flex-col gap-4 h-full">
@@ -191,26 +191,26 @@ export const BentoGrid = () => {
                                         transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'
                                     }}
                                 >
-                                    <div className="absolute inset-0 p-7 flex flex-col text-center justify-center items-center h-full w-full">
+                                    <div className="absolute inset-0 p-5 sm:p-7 flex flex-col text-center justify-between items-center h-full w-full">
                                         <div className={`absolute inset-0 bg-linear-to-br ${step.color} opacity-20 group-hover:opacity-40 transition-opacity`} />
 
-                                        <div className="relative z-10 flex flex-col items-center justify-center h-full gap-4">
-                                            <div className="p-4 rounded-full bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg mb-2 text-text-primary">
+                                        <div className="relative z-10 flex flex-col items-center justify-center p-2 mb-2">
+                                            <div className="p-3.5 sm:p-4 rounded-full bg-white/50 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 shadow-lg mb-2 text-text-primary">
                                                 {getBackIcon(index)}
                                             </div>
 
-                                            <div className="flex flex-col gap-2">
+                                            <div className="flex flex-col gap-2 mb-auto">
                                                 <h4 className="text-sm font-bold uppercase text-text-primary tracking-widest leading-tight">
                                                     {t(`dashboard:evolution.steps.${step.id}.back_title`)}
                                                 </h4>
 
-                                                <p className="text-caption font-medium text-text-secondary leading-relaxed max-w-[260px] mx-auto">
+                                                <p className="text-caption font-medium text-text-secondary leading-relaxed max-w-[260px] mx-auto line-clamp-4">
                                                     {t(`dashboard:evolution.steps.${step.id}.back_desc`)}
                                                 </p>
                                             </div>
 
                                             {index >= 3 && (
-                                                <button className="mt-2 px-6 py-2.5 rounded-xl text-label font-bold uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 shadow-lg bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700">
+                                                <button className="mt-4 mb-2 w-full px-6 py-3 rounded-xl text-label font-bold uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-95 shadow-lg bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700">
                                                     {t('marketing:income.cta.join')}
                                                 </button>
                                             )}
