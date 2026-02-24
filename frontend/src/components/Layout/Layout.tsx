@@ -72,7 +72,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch] no-scrollbar"
                     style={{
                         overscrollBehaviorY: 'none',
-                        paddingTop: !isHeaderVisible ? '0px' : ['pro', 'partner', 'cards', 'league', 'earn'].includes(activeTab) ? '138px' : 'var(--header-total-height, 160px)',
+                        paddingTop: !isHeaderVisible ? '0px' : ['pro', 'partner', 'cards', 'league', 'earn', 'admin', 'blog', 'faq'].includes(activeTab) ? '138px' : 'var(--header-total-height, 160px)',
                         paddingBottom: 'calc(var(--bottom-nav-height, 80px) + var(--spacing-safe-bottom, 24px) + 20px)'
                     }}
                 >

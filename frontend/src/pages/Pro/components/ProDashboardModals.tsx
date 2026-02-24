@@ -348,7 +348,7 @@ export const ProDashboardModals = ({
 
                                         {/* Telegram (PRO) */}
                                         {activeProPlatform === 'tg' && (
-                                            <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-5 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 space-y-4 shadow-xs">
+                                            <motion.div key="pro-tg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 space-y-4 shadow-xs">
                                                 <div className="flex items-center gap-3 bg-sky-500/5 -mx-4 -mt-4 p-4 border-b border-sky-500/15">
                                                     <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center text-white shadow-md shadow-sky-500/20 shrink-0">
                                                         <Send size={18} className="-ml-0.5" />
@@ -391,7 +391,7 @@ export const ProDashboardModals = ({
 
                                         {/* X (PRO) */}
                                         {activeProPlatform === 'x' && (
-                                            <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-5 rounded-[1.5rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 space-y-4 shadow-xs">
+                                            <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 space-y-4 shadow-xs">
                                                 <div className="flex items-center gap-3 bg-indigo-500/5 -mx-4 -mt-4 p-4 border-b border-indigo-500/15">
                                                     <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
                                                         <Network size={18} />
@@ -453,7 +453,7 @@ export const ProDashboardModals = ({
                                                 {/* Headline */}
                                                 <div className="space-y-1.5">
                                                     <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
-                                                        <Trans i18nKey="pro_dashboard.setup.teaser.title">
+                                                        <Trans t={t} i18nKey="pro_dashboard.setup.teaser.title">
                                                             Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                         </Trans>
                                                     </h4>
@@ -592,7 +592,7 @@ export const ProDashboardModals = ({
 
                                                 {/* X (Twitter) PRO+ */}
                                                 {activePlusPlatform === 'x' && (
-                                                    <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
@@ -625,7 +625,7 @@ export const ProDashboardModals = ({
 
                                                 {/* LinkedIn */}
                                                 {activePlusPlatform === 'linkedin' && (
-                                                    <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-contain p-1" />
@@ -646,7 +646,7 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                <Trans i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
+                                                                <Trans t={t} i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
                                                                     Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
                                                                 </Trans>
                                                             </p>
@@ -656,7 +656,7 @@ export const ProDashboardModals = ({
 
                                                 {/* Pinterest */}
                                                 {activePlusPlatform === 'pinterest' && (
-                                                    <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-pi" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-rose-500/5 border-b border-rose-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#BD081C] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.pinterest} alt="Pinterest" className="w-full h-full object-contain p-1" />
@@ -677,7 +677,7 @@ export const ProDashboardModals = ({
                                                                 className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                             />
                                                             <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                                <Trans i18nKey="pro_dashboard.setup.pinterest.dev_portal_desc">
+                                                                <Trans t={t} i18nKey="pro_dashboard.setup.pinterest.dev_portal_desc">
                                                                     Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-bold">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
                                                                 </Trans>
                                                             </p>
@@ -687,7 +687,7 @@ export const ProDashboardModals = ({
 
                                                 {/* Threads */}
                                                 {activePlusPlatform === 'threads' && (
-                                                    <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-tr" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-emerald-500/5 border-b border-emerald-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5 dark:invert" />
@@ -718,7 +718,7 @@ export const ProDashboardModals = ({
 
                                                 {/* Facebook */}
                                                 {activePlusPlatform === 'facebook' && (
-                                                    <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-fb" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-blue-500/5 border-b border-blue-500/15">
                                                             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.facebook} alt="Facebook" className="w-full h-full object-contain p-1" />
@@ -749,7 +749,7 @@ export const ProDashboardModals = ({
 
                                                 {/* Discord */}
                                                 {activePlusPlatform === 'discord' && (
-                                                    <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-[1.5rem] sm:rounded-[2rem] border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
+                                                    <motion.div key="plus-dc" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
                                                         <div className="flex items-center gap-3 p-4 sm:p-5 bg-[#5865F2]/5 border-b border-[#5865F2]/15">
                                                             <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                                 <img src={socialLogos.discord} alt="Discord" className="w-full h-full object-contain p-1" />

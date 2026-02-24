@@ -424,7 +424,7 @@ export default function ReferralPage() {
                                     {/* Footer Info */}
                                     <div className="text-center pb-2">
                                         <p className="text-label text-slate-400 font-medium">
-                                            <Trans i18nKey="referral.modal.boost_desc">
+                                            <Trans t={t} i18nKey="referral.modal.boost_desc">
                                                 Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>.
                                             </Trans>
                                         </p>
@@ -456,13 +456,13 @@ export default function ReferralPage() {
                             <div className="text-center space-y-6">
                                 <div className="space-y-2 pt-2">
                                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">
-                                        <Trans i18nKey="referral.qr.title">
+                                        <Trans t={t} i18nKey="referral.qr.title">
                                             Claim Your <br />
                                             <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>
                                         </Trans>
                                     </h3>
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                        <Trans i18nKey="referral.qr.desc">
+                                        <Trans t={t} i18nKey="referral.qr.desc">
                                             Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
                                             Build your empire now.
                                         </Trans>

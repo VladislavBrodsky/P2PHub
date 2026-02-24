@@ -201,7 +201,7 @@ export default function FAQPage() {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-bold text-text-primary tracking-tighter leading-none mb-4 uppercase"
                 >
-                    <Trans i18nKey="faq.header_title" components={{ 0: <span className="text-blue-500" /> }} />
+                    <Trans t={t} i18nKey="faq.header_title" components={{ 0: <span className="text-blue-500" /> }} />
                 </motion.h1>
                 <p className="text-text-secondary font-medium text-xs max-w-[280px] leading-relaxed opacity-70">
                     {t('faq.header_desc')}
@@ -336,7 +336,7 @@ export default function FAQPage() {
                 <div className="p-8 rounded-3xl bg-linear-to-br from-blue-600 to-blue-800 text-white relative overflow-hidden shadow-2xl shadow-blue-500/30">
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 blur-3xl rounded-full" />
                     <h2 className="text-2xl font-bold mb-2 uppercase tracking-tighter italic">
-                        <Trans i18nKey="faq.still_have_questions" components={{ 0: <span className="text-white/60" /> }} />
+                        <Trans t={t} i18nKey="faq.still_have_questions" components={{ 0: <span className="text-white/60" /> }} />
                     </h2>
                     <p className="text-white/70 text-xs font-medium mb-6 leading-relaxed">
                         {t('faq.still_have_questions_desc')}

@@ -40,6 +40,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
             title: t('brief.goal_title'),
             content: (
                 <Trans
+                    t={t}
                     i18nKey="brief.goal_desc"
                     components={{
                         1: <span className="text-slate-900 dark:text-white font-bold" />,
