@@ -38,11 +38,26 @@ async def post_to_x(partner: Partner, content: str, image_path: str | None) -> d
                 media_ids = [media.media_id]
                 logger.info(f"✅ X Media Upload Successful: {media.media_id}")
 
-        # Transform HTML to Newlines
+        # Strip ALL markdown: html tags, links, bold (**), italic (*, _), headers
         clean_content = content.replace("<br>", "\n").replace("<p>", "").replace("</p>", "\n")
         clean_content = re.sub(r'<[^>]*>', '', clean_content)
-        clean_content = re.sub(r'\[(.*?)\]\((https?://.*?)\)', r'\1: \2', clean_content)
-        clean_content = clean_content.replace('**', '').replace('__', '').replace('*', '')
+        # Convert markdown links to "text: url" or just url if text is generic
+        def _clean_link(m):
+            text, url = m.group(1), m.group(2)
+            text = re.sub(r'^CTA:\s*', '', text, flags=re.IGNORECASE)
+            if text.lower() in ('here', 'link', 'click here'):
+                return url
+            return f'{text}: {url}'
+        clean_content = re.sub(r'\[([^\]]+)\]\((https?://[^)]+)\)', _clean_link, clean_content)
+        # Strip bold/italic: **text**, __text__, *text*, _text_
+        clean_content = re.sub(r'\*\*(.*?)\*\*', r'\1', clean_content)
+        clean_content = re.sub(r'__(.*?)__', r'\1', clean_content)
+        clean_content = re.sub(r'\*(.*?)\*', r'\1', clean_content)
+        clean_content = re.sub(r'_(\w[^_]*\w)_|_(\w)_', lambda m: m.group(1) or m.group(2), clean_content)
+        # Strip markdown headers (# ##)
+        clean_content = re.sub(r'^#{1,3}\s+', '', clean_content, flags=re.MULTILINE)
+        # Normalize whitespace
+        clean_content = re.sub(r'[ \t]{2,}', ' ', clean_content)
 
         final_text = clean_content.strip()
         response = await loop.run_in_executor(None, lambda: client.create_tweet(text=final_text, media_ids=media_ids if media_ids else None))

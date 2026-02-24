@@ -345,6 +345,24 @@ export const StudioTab = ({
         };
     }, [handleGenerate, setExternalStep]);
 
+    // Strip all markdown syntax for platforms that don't support it (X, WhatsApp, etc)
+    const stripMarkdownForPlainText = (text: string): string => {
+        return text
+            // Remove **bold** and __bold__
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/__(.*?)__/g, '$1')
+            // Remove *italic* and _italic_
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/_(.*?)_/g, '$1')
+            // Remove headers (#, ##, ###)
+            .replace(/^#{1,3}\s+/gm, '')
+            // Remove [CTA:text](url) patterns to just url
+            .replace(/\[CTA:\s*(.*?)\]\s*\([^)]+\)/g, '$1')
+            // Clean up any double spaces or trailing spaces per line
+            .replace(/[ \t]{2,}/g, ' ')
+            .trim();
+    };
+
     const getCleanShareText = (platform?: 'x' | 'telegram' | 'whatsapp' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
         if (!generatedResult) return '';
 
@@ -355,7 +373,7 @@ export const StudioTab = ({
             const cleanText = text.replace(/^CTA:\s*/i, '');
 
             if (platform === 'telegram') {
-                // Telegram supports HTML/Markdown links
+                // Telegram supports Markdown links
                 return `[${cleanText}](${url})`;
             }
 
@@ -363,9 +381,13 @@ export const StudioTab = ({
             if (cleanText.toLowerCase() === 'here' || cleanText.toLowerCase() === 'link') return url;
             return `${cleanText}: ${url}`;
         });
+
+        // Strip all markdown for platforms that render it literally (X, WhatsApp, etc)
+        const finalBody = (platform !== 'telegram') ? stripMarkdownForPlainText(cleanBody) : cleanBody;
+
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
 
-        let text = `${generatedResult.title}\n\n${cleanBody}`;
+        let text = `${generatedResult.title}\n\n${finalBody}`;
 
         // Append viral hashtags and existing ones
         const viralHashtags = ['#1Dollar1Minute', '#PassiveIncome', '#FinancialFreedom', '#P2PHub'];

@@ -116,6 +116,7 @@ All output (title, body, hashtags) MUST be in {language}.
 Write as a high-status NATIVE {language} CMO. Every word must feel earned, authentic, and sophisticated.
 
 **OUTPUT FORMAT (JSON ONLY):**
+**CRITICAL FORMATTING RULE:** NEVER use _underscore_ formatting for italics. It renders literally on X (Twitter) and Telegram. Use CAPS for emphasis instead. Do NOT wrap brand names in underscores (e.g., write 'Pintopay' NOT '_Pintopay_').
 {{
   "title": "A high-status strategic title <10 words",
   "body": "**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
@@ -287,7 +288,7 @@ Structure:
   - Close: {structure.get('close', 'Strong CTA')}
 Psychological Triggers to Activate: {', '.join(triggers[:4])}
 Bold Text For: {', '.join(formatting.get('bold', [])[:3]) if isinstance(formatting.get('bold'), list) else 'Key benefits, stats, CTAs'}
-Italic Text For: {', '.join(formatting.get('italic', [])[:2]) if isinstance(formatting.get('italic'), list) else 'Subtle emphasis'}
+NOTE: Do NOT use _italic_ (underscores) formatting as it renders literally on social platforms.
 Hyperlink Strategy: {', '.join(formatting.get('hyperlink', [])[:2]) if isinstance(formatting.get('hyperlink'), list) else 'Primary CTA in final paragraph'}
 Visual Scene: {category_strategy.get('visual_scene', 'High-impact breakthrough')}
 """
