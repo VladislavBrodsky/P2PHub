@@ -104,11 +104,17 @@ export const BlogCarousel = () => {
                             </div>
 
                             <div className="mt-auto pt-4 flex items-center justify-between border-t border-slate-200 dark:border-white/10">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-full bg-blue-500/10 flex items-center justify-center text-label font-bold text-blue-500 border border-blue-500/10 shadow-inner">
-                                        {post.author.charAt(0)}
+                                <div className="flex items-center gap-2 group/author">
+                                    <div className="w-6 h-6 rounded-lg bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-px overflow-hidden group-hover/author:from-blue-500/40 transition-colors">
+                                        <div className="w-full h-full rounded-[calc(0.5rem-1px)] bg-slate-50 dark:bg-slate-900 flex items-center justify-center overflow-hidden">
+                                            {post.authorImage ? (
+                                                <img src={post.authorImage} className="w-full h-full object-cover" alt="" />
+                                            ) : (
+                                                <span className="text-[9px] font-bold text-blue-500">{post.author.charAt(0)}</span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-wider">
+                                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 opacity-80 uppercase tracking-widest group-hover/author:text-blue-500 transition-colors">
                                         {post.author}
                                     </span>
                                 </div>

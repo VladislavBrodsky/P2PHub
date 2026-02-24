@@ -407,9 +407,10 @@ async def upgrade_from_balance(
     if partner.balance < price:
         raise HTTPException(status_code=400, detail=f"Insufficient balance. Need ${price}")
 
-    # Deduct Balance
-    partner.balance = Partner.balance - price
+    # Deduct Balance (In-memory subtraction keeps the instance dirty for the subsequent upgrade call)
+    partner.balance -= price
     session.add(partner)
+    await session.flush()
 
     # Process Upgrade
     # We call upgrade_to_pro which handles the logic, commissions, and notifications

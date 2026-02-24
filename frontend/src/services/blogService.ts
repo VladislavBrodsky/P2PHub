@@ -1,6 +1,21 @@
 import { apiClient } from '../api/client';
 import { BlogPost } from '../data/blogPosts';
+import { authorAvatars } from '../data/authorAvatars';
 import i18n from '../i18n';
+
+const AUTHOR_MAP: Record<string, string> = {
+    'Marcus Vance': 'marcus_vance',
+    'Alex Rivera': 'alex_rivera',
+    'Sarah Chen': 'sarah_chen'
+};
+
+const injectAuthorImage = (post: any) => {
+    const key = AUTHOR_MAP[post.author];
+    if (key && authorAvatars[key]) {
+        post.authorImage = authorAvatars[key];
+    }
+    return post;
+};
 
 export interface BlogEngagement {
     likes: number;
@@ -61,9 +76,11 @@ export const blogService = {
 
         try {
             const response = await apiClient.get('/api/blog', { params: options });
-            cache.posts[cacheKey] = { data: response.data, timestamp: Date.now() };
+            const data = response.data;
+            data.items = data.items.map(injectAuthorImage);
+            cache.posts[cacheKey] = { data, timestamp: Date.now() };
             persistCache();
-            return response.data;
+            return data;
         } catch (error) {
             // Fallback to stale cache if network fails
             if (cached) return cached.data;
@@ -93,7 +110,7 @@ export const blogService = {
 
         try {
             const response = await apiClient.get(`/api/blog/${slug}`);
-            const data = response.data;
+            const data = injectAuthorImage(response.data);
             cache.details[detailKey] = { data, timestamp: Date.now() };
             persistCache();
             return data;

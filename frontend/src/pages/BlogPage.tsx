@@ -365,16 +365,20 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                             dangerouslySetInnerHTML={{ __html: renderExcerpt(currentFeaturedPost.excerpt) }}
                                         />
                                         <div className="pt-6 flex items-center justify-between border-t border-slate-200 dark:border-white/5">
-                                            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-inner overflow-hidden">
-                                                {currentFeaturedPost.authorImage ? (
-                                                    <img src={currentFeaturedPost.authorImage} className="w-full h-full object-cover" alt={currentFeaturedPost.author} />
-                                                ) : (
-                                                    <BookOpen className="w-4 h-4 text-blue-500" />
-                                                )}
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
-                                                <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author || 'Marcus Vance'}</span>
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-px overflow-hidden shadow-inner">
+                                                    <div className="w-full h-full rounded-[calc(1rem-1px)] bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
+                                                        {currentFeaturedPost.authorImage ? (
+                                                            <img src={currentFeaturedPost.authorImage} className="w-full h-full object-cover" alt={currentFeaturedPost.author} />
+                                                        ) : (
+                                                            <BookOpen className="w-4 h-4 text-blue-500" />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
+                                                    <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author || 'Marcus Vance'}</span>
+                                                </div>
                                             </div>
                                             <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-all duration-500">
                                                 <ArrowUpRight className="w-6 h-6" />
@@ -638,17 +642,18 @@ const BlogDetail = ({
                         <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
-                        <div className="flex -space-x-4">
+                        <div className="flex -space-x-3">
                             {[1, 2, 3].map(i => (
-                                <div key={i} style={{ zIndex: 10 - i }} className={`w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative overflow-hidden`}>
-                                    <img src={authorAvatars[`user_${i}` as keyof typeof authorAvatars]} className="w-full h-full object-cover" alt="" onError={(e) => {
+                                <div key={i} style={{ zIndex: 10 - i }} className="w-9 h-9 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative overflow-hidden group/avatar">
+                                    <img src={authorAvatars[`user_${i}` as keyof typeof authorAvatars]} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" alt="" onError={(e) => {
                                         (e.target as HTMLImageElement).style.display = 'none';
                                         (e.target as HTMLImageElement).parentElement!.innerHTML = '<svg class="w-4 h-4 text-slate-400 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
                                     }} />
+                                    <div className="absolute inset-0 ring-1 ring-inset ring-black/5 dark:ring-white/5 rounded-full" />
                                 </div>
                             ))}
-                            <div className="w-8 h-8 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold backdrop-blur-md shadow-lg z-10 relative">
-                                +12k
+                            <div className="w-9 h-9 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-linear-to-br from-slate-800 to-black text-white flex items-center justify-center text-[9px] font-bold backdrop-blur-md shadow-lg z-10 relative">
+                                +12K
                             </div>
                         </div>
                     </div>

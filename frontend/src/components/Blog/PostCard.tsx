@@ -86,15 +86,17 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                         className="mt-0.5 text-[10px] font-medium text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed opacity-80"
                         dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                     />
-                    <div className="mt-2 flex items-center gap-1.5 opacity-80">
-                        <div className="w-5 h-5 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center overflow-hidden">
-                            {post.authorImage ? (
-                                <img src={post.authorImage} className="w-full h-full object-cover" alt="" />
-                            ) : (
-                                <span className="text-[8px] font-bold text-blue-500">{post.author?.[0] || 'P'}</span>
-                            )}
+                    <div className="mt-3 flex items-center gap-2 group/author">
+                        <div className="w-6 h-6 rounded-lg bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-px overflow-hidden group-hover/author:from-blue-500/40 transition-colors">
+                            <div className="w-full h-full rounded-[calc(0.5rem-1px)] bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
+                                {post.authorImage ? (
+                                    <img src={post.authorImage} className="w-full h-full object-cover" alt="" />
+                                ) : (
+                                    <span className="text-[9px] font-bold text-blue-500">{post.author?.[0] || 'P'}</span>
+                                )}
+                            </div>
                         </div>
-                        <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{post.author}</span>
+                        <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400/80 uppercase tracking-widest group-hover/author:text-blue-500 transition-colors">{post.author}</span>
                     </div>
                 </div>
             </div>
