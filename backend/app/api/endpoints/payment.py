@@ -174,6 +174,56 @@ async def verify_ton(
     else:
         raise HTTPException(status_code=400, detail="Transaction verification failed or still pending")
 
+@router.post("/verify-usdt")
+async def verify_usdt(
+    tx_hash: str = Body(..., embed=True),
+    network: str = Body("TRC20", embed=True),
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Verifies a USDT transaction hash (TRC-20 or TON Jetton) and upgrades user to PRO if valid.
+    """
+    try:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    except Exception as e:
+        logger.warning(f"Invalid user data in verify_usdt: {e}")
+        raise HTTPException(status_code=400, detail="Invalid user data")
+
+    statement = select(Partner).where(Partner.telegram_id == tg_id).with_for_update()
+    result = await session.exec(statement)
+    partner = result.first()
+
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    success = await payment_service.verify_usdt_transaction(session, partner, tx_hash, network)
+
+    # Log the verification result
+    from app.models.audit_log import ActionType
+    await audit_service.log_event(
+        session=session,
+        partner_id=partner.id,
+        action_type=ActionType.PAYMENT,
+        description=f"USDT Verification Attempted ({network}): {success}",
+        entity_type="transaction",
+        entity_id=tx_hash,
+        action="usdt_verification_attempt",
+        actor_id=tg_id,
+        details={
+            "tx_hash": tx_hash,
+            "network": network,
+            "success": success
+        }
+    )
+    await session.commit()
+
+    if success:
+        return {"status": "success", "message": "Upgraded successfully"}
+    else:
+        raise HTTPException(status_code=400, detail="Transaction verification failed or still pending")
+
 @router.post("/submit-manual")
 async def submit_manual_payment(
     currency: str = Body(..., embed=True),

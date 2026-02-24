@@ -15,6 +15,7 @@ from app.models.partner import Partner, SystemSetting
 from app.models.transaction import PartnerTransaction
 from app.services.redis_service import redis_service
 from app.services.ton_verification_service import ton_verification_service
+from app.services.tron_verification_service import tron_verification_service
 
 logger = logging.getLogger(__name__)
 
@@ -210,6 +211,90 @@ class PaymentService:
             status="failed",
             tx_hash=tx_hash
         )
+
+        return False
+
+    @async_retry(max_attempts=3, base_delay=1.0)
+    async def verify_usdt_transaction(
+        self,
+        session: AsyncSession,
+        partner: Partner,
+        tx_hash: str,
+        network: str = "TRC20"
+    ) -> bool:
+        """
+        Verifies a USDT transaction hash (TRC-20 or TON Jetton) and upgrades user if valid.
+        """
+        sentry_sdk.add_breadcrumb(
+            category="payment",
+            message=f"Starting USDT verification ({network}) for {partner.id} | Hash: {tx_hash}",
+            level="info"
+        )
+        # 1. Check if TX already processed
+        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash).with_for_update()
+        res = await session.exec(stmt)
+        existing = res.first()
+        if existing and existing.status == "completed":
+            return True
+
+        # 2. Find the most recent pending USDT transaction for this partner on this network
+        thirty_mins_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(minutes=30)
+        stmt_session = select(PartnerTransaction).where(
+            PartnerTransaction.partner_id == partner.id,
+            PartnerTransaction.status.in_(["pending", "manual_review"]),
+            PartnerTransaction.currency == "USDT",
+            PartnerTransaction.network == network,
+            PartnerTransaction.created_at >= thirty_mins_ago
+        ).order_by(PartnerTransaction.created_at.desc())
+
+        res_session = await session.exec(stmt_session.with_for_update())
+        active_session = res_session.first()
+
+        if not active_session:
+            logger.warning(f"No active USDT/{network} session found for partner {partner.id}")
+            return False
+
+        expected_usdt = active_session.amount
+
+        # 3. Call dedicated verification service
+        if network == "TRC20":
+            is_valid = await tron_verification_service.verify_transaction(
+                tx_hash=tx_hash,
+                expected_amount_usdt=expected_usdt,
+                expected_address=settings.ADMIN_USDT_ADDRESS
+            )
+        else: # TON (Jetton)
+            is_valid = await ton_verification_service.verify_transaction(
+                tx_hash=tx_hash,
+                expected_amount=expected_usdt,
+                expected_address=settings.ADMIN_TON_ADDRESS,
+                currency="USDT"
+            )
+
+        if is_valid:
+            # Upgrade user to PRO/PRO+
+            await self.upgrade_to_pro(
+                session=session,
+                partner=partner,
+                amount=active_session.amount,
+                currency="USDT",
+                network=network,
+                tx_hash=tx_hash,
+                transaction_id=active_session.id
+            )
+            
+            from app.services.audit_service import audit_service
+            await audit_service.log_payment(
+                session=session,
+                partner_id=partner.id,
+                transaction_id=active_session.id,
+                amount=active_session.amount,
+                currency="USDT",
+                plan=partner.subscription_plan or "PRO",
+                status="verified",
+                tx_hash=tx_hash
+            )
+            return True
 
         return False
 

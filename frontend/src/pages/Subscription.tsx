@@ -200,9 +200,43 @@ export default function SubscriptionPage() {
         if (!manualHash) return;
         setIsLoading(true); impact('heavy');
         try {
-            await apiClient.post('/api/payment/submit-manual', { tx_hash: manualHash?.trim() || null, currency: 'USDT', network: 'TRC20', amount: planPrice });
-            setStatus('manual_review'); notification('success');
-        } catch (error: any) { console.error('Manual submission error:', error); alert(`Submission failed: ${error.response?.data?.detail || 'Error'}`); }
+            // 1. Try automated verification first
+            const verifyRes = await apiClient.post('/api/payment/verify-usdt', {
+                tx_hash: manualHash.trim(),
+                network: 'TRC20' // Default to TRC20, we can add a toggle if needed
+            });
+
+            if (verifyRes.data.status === 'success') {
+                setStatus('success');
+                notification('success');
+                await refreshUser();
+            } else {
+                // Fallback to manual review submission
+                await apiClient.post('/api/payment/submit-manual', {
+                    tx_hash: manualHash.trim(),
+                    currency: 'USDT',
+                    network: 'TRC20',
+                    amount: planPrice
+                });
+                setStatus('manual_review');
+                notification('success');
+            }
+        } catch (error: any) {
+            console.error('USDT verification error:', error);
+            // If verification failed (400), submit for manual review as backup
+            try {
+                await apiClient.post('/api/payment/submit-manual', {
+                    tx_hash: manualHash.trim(),
+                    currency: 'USDT',
+                    network: 'TRC20',
+                    amount: planPrice
+                });
+                setStatus('manual_review');
+                notification('success');
+            } catch (innerError) {
+                alert(`Submission failed: ${error.response?.data?.detail || 'Error'}`);
+            }
+        }
         finally { setIsLoading(false); }
     };
 
