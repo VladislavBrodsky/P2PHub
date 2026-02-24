@@ -454,7 +454,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-lg">
                                                         <img src={url} alt="Partner" className="w-full h-full object-cover" />
                                                     </div>
-                                                ))
+                                                ))}
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-base font-black text-white">{liveCount}</span>
@@ -602,7 +602,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
                                                 <img src={url} alt="user" className="w-full h-full object-cover" />
                                             </div>
-                                        ))
+                                        ))}
                                     </div>
                                     <div className="text-left">
                                         <div className="text-label font-bold text-slate-900 dark:text-white leading-none">
