@@ -401,9 +401,8 @@ export default function SubscriptionPage() {
                                                 <span className="text-heading font-bold text-slate-900 dark:text-white tabular-nums leading-none">
                                                     {proStats.total - proStats.sold}
                                                 </span>
-                                                <span className="text-label text-slate-400 dark:text-white/30 font-bold uppercase tracking-widest">{t('pro:subscription.upgrade.left_label')}</span>
                                             </div>
-                                            <div className="text-label font-bold text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
+                                            <div className="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
                                                 {t('pro:subscription.upgrade.selling_fast')}
                                             </div>
                                         </div>
@@ -813,17 +812,17 @@ export default function SubscriptionPage() {
                                     })}
                                 </div>
 
-                                {/* Quick checklist - Smaller */}
-                                <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl p-4 grid grid-cols-2 gap-2 shadow-sm backdrop-blur-md">
+                                {/* Quick checklist - Compacted */}
+                                <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl p-3 grid grid-cols-1 gap-1.5 shadow-sm backdrop-blur-md">
                                     {(() => {
                                         const benefitsArr = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
                                         const benefitsList = Array.isArray(benefitsArr) ? benefitsArr : [];
                                         return benefitsList.map((b: string, i: number) => (
-                                            <div key={i} className="flex items-center gap-1.5">
+                                            <div key={i} className="flex items-center gap-2">
                                                 <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400' : 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-500'}`}>
                                                     <Check size={8} strokeWidth={4} />
                                                 </div>
-                                                <span className="text-label font-bold text-slate-500 dark:text-white/50 uppercase tracking-tight">{b}</span>
+                                                <span className="text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-tight leading-tight">{b}</span>
                                             </div>
                                         ));
                                     })()}
