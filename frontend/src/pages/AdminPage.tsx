@@ -462,6 +462,12 @@ export const AdminPage = () => {
             setIsPalantirPolling(false);
         } else {
             setIsPalantirPolling(false);
+            if (['kpis', 'financials', 'payments'].includes(viewMode)) {
+                fetchData(true, false); // Fetch immediately without triggering loader
+                interval = setInterval(() => {
+                    fetchData(true, false);
+                }, 60000); // Auto-refresh metrics every minute
+            }
         }
 
         return () => {

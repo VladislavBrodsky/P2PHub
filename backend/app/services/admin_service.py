@@ -214,6 +214,10 @@ class AdminService:
         cache_item = (await session.exec(select(SystemSetting).where(SystemSetting.key == "cache:admin_stats"))).first()
         if cache_item:
             try:
+                now = datetime.now(UTC).replace(tzinfo=None)
+                if getattr(cache_item, "updated_at", None) and now - cache_item.updated_at > timedelta(minutes=1):
+                    return None
+                    
                 data = json.loads(cache_item.value)
                 data["cached_at"] = cache_item.updated_at.isoformat()
                 return data
