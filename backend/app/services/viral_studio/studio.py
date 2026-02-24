@@ -140,14 +140,16 @@ class ViralMarketingStudio:
                 except Exception as e:
                     logger.warning(f"Resonance sync failed: {e}")
 
-            # Build Story History if in Story Mode
-            is_story_mode = tone_of_voice and ("empath" in tone_of_voice.lower() or "story" in tone_of_voice.lower())
+            # 📜 UNIVERSAL NARRATIVE CONTINUITY
+            # We always try to fetch story history to allow the AI to maintain continuity if it exists.
             story_history = None
-            if is_story_mode:
-                try:
-                    story_history = await viral_log.viral_logger.get_user_story_history(partner.id)
-                except Exception as e:
-                    logger.warning(f"story history fetch failed: {e}")
+            try:
+                story_history = await viral_log.viral_logger.get_user_story_history(partner.id)
+            except Exception as e:
+                logger.warning(f"story history fetch failed: {e}")
+
+            # Define if we should append to story history based on the current mode
+            is_story_mode = tone_of_voice and ("empath" in tone_of_voice.lower() or "story" in tone_of_voice.lower())
 
             # Prepare Prompts
             system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)

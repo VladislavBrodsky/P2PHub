@@ -41,8 +41,9 @@ class AudienceProfile:
                 ],
                 "values": ["Decentralization", "Capital Efficiency", "Privacy", "Velocity"],
                 "language_patterns": ["Technical precision", "Minimalist authority", "Data-centric", "Skeptical of hype"],
-                "triggers": ["Exponential Alpha", "Institutional bypass", "Liquidity leaks", "Elite social proof"]
-            },
+                "triggers": ["Exponential Alpha", "Institutional bypass", "Liquidity leaks", "Elite social proof", "Frontrunning the Legacy"],
+            "archetype": "The Strategist",
+            "hidden_need": "Significance through Mastery",
             "tov": {
                 "style": "Sharp, authoritative, minimal",
                 "formality": "Professional mastery",
@@ -83,8 +84,9 @@ class AudienceProfile:
                 ],
                 "values": ["Freedom", "Mobility", "Experiences", "Autonomy"],
                 "language_patterns": ["Inspirational", "Sophisticated", "Global-aware", "Minimalist"],
-                "triggers": ["Lifestyle arbitrage", "Freedom metrics", "Private travel hacks", "Status signals"]
-            },
+                "triggers": ["Lifestyle arbitrage", "Freedom metrics", "Private travel hacks", "Status signals", "Geofence escape"],
+            "archetype": "The Explorer",
+            "hidden_need": "Autonomy through Mobility",
             "tov": {
                 "style": "Sophisticated, global, magnetic",
                 "formality": "Elevated and casual",
@@ -125,8 +127,9 @@ class AudienceProfile:
                 ],
                 "values": ["ROI", "Optimization", "Leverage", "Automation"],
                 "language_patterns": ["Metrics-heavy", "Conversion-focused", "Strategic", "Tactical"],
-                "triggers": ["Revenue increase", "Efficiency gains", "Competitive edge", "Case studies"]
-            },
+                "triggers": ["Revenue increase", "Efficiency gains", "Competitive edge", "Case studies", "Shadowban Protection"],
+            "archetype": "The Optimization Master",
+            "hidden_need": "Financial Leverage",
             "tov": {
                 "style": "Results-driven, tactical, no-BS",
                 "formality": "Professional but direct",
@@ -168,8 +171,9 @@ class AudienceProfile:
                 ],
                 "values": ["Relationships", "Leverage", "Leadership", "Abundance mindset"],
                 "language_patterns": ["Motivational", "Visionary", "Team-centric", "Growth metaphors"],
-                "triggers": ["Duplication", "Team success stories", "Rank advancement", "Passive income"]
-            },
+                "triggers": ["Duplication", "Team success stories", "Rank advancement", "Passive income", "Tribe Loyalty"],
+            "archetype": "The Architect",
+            "hidden_need": "Influence through Infrastructure",
             "tov": {
                 "style": "Visionary, empowering, magnetic",
                 "formality": "Motivational speaker energy",
@@ -211,8 +215,9 @@ class AudienceProfile:
                 ],
                 "values": ["Legacy", "Security", "Simplicity", "Connection"],
                 "language_patterns": ["Empathetic", "Graceful", "Visionary", "Clear"],
-                "triggers": ["Future security", "Simplicity hacks", "Quiet confidence", "Legacy stories"]
-            },
+                "triggers": ["Future security", "Simplicity hacks", "Quiet confidence", "Legacy stories", "Absolute Safety"],
+            "archetype": "The Guardian",
+            "hidden_need": "Generational Legacy",
             "tov": {
                 "style": "Graceful, supportive, visionary",
                 "formality": "Elegant and warm",
@@ -254,8 +259,9 @@ class AudienceProfile:
                 ],
                 "values": ["Velocity", "Innovation", "Risk Mastery", "Freedom"],
                 "language_patterns": ["High-energy", "Visionary", "Analytical", "Rebellious"],
-                "triggers": ["Early advantage", "Peer-led revolutions", "Anti-legacy banking", "Rapid status gains"]
-            },
+                "triggers": ["Early advantage", "Peer-led revolutions", "Anti-legacy banking", "Rapid status gains", "The Leapfrog Effect"],
+            "archetype": "The Rebel",
+            "hidden_need": "Status through Velocity",
             "tov": {
                 "style": "High-velocity, rebellious, future-proof",
                 "formality": "Casual mastery",
@@ -297,8 +303,9 @@ class AudienceProfile:
                 ],
                 "values": ["Autonomy", "Purpose", "Courage", "Strategic Mastery"],
                 "language_patterns": ["Strategic", "Reflective", "Analytical", "Liberation-focused"],
-                "triggers": ["Exit blueprints", "Second acts", "Autonomy metrics", "Identity shifts"]
-            },
+                "triggers": ["Exit blueprints", "Second acts", "Autonomy metrics", "Identity shifts", "The Redemption Arc"],
+            "archetype": "The Seeker",
+            "hidden_need": "Redemption from the Suit",
             "tov": {
                 "style": "Strategic, reflective, magnetic",
                 "formality": "Senior leadership energy",
@@ -340,8 +347,9 @@ class AudienceProfile:
                 ],
                 "values": ["Universal Growth", "Velocity of Trust", "Leveraged Leadership", "Visionary Abundance"],
                 "language_patterns": ["Professional Native Mastery", "Authoritative yet Inspiring", "Global Context", "Viral Dynamics"],
-                "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery"]
-            },
+                "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery", "Universal Synergy"],
+            "archetype": "The Visionary",
+            "hidden_need": "Global Impact",
             "tov": {
                 "style": "Global Leader, Professional Native Speaker, Viral Influencer",
                 "formality": "High-status professional with magnetic visionary energy",
@@ -371,8 +379,9 @@ class AudienceProfile:
                 "desires": ["Sleep-velocity income", "Unrestricted time-wealth", "Systemic automation", "Resilient capital abundance"],
                 "values": ["Freedom", "Efficiency", "Logic", "Legacy"],
                 "language_patterns": ["Ease-focused", "Metrics-driven", "Visionary"],
-                "triggers": ["Geometric scaling", "Autonomous yield", "Life-optimization", "Quiet wealth"]
-            },
+                "triggers": ["Geometric scaling", "Autonomous yield", "Life-optimization", "Quiet wealth", "Effortless Logic"],
+            "archetype": "The Sage",
+            "hidden_need": "Financial Peace",
             "tov": {
                 "style": "Calm, magnetic, logical",
                 "formality": "Casual mastery",
@@ -402,8 +411,9 @@ class AudienceProfile:
                 "desires": ["Extreme scale", "Algorithmic advantage", "Market dominance", "Efficient duplication"],
                 "values": ["Efficiency", "Metrics", "Speed", "Innovation"],
                 "language_patterns": ["Data-driven", "Strategic", "Direct"],
-                "triggers": ["Scale", "Optimization", "Competitive edge", "Viral loops"]
-            },
+                "triggers": ["Scale", "Optimization", "Competitive edge", "Viral loops", "Algorithmic Dominance"],
+            "archetype": "The Tactician",
+            "hidden_need": "Significance through Growth",
             "tov": {
                 "style": "Tactical, sharp, results-obsessed",
                 "formality": "Direct and semi-formal",
@@ -433,8 +443,9 @@ class AudienceProfile:
                 "desires": ["Full autonomy", "Perfect systems", "Set and forget income", "Infinite scalability"],
                 "values": ["Logic", "Productivity", "Freedom", "Consistency"],
                 "language_patterns": ["Technical", "Logical", "System-oriented"],
-                "triggers": ["Hands-free", "Systematic", "Zero effort", "Infinite scale"]
-            },
+                "triggers": ["Hands-free", "Systematic", "Zero effort", "Infinite scale", "Perfect Consistency"],
+            "archetype": "The Magician",
+            "hidden_need": "Freedom through Automation",
             "tov": {
                 "style": "Cool, logical, precise",
                 "formality": "Semi-formal",
@@ -464,8 +475,9 @@ class AudienceProfile:
                 "desires": ["Generational wealth", "Global influence", "Massive team legacy", "The $1/minute lifestyle"],
                 "values": ["Legacy", "Power", "Ambition", "Sustainability"],
                 "language_patterns": ["Visionary", "Grand", "Inspirational"],
-                "triggers": ["Legacy", "Empire", "Financial Dynasty", "Global Reach"]
-            },
+                "triggers": ["Legacy", "Empire", "Financial Dynasty", "Global Reach", "Generational Power"],
+            "archetype": "The Ruler",
+            "hidden_need": "Legacy Dominance",
             "tov": {
                 "style": "Grand, authoritative, magnetic",
                 "formality": "Formal and inspiring",
@@ -507,8 +519,9 @@ class AudienceProfile:
                 ],
                 "values": ["Family", "Stability", "Mobility", "Resilience"],
                 "language_patterns": ["Hopeful/Aspirational", "Safety-oriented", "Practical", "Community-minded"],
-                "triggers": ["Family security", "Zero-free remittance", "Inflation protection", "Status in transit"]
-            },
+                "triggers": ["Family security", "Zero-free remittance", "Inflation protection", "Status in transit", "Portable Home"],
+            "archetype": "The Pioneer",
+            "hidden_need": "Belonging through Mobility",
             "tov": {
                 "style": "Practical, warm, authoritative",
                 "formality": "High but accessible",

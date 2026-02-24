@@ -69,13 +69,18 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
         universal_rules_str = "\n".join(['- ' + rule for rule in best_practices['universal_rules'][:8]])
 
     story_context = ""
-    chapter_rule_system = "DO NOT write 'Chapter X' anywhere in the output."
-    if story_history is not None:
+    chapter_rule_system = "DO NOT write 'Chapter X' or 'Episode X' anywhere in the output."
+    
+    # Activate storytelling if user has history OR explicitly chose story/empathy tone
+    is_story_tone = tone and ("empath" in tone.lower() or "story" in tone.lower())
+    should_activate_story = is_story_tone or (story_history and len(story_history) > 0)
+
+    if should_activate_story:
         chapter_rule_system = "Use 'Episode X' or 'Chapter X' natively in your output. Maintain narrative continuity."
         story_context += "**EMPATHETIC (STORY) - LONG STORY PROTOCOL:**\n"
         story_context += "Create a viral, engaging, episodic 'Long Story'.\n"
         story_context += "Themes to weave in: Global Financial Transformation, Web3 Finance, Crypto Cards, Borderless Payments, $1 per Minute strategy, Viral Community Growth, Growth Hacks, x100 Viral Growth with AI Marketing Studio and Automated Content Generation 24/7.\n"
-        if story_history:
+        if story_history and len(story_history) > 0:
             story_context += "PREVIOUS EPISODES SUMMARY:\n"
             for ep in story_history[-3:]:
                 story_context += f"- Ep {ep.get('Episode')}: {ep.get('Title')} ({ep.get('Summary')})\n"
@@ -114,7 +119,8 @@ The TOTAL length of the 'body' MUST be strictly between 700 and 1000 characters 
 
 **CRITICAL LANGUAGE INSTRUCTION:**
 All output (title, body, hashtags) MUST be in {language}. 
-Write as a high-status NATIVE {language} CMO. Every word must feel earned, authentic, and sophisticated.
+Write as a high-status NATIVE {language} CMO embodying the **{audience_intel.get('archetype', 'Visionary')}** archetype. Every word must feel earned, authentic, and sophisticated.
+Your primary objective is to satisfy the audience's hidden need: **{audience_intel.get('hidden_need', 'Autonomy')}**.
 
 **OUTPUT FORMAT (JSON ONLY):**
 **CRITICAL FORMATTING RULE:** NEVER use _underscore_ formatting for italics. It renders literally on X (Twitter) and Telegram. Use CAPS for emphasis instead. Do NOT wrap brand names in underscores (e.g., write 'Pintopay' NOT '_Pintopay_').
@@ -179,6 +185,7 @@ Referral Link: {ref_link}
 3. **SALES BY SUBTLETY:** Weave the product (Pintopay) into the narrative as an essential tool for the desired lifestyle.
 4. **EMOTIONAL RESONANCE:** Agitate a real, visceral pain point before presenting the elegant solution.
 5. **NATIVE FLUENCY:** Use business idioms and cultural nuances specific to {language}.
+6. **ARCHETYPE VOICE:** Embody the **{audience_intel.get('archetype', 'The Visionary')}** archetype. Speak to their hidden need for **{audience_intel.get('hidden_need', 'Autonomy')}**.
 
 **STRUCTURE & FORMATTING:**
 - Hook: **Bold**
@@ -266,6 +273,8 @@ def _build_audience_context(target_audience: str, audience_intel: dict) -> str:
     tov = audience_intel.get("tov", {})
     return f"""
 **AUDIENCE DEEP DIVE: {target_audience}**
+Archetype: {audience_intel.get('archetype', 'The Visionary')}
+Hidden Need: {audience_intel.get('hidden_need', 'Autonomy')}
 Performing Keywords (2026): {', '.join(audience_intel.get('performing_keywords_2026', []))}
 Lead Magnets to Tease: {', '.join(audience_intel.get('lead_magnets', []))}
 Pain Points: {', '.join(psycho.get('pain_points', [])[:3])}
