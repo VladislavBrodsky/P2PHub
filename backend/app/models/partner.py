@@ -236,7 +236,7 @@ if "sqlite" not in database_url:
         "pool_size": 10,       # Reduced from 15 to stay safer within Railway connection limits
         "max_overflow": 10,
         "pool_timeout": 30,
-        "pool_recycle": 60,   # Further reduced to 60 to prevent "Connection reset by peer" on Railway.
+        "pool_recycle": 45,   # Further reduced to 45 (from 60) to stay ahead of Railway/Proxy idle timeouts.
     })
 
 try:

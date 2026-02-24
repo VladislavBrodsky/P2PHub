@@ -29,7 +29,7 @@ fi
 # Python path issues can cause this to fail unnecessarily.
 
 echo "🛠 Running Database Migrations (with timeout)..."
-timeout 60s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
+timeout 120s alembic upgrade head || echo "⚠️ Migrations failed or timed out, continuing startup..."
 echo "✅ Migration step finished."
 
 # Optimized Worker Calculation:
