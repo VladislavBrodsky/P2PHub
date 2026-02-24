@@ -232,24 +232,26 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             }}
                                         />
 
-                                        {/* Energy Particles */}
-                                        {[...Array(8)].map((_, i) => (
+                                        {/* Energy Particles - Multi-colored & varying speeds */}
+                                        {[...Array(12)].map((_, i) => (
                                             <motion.div
                                                 key={i}
-                                                className="absolute w-1 h-1 bg-blue-400 rounded-full blur-[1px]"
+                                                className={`absolute w-${i % 2 === 0 ? '1' : '1.5'} h-${i % 2 === 0 ? '1' : '1.5'} ${i % 3 === 0 ? 'bg-blue-400' : i % 3 === 1 ? 'bg-indigo-400' : 'bg-cyan-400'} rounded-full blur-[1px]`}
                                                 initial={{
                                                     x: Math.random() * 400,
                                                     y: Math.random() * 200,
-                                                    opacity: Math.random() * 0.5
+                                                    opacity: 0
                                                 }}
                                                 animate={{
-                                                    y: [null, Math.random() * -150],
-                                                    opacity: [0, 0.4, 0]
+                                                    y: [null, -100 - Math.random() * 100],
+                                                    x: [null, (Math.random() - 0.5) * 50 + (i % 2 === 0 ? 20 : -20)],
+                                                    opacity: [0, 0.7, 0],
+                                                    scale: [1, 1.5, 0.5]
                                                 }}
                                                 transition={{
-                                                    duration: 3 + Math.random() * 5,
+                                                    duration: 2 + Math.random() * 4,
                                                     repeat: Infinity,
-                                                    ease: "linear",
+                                                    ease: "easeOut",
                                                     delay: Math.random() * 5
                                                 }}
                                             />
@@ -309,7 +311,24 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 className="opacity-30"
                                             />
 
-                                            {/* Multi-Ring Energy Orbits */}
+                                            {/* Shooting Energy Path Particles */}
+                                            <motion.circle r="2" fill="#60A5FA" filter="blur(2px)">
+                                                <animateMotion
+                                                    path="M -50 150 Q 100 50 250 150 T 450 100"
+                                                    dur="3s"
+                                                    repeatCount="indefinite"
+                                                />
+                                            </motion.circle>
+                                            <motion.circle r="1.5" fill="#A855F7" filter="blur(2px)">
+                                                <animateMotion
+                                                    path="M -50 100 Q 150 180 300 80 T 450 150"
+                                                    dur="4s"
+                                                    repeatCount="indefinite"
+                                                    begin="1s"
+                                                />
+                                            </motion.circle>
+
+                                            {/* Multi-Ring Energy Orbits - Staggered & Pulsing */}
                                             <motion.circle
                                                 cx="200"
                                                 cy="100"
@@ -318,8 +337,14 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 strokeWidth="0.5"
                                                 fill="none"
                                                 strokeDasharray="4 60"
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                animate={{
+                                                    rotate: 360,
+                                                    scale: [1, 1.02, 1]
+                                                }}
+                                                transition={{
+                                                    rotate: { duration: 2, repeat: Infinity, ease: "linear" },
+                                                    scale: { duration: 1, repeat: Infinity, ease: "easeInOut" }
+                                                }}
                                                 className="opacity-40"
                                             />
                                             <motion.circle
@@ -330,8 +355,14 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 strokeWidth="1"
                                                 fill="none"
                                                 strokeDasharray="10 200"
-                                                animate={{ rotate: -360 }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                animate={{
+                                                    rotate: -360,
+                                                    opacity: [0.3, 0.7, 0.3]
+                                                }}
+                                                transition={{
+                                                    rotate: { duration: 4, repeat: Infinity, ease: "linear" },
+                                                    opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                                                }}
                                                 className="opacity-60"
                                             />
                                             <motion.circle
@@ -341,7 +372,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 stroke="url(#blue-gradient)"
                                                 strokeWidth="0.5"
                                                 fill="none"
-                                                animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.3, 0.1] }}
+                                                animate={{
+                                                    scale: [1, 1.08, 1],
+                                                    opacity: [0.1, 0.4, 0.1],
+                                                    strokeWidth: [0.5, 1.5, 0.5]
+                                                }}
                                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                             />
 
@@ -375,17 +410,17 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 transition={{ duration: 3, repeat: Infinity }}
                                             />
 
-                                            {/* Avatar Frame */}
+                                            {/* Avatar Frame with Rhythmic Pulse */}
                                             <motion.div
                                                 initial={{ scale: 0.8, opacity: 0 }}
                                                 animate={{ scale: 1, opacity: 1 }}
-                                                className="relative w-28 h-28 rounded-2xl p-1 bg-linear-to-br from-blue-500 to-indigo-600 shadow-2xl"
+                                                className="relative w-28 h-28 rounded-2xl p-1 bg-linear-to-br from-blue-500 via-indigo-500 to-cyan-400 shadow-[0_0_50px_rgba(59,130,246,0.5)] animate-rhythmic-pulse"
                                             >
-                                                <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-white/20">
+                                                <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-white/30 backdrop-blur-md">
                                                     <img
                                                         src={user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop"}
                                                         alt="Partner"
-                                                        className="w-full h-full object-cover"
+                                                        className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
                                                     />
                                                 </div>
                                             </motion.div>
@@ -442,18 +477,19 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <motion.div
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            className="w-full bg-slate-950/80 border-2 border-white/10 rounded-2xl py-3 px-4 shadow-[0_0_40px_rgba(59,130,246,0.4)] flex items-center justify-center backdrop-blur-xl relative overflow-hidden group/badge"
+                                            className="w-full bg-white border-2 border-blue-500/20 rounded-2xl py-3 px-4 shadow-[0_0_50px_rgba(255,255,255,0.4)] flex items-center justify-center relative overflow-hidden group/badge animate-vibe-shift"
                                         >
-                                            {/* "Vibing" Animated Gradient Border Effect */}
-                                            <div className="absolute -inset-[200%] bg-conic from-blue-500/40 via-indigo-500/40 to-blue-500/40 animate-slow-spin opacity-30 group-hover/badge:opacity-60 transition-opacity" />
+                                            {/* High-Energy Fusion Pulse Border */}
+                                            <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 via-indigo-500/20 to-cyan-500/20 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-500" />
 
                                             {/* Shimmer Overlay */}
                                             <motion.div
-                                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
-                                                animate={{ x: ['-100%', '100%'] }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/10 to-transparent"
+                                                animate={{ x: ['-200%', '200%'] }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                                             />
-                                            <span className="text-label font-black bg-linear-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent uppercase tracking-[0.3em] whitespace-nowrap relative z-10">
+
+                                            <span className="text-sm font-black text-slate-900 dark:text-slate-900 uppercase tracking-[0.4em] whitespace-nowrap relative z-10 drop-shadow-sm">
                                                 Viral Network Core
                                             </span>
                                         </motion.div>

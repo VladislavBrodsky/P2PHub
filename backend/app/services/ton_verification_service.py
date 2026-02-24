@@ -155,19 +155,66 @@ class TonVerificationService:
         return address.strip().lower()
 
     async def _verify_via_toncenter(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str) -> bool:
+        """Verify transaction via TonCenter getTransactions looking for the hash."""
         try:
             client = await http_client.get_client()
-            params = {"tx_hash": tx_hash, "api_key": self.api_key}
-            response = await client.get(f"{self.base_url}/getTransaction", params=params, timeout=10.0)
+            # Use getTransactions to see the confirmed state and details accurately for an address
+            params = {"address": expected_address, "limit": 20, "api_key": self.api_key}
+            response = await client.get(f"{self.base_url}/getTransactions", params=params, timeout=10.0)
             if response.status_code == 200:
                 data = response.json()
                 if data.get("ok"):
+                    # TonCenter returns a list in 'result'
                     for tx in data.get("result", []):
-                        if tx_hash in [tx.get("hash", ""), tx.get("transaction_id", {}).get("hash", "")]:
+                        tx_hash_blockchain = tx.get("hash") or tx.get("transaction_id", {}).get("hash", "")
+                        if self._normalize_hash(tx_hash_blockchain) == self._normalize_hash(tx_hash):
                             return self._verify_tx_details(tx, expected_amount, expected_address, currency)
             return False
         except Exception as e:
             logger.error(f"TonCenter Verification Failed: {e}")
+            return False
+
+    async def _verify_via_tonapi(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str) -> bool:
+        """Fallback verification using TonApi.io (Natively supports Jettons)."""
+        try:
+            client = await http_client.get_client()
+            url = f"https://tonapi.io/v2/blockchain/transactions/{tx_hash}"
+            headers = {"Authorization": f"Bearer {settings.TON_API_KEY}"} if settings.TON_API_KEY else {}
+            
+            response = await client.get(url, headers=headers, timeout=10.0)
+            if response.status_code == 200:
+                tx = response.json()
+                
+                # Check value and destination in the 'in_msg' of the result
+                in_msg = tx.get("in_msg", {})
+                
+                if currency == "TON":
+                    dest = in_msg.get("destination", {}).get("address", "")
+                    value = int(in_msg.get("value", 0))
+                    expected_nanoton = int(expected_amount * 1_000_000_000)
+                    if dest.lower() == expected_address.lower() and value >= (expected_nanoton * 0.98):
+                        logger.info(f"✅ Transaction {tx_hash} verified via TonAPI fallback.")
+                        return True
+                else:
+                    # Jetton Verification via TonAPI
+                    for action in tx.get("actions", []):
+                        if action.get("type") == "JettonTransfer":
+                            details = action.get("JettonTransfer", {})
+                            recipient = details.get("recipient", {}).get("address", "")
+                            amount_val = int(details.get("amount", 0))
+                            jetton_master = details.get("jetton", {}).get("address", "")
+                            
+                            # USDT Jetton has 6 decimals
+                            expected_units = int(expected_amount * 1_000_000)
+                            
+                            if (recipient.lower() == expected_address.lower() and 
+                                jetton_master.lower() == self.usdt_master.lower() and
+                                amount_val >= (expected_units * 0.99)):
+                                logger.info(f"✅ USDT Jetton {tx_hash} verified via TonAPI.")
+                                return True
+            return False
+        except Exception as e:
+            logger.error(f"TonAPI Verification Failed: {e}")
             return False
 
     async def _verify_heuristically(self, expected_amount_ton: float, expected_address: str) -> bool:
@@ -199,47 +246,6 @@ class TonVerificationService:
             logger.error(f"Heuristic Verification Failed: {e}")
             return False
 
-    async def _verify_via_tonapi(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str) -> bool:
-        try:
-            # Note: TonAPI often uses different URL structure, but for this fallback 
-            # we'll assume a similar pattern or a proxy if configured.
-            client = await http_client.get_client()
-            response = await client.get(f"https://tonapi.io/v2/blockchain/transactions/{tx_hash}", timeout=10.0)
-            if response.status_code == 200:
-                tx = response.json()
-                
-                # Check value and destination in the 'in_msg' of the result
-                in_msg = tx.get("in_msg", {})
-                
-                if currency == "TON":
-                    dest = in_msg.get("destination", {}).get("address", "")
-                    value = int(in_msg.get("value", 0))
-                    expected_nanoton = int(expected_amount * 1_000_000_000)
-                    if dest.lower() == expected_address.lower() and value >= (expected_nanoton * 0.98):
-                        logger.info(f"✅ Transaction {tx_hash} verified via TonAPI fallback.")
-                        return True
-                else:
-                    # Jetton Verification via TonAPI
-                    # We check the actions/events for token transfers
-                    for action in tx.get("actions", []):
-                        if action.get("type") == "JettonTransfer":
-                            details = action.get("JettonTransfer", {})
-                            recipient = details.get("recipient", {}).get("address", "")
-                            amount_val = int(details.get("amount", 0))
-                            jetton_master = details.get("jetton", {}).get("address", "")
-                            
-                            # USDT Jetton has 6 decimals
-                            expected_units = int(expected_amount * 1_000_000)
-                            
-                            if (recipient.lower() == expected_address.lower() and 
-                                jetton_master.lower() == self.usdt_master.lower() and
-                                amount_val >= (expected_units * 0.99)):
-                                logger.info(f"✅ USDT Jetton {tx_hash} verified via TonAPI.")
-                                return True
-            return False
-        except Exception as e:
-            logger.error(f"TonAPI Verification Failed: {e}")
-            return False
 
     def _verify_tx_details(self, tx: dict, expected_amount: float, expected_address: str, currency: str = "TON") -> bool:
         """Helper to verify internal details of a found transaction object."""

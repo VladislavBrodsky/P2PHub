@@ -509,17 +509,67 @@
   }
 }
 
-@keyframes slow-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes energy-flow {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0;
   }
 
-  to {
-    transform: rotate(360deg);
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes rhythmic-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes vibe-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+    transform: skewX(0deg);
+  }
+
+  50% {
+    background-position: 100% 50%;
+    transform: skewX(-2deg);
   }
 }
 
 @layer utilities {
+  .animate-energy-flow {
+    animation: energy-flow 3s linear infinite;
+  }
+
+  .animate-rhythmic-pulse {
+    animation: rhythmic-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-vibe-shift {
+    animation: vibe-shift 4s ease-in-out infinite;
+  }
+
   .animate-slow-spin {
     animation: slow-spin 12s linear infinite;
   }

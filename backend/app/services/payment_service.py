@@ -132,13 +132,20 @@ class PaymentService:
             message=f"Starting verification for {partner.id} | Hash: {tx_hash}",
             level="info"
         )
-        # 1. Check if TX already processed (Global Uniqueness per hash)
-        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash).with_for_update()
+        # 1. Check if TX already processed by someone else
+        stmt = select(PartnerTransaction).where(
+            PartnerTransaction.tx_hash == tx_hash,
+            PartnerTransaction.status == "completed"
+        )
         res = await session.exec(stmt)
         existing = res.first()
-        if existing and existing.status == "completed":
-            logger.info(f"Transaction {tx_hash} already completed.")
-            return True
+        if existing:
+            if existing.partner_id == partner.id:
+                logger.info(f"Transaction {tx_hash} already processed for partner {partner.id}")
+                return True
+            else:
+                logger.warning(f"🚨 FRAUD ATTEMPT: Partner {partner.id} tried to use Hash {tx_hash} already used by {existing.partner_id}")
+                return False
 
         # 2. Find the most recent pending TON transaction for this partner
         sentry_sdk.add_breadcrumb(
@@ -230,12 +237,20 @@ class PaymentService:
             message=f"Starting USDT verification ({network}) for {partner.id} | Hash: {tx_hash}",
             level="info"
         )
-        # 1. Check if TX already processed
-        stmt = select(PartnerTransaction).where(PartnerTransaction.tx_hash == tx_hash).with_for_update()
+        # 1. Check if TX already processed by someone else
+        stmt = select(PartnerTransaction).where(
+            PartnerTransaction.tx_hash == tx_hash,
+            PartnerTransaction.status == "completed"
+        )
         res = await session.exec(stmt)
         existing = res.first()
-        if existing and existing.status == "completed":
-            return True
+        if existing:
+            if existing.partner_id == partner.id:
+                logger.info(f"Transaction {tx_hash} already processed for partner {partner.id}")
+                return True
+            else:
+                logger.warning(f"🚨 FRAUD ATTEMPT: Partner {partner.id} tried to use USDT Hash {tx_hash} already used by {existing.partner_id}")
+                return False
 
         # 2. Find the most recent pending USDT transaction for this partner on this network
         thirty_mins_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(minutes=30)

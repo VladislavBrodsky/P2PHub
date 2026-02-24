@@ -345,7 +345,7 @@ export const StudioTab = ({
         };
     }, [handleGenerate, setExternalStep]);
 
-    const getCleanShareText = (platform?: 'x' | 'telegram' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
+    const getCleanShareText = (platform?: 'x' | 'telegram' | 'whatsapp' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
         if (!generatedResult) return '';
 
         const sanitizedBody = sanitizeAIGeneratedText(generatedResult.body);
@@ -399,7 +399,7 @@ export const StudioTab = ({
         if (!generatedResult) return;
         setIsSharingSystem(true);
         impact('light');
-        const textToShare = getCleanShareText();
+        const textToShare = getCleanShareText('telegram');
         const shareData: ShareData = {
             title: generatedResult.title,
             text: textToShare,
@@ -453,7 +453,7 @@ export const StudioTab = ({
     const handleSharePlatform = (platform: 'telegram' | 'whatsapp' | 'x') => {
         if (!generatedResult) return;
         impact('light');
-        const textToShare = getCleanShareText();
+        const textToShare = getCleanShareText(platform);
         const encodedText = encodeURIComponent(textToShare);
 
         // For better previews, we can try to pass the image as the URL parameter
