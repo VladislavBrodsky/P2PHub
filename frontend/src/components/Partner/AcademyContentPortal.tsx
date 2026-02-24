@@ -116,7 +116,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         className="pointer-events-auto p-2 rounded-xl bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white hover:scale-105 active:scale-90 transition-all shadow-md flex items-center gap-2 group z-50"
                     >
                         <X className="w-4 h-4" />
-                        <span className="text-label font-bold uppercase tracking-widest pr-1 hidden sm:block">{t('common.close')}</span>
+                        <span className="text-label font-bold uppercase tracking-widest pr-1 hidden sm:block">{t('common:close')}</span>
                     </button>
 
                     {/* Stage Badge - Centered specifically for better hierarchy */}
