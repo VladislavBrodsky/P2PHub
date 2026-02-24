@@ -1,6 +1,6 @@
 import { m, AnimatePresence } from 'framer-motion';
 import { User, Globe, Network, AlertCircle, Brain, Zap, TrendingUp, ChevronRight, Sparkles, Users } from 'lucide-react';
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
 import { useTranslation } from 'react-i18next';
@@ -15,54 +15,13 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
 
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
-    const [count, setCount] = useState(0);
-    const [baseCount, setBaseCount] = useState(0);
     const [isCalculating, setIsCalculating] = useState(true);
-    const [isDoneCalculating, setIsDoneCalculating] = useState(false);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
         const pseudoRandom = Math.abs(Math.sin(seed * 12345));
         return Math.floor(pseudoRandom * (765 - 333 + 1)) + 333;
     }, []);
-
-    // ── COUNT UP TO $43,200 OVER 10 SECONDS, THEN STOP ──
-    useEffect(() => {
-        if (isCalculating) {
-            const duration = 10000; // 10s so users can watch it climb
-            const startTime = Date.now();
-            const startVal = count;
-
-            const animate = () => {
-                const now = Date.now();
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                // easeInOutCubic for a satisfying build-up
-                const ease = progress < 0.5
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-                const current = Math.floor(startVal + (targetAmount - startVal) * ease);
-                setCount(current);
-                setBaseCount(current);
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    impact('medium');
-                    setCount(targetAmount);
-                    setBaseCount(targetAmount);
-                    setTimeout(() => {
-                        setIsCalculating(false);
-                        setIsDoneCalculating(true);
-                        // Do NOT auto-show funnel — user taps CTA
-                    }, 400);
-                }
-            };
-            requestAnimationFrame(animate);
-        }
-    }, [isCalculating, targetAmount, impact]);
-
 
     const handleUpgrade = () => {
         impact('heavy');
@@ -79,7 +38,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
         setFunnelStep(prev => prev + 1);
     };
 
-    const funnelStages = [
+    const funnelStages = useMemo(() => [
         {
             icon: <AlertCircle className="w-12 h-12 text-amber-500" />,
             title: t('viral_funnel.step1_title', { defaultValue: 'Immediate Opportunity' }),
@@ -101,7 +60,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
             color: 'from-yellow-500/20 to-orange-500/20',
             borderColor: 'border-yellow-500/30'
         }
-    ];
+    ], [t]);
 
     return (
         <div className={clsx(
@@ -109,35 +68,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
             "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl",
             "group"
         )}>
-            {/* ── PREMIUM NEURAL BACKGROUND ── */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60 dark:opacity-80">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)]" />
-                <div className="circuit-decor opacity-40 dark:opacity-60" />
-
-                {/* Visual Neural Connections */}
-                <svg className="absolute inset-0 w-full h-full opacity-50">
-                    <m.path
-                        d="M100,250 Q250,100 400,250 T700,250"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        fill="none"
-                        className="text-indigo-500/40"
-                        animate={{ strokeDashoffset: [0, 100] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "8, 8" }}
-                    />
-                    <m.path
-                        d="M-50,400 Q200,550 450,400 T950,400"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        fill="none"
-                        className="text-emerald-500/40"
-                        animate={{ strokeDashoffset: [100, 0] }}
-                        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "8, 8" }}
-                    />
-                </svg>
-            </div>
+            <NeuralBackground />
 
             <AnimatePresence mode="wait">
                 {!showFunnel ? (
@@ -148,199 +79,6 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                         exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }}
                         className="absolute inset-0 flex flex-col items-center justify-center p-6"
                     >
-                        <div className="absolute inset-0 z-0">
-                            {/* Atmospheric Plasma Glows */}
-                            <m.div
-                                className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
-                                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                            />
-                            <m.div
-                                className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
-                                animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
-                                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                            />
-
-                            {/* Scanline Effect */}
-                            <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                                style={{
-                                    background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
-                                    backgroundSize: '100% 4px'
-                                }}
-                            />
-
-                            {/* Energy Particles */}
-                            {[...Array(12)].map((_, i) => (
-                                <m.div
-                                    key={i}
-                                    className={`absolute w-${i % 2 === 0 ? '1' : '1.5'} h-${i % 2 === 0 ? '1' : '1.5'} ${i % 3 === 0 ? 'bg-blue-400' : i % 3 === 1 ? 'bg-indigo-400' : 'bg-cyan-400'} rounded-full blur-[1px]`}
-                                    initial={{
-                                        x: Math.random() * 400,
-                                        y: Math.random() * 200,
-                                        opacity: 0
-                                    }}
-                                    animate={{
-                                        y: [null, -100 - Math.random() * 100],
-                                        x: [null, (Math.random() - 0.5) * 50 + (i % 2 === 0 ? 20 : -20)],
-                                        opacity: [0, 0.7, 0],
-                                        scale: [1, 1.5, 0.5]
-                                    }}
-                                    transition={{
-                                        duration: 2 + Math.random() * 4,
-                                        repeat: Infinity,
-                                        ease: "easeOut",
-                                        delay: Math.random() * 5
-                                    }}
-                                />
-                            ))}
-
-                            {/* Dot Grid Background */}
-                            <div className="absolute inset-0 opacity-15"
-                                style={{
-                                    backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
-                                    backgroundSize: '16px 16px'
-                                }}
-                            />
-
-                            {/* Neural & Energy SVG Layer */}
-                            <div className="absolute inset-0 flex items-center justify-center -top-10 sm:top-[-5%]">
-                                <svg className="w-full h-[400px] max-w-lg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
-                                    {/* Neural Connectivity Lines */}
-                                    <m.path
-                                        d="M 120 100 L 200 100"
-                                        stroke="url(#neural-gradient)"
-                                        strokeWidth="0.5"
-                                        strokeDasharray="4 4"
-                                        fill="none"
-                                        animate={{ strokeDashoffset: [0, -20] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                        className="opacity-20"
-                                    />
-                                    <m.path
-                                        d="M 280 100 L 200 100"
-                                        stroke="url(#neural-gradient)"
-                                        strokeWidth="0.5"
-                                        strokeDasharray="4 4"
-                                        fill="none"
-                                        animate={{ strokeDashoffset: [0, 20] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                        className="opacity-20"
-                                    />
-
-                                    {/* Dynamic Glow Curves */}
-                                    <m.path
-                                        d="M -50 150 Q 100 50 250 150 T 450 100"
-                                        fill="none"
-                                        stroke="url(#blue-gradient)"
-                                        strokeWidth="2"
-                                        initial={{ pathLength: 0, opacity: 0 }}
-                                        animate={{ pathLength: 1, opacity: 1 }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                        className="opacity-30"
-                                    />
-                                    <m.path
-                                        d="M -50 100 Q 150 180 300 80 T 450 150"
-                                        fill="none"
-                                        stroke="url(#purple-gradient)"
-                                        strokeWidth="1.5"
-                                        initial={{ pathLength: 0, opacity: 0 }}
-                                        animate={{ pathLength: 1, opacity: 1 }}
-                                        transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
-                                        className="opacity-30"
-                                    />
-
-                                    {/* Shooting Energy Path Particles */}
-                                    <m.circle r="2" fill="#60A5FA" filter="blur(2px)">
-                                        <animateMotion
-                                            path="M -50 150 Q 100 50 250 150 T 450 100"
-                                            dur="3s"
-                                            repeatCount="indefinite"
-                                        />
-                                    </m.circle>
-                                    <m.circle r="1.5" fill="#A855F7" filter="blur(2px)">
-                                        <animateMotion
-                                            path="M -50 100 Q 150 180 300 80 T 450 150"
-                                            dur="4s"
-                                            repeatCount="indefinite"
-                                            begin="1s"
-                                        />
-                                    </m.circle>
-
-                                    {/* Multi-Ring Energy Orbits - Staggered & Pulsing */}
-                                    <m.circle
-                                        cx="200"
-                                        cy="100"
-                                        r="68"
-                                        stroke="white"
-                                        strokeWidth="0.5"
-                                        fill="none"
-                                        strokeDasharray="4 60"
-                                        animate={{
-                                            rotate: 360,
-                                            scale: [1, 1.02, 1]
-                                        }}
-                                        transition={{
-                                            rotate: { duration: 2, repeat: Infinity, ease: "linear" },
-                                            scale: { duration: 1, repeat: Infinity, ease: "easeInOut" }
-                                        }}
-                                        className="opacity-40"
-                                        style={{ transformOrigin: "200px 100px" }}
-                                    />
-                                    <m.circle
-                                        cx="200"
-                                        cy="100"
-                                        r="74"
-                                        stroke="#3b82f6"
-                                        strokeWidth="1"
-                                        fill="none"
-                                        strokeDasharray="10 200"
-                                        animate={{
-                                            rotate: -360,
-                                            opacity: [0.3, 0.7, 0.3]
-                                        }}
-                                        transition={{
-                                            rotate: { duration: 4, repeat: Infinity, ease: "linear" },
-                                            opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                                        }}
-                                        className="opacity-60"
-                                        style={{ transformOrigin: "200px 100px" }}
-                                    />
-                                    <m.circle
-                                        cx="200"
-                                        cy="100"
-                                        r="82"
-                                        stroke="url(#blue-gradient)"
-                                        strokeWidth="0.5"
-                                        fill="none"
-                                        animate={{
-                                            scale: [1, 1.08, 1],
-                                            opacity: [0.1, 0.4, 0.1],
-                                            strokeWidth: [0.5, 1.5, 0.5]
-                                        }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                        style={{ transformOrigin: "200px 100px" }}
-                                    />
-
-                                    <defs>
-                                        <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-                                            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
-                                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                                        </linearGradient>
-                                        <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
-                                            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
-                                            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
-                                        </linearGradient>
-                                        <linearGradient id="neural-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-                                            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
-                                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </div>
-                        </div>
 
                         {/* ── VIRAL CORE HUB (USER) ── */}
                         <div className="absolute inset-x-0 top-6 sm:top-8 flex justify-center pointer-events-none z-10">
@@ -442,57 +180,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                         </div>
 
                         {/* ── CALCULATION COUNTER ── */}
-                        <m.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-xs px-4"
-                        >
-                            <div className="relative rounded-2xl bg-slate-950/95 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden px-4 py-3">
-                                <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/5 pointer-events-none" />
-
-                                {/* Label */}
-                                <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-indigo-400 text-center mb-1.5">
-                                    {t('income.network.yield', { defaultValue: 'ESTIMATED NETWORK YIELD' })}
-                                </p>
-
-                                {/* Dollar amount — single row, scales with screen */}
-                                <div className="flex items-baseline justify-center gap-0.5">
-                                    <span className="text-3xl sm:text-4xl font-black tabular-nums tracking-tight text-white leading-none">
-                                        ${Math.floor(count).toLocaleString()}
-                                    </span>
-                                    <span className="text-base sm:text-lg font-bold text-indigo-400 leading-none">
-                                        .{Math.floor((count % 1) * 100).toString().padStart(2, '0')}
-                                    </span>
-                                </div>
-
-                                {/* Progress bar */}
-                                <div className="mt-2.5 h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <m.div
-                                        initial={{ width: 0 }}
-                                        animate={{ width: `${Math.min((count / 43200) * 100, 100)}%` }}
-                                        className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
-                                    />
-                                </div>
-
-                                {/* Footer labels */}
-                                <div className="mt-1.5 flex justify-between items-center">
-                                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
-                                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
-                                </div>
-
-                                {/* CTA — only visible after count reaches $43,200 */}
-                                {isDoneCalculating && (
-                                    <m.button
-                                        initial={{ opacity: 0, y: 6 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        onClick={() => setShowFunnel(true)}
-                                        className="mt-3 w-full h-9 rounded-xl vibing-emerald-animated text-white font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-1.5 shadow-[0_8px_24px_-6px_rgba(16,185,129,0.5)] active:scale-95 transition-transform"
-                                    >
-                                        Reveal Strategy <ChevronRight className="w-3.5 h-3.5" />
-                                    </m.button>
-                                )}
-                            </div>
-                        </m.div>
+                        <YieldCounter targetAmount={targetAmount} onComplete={() => setShowFunnel(true)} />
                     </m.div>
                 ) : (
                     <m.div
@@ -639,6 +327,303 @@ const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
         )} />
     </m.div>
 );
+
+const NeuralBackground = React.memo(() => (
+    <>
+        {/* ── PREMIUM NEURAL BACKGROUND ── */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60 dark:opacity-80">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)]" />
+            <div className="circuit-decor opacity-40 dark:opacity-60" />
+
+            {/* Visual Neural Connections */}
+            <svg className="absolute inset-0 w-full h-full opacity-50">
+                <m.path
+                    d="M100,250 Q250,100 400,250 T700,250"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    fill="none"
+                    className="text-indigo-500/40"
+                    animate={{ strokeDashoffset: [0, 100] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                    style={{ strokeDasharray: "8, 8" }}
+                />
+                <m.path
+                    d="M-50,400 Q200,550 450,400 T950,400"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    fill="none"
+                    className="text-emerald-500/40"
+                    animate={{ strokeDashoffset: [100, 0] }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    style={{ strokeDasharray: "8, 8" }}
+                />
+            </svg>
+        </div>
+
+        <div className="absolute inset-0 z-0">
+            {/* Atmospheric Plasma Glows */}
+            <m.div
+                className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
+                animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <m.div
+                className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
+                animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
+                transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+
+            {/* Scanline Effect */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                style={{
+                    background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
+                    backgroundSize: '100% 4px'
+                }}
+            />
+
+            {/* Energy Particles */}
+            {[...Array(8)].map((_, i) => (
+                <m.div
+                    key={i}
+                    className={`absolute w-${i % 2 === 0 ? '1' : '1.5'} h-${i % 2 === 0 ? '1' : '1.5'} ${i % 3 === 0 ? 'bg-blue-400' : i % 3 === 1 ? 'bg-indigo-400' : 'bg-cyan-400'} rounded-full blur-[1px]`}
+                    initial={{
+                        x: Math.random() * 400,
+                        y: Math.random() * 200,
+                        opacity: 0
+                    }}
+                    animate={{
+                        y: [null, -100 - Math.random() * 100],
+                        x: [null, (Math.random() - 0.5) * 50 + (i % 2 === 0 ? 20 : -20)],
+                        opacity: [0, 0.7, 0],
+                        scale: [1, 1.5, 0.5]
+                    }}
+                    transition={{
+                        duration: 3 + Math.random() * 4,
+                        repeat: Infinity,
+                        ease: "easeOut",
+                        delay: Math.random() * 5
+                    }}
+                />
+            ))}
+
+            {/* Dot Grid Background */}
+            <div className="absolute inset-0 opacity-15"
+                style={{
+                    backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
+                    backgroundSize: '16px 16px'
+                }}
+            />
+
+            {/* Neural & Energy SVG Layer */}
+            <div className="absolute inset-0 flex items-center justify-center -top-10 sm:top-[-5%]">
+                <svg className="w-full h-[400px] max-w-lg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
+                    {/* Neural Connectivity Lines */}
+                    <m.path
+                        d="M 120 100 L 200 100"
+                        stroke="url(#neural-gradient)"
+                        strokeWidth="0.5"
+                        strokeDasharray="4 4"
+                        fill="none"
+                        animate={{ strokeDashoffset: [0, -20] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="opacity-20"
+                    />
+                    <m.path
+                        d="M 280 100 L 200 100"
+                        stroke="url(#neural-gradient)"
+                        strokeWidth="0.5"
+                        strokeDasharray="4 4"
+                        fill="none"
+                        animate={{ strokeDashoffset: [0, 20] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="opacity-20"
+                    />
+
+                    {/* Dynamic Glow Curves */}
+                    <m.path
+                        d="M -50 150 Q 100 50 250 150 T 450 100"
+                        fill="none"
+                        stroke="url(#blue-gradient)"
+                        strokeWidth="2"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        className="opacity-30"
+                    />
+                    <m.path
+                        d="M -50 100 Q 150 180 300 80 T 450 150"
+                        fill="none"
+                        stroke="url(#purple-gradient)"
+                        strokeWidth="1.5"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+                        className="opacity-30"
+                    />
+
+                    {/* Shooting Energy Path Particles */}
+                    <m.circle r="2" fill="#60A5FA" filter="blur(2px)">
+                        <animateMotion
+                            path="M -50 150 Q 100 50 250 150 T 450 100"
+                            dur="3s"
+                            repeatCount="indefinite"
+                        />
+                    </m.circle>
+                    <m.circle r="1.5" fill="#A855F7" filter="blur(2px)">
+                        <animateMotion
+                            path="M -50 100 Q 150 180 300 80 T 450 150"
+                            dur="4s"
+                            repeatCount="indefinite"
+                            begin="1s"
+                        />
+                    </m.circle>
+
+                    {/* Multi-Ring Energy Orbits - Staggered & Pulsing */}
+                    <m.circle
+                        cx="200"
+                        cy="100"
+                        r="68"
+                        stroke="white"
+                        strokeWidth="0.5"
+                        fill="none"
+                        strokeDasharray="4 60"
+                        animate={{
+                            rotate: 360,
+                            scale: [1, 1.02, 1]
+                        }}
+                        transition={{
+                            rotate: { duration: 6, repeat: Infinity, ease: "linear" },
+                            scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                        className="opacity-40"
+                        style={{ transformOrigin: "200px 100px" }}
+                    />
+                    <m.circle
+                        cx="200"
+                        cy="100"
+                        r="74"
+                        stroke="#3b82f6"
+                        strokeWidth="1"
+                        fill="none"
+                        strokeDasharray="10 200"
+                        animate={{
+                            rotate: -360,
+                            opacity: [0.3, 0.7, 0.3]
+                        }}
+                        transition={{
+                            rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+                            opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                        className="opacity-60"
+                        style={{ transformOrigin: "200px 100px" }}
+                    />
+
+                    <defs>
+                        <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+                            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                        </linearGradient>
+                        <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+                            <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
+                            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                        </linearGradient>
+                        <linearGradient id="neural-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+                            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+                            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    </>
+));
+
+const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: number; onComplete: () => void }) => {
+    const { t } = useTranslation(['marketing']);
+    const { impact } = useHaptic();
+    const [count, setCount] = useState(0);
+    const [isDoneCalculating, setIsDoneCalculating] = useState(false);
+
+    useEffect(() => {
+        const duration = 10000;
+        const startTime = Date.now();
+
+        const animate = () => {
+            const now = Date.now();
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+            const current = Math.floor(targetAmount * ease);
+            setCount(current);
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                impact('medium');
+                setCount(targetAmount);
+                setTimeout(() => {
+                    setIsDoneCalculating(true);
+                }, 400);
+            }
+        };
+        requestAnimationFrame(animate);
+    }, [targetAmount, impact]);
+
+    return (
+        <m.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-full max-w-xs px-4"
+        >
+            <div className="relative rounded-2xl bg-slate-950/95 border border-white/10 shadow-2xl backdrop-blur-xl overflow-hidden px-4 py-3">
+                <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/5 pointer-events-none" />
+
+                <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-indigo-400 text-center mb-1.5">
+                    {t('income.network.yield', { defaultValue: 'ESTIMATED NETWORK YIELD' })}
+                </p>
+
+                <div className="flex items-baseline justify-center gap-0.5">
+                    <span className="text-3xl sm:text-4xl font-black tabular-nums tracking-tight text-white leading-none">
+                        ${Math.floor(count).toLocaleString()}
+                    </span>
+                    <span className="text-base sm:text-lg font-bold text-indigo-400 leading-none">
+                        .{Math.floor((count % 1) * 100).toString().padStart(2, '0')}
+                    </span>
+                </div>
+
+                <div className="mt-2.5 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <m.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.min((count / targetAmount) * 100, 100)}%` }}
+                        className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
+                    />
+                </div>
+
+                <div className="mt-1.5 flex justify-between items-center">
+                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
+                </div>
+
+                {isDoneCalculating && (
+                    <m.button
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        onClick={onComplete}
+                        className="mt-3 w-full h-9 rounded-xl vibing-emerald-animated text-white font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-1.5 shadow-[0_8px_24px_-6px_rgba(16,185,129,0.5)] active:scale-95 transition-transform"
+                    >
+                        Reveal Strategy <ChevronRight className="w-3.5 h-3.5" />
+                    </m.button>
+                )}
+            </div>
+        </m.div>
+    );
+});
 
 
 

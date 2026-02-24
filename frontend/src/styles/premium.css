@@ -4,27 +4,27 @@
 @keyframes liquid-crystal-shift {
   0% {
     background-position: 0% 50%;
-    filter: brightness(1.1) saturate(1.4);
+    opacity: 0.95;
   }
 
   25% {
     background-position: 50% 0%;
-    filter: brightness(1.2) saturate(1.6);
+    opacity: 1;
   }
 
   50% {
     background-position: 100% 50%;
-    filter: brightness(1.15) saturate(1.5);
+    opacity: 0.95;
   }
 
   75% {
     background-position: 50% 100%;
-    filter: brightness(1.2) saturate(1.6);
+    opacity: 1;
   }
 
   100% {
     background-position: 0% 50%;
-    filter: brightness(1.1) saturate(1.4);
+    opacity: 0.95;
   }
 }
 
@@ -52,15 +52,11 @@
 
   0%,
   100% {
-    box-shadow: 0 0 6px 1px rgba(56, 189, 248, 0.5), 0 0 12px 2px rgba(139, 92, 246, 0.3);
+    opacity: 0.6;
   }
 
-  33% {
-    box-shadow: 0 0 8px 2px rgba(52, 211, 153, 0.6), 0 0 16px 3px rgba(99, 102, 241, 0.4);
-  }
-
-  66% {
-    box-shadow: 0 0 8px 2px rgba(192, 132, 252, 0.6), 0 0 16px 3px rgba(34, 211, 238, 0.4);
+  50% {
+    opacity: 1;
   }
 }
 
@@ -68,10 +64,8 @@
   position: relative;
   overflow: hidden;
   background-size: 200% 200%;
-  animation:
-    liquid-crystal-shift 4s ease infinite,
-    liquid-crystal-glow 4s ease infinite;
-  will-change: transform, filter, box-shadow;
+  animation: liquid-crystal-shift 4s ease infinite;
+  will-change: transform, opacity;
   transform: translateZ(0);
 }
 
@@ -105,22 +99,16 @@
 
 /* === XP Acid Vibing Badge === */
 @keyframes xp-acid-vibe {
-  0% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
-    filter: brightness(1.0) saturate(1.1);
-    box-shadow: 0 0 6px 1px rgba(210, 255, 0, 0.2), 0 0 10px 2px rgba(163, 255, 0, 0.1);
+    opacity: 0.9;
   }
 
   50% {
     background-position: 100% 50%;
-    filter: brightness(1.1) saturate(1.2);
-    box-shadow: 0 0 8px 1px rgba(210, 255, 0, 0.3), 0 0 12px 2px rgba(163, 255, 0, 0.15);
-  }
-
-  100% {
-    background-position: 0% 50%;
-    filter: brightness(1.0) saturate(1.1);
-    box-shadow: 0 0 6px 1px rgba(210, 255, 0, 0.2), 0 0 10px 2px rgba(163, 255, 0, 0.1);
+    opacity: 1;
   }
 }
 
@@ -282,11 +270,13 @@
 
   0%,
   100% {
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+    opacity: 0.7;
+    transform: scale(1);
   }
 
   50% {
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
+    opacity: 1;
+    transform: scale(1.01);
   }
 }
 
@@ -576,5 +566,33 @@
 
   .animate-vibing-gradient {
     animation: vibing-gradient 4s ease-in-out infinite;
+  }
+}
+
+/* === MOBILE PERFORMANCE OVERRIDES === */
+@media (max-width: 768px) {
+
+  .backdrop-blur-3xl,
+  .backdrop-blur-2xl,
+  .backdrop-blur-xl {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  .vibing-premium-panel {
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+
+  .dark .vibing-premium-panel {
+    background: rgba(15, 23, 42, 0.9) !important;
+  }
+
+  /* Disable expensive continuous shadow animations on mobile */
+  .vibrating-glow-blue,
+  .xp-acid-badge,
+  .progress-bar-liquid {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   }
 }

@@ -17,6 +17,73 @@ import { useConfig } from '../context/ConfigContext';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
 
+// --- ISOLATED PERFORMANCE COMPONENTS ---
+const FomoTimer = React.memo(() => {
+    const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
+
+    useEffect(() => {
+        const deadTimer = setInterval(() => {
+            setDeadLine(prev => {
+                let { h, m, s } = prev;
+                s--;
+                if (s < 0) { s = 59; m--; }
+                if (m < 0) { m = 59; h--; }
+                if (h < 0) { h = 23; }
+                return { h, m, s };
+            });
+        }, 1000);
+        return () => clearInterval(deadTimer);
+    }, []);
+
+    return (
+        <div className="relative z-10 flex items-center gap-1 font-mono shrink-0 bg-black/5 p-1 rounded-lg">
+            {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
+                <React.Fragment key={i}>
+                    <div className="bg-black text-yellow-400 rounded-md px-1.5 py-0.5 text-label font-bold min-w-[28px] text-center shadow-lg">
+                        {val.toString().padStart(2, '0')}
+                    </div>
+                    {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
+                </React.Fragment>
+            ))}
+        </div>
+    );
+});
+
+const PaymentSessionTimer = React.memo(({ expiresAt, onExpire }: { expiresAt?: string; onExpire: () => void }) => {
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (!expiresAt) { setTimeLeft(null); return; }
+        const interval = setInterval(() => {
+            const expires = new Date(expiresAt).getTime();
+            const now = new Date().getTime();
+            const diff = Math.max(0, Math.floor((expires - now) / 1000));
+            setTimeLeft(diff);
+            if (diff === 0) {
+                clearInterval(interval);
+                onExpire();
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [expiresAt, onExpire]);
+
+    const formattedTime = useMemo(() => {
+        if (timeLeft === null) return null;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }, [timeLeft]);
+
+    if (!formattedTime) return null;
+
+    return (
+        <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
+            <Clock size={10} className="text-blue-600 dark:text-blue-400" />
+            <span className="text-label font-bold font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
+        </div>
+    );
+});
+
 export default function SubscriptionPage() {
     const { t } = useTranslation(['pro', 'marketing', 'common']);
     const { user, refreshUser } = useUser();
@@ -28,7 +95,6 @@ export default function SubscriptionPage() {
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
     const [manualHash, setManualHash] = useState('');
     const [sessionData, setSessionData] = useState<{ expires_at: string; transaction_id: number } | null>(null);
-    const [timeLeft, setTimeLeft] = useState<number | null>(null);
     const [selectedPlan, setSelectedPlan] = useState<'PRO' | 'PRO_PLUS'>('PRO_PLUS');
     const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
     const [expandedBenefit, setExpandedBenefit] = useState<string | null>(null);
@@ -36,10 +102,6 @@ export default function SubscriptionPage() {
     const [showPaymentOptionsForPro, setShowPaymentOptionsForPro] = useState(false);
     const [infoModal, setInfoModal] = useState<{ title: string; desc: string; icon: any; color: string } | null>(null);
     const [isSelectingCurrency, setIsSelectingCurrency] = useState(false);
-
-    const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
-
-    const [slotsLeft, setSlotsLeft] = useState(7);
 
     const isPro = user?.is_pro;
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
@@ -76,42 +138,8 @@ export default function SubscriptionPage() {
         fetchMyTransactions();
     }, []);
 
-    useEffect(() => {
-        if (!sessionData?.expires_at) { setTimeLeft(null); return; }
-        const interval = setInterval(() => {
-            const expires = new Date(sessionData.expires_at).getTime();
-            const now = new Date().getTime();
-            const diff = Math.max(0, Math.floor((expires - now) / 1000));
-            setTimeLeft(diff);
-            if (diff === 0) { clearInterval(interval); setPaymentMethod(null); setSessionData(null); alert(t('subscription.alerts.expired')); }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [sessionData, t]);
-
-
-
-    // Unified FOMO Effects
-    useEffect(() => {
-
-        const slotTimer = setInterval(() => {
-            setSlotsLeft(prev => prev > 3 ? prev - (Math.random() > 0.8 ? 1 : 0) : prev);
-        }, 15000);
-        const deadTimer = setInterval(() => {
-            setDeadLine(prev => {
-                let { h, m, s } = prev;
-                s--;
-                if (s < 0) { s = 59; m--; }
-                if (m < 0) { m = 59; h--; }
-                if (h < 0) { h = 23; }
-                return { h, m, s };
-            });
-        }, 1000);
-        return () => {
-
-            clearInterval(slotTimer);
-            clearInterval(deadTimer);
-        };
-    }, []);
+    // Unified FOMO Effects - slotsLeft and deadLine removed from here
+    // as they are now managed in isolated sub-components to prevent full-page re-renders.
 
     // Scroll locking for modals
     useEffect(() => {
@@ -164,12 +192,6 @@ export default function SubscriptionPage() {
         };
     }, [impact]);
 
-    const formattedTime = useMemo(() => {
-        if (timeLeft === null) return null;
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-    }, [timeLeft]);
 
     const planPrice = useMemo(() => {
         if (selectedPlan === 'PRO') return proPrice;
@@ -337,27 +359,27 @@ export default function SubscriptionPage() {
         );
     }
 
-    const proBenefits = [
+    const proBenefits = useMemo(() => [
         { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
         { id: 'tokens', icon: Zap, label: t('pro:subscription.benefits.tokens'), desc: t('pro:subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
         { id: 'cashback', icon: TrendingUp, label: t('pro:subscription.benefits.cashback'), desc: t('pro:subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
         { id: 'tools', icon: Bot, label: t('pro:subscription.benefits.tools'), desc: t('pro:subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'intel', icon: Target, label: t('pro:subscription.benefits.growth_intel'), desc: t('pro:subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-    ];
+    ], [t]);
 
-    const proPlusBenefits = [
+    const proPlusBenefits = useMemo(() => [
         { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
         { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
         { id: 'omni', icon: InfinityIcon, label: t('pro:subscription.benefits.omni_sync'), desc: t('pro:subscription.benefits.omni_sync_desc') + " " + t('pro:subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
         { id: 'priority', icon: Star, label: t('pro:subscription.benefits.priority_ai'), desc: t('pro:subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
         { id: 'analytics', icon: BarChart2, label: t('pro:subscription.benefits.content_analytics'), desc: t('pro:subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
         { id: 'empire', icon: Rocket, label: t('pro:subscription.benefits.empire_access'), desc: t('pro:subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-    ];
+    ], [t]);
 
     const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
 
-    const faqs = [
+    const faqs = useMemo(() => [
         { icon: Clock, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q1'), a: t('pro:subscription.faq.a1') },
         { icon: Zap, iconColor: 'text-amber-500 dark:text-amber-400', q: t('pro:subscription.faq.q2'), a: t('pro:subscription.faq.a2') },
         { icon: Globe, iconColor: 'text-emerald-500 dark:text-emerald-400', q: t('pro:subscription.faq.q3'), a: t('pro:subscription.faq.a3') },
@@ -365,7 +387,7 @@ export default function SubscriptionPage() {
         { icon: Network, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q5'), a: t('pro:subscription.faq.a5') },
         { icon: TrendingUp, iconColor: 'text-rose-500 dark:text-rose-400', q: t('pro:subscription.faq.q6'), a: t('pro:subscription.faq.a6') },
         { icon: Share2, iconColor: 'text-fuchsia-500 dark:text-fuchsia-400', q: t('pro:subscription.faq.q7'), a: t('pro:subscription.faq.a7') },
-    ];
+    ], [t]);
 
     return (
         <>
@@ -558,16 +580,7 @@ export default function SubscriptionPage() {
                                 </div>
                             </div>
 
-                            <div className="relative z-10 flex items-center gap-1 font-mono shrink-0 bg-black/5 p-1 rounded-lg">
-                                {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
-                                    <React.Fragment key={i}>
-                                        <div className="bg-black text-yellow-400 rounded-md px-1.5 py-0.5 text-label font-bold min-w-[28px] text-center shadow-lg">
-                                            {val.toString().padStart(2, '0')}
-                                        </div>
-                                        {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
-                                    </React.Fragment>
-                                ))}
-                            </div>
+                            <FomoTimer />
                         </div>
                     </div>
 
@@ -931,12 +944,7 @@ export default function SubscriptionPage() {
                                         <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-label font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
                                             <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
                                         </button>
-                                        {formattedTime && (
-                                            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
-                                                <Clock size={10} className="text-blue-600 dark:text-blue-400" />
-                                                <span className="text-label font-bold font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
-                                            </div>
-                                        )}
+                                        <PaymentSessionTimer expiresAt={sessionData?.expires_at} onExpire={() => { setPaymentMethod(null); setSessionData(null); alert(t('subscription.alerts.expired')); }} />
                                     </div>
                                     <div className="mt-4">
                                         {paymentMethod === 'TON' ? (
