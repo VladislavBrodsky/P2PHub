@@ -117,6 +117,7 @@ class Settings(BaseSettings):
     ADMIN_TON_ADDRESS: str = "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN"
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
     TON_API_KEY: str | None = Field(default=None, validation_alias="TON_API_KEY")
+    TON_WEBHOOK_SECRET: str | None = Field(default=None, validation_alias="TON_WEBHOOK_SECRET")
     TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
 
     # --- BUSINESS LOGIC ---

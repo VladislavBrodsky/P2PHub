@@ -396,6 +396,10 @@ from app.api.endpoints import support
 
 app.include_router(support.router, prefix="/api/support", tags=["support"])
 
+from app.api.endpoints import webhooks  # TonAPI payment webhook listener
+
+app.include_router(webhooks.router, tags=["webhooks"])
+
 # #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.
 # This ensures that images are cached by the browser/CDN for 1 year,
 # which is perfect since our optimized WebP assets rarely change.
