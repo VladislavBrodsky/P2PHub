@@ -123,7 +123,6 @@ export const GrowthTab = ({
                             <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
                             <div className="text-3xl sm:text-5xl font-bold text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
-                                <span className="text-label text-indigo-500/80 dark:text-indigo-400/80 tracking-normal italic ml-0.5 font-bold">XP</span>
                             </div>
                         </div>
                     </div>

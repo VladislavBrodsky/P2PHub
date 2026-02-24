@@ -150,7 +150,7 @@ export const EarnHeader = () => {
                                 animate={{ opacity: 1, x: 0 }}
                                 className="text-xs sm:text-sm font-bold text-text-primary text-right tabular-nums ml-2 whitespace-nowrap"
                             >
-                                {Math.floor(progress.current).toLocaleString()} <span className="opacity-40 font-normal">/</span> {Math.floor(progress.total).toLocaleString()} <span className="text-[9px] sm:text-[10px] opacity-60 font-bold ml-0.5">XP</span>
+                                {Math.floor(progress.current).toLocaleString()} <span className="opacity-40 font-normal">/</span> {Math.floor(progress.total).toLocaleString()}
                             </motion.span>
                         </div>
 
@@ -238,8 +238,6 @@ export const EarnHeader = () => {
                                     <span className="text-base sm:text-xl font-bold leading-none tabular-nums text-text-primary">
                                         {Math.floor(xp).toLocaleString()}
                                     </span>
-                                    <span className="text-[9px] sm:text-[10px] font-bold uppercase mb-0.5 shrink-0"
-                                        style={{ color: `${badgeColor}dd` }}>xp</span>
                                 </div>
                                 {/* Subtle highlight */}
                                 <div className="absolute inset-x-0 top-0 h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${badgeColor}30, transparent)` }} />
