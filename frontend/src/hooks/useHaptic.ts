@@ -1,7 +1,8 @@
+import { useCallback } from 'react';
 import { hapticFeedback } from '@telegram-apps/sdk-react';
 
 export const useHaptic = () => {
-    const selection = () => {
+    const selection = useCallback(() => {
         try {
             if (hapticFeedback && hapticFeedback.selectionChanged && hapticFeedback.selectionChanged.isAvailable()) {
                 hapticFeedback.selectionChanged();
@@ -9,9 +10,9 @@ export const useHaptic = () => {
         } catch (e) {
             // Ignore errors in non-TMA environment
         }
-    };
+    }, []);
 
-    const impact = (style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => {
+    const impact = useCallback((style: 'light' | 'medium' | 'heavy' | 'rigid' | 'soft') => {
         try {
             if (hapticFeedback && hapticFeedback.impactOccurred && hapticFeedback.impactOccurred.isAvailable()) {
                 hapticFeedback.impactOccurred(style);
@@ -19,9 +20,9 @@ export const useHaptic = () => {
         } catch (e) {
             // Ignore
         }
-    };
+    }, []);
 
-    const notification = (type: 'error' | 'success' | 'warning') => {
+    const notification = useCallback((type: 'error' | 'success' | 'warning') => {
         try {
             if (hapticFeedback && hapticFeedback.notificationOccurred && hapticFeedback.notificationOccurred.isAvailable()) {
                 hapticFeedback.notificationOccurred(type);
@@ -29,7 +30,7 @@ export const useHaptic = () => {
         } catch (e) {
             // Ignore
         }
-    };
+    }, []);
 
     return { selection, impact, notification };
 };
