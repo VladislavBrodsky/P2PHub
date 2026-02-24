@@ -427,7 +427,7 @@ export const ProDashboard = () => {
             id="pro-dashboard-container"
             className="w-full text-text-primary font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-6"
         >
-            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-4 pb-12 min-h-[70vh]">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 pt-1 pb-12 min-h-[70vh]">
                 {/* Header Section - Mobile Optimized */}
                 <div className="flex flex-row items-center justify-between gap-2 mb-4 w-full">
                     {/* Dummy spacer to perfectly center the core content block against right button */}
