@@ -534,6 +534,7 @@
         "title": "Global Marketing Audit",
         "desc": "Elite CMO analytics and intel. (3 Tokens)",
         "btn": "Request Audit",
+        "initiate_btn": "SCAN SIGNALS",
         "modal_title": "Marketing Audit",
         "node_status": "Global Node: Active • 2026",
         "status": "ACTIVE",

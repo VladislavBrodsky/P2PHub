@@ -29,12 +29,12 @@ export const TopicDropdown = ({ selected, onSelect, categories, t }: TopicDropdo
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between px-5 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.99] transition-all shadow-sm"
+                className="w-full flex items-center justify-between px-4 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-[0.99] transition-all shadow-sm"
             >
                 <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                    <span className="text-label font-bold uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
-                    <span className="text-xs font-bold text-slate-900 dark:text-white">{t(selectedLabel)}</span>
+                    <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mr-2">{t('blog.navigation.intelligence', { defaultValue: 'Intelligence:' })}</span>
+                    <span className="text-[10px] font-bold text-slate-900 dark:text-white">{t(selectedLabel)}</span>
                 </div>
                 <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}

@@ -273,23 +273,23 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                             <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/5 blur-[120px] rounded-full animate-pulse [animation-delay:2s]" />
                         </div>
 
-                        <div className="px-5 pt-4 pb-2 flex items-center justify-between sticky top-0 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl z-50">
+                        <div className="px-5 pt-4 pb-2 flex items-center justify-between z-10">
                             <div className="flex items-center gap-3.5">
                                 <button
                                     onClick={() => { selection(); setActiveTab?.('home'); }}
-                                    className="p-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all shadow-sm hover:shadow-md hover:border-blue-500/20"
+                                    className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 active:scale-90 transition-all shadow-sm hover:shadow-md hover:border-blue-500/20 text-slate-900 dark:text-white"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                 </button>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <h1 className="text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
-                                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20">
+                                        <h1 className="text-xl sm:text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
+                                        <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 shrink-0">
                                             <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-label font-bold uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
+                                            <span className="text-[9px] font-bold uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
                                         </div>
                                     </div>
-                                    <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-1">
+                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-0.5">
                                         {t('blog.latest_count', { count: total })}
                                     </p>
                                 </div>
@@ -298,15 +298,15 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
 
                         <div className="px-5 py-6 space-y-5">
                             <div className="relative group">
-                                <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-all duration-300 group-focus-within:scale-110" />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 group-focus-within:text-blue-500 transition-all duration-300 group-focus-within:scale-110" />
                                 <input
                                     type="text"
                                     placeholder={t('blog.navigation.search_placeholder')}
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full h-15 pl-13 pr-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5"
+                                    className="w-full h-12 pl-12 pr-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5 placeholder:text-slate-400 dark:placeholder:text-slate-500/70"
                                 />
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-50 dark:bg-slate-800 text-label font-bold uppercase tracking-widest text-slate-400 border border-slate-200 dark:border-white/5 pointer-events-none">
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-800 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-300/80 border border-slate-200 dark:border-white/5 pointer-events-none">
                                     {t('blog.navigation.search_label')}
                                 </div>
                             </div>
@@ -545,16 +545,16 @@ const BlogDetail = ({
                 <div className="flex items-center justify-between w-full max-w-lg mx-auto">
                     <button
                         onClick={onBack}
-                        className="p-2 px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group"
+                        className="p-2 sm:px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group shrink-0"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="text-label font-bold uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
+                        <span className="hidden sm:block text-[10px] font-bold uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
                     </button>
 
-                    <div className="flex items-center gap-3">
-                        <div className="flex flex-col items-center mr-2">
-                            <div className="text-label font-bold uppercase tracking-widest text-slate-400 leading-none mb-0.5">{t('blog.navigation.reading_progress')}</div>
-                            <div className="text-label font-bold text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="flex flex-col items-end sm:items-center mr-1 sm:mr-2">
+                            <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 leading-none mb-0.5 whitespace-nowrap">{t('blog.navigation.reading_progress')}</div>
+                            <div className="text-[10px] font-bold text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
                             <button
@@ -604,19 +604,19 @@ const BlogDetail = ({
                     </div>
                 </div>
 
-                <h1 className="text-3xl sm:text-4xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white drop-shadow-sm uppercase!">
+                <h1 className="text-2xl sm:text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white drop-shadow-sm">
                     {post.title}
                 </h1>
 
-                <div className="flex items-center gap-4 py-5 border-y border-slate-200 dark:border-white/5">
-                    <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
-                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-bold text-lg text-blue-600 dark:text-blue-400">
-                            {post.author?.[0] || 'A'}
+                <div className="flex items-center gap-3 py-4 border-y border-slate-200 dark:border-white/5">
+                    <div className="w-10 h-10 rounded-xl bg-linear-to-br from-blue-500 to-indigo-600 p-0.5 shadow-lg shadow-blue-500/20">
+                        <div className="w-full h-full rounded-lg bg-white dark:bg-slate-900 flex items-center justify-center font-bold text-base text-blue-600 dark:text-blue-400">
+                            {post.author?.[0] || 'P'}
                         </div>
                     </div>
                     <div>
-                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author}</p>
-                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
+                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author || 'Pinto Team'}</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
                         <div className="flex -space-x-2.5">

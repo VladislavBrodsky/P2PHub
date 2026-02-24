@@ -41,12 +41,12 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: Math.min(index * 0.05, 0.3) }}
             onClick={onClick}
-            className="group relative p-4 sm:p-5 rounded-[2.25rem] bg-white dark:bg-slate-900/50 dark:backdrop-blur-xl border border-slate-200 dark:border-white/5 hover:border-blue-500/40 transition-all active:scale-[0.98] flex gap-3 sm:gap-4 items-center cursor-pointer shadow-xs hover:shadow-xl hover:shadow-blue-500/10"
+            className="group relative p-3 sm:p-4 rounded-2xl bg-white dark:bg-slate-900/50 dark:backdrop-blur-xl border border-slate-200 dark:border-white/5 hover:border-blue-500/40 transition-all active:scale-[0.98] flex gap-3 items-center cursor-pointer shadow-xs hover:shadow-xl hover:shadow-blue-500/10"
         >
             <div className="absolute inset-0 rounded-[2.25rem] bg-linear-to-br from-blue-500/0 to-indigo-500/0 group-hover:from-blue-500/5 group-hover:to-indigo-500/5 transition-all duration-500" />
 
             {(post.image) && (
-                <div className="relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800 shadow-inner">
+                <div className="relative shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800 shadow-inner">
                     <img
                         src={post.image}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
@@ -58,7 +58,7 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
             )}
             <div className="relative flex-1 min-w-0 space-y-1.5 sm:space-y-2.5">
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-label font-bold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[120px] sm:max-w-none">
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100px] sm:max-w-none">
                         {t(getCategoryKey(post.category))}
                     </span>
                     <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -77,11 +77,11 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                     </div>
                 </div>
                 <div>
-                    <h4 className="text-sm sm:text-body font-bold leading-snug group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
+                    <h4 className="text-sm font-bold leading-tight group-hover:text-blue-500 transition-colors line-clamp-2 text-slate-900 dark:text-white">
                         {post.title}
                     </h4>
                     <p
-                        className="mt-1 text-label sm:text-label font-bold text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed uppercase tracking-tight opacity-80"
+                        className="mt-0.5 text-[10px] font-medium text-slate-500 dark:text-slate-400/70 line-clamp-2 leading-relaxed opacity-80"
                         dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                     />
                 </div>

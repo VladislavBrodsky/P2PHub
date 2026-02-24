@@ -310,6 +310,40 @@
     "performance_control": "Performance control",
     "system_optimal": "System Optimal",
     "attention_required": "Attention Required",
-    "refresh_data": "Refresh Data"
+    "refresh_data": "Refresh Data",
+    "event_ledger": "System Event Ledger",
+    "immutable_audit": "Immutable audit trail",
+    "events_loaded": "{{count}} events loaded",
+    "latest_events": "Latest Events",
+    "loading": "Loading...",
+    "no_events": "No events found for this filter.",
+    "filter_partner_placeholder": "Filter by Partner ID (optional)",
+    "notif_history_title": "Notification History by Chat ID",
+    "notif_history_desc": "Use to verify: \"Was user X notified about event Y?\"",
+    "tg_chat_id_placeholder": "Telegram Chat ID (e.g. 716720099)",
+    "look_up": "Look Up",
+    "actions": {
+      "title": "Administrative Actions",
+      "revoke_pro": "Revoke PRO",
+      "grant_pro": "Grant PRO",
+      "adjust_xp": "Adjust XP",
+      "enter_xp_prompt": "Enter XP amount to add (can be negative):"
+    },
+    "stats": {
+      "direct_referrals": "Direct Referrals",
+      "tasks_completed": "Tasks Completed",
+      "current_balance": "Current Balance"
+    },
+    "event_types": {
+      "all": "ALL",
+      "commission": "COMMISSION",
+      "xp_award": "XP_AWARD",
+      "notification": "NOTIFICATION",
+      "referral": "REFERRAL",
+      "payment": "PAYMENT",
+      "reconciliation": "RECONCILIATION",
+      "system": "SYSTEM",
+      "misc": "MISC"
+    }
   }
 }

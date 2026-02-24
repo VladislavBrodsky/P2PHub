@@ -2008,16 +2008,16 @@ export const AdminPage = () => {
                                                     }`}
                                             >
                                                 {partnerDetails.is_pro ? <Trash size={14} /> : <Zap size={14} />}
-                                                {partnerDetails.is_pro ? 'Revoke PRO' : 'Grant PRO'}
+                                                {partnerDetails.is_pro ? t('admin_portal.actions.revoke_pro') : t('admin_portal.actions.grant_pro')}
                                             </button>
                                             <button
                                                 onClick={() => {
-                                                    const xp = prompt('Enter XP amount to add (can be negative):', '500');
+                                                    const xp = prompt(t('admin_portal.actions.enter_xp_prompt'), '500');
                                                     if (xp) updatePartner({ xp: parseFloat(xp) });
                                                 }}
                                                 className="py-4 rounded-2xl bg-blue-500 text-white font-bold text-label uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20"
                                             >
-                                                <Plus size={14} /> Adjust XP
+                                                <Plus size={14} /> {t('admin_portal.actions.adjust_xp')}
                                             </button>
                                         </div>
                                     </div>
@@ -2027,21 +2027,21 @@ export const AdminPage = () => {
                                         <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                             <div className="flex items-center gap-3">
                                                 <Users size={18} className="text-slate-400" />
-                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Direct Referrals</span>
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.direct_referrals')}</span>
                                             </div>
                                             <span className="text-sm font-bold">{partnerDetails.referral_count}</span>
                                         </div>
                                         <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                             <div className="flex items-center gap-3">
                                                 <CheckCircle size={18} className="text-slate-400" />
-                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Tasks Completed</span>
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.tasks_completed')}</span>
                                             </div>
                                             <span className="text-sm font-bold">{partnerDetails.tasks?.length || 0}</span>
                                         </div>
                                         <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                             <div className="flex items-center gap-3">
                                                 <Wallet size={18} className="text-slate-400" />
-                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Current Balance</span>
+                                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.current_balance')}</span>
                                             </div>
                                             <span className="text-sm font-bold text-emerald-500">${partnerDetails.balance}</span>
                                         </div>
@@ -2081,8 +2081,8 @@ export const AdminPage = () => {
                                             <BookOpen className="text-emerald-400" size={20} />
                                         </div>
                                         <div>
-                                            <div className="text-sm font-bold text-white">System Event Ledger</div>
-                                            <div className="text-label text-slate-500 font-medium">Immutable audit trail · {ledgerEvents.length} events loaded</div>
+                                            <div className="text-sm font-bold text-white">{t('admin_portal.event_ledger')}</div>
+                                            <div className="text-label text-slate-500 font-medium">{t('admin_portal.immutable_audit')} · {t('admin_portal.events_loaded', { count: ledgerEvents.length })}</div>
                                         </div>
                                     </div>
                                     <button
@@ -2097,16 +2097,16 @@ export const AdminPage = () => {
                             {/* Filters Row */}
                             <div className="space-y-3">
                                 <div className="flex gap-1.5 flex-wrap">
-                                    {EVENT_TYPES.map(t => (
+                                    {EVENT_TYPES.map(t_val => (
                                         <button
-                                            key={t}
-                                            onClick={() => { setLedgerFilter(t); setLedgerNotifHistory(null); }}
-                                            className={`px-3 py-1.5 rounded-xl text-label font-bold uppercase tracking-widest transition-all border ${ledgerFilter === t
-                                                ? (t === 'ALL' ? 'bg-white/10 border-white/20 text-white' : `${getType(t).bg} ${getType(t).color}`)
+                                            key={t_val}
+                                            onClick={() => { setLedgerFilter(t_val); setLedgerNotifHistory(null); }}
+                                            className={`px-3 py-1.5 rounded-xl text-label font-bold uppercase tracking-widest transition-all border ${ledgerFilter === t_val
+                                                ? (t_val === 'ALL' ? 'bg-white/10 border-white/20 text-white' : `${getType(t_val).bg} ${getType(t_val).color}`)
                                                 : 'bg-transparent border-white/5 text-slate-500 hover:border-white/10'}`}
                                         >
-                                            {t !== 'ALL' && <span className="mr-1">{getType(t).icon}</span>}
-                                            {t}
+                                            {t_val !== 'ALL' && <span className="mr-1">{getType(t_val).icon}</span>}
+                                            {t(`admin_portal.event_types.${t_val.toLowerCase()}`)}
                                         </button>
                                     ))}
                                 </div>
@@ -2115,7 +2115,7 @@ export const AdminPage = () => {
                                         type="text"
                                         value={ledgerPartnerId}
                                         onChange={e => setLedgerPartnerId(e.target.value)}
-                                        placeholder="Filter by Partner ID (optional)"
+                                        placeholder={t('admin_portal.filter_partner_placeholder')}
                                         className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/40"
                                     />
                                     <button onClick={fetchLedgerEvents} className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
@@ -2127,12 +2127,12 @@ export const AdminPage = () => {
                             {/* Event Feed */}
                             <div className="rounded-3xl bg-slate-900/60 border border-white/5 overflow-hidden">
                                 <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                                    <span className="text-label font-bold text-slate-500 uppercase tracking-widest">Latest Events</span>
-                                    {isLedgerLoading && <span className="text-label text-emerald-400 animate-pulse">Loading…</span>}
+                                    <span className="text-label font-bold text-slate-500 uppercase tracking-widest">{t('admin_portal.latest_events')}</span>
+                                    {isLedgerLoading && <span className="text-label text-emerald-400 animate-pulse">{t('admin_portal.loading')}</span>}
                                 </div>
                                 <div className="divide-y divide-white/5 max-h-[480px] overflow-y-auto">
                                     {ledgerEvents.length === 0 && !isLedgerLoading && (
-                                        <div className="p-8 text-center text-slate-600 text-xs">No events found for this filter.</div>
+                                        <div className="p-8 text-center text-slate-600 text-xs">{t('admin_portal.no_events')}</div>
                                     )}
                                     {ledgerEvents.map(ev => {
                                         const cfg = getType(ev.action_type || 'MISC');
@@ -2170,20 +2170,20 @@ export const AdminPage = () => {
                             <div className="p-5 rounded-3xl bg-slate-900/60 border border-violet-500/20 space-y-3">
                                 <div className="flex items-center gap-2 mb-1">
                                     <Bell size={14} className="text-violet-400" />
-                                    <span className="text-label font-bold text-white uppercase tracking-widest">Notification History by Chat ID</span>
+                                    <span className="text-label font-bold text-white uppercase tracking-widest">{t('admin_portal.notif_history_title')}</span>
                                 </div>
-                                <p className="text-label text-slate-500">Use to verify: "Was user X notified about event Y?"</p>
+                                <p className="text-label text-slate-500">{t('admin_portal.notif_history_desc')}</p>
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
                                         value={ledgerChatId}
                                         onChange={e => setLedgerChatId(e.target.value)}
-                                        placeholder="Telegram Chat ID (e.g. 716720099)"
+                                        placeholder={t('admin_portal.tg_chat_id_placeholder')}
                                         className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-violet-500/40"
                                     />
                                     <button onClick={fetchNotifHistoryForUser} disabled={isLedgerLoading}
                                         className="px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400 text-xs font-bold flex items-center gap-1.5 hover:bg-violet-500/20 transition-all">
-                                        <Search size={13} /> Look Up
+                                        <Search size={13} /> {t('admin_portal.look_up')}
                                     </button>
                                 </div>
                                 {ledgerNotifHistory && (

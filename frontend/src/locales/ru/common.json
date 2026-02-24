@@ -297,6 +297,40 @@
     "performance_control": "Контроль производительности",
     "system_optimal": "Система в норме",
     "attention_required": "Требуется внимание",
-    "refresh_data": "Обновить данные"
+    "refresh_data": "Обновить данные",
+    "event_ledger": "Системный журнал событий",
+    "immutable_audit": "Неизменяемый журнал аудита",
+    "events_loaded": "Загружено событий: {{count}}",
+    "latest_events": "Последние события",
+    "loading": "Загрузка...",
+    "no_events": "Событий с таким фильтром не найдено.",
+    "filter_partner_placeholder": "Фильтр по ID партнера (опционально)",
+    "notif_history_title": "История уведомлений по Chat ID",
+    "notif_history_desc": "Используйте для проверки: «Был ли пользователь X уведомлен о событии Y?»",
+    "tg_chat_id_placeholder": "Telegram Chat ID (напр. 716720099)",
+    "look_up": "Поиск",
+    "actions": {
+      "title": "Административные действия",
+      "revoke_pro": "Отозвать PRO",
+      "grant_pro": "Выдать PRO",
+      "adjust_xp": "Изменить XP",
+      "enter_xp_prompt": "Введите количество XP (можно отрицательное):"
+    },
+    "stats": {
+      "direct_referrals": "Прямые рефералы",
+      "tasks_completed": "Завершено заданий",
+      "current_balance": "Текущий баланс"
+    },
+    "event_types": {
+      "all": "ВСЕ",
+      "commission": "КОМИССИЯ",
+      "xp_award": "НАГРАДА_XP",
+      "notification": "УВЕДОМЛЕНИЕ",
+      "referral": "РЕФЕРАЛ",
+      "payment": "ПЛАТЕЖ",
+      "reconciliation": "РЕКОНСИЛЯЦИЯ",
+      "system": "СИСТЕМА",
+      "misc": "РАЗНОЕ"
+    }
   }
 }

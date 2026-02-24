@@ -126,7 +126,10 @@
       "income": "Income",
       "pro_benefits": "PRO Benefits",
       "vision": "Vision",
-      "future": "Future"
+      "future": "Future",
+      "intelligence_hub": "Intelligence Hub",
+      "success_blueprints": "Success Blueprints",
+      "leadership": "Leadership"
     },
     "latest": "Latest Intel",
     "latest_count": "{{count}} Latest Reports",

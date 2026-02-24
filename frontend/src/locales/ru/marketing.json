@@ -122,7 +122,10 @@
       "income": "Доход",
       "pro_benefits": "Преимущества PRO",
       "vision": "Видение",
-      "future": "Будущее"
+      "future": "Будущее",
+      "intelligence_hub": "Интеллект-центр",
+      "success_blueprints": "Сценарии успеха",
+      "leadership": "Лидерство"
     },
     "latest": "Последние материалы",
     "latest_count": "{{count}} последних материалов",
