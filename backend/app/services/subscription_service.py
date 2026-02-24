@@ -20,18 +20,20 @@ class SubscriptionService:
         """
         now = datetime.now(UTC)
 
-        # 1. Check for 3-day warning
-        three_days_start = now + timedelta(days=3)
-        three_days_end = three_days_start + timedelta(hours=1)
+        # 1. Check for 5-day warning
+        five_days_start = now + timedelta(days=5)
+        five_days_end = five_days_start + timedelta(hours=1)
 
-        stmt_3d = select(Partner).where(
+        stmt_5d = select(Partner).where(
             Partner.is_pro,
-            Partner.pro_expires_at >= three_days_start,
-            Partner.pro_expires_at < three_days_end
+            Partner.pro_expires_at >= five_days_start,
+            Partner.pro_expires_at < five_days_end
         )
-        res_3d = await session.exec(stmt_3d)
-        for partner in res_3d.all():
-            await self.send_expiration_warning(partner, 3)
+        res_5d = await session.exec(stmt_5d)
+        for partner in res_5d.all():
+            await self.send_expiration_warning(partner, 5)
+
+        # 2. Check for 3-day warning
 
         # 2. Check for 1-day warning
         one_day_start = now + timedelta(days=1)
