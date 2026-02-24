@@ -638,7 +638,7 @@ const BlogDetail = ({
                         </div>
                     </div>
                     <div>
-                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author || 'Pinto Team'}</p>
+                        <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author || 'Marcus Vance'}</p>
                         <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">

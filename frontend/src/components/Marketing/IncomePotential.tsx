@@ -1,7 +1,7 @@
 import { m, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
 import { TrendingUp, Users, DollarSign, ArrowRight, Calculator, Clock, AlertCircle, Lock, Flame, ChevronRight, Zap } from 'lucide-react';
-import { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { ReferralGraph } from './ReferralGraph';
 import { useTranslation, Trans } from 'react-i18next';
 import clsx from 'clsx';
@@ -14,6 +14,36 @@ type CalculatorMode = 'profit' | 'inaction';
 interface IncomePotentialProps {
     onNavigateToPartner?: () => void;
 }
+
+// #comment: Memoized sub-component to handle viral message rotation without re-rendering the whole calculator.
+const ViralMessages = React.memo(({ messages, isEnabled }: { messages: string[], isEnabled: boolean }) => {
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        if (!isEnabled) return;
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % messages.length);
+        }, 2000);
+        return () => clearInterval(interval);
+    }, [isEnabled, messages.length]);
+
+    return (
+        <div className="text-center h-12 flex items-center justify-center">
+            <AnimatePresence mode="wait">
+                <m.p
+                    key={index}
+                    initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className="text-caption text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
+                >
+                    {messages[index]}
+                </m.p>
+            </AnimatePresence>
+        </div>
+    );
+});
 
 export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) => {
     const { t } = useTranslation(['marketing', 'common']);
@@ -33,7 +63,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const [hoursWorked, setHoursWorked] = useState(8);
     const [isStrategyUnlocked, setIsStrategyUnlocked] = useState(false);
     const [showMathSection, setShowMathSection] = useState(false);
-    const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
     const [liveCount, setLiveCount] = useState(() => Math.floor(Math.random() * 40) + 18);
     const [slotsLeft] = useState(() => Math.floor(Math.random() * 7) + 3);
     const [mathVisible, setMathVisible] = useState(false);
@@ -78,15 +107,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
         return () => obs.disconnect();
     }, [showMathSection]);
 
-    useEffect(() => {
-        if (!isStrategyUnlocked) return;
-        const interval = setInterval(() => {
-            setCurrentMessageIndex((prev) => (prev + 1) % viralMessages.length);
-        }, 2000);
-        return () => clearInterval(interval);
-    }, [isStrategyUnlocked, viralMessages.length]);
-
-    // Profit Math
+    // Trigger math section once plan is unlocked
     const estimatedMonthlyRaw = activePartners * 45;
     const estimatedMonthly = estimatedMonthlyRaw.toLocaleString();
 
@@ -164,6 +185,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             {/* Mode Toggle */}
                             <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
                                 <button
+                                    onClick={() => setMode('profit')}
                                     className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
@@ -318,20 +340,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                             <ReferralGraph targetAmount={estimatedMonthlyRaw} />
 
-                            <div className="text-center h-12 flex items-center justify-center">
-                                <AnimatePresence mode="wait">
-                                    <m.p
-                                        key={currentMessageIndex}
-                                        initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
-                                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                                        exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
-                                        transition={{ duration: 0.5, ease: "easeOut" }}
-                                        className="text-caption text-slate-500 dark:text-slate-400 font-medium leading-tight max-w-[280px]"
-                                    >
-                                        {viralMessages[currentMessageIndex]}
-                                    </m.p>
-                                </AnimatePresence>
-                            </div>
+                            <ViralMessages messages={viralMessages} isEnabled={isStrategyUnlocked} />
                         </m.div>
                     )}
                 </div>

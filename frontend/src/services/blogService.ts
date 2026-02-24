@@ -6,7 +6,12 @@ import i18n from '../i18n';
 const AUTHOR_MAP: Record<string, string> = {
     'Marcus Vance': 'marcus_vance',
     'Alex Rivera': 'alex_rivera',
-    'Sarah Chen': 'sarah_chen'
+    'Sarah Chen': 'sarah_chen',
+    'Liam Frost': 'liam_frost',
+    'Ava Sterling': 'ava_sterling',
+    'Noah Vance': 'noah_vance',
+    'Zoe Chen': 'zoe_chen',
+    'Kai Rivera': 'kai_rivera'
 };
 
 const injectAuthorImage = (post: any) => {
