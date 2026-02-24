@@ -371,7 +371,7 @@ export default function SubscriptionPage() {
         <>
             <div className="flex flex-col px-3 pb-24 pt-0 max-w-lg mx-auto overflow-x-hidden">
                 {/* Main Navigation Header */}
-                <div className="w-full flex items-center justify-between py-4 mb-2 relative z-50">
+                <div className="sticky top-0 w-full flex items-center justify-between py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-3 -mx-3 w-[calc(100%+1.5rem)]">
                     <button
                         onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
                         className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform shadow-sm"
@@ -543,8 +543,8 @@ export default function SubscriptionPage() {
                     </div>
 
                     {/* ── DEADLINE STICKY HEADER ── */}
-                    <div className="mb-4 mt-1 px-1">
-                        <div className="rounded-xl overflow-hidden px-3 py-2 bg-yellow-400 border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-sm">
+                    <div className="mb-4 mt-1 px-1 sticky top-[72px] z-40">
+                        <div className="rounded-xl overflow-hidden px-3 py-2 bg-yellow-400/90 backdrop-blur-md border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-lg">
                             <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                             <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
@@ -641,7 +641,7 @@ export default function SubscriptionPage() {
                                     <div key={idx} className="flex flex-col items-center gap-1.5 min-w-0">
                                         <button
                                             onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                            className="w-full vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-xl p-1.5 flex flex-col items-center gap-0.5 transition-all shadow-md active:scale-95 text-center min-w-0"
+                                            className="w-full vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-xl p-1 flex flex-col items-center gap-0.5 transition-all shadow-md active:scale-95 text-center min-w-0"
                                         >
                                             <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
 
@@ -1044,20 +1044,20 @@ export default function SubscriptionPage() {
                     </motion.div>
 
                     {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
-                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-1">
+                        <div className="grid grid-cols-3 gap-1.5">
                             {[
-                                { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10' },
+                                { value: '5K+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10' },
                                 { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
                                 { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
                             ].map((stat) => (
-                                <div key={stat.label} className="p-4 sm:p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex sm:flex-col items-center sm:text-center gap-4 sm:gap-3 group transition-all duration-300 hover:scale-[1.03] hover:bg-slate-100/80 dark:hover:bg-white/5 shadow-sm">
-                                    <div className={`w-10 h-10 rounded-[1rem] shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
-                                        <stat.icon size={18} strokeWidth={2.5} />
+                                <div key={stat.label} className="p-2 rounded-xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex flex-col items-center text-center gap-1 group transition-all duration-300 hover:scale-[1.03] shadow-sm">
+                                    <div className={`w-7 h-7 rounded-lg shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
+                                        <stat.icon size={12} strokeWidth={2.5} />
                                     </div>
-                                    <div className="flex flex-col items-start sm:items-center">
-                                        <div className={`text-lg sm:text-xl font-bold tabular-nums tracking-tighter ${stat.color} drop-shadow-[0_2px_10px_currentColor] opacity-90 leading-none`}>{stat.value}</div>
-                                        <div className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-[0.2em] leading-tight mt-1">{stat.label}</div>
+                                    <div className="flex flex-col items-center">
+                                        <div className={`text-caption font-bold tabular-nums tracking-tighter ${stat.color} opacity-90 leading-none`}>{stat.value}</div>
+                                        <div className="text-[7px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest leading-tight mt-0.5">{stat.label}</div>
                                     </div>
                                 </div>
                             ))}
