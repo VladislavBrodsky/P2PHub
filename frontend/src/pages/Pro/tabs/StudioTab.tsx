@@ -350,18 +350,31 @@ export const StudioTab = ({
 
         const sanitizedBody = sanitizeAIGeneratedText(generatedResult.body);
 
-        // Convert Markdown links [text](url) to "text: url" for plain text sharing
-        // We do this AFTER sanitizing to maintain consistency
-        const cleanBody = sanitizedBody.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1: $2');
+        // Convert Markdown links [text](url) to "text: url"
+        const cleanBody = sanitizedBody.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+            if (text.toLowerCase() === 'here' || text.toLowerCase() === 'link') return url;
+            return `${text}: ${url}`;
+        });
         const hashtagsStr = generatedResult.hashtags?.map((t: string) => t.startsWith('#') ? t : `#${t}`).join(' ') || '';
 
-        let text = `🔥 ${generatedResult.title} 🔥\n\n${cleanBody}`;
+        let text = `${generatedResult.title}\n\n${cleanBody}`;
 
-        // Append hashtags if they exist
-        if (hashtagsStr) text += `\n\n${hashtagsStr}`;
+        // Append viral hashtags and existing ones
+        const viralHashtags = ['#1Dollar1Minute', '#PassiveIncome', '#FinancialFreedom', '#P2PHub'];
+        let finalHashtags = hashtagsStr;
+
+        viralHashtags.forEach(tag => {
+            if (!finalHashtags.includes(tag.replace('#', ''))) {
+                finalHashtags += ` ${tag}`;
+            }
+        });
+
+        if (finalHashtags.trim()) {
+            text += `\n\n${finalHashtags.trim()}`;
+        }
 
         // Ensure #PintopayPRO tag
-        if (!hashtagsStr.includes('PintopayPRO')) text += ' #PintopayPRO';
+        if (!text.includes('PintopayPRO')) text += ' #PintopayPRO';
 
         return text;
     };
