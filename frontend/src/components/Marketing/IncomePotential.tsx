@@ -346,7 +346,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
                             className="overflow-hidden"
                         >
-                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-4 space-y-2 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
+                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-3 space-y-1 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
                                 {/* LIVE Indicator & Header */}
                                 <div className="flex flex-col items-center pt-2">
                                     <div className="flex items-center gap-2 bg-emerald-500/5 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/10 transition-colors">
@@ -373,7 +373,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </div>
 
                                 {/* THE COMPACT MATH LIST */}
-                                <div className="space-y-2.5 px-4 mb-8">
+                                <div className="space-y-1.5 px-3 mb-4">
                                     {([
                                         { key: 'per_min', amount: '$1', period: t('marketing:income.math.per_min'), highlight: false, delay: 0 },
                                         { key: 'per_hour', amount: '$60', period: t('marketing:income.math.per_hour'), highlight: false, delay: 0.1 },
@@ -387,9 +387,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             animate={mathVisible ? { opacity: 1, x: 0 } : {}}
                                             transition={{ duration: 0.4, delay }}
                                             className={clsx(
-                                                'relative group flex items-center h-12 sm:h-14 px-4 sm:px-6 rounded-full border transition-all duration-300',
+                                                'relative group flex items-center h-10 sm:h-11 px-3 sm:px-4 rounded-full border transition-all duration-300',
                                                 highlight
-                                                    ? 'bg-emerald-500/10 border-emerald-400/30 shadow-[0_0_20px_rgba(16,185,129,0.05)]'
+                                                    ? 'bg-emerald-500/10 border-emerald-400/30'
                                                     : 'bg-white/5 border-white/5'
                                             )}
                                         >
@@ -401,7 +401,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
 
                                             <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2">
-                                                <span className={clsx("text-base sm:text-lg font-black tracking-tight", highlight ? "text-emerald-400" : "text-white")}>
+                                                <span className={clsx("text-sm sm:text-base font-black tracking-tight", highlight ? "text-emerald-400" : "text-white")}>
                                                     {amount}
                                                 </span>
                                                 {highlight && (
@@ -412,13 +412,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
 
                                             {/* Premium Glass Shine */}
-                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
+                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer-slide animate-shimmer-slow pointer-events-none" />
                                         </m.div>
                                     ))}
                                 </div>
 
                                 {/* Formula */}
-                                <div className="flex flex-col items-center gap-4 px-4 mb-8">
+                                <div className="flex flex-col items-center gap-3 px-4 mb-4">
                                     <m.div
                                         initial={{ opacity: 0 }}
                                         animate={mathVisible ? { opacity: 1 } : {}}

@@ -391,7 +391,7 @@ export default function SubscriptionPage() {
                                                 <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shrink-0" />
                                                 {t('pro:subscription.upgrade.live_demand')}
                                             </div>
-                                            <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
+                                            <div className="text-[10px] font-black text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
                                                 {t('pro:subscription.upgrade.lifetime_slots')}
                                             </div>
                                         </div>
@@ -445,627 +445,628 @@ export default function SubscriptionPage() {
                             </div>
 
                             {/* High-End Card Selector - Low Profile */}
-                            <div className="relative bg-slate-100/50 dark:bg-black/30 p-1.5 rounded-2xl flex gap-1.5 border border-slate-200 dark:border-white/5 shadow-inner-lg backdrop-blur-2xl">
-                                <div
-                                    className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-xl shadow-premium ${selectedPlan === 'PRO'
-                                        ? 'left-1.5 w-[calc(50%-0.375rem)] vibing-yellow-animated border border-yellow-400/30'
-                                        : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] vibing-crystal-purple-animated border border-white/20'
-                                        }`}
-                                />
-
-                                {/* PRO Card Action */}
-                                <button
-                                    onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                                    className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
-                                >
-                                    <span className={`text-label font-bold tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
-                                        {t('pro:subscription.upgrade.pro_title')}
-                                    </span>
-                                    <div className="flex items-baseline gap-0.5">
-                                        <span className={`text-caption font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
-                                        <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
-                                            39
-                                        </span>
-                                    </div>
-                                    <span className={`text-label font-bold uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                        {t('pro:subscription.upgrade.monthly_label')}
-                                    </span>
-                                </button>
-
-                                {/* PRO+ Card Action */}
-                                <button
-                                    onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                                    className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
-                                >
-                                    <AnimatePresence>
-                                        {selectedPlan === 'PRO_PLUS' && (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
-                                                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-                                                exit={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
-                                                className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-label sm:text-label font-bold rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
-                                            >
-                                                <Zap size={10} className="fill-white animate-pulse" />
-                                                {t('pro:subscription.upgrade.viral_badge')}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-
-                                    <span className={`text-label font-bold tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
-                                        {isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title')}
-                                    </span>
-                                    <div className="flex items-baseline gap-0.5">
-                                        <span className={`text-caption font-bold ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/30'}`}>$</span>
-                                        <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
-                                            {isStandardPro ? upgradePrice : proPlusPrice}
-                                        </span>
-                                    </div>
-                                    <span className={`text-label font-bold uppercase tracking-widest ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                        {isStandardPro ? t('pro:subscription.upgrade.upgrade_label') : t('pro:subscription.upgrade.lifetime_label')}
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* ── DEADLINE STICKY HEADER ── */}
-                        <div className="mb-4 mt-1 px-1">
-                            <div className="rounded-xl overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/30 flex items-center justify-between relative group shadow-sm">
-                                <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
-                                <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
-
-                                <div className="relative z-10 flex items-center gap-2">
-                                    <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
-                                        <Clock size={16} className="animate-pulse" />
-                                    </div>
-                                    <div className="flex flex-col min-w-0">
-                                        <span className="text-label font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                        <span className="text-label font-bold text-black uppercase tracking-tighter leading-tight truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
-                                    </div>
-                                </div>
-
-                                <div className="relative z-10 flex items-center gap-1 font-mono shrink-0">
-                                    {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
-                                        <React.Fragment key={i}>
-                                            <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-label font-bold min-w-[28px] text-center shadow-xl">
-                                                {val.toString().padStart(2, '0')}
-                                            </div>
-                                            {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
-                                        </React.Fragment>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── PROFIT MATH SECTION ── */}
-                        <div className="mb-6 px-1">
-                            <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 p-5 space-y-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)]">
-                                {/* Ambient glow */}
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
-
-                                <div className="relative flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
-                                    <div className="flex flex-col text-left">
-                                        <div className="flex items-center gap-1 mb-0.5">
-                                            <Zap className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400" />
-                                            <span className="text-label font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 opacity-80">
-                                                {t('marketing:income.math.subheading')}
-                                            </span>
-                                        </div>
-                                        <h4 className="text-label font-bold text-slate-900 dark:text-white leading-tight">
-                                            {t('marketing:income.math.heading')}
-                                        </h4>
-                                    </div>
-                                    <div className="text-right">
-                                        <div className="text-button font-bold text-emerald-600 dark:text-emerald-400 tracking-tighter mb-0.5">$43,200</div>
-                                        <div className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('marketing:income.math.per_month')}</div>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-2">
-                                    <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_day')}</div>
-                                        <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$1,440</div>
-                                    </div>
-                                    <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
-                                        <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_year')}</div>
-                                        <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$518,400</div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between text-label">
-                                    <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('marketing:income.math.formula_note')}</span>
-                                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
-                                        <Flame className="w-2 h-2 text-rose-500 animate-pulse" />
-                                        <span className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
-                        <div className="mb-6 px-1">
-                            <div className="flex items-center justify-between mb-3 px-3">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1 h-3 bg-blue-600 rounded-full" />
-                                    <h3 className="text-label sm:text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
-                                        {t('pro:subscription.comparison.title')}
-                                    </h3>
-                                </div>
-                                <div className="text-label font-bold text-blue-500/80 uppercase tracking-widest animate-pulse">
-                                    {t('pro:subscription.comparison.tap_to_explore')}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-3 gap-1.5 px-0.5">
-                                {[
-                                    { icon: Network, label: t('pro:subscription.comparison.levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('pro:subscription.benefits.network_levels_desc_plus'), accent: 'emerald' },
-                                    { icon: Zap, label: t('pro:subscription.comparison.tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('pro:subscription.benefits.tokens_desc_plus'), accent: 'amber' },
-                                    { icon: Send, label: t('pro:subscription.comparison.channels'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('pro:subscription.benefits.tg_multi_channel_desc'), accent: 'blue' },
-                                ].map((item, idx) => {
-                                    const activeValue = selectedPlan === 'PRO' ? item.pro : item.plus;
-                                    const inactiveValue = selectedPlan === 'PRO' ? item.plus : item.pro;
-                                    return (
-                                        <button
-                                            key={idx}
-                                            onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
-                                            className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-xl p-1.5 flex flex-col items-center gap-0.5 relative overflow-hidden group transition-all shadow-md active:scale-95 text-center min-w-0"
-                                        >
-                                            <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
-
-                                            <AnimatePresence>
-                                                {selectedPlan === 'PRO_PLUS' && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, scale: 0.5 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
-                                                        exit={{ opacity: 0, scale: 0.5 }}
-                                                        className="absolute top-1 right-1 z-10"
-                                                    >
-                                                        <span className="text-[9px] font-bold bg-linear-to-r from-rose-500 to-pink-500 text-white px-1 py-0.5 tracking-tight rounded-full shadow-xs uppercase flex items-center gap-0.5">
-                                                            <Zap size={6} className="fill-white animate-pulse" />
-                                                            {t('marketing:income.math.turbo_badge', 'TURBO')}
-                                                        </span>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-
-                                            <div className={`w-7 h-7 rounded-lg ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12`}>
-                                                <item.icon size={12} strokeWidth={2.5} />
-                                            </div>
-                                            <span className="text-[10px] font-bold text-slate-500 dark:text-white/60 uppercase tracking-widest truncate w-full px-0.5">{item.label}</span>
-
-                                            <div className="flex items-center justify-center gap-1 mt-0 w-full">
-                                                <span className="text-[10px] font-bold text-slate-400 dark:text-white/30 transition-all duration-500">{inactiveValue}</span>
-                                                <div className="w-px h-2.5 bg-slate-200 dark:bg-white/10 rounded-full shrink-0" />
-                                                <span className={`text-[13px] font-bold tracking-tighter transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]' : 'vibing-yellow-text drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]'}`}>
-                                                    {activeValue}
-                                                </span>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
-
-                        {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
-                        <div className="mb-10 px-1 relative z-20">
-                            <AnimatePresence mode="wait">
-                                {!isSelectingCurrency ? (
-                                    <motion.button
-                                        key="buy-btn"
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.95 }}
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={() => {
-                                            selection();
-                                            setIsSelectingCurrency(true);
-                                        }}
-                                        className={`group relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
-                                            ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
-                                            : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
-                                            }`}
-                                    >
-                                        <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                        <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
-                                        <span className="relative z-10">
-                                            {selectedPlan === 'PRO'
-                                                ? t('pro:subscription.upgrade.buy_pro_btn')
-                                                : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn'))}
-                                        </span>
-                                    </motion.button>
-                                ) : (
-                                    <motion.div
-                                        key="currency-picker"
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 10 }}
-                                        className="space-y-4"
-                                    >
-                                        <div className="flex items-center justify-between mb-2">
-                                            <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
-                                            <button
-                                                onClick={() => setIsSelectingCurrency(false)}
-                                                className="text-label font-bold text-blue-500 uppercase tracking-widest"
-                                            >
-                                                {t('common:cancel', 'CANCEL')}
-                                            </button>
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <button
-                                                onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
-                                            >
-                                                <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
-                                            </button>
-                                            <button
-                                                onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                                className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
-                                            >
-                                                <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
-                                            </button>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                            <div id="currency-selector-anchor" className="absolute -top-20" />
-                        </div>
-
-                        {/* ── BENEFITS GRID ───────────────────────────────────────────── */}
-                        <AnimatePresence mode="wait">
                             <motion.div
-                                key={selectedPlan}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.25 }}
-                                className="mb-8"
+                                layoutId="plan-selector-bg"
+                                className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.1)] ${selectedPlan === 'PRO'
+                                    ? 'left-1.5 w-[calc(50%-0.375rem)] vibing-yellow-animated border border-yellow-400/30 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
+                                    : 'left-[calc(50%+0.375rem)] w-[calc(50%-0.375rem)] vibing-crystal-purple-animated border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
+                                    }`}
+                            />
+
+                            {/* PRO Card Action */}
+                            <button
+                                onClick={() => { selection(); setSelectedPlan('PRO'); }}
+                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
                             >
-                                {/* Plan headline */}
-                                <div className={`rounded-2xl p-5 mb-5 border relative overflow-hidden shadow-premium backdrop-blur-md transition-all duration-500 ${selectedPlan === 'PRO'
-                                    ? 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/20 dark:border-blue-500/20'
-                                    : 'bg-yellow-500/5 dark:bg-yellow-500/10 border-yellow-500/20 dark:border-yellow-500/20'
-                                    }`}>
-
-                                    {/* Shimmer Light Gradient Animation */}
-                                    <motion.div
-                                        animate={{
-                                            x: ['-100%', '200%'],
-                                            opacity: [0, 0.4, 0]
-                                        }}
-                                        transition={{
-                                            duration: 3,
-                                            repeat: Infinity,
-                                            ease: "linear",
-                                            repeatDelay: 1.5
-                                        }}
-                                        className={`absolute inset-0 pointer-events-none bg-linear-to-r from-transparent ${selectedPlan === 'PRO' ? 'via-white/40' : 'via-yellow-300/40'} to-transparent skew-x-[-20deg] z-0`}
-                                    />
-
-                                    <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 ${selectedPlan === 'PRO' ? 'bg-blue-500' : 'bg-yellow-500'} transition-colors duration-500`} />
-                                    <div className="relative z-10">
-                                        <div className={`text-label font-bold uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-blue-600 dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`}>
-                                            {selectedPlan === 'PRO' ? t('pro:subscription.upgrade.pro_title') : t('pro:subscription.upgrade.pro_plus_title')} — {t('pro:subscription.plan_headline')}
-                                        </div>
-                                        <p className="text-caption font-bold text-slate-700 dark:text-white/80 leading-snug">
-                                            {selectedPlan === 'PRO' ? t('pro:subscription.plan_desc_pro') : t('pro:subscription.plan_desc_plus')}
-                                        </p>
-                                    </div>
+                                <span className={`text-label font-bold tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
+                                    {t('pro:subscription.upgrade.pro_title')}
+                                </span>
+                                <div className="flex items-baseline gap-0.5">
+                                    <span className={`text-caption font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
+                                    <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                        39
+                                    </span>
                                 </div>
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                    {t('pro:subscription.upgrade.monthly_label')}
+                                </span>
+                            </button>
 
-                                {/* Benefits list */}
-                                <div className="grid grid-cols-1 gap-2.5">
-                                    {currentBenefits.map((b, i) => {
-                                        const isExpanded = expandedBenefit === b.id;
-                                        return (
-                                            <motion.div
-                                                key={b.id}
-                                                initial={{ opacity: 0, scale: 0.95 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ delay: i * 0.05 }}
-                                                className="relative group focus-within:ring-2 focus-within:ring-blue-500/50 rounded-2xl transition-all"
-                                            >
-                                                <button
-                                                    onClick={() => {
-                                                        selection();
-                                                        setExpandedBenefit(isExpanded ? null : b.id);
-                                                    }}
-                                                    className={`w-full text-left rounded-2xl border transition-all duration-300 ${isExpanded ? 'bg-white dark:bg-white/10 border-blue-500/30 shadow-lg' : 'bg-white/40 dark:bg-black/20 border-slate-200/60 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10'}`}
-                                                >
-                                                    <div className="px-4 py-2.5 flex items-center justify-between">
-                                                        <div className="flex items-center gap-3">
-                                                            <div className={`w-8 h-8 rounded-xl ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color} group-hover:scale-110 transition-transform`}>
-                                                                <b.icon size={14} />
-                                                            </div>
-                                                            <span className="text-label font-bold uppercase tracking-wider text-slate-700 dark:text-white/90">{b.label}</span>
-                                                        </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <Check size={10} className="text-emerald-500 opacity-60" strokeWidth={4} />
-                                                            <ChevronDown
-                                                                size={12}
-                                                                className={`text-slate-400 dark:text-white/20 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-blue-500' : ''}`}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                                <AnimatePresence>
-                                                    {isExpanded && (
-                                                        <motion.div
-                                                            initial={{ height: 0, opacity: 0 }}
-                                                            animate={{ height: 'auto', opacity: 1 }}
-                                                            exit={{ height: 0, opacity: 0 }}
-                                                            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
-                                                        >
-                                                            <div className="px-4 pb-4 pt-0">
-                                                                <div className="pl-12 pr-4 py-3 border-t border-slate-100 dark:border-white/5">
-                                                                    <p className="text-label font-medium text-slate-500 dark:text-white/50 leading-relaxed italic">
-                                                                        {b.desc}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
-                                            </motion.div>
-                                        );
-                                    })}
+                            {/* PRO+ Card Action */}
+                            <button
+                                onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
+                                className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
+                            >
+                                <AnimatePresence>
+                                    {selectedPlan === 'PRO_PLUS' && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
+                                            animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                                            exit={{ opacity: 0, y: -20, scale: 0.5, rotate: -5 }}
+                                            className="absolute -top-3 sm:-top-4 right-1 sm:right-2 px-2.5 py-1 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-label sm:text-label font-bold rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
+                                        >
+                                            <Zap size={10} className="fill-white animate-pulse" />
+                                            {t('pro:subscription.upgrade.viral_badge')}
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                <span className={`text-label font-bold tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
+                                    {isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title')}
+                                </span>
+                                <div className="flex items-baseline gap-0.5">
+                                    <span className={`text-caption font-bold ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/30'}`}>$</span>
+                                    <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                        {isStandardPro ? upgradePrice : proPlusPrice}
+                                    </span>
                                 </div>
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                    {isStandardPro ? t('pro:subscription.upgrade.upgrade_label') : t('pro:subscription.upgrade.lifetime_label')}
+                                </span>
+                            </button>
+                        </div>
+                    </div>
 
-                                {/* Quick checklist - Compacted */}
-                                <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl p-3 grid grid-cols-1 gap-1.5 shadow-sm backdrop-blur-md">
-                                    {(() => {
-                                        const benefitsArr = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
-                                        const benefitsList = Array.isArray(benefitsArr) ? benefitsArr : [];
-                                        return benefitsList.map((b: string, i: number) => (
-                                            <div key={i} className="flex items-center gap-2">
-                                                <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400' : 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-500'}`}>
-                                                    <Check size={8} strokeWidth={4} />
-                                                </div>
-                                                <span className="text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-tight leading-tight">{b}</span>
-                                            </div>
-                                        ));
-                                    })()}
+                    {/* ── DEADLINE STICKY HEADER ── */}
+                    <div className="mb-4 mt-1 px-1">
+                        <div className="rounded-xl overflow-hidden pl-4 pr-2.5 py-2.5 bg-yellow-400 border border-yellow-500/30 flex items-center justify-between relative group shadow-sm">
+                            <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
+                            <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
+
+                            <div className="relative z-10 flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
+                                    <Clock size={16} className="animate-pulse" />
                                 </div>
-
-                            </motion.div>
-                        </AnimatePresence>
-
-                        {/* ── PAYMENT SECTION ─────────────────────────────────────────── */}
-                        <motion.div ref={paymentRef} className="mb-12 relative px-2">
-                            {/* Background Glows to match Home Style */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/20 blur-[100px] pointer-events-none animate-pulse" />
-
-                            <div className="relative z-10 bg-white dark:bg-bg-app border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
-                                {/* Inner liquid background layer */}
-                                <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-yellow-500/5 opacity-40 pointer-events-none" />
-
-                                {!paymentMethod ? (
-                                    <div className="space-y-8 relative z-10">
-                                        <div className="text-center">
-
-
-                                            <div className="flex flex-col items-center gap-0.5 mb-5">
-                                                <div className="flex items-baseline gap-1">
-                                                    <span className="text-4xl font-bold text-slate-900 dark:text-white tracking-tighter drop-shadow-sm">
-                                                        ${planPrice}
-                                                    </span>
-                                                    <span className="text-label font-bold text-slate-400 dark:text-white/30 uppercase font-mono">
-                                                        / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
-                                                    </span>
-                                                </div>
-                                                <h4 className="text-label font-bold text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-yellow-400 dark:to-blue-400 dark:text-animate-shimmer uppercase tracking-[0.2em]">
-                                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
-                                                </h4>
-                                            </div>
-                                            <div className="w-12 h-1 bg-linear-to-r from-blue-500 to-yellow-500 mx-auto rounded-full opacity-60" />
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <button
-                                                onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
-                                            >
-                                                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
-                                                    <TONLogo className="w-5 h-5" />
-                                                </div>
-                                                <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
-                                            </button>
-                                            <button
-                                                onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
-                                                className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
-                                            >
-                                                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
-                                                    <USDTLogo className="w-5 h-5" />
-                                                </div>
-                                                <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
-                                            </button>
-                                        </div>
-                                        <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
-                                            <Shield size={10} className="text-blue-600 dark:text-blue-400" />
-                                            <p className="text-label text-slate-600 dark:text-white font-bold uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
-                                            <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-label font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
-                                                <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
-                                            </button>
-                                            {formattedTime && (
-                                                <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
-                                                    <Clock size={10} className="text-blue-600 dark:text-blue-400" />
-                                                    <span className="text-label font-bold font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="mt-4">
-                                            {paymentMethod === 'TON' ? (
-                                                <div className="space-y-6 text-center">
-                                                    <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
-                                                        <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
-                                                        <div className="flex justify-center mb-4"><TonConnectButton /></div>
-                                                    </div>
-                                                    <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-bold text-caption uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
-                                                        {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className="space-y-5">
-                                                    {/* STEP 1: COPY ADDRESS */}
-                                                    <div className="relative group">
-                                                        <div className="absolute -left-3 top-0 bottom-0 w-1 bg-emerald-500 rounded-full opacity-50" />
-                                                        <div className="flex flex-col gap-2">
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-bold flex items-center justify-center shadow-lg">1</div>
-                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.copy_address')}</span>
-                                                            </div>
-                                                            <div
-                                                                onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
-                                                                className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
-                                                            >
-                                                                <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
-                                                                <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
-                                                                    <code className="text-label font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
-                                                                    <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
-                                                                        <Share2 size={14} />
-                                                                    </div>
-                                                                </div>
-                                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:marketing:studio.publish_modal.more', { defaultValue: 'CLICK TO COPY' })}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {/* STEP 2: PASTE HASH */}
-                                                    <div className="relative group">
-                                                        <div className="absolute -left-3 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-50" />
-                                                        <div className="flex flex-col gap-2">
-                                                            <div className="flex items-center gap-2 mb-1">
-                                                                <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-bold flex items-center justify-center shadow-lg">2</div>
-                                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.paste_hash')}</span>
-                                                            </div>
-
-                                                            {/* CRITICAL INSTRUCTION ALERT */}
-                                                            <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
-                                                                <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
-                                                                <p className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
-                                                                    {t('pro:subscription.upgrade.final_instruction')}
-                                                                </p>
-                                                            </div>
-
-                                                            <div className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-5 shadow-sm">
-                                                                <div className="relative mb-3">
-                                                                    <input
-                                                                        value={manualHash}
-                                                                        onChange={(e) => setManualHash(e.target.value)}
-                                                                        placeholder="0x..."
-                                                                        className="w-full h-12 bg-white dark:bg-black/40 border-2 border-slate-200 dark:border-white/10 rounded-2xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500 outline-none transition-all shadow-inner"
-                                                                    />
-                                                                    <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
-                                                                        <Fingerprint size={16} />
-                                                                    </div>
-                                                                </div>
-                                                                <div className="flex items-center gap-2 px-2">
-                                                                    <HelpCircle size={10} className="text-slate-400 shrink-0" />
-                                                                    <p className="text-label text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
-                                                                        {t('pro:subscription.upgrade.hash_help')}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <button
-                                                        onClick={handleManualSubmit}
-                                                        disabled={isLoading || !manualHash || status === 'manual_review'}
-                                                        className={`w-full h-14 rounded-xl font-bold text-caption uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
-                                                    >
-                                                        <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000" />
-                                                        <div className="flex items-center justify-center gap-3">
-                                                            {isLoading ? <Loader2 className="animate-spin" /> : (
-                                                                <>
-                                                                    <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                                                    <span>{status === 'manual_review' ? t('pro:subscription.upgrade.pending_review') : t('pro:subscription.upgrade.verify_transaction')}</span>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    </button>
-
-                                                    {/* HELP SECTION */}
-                                                    <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
-                                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('pro:subscription.upgrade.help_title')}</p>
-                                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('pro:subscription.upgrade.help_desc')}</p>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
+                                <div className="flex flex-col min-w-0">
+                                    <span className="text-label font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                    <span className="text-label font-bold text-black uppercase tracking-tighter leading-tight truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                </div>
                             </div>
-                        </motion.div>
 
-                        {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
-                        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-2">
-                            <div className="grid grid-cols-3 gap-3">
-                                {[
-                                    { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10' },
-                                    { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
-                                    { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
-                                ].map((stat) => (
-                                    <div key={stat.label} className="p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex flex-col items-center text-center space-y-3 group transition-all duration-300 hover:scale-[1.03] hover:bg-slate-100/80 dark:hover:bg-white/5 shadow-sm">
-                                        <div className={`w-10 h-10 rounded-[1rem] shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
-                                            <stat.icon size={18} strokeWidth={2.5} />
+                            <div className="relative z-10 flex items-center gap-1 font-mono shrink-0">
+                                {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
+                                    <React.Fragment key={i}>
+                                        <div className="bg-black text-yellow-400 rounded-lg px-2 py-1 text-label font-bold min-w-[28px] text-center shadow-xl">
+                                            {val.toString().padStart(2, '0')}
                                         </div>
-                                        <div className="flex flex-col">
-                                            <div className={`text-xl font-bold tabular-nums tracking-tighter ${stat.color} drop-shadow-[0_2px_10px_currentColor] opacity-90`}>{stat.value}</div>
-                                            <div className="text-label font-bold text-slate-500 dark:text-white/40 uppercase tracking-[0.2em] leading-tight mt-1">{stat.label}</div>
-                                        </div>
-                                    </div>
+                                        {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
+                                    </React.Fragment>
                                 ))}
                             </div>
-                        </motion.div>
+                        </div>
+                    </div>
 
-                        {/* ── FAQ SECTION ─────────────────────────────────────────────── */}
-                        <section className="mb-10">
-                            <SectionHeader
-                                badge={t('subscription.faq.teaser_badge')}
-                                title={<>{t('subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('subscription.faq.header_highlight')}</span></>}
-                                className="mb-8"
-                            />
-                            <div className="space-y-3">
-                                {faqs.map((faq, idx) => (
-                                    <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50">
-                                        <button
-                                            onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }}
-                                            className="w-full p-4 flex items-center justify-between group text-left"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className={`w-10 h-10 rounded-[1rem] bg-white dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm ${faq.iconColor}`}>
-                                                    <faq.icon size={16} />
-                                                </div>
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight pr-4">{faq.q}</span>
-                                            </div>
-                                            <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${expandedFaq === idx ? 'rotate-180 text-blue-500' : 'text-slate-400 dark:text-white/30'}`} />
-                                        </button>
+                    {/* ── PROFIT MATH SECTION ── */}
+                    <div className="mb-6 px-1">
+                        <div className="relative overflow-hidden rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-emerald-500/20 p-5 space-y-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)]">
+                            {/* Ambient glow */}
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 blur-3xl pointer-events-none" />
+
+                            <div className="relative flex items-center justify-between border-b border-slate-100 dark:border-white/5 pb-3">
+                                <div className="flex flex-col text-left">
+                                    <div className="flex items-center gap-1 mb-0.5">
+                                        <Zap className="w-2.5 h-2.5 text-emerald-500 dark:text-emerald-400" />
+                                        <span className="text-label font-bold uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400 opacity-80">
+                                            {t('marketing:income.math.subheading')}
+                                        </span>
+                                    </div>
+                                    <h4 className="text-label font-bold text-slate-900 dark:text-white leading-tight">
+                                        {t('marketing:income.math.heading')}
+                                    </h4>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-button font-bold text-emerald-600 dark:text-emerald-400 tracking-tighter mb-0.5">$43,200</div>
+                                    <div className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/60 uppercase tracking-widest -mt-1">{t('marketing:income.math.per_month')}</div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                                <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
+                                    <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_day')}</div>
+                                    <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$1,440</div>
+                                </div>
+                                <div className="p-2.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 shadow-sm dark:shadow-none">
+                                    <div className="text-label font-bold text-slate-500 dark:text-white/30 uppercase tracking-[0.2em] mb-0.5">{t('marketing:income.math.per_year')}</div>
+                                    <div className="text-caption font-bold text-slate-900 dark:text-white tracking-tighter">$518,400</div>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center justify-between text-label">
+                                <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('marketing:income.math.formula_note')}</span>
+                                <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
+                                    <Flame className="w-2 h-2 text-rose-500 animate-pulse" />
+                                    <span className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
+                    <div className="mb-6 px-1">
+                        <div className="flex items-center justify-between mb-3 px-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-1 h-3 bg-blue-600 rounded-full" />
+                                <h3 className="text-label sm:text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
+                                    {t('pro:subscription.comparison.title')}
+                                </h3>
+                            </div>
+                            <div className="text-label font-bold text-blue-500/80 uppercase tracking-widest animate-pulse">
+                                {t('pro:subscription.comparison.tap_to_explore')}
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-1.5 px-0.5">
+                            {[
+                                { icon: Network, label: t('pro:subscription.comparison.levels'), pro: '9', plus: '20', color: 'text-emerald-500', bg: 'bg-emerald-500/10', desc: t('pro:subscription.benefits.network_levels_desc_plus'), accent: 'emerald' },
+                                { icon: Zap, label: t('pro:subscription.comparison.tokens'), pro: '250', plus: '500', color: 'text-amber-500', bg: 'bg-amber-500/10', desc: t('pro:subscription.benefits.tokens_desc_plus'), accent: 'amber' },
+                                { icon: Send, label: t('pro:subscription.comparison.channels'), pro: '1', plus: '5', color: 'text-blue-500', bg: 'bg-blue-500/10', desc: t('pro:subscription.benefits.tg_multi_channel_desc'), accent: 'blue' },
+                            ].map((item, idx) => {
+                                const activeValue = selectedPlan === 'PRO' ? item.pro : item.plus;
+                                const inactiveValue = selectedPlan === 'PRO' ? item.plus : item.pro;
+                                return (
+                                    <button
+                                        key={idx}
+                                        onClick={() => { selection(); setInfoModal({ title: item.label, desc: item.desc, icon: item.icon, color: item.accent }); }}
+                                        className="vibing-premium-panel bg-white dark:bg-slate-900 border-slate-200 dark:border-white/10 rounded-xl p-1.5 flex flex-col items-center gap-0.5 relative overflow-hidden group transition-all shadow-md active:scale-95 text-center min-w-0"
+                                    >
+                                        <div className="circuit-decor opacity-0 group-hover:opacity-10 transition-opacity" />
+
                                         <AnimatePresence>
-                                            {expandedFaq === idx && (
+                                            {selectedPlan === 'PRO_PLUS' && (
                                                 <motion.div
-                                                    initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: "auto", opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    className="overflow-hidden"
+                                                    initial={{ opacity: 0, scale: 0.5 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.5 }}
+                                                    className="absolute top-0.5 right-0.5 z-10"
                                                 >
-                                                    <p className="px-5 pb-5 pt-3 text-label text-slate-600 dark:text-white/60 leading-relaxed font-medium border-t border-slate-200/50 dark:border-white/10">{faq.a}</p>
+                                                    <span className="text-[7px] font-black bg-linear-to-r from-rose-500 to-pink-500 text-white px-1 py-0.5 tracking-tight rounded-full shadow-xs uppercase flex items-center gap-0.5">
+                                                        <Zap size={5} className="fill-white animate-pulse" />
+                                                        {t('marketing:income.math.turbo_badge', 'TURBO')}
+                                                    </span>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>
-                                    </div>
-                                ))}
-                            </div>
-                        </section>
 
-                        <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.15-ELITE</div>
+                                        <div className={`w-7 h-7 rounded-lg ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 mt-1`}>
+                                            <item.icon size={12} strokeWidth={2.5} />
+                                        </div>
+                                        <span className="text-[8px] font-bold text-slate-500 dark:text-white/60 uppercase tracking-tight w-full px-0.5 leading-tight">
+                                            {item.label}
+                                        </span>
+
+                                        <div className="flex items-center justify-center gap-1 mt-0.5 w-full">
+                                            <span className="text-[10px] font-bold text-slate-400 dark:text-white/30 transition-all duration-500">{inactiveValue}</span>
+                                            <div className="w-px h-2.5 bg-slate-200 dark:bg-white/10 rounded-full shrink-0" />
+                                            <span className={`text-caption font-bold tracking-tighter transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]' : 'vibing-yellow-text drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]'}`}>
+                                                {activeValue}
+                                            </span>
+                                        </div>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
+
+                    {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
+                    <div className="mb-10 px-1 relative z-20">
+                        <AnimatePresence mode="wait">
+                            {!isSelectingCurrency ? (
+                                <motion.button
+                                    key="buy-btn"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => {
+                                        selection();
+                                        setIsSelectingCurrency(true);
+                                    }}
+                                    className={`group relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
+                                        ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
+                                        : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
+                                        }`}
+                                >
+                                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
+                                    <span className="relative z-10">
+                                        {selectedPlan === 'PRO'
+                                            ? t('pro:subscription.upgrade.buy_pro_btn')
+                                            : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn'))}
+                                    </span>
+                                </motion.button>
+                            ) : (
+                                <motion.div
+                                    key="currency-picker"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="space-y-4"
+                                >
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
+                                        <button
+                                            onClick={() => setIsSelectingCurrency(false)}
+                                            className="text-label font-bold text-blue-500 uppercase tracking-widest"
+                                        >
+                                            {t('common:cancel', 'CANCEL')}
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
+                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
+                                        >
+                                            <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
+                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
+                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                        >
+                                            <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
+                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
+                                        </button>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        <div id="currency-selector-anchor" className="absolute -top-20" />
+                    </div>
+
+                    {/* ── BENEFITS GRID ───────────────────────────────────────────── */}
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={selectedPlan}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.25 }}
+                            className="mb-8"
+                        >
+                            {/* Plan headline */}
+                            <div className={`rounded-2xl p-5 mb-5 border relative overflow-hidden shadow-premium backdrop-blur-md transition-all duration-500 ${selectedPlan === 'PRO'
+                                ? 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/20 dark:border-blue-500/20'
+                                : 'bg-yellow-500/5 dark:bg-yellow-500/10 border-yellow-500/20 dark:border-yellow-500/20'
+                                }`}>
+
+                                {/* Shimmer Light Gradient Animation */}
+                                <motion.div
+                                    animate={{
+                                        x: ['-100%', '200%'],
+                                        opacity: [0, 0.4, 0]
+                                    }}
+                                    transition={{
+                                        duration: 3,
+                                        repeat: Infinity,
+                                        ease: "linear",
+                                        repeatDelay: 1.5
+                                    }}
+                                    className={`absolute inset-0 pointer-events-none bg-linear-to-r from-transparent ${selectedPlan === 'PRO' ? 'via-white/40' : 'via-yellow-300/40'} to-transparent skew-x-[-20deg] z-0`}
+                                />
+
+                                <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 ${selectedPlan === 'PRO' ? 'bg-blue-500' : 'bg-yellow-500'} transition-colors duration-500`} />
+                                <div className="relative z-10">
+                                    <div className={`text-label font-bold uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-blue-600 dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`}>
+                                        {selectedPlan === 'PRO' ? t('pro:subscription.upgrade.pro_title') : t('pro:subscription.upgrade.pro_plus_title')} — {t('pro:subscription.plan_headline')}
+                                    </div>
+                                    <p className="text-caption font-bold text-slate-700 dark:text-white/80 leading-snug">
+                                        {selectedPlan === 'PRO' ? t('pro:subscription.plan_desc_pro') : t('pro:subscription.plan_desc_plus')}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Benefits list */}
+                            <div className="grid grid-cols-1 gap-2.5">
+                                {currentBenefits.map((b, i) => {
+                                    const isExpanded = expandedBenefit === b.id;
+                                    return (
+                                        <motion.div
+                                            key={b.id}
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: i * 0.05 }}
+                                            className="relative group focus-within:ring-2 focus-within:ring-blue-500/50 rounded-2xl transition-all"
+                                        >
+                                            <button
+                                                onClick={() => {
+                                                    selection();
+                                                    setExpandedBenefit(isExpanded ? null : b.id);
+                                                }}
+                                                className={`w-full text-left rounded-2xl border transition-all duration-300 ${isExpanded ? 'bg-white dark:bg-white/10 border-blue-500/30 shadow-lg' : 'bg-white/40 dark:bg-black/20 border-slate-200/60 dark:border-white/5 hover:border-slate-300 dark:hover:border-white/10'}`}
+                                            >
+                                                <div className="px-4 py-2.5 flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-8 h-8 rounded-xl ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color} group-hover:scale-110 transition-transform`}>
+                                                            <b.icon size={14} />
+                                                        </div>
+                                                        <span className="text-label font-bold uppercase tracking-wider text-slate-700 dark:text-white/90">{b.label}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2">
+                                                        <Check size={10} className="text-emerald-500 opacity-60" strokeWidth={4} />
+                                                        <ChevronDown
+                                                            size={12}
+                                                            className={`text-slate-400 dark:text-white/20 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-blue-500' : ''}`}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <AnimatePresence>
+                                                {isExpanded && (
+                                                    <motion.div
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                                                    >
+                                                        <div className="px-4 pb-4 pt-0">
+                                                            <div className="pl-12 pr-4 py-3 border-t border-slate-100 dark:border-white/5">
+                                                                <p className="text-label font-medium text-slate-500 dark:text-white/50 leading-relaxed italic">
+                                                                    {b.desc}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Quick checklist - Compacted */}
+                            <div className="mt-4 bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl p-3 grid grid-cols-1 gap-1.5 shadow-sm backdrop-blur-md">
+                                {(() => {
+                                    const benefitsArr = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
+                                    const benefitsList = Array.isArray(benefitsArr) ? benefitsArr : [];
+                                    return benefitsList.map((b: string, i: number) => (
+                                        <div key={i} className="flex items-center gap-2">
+                                            <div className={`w-3.5 h-3.5 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-blue-500/15 text-blue-600 dark:text-blue-400' : 'bg-yellow-500/15 text-yellow-600 dark:text-yellow-500'}`}>
+                                                <Check size={8} strokeWidth={4} />
+                                            </div>
+                                            <span className="text-[10px] font-black text-slate-500 dark:text-white/60 uppercase tracking-tight leading-tight">{b}</span>
+                                        </div>
+                                    ));
+                                })()}
+                            </div>
+
+                        </motion.div>
+                    </AnimatePresence>
+
+                    {/* ── PAYMENT SECTION ─────────────────────────────────────────── */}
+                    <motion.div ref={paymentRef} className="mb-12 relative px-2">
+                        {/* Background Glows to match Home Style */}
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/20 blur-[100px] pointer-events-none animate-pulse" />
+
+                        <div className="relative z-10 bg-white dark:bg-bg-app border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
+                            {/* Inner liquid background layer */}
+                            <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-yellow-500/5 opacity-40 pointer-events-none" />
+
+                            {!paymentMethod ? (
+                                <div className="space-y-8 relative z-10">
+                                    <div className="text-center">
+
+
+                                        <div className="flex flex-col items-center gap-0.5 mb-5">
+                                            <div className="flex items-baseline gap-1">
+                                                <span className="text-4xl font-bold text-slate-900 dark:text-white tracking-tighter drop-shadow-sm">
+                                                    ${planPrice}
+                                                </span>
+                                                <span className="text-label font-bold text-slate-400 dark:text-white/30 uppercase font-mono">
+                                                    / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                                                </span>
+                                            </div>
+                                            <h4 className="text-label font-bold text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-yellow-400 dark:to-blue-400 dark:text-animate-shimmer uppercase tracking-[0.2em]">
+                                                {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
+                                            </h4>
+                                        </div>
+                                        <div className="w-12 h-1 bg-linear-to-r from-blue-500 to-yellow-500 mx-auto rounded-full opacity-60" />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('TON'); }}
+                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                                                <TONLogo className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
+                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
+                                        >
+                                            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                                                <USDTLogo className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
+                                        <Shield size={10} className="text-blue-600 dark:text-blue-400" />
+                                        <p className="text-label text-slate-600 dark:text-white font-bold uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
+                                        <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-label font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
+                                            <ChevronLeft size={14} /> {t('subscription.upgrade.change_method')}
+                                        </button>
+                                        {formattedTime && (
+                                            <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
+                                                <Clock size={10} className="text-blue-600 dark:text-blue-400" />
+                                                <span className="text-label font-bold font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="mt-4">
+                                        {paymentMethod === 'TON' ? (
+                                            <div className="space-y-6 text-center">
+                                                <div className="p-6 bg-slate-50 dark:bg-white/5 rounded-3xl border border-slate-200 dark:border-white/10 shadow-inner">
+                                                    <Wallet size={32} className="mx-auto text-blue-600 dark:text-blue-400 mb-4" />
+                                                    <div className="flex justify-center mb-4"><TonConnectButton /></div>
+                                                </div>
+                                                <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-bold text-caption uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
+                                                    {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-5">
+                                                {/* STEP 1: COPY ADDRESS */}
+                                                <div className="relative group">
+                                                    <div className="absolute -left-3 top-0 bottom-0 w-1 bg-emerald-500 rounded-full opacity-50" />
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-bold flex items-center justify-center shadow-lg">1</div>
+                                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.copy_address')}</span>
+                                                        </div>
+                                                        <div
+                                                            onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
+                                                            className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
+                                                        >
+                                                            <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
+                                                            <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
+                                                                <code className="text-label font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
+                                                                <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
+                                                                    <Share2 size={14} />
+                                                                </div>
+                                                            </div>
+                                                            <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:marketing:studio.publish_modal.more', { defaultValue: 'CLICK TO COPY' })}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* STEP 2: PASTE HASH */}
+                                                <div className="relative group">
+                                                    <div className="absolute -left-3 top-0 bottom-0 w-1 bg-blue-500 rounded-full opacity-50" />
+                                                    <div className="flex flex-col gap-2">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-bold flex items-center justify-center shadow-lg">2</div>
+                                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.paste_hash')}</span>
+                                                        </div>
+
+                                                        {/* CRITICAL INSTRUCTION ALERT */}
+                                                        <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
+                                                            <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
+                                                            <p className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
+                                                                {t('pro:subscription.upgrade.final_instruction')}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-5 shadow-sm">
+                                                            <div className="relative mb-3">
+                                                                <input
+                                                                    value={manualHash}
+                                                                    onChange={(e) => setManualHash(e.target.value)}
+                                                                    placeholder="0x..."
+                                                                    className="w-full h-12 bg-white dark:bg-black/40 border-2 border-slate-200 dark:border-white/10 rounded-2xl px-4 text-xs text-slate-900 dark:text-white text-center font-mono focus:border-blue-500 outline-none transition-all shadow-inner"
+                                                                />
+                                                                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">
+                                                                    <Fingerprint size={16} />
+                                                                </div>
+                                                            </div>
+                                                            <div className="flex items-center gap-2 px-2">
+                                                                <HelpCircle size={10} className="text-slate-400 shrink-0" />
+                                                                <p className="text-label text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
+                                                                    {t('pro:subscription.upgrade.hash_help')}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    onClick={handleManualSubmit}
+                                                    disabled={isLoading || !manualHash || status === 'manual_review'}
+                                                    className={`w-full h-14 rounded-xl font-bold text-caption uppercase tracking-[0.2em] shadow-xl active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-30 relative overflow-hidden group ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}
+                                                >
+                                                    <div className="absolute inset-x-0 top-0 h-1/2 bg-white/10 -skew-y-12 -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000" />
+                                                    <div className="flex items-center justify-center gap-3">
+                                                        {isLoading ? <Loader2 className="animate-spin" /> : (
+                                                            <>
+                                                                <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
+                                                                <span>{status === 'manual_review' ? t('pro:subscription.upgrade.pending_review') : t('pro:subscription.upgrade.verify_transaction')}</span>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </button>
+
+                                                {/* HELP SECTION */}
+                                                <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
+                                                    <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('pro:subscription.upgrade.help_title')}</p>
+                                                    <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('pro:subscription.upgrade.help_desc')}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+
+                    {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {[
+                                { value: '5,000+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10' },
+                                { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
+                                { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
+                            ].map((stat) => (
+                                <div key={stat.label} className="p-4 sm:p-5 rounded-2xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex sm:flex-col items-center sm:text-center gap-4 sm:gap-3 group transition-all duration-300 hover:scale-[1.03] hover:bg-slate-100/80 dark:hover:bg-white/5 shadow-sm">
+                                    <div className={`w-10 h-10 rounded-[1rem] shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
+                                        <stat.icon size={18} strokeWidth={2.5} />
+                                    </div>
+                                    <div className="flex flex-col items-start sm:items-center">
+                                        <div className={`text-lg sm:text-xl font-bold tabular-nums tracking-tighter ${stat.color} drop-shadow-[0_2px_10px_currentColor] opacity-90 leading-none`}>{stat.value}</div>
+                                        <div className="text-[10px] font-black text-slate-500 dark:text-white/40 uppercase tracking-[0.2em] leading-tight mt-1">{stat.label}</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* ── FAQ SECTION ─────────────────────────────────────────────── */}
+                    <section className="mb-10">
+                        <SectionHeader
+                            badge={t('subscription.faq.teaser_badge')}
+                            title={<>{t('subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('subscription.faq.header_highlight')}</span></>}
+                            className="mb-8"
+                        />
+                        <div className="space-y-3">
+                            {faqs.map((faq, idx) => (
+                                <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50">
+                                    <button
+                                        onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }}
+                                        className="w-full p-4 flex items-center justify-between group text-left"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-10 h-10 rounded-[1rem] bg-white dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm ${faq.iconColor}`}>
+                                                <faq.icon size={16} />
+                                            </div>
+                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight pr-4">{faq.q}</span>
+                                        </div>
+                                        <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${expandedFaq === idx ? 'rotate-180 text-blue-500' : 'text-slate-400 dark:text-white/30'}`} />
+                                    </button>
+                                    <AnimatePresence>
+                                        {expandedFaq === idx && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: "auto", opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <p className="px-5 pb-5 pt-3 text-label text-slate-600 dark:text-white/60 leading-relaxed font-medium border-t border-slate-200/50 dark:border-white/10">{faq.a}</p>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.15-ELITE</div>
                 </div>
             </div>
 
