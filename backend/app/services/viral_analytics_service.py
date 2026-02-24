@@ -182,7 +182,10 @@ class ViralAnalyticsService:
                     else: views = int(re.sub(r'[^\d]', '', views_str) or 0)
                 
                 total_reactions = 0
-                reactions_match = re.findall(r'class="tgme_widget_message_reaction_count">([^<]+)</span>', html)
+                reactions_match = re.findall(r'<span class="tgme_reaction[^>]*>.*?</i>([^<]+)</span>', html)
+                if not reactions_match:
+                    reactions_match = re.findall(r'class="tgme_widget_message_reaction_count">([^<]+)</span>', html)
+                    
                 for count_str in reactions_match:
                     with contextlib.suppress(Exception):
                         c_str = count_str.strip()

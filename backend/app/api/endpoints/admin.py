@@ -155,6 +155,117 @@ async def reject_payment(
 
     return {"status": "success", "message": f"Payment {transaction_id} rejected"}
 
+from pydantic import BaseModel
+
+class BatchPaymentsRequest(BaseModel):
+    transaction_ids: list[int]
+
+@router.post("/approve-payments/batch")
+async def approve_payments_batch(
+    payload: BatchPaymentsRequest,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Approves multiple manual payments and triggers user upgrades sequentially.
+    """
+    success_count = 0
+    errors = []
+    
+    for tx_id in payload.transaction_ids:
+        try:
+            stmt = select(PartnerTransaction).where(PartnerTransaction.id == tx_id).with_for_update()
+            result = await session.execute(stmt)
+            transaction = result.scalar_one_or_none()
+
+            if not transaction or transaction.status != "manual_review":
+                errors.append({"id": tx_id, "error": "Not found or not pending"})
+                continue
+
+            partner = await session.get(Partner, transaction.partner_id)
+            if not partner:
+                errors.append({"id": tx_id, "error": "Partner missing"})
+                continue
+
+            success = await payment_service.upgrade_to_pro(
+                session=session,
+                partner=partner,
+                amount=transaction.amount,
+                currency=transaction.currency,
+                network=transaction.network,
+                tx_hash=transaction.tx_hash,
+                transaction_id=transaction.id
+            )
+            if success:
+                success_count += 1
+            else:
+                errors.append({"id": tx_id, "error": "Upgrade failed"})
+                
+        except Exception as e:
+            logger.error(f"Batch approve failed for {tx_id}: {e}")
+            errors.append({"id": tx_id, "error": str(e)})
+
+    return {
+        "status": "success", 
+        "message": f"Approved {success_count}/{len(payload.transaction_ids)} payments",
+        "errors": errors
+    }
+
+@router.post("/reject-payments/batch")
+async def reject_payments_batch(
+    payload: BatchPaymentsRequest,
+    admin: dict = Depends(get_current_admin),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Rejects multiple manual payments efficiently.
+    """
+    success_count = 0
+    errors = []
+    
+    for tx_id in payload.transaction_ids:
+        try:
+            stmt = select(PartnerTransaction).where(PartnerTransaction.id == tx_id).with_for_update()
+            result = await session.execute(stmt)
+            transaction = result.scalar_one_or_none()
+
+            if not transaction or transaction.status != "manual_review":
+                errors.append({"id": tx_id, "error": "Not found or not pending"})
+                continue
+                
+            partner = await session.get(Partner, transaction.partner_id)
+
+            transaction.status = "failed"
+            session.add(transaction)
+            
+            await audit_service.log_event(
+                session=session,
+                entity_type="transaction",
+                entity_id=str(transaction.id),
+                action="payment_rejected",
+                actor_id=str(admin.get("id") or "admin"),
+                details={"partner_id": transaction.partner_id, "amount": transaction.amount, "batch": True}
+            )
+            
+            await session.commit()
+            success_count += 1
+
+            if partner:
+                await notification_service.send_standard(
+                    chat_id=partner.telegram_id,
+                    text="❌ *PAYMENT REJECTED*\n\nYour manual payment confirmation was rejected. Please try again or contact support.",
+                    salt=f"pay_rej_{transaction.id}"
+                )
+        except Exception as e:
+            logger.error(f"Batch reject failed for {tx_id}: {e}")
+            errors.append({"id": tx_id, "error": str(e)})
+
+    return {
+        "status": "success", 
+        "message": f"Rejected {success_count}/{len(payload.transaction_ids)} payments",
+        "errors": errors
+    }
+
 @router.get("/tree")
 async def get_global_tree_stats(
     target_id: int | None = None,
@@ -246,13 +357,15 @@ async def clear_cache(
 @router.get("/search-partners", response_model=list[dict[str, Any]])
 async def search_partners(
     query: str,
+    skip: int = 0,
+    limit: int = 20,
     admin: dict = Depends(get_current_admin)
 ):
     """
     Search for partners by username or Telegram ID.
     Only accessible by admins.
     """
-    return await admin_service.search_partners(query)
+    return await admin_service.search_partners(query, skip=skip, limit=limit)
 
 @router.get("/maintenance/notification-stats")
 async def get_notification_stats(
@@ -274,13 +387,14 @@ async def get_notification_stats(
 
 @router.get("/palantir-feed", response_model=list[dict[str, Any]])
 async def get_palantir_feed(
+    skip: int = 0,
     limit: int = 100,
     admin: dict = Depends(get_current_admin)
 ):
     """
     Returns the real-time system event feed.
     """
-    return await admin_service.get_palantir_feed(limit=limit)
+    return await admin_service.get_palantir_feed(limit=limit, skip=skip)
 
 # --- Mass Messaging (Broadcast) Endpoints ---
 

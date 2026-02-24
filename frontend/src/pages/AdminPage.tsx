@@ -139,6 +139,12 @@ export const AdminPage = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [approvingIds, setApprovingIds] = useState<Set<number>>(new Set());
+
+    // Batch Processing & Pagination
+    const [selectedPayments, setSelectedPayments] = useState<Set<number>>(new Set());
+    const [isBatchProcessing, setIsBatchProcessing] = useState(false);
+    const [palantirPage, setPalantirPage] = useState(0);
+    const [searchPage, setSearchPage] = useState(0);
     const [health, setHealth] = useState<{ status: string; latency_ms: number; orphaned_count: number; timestamp: string } | null>(null);
     const [viewMode, setViewMode] = useState<'kpis' | 'payments' | 'financials' | 'search' | 'network' | 'maintenance' | 'palantir' | 'nexus' | 'ledger'>('kpis');
     const [notifStats, setNotifStats] = useState<{ sent: number; pending: number; failed: number; total: number } | null>(null);
@@ -278,10 +284,10 @@ export const AdminPage = () => {
         }
     };
 
-    const fetchPalantirFeed = async (showLoading = false) => {
+    const fetchPalantirFeed = async (showLoading = false, page = palantirPage) => {
         if (showLoading) setIsRefreshing(true);
         try {
-            const res = await apiClient.get('/api/admin/palantir-feed');
+            const res = await apiClient.get(`/api/admin/palantir-feed?skip=${page * 100}&limit=100`);
             setPalantirFeed(res.data);
         } catch (err) {
             console.error('Failed to fetch palantir feed:', err);
@@ -473,7 +479,57 @@ export const AdminPage = () => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [viewMode]);
+    }, [viewMode, palantirPage]);
+
+    const handleBatchApprove = async () => {
+        if (selectedPayments.size === 0) return;
+        setIsBatchProcessing(true);
+        try {
+            await apiClient.post(`/api/admin/approve-payments/batch`, {
+                transaction_ids: Array.from(selectedPayments)
+            });
+            setSelectedPayments(new Set());
+            await fetchData(true);
+        } catch (err: any) {
+            alert(err.response?.data?.detail || 'Batch approval failed');
+        } finally {
+            setIsBatchProcessing(false);
+        }
+    };
+
+    const handleBatchReject = async () => {
+        if (selectedPayments.size === 0) return;
+        if (!confirm(`Are you sure you want to reject ${selectedPayments.size} transactions?`)) return;
+        setIsBatchProcessing(true);
+        try {
+            await apiClient.post(`/api/admin/reject-payments/batch`, {
+                transaction_ids: Array.from(selectedPayments)
+            });
+            setSelectedPayments(new Set());
+            await fetchData(true);
+        } catch (err: any) {
+            alert(err.response?.data?.detail || 'Batch rejection failed');
+        } finally {
+            setIsBatchProcessing(false);
+        }
+    };
+
+    const togglePaymentSelection = (id: number) => {
+        setSelectedPayments(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) next.delete(id);
+            else next.add(id);
+            return next;
+        });
+    };
+
+    const toggleAllPayments = () => {
+        if (selectedPayments.size === transactions.length) {
+            setSelectedPayments(new Set());
+        } else {
+            setSelectedPayments(new Set(transactions.map(t => t.id)));
+        }
+    };
 
     const handleApprove = async (txId: number) => {
         if (approvingIds.has(txId)) return;
@@ -504,14 +560,15 @@ export const AdminPage = () => {
         }
     };
 
-    const handleSearch = async (e?: React.FormEvent) => {
+    const handleSearch = async (e?: React.FormEvent, page = 0) => {
         if (e) e.preventDefault();
         if (!searchQuery.trim()) return;
 
         setIsSearching(true);
         try {
-            const res = await apiClient.get(`/api/admin/search-partners?query=${encodeURIComponent(searchQuery)}`);
+            const res = await apiClient.get(`/api/admin/search-partners?query=${encodeURIComponent(searchQuery)}&skip=${page * 20}&limit=20`);
             setSearchResults(res.data);
+            setSearchPage(page);
         } catch (err: any) {
             console.error('[Admin] Search failed:', err);
         } finally {
