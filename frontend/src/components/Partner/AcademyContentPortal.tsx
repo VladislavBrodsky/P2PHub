@@ -211,6 +211,37 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             <div className="space-y-10">
                                 {/* Viral Network Core - Dynamic Hero Section */}
                                 <div className="relative h-56 rounded-2xl overflow-hidden -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
+                                    {/* Scanline Effect */}
+                                    <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
+                                        style={{
+                                            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
+                                            backgroundSize: '100% 4px'
+                                        }}
+                                    />
+
+                                    {/* Energy Particles */}
+                                    {[...Array(6)].map((_, i) => (
+                                        <motion.div
+                                            key={i}
+                                            className="absolute w-1 h-1 bg-blue-400 rounded-full blur-[1px]"
+                                            initial={{
+                                                x: Math.random() * 400,
+                                                y: Math.random() * 200,
+                                                opacity: Math.random() * 0.5
+                                            }}
+                                            animate={{
+                                                y: [null, Math.random() * -100],
+                                                opacity: [0, 0.4, 0]
+                                            }}
+                                            transition={{
+                                                duration: 4 + Math.random() * 4,
+                                                repeat: Infinity,
+                                                ease: "linear",
+                                                delay: Math.random() * 5
+                                            }}
+                                        />
+                                    ))}
+
                                     {/* Dot Grid Background */}
                                     <div className="absolute inset-0 opacity-20"
                                         style={{
@@ -239,6 +270,33 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             animate={{ pathLength: 1, opacity: 1 }}
                                             transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
                                         />
+
+                                        {/* Radial Sweep Ring */}
+                                        <motion.circle
+                                            cx="200"
+                                            cy="100"
+                                            r="70"
+                                            stroke="white"
+                                            strokeWidth="0.5"
+                                            fill="none"
+                                            strokeDasharray="20 180"
+                                            animate={{ rotate: 360 }}
+                                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                            className="opacity-20"
+                                        />
+                                        <motion.circle
+                                            cx="200"
+                                            cy="100"
+                                            r="75"
+                                            stroke="#3b82f6"
+                                            strokeWidth="2"
+                                            fill="none"
+                                            strokeDasharray="10 240"
+                                            animate={{ rotate: -360 }}
+                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                            className="opacity-40"
+                                        />
+
                                         <defs>
                                             <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
                                                 <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
@@ -305,9 +363,15 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         <motion.div
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            className="w-full bg-white rounded-2xl py-3 px-4 shadow-2xl flex items-center justify-center border border-white/50 backdrop-blur-sm"
+                                            className="w-full bg-slate-900 border-2 border-white/20 rounded-2xl py-3 px-4 shadow-[0_0_30px_rgba(59,130,246,0.3)] flex items-center justify-center backdrop-blur-md relative overflow-hidden"
                                         >
-                                            <span className="text-label font-black text-slate-900 uppercase tracking-[0.25em] whitespace-nowrap">
+                                            {/* Shimmer Overlay */}
+                                            <motion.div
+                                                className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
+                                                animate={{ x: ['-100%', '100%'] }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                            />
+                                            <span className="text-label font-black text-white uppercase tracking-[0.25em] whitespace-nowrap relative z-10">
                                                 Viral Network Core
                                             </span>
                                         </motion.div>
