@@ -212,6 +212,18 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 {/* Viral Network Core - Dynamic Hero Section */}
                                 <div className="relative h-56 rounded-2xl -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
                                     <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                                        {/* Atmospheric Plasma Glows */}
+                                        <motion.div
+                                            className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
+                                            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+                                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                                        />
+                                        <motion.div
+                                            className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
+                                            animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
+                                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                                        />
+
                                         {/* Scanline Effect */}
                                         <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
                                             style={{
@@ -221,7 +233,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         />
 
                                         {/* Energy Particles */}
-                                        {[...Array(6)].map((_, i) => (
+                                        {[...Array(8)].map((_, i) => (
                                             <motion.div
                                                 key={i}
                                                 className="absolute w-1 h-1 bg-blue-400 rounded-full blur-[1px]"
@@ -231,11 +243,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     opacity: Math.random() * 0.5
                                                 }}
                                                 animate={{
-                                                    y: [null, Math.random() * -100],
+                                                    y: [null, Math.random() * -150],
                                                     opacity: [0, 0.4, 0]
                                                 }}
                                                 transition={{
-                                                    duration: 4 + Math.random() * 4,
+                                                    duration: 3 + Math.random() * 5,
                                                     repeat: Infinity,
                                                     ease: "linear",
                                                     delay: Math.random() * 5
@@ -244,15 +256,38 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         ))}
 
                                         {/* Dot Grid Background */}
-                                        <div className="absolute inset-0 opacity-20"
+                                        <div className="absolute inset-0 opacity-15"
                                             style={{
                                                 backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
                                                 backgroundSize: '16px 16px'
                                             }}
                                         />
 
-                                        {/* Animated Glow Curves */}
-                                        <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 200">
+                                        {/* Neural & Energy SVG Layer */}
+                                        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 200">
+                                            {/* Neural Connectivity Lines */}
+                                            <motion.path
+                                                d="M 120 100 L 200 100"
+                                                stroke="url(#neural-gradient)"
+                                                strokeWidth="0.5"
+                                                strokeDasharray="4 4"
+                                                fill="none"
+                                                animate={{ strokeDashoffset: [0, -20] }}
+                                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-20"
+                                            />
+                                            <motion.path
+                                                d="M 280 100 L 200 100"
+                                                stroke="url(#neural-gradient)"
+                                                strokeWidth="0.5"
+                                                strokeDasharray="4 4"
+                                                fill="none"
+                                                animate={{ strokeDashoffset: [0, 20] }}
+                                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-20"
+                                            />
+
+                                            {/* Dynamic Glow Curves */}
                                             <motion.path
                                                 d="M -50 150 Q 100 50 250 150 T 450 100"
                                                 fill="none"
@@ -261,6 +296,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 initial={{ pathLength: 0, opacity: 0 }}
                                                 animate={{ pathLength: 1, opacity: 1 }}
                                                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-30"
                                             />
                                             <motion.path
                                                 d="M -50 100 Q 150 180 300 80 T 450 150"
@@ -270,32 +306,43 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 initial={{ pathLength: 0, opacity: 0 }}
                                                 animate={{ pathLength: 1, opacity: 1 }}
                                                 transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+                                                className="opacity-30"
                                             />
 
-                                            {/* Radial Sweep Ring */}
+                                            {/* Multi-Ring Energy Orbits */}
                                             <motion.circle
                                                 cx="200"
                                                 cy="100"
-                                                r="70"
+                                                r="68"
                                                 stroke="white"
                                                 strokeWidth="0.5"
                                                 fill="none"
-                                                strokeDasharray="20 180"
+                                                strokeDasharray="4 60"
                                                 animate={{ rotate: 360 }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                                className="opacity-20"
+                                                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-40"
                                             />
                                             <motion.circle
                                                 cx="200"
                                                 cy="100"
-                                                r="75"
+                                                r="74"
                                                 stroke="#3b82f6"
-                                                strokeWidth="2"
+                                                strokeWidth="1"
                                                 fill="none"
-                                                strokeDasharray="10 240"
+                                                strokeDasharray="10 200"
                                                 animate={{ rotate: -360 }}
-                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                                className="opacity-40"
+                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-60"
+                                            />
+                                            <motion.circle
+                                                cx="200"
+                                                cy="100"
+                                                r="82"
+                                                stroke="url(#blue-gradient)"
+                                                strokeWidth="0.5"
+                                                fill="none"
+                                                animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.3, 0.1] }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                             />
 
                                             <defs>
@@ -308,6 +355,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
                                                     <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
                                                     <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                                                </linearGradient>
+                                                <linearGradient id="neural-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+                                                    <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
                                                 </linearGradient>
                                             </defs>
                                         </svg>
@@ -340,7 +392,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                             {/* Floating Nodes */}
                                             <motion.div
-                                                className="absolute -left-12 top-4 px-3 py-1.5 rounded-full bg-emerald-500/90 backdrop-blur-md border border-emerald-400 flex items-center gap-2 shadow-lg z-20"
+                                                className="absolute -left-12 top-4 px-3 py-1.5 rounded-full bg-emerald-500/90 backdrop-blur-md border border-emerald-400 flex items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.4)] z-20 group/node overflow-hidden"
                                                 initial={{ scale: 0, opacity: 0, x: -20 }}
                                                 animate={{
                                                     scale: 1,
@@ -355,14 +407,16 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     x: { duration: 4, repeat: Infinity, ease: "easeInOut" }
                                                 }}
                                             >
-                                                <div className="p-1 rounded-full bg-white/20">
+                                                {/* Orb Glow */}
+                                                <div className="absolute inset-0 bg-radial from-white/20 to-transparent pointer-events-none" />
+                                                <div className="p-1 rounded-full bg-white/20 relative z-10">
                                                     <Users className="w-3 h-3 text-white" />
                                                 </div>
-                                                <span className="text-[10px] font-black text-white tracking-wider">+$8.64</span>
+                                                <span className="text-[10px] font-black text-white tracking-wider relative z-10">+$8.64</span>
                                             </motion.div>
 
                                             <motion.div
-                                                className="absolute -right-10 bottom-6 w-10 h-10 rounded-full bg-indigo-500/90 backdrop-blur-md border border-indigo-400 flex items-center justify-center shadow-lg z-20"
+                                                className="absolute -right-10 bottom-6 w-10 h-10 rounded-full bg-indigo-500/90 backdrop-blur-md border border-indigo-400 flex items-center justify-center shadow-[0_0_20px_rgba(99,102,241,0.4)] z-20 group/node overflow-hidden"
                                                 initial={{ scale: 0, opacity: 0, x: 20 }}
                                                 animate={{
                                                     scale: 1,
@@ -377,25 +431,29 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     x: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
                                                 }}
                                             >
-                                                <Zap className="w-4 h-4 text-white fill-white" />
+                                                {/* Orb Glow */}
+                                                <div className="absolute inset-0 bg-radial from-white/20 to-transparent pointer-events-none" />
+                                                <Zap className="w-4 h-4 text-white fill-white relative z-10" />
                                             </motion.div>
                                         </div>
                                     </div>
 
-                                    {/* Viral Core Badge */}
                                     <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-8">
                                         <motion.div
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            className="w-full bg-slate-900 border-2 border-white/20 rounded-2xl py-3 px-4 shadow-[0_0_30px_rgba(59,130,246,0.3)] flex items-center justify-center backdrop-blur-md relative overflow-hidden"
+                                            className="w-full bg-slate-950/80 border-2 border-white/10 rounded-2xl py-3 px-4 shadow-[0_0_40px_rgba(59,130,246,0.4)] flex items-center justify-center backdrop-blur-xl relative overflow-hidden group/badge"
                                         >
+                                            {/* "Vibing" Animated Gradient Border Effect */}
+                                            <div className="absolute -inset-[200%] bg-conic from-blue-500/40 via-indigo-500/40 to-blue-500/40 animate-slow-spin opacity-30 group-hover/badge:opacity-60 transition-opacity" />
+
                                             {/* Shimmer Overlay */}
                                             <motion.div
                                                 className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent"
                                                 animate={{ x: ['-100%', '100%'] }}
-                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                                             />
-                                            <span className="text-label font-black text-white uppercase tracking-[0.25em] whitespace-nowrap relative z-10">
+                                            <span className="text-label font-black bg-linear-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent uppercase tracking-[0.3em] whitespace-nowrap relative z-10">
                                                 Viral Network Core
                                             </span>
                                         </motion.div>
