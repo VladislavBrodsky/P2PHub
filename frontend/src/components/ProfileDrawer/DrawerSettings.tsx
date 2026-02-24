@@ -82,7 +82,7 @@ export function DrawerSettings({ selection }: DrawerSettingsProps) {
                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.2),transparent)] pointer-events-none" />
                 {[
                     { id: 'en', flag: '🇺🇸', label: 'English', activeColor: 'rgba(59,130,246,0.1)' },
-                    { id: 'ru', flag: '🇷🇺', label: 'Russian', activeColor: 'rgba(239,68,68,0.1)' },
+                    { id: 'ru', flag: '🇷🇺', label: 'РУССКИЙ', activeColor: 'rgba(239,68,68,0.1)' },
                 ].map((option) => (
                     <button
                         key={option.id}
