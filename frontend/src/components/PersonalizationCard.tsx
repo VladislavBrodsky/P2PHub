@@ -97,16 +97,16 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             `}
                             >
                                 {/* Skeleton/Placeholder while loading */}
-                                {(isUserLoading || (user?.photo_url && !imageLoaded)) && (
+                                {(isUserLoading || (user && !user.photo_url && !user.photo_file_id && !imageLoaded)) && (
                                     <div className="absolute inset-0 bg-btn-secondary-bg flex items-center justify-center">
                                         <div className="absolute inset-0 bg-linear-to-tr from-blue-500/10 to-transparent animate-pulse"></div>
                                         <User size={variant === 'compact' ? 24 : 32} className="text-text-secondary opacity-40" />
                                     </div>
                                 )}
 
-                                {user?.photo_url && !imgError ? (
+                                {(user?.photo_file_id || user?.photo_url) && !imgError ? (
                                     <img
-                                        src={user.photo_url}
+                                        src={user.photo_file_id ? `/api/partner/photo/${user.photo_file_id}` : (user.photo_url || undefined)}
                                         alt={`${user.first_name || t('partner_fallback')}'s avatar`}
                                         className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-110' : ''}`}
                                         onLoad={() => setImageLoaded(true)}

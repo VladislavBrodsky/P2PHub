@@ -11,6 +11,7 @@ interface User {
     first_name: string | null;
     last_name: string | null;
     photo_url: string | null;
+    photo_file_id?: string | null;
     balance: number;
     total_earned?: number; // Sum of all PRO commissions
     level: number;
@@ -57,7 +58,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             if (saved) {
                 const cachedUser = JSON.parse(saved);
                 // Eagerly preload cached profile photo for instant display
-                if (cachedUser?.photo_url) {
+                if (cachedUser?.photo_file_id) {
+                    const img = new Image();
+                    img.src = `/api/partner/photo/${cachedUser.photo_file_id}`;
+                    img.loading = 'eager';
+                } else if (cachedUser?.photo_url) {
                     const img = new Image();
                     img.src = cachedUser.photo_url;
                     img.loading = 'eager';
@@ -148,7 +153,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
 
             // Eagerly preload profile photo for instant display
-            if (userData.photo_url) {
+            if (userData.photo_file_id) {
+                const img = new Image();
+                img.src = `/api/partner/photo/${userData.photo_file_id}`;
+                img.loading = 'eager';
+            } else if (userData.photo_url) {
                 const img = new Image();
                 img.src = userData.photo_url;
                 img.loading = 'eager';
@@ -205,6 +214,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         first_name: 'Dev',
                         last_name: 'User',
                         photo_url: null,
+                        photo_file_id: null,
                         balance: 5000,
                         level: 5,
                         xp: 150,
