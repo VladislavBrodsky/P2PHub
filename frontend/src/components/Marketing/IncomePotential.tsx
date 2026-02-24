@@ -360,7 +360,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     <div className="text-center space-y-2 mb-8">
                                         <div className="flex items-center justify-center gap-1.5">
                                             <Zap className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
-                                            <span className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.2em]">
+                                            <span className="text-label font-black text-emerald-400 uppercase tracking-[0.2em]">
                                                 {t('marketing:income.math.subheading')}
                                             </span>
                                         </div>
@@ -388,7 +388,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 'relative group flex items-center justify-between h-14 px-6 rounded-full border transition-all duration-300',
                                                 highlight
                                                     ? 'bg-emerald-500/10 border-emerald-400/30'
-                                                    : 'bg-white/[0.03] border-white/5'
+                                                    : 'bg-white/3 border-white/5'
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
@@ -418,7 +418,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0 }}
                                         animate={mathVisible ? { opacity: 1 } : {}}
                                         transition={{ delay: 0.6 }}
-                                        className="text-[11px] text-white/20 font-mono tracking-widest"
+                                        className="text-label text-white/20 font-mono tracking-widest"
                                     >
                                         {t('marketing:income.math.formula_note')}
                                     </m.div>
@@ -442,19 +442,19 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                 {/* Social Proof & CTA */}
                                 <div className="px-4 pb-6 space-y-5">
-                                    <div className="bg-white/[0.02] border border-white/5 rounded-full py-2.5 px-6 flex items-center justify-between">
+                                    <div className="bg-white/2 border border-white/5 rounded-full py-2.5 px-6 flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="flex -space-x-3">
-                                                {displayAvatars.map((avatar, i) => (
+                                                {[
+                                                    "https://randomuser.me/api/portraits/women/44.jpg",
+                                                    "https://randomuser.me/api/portraits/men/32.jpg",
+                                                    "https://randomuser.me/api/portraits/women/68.jpg",
+                                                    "https://randomuser.me/api/portraits/men/45.jpg"
+                                                ].map((url, i) => (
                                                     <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-lg">
-                                                        <img
-                                                            src={avatar.file_id ? `${getApiUrl()}/api/partner/photo/${avatar.file_id}` : avatar.url}
-                                                            alt="Partner"
-                                                            className="w-full h-full object-cover"
-                                                            onError={(e) => { e.currentTarget.src = `https://randomuser.me/api/portraits/women/${40 + i}.jpg`; }}
-                                                        />
+                                                        <img src={url} alt="Partner" className="w-full h-full object-cover" />
                                                     </div>
-                                                ))}
+                                                ))
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-base font-black text-white">{liveCount}</span>
@@ -593,21 +593,23 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
                                 <div className="flex items-center justify-center gap-4">
                                     <div className="flex -space-x-2">
-                                        {[1, 2, 3, 4].map(i => {
-                                            const gender = i % 2 === 0 ? 'men' : 'women';
-                                            return (
-                                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
-                                                    <img src={`https://randomuser.me/api/portraits/${gender}/${i + 20}.jpg`} alt="user" className="w-full h-full object-cover" />
-                                                </div>
-                                            );
-                                        })}
+                                        {[
+                                            "https://randomuser.me/api/portraits/women/44.jpg",
+                                            "https://randomuser.me/api/portraits/men/32.jpg",
+                                            "https://randomuser.me/api/portraits/women/68.jpg",
+                                            "https://randomuser.me/api/portraits/men/45.jpg"
+                                        ].map((url, i) => (
+                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
+                                                <img src={url} alt="user" className="w-full h-full object-cover" />
+                                            </div>
+                                        ))
                                     </div>
                                     <div className="text-left">
                                         <div className="text-label font-bold text-slate-900 dark:text-white leading-none">
-                                            {t('marketing:income.math.people_joining_count', '12,402+ PARTNERS', { val: '12,402+' })}
+                                            <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.people_joining_count', '721+ PARTNERS', { val: '721+' })}</span>
                                         </div>
                                         <div className="text-label font-bold text-slate-500 uppercase tracking-wider">
-                                            {t('marketing:income.math.joined_protocol', 'JOINED THE $1/MIN PROTOCOL TODAY')}
+                                            <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.joined_protocol', 'JOINED AI MARKETING STUDIO TODAY')}</span>
                                         </div>
                                     </div>
                                 </div>

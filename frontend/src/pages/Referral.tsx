@@ -261,7 +261,7 @@ export default function ReferralPage() {
         selection();
         const botUsername = 'pintopay_probot';
         const shareLink = `https://t.me/${botUsername}?start=${referralCode}`;
-        const shareText = `${VIRAL_HOOK}\n${VIRAL_SUBTITLE}`;
+        const shareText = t('referral.viral.share_template', { link: shareLink });
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
         if (window.Telegram?.WebApp) {
@@ -346,7 +346,7 @@ export default function ReferralPage() {
                                     <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
                                     {/* Promo image on top of gradient */}
                                     <img
-                                        src={`${getApiUrl()}/images/v3_referral_promo.jpg`}
+                                        src="/images/v3_referral_promo.jpg"
                                         alt={t('referral.modal.invite_image_alt')}
                                         className="absolute inset-0 w-full h-full object-cover"
                                         onError={(e) => {

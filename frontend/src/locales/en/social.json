@@ -209,7 +209,8 @@
     "viral": {
       "hook": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀",
       "subtitle": "Create your source of passive income. $1 every minute. 📈",
-      "text": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀\n\nThe world of finance is evolving. Be part of the change. 🦅\n\nJoin the Pintopay Partner Hub and start building your partner network with income up to $1 per minute.\n\n✅ No barriers\n✅ No bureaucracy\n✅ Full financial freedom\n\nStart your journey to success right now! 👇"
+      "text": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀\n\nThe world of finance is evolving. Be part of the change. 🦅\n\nJoin the Pintopay Partner Hub and start building your partner network with income up to $1 per minute.\n\n✅ No barriers\n✅ No bureaucracy\n✅ Full financial freedom\n\nStart your journey to success right now! 👇",
+      "share_template": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES! \nCreate your source of passive income - $1 every minute \n\nJoin my Network - {{link}}"
     },
     "modal": {
       "invite_image_alt": "Your financial ecosystem",

@@ -100,7 +100,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 animate={{ y: 0 }}
                 exit={{ y: "100%" }}
                 transition={{ type: "spring", damping: 32, stiffness: 350 }}
-                className="relative w-full sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-[2rem] shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 flex flex-col"
+                className="relative w-full sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-2xl shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 flex flex-col"
                 style={{
                     height: '100dvh',
                     maxHeight: '100dvh',
@@ -166,7 +166,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         {isLocked ? (
                             /* PRO Lock View */
                             <div className="flex flex-col items-center text-center space-y-8 py-12">
-                                <div className="w-20 h-20 rounded-[2rem] bg-amber-500/10 border-2 border-dashed border-amber-500/30 flex items-center justify-center">
+                                <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border-2 border-dashed border-amber-500/30 flex items-center justify-center">
                                     <Lock className="w-10 h-10 text-amber-500" />
                                 </div>
                                 <div className="space-y-2">
@@ -178,7 +178,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     </p>
                                 </div>
 
-                                <div className="w-full p-6 rounded-[2rem] bg-linear-to-br from-amber-500/10 to-transparent border border-amber-500/20 space-y-5">
+                                <div className="w-full p-6 rounded-2xl bg-linear-to-br from-amber-500/10 to-transparent border border-amber-500/20 space-y-5">
                                     <div className="flex items-center gap-3">
                                         <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
                                         <span className="text-label font-bold text-amber-500 uppercase tracking-widest">{t('academy.pro_benefits')}</span>
@@ -208,6 +208,28 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                             /* Lesson Content View */
                             <div className="space-y-10">
+                                {/* Hero Image */}
+                                <div className="relative h-40 rounded-xl overflow-hidden -mx-1 shrink-0">
+                                    <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
+                                    <img
+                                        src="/images/academy_hero.webp"
+                                        alt=""
+                                        className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                                    />
+                                    <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-white dark:to-[#030712]" />
+                                    <div className="absolute bottom-3 left-4 right-4 z-10">
+                                        <div className="flex items-center gap-1.5 mb-1">
+                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/30 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-200 uppercase tracking-widest">
+                                                {t('academy.academy_label')} · {t('academy.stage_title', { stage: stage.id })}
+                                            </span>
+                                        </div>
+                                        <h2 className="text-xl font-bold text-white leading-tight tracking-tight drop-shadow-lg">
+                                            {title}
+                                        </h2>
+                                    </div>
+                                </div>
+
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
                                         <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 uppercase tracking-widest">
@@ -217,9 +239,6 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             {category}
                                         </div>
                                     </div>
-                                    <h2 className="text-3xl font-bold text-slate-900 dark:text-white leading-[0.95] tracking-tight">
-                                        {title}
-                                    </h2>
                                 </div>
 
                                 {/* Main Article Content */}
@@ -228,7 +247,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         {renderInline(t(`academy_content.stage_${stage.id}_lesson_intro`, { defaultValue: t('academy.elite_training') }))}
                                     </div>
 
-                                    <div className="p-5 rounded-[1.5rem] bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
+                                    <div className="p-5 rounded-xl bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
                                         <div className="flex items-center justify-between relative z-10">
                                             <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-bold text-label uppercase tracking-widest">
@@ -255,7 +274,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                         {/* AI Expert Section */}
                                         {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10) || t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: '' })) && (
-                                            <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-3">
+                                            <div className="p-5 rounded-xl bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-3">
                                                 <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-bold text-label uppercase tracking-widest">
                                                     <Wand2 className="w-4 h-4" />
                                                     {t('academy.ai_expert')}
@@ -268,7 +287,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                         {/* Viral Rule / Marketing Trick Section */}
                                         {t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { defaultValue: '' }) && (
-                                            <div className="p-5 rounded-[1.5rem] bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-3">
+                                            <div className="p-5 rounded-xl bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-3">
                                                 <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-bold text-label uppercase tracking-widest">
                                                     <Zap className="w-4 h-4" />
                                                     {t('academy.viral_psychology')}
@@ -288,7 +307,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         whileInView={{ opacity: 1, y: 0 }}
-                                        className="p-6 rounded-[2rem] bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
+                                        className="p-6 rounded-2xl bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
                                     >
                                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/mission:translate-x-full transition-transform duration-1000 pointer-events-none" />
                                         <div className="flex items-center gap-3">
