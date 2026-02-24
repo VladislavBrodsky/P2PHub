@@ -430,7 +430,7 @@ export const GrowthTab = ({
                                                                         <button
                                                                             onClick={() => handleUnlockAcademyStage(stageIdStr)}
                                                                             disabled={isUnlockingStage === stageIdStr}
-                                                                            className="w-full h-11 sm:h-12 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all"
+                                                                            className="w-full h-11 sm:h-12 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-amber-400/30"
                                                                         >
                                                                             {isUnlockingStage === stageIdStr ? (
                                                                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -447,7 +447,7 @@ export const GrowthTab = ({
                                                                     <button
                                                                         onClick={() => handleCompleteAcademyStage(String(stage.id))}
                                                                         disabled={isLoading}
-                                                                        className="w-full h-11 sm:h-12 bg-slate-900 dark:bg-white/10 text-white dark:text-white border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 hover:bg-slate-800 dark:hover:bg-white/15 active:scale-[0.98] transition-all"
+                                                                        className={`w-full h-11 sm:h-12 ${isCompleted ? 'bg-emerald-500/10 text-emerald-500 pointer-events-none' : 'vibing-blue-animated text-white'} border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all`}
                                                                     >
                                                                         {isLoading ? (
                                                                             <Loader2 className="w-5 h-5 animate-spin" />
@@ -656,7 +656,7 @@ export const GrowthTab = ({
 
                             <button
                                 onClick={() => { selection(); setShowSetup(true); }}
-                                className="w-full h-12 bg-emerald-500 hover:bg-emerald-400 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all sm:active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 relative z-10 overflow-hidden group/btn border border-emerald-400/50"
+                                className="w-full h-12 vibing-emerald-animated text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all sm:active:scale-95 shadow-[0_10px_20px_rgba(16,185,129,0.4)] flex items-center justify-center gap-2 relative z-10 overflow-hidden group/btn border border-emerald-400/50"
                             >
                                 <motion.div
                                     className="absolute inset-0 bg-white/20 -skew-x-12"

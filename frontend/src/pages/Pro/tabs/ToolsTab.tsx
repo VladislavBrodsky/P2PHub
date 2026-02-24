@@ -83,7 +83,7 @@ export const ToolsTab = ({
                         </p>
                         <button
                             onClick={() => { selection(); setShowHeadlineModal(true); }}
-                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-indigo-500/20 shrink-0 relative z-20 shadow-premium-sm"
+                            className="mt-auto w-full h-10 vibing-blue-animated text-white rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
                             {t('pro_dashboard.tools.headline.btn')}
                             <ChevronRight size={10} />
@@ -125,7 +125,7 @@ export const ToolsTab = ({
                         </p>
                         <button
                             onClick={() => { selection(); setShowBioModal(true); }}
-                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-amber-500/20 shrink-0 relative z-20 shadow-premium-sm"
+                            className="mt-auto w-full h-10 acid-yellow-gradient rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
                             {t('pro_dashboard.tools.bio.btn')}
                             <ChevronRight size={10} />
@@ -154,7 +154,7 @@ export const ToolsTab = ({
                         </p>
                         <button
                             onClick={() => { selection(); setShowGrowthModal?.(true); }}
-                            className="mt-auto w-full h-9 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-blue-500/20 shrink-0 relative z-20 shadow-premium-sm"
+                            className="mt-auto w-full h-10 vibing-emerald-animated text-white rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
                             {t('pro_dashboard.growth_strategist.btn')}
                             <ChevronRight size={10} />

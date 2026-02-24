@@ -540,10 +540,10 @@ export const ProDashboard = () => {
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTabGlow"
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-gradient-xy rounded-2xl ${tabConfig[tab].shadow}`}
+                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-vibing-gradient rounded-2xl ${tabConfig[tab].shadow} shadow-lg`}
                                         transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                     >
-                                        <div className="absolute inset-0 bg-white/5 backdrop-blur-[1px] rounded-2xl" />
+                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl" />
                                     </motion.div>
                                 )}
                                 <span className="relative z-10 flex flex-col items-center justify-center gap-0.5">

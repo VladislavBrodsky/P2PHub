@@ -3,6 +3,8 @@
     "css.lint.unknownAtRules": "ignore",
     "scss.lint.unknownAtRules": "ignore",
     "less.lint.unknownAtRules": "ignore",
+    "postcss.validate": false,
+    "stylelint.enable": false,
     "less.validate": false,
     "scss.validate": false,
     "tailwindCSS.includeLanguages": {

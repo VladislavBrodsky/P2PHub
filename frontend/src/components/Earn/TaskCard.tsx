@@ -69,7 +69,6 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
 
     return (
         <motion.div
-            layout
             initial={false}
             whileHover={{ y: -2, scale: 1.01 }}
             className={`relative rounded-2xl border transition-all duration-500 overflow-hidden ${variants[status]} ${isExpanded ? 'ring-2 ring-blue-500/20 shadow-xl' : ''}`}

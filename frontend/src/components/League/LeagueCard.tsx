@@ -52,7 +52,7 @@ const useLeagueConfig = () => {
         },
         platinum: {
             name: t('leaderboard.levels.platinum', 'Platinum Tier'),
-            color: 'from-[#6366f1] via-[#a855f7] to-[#ec4899]',
+            color: 'from-[#6366f1] via-[#a855f7] to-[#ec4899] bg-size-[200%_auto] animate-vibing-gradient',
             textColor: 'text-white',
             borderColor: 'border-white/30',
             icon: Flame,
