@@ -337,7 +337,7 @@
     "event_types": {
       "all": "ALL",
       "commission": "COMMISSION",
-      "xp_award": "XP_AWARD",
+      "xp_award": "XP REWARDS",
       "notification": "NOTIFICATION",
       "referral": "REFERRAL",
       "payment": "PAYMENT",

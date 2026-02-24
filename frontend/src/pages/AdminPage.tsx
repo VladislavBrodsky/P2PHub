@@ -2073,52 +2073,60 @@ export const AdminPage = () => {
                     return (
                         <motion.div key="ledger" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-5">
                             {/* Header */}
-                            <div className="p-5 rounded-3xl bg-slate-900/80 border border-emerald-500/20 shadow-2xl shadow-emerald-500/5 relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none"><BookOpen size={100} /></div>
+                            <div className="p-4 rounded-3xl bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20 shadow-2xl shadow-emerald-500/5 relative overflow-hidden">
+                                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none"><BookOpen size={80} /></div>
                                 <div className="flex items-center justify-between relative z-10">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                                            <BookOpen className="text-emerald-400" size={20} />
+                                        <div className="w-9 h-9 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                                            <BookOpen className="text-emerald-400" size={18} />
                                         </div>
                                         <div>
-                                            <div className="text-sm font-bold text-white">{t('admin_portal.event_ledger')}</div>
-                                            <div className="text-label text-slate-500 font-medium">{t('admin_portal.immutable_audit')} · {t('admin_portal.events_loaded', { count: ledgerEvents.length })}</div>
+                                            <div className="text-sm font-bold text-white tracking-tight">{t('admin_portal.event_ledger')}</div>
+                                            <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">{t('admin_portal.immutable_audit')} · {t('admin_portal.events_loaded', { count: ledgerEvents.length })}</div>
                                         </div>
                                     </div>
                                     <button
                                         onClick={fetchLedgerEvents}
-                                        className={`w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all ${isLedgerLoading ? 'animate-spin' : ''}`}
+                                        className={`w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 active:scale-90 transition-all ${isLedgerLoading ? 'animate-spin' : ''}`}
                                     >
-                                        <RefreshCw size={15} className="text-emerald-400" />
+                                        <RefreshCw size={14} className="text-emerald-400" />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Filters Row */}
-                            <div className="space-y-3">
-                                <div className="flex gap-1.5 flex-wrap">
+                            <div className="space-y-2">
+                                <div className="flex gap-2 p-1 bg-white/5 rounded-2xl overflow-x-auto scrollbar-none">
                                     {EVENT_TYPES.map(t_val => (
                                         <button
                                             key={t_val}
                                             onClick={() => { setLedgerFilter(t_val); setLedgerNotifHistory(null); }}
-                                            className={`px-3 py-1.5 rounded-xl text-label font-bold uppercase tracking-widest transition-all border ${ledgerFilter === t_val
-                                                ? (t_val === 'ALL' ? 'bg-white/10 border-white/20 text-white' : `${getType(t_val).bg} ${getType(t_val).color}`)
-                                                : 'bg-transparent border-white/5 text-slate-500 hover:border-white/10'}`}
+                                            className={`px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase tracking-[0.15em] transition-all whitespace-nowrap flex items-center gap-1.5 border ${ledgerFilter === t_val
+                                                ? (t_val === 'ALL' ? 'bg-white/10 border-white/20 text-white shadow-lg' : `${getType(t_val).bg} ${getType(t_val).color} shadow-lg`)
+                                                : 'bg-transparent border-transparent text-slate-500 hover:text-slate-300 hover:bg-white/5'}`}
                                         >
-                                            {t_val !== 'ALL' && <span className="mr-1">{getType(t_val).icon}</span>}
+                                            {t_val !== 'ALL' && <span className="opacity-80 group-hover:opacity-100">{getType(t_val).icon}</span>}
                                             {t(`admin_portal.event_types.${t_val.toLowerCase()}`)}
                                         </button>
                                     ))}
                                 </div>
                                 <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={ledgerPartnerId}
-                                        onChange={e => setLedgerPartnerId(e.target.value)}
-                                        placeholder={t('admin_portal.filter_partner_placeholder')}
-                                        className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/40"
-                                    />
-                                    <button onClick={fetchLedgerEvents} className="px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                                    <div className="relative flex-1 group">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-emerald-500 transition-colors">
+                                            <Search size={12} />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={ledgerPartnerId}
+                                            onChange={e => setLedgerPartnerId(e.target.value)}
+                                            placeholder={t('admin_portal.filter_partner_placeholder')}
+                                            className="w-full pl-8 pr-3 py-2 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/40 focus:bg-white/10 transition-all"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={fetchLedgerEvents}
+                                        className="h-9 w-12 flex items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 active:scale-95 transition-all"
+                                    >
                                         <Filter size={14} />
                                     </button>
                                 </div>
@@ -2130,30 +2138,42 @@ export const AdminPage = () => {
                                     <span className="text-label font-bold text-slate-500 uppercase tracking-widest">{t('admin_portal.latest_events')}</span>
                                     {isLedgerLoading && <span className="text-label text-emerald-400 animate-pulse">{t('admin_portal.loading')}</span>}
                                 </div>
-                                <div className="divide-y divide-white/5 max-h-[480px] overflow-y-auto">
+                                <div className="divide-y divide-white/5 max-h-[500px] overflow-y-auto">
                                     {ledgerEvents.length === 0 && !isLedgerLoading && (
-                                        <div className="p-8 text-center text-slate-600 text-xs">{t('admin_portal.no_events')}</div>
+                                        <div className="p-8 text-center text-slate-600 text-xs font-bold uppercase tracking-[0.2em]">{t('admin_portal.no_events')}</div>
                                     )}
                                     {ledgerEvents.map(ev => {
                                         const cfg = getType(ev.action_type || 'MISC');
                                         return (
-                                            <div key={ev.id} className="px-4 py-3 hover:bg-white/3 transition-colors group">
+                                            <div key={ev.id} className="px-3 py-2 hover:bg-white/5 transition-colors group">
                                                 <div className="flex items-start gap-3">
-                                                    <div className={`mt-0.5 px-2 py-1 rounded-lg border text-label font-bold uppercase tracking-widest flex items-center gap-1 shrink-0 ${cfg.bg} ${cfg.color}`}>
-                                                        {cfg.icon}{ev.action_type || 'MISC'}
+                                                    <div className={`mt-0.5 px-1.5 py-0.5 rounded-lg border text-[9px] font-bold uppercase tracking-[0.1em] flex items-center gap-1 shrink-0 ${cfg.bg} ${cfg.color}`}>
+                                                        {cfg.icon}
+                                                        <span className="truncate max-w-[60px] sm:max-w-none">
+                                                            {t(`admin_portal.event_types.${(ev.action_type || 'MISC').toLowerCase()}`)}
+                                                        </span>
                                                     </div>
                                                     <div className="flex-1 min-w-0">
-                                                        <div className="text-label font-semibold text-white/90 truncate">{ev.description || ev.action}</div>
-                                                        <div className="flex items-center gap-2 mt-0.5">
-                                                            {ev.partner_id && <span className="text-label text-slate-600">P#{ev.partner_id}</span>}
-                                                            {ev.entity_id && <span className="text-label text-slate-600">→ {ev.entity_id}</span>}
-                                                            <span className="text-label text-slate-700 ml-auto shrink-0">{fmt(ev.created_at)}</span>
+                                                        <div className="flex items-center justify-between gap-2">
+                                                            <div className="text-label font-bold text-white/90 truncate">{ev.description || ev.action}</div>
+                                                            <span className="text-[9px] font-bold text-slate-600 shrink-0 uppercase tracking-tighter">{fmt(ev.created_at)}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3 mt-0.5">
+                                                            {ev.partner_id && <span className="text-[10px] font-bold text-slate-500/80">ID#{ev.partner_id}</span>}
+                                                            {ev.entity_id && (
+                                                                <span className="text-[10px] font-medium text-slate-600 flex items-center gap-1">
+                                                                    <GitBranch size={8} /> {ev.entity_id}
+                                                                </span>
+                                                            )}
+                                                            <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                <Search size={10} className="text-emerald-500/50" />
+                                                            </div>
                                                         </div>
                                                         {ev.details && Object.keys(ev.details).length > 0 && (
-                                                            <div className="mt-1.5 hidden group-hover:flex flex-wrap gap-1.5">
-                                                                {Object.entries(ev.details).filter(([_, v]) => v != null && v !== '').slice(0, 6).map(([k, v]) => (
-                                                                    <span key={k} className="px-1.5 py-0.5 rounded-md bg-white/5 text-label text-slate-400">
-                                                                        <span className="text-slate-600">{k}:</span> {String(v).slice(0, 30)}
+                                                            <div className="mt-1.5 hidden group-hover:flex flex-wrap gap-1">
+                                                                {Object.entries(ev.details).filter(([_, v]) => v != null && v !== '').slice(0, 4).map(([k, v]) => (
+                                                                    <span key={k} className="px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-medium text-slate-400">
+                                                                        <span className="text-slate-600 lowercase">{k}:</span> {String(v).slice(0, 20)}
                                                                     </span>
                                                                 ))}
                                                             </div>

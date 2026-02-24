@@ -337,7 +337,7 @@
     "event_types": {
       "all": "ВСЕ",
       "commission": "КОМИССИЯ",
-      "xp_award": "НАГРАДА_XP",
+      "xp_award": "XP НАГРАДЫ",
       "notification": "УВЕДОМЛЕНИЕ",
       "referral": "РЕФЕРАЛ",
       "payment": "ПЛАТЕЖ",
