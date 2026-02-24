@@ -349,7 +349,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-4 space-y-2 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
                                 {/* LIVE Indicator & Header */}
                                 <div className="flex flex-col items-center pt-2">
-                                    <div className="flex items-center gap-2 bg-[#F0FFFA]/5 rounded-full px-4 py-1.5 border border-emerald-500/10 mb-6 group hover:bg-emerald-500/5 transition-colors">
+                                    <div className="flex items-center gap-2 bg-emerald-500/5 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/10 transition-colors">
                                         <div className="relative flex h-2 w-2">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -357,14 +357,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                     </div>
 
-                                    <div className="text-center space-y-2 mb-8">
-                                        <div className="flex items-center justify-center gap-1.5">
-                                            <Zap className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
-                                            <span className="text-label font-black text-emerald-400 uppercase tracking-[0.2em]">
+                                    <div className="text-center space-y-1 mb-5">
+                                        <div className="flex items-center justify-center gap-1.5 text-emerald-400 uppercase tracking-[0.2em]">
+                                            <Zap className="w-3.5 h-3.5 fill-emerald-400" />
+                                            <span className="text-[10px] sm:text-xs font-black">
                                                 {t('marketing:income.math.subheading')}
                                             </span>
                                         </div>
-                                        <h4 className="text-2xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
+                                        <h4 className="text-xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
@@ -385,10 +385,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             animate={mathVisible ? { opacity: 1, x: 0 } : {}}
                                             transition={{ duration: 0.4, delay }}
                                             className={clsx(
-                                                'relative group flex items-center justify-between h-14 px-6 rounded-full border transition-all duration-300',
+                                                'relative group flex items-center justify-between h-12 sm:h-14 px-4 sm:px-6 rounded-full border transition-all duration-300',
                                                 highlight
-                                                    ? 'bg-emerald-500/10 border-emerald-400/30'
-                                                    : 'bg-white/3 border-white/5'
+                                                    ? 'bg-emerald-500/10 border-emerald-400/30 shadow-[0_0_20px_rgba(16,185,129,0.05)]'
+                                                    : 'bg-white/5 border-white/5'
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
@@ -398,12 +398,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-2 sm:gap-3">
                                                 <span className={clsx("text-lg font-black tracking-tight", highlight ? "text-emerald-400" : "text-white")}>
                                                     {amount}
                                                 </span>
                                                 {highlight && (
-                                                    <div className="bg-emerald-500 text-[10px] font-black text-white px-2 py-0.5 rounded-md tracking-widest shadow-lg shadow-emerald-500/40">
+                                                    <div className="bg-emerald-500 text-[9px] font-black text-white px-2 py-0.5 rounded-md tracking-widest shadow-lg shadow-emerald-500/40">
                                                         {t('marketing:income.math.target_badge')}
                                                     </div>
                                                 )}
@@ -413,12 +413,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 </div>
 
                                 {/* Formula */}
-                                <div className="flex flex-col items-center gap-6 px-4 mb-10">
+                                <div className="flex flex-col items-center gap-4 px-4 mb-8">
                                     <m.div
                                         initial={{ opacity: 0 }}
                                         animate={mathVisible ? { opacity: 1 } : {}}
                                         transition={{ delay: 0.6 }}
-                                        className="text-label text-white/20 font-mono tracking-widest"
+                                        className="text-[10px] text-white/20 font-mono tracking-widest uppercase"
                                     >
                                         {t('marketing:income.math.formula_note')}
                                     </m.div>
@@ -428,43 +428,43 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0, scale: 0.95 }}
                                         animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
                                         transition={{ delay: 0.7 }}
-                                        className="w-full bg-rose-500/5 border border-rose-500/20 rounded-[28px] p-5 flex items-center gap-4 group"
+                                        className="w-full bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex items-center gap-3 group"
                                     >
-                                        <div className="relative flex h-3 w-3 shrink-0">
+                                        <div className="relative flex h-2 w-2 shrink-0">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600" />
+                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600 shadow-[0_0_8px_rgba(225,29,72,0.4)]" />
                                         </div>
-                                        <p className="text-xs sm:text-sm font-black text-rose-400 uppercase leading-relaxed tracking-wide group-hover:text-rose-300 transition-colors">
+                                        <p className="text-[10px] sm:text-xs font-black text-rose-400 uppercase leading-snug tracking-wide group-hover:text-rose-300 transition-colors">
                                             {t('marketing:income.math.fomo_line')}
                                         </p>
                                     </m.div>
                                 </div>
 
                                 {/* Social Proof & CTA */}
-                                <div className="px-4 pb-6 space-y-5">
-                                    <div className="bg-white/2 border border-white/5 rounded-full py-2.5 px-6 flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="flex -space-x-3">
+                                <div className="px-4 pb-6 space-y-4">
+                                    <div className="bg-white/5 border border-white/5 rounded-full py-2 px-4 flex items-center justify-between gap-2 overflow-hidden">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <div className="flex -space-x-3 shrink-0">
                                                 {[
                                                     "https://randomuser.me/api/portraits/women/44.jpg",
                                                     "https://randomuser.me/api/portraits/men/32.jpg",
                                                     "https://randomuser.me/api/portraits/women/68.jpg",
                                                     "https://randomuser.me/api/portraits/men/45.jpg"
                                                 ].map((url, i) => (
-                                                    <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0A1A0F] bg-slate-800 overflow-hidden shrink-0 shadow-lg">
+                                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-lg">
                                                         <img src={url} alt="Partner" className="w-full h-full object-cover" />
                                                     </div>
                                                 ))}
                                             </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-base font-black text-white">{liveCount}</span>
-                                                <span className="text-[10px] font-black text-white/40 uppercase tracking-widest">{t('marketing:income.math.online_badge')}</span>
+                                            <div className="flex items-center gap-1.5 min-w-0">
+                                                <span className="text-sm font-black text-white shrink-0">{liveCount}</span>
+                                                <span className="text-[9px] font-black text-white/40 uppercase tracking-widest truncate">{t('marketing:income.math.online_badge')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex items-center gap-1.5 shrink-0 whitespace-nowrap">
                                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                                            <span className="text-amber-500/80 font-black text-[10px] tracking-widest uppercase">
+                                            <span className="text-amber-500/80 font-black text-[9px] tracking-widest uppercase">
                                                 {t('marketing:income.math.spots_left', { count: slotsLeft })}
                                             </span>
                                         </div>
