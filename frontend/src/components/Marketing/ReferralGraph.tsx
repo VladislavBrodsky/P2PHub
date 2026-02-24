@@ -302,10 +302,10 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                         {funnelStages[funnelStep].icon}
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-tight">
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 uppercase tracking-tight">
                                         {funnelStages[funnelStep].title}
                                     </h3>
-                                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-6 px-4">
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed mb-5 px-4">
                                         {funnelStages[funnelStep].desc}
                                     </p>
 
@@ -317,7 +317,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                         </div>
                                         <button
                                             onClick={nextStep}
-                                            className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
+                                            className="w-full h-11 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
                                         >
                                             {t('common:next', { defaultValue: 'Next' })}
                                             <ChevronRight className="w-4 h-4" />
@@ -344,12 +344,12 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2 mb-6 text-center">
-                                        <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase leading-tight pb-1">
+                                    <div className="space-y-1.5 mb-5 text-center">
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase leading-tight pb-0.5">
                                             {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                         </h3>
-                                        <div className="w-10 h-1 bg-emerald-500 mx-auto rounded-full" />
-                                        <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em]">
+                                        <div className="w-8 h-1 bg-emerald-500 mx-auto rounded-full" />
+                                        <p className="text-[9px] font-bold text-emerald-500 uppercase tracking-[0.2em] mt-1.5">
                                             {t('viral_funnel.elite_users', { defaultValue: 'OFFER LIMITED TO FIRST 5,000 PARTNERS' })}
                                         </p>
                                     </div>
@@ -357,7 +357,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                     <div className="w-full space-y-4">
                                         <button
                                             onClick={handleUpgrade}
-                                            className="w-full h-14 vibing-emerald-animated rounded-2xl text-white font-bold text-xs uppercase tracking-widest shadow-[0_20px_60px_-10px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                            className="w-full h-12 vibing-emerald-animated rounded-2xl text-white font-bold text-xs uppercase tracking-widest shadow-[0_15px_40px_-10px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                         >
                                             {t('viral_funnel.cta', { defaultValue: 'Activate My Node' })}
                                             <Zap className="w-4 h-4 group-hover:rotate-12 transition-transform" />
@@ -372,18 +372,18 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                     </div>
 
                                     {/* Social Proof Footer */}
-                                    <div className="mt-6 p-4 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 w-full flex items-center gap-4">
-                                        <div className="flex -space-x-3 shrink-0">
+                                    <div className="mt-5 p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 w-full flex items-center gap-3">
+                                        <div className="flex -space-x-2 shrink-0">
                                             {[1, 2, 3, 4].map(i => (
                                                 <img
                                                     key={i}
                                                     src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${i + partnersCount + 42}`}
-                                                    className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200"
+                                                    className="w-7 h-7 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200"
                                                     alt="user"
                                                 />
                                             ))}
                                         </div>
-                                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 leading-tight text-left">
+                                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 leading-tight text-left">
                                             {t('viral_funnel.deployed_partners', { count: partnersCount, defaultValue: `${partnersCount} nodes activated today` })}
                                         </p>
                                     </div>

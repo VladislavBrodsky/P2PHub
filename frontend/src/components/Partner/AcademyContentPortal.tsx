@@ -210,106 +210,108 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             /* Lesson Content View */
                             <div className="space-y-10">
                                 {/* Viral Network Core - Dynamic Hero Section */}
-                                <div className="relative h-56 rounded-2xl overflow-hidden -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
-                                    {/* Scanline Effect */}
-                                    <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
-                                        style={{
-                                            background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
-                                            backgroundSize: '100% 4px'
-                                        }}
-                                    />
-
-                                    {/* Energy Particles */}
-                                    {[...Array(6)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            className="absolute w-1 h-1 bg-blue-400 rounded-full blur-[1px]"
-                                            initial={{
-                                                x: Math.random() * 400,
-                                                y: Math.random() * 200,
-                                                opacity: Math.random() * 0.5
-                                            }}
-                                            animate={{
-                                                y: [null, Math.random() * -100],
-                                                opacity: [0, 0.4, 0]
-                                            }}
-                                            transition={{
-                                                duration: 4 + Math.random() * 4,
-                                                repeat: Infinity,
-                                                ease: "linear",
-                                                delay: Math.random() * 5
+                                <div className="relative h-56 rounded-2xl -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
+                                    <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                                        {/* Scanline Effect */}
+                                        <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
+                                            style={{
+                                                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
+                                                backgroundSize: '100% 4px'
                                             }}
                                         />
-                                    ))}
 
-                                    {/* Dot Grid Background */}
-                                    <div className="absolute inset-0 opacity-20"
-                                        style={{
-                                            backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
-                                            backgroundSize: '16px 16px'
-                                        }}
-                                    />
+                                        {/* Energy Particles */}
+                                        {[...Array(6)].map((_, i) => (
+                                            <motion.div
+                                                key={i}
+                                                className="absolute w-1 h-1 bg-blue-400 rounded-full blur-[1px]"
+                                                initial={{
+                                                    x: Math.random() * 400,
+                                                    y: Math.random() * 200,
+                                                    opacity: Math.random() * 0.5
+                                                }}
+                                                animate={{
+                                                    y: [null, Math.random() * -100],
+                                                    opacity: [0, 0.4, 0]
+                                                }}
+                                                transition={{
+                                                    duration: 4 + Math.random() * 4,
+                                                    repeat: Infinity,
+                                                    ease: "linear",
+                                                    delay: Math.random() * 5
+                                                }}
+                                            />
+                                        ))}
 
-                                    {/* Animated Glow Curves */}
-                                    <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 200">
-                                        <motion.path
-                                            d="M -50 150 Q 100 50 250 150 T 450 100"
-                                            fill="none"
-                                            stroke="url(#blue-gradient)"
-                                            strokeWidth="2"
-                                            initial={{ pathLength: 0, opacity: 0 }}
-                                            animate={{ pathLength: 1, opacity: 1 }}
-                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                        />
-                                        <motion.path
-                                            d="M -50 100 Q 150 180 300 80 T 450 150"
-                                            fill="none"
-                                            stroke="url(#purple-gradient)"
-                                            strokeWidth="1.5"
-                                            initial={{ pathLength: 0, opacity: 0 }}
-                                            animate={{ pathLength: 1, opacity: 1 }}
-                                            transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
-                                        />
-
-                                        {/* Radial Sweep Ring */}
-                                        <motion.circle
-                                            cx="200"
-                                            cy="100"
-                                            r="70"
-                                            stroke="white"
-                                            strokeWidth="0.5"
-                                            fill="none"
-                                            strokeDasharray="20 180"
-                                            animate={{ rotate: 360 }}
-                                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                                            className="opacity-20"
-                                        />
-                                        <motion.circle
-                                            cx="200"
-                                            cy="100"
-                                            r="75"
-                                            stroke="#3b82f6"
-                                            strokeWidth="2"
-                                            fill="none"
-                                            strokeDasharray="10 240"
-                                            animate={{ rotate: -360 }}
-                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                            className="opacity-40"
+                                        {/* Dot Grid Background */}
+                                        <div className="absolute inset-0 opacity-20"
+                                            style={{
+                                                backgroundImage: 'radial-gradient(circle, #3b82f6 1px, transparent 1px)',
+                                                backgroundSize: '16px 16px'
+                                            }}
                                         />
 
-                                        <defs>
-                                            <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-                                                <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
-                                                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-                                            </linearGradient>
-                                            <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
-                                                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
-                                                <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
+                                        {/* Animated Glow Curves */}
+                                        <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 400 200">
+                                            <motion.path
+                                                d="M -50 150 Q 100 50 250 150 T 450 100"
+                                                fill="none"
+                                                stroke="url(#blue-gradient)"
+                                                strokeWidth="2"
+                                                initial={{ pathLength: 0, opacity: 0 }}
+                                                animate={{ pathLength: 1, opacity: 1 }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                            />
+                                            <motion.path
+                                                d="M -50 100 Q 150 180 300 80 T 450 150"
+                                                fill="none"
+                                                stroke="url(#purple-gradient)"
+                                                strokeWidth="1.5"
+                                                initial={{ pathLength: 0, opacity: 0 }}
+                                                animate={{ pathLength: 1, opacity: 1 }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+                                            />
+
+                                            {/* Radial Sweep Ring */}
+                                            <motion.circle
+                                                cx="200"
+                                                cy="100"
+                                                r="70"
+                                                stroke="white"
+                                                strokeWidth="0.5"
+                                                fill="none"
+                                                strokeDasharray="20 180"
+                                                animate={{ rotate: 360 }}
+                                                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-20"
+                                            />
+                                            <motion.circle
+                                                cx="200"
+                                                cy="100"
+                                                r="75"
+                                                stroke="#3b82f6"
+                                                strokeWidth="2"
+                                                fill="none"
+                                                strokeDasharray="10 240"
+                                                animate={{ rotate: -360 }}
+                                                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                                className="opacity-40"
+                                            />
+
+                                            <defs>
+                                                <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+                                                    <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                                                </linearGradient>
+                                                <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                    <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0" />
+                                                    <stop offset="50%" stopColor="#8b5cf6" stopOpacity="1" />
+                                                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>
+                                    </div>
 
                                     {/* Central Avatar Container */}
                                     <div className="absolute inset-0 flex items-center justify-center">
@@ -339,8 +341,19 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             {/* Floating Nodes */}
                                             <motion.div
                                                 className="absolute -left-12 top-4 px-3 py-1.5 rounded-full bg-emerald-500/90 backdrop-blur-md border border-emerald-400 flex items-center gap-2 shadow-lg z-20"
-                                                animate={{ y: [0, -8, 0], x: [0, 4, 0] }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                                initial={{ scale: 0, opacity: 0, x: -20 }}
+                                                animate={{
+                                                    scale: 1,
+                                                    opacity: 1,
+                                                    y: [0, -10, 0],
+                                                    x: [0, 6, 0]
+                                                }}
+                                                transition={{
+                                                    scale: { duration: 0.5, delay: 0.2 },
+                                                    opacity: { duration: 0.5, delay: 0.2 },
+                                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                                                    x: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                                                }}
                                             >
                                                 <div className="p-1 rounded-full bg-white/20">
                                                     <Users className="w-3 h-3 text-white" />
@@ -350,8 +363,19 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
 
                                             <motion.div
                                                 className="absolute -right-10 bottom-6 w-10 h-10 rounded-full bg-indigo-500/90 backdrop-blur-md border border-indigo-400 flex items-center justify-center shadow-lg z-20"
-                                                animate={{ y: [0, 10, 0], x: [0, -6, 0] }}
-                                                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                                initial={{ scale: 0, opacity: 0, x: 20 }}
+                                                animate={{
+                                                    scale: 1,
+                                                    opacity: 1,
+                                                    y: [0, 12, 0],
+                                                    x: [0, -8, 0]
+                                                }}
+                                                transition={{
+                                                    scale: { duration: 0.5, delay: 0.4 },
+                                                    opacity: { duration: 0.5, delay: 0.4 },
+                                                    y: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+                                                    x: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+                                                }}
                                             >
                                                 <Zap className="w-4 h-4 text-white fill-white" />
                                             </motion.div>
