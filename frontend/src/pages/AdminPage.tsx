@@ -826,6 +826,23 @@ export const AdminPage = () => {
                                     </div>
                                 ))
                             )}
+                            <div className="flex items-center justify-between pt-4 pb-2">
+                                <button
+                                    onClick={() => setPalantirPage(p => Math.max(0, p - 1))}
+                                    disabled={palantirPage === 0}
+                                    className="px-4 py-2 rounded-xl bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 text-xs font-bold uppercase transition-colors"
+                                >
+                                    Previous
+                                </button>
+                                <span className="text-xs font-bold text-slate-600">Page {palantirPage + 1}</span>
+                                <button
+                                    onClick={() => setPalantirPage(p => p + 1)}
+                                    disabled={palantirFeed.length < 100}
+                                    className="px-4 py-2 rounded-xl bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 text-xs font-bold uppercase transition-colors"
+                                >
+                                    Next
+                                </button>
+                            </div>
                         </div>
                     </motion.div>
                 )}
@@ -1546,6 +1563,31 @@ export const AdminPage = () => {
                             <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-label font-bold uppercase">Action Required</div>
                         </div>
 
+                        {transactions.length > 0 && (
+                            <div className="flex items-center justify-between px-2 pb-2 mt-2 border-b border-black/5 dark:border-white/5">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        className="w-4 h-4 rounded border-slate-300 text-blue-500 focus:ring-blue-500 bg-black/20"
+                                        checked={transactions.length > 0 && selectedPayments.size === transactions.length}
+                                        onChange={toggleAllPayments}
+                                    />
+                                    <span className="text-xs font-bold text-slate-500 uppercase">Select All</span>
+                                </label>
+                                {selectedPayments.size > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={handleBatchReject} disabled={isBatchProcessing} className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-500 text-xs font-bold uppercase hover:bg-red-500/20 disabled:opacity-50 transition-colors">
+                                            Reject ({selectedPayments.size})
+                                        </button>
+                                        <button onClick={handleBatchApprove} disabled={isBatchProcessing} className="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-xs font-bold uppercase hover:bg-blue-600 disabled:opacity-50 flex items-center gap-1 shadow-md shadow-blue-500/20 transition-colors">
+                                            {isBatchProcessing && <RefreshCw size={12} className="animate-spin" />}
+                                            Approve ({selectedPayments.size})
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         <AnimatePresence mode="popLayout">
                             {transactions.length === 0 ? (
                                 <motion.div
@@ -1571,7 +1613,13 @@ export const AdminPage = () => {
                                     >
                                         <div className="flex items-start justify-between relative z-10">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-5 h-5 rounded border-slate-300 text-blue-500 focus:ring-blue-500 bg-black/20 mt-1 cursor-pointer shrink-0"
+                                                    checked={selectedPayments.has(tx.id)}
+                                                    onChange={() => togglePaymentSelection(tx.id)}
+                                                />
+                                                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0">
                                                     <Clock className="text-amber-500" size={24} />
                                                 </div>
                                                 <div>
@@ -1949,48 +1997,65 @@ export const AdminPage = () => {
                             </form>
                         </div>
 
-                        <div className="space-y-2">
+                        <div className="space-y-2 pb-6">
                             {isSearching ? (
                                 <div className="p-12 text-center text-slate-500 text-xs font-bold animate-pulse">Searching users...</div>
                             ) : searchResults.length > 0 ? (
-                                searchResults.map(p => (
-                                    <button
-                                        key={p.id}
-                                        onClick={() => fetchPartnerDetails(p.id)}
-                                        className="w-full text-left p-4 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2 hover:border-blue-500/30 transition-all group"
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <div className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">@{p.username || p.telegram_id}</div>
-                                                <div className="text-label text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
-                                            </div>
-                                            <div className={`px-2 py-0.5 rounded-lg text-label font-bold uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
-                                                {p.is_pro ? 'PRO MEMBER' : 'FREE USER'}
-                                            </div>
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/5 dark:border-white/5">
-                                            {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && (
-                                                <div className="text-center">
-                                                    <div className="text-label text-slate-500 font-bold uppercase">Level</div>
-                                                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{p.level}</div>
+                                <>
+                                    {searchResults.map(p => (
+                                        <button
+                                            key={p.id}
+                                            onClick={() => fetchPartnerDetails(p.id)}
+                                            className="w-full text-left p-4 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2 hover:border-blue-500/30 transition-all group"
+                                        >
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <div className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">@{p.username || p.telegram_id}</div>
+                                                    <div className="text-label text-slate-500 font-bold uppercase">ID: {p.telegram_id}</div>
                                                 </div>
-                                            )}
-                                            <div className="text-center">
-                                                <div className="text-label text-slate-500 font-bold uppercase">Network</div>
-                                                <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{p.referral_count}</div>
+                                                <div className={`px-2 py-0.5 rounded-lg text-label font-bold uppercase ${p.is_pro ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-500/20 text-slate-500'}`}>
+                                                    {p.is_pro ? 'PRO MEMBER' : 'FREE USER'}
+                                                </div>
                                             </div>
-                                            <div className="text-center">
-                                                <div className="text-label text-slate-500 font-bold uppercase">XP</div>
-                                                <div className="text-xs font-bold text-blue-500">{p.xp}</div>
+                                            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-black/5 dark:border-white/5">
+                                                {!(p.is_pro && (p.subscription_plan || "").includes('PLUS')) && (
+                                                    <div className="text-center">
+                                                        <div className="text-label text-slate-500 font-bold uppercase">Level</div>
+                                                        <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{p.level}</div>
+                                                    </div>
+                                                )}
+                                                <div className="text-center">
+                                                    <div className="text-label text-slate-500 font-bold uppercase">Network</div>
+                                                    <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{p.referral_count}</div>
+                                                </div>
+                                                <div className="text-center">
+                                                    <div className="text-label text-slate-500 font-bold uppercase">Total XP</div>
+                                                    <div className="text-xs font-bold text-blue-500">{p.xp} XP</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                ))
-                            ) : searchQuery && !isSearching ? (
-                                <div className="p-12 text-center text-slate-500 text-xs font-bold">No results found</div>
-                            ) : (
-                                <div className="p-12 text-center text-slate-500 text-xs font-bold">Search for any partner by username or ID</div>
-                            )}
+                                        </button>
+                                    ))}
+                                    <div className="flex items-center justify-between pt-4 mt-4 border-t border-black/5 dark:border-white/5">
+                                        <button
+                                            onClick={() => handleSearch(undefined, Math.max(0, searchPage - 1))}
+                                            disabled={searchPage === 0 || isSearching}
+                                            className="px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 text-slate-500 hover:text-white disabled:opacity-30 text-xs font-bold uppercase transition-colors"
+                                        >
+                                            Previous
+                                        </button>
+                                        <span className="text-xs font-bold text-slate-600">Page {searchPage + 1}</span>
+                                        <button
+                                            onClick={() => handleSearch(undefined, searchPage + 1)}
+                                            disabled={searchResults.length < 20 || isSearching}
+                                            className="px-4 py-2 rounded-xl bg-black/5 dark:bg-white/5 text-slate-500 hover:text-white disabled:opacity-30 text-xs font-bold uppercase transition-colors"
+                                        >
+                                            Next
+                                        </button>
+                                    </div>
+                                </>
+                            ) : searchQuery.trim() !== '' ? (
+                                <div className="p-12 text-center text-slate-500 text-xs font-bold border border-dashed border-white/10 rounded-2xl">No partners found.</div>
+                            ) : null}
                         </div>
                     </motion.div>
                 )}
