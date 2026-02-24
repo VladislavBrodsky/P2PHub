@@ -357,14 +357,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                     </div>
 
-                                    <div className="text-center space-y-1 mb-5">
-                                        <div className="flex items-center justify-center gap-1.5 text-emerald-400 uppercase tracking-[0.2em]">
-                                            <Zap className="w-3.5 h-3.5 fill-emerald-400" />
-                                            <span className="text-[10px] sm:text-xs font-black">
-                                                {t('marketing:income.math.subheading')}
+                                    <div className="text-center mb-5">
+                                        <div className="flex flex-col items-center justify-center uppercase tracking-[0.2em] font-black italic">
+                                            <span className="text-[10px] sm:text-xs text-emerald-400">
+                                                {t('marketing:income.math.subheading_part1', 'THE $1/MINUTE STRATEGY')}
+                                            </span>
+                                            <span className="text-[10px] sm:text-xs text-white">
+                                                {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
                                             </span>
                                         </div>
-                                        <h4 className="text-xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
+                                        <h4 className="mt-2 text-xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
