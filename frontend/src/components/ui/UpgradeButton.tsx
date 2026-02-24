@@ -59,12 +59,12 @@ export const UpgradeButton = ({ onClick, className = '', showPrice = true }: Upg
                         <div className="flex flex-col items-start gap-0.5 min-w-0">
                             <div className="flex items-center gap-2">
                                 <h3 className="text-caption font-bold text-white uppercase tracking-widest leading-none drop-shadow-sm whitespace-nowrap">
-                                    {t('common.upgrade_pro')}
+                                    {t('common:upgrade_pro')}
                                 </h3>
                                 <Sparkles size={10} className="text-amber-300 animate-pulse shrink-0" />
                             </div>
                             <p className="text-[8px] font-bold text-slate-400 dark:text-white/40 uppercase tracking-widest leading-none whitespace-nowrap overflow-hidden text-ellipsis max-w-[140px]">
-                                {t('common.unlock_rewards')}
+                                {t('common:unlock_rewards')}
                             </p>
                         </div>
                     </div>

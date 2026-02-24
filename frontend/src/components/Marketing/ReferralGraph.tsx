@@ -319,14 +319,14 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                             onClick={nextStep}
                                             className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-transform flex items-center justify-center gap-2"
                                         >
-                                            {t('common.next', { defaultValue: 'Next' })}
+                                            {t('common:next', { defaultValue: 'Next' })}
                                             <ChevronRight className="w-4 h-4" />
                                         </button>
                                         <button
                                             onClick={() => setShowFunnel(false)}
                                             className="text-label font-bold text-slate-400 hover:text-slate-600 dark:hover:text-white uppercase tracking-[0.3em] transition-colors"
                                         >
-                                            {t('common.close', { defaultValue: 'Close' })}
+                                            {t('common:close', { defaultValue: 'Close' })}
                                         </button>
                                     </div>
                                 </m.div>
@@ -367,7 +367,7 @@ export const ReferralGraph = ({ targetAmount = 43200 }: { targetAmount?: number 
                                             onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
                                             className="text-label font-bold text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
-                                            {t('common.close', { defaultValue: 'Close' })}
+                                            {t('common:close', { defaultValue: 'Close' })}
                                         </button>
                                     </div>
 

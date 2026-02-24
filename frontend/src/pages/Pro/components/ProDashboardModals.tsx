@@ -1283,7 +1283,7 @@ export const ProDashboardModals = ({
                                             <label className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.headline.label', 'Input Headline')}</label>
                                             {headlineInput && (
                                                 <button onClick={() => setHeadlineInput('')} className="text-label font-bold text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
-                                                    <X size={10} /> {t('common.delete')}
+                                                    <X size={10} /> {t('common:delete')}
                                                 </button>
                                             )}
                                         </div>
@@ -1405,7 +1405,7 @@ export const ProDashboardModals = ({
                                             <label className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.label', 'Your Current Bio')}</label>
                                             {bioInput && (
                                                 <button onClick={() => setBioInput('')} className="text-label font-bold text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
-                                                    <X size={10} /> {t('common.delete')}
+                                                    <X size={10} /> {t('common:delete')}
                                                 </button>
                                             )}
                                         </div>

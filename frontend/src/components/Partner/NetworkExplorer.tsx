@@ -212,7 +212,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                         onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
                                         className="text-blue-500 hover:text-blue-600 font-bold active:scale-95 transition-transform bg-blue-500/10 px-1.5 py-0.5 rounded-md"
                                     >
-                                        &larr; {t('common.back', 'BACK')}
+                                        &larr; {t('common:back', 'BACK')}
                                     </button>
                                 ) : (
                                     <>

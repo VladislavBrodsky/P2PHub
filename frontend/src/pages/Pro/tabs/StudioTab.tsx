@@ -197,7 +197,7 @@ export const StudioTab = ({
                 if (personalLink.startsWith('https://t.me/pintopaybot?start=') || personalLink.startsWith('t.me/pintopaybot?start=')) {
                     finalLink = personalLink;
                 } else {
-                    notification({ title: t('common.error') || 'Invalid Link', text: "Link must start with 'https://t.me/pintopaybot?start='", type: 'error' });
+                    notification({ title: t('common:error') || 'Invalid Link', text: "Link must start with 'https://t.me/pintopaybot?start='", type: 'error' });
                     setIsGenerating(false);
                     return;
                 }
@@ -309,13 +309,13 @@ export const StudioTab = ({
             await proService.updateReferralLink(link);
             setStatus({ ...status, personal_referral_link: link });
             notification({
-                title: t('common.success'),
+                title: t('common:success'),
                 text: t('pro_dashboard.studio.link_saved', 'Referral link updated successfully'),
                 type: 'success'
             });
         } catch (error: any) {
             notification({
-                title: t('common.error'),
+                title: t('common:error'),
                 text: error.response?.data?.detail || t('pro_dashboard.studio.link_error', 'Invalid link format'),
                 type: 'error'
             });
@@ -813,7 +813,7 @@ export const StudioTab = ({
                                                         onClick={() => handleUpdatePersonalLink(personalLink)}
                                                         className="absolute right-1 top-1 bottom-1 px-3 bg-purple-500 hover:bg-purple-600 text-white rounded-md text-label font-bold uppercase tracking-wider disabled:opacity-30 transition-all active:scale-95 shadow-md"
                                                     >
-                                                        {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common.save', 'Save')}
+                                                        {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common:save', 'Save')}
                                                     </button>
                                                 </div>
 

@@ -688,7 +688,7 @@ export default function SubscriptionPage() {
                                                 onClick={() => setIsSelectingCurrency(false)}
                                                 className="text-label font-bold text-blue-500 uppercase tracking-widest"
                                             >
-                                                {t('common.cancel', 'CANCEL')}
+                                                {t('common:cancel', 'CANCEL')}
                                             </button>
                                         </div>
                                         <div className="grid grid-cols-2 gap-3">
