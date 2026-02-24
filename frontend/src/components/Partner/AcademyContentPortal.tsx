@@ -8,6 +8,7 @@ import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useTMALock } from '../../hooks/useTMALock';
 import { renderMarkdown, renderInline, sanitizeAIGeneratedText } from '../../utils/renderMarkdown';
+import { getSafeLaunchParams } from '../../utils/tma';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -418,9 +419,17 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             >
                                                 <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-white/30 backdrop-blur-md">
                                                     <img
-                                                        src={user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop"}
+                                                        src={
+                                                            (() => {
+                                                                const lp = getSafeLaunchParams();
+                                                                if (lp.initData?.user?.photoUrl) return lp.initData.user.photoUrl;
+                                                                if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+                                                                return user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop";
+                                                            })()
+                                                        }
                                                         alt="Partner"
-                                                        className="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700"
+                                                        className="w-full h-full object-cover grayscale-20 hover:grayscale-0 transition-all duration-700"
+                                                        loading="eager"
                                                     />
                                                 </div>
                                             </motion.div>

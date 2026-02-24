@@ -4,6 +4,7 @@ import { AVATAR_DATA, LOGO_DATA } from '../../data/avatars';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { useUser } from '../../context/UserContext';
+import { getSafeLaunchParams } from '../../utils/tma';
 
 // #comment: Asset constants for fallback avatars and crypto icons.
 const ALL_AVATARS = Object.values(AVATAR_DATA);
@@ -170,8 +171,23 @@ export const CommunityOrbit = memo(() => {
 
 const CentralLogo = memo(() => {
     const { user } = useUser();
-    const logoSrc = user?.photo_url || LOGO_DATA;
-    const isUserPhoto = !!user?.photo_url;
+
+    const tgPhotoUrl = React.useMemo(() => {
+        try {
+            const lp = getSafeLaunchParams();
+            return lp.initData?.user?.photoUrl || null;
+        } catch {
+            return null;
+        }
+    }, []);
+
+    const logoSrc = React.useMemo(() => {
+        if (tgPhotoUrl) return tgPhotoUrl;
+        if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+        return user?.photo_url || LOGO_DATA;
+    }, [tgPhotoUrl, user?.photo_file_id, user?.photo_url]);
+
+    const isUserPhoto = !!(tgPhotoUrl || user?.photo_file_id || user?.photo_url);
 
     return (
         <div className="relative z-10 flex h-24 w-24 items-center justify-center">
@@ -356,7 +372,8 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                                 className="h-full w-full object-cover"
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
-                                    if (!target.src.includes('unsplash.com')) {
+                                    // If even the proxy fails, fall back to demo
+                                    if (!target.src.includes('unsplash.com') && !target.src.includes('pravatar.cc')) {
                                         target.src = ALL_AVATARS[index % ALL_AVATARS.length];
                                     }
                                 }}
