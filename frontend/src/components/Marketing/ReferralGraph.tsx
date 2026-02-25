@@ -288,7 +288,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
                 <div className="absolute inset-0 bg-linear-to-tr from-indigo-500/10 to-emerald-500/5 pointer-events-none" />
 
                 <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-indigo-400 text-center mb-1.5">
-                    {t('income.network.yield', { defaultValue: 'ESTIMATED NETWORK YIELD' })}
+                    {t('income.math.reveal_strategy', { defaultValue: 'ESTIMATED NETWORK YIELD' })}
                 </p>
 
                 <div className="flex items-baseline justify-center gap-0.5">
@@ -311,7 +311,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
 
                 <div className="mt-1.5 flex justify-between items-center">
                     <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('income.math.per_min', { defaultValue: '$1/MIN' })}</span>
-                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('marketing.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
+                    <span className="text-[8px] sm:text-[9px] font-bold text-white/30 uppercase tracking-widest">{t('income.math.max_dividends', { defaultValue: 'MAX DIVIDENDS' })}</span>
                 </div>
 
                 {isDoneCalculating && (
@@ -321,7 +321,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
                         onClick={onComplete}
                         className="mt-3 w-full h-9 rounded-xl vibing-emerald-animated text-white font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-1.5 shadow-[0_8px_24px_-6px_rgba(16,185,129,0.5)] active:scale-95 transition-transform"
                     >
-                        Reveal Strategy <ChevronRight className="w-3.5 h-3.5" />
+                        {t('income.math.reveal_strategy', { defaultValue: 'Reveal Strategy' })} <ChevronRight className="w-3.5 h-3.5" />
                     </m.button>
                 )}
             </div>
@@ -576,7 +576,7 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                                     />
 
                                     <span className="text-[10px] sm:text-xs font-black text-slate-900 uppercase tracking-[0.2em] sm:tracking-[0.4em] relative z-10 drop-shadow-sm">
-                                        Viral Network Core
+                                        {t('income.network.core', { defaultValue: 'Viral Network Core' })}
                                     </span>
                                 </m.div>
                             </div>

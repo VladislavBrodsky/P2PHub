@@ -77,7 +77,9 @@
       "spots_left": "{{count}} Elite slots left today",
       "cta_urgency": "CLAIM YOUR SLOT NOW",
       "target_badge": "TARGET",
-      "online_badge": "ONLINE"
+      "online_badge": "ONLINE",
+      "reveal_strategy": "REVEAL STRATEGY",
+      "max_dividends": "MAX DIVIDENDS"
     }
   },
   "income_details": {
