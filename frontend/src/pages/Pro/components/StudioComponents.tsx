@@ -100,7 +100,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
             exit={{ opacity: 0, scale: 0.98 }}
             className="space-y-6"
         >
-            <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+            <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                 <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-purple-500/20 pointer-events-none" />
                 <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
 
@@ -142,6 +142,8 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         indexStr="01"
                     />
 
+                    <div className="pt-1" />
+
                     <PremiumSelect
                         label={t('pro_dashboard.studio.target_label')}
                         instruction={t('pro_dashboard.studio.target_instruction')}
@@ -171,7 +173,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="p-5 rounded-3xl bg-linear-to-br from-purple-500/10 via-purple-500/10 to-transparent border border-purple-500/20 relative overflow-hidden group shadow-lg"
+                            className="p-4 rounded-2xl bg-linear-to-br from-purple-500/10 via-purple-500/10 to-transparent border border-purple-500/20 relative overflow-hidden group shadow-lg"
                         >
                             <div className="absolute top-0 right-0 p-4 opacity-20 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-700">
                                 <Zap size={60} className="text-purple-500" />
@@ -181,13 +183,15 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                     <Users size={24} className="text-white" />
                                 </div>
                                 <div>
-                                    <h4 className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1 flex items-center gap-2">
-                                        {t('pro_dashboard.studio.partners_strategy.title')}
-                                        <span className="px-1.5 py-0.5 bg-purple-500 rounded text-label text-white">
+                                    <div className="flex items-center justify-between gap-2 mb-1">
+                                        <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight italic">
+                                            {t('pro_dashboard.studio.partners_strategy.title')}
+                                        </h4>
+                                        <span className="px-1.5 py-0.5 bg-purple-500 rounded text-[9px] font-black text-white shrink-0 shadow-[0_2px_8px_rgba(168,85,247,0.4)]">
                                             {t('pro_dashboard.studio.partners_strategy.mode')}
                                         </span>
-                                    </h4>
-                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed pr-8">
+                                    </div>
+                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-snug pr-4 italic opacity-80">
                                         <Trans i18nKey="pro_dashboard.studio.partners_strategy.desc">
                                             Using geometric growth protocols and specialized Web App referral links for <span className="text-purple-500 font-bold">maximum geometric scaling</span>.
                                         </Trans>
@@ -201,19 +205,19 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="p-5 rounded-2xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 space-y-4 shadow-premium-sm relative overflow-hidden group/link"
+                            className="p-4 rounded-xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 space-y-3 shadow-premium-sm relative overflow-hidden group/link"
                         >
                             <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 via-transparent to-transparent opacity-0 group-hover/link:opacity-100 transition-opacity duration-500" />
                             <div className="flex items-center justify-between relative z-10">
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-500 ${usePersonalLink ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-100 dark:bg-white/5 text-slate-400'}`}>
-                                        <LinkIcon size={16} />
+                                <div className="flex items-center gap-2.5">
+                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-500 ${usePersonalLink ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/20' : 'bg-slate-100 dark:bg-white/5 text-slate-400'}`}>
+                                        <LinkIcon size={14} />
                                     </div>
                                     <div>
-                                        <h4 className="text-caption font-bold text-slate-900 dark:text-white">
+                                        <h4 className="text-label font-bold text-slate-900 dark:text-white leading-none">
                                             {t('pro_dashboard.studio.add_personal_link')}
                                         </h4>
-                                        <p className="text-label font-medium text-slate-400 leading-tight mt-0.5">
+                                        <p className="text-[10px] font-medium text-slate-400 leading-none mt-1 uppercase tracking-wider">
                                             {t('pro_dashboard.studio.personal_link_subtitle')}
                                         </p>
                                     </div>

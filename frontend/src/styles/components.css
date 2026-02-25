@@ -129,8 +129,10 @@
 
   .range-input-premium::-webkit-slider-runnable-track {
     height: 6px;
-    background: var(--color-slate-200);
+    background: #e2e8f0;
+    /* slate-200 replacement or slightly darker */
     border-radius: 99px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .dark .range-input-premium::-webkit-slider-runnable-track {
@@ -142,7 +144,8 @@
     appearance: none;
     margin-top: -6px;
     /* Centers thumb on the track */
-    background-color: var(--color-blue-500);
+    background-color: #3b82f6;
+    /* Use direct hex to ensure it resolves */
     height: 18px;
     width: 18px;
     border-radius: 50%;

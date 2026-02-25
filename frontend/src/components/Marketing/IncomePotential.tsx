@@ -358,24 +358,24 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-3 space-y-1 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
                                 {/* LIVE Indicator & Header */}
                                 <div className="flex flex-col items-center pt-2">
-                                    <div className="flex items-center gap-2 bg-emerald-500/5 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/10 transition-colors">
+                                    <div className="flex items-center gap-2 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/15 transition-colors">
                                         <div className="relative flex h-2 w-2">
                                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                                             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                                         </div>
-                                        <span className="text-[10px] font-black text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
+                                        <span className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                     </div>
 
                                     <div className="text-center mb-5">
                                         <div className="flex flex-col items-center justify-center uppercase tracking-[0.2em] font-black italic">
-                                            <span className="text-[10px] sm:text-xs text-emerald-400">
+                                            <span className="text-[10px] sm:text-xs text-emerald-500 dark:text-emerald-400">
                                                 {t('marketing:income.math.subheading_part1', 'THE $1/MINUTE STRATEGY')}
                                             </span>
-                                            <span className="text-[10px] sm:text-xs text-white">
+                                            <span className="text-[10px] sm:text-xs text-slate-800 dark:text-white">
                                                 {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
                                             </span>
                                         </div>
-                                        <h4 className="mt-2 text-xl sm:text-3xl font-black text-white leading-tight tracking-tight uppercase">
+                                        <h4 className="mt-2 text-xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight uppercase">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
@@ -399,18 +399,18 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 'relative group flex items-center h-10 sm:h-11 px-3 sm:px-4 rounded-full border transition-all duration-300',
                                                 highlight
                                                     ? 'bg-emerald-500/10 border-emerald-400/30'
-                                                    : 'bg-white/5 border-white/5'
+                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5'
                                             )}
                                         >
                                             <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                                                <ChevronRight className={clsx("w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5", highlight ? "text-emerald-400" : "text-white/20")} />
-                                                <span className={clsx("text-label sm:text-sm font-bold truncate", highlight ? "text-emerald-500" : "text-white/60")}>
+                                                <ChevronRight className={clsx("w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
+                                                <span className={clsx("text-label sm:text-sm font-bold truncate", highlight ? "text-emerald-500" : "text-slate-500 dark:text-white/60")}>
                                                     {period}
                                                 </span>
                                             </div>
 
                                             <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2">
-                                                <span className={clsx("text-sm sm:text-base font-black tracking-tight", highlight ? "text-emerald-400" : "text-white")}>
+                                                <span className={clsx("text-sm sm:text-base font-black tracking-tight", highlight ? "text-emerald-500" : "text-slate-900 dark:text-white")}>
                                                     {amount}
                                                 </span>
                                                 {highlight && (
@@ -432,7 +432,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0 }}
                                         animate={mathVisible ? { opacity: 1 } : {}}
                                         transition={{ delay: 0.6 }}
-                                        className="text-[10px] text-white/20 font-mono tracking-widest uppercase"
+                                        className="text-[10px] text-slate-300 dark:text-white/20 font-mono tracking-widest uppercase"
                                     >
                                         {t('marketing:income.math.formula_note')}
                                     </m.div>
@@ -456,7 +456,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                 {/* Social Proof & CTA */}
                                 <div className="px-4 pb-6 space-y-4">
-                                    <div className="bg-white/5 border border-white/5 rounded-full py-2.5 px-4 flex items-center gap-3 overflow-hidden">
+                                    <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-full py-2.5 px-4 flex items-center gap-3 overflow-hidden">
                                         <div className="flex items-center gap-2 shrink-0">
                                             <div className="flex -space-x-2.5 shrink-0">
                                                 {[
@@ -465,18 +465,18 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     "https://randomuser.me/api/portraits/women/68.jpg",
                                                     "https://randomuser.me/api/portraits/men/45.jpg"
                                                 ].map((url, i) => (
-                                                    <div key={i} className="w-6 h-6 rounded-full border border-slate-900 bg-slate-800 overflow-hidden shrink-0 shadow-md">
+                                                    <div key={i} className="w-6 h-6 rounded-full border border-white dark:border-slate-900 bg-slate-100 dark:bg-slate-800 overflow-hidden shrink-0 shadow-md">
                                                         <img src={url} alt="Partner" className="w-full h-full object-cover" />
                                                     </div>
                                                 ))}
                                             </div>
                                             <div className="flex flex-col leading-none">
-                                                <span className="text-[10px] font-black text-white">{liveCount}</span>
-                                                <span className="text-[7px] font-black text-white/30 uppercase tracking-tighter truncate">{t('marketing:income.math.online_badge')}</span>
+                                                <span className="text-[10px] font-black text-slate-900 dark:text-white">{liveCount}</span>
+                                                <span className="text-[7px] font-black text-slate-400 dark:text-white/30 uppercase tracking-tighter truncate">{t('marketing:income.math.online_badge')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="h-4 w-px bg-white/10 shrink-0" />
+                                        <div className="h-4 w-px bg-slate-200 dark:bg-white/10 shrink-0" />
 
                                         <div className="flex items-center gap-1.5 min-w-0">
                                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
