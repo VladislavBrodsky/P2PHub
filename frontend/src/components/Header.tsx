@@ -26,7 +26,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 lowPowerMode && "low-power-mode"
             )}
             style={{
-                paddingTop: 'calc(var(--spacing-safe-top, 32px) + 84px)',
+                paddingTop: 'calc(var(--spacing-safe-top, 32px) + 76px)',
                 paddingLeft: 'var(--spacing-safe-left, 16px)',
                 paddingRight: 'var(--spacing-safe-right, 16px)'
             }}
