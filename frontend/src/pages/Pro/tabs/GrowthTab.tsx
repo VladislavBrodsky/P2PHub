@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
@@ -11,6 +11,228 @@ import { renderMarkdown } from '../utils/renderMarkdown';
 import { LiquidCounter } from '../utils/LiquidCounter';
 import { socialLogos } from '../utils/socialLogos';
 import { ACADEMY_STAGES, getCategoryColor } from '../../../data/academyData';
+import { usePerformance } from '../../../hooks/usePerformance';
+
+const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLocked, unlockedStages, toggleExpand, handleUnlock, handleComplete, t, lowPowerMode, renderMarkdown }: any) => {
+    const stageIdStr = String(stage.id);
+    const CategoryIcon = stage.icon;
+    const isUnlocked = unlockedStages.includes(stageIdStr) || stage.xpCost === 0;
+
+    return (
+        <motion.div
+            initial={lowPowerMode ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-10px" }}
+            transition={{ delay: 0.05 }}
+            className="pl-12 sm:pl-16 relative group"
+        >
+            {/* Timeline Node */}
+            <div className={`absolute left-0 top-[18px] w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 z-20 border-2 ${isCompleted
+                ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+                : isLocked
+                    ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
+                    : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr)
+                        ? 'bg-amber-500/10 text-amber-500 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
+                        : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                }`}>
+                <span className="font-bold text-xs italic">{stage.id}</span>
+                {!isCompleted && !isLocked && isUnlocked && !lowPowerMode && (
+                    <motion.div
+                        className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
+                        animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                    />
+                )}
+                {!isCompleted && !isLocked && !isUnlocked && !lowPowerMode && (
+                    <motion.div
+                        className="absolute inset-0 rounded-full bg-amber-500 -z-10"
+                        animate={{ scale: [1, 1.4], opacity: [0.3, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                    />
+                )}
+            </div>
+
+            {/* Card Container */}
+            <div className={`rounded-[24px] overflow-hidden transition-all duration-500 border font-sans ${isExpanded
+                ? 'bg-white dark:bg-slate-900 border-indigo-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-indigo-500/10'
+                : isCompleted
+                    ? 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-80'
+                    : isLocked
+                        ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5 grayscale pointer-events-none'
+                        : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-sm'
+                }`}>
+
+                {/* Header */}
+                <div
+                    onClick={toggleExpand}
+                    className="px-5 py-4 sm:px-7 sm:py-5 flex items-center justify-between cursor-pointer gap-4"
+                >
+                    <div className="flex flex-col gap-2.5 min-w-0">
+                        <div className="flex items-center gap-3 flex-wrap">
+                            <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-label font-bold uppercase tracking-[0.15em] ${getCategoryColor(stage.category)}`}>
+                                <CategoryIcon size={10} />
+                                {stage.category}
+                            </div>
+                            <h4 className={`text-sm sm:text-base font-bold uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
+                                {stage.title}
+                            </h4>
+                        </div>
+                        {!isExpanded && (
+                            <div className="flex items-center gap-3 opacity-60">
+                                <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
+                                    {stage.description}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0">
+                        {isCompleted ? (
+                            <span className="text-label font-bold text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
+                        ) : isLocked ? (
+                            <Lock size={14} className="text-slate-400" />
+                        ) : !isUnlocked ? (
+                            <div className="flex items-center gap-2">
+                                <Lock size={12} className="text-amber-500/60" />
+                                <span className="text-label font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-1 rounded-md">{stage.xpCost} XP</span>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <span className="text-label font-bold text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
+                            </div>
+                        )}
+                        <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
+                    </div>
+                </div>
+
+                {/* Content Module */}
+                <AnimatePresence>
+                    {isExpanded && !isLocked && (
+                        <motion.div
+                            initial={lowPowerMode ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                        >
+                            <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
+                                <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-caption sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <CategoryIcon size={16} className="text-indigo-500" />
+                                        <span className="text-label font-bold uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
+                                    </div>
+                                    {!isUnlocked ? (
+                                        <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">
+                                            <Lock size={32} className="text-amber-500/40" />
+                                            <p className="text-label font-bold uppercase tracking-widest text-center">
+                                                {t('pro_dashboard.academy.insufficient_xp_msg')}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        renderMarkdown(stage.content || stage.description)
+                                    )}
+                                </div>
+
+                                {!isCompleted && (
+                                    <>
+                                        {!isUnlocked ? (
+                                            <div className="space-y-4">
+                                                <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
+                                                    <p className="text-caption font-medium text-slate-500 dark:text-slate-400 italic text-center">
+                                                        "{t('pro_dashboard.academy.motivate_msg')}"
+                                                    </p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleUnlock(stageIdStr)}
+                                                    className="w-full h-11 sm:h-12 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-amber-400/30"
+                                                >
+                                                    <span>{t('pro_dashboard.academy.unlock_for', { cost: stage.xpCost })}</span>
+                                                    <div className={`w-1.5 h-1.5 rounded-full bg-white/50 ${lowPowerMode ? '' : 'animate-pulse'}`} />
+                                                    <Lock size={14} />
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                onClick={() => handleComplete(stageIdStr)}
+                                                disabled={isLoading}
+                                                className={`w-full h-11 sm:h-12 ${isCompleted ? 'bg-emerald-500/10 text-emerald-500 pointer-events-none' : 'vibing-blue-animated text-white'} border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all`}
+                                            >
+                                                {isLoading ? (
+                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                ) : (
+                                                    <>
+                                                        <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
+                                                        <div className={`w-1.5 h-1.5 rounded-full bg-emerald-500 ${lowPowerMode ? '' : 'animate-pulse'}`} />
+                                                        <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
+                                                    </>
+                                                )}
+                                            </button>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        </motion.div>
+    );
+});
+
+const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode }: any) => (
+    <motion.div
+        whileHover={lowPowerMode ? {} : { y: -4 }}
+        className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
+    >
+        {/* Tech Gradients */}
+        {!lowPowerMode && <div className="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />}
+
+        {/* Trigger Badge - Premium Label */}
+        <div className="flex items-center justify-between mb-4">
+            <div className="w-7 h-7 rounded-lg bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-label font-bold italic border border-slate-300 dark:border-white/10">
+                {i + 1}
+            </div>
+            <div className="px-2.5 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
+                <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.15em]">{item.trigger}</span>
+            </div>
+        </div>
+
+        <h5 className="text-sm font-bold uppercase tracking-tighter leading-snug mb-2 group-hover/card:text-indigo-500 transition-colors italic">
+            {item.title}
+        </h5>
+
+        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-4 min-h-[40px] opacity-80">
+            {item.desc}
+        </p>
+
+        {/* Tactical BluePrint Action Container */}
+        <div className="mt-auto p-3 bg-white dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/10 relative overflow-hidden group/blueprint">
+            <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-emerald-500/30 to-transparent" />
+            <div className="flex items-start gap-2.5">
+                <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20">
+                    <Play size={8} className="text-emerald-500 fill-emerald-500/20" />
+                </div>
+                <div className="flex flex-col">
+                    <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">Direct Action</span>
+                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
+                        {item.action}
+                    </span>
+                </div>
+            </div>
+
+            {/* Copy/Share micro-action */}
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard.writeText(item.action);
+                    impact('medium');
+                }}
+                className="absolute right-1.5 bottom-1.5 w-5 h-5 rounded-md bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/blueprint:opacity-100 transition-opacity hover:bg-emerald-500/10 hover:text-emerald-500"
+            >
+                <Share size={9} />
+            </button>
+        </div>
+    </motion.div>
+));
 
 interface GrowthTabProps {
     status: PROStatus | null;
@@ -44,6 +266,7 @@ export const GrowthTab = ({
     impact
 }: GrowthTabProps) => {
     const { t } = useTranslation('pro');
+    const { lowPowerMode } = usePerformance();
     const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
     const hasInitialAutoExpanded = useRef(false);
     const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
@@ -126,7 +349,7 @@ export const GrowthTab = ({
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
-                            <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />
+                            {!lowPowerMode && <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />}
                             <div className="text-3xl sm:text-5xl font-bold text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
                             </div>
@@ -163,7 +386,7 @@ export const GrowthTab = ({
                                                     : 'bg-slate-200 dark:bg-white/5'
                                                     }`}
                                             >
-                                                {isActive && (
+                                                {isActive && !lowPowerMode && (
                                                     <motion.div
                                                         className="absolute inset-0 bg-white/30"
                                                         animate={{ opacity: [0, 0.5, 0] }}
@@ -284,192 +507,32 @@ export const GrowthTab = ({
 
                 <div className="space-y-4 relative z-10">
                     {(() => {
-                        return ACADEMY_STAGES.map((stage: any, i: number) => {
-                            const stageIdStr = String(stage.id);
-                            const isCompleted = completedStages.includes(String(stage.id));
-                            const isLoading = isCompletingStage === stageIdStr;
-                            const isExpanded = expandedModuleId === stageIdStr;
-                            const isLocked = stage.isPro && !status?.is_pro;
-                            const CategoryIcon = stage.icon;
-
-                            const toggleExpand = () => {
-                                if (isLocked) {
-                                    impact('heavy');
-                                    setShowSetup(true);
-                                    return;
-                                }
-                                selection();
-                                impact('light');
-                                setExpandedModuleId(isExpanded ? null : String(stage.id));
-                            };
-
-                            return (
-                                <motion.div
-                                    key={stage.id}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true, margin: "-10px" }}
-                                    transition={{ delay: 0.05 }}
-                                    className="pl-12 sm:pl-16 relative group"
-                                >
-                                    {/* Timeline Node */}
-                                    <div className={`absolute left-0 top-[18px] w-8 h-8 rounded-full flex items-center justify-center transition-all duration-500 z-20 border-2 ${isCompleted
-                                        ? 'bg-emerald-500 text-white border-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'
-                                        : isLocked
-                                            ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
-                                            : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr)
-                                                ? 'bg-amber-500/10 text-amber-500 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
-                                                : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
-                                        }`}>
-                                        <span className="font-bold text-xs italic">{stage.id}</span>
-                                        {!isCompleted && !isLocked && (unlockedStages.includes(stageIdStr) || stage.xpCost === 0) && (
-                                            <motion.div
-                                                className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
-                                                animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
-                                                transition={{ duration: 2, repeat: Infinity }}
-                                            />
-                                        )}
-                                        {!isCompleted && !isLocked && stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) && (
-                                            <motion.div
-                                                className="absolute inset-0 rounded-full bg-amber-500 -z-10"
-                                                animate={{ scale: [1, 1.4], opacity: [0.3, 0] }}
-                                                transition={{ duration: 2, repeat: Infinity }}
-                                            />
-                                        )}
-                                    </div>
-
-                                    {/* Card Container */}
-                                    <div className={`rounded-[24px] overflow-hidden transition-all duration-500 border font-sans ${isExpanded
-                                        ? 'bg-white dark:bg-slate-900 border-indigo-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-indigo-500/10'
-                                        : isCompleted
-                                            ? 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-80'
-                                            : isLocked
-                                                ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5 grayscale pointer-events-none'
-                                                : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-sm'
-                                        }`}>
-
-                                        {/* Header */}
-                                        <div
-                                            onClick={toggleExpand}
-                                            className="px-5 py-4 sm:px-7 sm:py-5 flex items-center justify-between cursor-pointer gap-4"
-                                        >
-                                            <div className="flex flex-col gap-2.5 min-w-0">
-                                                <div className="flex items-center gap-3 flex-wrap">
-                                                    <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-label font-bold uppercase tracking-[0.15em] ${getCategoryColor(stage.category)}`}>
-                                                        <CategoryIcon size={10} />
-                                                        {stage.category}
-                                                    </div>
-                                                    <h4 className={`text-sm sm:text-base font-bold uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
-                                                        {stage.title}
-                                                    </h4>
-                                                </div>
-                                                {!isExpanded && (
-                                                    <div className="flex items-center gap-3 opacity-60">
-                                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
-                                                            {stage.description}
-                                                        </span>
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            <div className="flex items-center gap-3 shrink-0">
-                                                {isCompleted ? (
-                                                    <span className="text-label font-bold text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
-                                                ) : isLocked ? (
-                                                    <Lock size={14} className="text-slate-400" />
-                                                ) : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
-                                                    <div className="flex items-center gap-2">
-                                                        <Lock size={12} className="text-amber-500/60" />
-                                                        <span className="text-label font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-1 rounded-md">{stage.xpCost} XP</span>
-                                                    </div>
-                                                ) : (
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-label font-bold text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
-                                                    </div>
-                                                )}
-                                                <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
-                                            </div>
-                                        </div>
-
-                                        {/* Content Module */}
-                                        <AnimatePresence>
-                                            {isExpanded && !isLocked && (
-                                                <motion.div
-                                                    initial={{ height: 0, opacity: 0 }}
-                                                    animate={{ height: "auto", opacity: 1 }}
-                                                    exit={{ height: 0, opacity: 0 }}
-                                                    transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                                                >
-                                                    <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
-                                                        <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-caption sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
-                                                            <div className="flex items-center gap-2 mb-4">
-                                                                <CategoryIcon size={16} className="text-indigo-500" />
-                                                                <span className="text-label font-bold uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
-                                                            </div>
-                                                            {stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
-                                                                <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">
-                                                                    <Lock size={32} className="text-amber-500/40" />
-                                                                    <p className="text-label font-bold uppercase tracking-widest text-center">
-                                                                        {t('pro_dashboard.academy.insufficient_xp_msg')}
-                                                                    </p>
-                                                                </div>
-                                                            ) : (
-                                                                stage.content || stage.description
-                                                            )}
-                                                        </div>
-
-                                                        {!isCompleted && (
-                                                            <>
-                                                                {stage.xpCost > 0 && !unlockedStages.includes(stageIdStr) ? (
-                                                                    <div className="space-y-4">
-                                                                        <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
-                                                                            <p className="text-caption font-medium text-slate-500 dark:text-slate-400 italic text-center">
-                                                                                "{t('pro_dashboard.academy.motivate_msg')}"
-                                                                            </p>
-                                                                        </div>
-                                                                        <button
-                                                                            onClick={() => handleUnlockAcademyStage(stageIdStr)}
-                                                                            disabled={isUnlockingStage === stageIdStr}
-                                                                            className="w-full h-11 sm:h-12 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-amber-400/30"
-                                                                        >
-                                                                            {isUnlockingStage === stageIdStr ? (
-                                                                                <Loader2 className="w-5 h-5 animate-spin" />
-                                                                            ) : (
-                                                                                <>
-                                                                                    <span>{t('pro_dashboard.academy.unlock_for', { cost: stage.xpCost })}</span>
-                                                                                    <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
-                                                                                    <Lock size={14} />
-                                                                                </>
-                                                                            )}
-                                                                        </button>
-                                                                    </div>
-                                                                ) : (
-                                                                    <button
-                                                                        onClick={() => handleCompleteAcademyStage(String(stage.id))}
-                                                                        disabled={isLoading}
-                                                                        className={`w-full h-11 sm:h-12 ${isCompleted ? 'bg-emerald-500/10 text-emerald-500 pointer-events-none' : 'vibing-blue-animated text-white'} border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all`}
-                                                                    >
-                                                                        {isLoading ? (
-                                                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                                                        ) : (
-                                                                            <>
-                                                                                <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
-                                                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                                                                <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
-                                                                            </>
-                                                                        )}
-                                                                    </button>
-                                                                )}
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                </motion.div>
-                            );
-                        });
+                        return ACADEMY_STAGES.map((stage: any, i: number) => (
+                            <AcademyStageItem
+                                key={stage.id}
+                                stage={stage}
+                                isCompleted={completedStages.includes(String(stage.id))}
+                                isLoading={isCompletingStage === String(stage.id)}
+                                isExpanded={expandedModuleId === String(stage.id)}
+                                isLocked={stage.isPro && !status?.is_pro}
+                                unlockedStages={unlockedStages}
+                                toggleExpand={() => {
+                                    if (stage.isPro && !status?.is_pro) {
+                                        impact('heavy');
+                                        setShowSetup(true);
+                                        return;
+                                    }
+                                    selection();
+                                    impact('light');
+                                    setExpandedModuleId(expandedModuleId === String(stage.id) ? null : String(stage.id));
+                                }}
+                                handleUnlock={handleUnlockAcademyStage}
+                                handleComplete={handleCompleteAcademyStage}
+                                t={t}
+                                lowPowerMode={lowPowerMode}
+                                renderMarkdown={renderMarkdown}
+                            />
+                        ));
                     })()}
                 </div>
             </div>
@@ -675,60 +738,7 @@ export const GrowthTab = ({
                             const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
                             const stratsList = Array.isArray(strats) ? strats : [];
                             return stratsList.map((item: any, i: number) => (
-                                <motion.div
-                                    key={i}
-                                    whileHover={{ y: -4 }}
-                                    className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
-                                >
-                                    {/* Tech Gradients */}
-                                    <div className="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />
-
-                                    {/* Trigger Badge - Premium Label */}
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className="w-7 h-7 rounded-lg bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-label font-bold italic border border-slate-300 dark:border-white/10">
-                                            {i + 1}
-                                        </div>
-                                        <div className="px-2.5 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
-                                            <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.15em]">{item.trigger}</span>
-                                        </div>
-                                    </div>
-
-                                    <h5 className="text-sm font-bold uppercase tracking-tighter leading-snug mb-2 group-hover/card:text-indigo-500 transition-colors italic">
-                                        {item.title}
-                                    </h5>
-
-                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-4 min-h-[40px] opacity-80">
-                                        {item.desc}
-                                    </p>
-
-                                    {/* Tactical BluePrint Action Container */}
-                                    <div className="mt-auto p-3 bg-white dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/10 relative overflow-hidden group/blueprint">
-                                        <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-emerald-500/30 to-transparent" />
-                                        <div className="flex items-start gap-2.5">
-                                            <div className="w-4 h-4 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/20">
-                                                <Play size={8} className="text-emerald-500 fill-emerald-500/20" />
-                                            </div>
-                                            <div className="flex flex-col">
-                                                <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">Direct Action</span>
-                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
-                                                    {item.action}
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Copy/Share micro-action */}
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                navigator.clipboard.writeText(item.action);
-                                                impact('medium');
-                                            }}
-                                            className="absolute right-1.5 bottom-1.5 w-5 h-5 rounded-md bg-slate-100 dark:bg-white/5 flex items-center justify-center opacity-0 group-hover/blueprint:opacity-100 transition-opacity hover:bg-emerald-500/10 hover:text-emerald-500"
-                                        >
-                                            <Share size={9} />
-                                        </button>
-                                    </div>
-                                </motion.div>
+                                <PsychStrategyCard key={i} item={item} i={i} selection={selection} impact={impact} lowPowerMode={lowPowerMode} />
                             ));
                         })()}
                     </div>

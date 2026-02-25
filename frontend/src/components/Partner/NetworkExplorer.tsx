@@ -1,5 +1,5 @@
 // #comment: Premium NetworkExplorer with search, sorting, and enhanced visual feedback
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, memo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -43,6 +43,96 @@ const MemberSkeleton = () => (
         <div className="w-10 h-5 bg-slate-200 dark:bg-white/10 rounded" />
     </div>
 );
+
+interface NetworkMemberRowProps {
+    member: NetworkMember;
+    index: number;
+    t: any;
+    onSelect: (member: NetworkMember) => void;
+}
+
+const NetworkMemberRow = memo(({ member, index, t, onSelect }: NetworkMemberRowProps) => {
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, y: 10, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.3) }}
+            onClick={() => onSelect(member)}
+            className="group flex items-center gap-3 p-2.5 bg-white dark:bg-[#ffffff03] border border-slate-200/50 dark:border-white/5 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/4 transition-all duration-300 relative cursor-pointer"
+        >
+            <div className="relative shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 overflow-hidden ring-1 ring-slate-200/50 dark:ring-white/5 shadow-sm transform group-active:scale-95 transition-transform">
+                    {(member.photo_file_id || member.photo_url) ? (
+                        <img
+                            src={member.photo_file_id
+                                ? `${getApiUrl()}/api/partner/photo/${member.photo_file_id}`
+                                : member.photo_url
+                            }
+                            alt={member.first_name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${member.first_name}&background=6366f1&color=fff`;
+                            }}
+                        />
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-sm bg-linear-to-br from-slate-50 to-slate-100 dark:from-white/5 dark:to-white/10">
+                            {member.first_name?.charAt(0)}
+                        </div>
+                    )}
+                </div>
+                {member.xp > 1000 && (
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900">
+                        <Award className="w-2 h-2 text-white" />
+                    </div>
+                )}
+                {(member.subscription_plan || '').includes('PLUS') && (
+                    <div className="absolute -bottom-1 -left-1 z-20">
+                        <ProPlusBadge size="sm" />
+                    </div>
+                )}
+            </div>
+
+            <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                        {member.first_name} {member.last_name}
+                    </h4>
+                    {member.xp > 5000 && <Zap className="w-3 h-3 text-blue-500" />}
+                </div>
+                <div className="flex items-center gap-2">
+                    {member.username && (
+                        <a
+                            href={`https://t.me/${member.username}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                            className="text-label font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-0.5 shrink-0"
+                        >
+                            @{member.username}
+                        </a>
+                    )}
+                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
+                        • {t('network.explorer.joined_date', { date: new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) })}
+                    </span>
+                </div>
+            </div>
+
+            <div className="text-right flex flex-col items-end">
+                <div className="text-label font-bold text-blue-600 dark:text-blue-400 tabular-nums">
+                    {member.xp.toLocaleString()} XP
+                </div>
+                <div className="flex items-center gap-1 mt-0.5">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    <span className="text-label font-bold text-emerald-500/80 uppercase">{t('network.explorer.active_status')}</span>
+                </div>
+            </div>
+            <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 rounded-r-full transition-opacity" />
+        </motion.div>
+    );
+});
 
 export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplorerProps) => {
     const { t } = useTranslation('social');
@@ -449,92 +539,20 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             )}
 
                             {filteredMembers.map((member, index) => (
-                                <motion.div
+                                <NetworkMemberRow
                                     key={member.telegram_id}
-                                    layout
-                                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.3) }}
-                                    onClick={() => {
+                                    member={member}
+                                    index={index}
+                                    t={t}
+                                    onSelect={(m) => {
                                         selection();
-                                        setTargetPartner(member);
+                                        setTargetPartner(m);
                                         setLevel(1);
                                     }}
-                                    className="group flex items-center gap-3 p-2.5 bg-white dark:bg-[#ffffff03] border border-slate-200/50 dark:border-white/5 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/4 transition-all duration-300 relative cursor-pointer"
-                                >
-                                    <div className="relative shrink-0">
-                                        <div className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 overflow-hidden ring-1 ring-slate-200/50 dark:ring-white/5 shadow-sm transform group-active:scale-95 transition-transform">
-                                            {(member.photo_file_id || member.photo_url) ? (
-                                                <img
-                                                    src={member.photo_file_id
-                                                        ? `${getApiUrl()}/api/partner/photo/${member.photo_file_id}`
-                                                        : member.photo_url
-                                                    }
-                                                    alt={member.first_name}
-                                                    className="w-full h-full object-cover"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${member.first_name}&background=6366f1&color=fff`;
-                                                    }}
-                                                />
-                                            ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-sm bg-linear-to-br from-slate-50 to-slate-100 dark:from-white/5 dark:to-white/10">
-                                                    {member.first_name?.charAt(0)}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {member.xp > 1000 && (
-                                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center shadow-md border-2 border-white dark:border-slate-900">
-                                                <Award className="w-2 h-2 text-white" />
-                                            </div>
-                                        )}
-                                        {(member.subscription_plan || '').includes('PLUS') && (
-                                            <div className="absolute -bottom-1 -left-1 z-20">
-                                                <ProPlusBadge size="sm" />
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-1.5 mb-0.5">
-                                            <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                                                {member.first_name} {member.last_name}
-                                            </h4>
-                                            {member.xp > 5000 && <Zap className="w-3 h-3 text-blue-500" />}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            {member.username && (
-                                                <a
-                                                    href={`https://t.me/${member.username}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        selection();
-                                                    }}
-                                                    className="text-label font-bold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-0.5 shrink-0"
-                                                >
-                                                    @{member.username}
-                                                </a>
-                                            )}
-                                            <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
-                                                • {t('network.explorer.joined_date', { date: new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) })}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="text-right flex flex-col items-end">
-                                        <div className="text-label font-bold text-blue-600 dark:text-blue-400 tabular-nums">
-                                            {member.xp.toLocaleString()} XP
-                                        </div>
-                                        <div className="flex items-center gap-1 mt-0.5">
-                                            <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                                            <span className="text-label font-bold text-emerald-500/80 uppercase">{t('network.explorer.active_status')}</span>
-                                        </div>
-                                    </div>
-                                    <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 rounded-r-full transition-opacity" />
-                                </motion.div>
+                                />
                             ))}
                         </motion.div>
+
                     ) : (
                         <motion.div key="empty" className="flex flex-col items-center justify-center py-16 text-center px-6">
                             <div className="w-16 h-16 bg-slate-100 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-6 relative">

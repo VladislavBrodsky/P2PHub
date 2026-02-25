@@ -254,49 +254,12 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                         ))}
                     </div>
 
-                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
-                        <defs>
-                            {LEVEL_COLORS.map((color, i) => (
-                                <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor={color} stopOpacity="0.5" />
-                                    <stop offset="100%" stopColor={color} stopOpacity="0.05" />
-                                </linearGradient>
-                            ))}
-                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                                <feGaussianBlur stdDeviation="1.5" result="blur" />
-                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
-                        </defs>
-
-                        {/* Stacked Areas */}
-                        {LEVEL_COLORS.map((_, i) => (
-                            <motion.path
-                                key={i}
-                                d={chartPaths[i] || 'M 0,0'}
-                                fill={`url(#${gradientId}-${i})`}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1, d: chartPaths[i] || 'M 0,0' }}
-                                transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
-                                className="transition-opacity duration-300"
-                            />
-                        ))}
-
-                        {/* Stroke line for the Total (Top Level) with glow */}
-                        <motion.path
-                            d={topLinePath}
-                            fill="none"
-                            stroke="#3b82f6"
-                            strokeWidth="1.5"
-                            strokeOpacity="0.8"
-                            vectorEffect="non-scaling-stroke"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            filter="url(#glow)"
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{ pathLength: 1, opacity: 1, d: topLinePath }}
-                            transition={{ duration: 1, ease: "easeOut" }}
-                        />
-                    </svg>
+                    <ChartSVG
+                        chartPaths={chartPaths}
+                        topLinePath={topLinePath}
+                        maxValue={maxValue}
+                        gradientId={gradientId}
+                    />
 
                     {/* HTML Overlay for Interactive Points - Fixes aspect ratio distortion */}
                     <div className="absolute top-0 bottom-0 left-2 right-2">
@@ -352,45 +315,10 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                     </div>
 
                     {/* Tooltip Overhead - Redesigned for Level Breakdown */}
-                    <AnimatePresence>
-                        {hoveredIndex !== null && chartData[hoveredIndex] && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9.5px] rounded-2xl p-2 shadow-2xl border border-white/20 z-30 flex flex-col gap-1 pointer-events-none min-w-[140px]"
-                            >
-                                <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
-                                    <span className="font-bold text-slate-400 uppercase tracking-tighter">{chartData[hoveredIndex].date}</span>
-                                    <div className="flex items-center gap-1">
-                                        <Users className="w-2 h-2 text-blue-400" />
-                                        <span className="font-bold text-[10px]">{chartData[hoveredIndex].total.toLocaleString()}</span>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-3 gap-x-1.5 gap-y-0.5">
-                                    {LEVEL_COLORS.map((color, i) => {
-                                        // Fix: Use raw level count directly
-                                        const count = chartData[hoveredIndex].levels[i] || 0;
-                                        return (
-                                            <div key={i} className="flex items-center gap-1 opacity-90">
-                                                <div className="w-1 h-1 rounded-full" style={{ backgroundColor: color }} />
-                                                <span className="font-bold text-slate-400">{t('lvl')}{i + 1}:</span>
-                                                <span className="font-bold">{count.toLocaleString()}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-
-                                {chartData[hoveredIndex].joined_per_level && (
-                                    <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-label">
-                                        <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">{t('metrics.flow_power')}</span>
-                                        <span className="font-bold text-emerald-400">+{chartData[hoveredIndex].joined_per_level.reduce((a, b) => a + b, 0)}</span>
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    <ChartTooltip
+                        hoveredPoint={hoveredIndex !== null ? chartData[hoveredIndex] : null}
+                        t={t}
+                    />
                 </div>
             </div>
 
@@ -422,5 +350,110 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 </button>
             </div>
         </div>
+    );
+};
+
+// --- Sub-components for Optimization ---
+
+interface ChartSVGProps {
+    chartPaths: string[];
+    topLinePath: string;
+    maxValue: number;
+    gradientId: string;
+}
+
+const ChartSVG = React.memo(({ chartPaths, topLinePath, maxValue, gradientId }: ChartSVGProps) => {
+    return (
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full h-full overflow-visible">
+            <defs>
+                {LEVEL_COLORS.map((color, i) => (
+                    <linearGradient key={i} id={`${gradientId}-${i}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={color} stopOpacity="0.5" />
+                        <stop offset="100%" stopColor={color} stopOpacity="0.05" />
+                    </linearGradient>
+                ))}
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="1.5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+            </defs>
+
+            {/* Stacked Areas */}
+            {LEVEL_COLORS.map((_, i) => (
+                <motion.path
+                    key={i}
+                    d={chartPaths[i] || 'M 0,0'}
+                    fill={`url(#${gradientId}-${i})`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, d: chartPaths[i] || 'M 0,0' }}
+                    transition={{ duration: 0.8, delay: i * 0.05, ease: "easeOut" }}
+                    className="transition-opacity duration-300"
+                />
+            ))}
+
+            {/* Stroke line for the Total (Top Level) with glow */}
+            <motion.path
+                d={topLinePath}
+                fill="none"
+                stroke="#3b82f6"
+                strokeWidth="1.5"
+                strokeOpacity="0.8"
+                vectorEffect="non-scaling-stroke"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                filter="url(#glow)"
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 1, d: topLinePath }}
+                transition={{ duration: 1, ease: "easeOut" }}
+            />
+        </svg>
+    );
+});
+
+interface ChartTooltipProps {
+    hoveredPoint: ChartDataPoint | null;
+    t: any;
+}
+
+const ChartTooltip = ({ hoveredPoint, t }: ChartTooltipProps) => {
+    return (
+        <AnimatePresence>
+            {hoveredPoint && (
+                <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="absolute top-0 left-1/2 -translate-x-1/2 bg-slate-900/95 backdrop-blur-xl text-white text-[9.5px] rounded-2xl p-2 shadow-2xl border border-white/20 z-30 flex flex-col gap-1 pointer-events-none min-w-[140px]"
+                >
+                    <div className="flex items-center justify-between border-b border-white/10 pb-1 mb-0.5">
+                        <span className="font-bold text-slate-400 uppercase tracking-tighter">{hoveredPoint.date}</span>
+                        <div className="flex items-center gap-1">
+                            <Users className="w-2 h-2 text-blue-400" />
+                            <span className="font-bold text-[10px]">{hoveredPoint.total.toLocaleString()}</span>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-x-1.5 gap-y-0.5">
+                        {LEVEL_COLORS.map((color, i) => {
+                            const count = hoveredPoint.levels[i] || 0;
+                            return (
+                                <div key={i} className="flex items-center gap-1 opacity-90">
+                                    <div className="w-1 h-1 rounded-full" style={{ backgroundColor: color }} />
+                                    <span className="font-bold text-slate-400">{t('lvl')}{i + 1}:</span>
+                                    <span className="font-bold">{count.toLocaleString()}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {hoveredPoint.joined_per_level && (
+                        <div className="mt-1 pt-1 border-t border-white/10 flex items-center justify-between text-label">
+                            <span className="font-bold text-emerald-400 tracking-tighter uppercase italic">{t('metrics.flow_power')}</span>
+                            <span className="font-bold text-emerald-400">+{hoveredPoint.joined_per_level.reduce((a, b) => a + b, 0)}</span>
+                        </div>
+                    )}
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 };

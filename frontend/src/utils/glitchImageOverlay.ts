@@ -12,6 +12,7 @@ export interface GlitchOverlayOptions {
     fontSizeFraction?: number;
     glitchPasses?: number;
     minReadableRatio?: number;
+    lowPowerMode?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -99,7 +100,8 @@ function paintGlitchText(
     fontDecl: string,
     canvasWidth: number,
     canvasHeight: number,
-    passes: number
+    passes: number,
+    lowPowerMode: boolean = false
 ) {
     const PADDING_X = canvasWidth * 0.05;
     const maxWidth = canvasWidth - PADDING_X * 2;
@@ -123,8 +125,9 @@ function paintGlitchText(
     ctx.fillStyle = backdropGrad;
     ctx.fillRect(0, startY - fontSize, canvasWidth, canvasHeight - (startY - fontSize));
 
-    // 3. Bake-in noise/grain to the backdrop
-    for (let i = 0; i < 400; i++) {
+    // 3. Bake-in noise/grain to the backdrop (Throttle in low power)
+    const noiseCount = lowPowerMode ? 100 : 400;
+    for (let i = 0; i < noiseCount; i++) {
         const rx = Math.random() * canvasWidth;
         const ry = startY - fontSize + Math.random() * (canvasHeight - startY + fontSize);
         const size = Math.random() * 2;
@@ -134,7 +137,8 @@ function paintGlitchText(
 
     // 4. Glitch Passes (Before main text)
     const glitchColors = ['#00f5ff', '#ff00e6', '#00ff88'];
-    for (let p = 0; p < passes; p++) {
+    const finalPasses = lowPowerMode ? Math.min(passes, 1) : passes;
+    for (let p = 0; p < finalPasses; p++) {
         const color = glitchColors[p % glitchColors.length];
         const sliceY = startY + Math.random() * totalTextHeight;
         const sliceH = 5 + Math.random() * 15;
@@ -145,8 +149,8 @@ function paintGlitchText(
     lines.forEach((line, i) => {
         const y = startY + (i * lineHeight);
 
-        // Chromatic Aberration Layers
-        const offsets = [
+        // Chromatic Aberration Layers (Disabled in low power)
+        const offsets = lowPowerMode ? [] : [
             { dx: -2, dy: 0, color: 'rgba(0,245,255,0.4)' },
             { dx: 2, dy: 0, color: 'rgba(255,0,230,0.4)' },
         ];
@@ -189,7 +193,7 @@ function paintGlitchText(
 // ---------------------------------------------------------------------------
 
 export async function applyGlitchOverlay(opts: GlitchOverlayOptions): Promise<string> {
-    const { text, imageUrl, baseUrl = '', fontSizeFraction = 0.065, glitchPasses = 3, minReadableRatio = 0.015 } = opts;
+    const { text, imageUrl, baseUrl = '', fontSizeFraction = 0.065, glitchPasses = 3, minReadableRatio = 0.015, lowPowerMode = false } = opts;
     if (!text || !imageUrl) return imageUrl;
 
     let fullUrl = imageUrl.startsWith('http') ? imageUrl : `${baseUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
@@ -218,7 +222,7 @@ export async function applyGlitchOverlay(opts: GlitchOverlayOptions): Promise<st
         const metrics = ctx.measureText(text);
         if (metrics.width < 5) return imageUrl; // Blank/Too small
 
-        paintGlitchText(ctx, text, fontDecl, W, H, glitchPasses);
+        paintGlitchText(ctx, text, fontDecl, W, H, glitchPasses, lowPowerMode);
 
         // Final Canvas check for transparency / failure
         return canvas.toDataURL('image/jpeg', 0.9);
