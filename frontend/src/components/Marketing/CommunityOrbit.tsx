@@ -125,28 +125,10 @@ export const CommunityOrbit = memo(() => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
             </div>
 
-            {/* Background Particles/Stars */}
-            {[...Array(12)].map((_, i) => (
-                <m.div
-                    key={`star-${i}`}
-                    className="absolute h-px w-px rounded-full bg-blue-400/60"
-                    style={{
-                        top: `${Math.random() * 100}%`,
-                        left: `${Math.random() * 100}%`,
-                        willChange: 'transform, opacity'
-                    }}
-                    animate={{
-                        opacity: [0, 1, 0],
-                        scale: [0, 2, 0],
-                    }}
-                    transition={{
-                        duration: 3 + Math.random() * 5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: Math.random() * 5,
-                    }}
-                />
-            ))}
+            {/* Background Particles Decoration (Single CSS Keyframe instead of 12 independent JS loops) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-50">
+                <div className="circuit-decor absolute inset-0 animate-soft-breath" />
+            </div>
 
             {/* Central Logic */}
             <CentralLogo />
@@ -204,10 +186,10 @@ const CentralLogo = memo(() => {
                 {isUserPhoto ? (
                     <m.img
                         animate={{
-                            scale: [1, 1.05, 1],
+                            scale: isUserPhoto ? [1, 1.02, 1] : [1, 1.05, 1],
                         }}
                         transition={{
-                            duration: 4,
+                            duration: 6,
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}
@@ -223,10 +205,10 @@ const CentralLogo = memo(() => {
                 ) : (
                     <m.img
                         animate={{
-                            scale: [1, 1.08, 1],
+                            scale: [1, 1.05, 1],
                         }}
                         transition={{
-                            duration: 4,
+                            duration: 6,
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}

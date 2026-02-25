@@ -9,6 +9,7 @@ import { ConfigProvider, useConfig } from './context/ConfigContext'
 import { StartupProgressProvider } from './context/StartupProgressContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { UserProvider } from './context/UserContext'
+import { PerformanceProvider } from './hooks/usePerformance'
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
 
 // #comment: Performance Optimization - Deferred Sentry Loading
@@ -67,13 +68,15 @@ const startApp = async () => {
                 <QueryClientProvider client={queryClient}>
                     <StartupProgressProvider>
                         <ConfigProvider>
-                            <AppContextProviders>
-                                <ThemeProvider>
-                                    <UserProvider>
-                                        <App />
-                                    </UserProvider>
-                                </ThemeProvider>
-                            </AppContextProviders>
+                            <PerformanceProvider>
+                                <AppContextProviders>
+                                    <ThemeProvider>
+                                        <UserProvider>
+                                            <App />
+                                        </UserProvider>
+                                    </ThemeProvider>
+                                </AppContextProviders>
+                            </PerformanceProvider>
                         </ConfigProvider>
                     </StartupProgressProvider>
                 </QueryClientProvider>

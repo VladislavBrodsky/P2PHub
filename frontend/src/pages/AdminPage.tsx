@@ -15,6 +15,7 @@ import {
 import { apiClient } from '../api/client';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
+import { useSystemClock } from '../hooks/usePerformance';
 
 interface GrowthStat {
     count: number;
@@ -449,35 +450,47 @@ export const AdminPage = () => {
         fetchData();
     }, []);
 
+    const tick = useSystemClock();
+
     useEffect(() => {
-        let interval: any;
+        // Shared Polling Logic - Triggered by the global heartbeat (1s)
+        // Consolidates multiple setIntervals into conditional execution blocks
+
         if (viewMode === 'maintenance') {
-            fetchNotifStats();
+            if (tick % 60 === 0) fetchNotifStats(); // Every 60s
         } else if (viewMode === 'palantir') {
-            fetchPalantirFeed(true);
-            fetchNotificationsHealth();
-            // Enable polling for Palantir
-            setIsPalantirPolling(true);
-            interval = setInterval(() => {
+            if (tick % 8 === 0) { // Every 8s - God-Mode heart-beat
                 fetchPalantirFeed();
                 fetchNotificationsHealth();
-            }, 8000); // 8-second God-Mode heart-beat
+            }
+        } else if (viewMode === 'nexus') {
+            if (tick % 3 === 0) fetchBroadcasts(); // Every 3s - Fast polling for progress
+        } else {
+            if (['kpis', 'financials', 'payments'].includes(viewMode)) {
+                if (tick % 60 === 0) fetchData(true, false); // Every 60s - Auto-refresh metrics
+            }
+        }
+    }, [tick, viewMode, palantirPage]);
+
+    useEffect(() => {
+        // Initial data fetch on view change
+        if (viewMode === 'maintenance') fetchNotifStats();
+        if (viewMode === 'palantir') {
+            fetchPalantirFeed(true);
+            fetchNotificationsHealth();
+            setIsPalantirPolling(true);
         } else if (viewMode === 'nexus') {
             fetchBroadcasts();
-            interval = setInterval(fetchBroadcasts, 3000); // Fast 3s polling for progress bars
             setIsPalantirPolling(false);
         } else {
             setIsPalantirPolling(false);
             if (['kpis', 'financials', 'payments'].includes(viewMode)) {
-                fetchData(true, false); // Fetch immediately without triggering loader
-                interval = setInterval(() => {
-                    fetchData(true, false);
-                }, 60000); // Auto-refresh metrics every minute
+                fetchData(true, false);
             }
         }
 
         return () => {
-            if (interval) clearInterval(interval);
+            // No intervals to clear anymore
         };
     }, [viewMode, palantirPage]);
 

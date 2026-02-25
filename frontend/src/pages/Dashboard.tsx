@@ -11,6 +11,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { CommunityOrbit } from '../components/Marketing/CommunityOrbit';
 import { PartnerStats } from '../components/Marketing/PartnerStats';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { ThrottledSuspense } from '../components/ui/ThrottledSuspense';
 
 // Lazy Loaded Sections
 const BentoGrid = lazy(() => import('../components/Marketing/BentoGrid').then(m => ({ default: m.BentoGrid })));
@@ -142,23 +143,23 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         description={t('dashboard:evolution.desc')}
                     />
                 </div>
-                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
                     <BentoGrid />
-                </Suspense>
+                </ThrottledSuspense>
             </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
             <m.div variants={item} className="w-full">
-                <Suspense fallback={<div className="h-80 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-80 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
-                </Suspense>
+                </ThrottledSuspense>
             </m.div>
 
             {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
             <m.div variants={item} className="w-full">
-                <Suspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <BlogCarousel />
-                </Suspense>
+                </ThrottledSuspense>
             </m.div>
 
             {/* #comment: 6. Final CTA - Clear conversion point. */}

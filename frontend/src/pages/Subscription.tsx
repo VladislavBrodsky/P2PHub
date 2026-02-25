@@ -14,26 +14,25 @@ import { useUser } from '../context/UserContext';
 import { apiClient } from '../api/client';
 import { useHaptic } from '../hooks/useHaptic';
 import { useConfig } from '../context/ConfigContext';
+import { useSystemClock } from '../hooks/usePerformance';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
 
 // --- ISOLATED PERFORMANCE COMPONENTS ---
 const FomoTimer = React.memo(() => {
+    const tick = useSystemClock();
     const [deadLine, setDeadLine] = useState({ h: 5, m: 22, s: 41 });
 
     useEffect(() => {
-        const deadTimer = setInterval(() => {
-            setDeadLine(prev => {
-                let { h, m, s } = prev;
-                s--;
-                if (s < 0) { s = 59; m--; }
-                if (m < 0) { m = 59; h--; }
-                if (h < 0) { h = 23; }
-                return { h, m, s };
-            });
-        }, 1000);
-        return () => clearInterval(deadTimer);
-    }, []);
+        setDeadLine(prev => {
+            let { h, m, s } = prev;
+            s--;
+            if (s < 0) { s = 59; m--; }
+            if (m < 0) { m = 59; h--; }
+            if (h < 0) { h = 23; }
+            return { h, m, s };
+        });
+    }, [tick]);
 
     return (
         <div className="relative z-10 flex items-center gap-1 font-mono shrink-0 bg-black/5 p-1 rounded-lg">
@@ -50,22 +49,19 @@ const FomoTimer = React.memo(() => {
 });
 
 const PaymentSessionTimer = React.memo(({ expiresAt, onExpire }: { expiresAt?: string; onExpire: () => void }) => {
+    const tick = useSystemClock();
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
     useEffect(() => {
         if (!expiresAt) { setTimeLeft(null); return; }
-        const interval = setInterval(() => {
-            const expires = new Date(expiresAt).getTime();
-            const now = new Date().getTime();
-            const diff = Math.max(0, Math.floor((expires - now) / 1000));
-            setTimeLeft(diff);
-            if (diff === 0) {
-                clearInterval(interval);
-                onExpire();
-            }
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [expiresAt, onExpire]);
+        const expires = new Date(expiresAt).getTime();
+        const now = new Date().getTime();
+        const diff = Math.max(0, Math.floor((expires - now) / 1000));
+        setTimeLeft(diff);
+        if (diff === 0) {
+            onExpire();
+        }
+    }, [expiresAt, onExpire, tick]);
 
     const formattedTime = useMemo(() => {
         if (timeLeft === null) return null;
@@ -268,7 +264,38 @@ export default function SubscriptionPage() {
         paymentRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // ─── PRO ACTIVE STATE (already subscriber) ───────────────────────────────
+    // ─── BENEFITS DATA MEMOIZATION ───
+    const proBenefits = useMemo(() => [
+        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'tokens', icon: Zap, label: t('pro:subscription.benefits.tokens'), desc: t('pro:subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'cashback', icon: TrendingUp, label: t('pro:subscription.benefits.cashback'), desc: t('pro:subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
+        { id: 'tools', icon: Bot, label: t('pro:subscription.benefits.tools'), desc: t('pro:subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'intel', icon: Target, label: t('pro:subscription.benefits.growth_intel'), desc: t('pro:subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+    ], [t]);
+
+    const proPlusBenefits = useMemo(() => [
+        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
+        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
+        { id: 'omni', icon: InfinityIcon, label: t('pro:subscription.benefits.omni_sync'), desc: t('pro:subscription.benefits.omni_sync_desc') + " " + t('pro:subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
+        { id: 'priority', icon: Star, label: t('pro:subscription.benefits.priority_ai'), desc: t('pro:subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
+        { id: 'analytics', icon: BarChart2, label: t('pro:subscription.benefits.content_analytics'), desc: t('pro:subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
+        { id: 'empire', icon: Rocket, label: t('pro:subscription.benefits.empire_access'), desc: t('pro:subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
+    ], [t]);
+
+    const faqs = useMemo(() => [
+        { icon: Clock, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q1'), a: t('pro:subscription.faq.a1') },
+        { icon: Zap, iconColor: 'text-amber-500 dark:text-amber-400', q: t('pro:subscription.faq.q2'), a: t('pro:subscription.faq.a2') },
+        { icon: Globe, iconColor: 'text-emerald-500 dark:text-emerald-400', q: t('pro:subscription.faq.q3'), a: t('pro:subscription.faq.a3') },
+        { icon: Shield, iconColor: 'text-purple-500 dark:text-purple-400', q: t('pro:subscription.faq.q4'), a: t('pro:subscription.faq.a4') },
+        { icon: Network, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q5'), a: t('pro:subscription.faq.a5') },
+        { icon: TrendingUp, iconColor: 'text-rose-500 dark:text-rose-400', q: t('pro:subscription.faq.q6'), a: t('pro:subscription.faq.a6') },
+        { icon: Share2, iconColor: 'text-fuchsia-500 dark:text-fuchsia-400', q: t('pro:subscription.faq.q7'), a: t('pro:subscription.faq.a7') },
+    ], [t]);
+
+    const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
+
+    // ─── EARLY RETURN CHECK (Moved after all hook declarations) ───
     if (user?.is_pro && !showPaymentOptionsForPro) {
         const isPlus = (user.subscription_plan?.includes('PLUS'));
         const isLifetime = !user.pro_expires_at || user.subscription_plan === 'PRO_LIFETIME';
@@ -358,36 +385,6 @@ export default function SubscriptionPage() {
             </div>
         );
     }
-
-    const proBenefits = useMemo(() => [
-        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_pro'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { id: 'tokens', icon: Zap, label: t('pro:subscription.benefits.tokens'), desc: t('pro:subscription.benefits.tokens_desc_pro'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'cashback', icon: TrendingUp, label: t('pro:subscription.benefits.cashback'), desc: t('pro:subscription.benefits.cashback_desc_pro'), color: 'text-yellow-600 dark:text-yellow-500', bg: 'bg-indigo-500/10 dark:bg-indigo-500/20' },
-        { id: 'tools', icon: Bot, label: t('pro:subscription.benefits.tools'), desc: t('pro:subscription.benefits.tools_desc_pro'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'intel', icon: Target, label: t('pro:subscription.benefits.growth_intel'), desc: t('pro:subscription.benefits.growth_intel_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-    ], [t]);
-
-    const proPlusBenefits = useMemo(() => [
-        { id: 'ai', icon: Brain, label: t('pro:subscription.benefits.ai_studio'), desc: t('pro:subscription.benefits.ai_studio_desc_plus'), color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 dark:bg-blue-500/20' },
-        { id: 'network', icon: Network, label: t('pro:subscription.benefits.network_levels'), desc: t('pro:subscription.benefits.network_levels_desc_plus'), color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 dark:bg-emerald-500/20' },
-        { id: 'omni', icon: InfinityIcon, label: t('pro:subscription.benefits.omni_sync'), desc: t('pro:subscription.benefits.omni_sync_desc') + " " + t('pro:subscription.benefits.tg_multi_channel_desc'), color: 'text-fuchsia-600 dark:text-fuchsia-400', bg: 'bg-fuchsia-500/10 dark:bg-fuchsia-500/20' },
-        { id: 'priority', icon: Star, label: t('pro:subscription.benefits.priority_ai'), desc: t('pro:subscription.benefits.priority_ai_desc'), color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 dark:bg-amber-500/20' },
-        { id: 'analytics', icon: BarChart2, label: t('pro:subscription.benefits.content_analytics'), desc: t('pro:subscription.benefits.content_analytics_desc'), color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 dark:bg-teal-500/20' },
-        { id: 'empire', icon: Rocket, label: t('pro:subscription.benefits.empire_access'), desc: t('pro:subscription.benefits.empire_access_desc'), color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 dark:bg-rose-500/20' },
-    ], [t]);
-
-    const currentBenefits = selectedPlan === 'PRO' ? proBenefits : proPlusBenefits;
-
-    const faqs = useMemo(() => [
-        { icon: Clock, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q1'), a: t('pro:subscription.faq.a1') },
-        { icon: Zap, iconColor: 'text-amber-500 dark:text-amber-400', q: t('pro:subscription.faq.q2'), a: t('pro:subscription.faq.a2') },
-        { icon: Globe, iconColor: 'text-emerald-500 dark:text-emerald-400', q: t('pro:subscription.faq.q3'), a: t('pro:subscription.faq.a3') },
-        { icon: Shield, iconColor: 'text-purple-500 dark:text-purple-400', q: t('pro:subscription.faq.q4'), a: t('pro:subscription.faq.a4') },
-        { icon: Network, iconColor: 'text-blue-500 dark:text-blue-400', q: t('pro:subscription.faq.q5'), a: t('pro:subscription.faq.a5') },
-        { icon: TrendingUp, iconColor: 'text-rose-500 dark:text-rose-400', q: t('pro:subscription.faq.q6'), a: t('pro:subscription.faq.a6') },
-        { icon: Share2, iconColor: 'text-fuchsia-500 dark:text-fuchsia-400', q: t('pro:subscription.faq.q7'), a: t('pro:subscription.faq.a7') },
-    ], [t]);
 
     return (
         <>
@@ -1116,7 +1113,7 @@ export default function SubscriptionPage() {
             </div>
 
             {/* ── SUCCESS / STATUS MODAL ──────────────────────────────────── */}
-            {createPortal(
+            {typeof document !== 'undefined' && createPortal(
                 <AnimatePresence>
                     {(status !== 'idle' || infoModal) && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl">
@@ -1128,7 +1125,7 @@ export default function SubscriptionPage() {
 
                                     <div className="relative z-10 flex flex-col items-center">
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
-                                            <infoModal.icon size={24} className="text-white drop-shadow-md" />
+                                            {React.createElement(infoModal.icon, { size: 24, className: "text-white drop-shadow-md" })}
                                         </div>
                                         <h3 className={`text-lg font-bold uppercase mb-2 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
                                         <div className="px-1 mb-6">

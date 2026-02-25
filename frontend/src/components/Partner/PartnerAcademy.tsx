@@ -60,24 +60,23 @@ export const PartnerAcademy = () => {
             <div className="relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-full bg-linear-to-b from-blue-500/20 via-slate-200 dark:via-white/5 to-transparent -z-10" />
 
-                {/* Global Ranking / Active Status (Relocated from fixed footer for better responsiveness) */}
-                <div className="mb-8 flex justify-center px-4">
+                <div className="mb-6 flex justify-center px-2">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-panel-premium rounded-full p-1.5 border-white/20 shadow-xl flex items-center justify-between gap-3 bg-white/50 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 w-fit min-w-[260px] max-w-full"
+                        className="glass-panel-premium !overflow-visible rounded-full p-1 border-white/20 shadow-xl flex items-center justify-between gap-2 bg-white/50 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 w-fit"
                     >
-                        <div className="flex items-center gap-2 pl-1">
-                            <div className="w-7.5 h-7.5 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white shrink-0">
+                        <div className="flex items-center gap-1.5 pl-1">
+                            <div className="w-7 h-7 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white shrink-0">
                                 <TrendingUp className="w-4 h-4" />
                             </div>
                             <div className="flex items-baseline gap-1.5 overflow-hidden">
-                                <span className="text-[9px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest whitespace-nowrap opacity-80">{t('academy.global_ranking')}</span>
-                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
+                                <span className="text-[8px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest whitespace-nowrap opacity-80">{t('academy.global_ranking')}</span>
+                                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
-                        <div className="px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-500 dark:text-orange-400 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-[inset_0_1px_8px_rgba(249,115,22,0.1)] mr-0.5 shrink-0">
+                        <div className="px-2 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-500 dark:text-orange-400 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-[inset_0_1px_8px_rgba(249,115,22,0.1)] mr-0.5 shrink-0">
                             <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
                             {t('academy.footer_status')}
                         </div>
