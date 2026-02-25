@@ -12,6 +12,65 @@ interface PartnerBriefingModalProps {
     onClose: () => void;
 }
 
+// #comment Move static data outside component to avoid re-allocation and re-renders
+const SECTIONS_CONFIG = (t: any) => [
+    {
+        id: 'mission',
+        icon: Target,
+        title: t('brief.goal_title'),
+        content: (
+            <Trans
+                t={t}
+                i18nKey="brief.goal_desc"
+                components={{
+                    1: <span className="text-slate-900 dark:text-white font-bold" />,
+                    3: <span className="text-blue-500 dark:text-blue-400 font-bold italic" />
+                }}
+            />
+        ),
+        color: 'blue' as const,
+        glow: 'rgba(59, 130, 246, 0.15)'
+    },
+    {
+        id: 'manual',
+        icon: BookOpen,
+        title: t('brief.manual_title'),
+        steps: [
+            t('brief.manual_step_1'),
+            t('brief.manual_step_2'),
+            t('brief.manual_step_3')
+        ],
+        color: 'purple' as const,
+        glow: 'rgba(168, 85, 247, 0.15)'
+    },
+    {
+        id: 'rules',
+        icon: Shield,
+        title: t('brief.rules_title'),
+        points: [
+            {
+                title: t('brief.rule_1_title'),
+                desc: t('brief.rule_1_desc')
+            },
+            {
+                title: t('brief.rule_2_title'),
+                desc: t('brief.rule_2_desc')
+            }
+        ],
+        color: 'red' as const,
+        badge: t('brief.antibot_active'),
+        glow: 'rgba(239, 68, 68, 0.1)'
+    },
+    {
+        id: 'motivation',
+        icon: Sparkles,
+        title: t('brief.motivation_title'),
+        content: t('brief.motivation_desc'),
+        color: 'emerald' as const,
+        glow: 'rgba(16, 185, 129, 0.15)'
+    }
+];
+
 export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalProps) => {
     const { t } = useTranslation(['social', 'common']);
     const { setFooterVisible, setHeaderVisible } = useUI();
@@ -23,7 +82,6 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
         if (isOpen) {
             setFooterVisible(false);
             setHeaderVisible(false);
-            // Lock body scroll if needed? The Layout main-scroll-root might need it too
         }
         return () => {
             setFooterVisible(true);
@@ -33,63 +91,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
 
     if (!isOpen) return null;
 
-    const sections = [
-        {
-            id: 'mission',
-            icon: Target,
-            title: t('brief.goal_title'),
-            content: (
-                <Trans
-                    t={t}
-                    i18nKey="brief.goal_desc"
-                    components={{
-                        1: <span className="text-slate-900 dark:text-white font-bold" />,
-                        3: <span className="text-blue-500 dark:text-blue-400 font-bold italic" />
-                    }}
-                />
-            ),
-            color: 'blue',
-            glow: 'rgba(59, 130, 246, 0.15)'
-        },
-        {
-            id: 'manual',
-            icon: BookOpen,
-            title: t('brief.manual_title'),
-            steps: [
-                t('brief.manual_step_1'),
-                t('brief.manual_step_2'),
-                t('brief.manual_step_3')
-            ],
-            color: 'purple',
-            glow: 'rgba(168, 85, 247, 0.15)'
-        },
-        {
-            id: 'rules',
-            icon: Shield,
-            title: t('brief.rules_title'),
-            points: [
-                {
-                    title: t('brief.rule_1_title'),
-                    desc: t('brief.rule_1_desc')
-                },
-                {
-                    title: t('brief.rule_2_title'),
-                    desc: t('brief.rule_2_desc')
-                }
-            ],
-            color: 'red',
-            badge: t('brief.antibot_active'),
-            glow: 'rgba(239, 68, 68, 0.1)'
-        },
-        {
-            id: 'motivation',
-            icon: Sparkles,
-            title: t('brief.motivation_title'),
-            content: t('brief.motivation_desc'),
-            color: 'emerald',
-            glow: 'rgba(16, 185, 129, 0.15)'
-        }
-    ];
+    const sections = SECTIONS_CONFIG(t);
 
     return createPortal(
         <div className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top)+var(--spacing-telegram-header))] pb-[calc(var(--spacing-safe-bottom)+20px)]">

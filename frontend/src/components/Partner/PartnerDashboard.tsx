@@ -407,9 +407,128 @@ export const PartnerDashboard = () => {
 
 
 
+const formatEarningDescription = (desc: string, t: any) => {
+    if (!desc) return '';
+
+    if (desc.startsWith('Task Reward: ')) {
+        const taskId = desc.replace('Task Reward: ', '').trim();
+        const taskTitleKey = `tasks.${taskId}.title`;
+        const translatedTitle = t(taskTitleKey);
+
+        if (translatedTitle && translatedTitle !== taskTitleKey) {
+            return `${translatedTitle}`;
+        }
+
+        return taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    return desc.replace('(Level ', '(L');
+};
+
+const getTypeStyles = (type: string) => {
+    switch (type) {
+        case 'PRO_COMMISSION':
+        case 'COMMISSION':
+            return {
+                icon: <DollarSign className="w-4 h-4" />,
+                bg: 'bg-emerald-500/10',
+                border: 'border-emerald-500/20',
+                text: 'text-emerald-600 dark:text-emerald-400'
+            };
+        case 'TRANSACTION':
+            return {
+                icon: <DollarSign className="w-4 h-4" />,
+                bg: 'bg-purple-500/10',
+                border: 'border-purple-500/20',
+                text: 'text-purple-600 dark:text-purple-400'
+            };
+        case 'TASK_XP':
+            return {
+                icon: <Gift className="w-4 h-4" />,
+                bg: 'bg-blue-500/10',
+                border: 'border-blue-500/20',
+                text: 'text-blue-600 dark:text-blue-400'
+            };
+        case 'REFERRAL_XP':
+            return {
+                icon: <Users className="w-4 h-4" />,
+                bg: 'bg-amber-500/10',
+                border: 'border-amber-500/20',
+                text: 'text-amber-600 dark:text-amber-400'
+            };
+        default:
+            return {
+                icon: <DollarSign className="w-4 h-4" />,
+                bg: 'bg-slate-500/10',
+                border: 'border-slate-500/20',
+                text: 'text-slate-600 dark:text-slate-400'
+            };
+    }
+};
+
+const EarningRow = React.memo(({ item, idx, t }: { item: any, idx: number, t: any }) => {
+    const styles = getTypeStyles(item.type);
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.03 }}
+            className="bg-[--color-bg-glass] rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+        >
+            <div className="flex items-center gap-2">
+                <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+                    {item.currency === 'TON' ? (
+                        <TONLogo className="w-3.5 h-3.5" />
+                    ) : item.currency === 'USDT' || item.type === 'COMMISSION' || item.type === 'PRO_COMMISSION' ? (
+                        <USDTLogo className="w-3.5 h-3.5" />
+                    ) : (
+                        React.cloneElement(styles.icon as React.ReactElement<{ className?: string }>, { className: 'w-3 h-3' })
+                    )}
+                </div>
+                <div className='flex flex-col'>
+                    <span className="font-bold text-slate-900 dark:text-white text-label leading-tight">
+                        {formatEarningDescription(item.description, t)}
+                    </span>
+                    <span className="text-label text-slate-500 opacity-50 font-medium">
+                        {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+                {item.status && item.status !== 'completed' && (
+                    <div className={`px-1 rounded text-label font-bold uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                        ? 'bg-amber-500/20 text-amber-500'
+                        : 'bg-red-500/20 text-red-500'
+                        }`}>
+                        {item.status === 'manual_review' ? t('tasks.review') : item.status}
+                    </div>
+                )}
+                {item.level && (
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
+                        <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
+                            <span className="text-label font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
+                            <span className="text-label font-bold bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
+                        </div>
+                    </div>
+                )}
+                <div className="flex items-center gap-1">
+                    <span className={`font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
+                        {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
+                    </span>
+                    <span className={`text-label font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                        {item.currency}
+                    </span>
+                </div>
+            </div>
+        </motion.div>
+    );
+});
+
 const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     const [xpEarnings, setXpEarnings] = React.useState<any[]>([]);
-    const [cryptoItems, setCryptoItems] = React.useState<any[]>([]);
+    const [cryptoData, setCryptoData] = React.useState<{ earnings: any[], transactions: any[] }>({ earnings: [], transactions: [] });
     const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
     const { t } = useTranslation(['social', 'common']);
@@ -419,7 +538,6 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
             try {
                 const limit = isExpanded ? 50 : 20;
 
-                // Fetch XP and Crypto separately using new backend filters
                 const [xpRes, cryptoEarnRes, txRes] = await Promise.all([
                     apiClient.get(`/api/partner/earnings?limit=${limit}&currency=XP`),
                     apiClient.get(`/api/partner/earnings?limit=${limit}&exclude_xp=true`),
@@ -427,26 +545,7 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                 ]);
 
                 setXpEarnings(xpRes.data);
-
-                // Merge crypto commissions with direct transactions
-                const mergedCrypto = [
-                    ...cryptoEarnRes.data.map((e: any) => ({
-                        ...e,
-                        isTransaction: false,
-                        date: new Date(e.created_at)
-                    })),
-                    ...txRes.data.map((t: any) => ({
-                        ...t,
-                        isTransaction: true,
-                        description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
-                        amount: (t.currency === 'TON' && t.amount_crypto) ? t.amount_crypto : t.amount,
-                        currency: t.currency,
-                        type: 'TRANSACTION',
-                        date: new Date(t.created_at)
-                    }))
-                ].sort((a, b) => b.date.getTime() - a.date.getTime());
-
-                setCryptoItems(mergedCrypto);
+                setCryptoData({ earnings: cryptoEarnRes.data, transactions: txRes.data });
             } catch (error) {
                 console.error('Failed to fetch earnings data:', error);
             } finally {
@@ -456,23 +555,25 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
         fetchData();
     }, [isExpanded]);
 
-    const formatEarningDescription = (desc: string) => {
-        if (!desc) return '';
-
-        if (desc.startsWith('Task Reward: ')) {
-            const taskId = desc.replace('Task Reward: ', '').trim();
-            const taskTitleKey = `tasks.${taskId}.title`;
-            const translatedTitle = t(taskTitleKey);
-
-            if (translatedTitle && translatedTitle !== taskTitleKey) {
-                return `${translatedTitle}`;
-            }
-
-            return taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-        }
-
-        return desc.replace('(Level ', '(L');
-    };
+    // #comment Memoized heavy sort and merge operation
+    const cryptoItems = React.useMemo(() => {
+        return [
+            ...cryptoData.earnings.map((e: any) => ({
+                ...e,
+                isTransaction: false,
+                date: new Date(e.created_at)
+            })),
+            ...cryptoData.transactions.map((t: any) => ({
+                ...t,
+                isTransaction: true,
+                description: t.description || `${t.currency} ${t.status.toUpperCase()}`,
+                amount: (t.currency === 'TON' && t.amount_crypto) ? t.amount_crypto : t.amount,
+                currency: t.currency,
+                type: 'TRANSACTION',
+                date: new Date(t.created_at)
+            }))
+        ].sort((a, b) => b.date.getTime() - a.date.getTime());
+    }, [cryptoData]);
 
     if (loading) {
         return (
@@ -484,47 +585,6 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
     }
 
     const displayItems = activeTab === 'XP' ? xpEarnings : cryptoItems;
-
-    const getTypeStyles = (type: string) => {
-        switch (type) {
-            case 'PRO_COMMISSION':
-            case 'COMMISSION':
-                return {
-                    icon: <DollarSign className="w-4 h-4" />,
-                    bg: 'bg-emerald-500/10',
-                    border: 'border-emerald-500/20',
-                    text: 'text-emerald-600 dark:text-emerald-400'
-                };
-            case 'TRANSACTION':
-                return {
-                    icon: <DollarSign className="w-4 h-4" />,
-                    bg: 'bg-purple-500/10',
-                    border: 'border-purple-500/20',
-                    text: 'text-purple-600 dark:text-purple-400'
-                };
-            case 'TASK_XP':
-                return {
-                    icon: <Gift className="w-4 h-4" />,
-                    bg: 'bg-blue-500/10',
-                    border: 'border-blue-500/20',
-                    text: 'text-blue-600 dark:text-blue-400'
-                };
-            case 'REFERRAL_XP':
-                return {
-                    icon: <Users className="w-4 h-4" />,
-                    bg: 'bg-amber-500/10',
-                    border: 'border-amber-500/20',
-                    text: 'text-amber-600 dark:text-amber-400'
-                };
-            default:
-                return {
-                    icon: <DollarSign className="w-4 h-4" />,
-                    bg: 'bg-slate-500/10',
-                    border: 'border-slate-500/20',
-                    text: 'text-slate-600 dark:text-slate-400'
-                };
-        }
-    };
 
     return (
         <div className="space-y-3 animate-in fade-in duration-500">
@@ -557,66 +617,9 @@ const EarningsList = ({ isExpanded = false }: { isExpanded?: boolean }) => {
                         <p className="text-xs font-bold text-slate-500 dark:text-slate-400">{t('partner_dashboard.no_earnings')}</p>
                     </div>
                 ) : (
-                    displayItems.map((item: any, idx: number) => {
-                        const styles = getTypeStyles(item.type);
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: idx * 0.03 }}
-                                key={item.id || idx}
-                                className="bg-[--color-bg-glass] rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
-                            >
-                                <div className="flex items-center gap-2">
-                                    <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
-                                        {item.currency === 'TON' ? (
-                                            <TONLogo className="w-3.5 h-3.5" />
-                                        ) : item.currency === 'USDT' || item.type === 'COMMISSION' || item.type === 'PRO_COMMISSION' ? (
-                                            <USDTLogo className="w-3.5 h-3.5" />
-                                        ) : (
-                                            React.cloneElement(styles.icon as React.ReactElement<{ className?: string }>, { className: 'w-3 h-3' })
-                                        )}
-                                    </div>
-                                    <div className='flex flex-col'>
-                                        <span className="font-bold text-slate-900 dark:text-white text-label leading-tight">
-                                            {formatEarningDescription(item.description)}
-                                        </span>
-                                        <span className="text-label text-slate-500 opacity-50 font-medium">
-                                            {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                    {item.status && item.status !== 'completed' && (
-                                        <div className={`px-1 rounded text-label font-bold uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
-                                            ? 'bg-amber-500/20 text-amber-500'
-                                            : 'bg-red-500/20 text-red-500'
-                                            }`}>
-                                            {item.status === 'manual_review' ? t('tasks.review') : item.status}
-                                        </div>
-                                    )}
-                                    {item.level && (
-                                        <div className="relative group">
-                                            <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
-                                            <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[28px] shadow-sm backdrop-blur-sm">
-                                                <span className="text-label font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
-                                                <span className="text-label font-bold bg-linear-to-br from-purple-600 via-blue-600 to-purple-600 dark:from-purple-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent leading-none">{item.level}</span>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div className="flex items-center gap-1">
-                                        <span className={`font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
-                                            {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
-                                        </span>
-                                        <span className={`text-label font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
-                                            {item.currency}
-                                        </span>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        );
-                    })
+                    displayItems.map((item: any, idx: number) => (
+                        <EarningRow key={item.id || idx} item={item} idx={idx} t={t} />
+                    ))
                 )}
             </div>
         </div>

@@ -3,6 +3,7 @@ import { Trophy, Star, Sparkles, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Confetti } from '../ui/Confetti';
 import { useTMALock } from '../../hooks/useTMALock';
+import { usePerformance } from '../../hooks/usePerformance';
 
 interface LevelUpModalProps {
     isOpen: boolean;
@@ -12,12 +13,13 @@ interface LevelUpModalProps {
 
 export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
     const { t } = useTranslation('social');
+    const { lowPowerMode } = usePerformance();
     useTMALock(isOpen);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-6 sm:p-12 overflow-hidden">
+                <div className={`fixed inset-0 z-100 flex items-center justify-center p-6 sm:p-12 overflow-hidden ${lowPowerMode ? 'low-power-mode' : ''}`}>
                     <Confetti />
 
                     {/* Immersive Backdrop */}
@@ -43,31 +45,17 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
 
                         {/* Header Icons */}
                         <div className="relative mb-8 pt-4">
-                            <motion.div
-                                animate={{
-                                    rotate: [0, -10, 10, -10, 0],
-                                    scale: [1, 1.1, 1]
-                                }}
-                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                            >
+                            <div className="animate-trophy-bop">
                                 <Trophy className="w-24 h-24 text-yellow-500 mx-auto drop-shadow-[0_0_20px_rgba(234,179,8,0.4)]" />
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                className="absolute top-4 right-1/4"
-                                animate={{ y: [0, -10, 0], opacity: [0.5, 1, 0.5] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                            >
+                            <div className="absolute top-4 right-1/4 animate-sparkle-float">
                                 <Sparkles className="w-8 h-8 text-yellow-300" />
-                            </motion.div>
+                            </div>
 
-                            <motion.div
-                                className="absolute bottom-4 left-1/4"
-                                animate={{ scale: [1, 1.3, 1], rotate: 45 }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                            >
+                            <div className="absolute bottom-4 left-1/4 animate-star-twinkle">
                                 <Star className="w-6 h-6 text-orange-400 fill-orange-400" />
-                            </motion.div>
+                            </div>
                         </div>
 
                         {/* Text Content */}
@@ -84,11 +72,13 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                     {t('referral.levelup.rank')}
                                     <span className="text-yellow-500 relative ml-2">
                                         {level}
-                                        <motion.div
-                                            animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                            className="absolute inset-0 bg-yellow-400 blur-xl rounded-full -z-10"
-                                        />
+                                        {!lowPowerMode && (
+                                            <motion.div
+                                                animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                                className="absolute inset-0 bg-yellow-400 blur-xl rounded-full -z-10"
+                                            />
+                                        )}
                                     </span>
                                 </h3>
                             </motion.div>
