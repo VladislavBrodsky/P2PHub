@@ -695,15 +695,15 @@ const BlogDetail = ({
                         <motion.button
                             whileTap={{ scale: 0.9 }}
                             onClick={onLike}
-                            className={`group h-12 px-8 rounded-2xl flex items-center gap-3 transition-all duration-500 ${engagement.liked
+                            className={`group h-10 px-5 rounded-xl flex items-center gap-2.5 transition-all duration-500 ${engagement.liked
                                 ? 'bg-red-500 text-white scale-105 shadow-2xl shadow-red-500/40'
                                 : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-red-500/30 text-slate-900 dark:text-white hover:shadow-xl'
                                 }`}
                         >
-                            <Heart className={`w-5 h-5 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
-                            <div className="flex flex-col items-start leading-none">
-                                <span className="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-0.5">{t('blog.navigation.impact')}</span>
-                                <span className="font-bold text-lg italic!">
+                            <Heart className={`w-4 h-4 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
+                            <div className="flex flex-col items-start leading-none mt-0.5">
+                                <span className="text-[8px] font-bold uppercase tracking-widest opacity-60 mb-0.5">{t('blog.navigation.impact')}</span>
+                                <span className="font-bold text-base italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
                             </div>
@@ -711,9 +711,9 @@ const BlogDetail = ({
 
                         <button
                             onClick={onShare}
-                            className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
+                            className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 active:scale-95 transition-all shadow-sm hover:shadow-xl group"
                         >
-                            <Share2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                            <Share2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
                         </button>
                     </div>
 
