@@ -1,3 +1,4 @@
+# Referral Notification Update Trigger
 MESSAGES = {
     "en": {
         "welcome": (
