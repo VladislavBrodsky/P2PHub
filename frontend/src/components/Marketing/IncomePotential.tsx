@@ -670,14 +670,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     </div>
 
                                                     <h3 className="text-xl font-bold text-white leading-tight">
-                                                        <Trans i18nKey="income_details.market_title">
+                                                        <Trans i18nKey="income_details.market_title" ns="marketing">
                                                             The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
                                                         </Trans>
                                                     </h3>
 
                                                     <div className="space-y-3 py-2">
                                                         <p className="text-sm text-slate-300 leading-relaxed">
-                                                            <Trans i18nKey="income_details.market_desc">
+                                                            <Trans i18nKey="income_details.market_desc" ns="marketing">
                                                                 Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
                                                             </Trans>
                                                         </p>
@@ -710,7 +710,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     </div>
 
                                                     <h3 className="text-xl font-bold text-white leading-tight">
-                                                        <Trans i18nKey="income_details.revenue_title">
+                                                        <Trans i18nKey="income_details.revenue_title" ns="marketing">
                                                             Unlock <span className="text-emerald-400">True Passive Income</span>
                                                         </Trans>
                                                     </h3>
