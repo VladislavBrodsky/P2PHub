@@ -1,5 +1,5 @@
 import { m, AnimatePresence } from 'framer-motion';
-import { User, Globe, Network, AlertCircle, Brain, Zap, TrendingUp, ChevronRight, Sparkles, Users } from 'lucide-react';
+import { User, Globe, Network, AlertCircle, Brain, Zap, TrendingUp, ChevronRight, Sparkles, Users, DollarSign } from 'lucide-react';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
@@ -268,43 +268,15 @@ const NeuralBackground = React.memo(() => {
 const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: number; onComplete: () => void }) => {
     const { t } = useTranslation(['marketing']);
     const { impact } = useHaptic();
-    const [count, setCount] = useState(0);
-    const [isDoneCalculating, setIsDoneCalculating] = useState(false);
 
     useEffect(() => {
-        const duration = 3000; // Snappier animation
-        const startTime = Date.now();
-        let rafId: number;
-
-        const animate = () => {
-            const now = Date.now();
-            const elapsed = now - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-
-            // Smoother easeInOutQuad
-            const ease = progress < 0.5
-                ? 2 * progress * progress
-                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-
-            const current = targetAmount * ease;
-            setCount(current);
-
-            if (progress < 1) {
-                rafId = requestAnimationFrame(animate);
-            } else {
-                impact('medium');
-                setCount(targetAmount);
-                setTimeout(() => {
-                    setIsDoneCalculating(true);
-                }, 400);
-            }
-        };
-        rafId = requestAnimationFrame(animate);
-
-        return () => {
-            if (rafId) cancelAnimationFrame(rafId);
-        };
+        if (targetAmount >= 43200) {
+            impact('medium');
+        }
     }, [targetAmount, impact]);
+
+    const isDoneCalculating = targetAmount >= 43200;
+    const displayCount = Math.floor(targetAmount);
 
     return (
         <m.div
@@ -321,17 +293,18 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
 
                 <div className="flex items-baseline justify-center gap-0.5">
                     <span className="text-3xl sm:text-4xl font-black tabular-nums tracking-tight text-white leading-none">
-                        ${Math.floor(count).toLocaleString()}
+                        ${displayCount.toLocaleString()}
                     </span>
                     <span className="text-base sm:text-lg font-bold text-indigo-400 leading-none">
-                        .{Math.floor((count % 1) * 100).toString().padStart(2, '0')}
+                        .00
                     </span>
                 </div>
 
                 <div className="mt-2.5 h-1 w-full bg-white/5 rounded-full overflow-hidden">
                     <m.div
                         initial={{ width: 0 }}
-                        animate={{ width: `${Math.min((count / targetAmount) * 100, 100)}%` }}
+                        animate={{ width: `${Math.min((targetAmount / 43200) * 100, 100)}%` }}
+                        transition={{ duration: 0.1 }}
                         className="h-full bg-linear-to-r from-indigo-500 via-blue-400 to-emerald-400 rounded-full"
                     />
                 </div>
@@ -363,6 +336,33 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
 
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
+    const [animatedCount, setAnimatedCount] = useState(0);
+
+    useEffect(() => {
+        const duration = 3000;
+        const startTime = Date.now();
+        let rafId: number;
+
+        const animate = () => {
+            const now = Date.now();
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            const ease = progress < 0.5
+                ? 2 * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+            setAnimatedCount(targetAmount * ease);
+
+            if (progress < 1) {
+                rafId = requestAnimationFrame(animate);
+            } else {
+                setAnimatedCount(targetAmount);
+            }
+        };
+        rafId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(rafId);
+    }, [targetAmount]);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
@@ -485,7 +485,59 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                                     <div className="p-1 rounded-full bg-white/20 relative z-10">
                                         <Users className="w-3 h-3 text-white" />
                                     </div>
-                                    <span className="text-[10px] font-black text-white tracking-wider relative z-10">+$8.64</span>
+                                    <span className="text-[10px] font-black text-white tracking-wider relative z-10">
+                                        +${Math.floor(animatedCount).toLocaleString()}
+                                    </span>
+                                </m.div>
+
+                                {/* TON Profit Node */}
+                                <m.div
+                                    className="absolute -left-16 sm:-left-20 bottom-8 px-2.5 py-1 rounded-full bg-blue-500/90 backdrop-blur-md border border-blue-400 flex items-center gap-1.5 shadow-[0_0_20px_rgba(59,130,246,0.4)] z-20 overflow-hidden"
+                                    initial={{ scale: 0, opacity: 0, x: -30 }}
+                                    animate={{
+                                        scale: 1,
+                                        opacity: 1,
+                                        y: [0, 15, 0],
+                                        x: [0, -10, 0]
+                                    }}
+                                    transition={{
+                                        scale: { duration: 0.5, delay: 0.6 },
+                                        opacity: { duration: 0.5, delay: 0.6 },
+                                        y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+                                        x: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }
+                                    }}
+                                >
+                                    <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center relative z-10">
+                                        <Sparkles className="w-2.5 h-2.5 text-white" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-white tracking-tighter relative z-10">
+                                        +{Math.floor(animatedCount / 3.4).toLocaleString()} TON
+                                    </span>
+                                </m.div>
+
+                                {/* USDT Profit Node */}
+                                <m.div
+                                    className="absolute -right-16 sm:-right-20 top-0 px-2.5 py-1 rounded-full bg-teal-500/90 backdrop-blur-md border border-teal-400 flex items-center gap-1.5 shadow-[0_0_20px_rgba(20,184,166,0.4)] z-20 overflow-hidden"
+                                    initial={{ scale: 0, opacity: 0, x: 30 }}
+                                    animate={{
+                                        scale: 1,
+                                        opacity: 1,
+                                        y: [0, -20, 0],
+                                        x: [0, 10, 0]
+                                    }}
+                                    transition={{
+                                        scale: { duration: 0.5, delay: 0.8 },
+                                        opacity: { duration: 0.5, delay: 0.8 },
+                                        y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 },
+                                        x: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }
+                                    }}
+                                >
+                                    <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center relative z-10">
+                                        <DollarSign className="w-2.5 h-2.5 text-emerald-100" />
+                                    </div>
+                                    <span className="text-[9px] font-black text-white tracking-tighter relative z-10">
+                                        +${Math.floor(animatedCount).toLocaleString()} USDT
+                                    </span>
                                 </m.div>
 
                                 <m.div
@@ -523,7 +575,7 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                                         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                                     />
 
-                                    <span className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-[0.2em] sm:tracking-[0.4em] relative z-10 drop-shadow-sm">
+                                    <span className="text-[10px] sm:text-xs font-black text-slate-900 uppercase tracking-[0.2em] sm:tracking-[0.4em] relative z-10 drop-shadow-sm">
                                         Viral Network Core
                                     </span>
                                 </m.div>
@@ -531,7 +583,7 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                         </div>
 
                         {/* ── CALCULATION COUNTER ── */}
-                        <YieldCounter targetAmount={targetAmount} onComplete={onYieldComplete} />
+                        <YieldCounter targetAmount={animatedCount} onComplete={onYieldComplete} />
                     </m.div>
                 ) : (
                     <m.div

@@ -74,11 +74,11 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         {user?.is_pro ? (
                             <m.button
                                 onClick={() => setActiveTab?.('pro')}
-                                className={`inline-flex items-center justify-center rounded-full border px-6 py-2.5 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
+                                className={`inline-flex items-center justify-center rounded-full border px-4 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className={`text-label font-bold uppercase tracking-[0.2em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                                <p className={`text-[10px] font-bold uppercase tracking-[0.1em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard:open_pro_dashboard')}
                                 </p>
                             </m.button>

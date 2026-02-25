@@ -64,7 +64,7 @@ export const PartnerAcademy = () => {
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="glass-panel-premium !overflow-visible rounded-full p-1 border-white/20 shadow-xl flex items-center justify-between gap-2 bg-white/50 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 w-fit"
+                        className="glass-panel-premium overflow-visible! rounded-full p-1 border-white/20 shadow-xl flex items-center justify-between gap-2 bg-white/50 dark:bg-slate-900/40 backdrop-blur-3xl ring-1 ring-white/10 w-fit"
                     >
                         <div className="flex items-center gap-1.5 pl-1">
                             <div className="w-7 h-7 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg ring-1 ring-white/30 text-white shrink-0">

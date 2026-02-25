@@ -118,8 +118,8 @@ export const BlogCarousel = () => {
                                         {post.author}
                                     </span>
                                 </div>
-                                <div className="p-2 rounded-full bg-slate-50 dark:bg-slate-950 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-slate-200 dark:border-white/10 group-active:scale-90">
-                                    <ArrowUpRight className="w-4 h-4" />
+                                <div className="p-2 rounded-full bg-slate-50 dark:bg-white/5 group-hover:bg-blue-500 group-hover:text-white transition-all duration-500 shadow-sm border border-slate-200 dark:border-white/10 group-active:scale-90">
+                                    <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:text-white transition-colors" />
                                 </div>
                             </div>
                         </div>

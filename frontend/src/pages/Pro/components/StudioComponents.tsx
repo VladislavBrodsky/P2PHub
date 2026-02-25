@@ -372,7 +372,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                             <div className="bg-slate-50 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-5 border border-slate-200 dark:border-white/10 shadow-premium-sm">
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-[24px] font-bold text-slate-900 dark:text-white leading-none tabular-nums">
+                                        <span className="text-heading font-bold text-slate-900 dark:text-white leading-none tabular-nums">
                                             {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-sm opacity-30">%</span>
                                         </span>
                                         <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.studio.processing_eta', { count: countdown })}</span>

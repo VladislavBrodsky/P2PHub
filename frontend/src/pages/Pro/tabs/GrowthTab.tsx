@@ -297,7 +297,7 @@ export const GrowthTab = ({
             {/* Master Score Card - Intelligence Hub - Re-engineered for compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum compactness */}
             {/* Master Score Card - Intelligence Hub - Re-engineered for maximum premium vibe */}
-            <div className="bg-white dark:bg-slate-950/80 rounded-[24px] p-4 sm:p-6 shadow-[0_15px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/10 relative overflow-hidden group">
+            <div className="bg-white dark:bg-slate-950/80 rounded-[24px] p-3.5 sm:p-5 shadow-[0_15px_40px_rgba(0,0,0,0.08)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.4)] border border-slate-100 dark:border-white/10 relative overflow-hidden group">
                 {/* Tech Background Pattern */}
                 <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none">
                     <svg width="100%" height="100%">
@@ -312,17 +312,17 @@ export const GrowthTab = ({
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" />
                 <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
 
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 relative z-10">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 relative z-10">
                     <div className="flex items-start gap-4 sm:gap-5">
-                        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[18px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-lg shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
-                            <div className="w-full h-full rounded-[17px] bg-white dark:bg-slate-950 flex items-center justify-center">
-                                <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-500 dark:text-indigo-400" />
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[16px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-lg shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
+                            <div className="w-full h-full rounded-[15px] bg-white dark:bg-slate-950 flex items-center justify-center">
+                                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-500 dark:text-indigo-400" />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-1.5 pt-1">
                             <div className="flex items-center gap-2">
-                                <h3 className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
+                                <h3 className="text-base sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
                                     {t('pro_dashboard.academy.protocols.title').split(' ')[0]} <span className="text-indigo-500">{t('pro_dashboard.academy.protocols.title').split(' ').slice(1).join(' ')}</span>
                                 </h3>
                             </div>
@@ -345,12 +345,12 @@ export const GrowthTab = ({
                     </div>
 
                     <div className="flex flex-col items-start sm:items-end gap-0">
-                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.3em] mb-1">
+                        <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">
                             {t('pro_dashboard.academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
                             {!lowPowerMode && <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />}
-                            <div className="text-3xl sm:text-5xl font-bold text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
+                            <div className="text-2xl sm:text-4xl font-bold text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
                             </div>
                         </div>
@@ -358,7 +358,7 @@ export const GrowthTab = ({
                 </div>
 
                 {/* Performance Visualizer - Segmented Bars */}
-                <div className="space-y-3 relative z-10 w-full mt-0 bg-slate-50 dark:bg-white/2 p-3 sm:p-4 rounded-2xl border border-slate-100 dark:border-white/5">
+                <div className="space-y-3 relative z-10 w-full mt-0 bg-slate-50 dark:bg-white/2 p-2.5 sm:p-3 rounded-2xl border border-slate-100 dark:border-white/5">
                     {(() => {
                         const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                         const moduleCount = Array.isArray(modules) ? modules.length : 6;
