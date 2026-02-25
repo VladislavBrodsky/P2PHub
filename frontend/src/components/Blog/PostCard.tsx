@@ -87,7 +87,7 @@ export const PostCard = memo(({ post, index, onClick }: { post: BlogPost & BlogE
                         dangerouslySetInnerHTML={{ __html: renderExcerpt(post.excerpt) }}
                     />
                     <div className="mt-3 flex items-center gap-2 group/author">
-                        <div className="w-6 h-6 rounded-lg bg-linear-to-br from-blue-500/20 to-indigo-500/20 p-px overflow-hidden group-hover/author:from-blue-500/40 transition-colors">
+                        <div className="w-6 h-6 rounded-lg bg-linear-to-br from-blue-500/20 to-blue-600/20 p-px overflow-hidden group-hover/author:from-blue-500/40 transition-colors">
                             <div className="w-full h-full rounded-[calc(0.5rem-1px)] bg-white dark:bg-slate-900 flex items-center justify-center overflow-hidden">
                                 {post.authorImage ? (
                                     <img src={post.authorImage} className="w-full h-full object-cover" alt="" />

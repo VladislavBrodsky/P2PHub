@@ -627,8 +627,7 @@ const BlogDetail = ({
                 </h1>
 
                 <div className="flex items-center gap-3 py-4 border-y border-slate-200 dark:border-white/5">
-                    <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500 via-indigo-500 to-blue-600 p-px shadow-lg shadow-blue-500/30 flex items-center justify-center relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 p-px shadow-lg shadow-blue-500/30 flex items-center justify-center relative overflow-hidden group">
                         <div className="w-full h-full rounded-[calc(1rem-1px)] bg-bg-app flex items-center justify-center font-bold text-base text-blue-500 relative z-10 border border-white/5 overflow-hidden">
                             {post.authorImage ? (
                                 <img src={post.authorImage} className="w-full h-full object-cover" alt={post.author} />
@@ -643,9 +642,9 @@ const BlogDetail = ({
                     </div>
                     <div className="ml-auto">
                         <div className="flex -space-x-3">
-                            {[1, 2, 3].map(i => (
-                                <div key={i} style={{ zIndex: 10 - i }} className="w-9 h-9 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative overflow-hidden group/avatar">
-                                    <img src={authorAvatars[`user_${i}` as keyof typeof authorAvatars]} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" alt="" onError={(e) => {
+                            {['marcus_vance', 'alex_rivera', 'sarah_chen'].map((key, i) => (
+                                <div key={key} style={{ zIndex: 10 - i }} className="w-9 h-9 rounded-full border-2 border-slate-50 dark:border-slate-950 bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg relative overflow-hidden group/avatar">
+                                    <img src={authorAvatars[key as keyof typeof authorAvatars]} className="w-full h-full object-cover transition-transform duration-500 group-hover/avatar:scale-110" alt="" onError={(e) => {
                                         (e.target as HTMLImageElement).style.display = 'none';
                                         (e.target as HTMLImageElement).parentElement!.innerHTML = '<svg class="w-4 h-4 text-slate-400 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
                                     }} />
