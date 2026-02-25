@@ -310,7 +310,7 @@ export default function ReferralPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[90vh] px-4 pt-[138px] pb-8 relative">
+        <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-8 relative">
             {confettiActive && <Confetti />}
 
             <AnimatePresence>

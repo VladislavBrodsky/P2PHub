@@ -475,7 +475,7 @@ export const ProDashboard = () => {
     return (
         <div
             id="pro-dashboard-container"
-            className="w-full text-text-primary font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-[138px] pb-6"
+            className="w-full text-text-primary font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-6"
         >
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-2 pb-12 min-h-[70vh]">
                 {/* Header Section - Mobile Optimized */}
