@@ -968,7 +968,7 @@ export default function SubscriptionPage() {
                                                                     <Share2 size={14} />
                                                                 </div>
                                                             </div>
-                                                            <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:marketing:studio.publish_modal.more', { defaultValue: 'CLICK TO COPY' })}</span>
+                                                            <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:subscription.upgrade.tap_to_copy')}</span>
                                                         </div>
                                                     </div>
                                                 </div>
