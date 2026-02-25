@@ -23,18 +23,18 @@ MESSAGES = {
             "🚀 *Your network foundation strengthens!*"
         ),
         "referral_l2_congrats": (
-            "🌐 *Network Expansion Detected!* 🌐\n\n"
-            "📊 *Path:* {referral_chain}\n"
-            "📈 *Depth:* Level 2\n"
-            "💰 *Reward:* `+{xp} XP`\n\n"
-            "🚀 *Your empire is scaling automatically!*"
+            "📊 Your network is working for you!\n\n"
+            "🧬 Network: {referral_chain}\n\n"
+            "📈 Depth: Level 2\n"
+            "💰 Reward: `+{xp} XP`\n\n"
+            "🚀 Your empire is scaling automatically!"
         ),
         "referral_deep_activity": (
-            "📡 *Deep Network Pulse!* 📡\n\n"
-            "📊 *Path:* {referral_chain}\n"
-            "📈 *Depth:* Level {level}\n"
-            "💰 *Reward:* `+{xp} XP`\n\n"
-            "🏆 *Your global influence expands!*"
+            "📊 Your network is working for you!\n\n"
+            "🧬 Network: {referral_chain}\n\n"
+            "📈 Depth: Level {level}\n"
+            "💰 Reward: `+{xp} XP`\n\n"
+            "🏆 Your global influence grows!"
         ),
         "level_up": (
             "🏆 *RANK UPGRADE: LEVEL {level}!* 🏆\n\n"
@@ -223,7 +223,8 @@ MESSAGES = {
         "btn_sup_safety": "🔒 Safety",
         "btn_sup_trading": "⚡ Trading",
         "btn_sup_vip": "☎️ VIP VIP",
-        "btn_try_again": "🔄 Try Again"
+        "btn_try_again": "🔄 Try Again",
+        "you": "You"
     },
     "ru": {
         "welcome": (
@@ -249,18 +250,18 @@ MESSAGES = {
             "🚀 *Фундамент вашей сети укрепляется!*"
         ),
         "referral_l2_congrats": (
-            "🎉 Ваша сеть растет!! \n\n"
-            "📊 Путь: {referral_chain}\n"
+            "📊 Твоя сеть работает на тебя!\n\n"
+            "🧬 Сеть: {referral_chain}\n\n"
             "📈 Глубина: Уровень 2\n"
             "💰 Награда: +{xp} XP\n\n"
             "🚀 Ваша империя масштабируется автоматически 24/7!"
         ),
         "referral_deep_activity": (
-            "📡 *Глубинный Пульс Сети!* 📡\n\n"
-            "📊 *Путь:* {referral_chain}\n"
-            "📈 *Глубина:* Уровень {level}\n"
-            "💰 *Награда:* `+{xp} XP`\n\n"
-            "🏆 *Ваше глобальное влияние растет!*"
+            "📊 Твоя сеть работает на тебя!\n\n"
+            "🧬 Сеть: {referral_chain}\n\n"
+            "📈 Глубина: Уровень {level}\n"
+            "💰 Награда: `+{xp} XP`\n\n"
+            "🏆 Ваше глобальное влияние растет!"
         ),
         "level_up": (
             "🏆 *АПГРЕЙД РАНГА: УРОВЕНЬ {level}!* 🏆\n\n"
@@ -449,7 +450,8 @@ MESSAGES = {
         "btn_sup_safety": "🔒 Безопасность",
         "btn_sup_trading": "⚡ Трейдинг",
         "btn_sup_vip": "☎️ VIP Доступ",
-        "btn_try_again": "🔄 Попробовать Снова"
+        "btn_try_again": "🔄 Попробовать Снова",
+        "you": "Ты"
     }
 }
 

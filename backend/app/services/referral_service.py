@@ -120,6 +120,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
         referrer = ancestor_map.get(current_referrer_id)
         if not referrer: break
 
+        lang = referrer.language_code or "en"
+
         # Compression Logic Check
         qualified = False
         if level <= 3:
@@ -131,7 +133,6 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
 
         if not qualified:
             if level in [4, 10]:
-                lang = referrer.language_code or "en"
                 fomo_msg = get_msg(lang, "pro_fomo_missed", level=level)
                 btn_text = get_msg(lang, "btn_upgrade")
                 buttons = [[{"text": btn_text, "web_app": {"url": settings.FRONTEND_URL}}]]
@@ -194,9 +195,9 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             try:
                 ref_idx = full_lineage_ids.index(referrer.id)
                 children_names = full_lineage_names[ref_idx + 1:]
-                msg_chain = ["You", *children_names]
+                msg_chain = [get_msg(lang, "you"), *children_names]
             except (ValueError, IndexError):
-                msg_chain = ["You"]
+                msg_chain = [get_msg(lang, "you")]
 
             msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, msg_chain, salt=str(partner.id))
             deferred_tasks.append(msg_task)
@@ -265,7 +266,7 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
             logger.warning(f"Redis invalidation failed (one-off): {e}")
 
 def _prepare_referral_notification(referrer: Partner, level: int, xp: float, name: str, chain: list, salt: str = ""):
-    chain_text = " ← ".join([*chain, name])
+    chain_text = " → ".join([*chain, name])
     lang = referrer.language_code or "en"
     clean_xp = int(xp) if xp.is_integer() else round(xp, 2)
     buttons = [[
