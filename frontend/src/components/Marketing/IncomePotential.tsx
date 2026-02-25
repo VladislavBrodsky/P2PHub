@@ -328,7 +328,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
                                     <TrendingUp className="w-4 h-4 text-emerald-500" />
-                                    <span className="text-label font-bold uppercase tracking-widest text-emerald-500">{t('income.network.title')}</span>
+                                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">{t('income.network.title')}</span>
                                 </div>
                                 <button
                                     onClick={() => setIsStrategyUnlocked(false)}

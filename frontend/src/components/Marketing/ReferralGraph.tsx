@@ -432,7 +432,7 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                     >
 
                         {/* ── VIRAL CORE HUB (USER) ── */}
-                        <div className="absolute inset-x-0 top-6 sm:top-8 flex justify-center pointer-events-none z-10">
+                        <div className="absolute inset-x-0 top-[35%] -translate-y-1/2 flex justify-center pointer-events-none z-10">
                             <div className="relative pointer-events-auto">
                                 {/* Pulsing Outer Glow */}
                                 <m.div

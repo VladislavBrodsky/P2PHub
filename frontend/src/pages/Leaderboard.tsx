@@ -8,9 +8,9 @@ import { LazyImage } from '../components/ui/LazyImage';
 
 import { apiClient } from '../api/client';
 import { getApiUrl } from '../utils/api';
-import { useState } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
-import { Trophy, Shield, Star, Crown, User } from 'lucide-react';
+import { Trophy, Shield, Star, Crown } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { ProPlusBadge } from '../components/ui/ProPlusBadge';
 import { useUser } from '../context/UserContext';
@@ -33,6 +33,119 @@ interface UserStats {
     level: number;
     referrals: number;
 }
+
+// #comment Moved outside to prevent redeclaring on every render
+const getLeague = (level: number): LeagueTier => {
+    if (!level || typeof level !== 'number' || level < 3) return 'wooden';
+    if (level < 6) return 'silver';
+    if (level < 11) return 'metal';
+    if (level < 21) return 'gold';
+    return 'platinum';
+};
+
+const PartnerRow = memo(({ user, index, onModalOpen, t }: {
+    user: LeaderboardUser;
+    index: number;
+    onModalOpen: () => void;
+    t: any;
+}) => {
+    const { selection } = useHaptic();
+
+    return (
+        <motion.button
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: Math.min(index * 0.04, 0.6), type: 'spring', stiffness: 400, damping: 30 }}
+            onClick={() => {
+                selection();
+                onModalOpen();
+            }}
+            className="w-full flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
+        >
+            {/* Background Glow for Top 3 */}
+            {index < 3 && (
+                <div className={`absolute inset-0 opacity-5 pointer-events-none ${index === 0 ? 'bg-amber-500' : index === 1 ? 'bg-slate-400' : 'bg-orange-400'
+                    }`} />
+            )}
+
+            <div className="flex items-center gap-3 relative z-10">
+                <div className="relative">
+                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-bold shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
+                        index === 1 ? 'bg-slate-300 text-slate-700' :
+                            index === 2 ? 'bg-orange-300 text-orange-800' :
+                                'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
+                        }`}>
+                        {index < 3 ? (
+                            index === 0 ? <Trophy size={14} /> :
+                                index === 1 ? <Shield size={14} /> :
+                                    <Star size={14} />
+                        ) : (
+                            <span>#{index + 1}</span>
+                        )}
+                    </div>
+                    {index < 3 && (
+                        <div className="absolute -top-1 -right-1">
+                            <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20" />
+                            <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                    <div className="relative">
+                        <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
+                            } bg-slate-200 dark:bg-slate-700 aspect-square`}>
+                            {(user.photo_file_id || user.photo_url) ? (
+                                <LazyImage
+                                    src={user.photo_file_id
+                                        ? `${getApiUrl()}/api/partner/photo/${user.photo_file_id}`
+                                        : user.photo_url!
+                                    }
+                                    alt={user.username || user.first_name}
+                                    className="h-full w-full object-cover"
+                                />
+                            ) : (
+                                <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
+                                    } text-white font-bold text-lg shadow-inner`}>
+                                    {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
+                                </div>
+                            )}
+                        </div>
+                        {(user.subscription_plan || '').includes('PLUS') && (
+                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                                <ProPlusBadge size="xs" />
+                            </div>
+                        )}
+                    </div>
+                    <div className="text-left">
+                        <div className="flex items-center gap-1.5">
+                            <p className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                            <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
+                                <span>{t('common:lvl')} {user.level}</span>
+                                <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
+                                <div className="flex items-center gap-1 text-blue-500/70">
+                                    <Crown size={8} className="stroke-3" />
+                                    <span className="font-bold">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col items-end gap-0.5 relative z-10">
+                <span className="text-xs font-bold text-slate-900 dark:text-white font-mono tracking-tighter">
+                    {Math.floor(user.xp).toLocaleString()}
+                </span>
+                <span className="text-label font-bold uppercase tracking-widest text-emerald-500/80 leading-none">
+                    {t('leaderboard.xp')}
+                </span>
+            </div>
+        </motion.button>
+    );
+});
 
 export default function LeaderboardPage() {
     const { t } = useTranslation(['social', 'common']);
@@ -62,18 +175,14 @@ export default function LeaderboardPage() {
 
     const isLoading = isLeaderboardLoading || isStatsLoading;
 
-    // #comment Rebalanced league thresholds to ensure top partners (4k+ XP) look prestigious.
-    // Level 1-2: Wooden, Level 3-5: Silver, Level 6-10: Metal, Level 11-20: Gold, 21+: Platinum
-    const getLeague = (level: number): LeagueTier => {
-        if (!level || typeof level !== 'number' || level < 3) return 'wooden';
-        if (level < 6) return 'silver';
-        if (level < 11) return 'metal';
-        if (level < 21) return 'gold';
-        return 'platinum';
-    };
+    // #comment Memoized displays slice to avoid per-render computation
+    const visiblePartners = useMemo(() => {
+        return leaderboard.slice(0, showAll ? 50 : 10);
+    }, [leaderboard, showAll]);
 
-    const displayCount = showAll ? 50 : 10;
-    const visiblePartners = leaderboard.slice(0, displayCount);
+    const userLeague = useMemo(() => {
+        return userStats ? getLeague(userStats.level) : 'wooden';
+    }, [userStats]);
 
     if (isLoading) return <div className="p-4"><ListSkeleton /></div>;
 
@@ -130,7 +239,7 @@ export default function LeaderboardPage() {
             {userStats && (
                 <div className="mb-8">
                     <LeagueCard
-                        league={getLeague(userStats.level)}
+                        league={userLeague}
                         rank={userStats.rank}
                         score={userStats.xp}
                         referrals={userStats.referrals}
@@ -143,101 +252,14 @@ export default function LeaderboardPage() {
                 title={t('leaderboard.top_partners')}
             >
                 <div className="space-y-2">
-                    {visiblePartners.map((user: LeaderboardUser, index: number) => (
-                        <motion.button
+                    {visiblePartners.map((user, index) => (
+                        <PartnerRow
                             key={user.id}
-                            initial={{ opacity: 0, y: 16 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: Math.min(index * 0.04, 0.6), type: 'spring', stiffness: 400, damping: 30 }}
-                            onClick={() => {
-                                selection();
-                                setIsModalOpen(true);
-                            }}
-                            className="w-full flex items-center justify-between rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 p-2.5 shadow-premium transition-all active:scale-[0.98] group relative overflow-hidden"
-                        >
-                            {/* Background Glow for Top 3 */}
-                            {index < 3 && (
-                                <div className={`absolute inset-0 opacity-5 pointer-events-none ${index === 0 ? 'bg-amber-500' : index === 1 ? 'bg-slate-400' : 'bg-orange-400'
-                                    }`} />
-                            )}
-
-                            <div className="flex items-center gap-3 relative z-10">
-                                <div className="relative">
-                                    {/* #comment Switched to rounded-full for the rank circle to satisfy the "perfect circle" aesthetic requested. */}
-                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-bold shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
-                                        index === 1 ? 'bg-slate-300 text-slate-700' :
-                                            index === 2 ? 'bg-orange-300 text-orange-800' :
-                                                'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
-                                        }`}>
-                                        {index < 3 ? (
-                                            index === 0 ? <Trophy size={14} /> :
-                                                index === 1 ? <Shield size={14} /> :
-                                                    <Star size={14} />
-                                        ) : (
-                                            <span>#{index + 1}</span>
-                                        )}
-                                    </div>
-                                    {index < 3 && (
-                                        <div className="absolute -top-1 -right-1">
-                                            <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20" />
-                                            <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="flex items-center gap-2.5">
-                                    <div className="relative">
-                                        <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
-                                            } bg-slate-200 dark:bg-slate-700 aspect-square`}>
-                                            {(user.photo_file_id || user.photo_url) ? (
-                                                <LazyImage
-                                                    src={user.photo_file_id
-                                                        ? `${getApiUrl()}/api/partner/photo/${user.photo_file_id}`
-                                                        : user.photo_url!
-                                                    }
-                                                    alt={user.username || user.first_name}
-                                                    className="h-full w-full object-cover"
-                                                />
-                                            ) : (
-                                                <div className={`h-full w-full flex items-center justify-center bg-linear-to-br ${['from-blue-500 to-indigo-500', 'from-emerald-400 to-teal-500', 'from-violet-500 to-fuchsia-500', 'from-rose-400 to-red-500', 'from-amber-400 to-orange-500'][user.id % 5]
-                                                    } text-white font-bold text-lg shadow-inner`}>
-                                                    {(user.first_name || user.username || '?').charAt(0).toUpperCase()}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {(user.subscription_plan || '').includes('PLUS') && (
-                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
-                                                <ProPlusBadge size="xs" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="text-left">
-                                        <div className="flex items-center gap-1.5">
-                                            <p className="text-xs font-bold text-slate-900 dark:text-white line-clamp-1 leading-tight">{user.first_name || user.username}</p>
-                                        </div>
-                                        <div className="flex items-center gap-1.5 flex-wrap">
-                                            <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
-                                                <span>{t('common:lvl')} {user.level}</span>
-                                                <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-                                                <div className="flex items-center gap-1 text-blue-500/70">
-                                                    <Crown size={8} className="stroke-3" />
-                                                    <span className="font-bold">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="flex flex-col items-end gap-0.5 relative z-10">
-                                <span className="text-xs font-bold text-slate-900 dark:text-white font-mono tracking-tighter">
-                                    {Math.floor(user.xp).toLocaleString()}
-                                </span>
-                                <span className="text-label font-bold uppercase tracking-widest text-emerald-500/80 leading-none">
-                                    {t('leaderboard.xp')}
-                                </span>
-                            </div>
-                        </motion.button>
+                            user={user}
+                            index={index}
+                            onModalOpen={() => setIsModalOpen(true)}
+                            t={t}
+                        />
                     ))}
 
                     {/* Show All toggle button */}
