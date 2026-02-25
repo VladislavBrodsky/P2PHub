@@ -22,7 +22,7 @@ import { USDTLogo, TONLogo } from '../ui/CryptoIcons';
 export const PartnerDashboard = () => {
     const { t } = useTranslation(['social', 'common']);
     const { notification, selection } = useHaptic();
-    const { setFooterVisible } = useUI();
+    const { setFooterVisible, setHeaderVisible } = useUI();
     const { lowPowerMode } = usePerformance();
     const { user, updateUser, refreshUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
@@ -39,13 +39,17 @@ export const PartnerDashboard = () => {
         }
     }, []);
 
-    // #comment: Manage app footer visibility when explorer is open to prevent UI overlap
+    // #comment: Manage app footer/header visibility when explorer is open to prevent UI overlap
     React.useEffect(() => {
         if (isExplorerOpen) {
             setFooterVisible(false);
-            return () => setFooterVisible(true);
+            setHeaderVisible(false);
+            return () => {
+                setFooterVisible(true);
+                setHeaderVisible(true);
+            };
         }
-    }, [isExplorerOpen, setFooterVisible]);
+    }, [isExplorerOpen, setFooterVisible, setHeaderVisible]);
 
     // Show Pro Welcome if user is pro but hasn't seen the notification
     React.useEffect(() => {
