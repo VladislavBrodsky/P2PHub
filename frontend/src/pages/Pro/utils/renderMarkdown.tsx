@@ -24,14 +24,51 @@ export const renderMarkdown = (text: string, isInline = false) => {
     }
 
     // Full mode: Split into blocks for proper paragraph/header handling
-    // Split by ANY newline sequence to handle single-spaced content better
-    const blocks = sanitizedText.trim().split(/\n+/);
+    const rawBlocks = sanitizedText.trim().split(/\n\n+/);
 
     return (
-        <div className="space-y-3 text-[13px] text-slate-600 dark:text-slate-400">
-            {blocks.map((block, index) => {
+        <div className="space-y-4 text-[13px] text-slate-600 dark:text-slate-400">
+            {rawBlocks.map((block, index) => {
                 const trimmed = block.trim();
                 if (!trimmed) return null;
+
+                // Callouts (GitHub style: > [!IMPORTAT])
+                if (trimmed.startsWith('> [!')) {
+                    const typeMatch = trimmed.match(/> \[!(IMPORTANT|WARNING|TIP|NOTE|CAUTION)\]/i);
+                    const type = typeMatch ? typeMatch[1].toUpperCase() : 'NOTE';
+                    const content = trimmed.replace(/> \[!(.*?)\]\n?/i, '').replace(/^>\s*/gm, '').trim();
+
+                    const colors: any = {
+                        IMPORTANT: 'border-indigo-500 bg-indigo-500/5 text-indigo-700 dark:text-indigo-300',
+                        WARNING: 'border-amber-500 bg-amber-500/5 text-amber-700 dark:text-amber-300',
+                        TIP: 'border-emerald-500 bg-emerald-500/5 text-emerald-700 dark:text-emerald-300',
+                        NOTE: 'border-blue-500 bg-blue-500/5 text-blue-700 dark:text-blue-300',
+                        CAUTION: 'border-rose-500 bg-rose-500/5 text-rose-700 dark:text-rose-300'
+                    };
+
+                    const style = colors[type] || colors.NOTE;
+
+                    return (
+                        <div key={`callout-${index}`} className={`p-4 rounded-xl border-l-4 ${style} space-y-2 my-4`}>
+                            <div className="flex items-center gap-2 font-bold uppercase tracking-widest text-[10px]">
+                                <span>{type}</span>
+                            </div>
+                            <div className="font-medium leading-relaxed" dangerouslySetInnerHTML={{ __html: processMarkdown(content) }} />
+                        </div>
+                    );
+                }
+
+                // Standard Blockquotes
+                if (trimmed.startsWith('> ')) {
+                    const content = trimmed.replace(/^>\s*/gm, '').trim();
+                    return (
+                        <blockquote
+                            key={`quote-${index}`}
+                            className="border-l-4 border-slate-200 dark:border-white/10 pl-4 py-1 italic text-slate-500 dark:text-slate-400"
+                            dangerouslySetInnerHTML={{ __html: processMarkdown(content) }}
+                        />
+                    );
+                }
 
                 // Headers
                 if (trimmed.startsWith('### ')) {
@@ -54,15 +91,15 @@ export const renderMarkdown = (text: string, isInline = false) => {
                 }
                 if (trimmed.startsWith('# ')) {
                     return (
-                        <h2
+                        <h1
                             key={`h1-${index}`}
-                            className="text-lg font-bold mt-5 mb-2 text-slate-900 dark:text-white leading-tight"
+                            className="text-xl font-bold mt-6 mb-3 text-slate-900 dark:text-white leading-tight border-b border-slate-100 dark:border-white/5 pb-2"
                             dangerouslySetInnerHTML={{ __html: processMarkdown(trimmed.replace(/^#\s+/, '')) }}
                         />
                     );
                 }
 
-                // Standard Paragraph
+                // Standard Paragraph (can contain multi-line text if not separated by \n\n)
                 return (
                     <p
                         key={`p-${index}`}
