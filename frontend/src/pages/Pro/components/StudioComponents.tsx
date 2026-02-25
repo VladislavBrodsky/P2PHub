@@ -345,18 +345,18 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
             className="relative overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
         >
             <div className="circuit-decor opacity-10" />
-            <div className="relative p-6 sm:p-10 text-center space-y-6">
+            <div className="relative p-4 sm:p-6 text-center space-y-4">
                 {isGenerating ? (
-                    <div className="py-4 flex flex-col items-center justify-center space-y-8">
-                        <div className="relative w-28 h-28 flex items-center justify-center scanning-glow rounded-3xl">
-                            <div className="absolute inset-0 bg-purple-500/5 backdrop-blur-3xl rounded-3xl border border-purple-500/20" />
+                    <div className="py-2 flex flex-col items-center justify-center space-y-6">
+                        <div className="relative w-20 h-20 flex items-center justify-center scanning-glow rounded-2xl">
+                            <div className="absolute inset-0 bg-purple-500/5 backdrop-blur-3xl rounded-2xl border border-purple-500/20" />
                             <motion.div
-                                className="absolute inset-0 rounded-3xl border-2 border-purple-500/30"
+                                className="absolute inset-0 rounded-2xl border-2 border-purple-500/30"
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                             />
-                            <div className="relative z-10 w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center border border-purple-500/20 pulse-ring-purple">
-                                <Bot className="w-8 h-8 text-purple-500" />
+                            <div className="relative z-10 w-12 h-12 bg-white dark:bg-slate-800 rounded-xl shadow-xl flex items-center justify-center border border-purple-500/20 pulse-ring-purple">
+                                <Bot className="w-6 h-6 text-purple-500" />
                             </div>
                         </div>
 
@@ -372,8 +372,8 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                             <div className="bg-slate-50 dark:bg-black/20 backdrop-blur-xl rounded-2xl p-5 border border-slate-200 dark:border-white/10 shadow-premium-sm">
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-[28px] font-bold text-slate-900 dark:text-white leading-none tabular-nums">
-                                            {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-base opacity-30">%</span>
+                                        <span className="text-[24px] font-bold text-slate-900 dark:text-white leading-none tabular-nums">
+                                            {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-sm opacity-30">%</span>
                                         </span>
                                         <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.studio.processing_eta', { count: countdown })}</span>
                                     </div>
