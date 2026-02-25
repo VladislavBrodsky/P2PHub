@@ -558,7 +558,7 @@ const BlogDetail = ({
                 />
             </div>
 
-            <div className="sticky top-0 w-full pt-[138px] pb-4 px-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
+            <div className="sticky top-0 w-full pt-[118px] pb-4 px-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
                 <div className="flex items-center justify-between w-full max-w-lg mx-auto">
                     <button
                         onClick={onBack}
