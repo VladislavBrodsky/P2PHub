@@ -312,7 +312,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 }}
                                 className={`w-full h-12 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
                             >
-                                <Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : lowPowerMode ? '' : 'animate-pulse'} />
+                                <Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : 'animate-pulse'} />
                                 {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.goto_studio') : t('pro_dashboard.analytics.resonance.action_btn')}
                             </button>
                             <p className="text-center text-label font-bold text-slate-400 uppercase tracking-widest mt-3 opacity-60">

@@ -23,7 +23,6 @@ export const PartnerDashboard = () => {
     const { t } = useTranslation(['social', 'common']);
     const { notification, selection } = useHaptic();
     const { setFooterVisible } = useUI();
-    const { lowPowerMode } = usePerformance();
     const { user, updateUser, refreshUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
