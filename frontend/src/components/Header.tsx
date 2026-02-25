@@ -21,10 +21,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
     return (
         <header
-            className={cn(
-                "fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none",
-                lowPowerMode && "low-power-mode"
-            )}
+            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{
                 paddingTop: 'calc(var(--spacing-safe-top, 32px) + 52px)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
@@ -50,7 +47,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     <button
                         className={cn(
                             "flex items-center gap-1.5 sm:gap-2 rounded-2xl border border-border-glass bg-bg-glass px-2 sm:px-2.5 py-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 mr-1 sm:mr-0",
-                            !lowPowerMode && "animate-header-pulse"
+                            "animate-header-pulse"
                         )}
                         aria-label="User stats"
                     >
@@ -73,6 +70,6 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                     </button>
                 </div>
             </div>
-        </header>
+        </header >
     );
 };

@@ -561,14 +561,29 @@ export const ProDashboardModals = ({
                                                                                     setTgChannels(nch);
                                                                                 }}
                                                                                 placeholder="@channel_username"
-                                                                                className={`w-full h-11 bg-white dark:bg-black/20 border rounded-xl pl-12 pr-14 text-label font-mono outline-none transition-all dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10 ${testSt === 'active' ? 'border-emerald-500/50 ring-2 ring-emerald-500/5' : 'border-slate-200 dark:border-white/10 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5'}`}
+                                                                                className={`w-full h-11 bg-white dark:bg-black/20 border rounded-xl pl-12 pr-24 text-label font-mono outline-none transition-all dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10 ${testSt === 'active' ? 'border-emerald-500/50 ring-2 ring-emerald-500/5' : 'border-slate-200 dark:border-white/10 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5'}`}
                                                                             />
-                                                                            {testSt && (
-                                                                                <div className={`absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider ${testSt === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
-                                                                                    <div className={`w-1.5 h-1.5 rounded-full ${testSt === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-                                                                                    {testSt === 'active' ? 'Live' : 'Error'}
-                                                                                </div>
-                                                                            )}
+                                                                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                                                                                {val && (
+                                                                                    <button
+                                                                                        onClick={() => {
+                                                                                            const nch = [...tgChannels];
+                                                                                            nch[idx] = '';
+                                                                                            setTgChannels(nch);
+                                                                                            selection();
+                                                                                        }}
+                                                                                        className="p-1.5 text-slate-300 hover:text-rose-500 transition-colors"
+                                                                                    >
+                                                                                        <Trash2 size={14} />
+                                                                                    </button>
+                                                                                )}
+                                                                                {testSt && (
+                                                                                    <div className={`flex items-center gap-1.5 px-2 py-1 rounded-lg text-[9px] font-bold uppercase tracking-wider ${testSt === 'active' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}>
+                                                                                        <div className={`w-1.5 h-1.5 rounded-full ${testSt === 'active' ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
+                                                                                        {testSt === 'active' ? 'Live' : 'Err'}
+                                                                                    </div>
+                                                                                )}
+                                                                            </div>
                                                                         </div>
                                                                     );
                                                                 })}

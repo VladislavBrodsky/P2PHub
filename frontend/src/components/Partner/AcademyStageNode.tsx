@@ -16,7 +16,6 @@ interface AcademyStageNodeProps {
 
 export const AcademyStageNode = memo(({ stage, status, onClick, index }: AcademyStageNodeProps) => {
     const { t } = useTranslation(['academy', 'common']);
-    const { lowPowerMode } = usePerformance();
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
@@ -43,8 +42,7 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full h-[85px]",
-                isLocked && "cursor-not-allowed opacity-60",
-                lowPowerMode && "low-power-mode"
+                isLocked && "cursor-not-allowed opacity-60"
             )}
         >
             {/* Connecting Line (Spine of the roadmap) */}
@@ -52,7 +50,7 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
                 <div className={cn(
                     "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
                 )}>
-                    {(isCompleted || isCurrent) && !lowPowerMode && (
+                    {(isCompleted || isCurrent) && (
                         <div className="absolute inset-x-0 w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-academy-flow" />
                     )}
                 </div>

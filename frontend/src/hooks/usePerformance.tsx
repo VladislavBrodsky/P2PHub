@@ -33,8 +33,16 @@ export const PerformanceProvider: React.FC<{ children: React.ReactNode }> = ({ c
         const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
         const handleChange = (e: MediaQueryListEvent) => setLowPowerMode(e.matches);
         mediaQuery.addEventListener('change', handleChange);
+
+        // Apply/Remove global class for CSS targeting
+        if (lowPowerMode) {
+            document.documentElement.classList.add('low-power-mode');
+        } else {
+            document.documentElement.classList.remove('low-power-mode');
+        }
+
         return () => mediaQuery.removeEventListener('change', handleChange);
-    }, []);
+    }, [lowPowerMode]);
 
     return (
         <PerformanceContext.Provider value={{ tick, lowPowerMode, setLowPowerMode }}>

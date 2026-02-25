@@ -13,13 +13,12 @@ interface LevelUpModalProps {
 
 export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
     const { t } = useTranslation('social');
-    const { lowPowerMode } = usePerformance();
     useTMALock(isOpen);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className={`fixed inset-0 z-100 flex items-center justify-center p-6 sm:p-12 overflow-hidden ${lowPowerMode ? 'low-power-mode' : ''}`}>
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-6 sm:p-12 overflow-hidden">
                     <Confetti />
 
                     {/* Immersive Backdrop */}
@@ -72,13 +71,11 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                                     {t('referral.levelup.rank')}
                                     <span className="text-yellow-500 relative ml-2">
                                         {level}
-                                        {!lowPowerMode && (
-                                            <motion.div
-                                                animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
-                                                transition={{ duration: 2, repeat: Infinity }}
-                                                className="absolute inset-0 bg-yellow-400 blur-xl rounded-full -z-10"
-                                            />
-                                        )}
+                                        <motion.div
+                                            animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                            className="absolute inset-0 bg-yellow-400 blur-xl rounded-full -z-10"
+                                        />
                                     </span>
                                 </h3>
                             </motion.div>

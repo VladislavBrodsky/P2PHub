@@ -489,8 +489,8 @@ export const ProDashboard = () => {
                                 {t('pro_dashboard.studio_header_title')} <span className="vibing-crystal-text drop-shadow-sm">{t('pro_dashboard.studio_header_highlight')}</span>
                             </h1>
                             <div className="flex items-center justify-center gap-1.5 px-0.5">
-                                <div className={`w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] ${lowPowerMode ? '' : 'animate-pulse'}`} />
-                                <Zap size={10} className={`text-indigo-500 ${lowPowerMode ? '' : 'animate-pulse'}`} />
+                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                                <Zap size={10} className="text-indigo-500 animate-pulse" />
                                 <span className="text-label font-bold text-text-primary tabular-nums leading-none tracking-tight">
                                     {status?.pro_tokens ?? 0}
                                 </span>

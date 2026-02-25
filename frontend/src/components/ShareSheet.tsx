@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Check, Send, Sparkles } from 'lucide-react';
+import { X, Copy, Check, Send, Sparkles, Loader2 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useTMALock } from '../hooks/useTMALock';
 import { apiClient } from '../api/client';
+
+import { socialLogos } from '../pages/Pro/utils/socialLogos';
 
 interface ShareSheetProps {
     isOpen: boolean;
@@ -146,38 +148,37 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                                 disabled={isSharing}
                                 className="flex flex-col items-center gap-2 group disabled:opacity-50"
                             >
-                                <div className="w-14 h-14 rounded-2xl bg-[#0088cc]/10 flex items-center justify-center group-active:scale-95 transition-transform relative">
+                                <div className="w-14 h-14 rounded-2xl bg-sky-500/10 dark:bg-sky-500/5 flex items-center justify-center group-active:scale-95 transition-transform relative overflow-hidden">
                                     {isSharing ? (
-                                        <div className="w-5 h-5 border-2 border-[#0088cc] border-t-transparent rounded-full animate-spin" />
+                                        <Loader2 className="w-6 h-6 text-sky-500 animate-spin" />
                                     ) : (
-                                        <Send className="w-6 h-6 text-[#0088cc] -rotate-45 translate-x-1" />
+                                        <img src={socialLogos.telegram} alt="Telegram" className="w-8 h-8 object-contain" />
                                     )}
                                 </div>
-                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">Telegram</span>
+                                <span className="text-xs font-bold uppercase tracking-tighter text-slate-500 dark:text-slate-400">Telegram</span>
                             </button>
 
                             <button onClick={() => handleShare('whatsapp')} className="flex flex-col items-center gap-2 group">
-                                <div className="w-14 h-14 rounded-2xl bg-[#25D366]/10 flex items-center justify-center group-active:scale-95 transition-transform">
-                                    <div className="w-6 h-6 bg-[#25D366] rounded-full" />
-                                    {/* Using div as placeholder icon if WhatsApp icon not available in lucide, or import specifically */}
-                                    {/* Actually Lucide doesn't have brand icons usually. Let's use generic Share for now if needed or custom SVG */}
-                                    {/* Reverting to generic icons for brands to avoid errors if not in lucide */}
+                                <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/5 flex items-center justify-center group-active:scale-95 transition-transform overflow-hidden">
+                                    <img src={socialLogos.whatsapp} alt="WhatsApp" className="w-8 h-8 object-contain" />
                                 </div>
-                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">WhatsApp</span>
+                                <span className="text-xs font-bold uppercase tracking-tighter text-slate-500 dark:text-slate-400">WhatsApp</span>
                             </button>
 
                             <button onClick={() => handleShare('x')} className="flex flex-col items-center gap-2 group">
-                                <div className="w-14 h-14 rounded-2xl bg-black/5 dark:bg-white/10 flex items-center justify-center group-active:scale-95 transition-transform">
-                                    <span className="text-xl font-bold dark:text-white">𝕏</span>
+                                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center group-active:scale-95 transition-transform overflow-hidden">
+                                    <img src={socialLogos.x} alt="X" className="w-6 h-6 object-contain dark:invert" />
                                 </div>
-                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">X</span>
+                                <span className="text-xs font-bold uppercase tracking-tighter text-slate-500 dark:text-slate-400">X</span>
                             </button>
 
                             <button onClick={() => handleShare()} className="flex flex-col items-center gap-2 group">
-                                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-active:scale-95 transition-transform">
-                                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full shadow-[6px_0_0_currentColor,-6px_0_0_currentColor]" />
+                                <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-white/5 flex items-center justify-center group-active:scale-95 transition-transform">
+                                    <div className="flex gap-1">
+                                        {[1, 2, 3].map(i => <div key={i} className="w-1.5 h-1.5 rounded-full bg-slate-400/60" />)}
+                                    </div>
                                 </div>
-                                <span className="text-xs font-medium text-slate-600 dark:text-slate-400">More</span>
+                                <span className="text-xs font-bold uppercase tracking-tighter text-slate-500 dark:text-slate-400">More</span>
                             </button>
                         </div>
 

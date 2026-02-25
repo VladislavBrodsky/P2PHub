@@ -258,7 +258,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                         {t('pro_dashboard.analytics.resonance.title')}
                                     </h3>
                                     <div className="flex items-center gap-1.5 mt-1">
-                                        <div className={`w-1.5 h-1.5 rounded-full ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'} ${lowPowerMode ? '' : 'animate-pulse'}`} />
+                                        <div className={`w-1.5 h-1.5 rounded-full ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'} animate-pulse`} />
                                         <span className={`text-label font-bold ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-500' : 'text-emerald-500'} uppercase tracking-widest leading-none`}>
                                             {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.gathering_data') : t('pro_dashboard.analytics.resonance.status')}
                                         </span>

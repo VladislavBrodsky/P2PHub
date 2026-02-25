@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
-import { AnimatePresence, LazyMotion, domMax, m } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domMax, m, MotionConfig } from 'framer-motion';
 import { Layout } from './components/Layout/Layout';
 // #comment: Reorganized imports and lazy declarations to satisfy Fast Refresh (react-refresh/only-export-components).
 // Constants and non-component exports (like prefetchPages) were moved to separate utility files.
@@ -388,7 +388,7 @@ function App() {
 
     return (
         <UIProvider>
-            <LazyMotion features={domMax}>
+            <MotionConfig reducedMotion="user">
                 <AnimatePresence>
                     {!isComplete && (
                         <m.div
@@ -406,38 +406,42 @@ function App() {
                 <div className={!isComplete ? 'hidden' : 'block h-full relative'}>
                     <NotificationOverlay />
 
-                    <AnimatePresence mode="wait">
-                        {showOnboarding ? (
-                            <m.div
-                                key="onboarding-overlay"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="fixed inset-0 z-200"
-                            >
-                                <Suspense fallback={<div className="fixed inset-0 bg-slate-950" />}>
-                                    <OnboardingStory
-                                        onComplete={() => {
-                                            setShowOnboarding(false);
-                                            localStorage.setItem('p2p_onboarded', 'true');
-                                        }}
-                                    />
-                                </Suspense>
-                            </m.div>
-                        ) : (
-                            <m.div
-                                key="app-content-root"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.5 }}
-                                className="h-full"
-                            >
-                                <AppContent onReady={complete} showOnboarding={false} />
-                            </m.div>
-                        )}
-                    </AnimatePresence>
+                    <LazyMotion features={domMax}>
+                        <m.div className="h-full">
+                            <AnimatePresence mode="wait">
+                                {showOnboarding ? (
+                                    <m.div
+                                        key="onboarding-overlay"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="fixed inset-0 z-200"
+                                    >
+                                        <Suspense fallback={<div className="fixed inset-0 bg-slate-950" />}>
+                                            <OnboardingStory
+                                                onComplete={() => {
+                                                    setShowOnboarding(false);
+                                                    localStorage.setItem('p2p_onboarded', 'true');
+                                                }}
+                                            />
+                                        </Suspense>
+                                    </m.div>
+                                ) : (
+                                    <m.div
+                                        key="app-content-root"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="h-full"
+                                    >
+                                        <AppContent onReady={complete} showOnboarding={false} />
+                                    </m.div>
+                                )}
+                            </AnimatePresence>
+                        </m.div>
+                    </LazyMotion>
                 </div>
-            </LazyMotion>
+            </MotionConfig>
         </UIProvider>
     );
 }

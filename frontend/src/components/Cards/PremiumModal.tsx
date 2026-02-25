@@ -13,13 +13,12 @@ interface PremiumModalProps {
 
 export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) {
     const { t } = useTranslation(['cards', 'common']);
-    const { lowPowerMode } = usePerformance();
     useTMALock(isOpen);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className={cn("fixed inset-0 z-100 flex items-center justify-center p-6", lowPowerMode && "low-power-mode")}>
+                <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
                     {/* Overlay */}
                     <motion.div
                         initial={{ opacity: 0 }}

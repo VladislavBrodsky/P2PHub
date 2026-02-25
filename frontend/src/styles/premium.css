@@ -443,15 +443,43 @@
   }
 }
 
-.pulse-ring-indigo {
+.pulse-ring-indigo,
+.pulse-ring-purple,
+.pulse-ring-blue,
+.pulse-ring-emerald,
+.pulse-ring-amber {
   position: relative;
 }
 
 .pulse-ring-indigo::before {
+  border-color: #6366f1;
+}
+
+.pulse-ring-purple::before {
+  border-color: #a855f7;
+}
+
+.pulse-ring-blue::before {
+  border-color: #3b82f6;
+}
+
+.pulse-ring-emerald::before {
+  border-color: #10b981;
+}
+
+.pulse-ring-amber::before {
+  border-color: #f59e0b;
+}
+
+.pulse-ring-indigo::before,
+.pulse-ring-purple::before,
+.pulse-ring-blue::before,
+.pulse-ring-emerald::before,
+.pulse-ring-amber::before {
   content: "";
   position: absolute;
   inset: -10px;
-  border: 2px solid #6366f1;
+  border: 2px solid;
   border-radius: inherit;
   animation: pulse-ring 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
 }
@@ -793,8 +821,57 @@
 .low-power-mode .animate-academy-flow,
 .low-power-mode .animate-academy-pulse,
 .low-power-mode .animate-slow-rotate,
-.low-power-mode .animate-header-pulse {
+.low-power-mode .animate-header-pulse,
+.low-power-mode .animate-energy-flow,
+.low-power-mode .animate-rhythmic-pulse,
+.low-power-mode .animate-vibe-shift,
+.low-power-mode .animate-slow-spin,
+.low-power-mode .animate-vibing-gradient,
+.low-power-mode .animate-text-shimmer,
+.low-power-mode .animate-shimmer-slide,
+.low-power-mode .animate-shimmer-slow,
+.low-power-mode .animate-liquid,
+.low-power-mode .animate-liquid-fast,
+.low-power-mode .progress-bar-liquid,
+.low-power-mode .xp-acid-badge,
+.low-power-mode .emerald-liquid-gradient,
+.low-power-mode .acid-blue-liquid,
+.low-power-mode .liquid-blue-premium,
+.low-power-mode .vibing-blue-animated,
+.low-power-mode .branding-liquid-gradient,
+.low-power-mode .vibing-crystal-text,
+.low-power-mode .liquid-red-premium,
+.low-power-mode .vibing-emerald-animated,
+.low-power-mode .vibing-yellow-animated,
+.low-power-mode .vibing-crystal-purple-animated,
+.low-power-mode .vibing-yellow-text,
+.low-power-mode .vibing-purple-text,
+.low-power-mode .holographic-shine::after,
+.low-power-mode .holographic-card::after,
+.low-power-mode .scanning-glow::after,
+.low-power-mode .pulse-ring-indigo::before,
+.low-power-mode .pulse-ring-purple::before,
+.low-power-mode .pulse-ring-blue::before,
+.low-power-mode .pulse-ring-emerald::before,
+.low-power-mode .pulse-ring-amber::before,
+.low-power-mode .animate-soft-breath,
+.low-power-mode .animate-pulse-slow,
+.low-power-mode .animate-pulse,
+.low-power-mode .animate-spin,
+.low-power-mode .animate-bounce,
+.low-power-mode .animate-ping,
+.low-power-mode .acid-yellow-gradient {
   animation-play-state: paused !important;
+  background-size: 100% 100% !important;
+}
+
+/* Specific reset for elements that look bad when paused at scale */
+.low-power-mode .vibing-crystal-text,
+.low-power-mode .vibing-yellow-text,
+.low-power-mode .vibing-purple-text,
+.low-power-mode .branding-liquid-gradient {
+  background-size: 200% auto !important;
+  background-position: 0% 50% !important;
 }
 
 .low-power-mode .animate-academy-pulse {
