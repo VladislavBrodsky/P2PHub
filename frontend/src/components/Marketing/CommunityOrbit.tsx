@@ -236,49 +236,67 @@ const FractalProfits = memo(() => {
     const { lowPowerMode } = usePerformance();
     const count = lowPowerMode ? 4 : 12;
 
+    // #comment: Memoizing profit items ensures that animation targets (targetX, targetY) 
+    // remain stable across renders, preventing the "stuck in center" glitch.
+    const profitItems = React.useMemo(() => {
+        return [...Array(count)].map((_, i) => {
+            const isTon = i % 2 !== 0;
+            const amount = isTon
+                ? Math.floor(Math.random() * 33) + 1
+                : Math.floor(Math.random() * 55) + 5;
+
+            const angle = (Math.random() * 360) * (Math.PI / 180);
+            const distance = 120 + Math.random() * 70;
+            const targetX = Math.cos(angle) * distance;
+            const targetY = Math.sin(angle) * distance;
+
+            return {
+                id: i,
+                isTon,
+                amount,
+                targetX,
+                targetY,
+                duration: 8 + Math.random() * 8,
+                delay: i * 0.8
+            };
+        });
+    }, [count]);
+
     return (
         <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
-            {[...Array(count)].map((_, i) => {
-                const isTon = i % 2 !== 0;
-                const amount = isTon
-                    ? Math.floor(Math.random() * 33) + 1
-                    : Math.floor(Math.random() * 55) + 5;
-
-                const angle = (Math.random() * 360) * (Math.PI / 180);
-                // #comment: Tightened profit radius to prevent UI overlap in hero section.
-                const distance = 110 + Math.random() * 60;
-                const targetX = Math.cos(angle) * distance;
-                const targetY = Math.sin(angle) * distance;
-
-                return (
-                    <m.div
-                        key={i}
-                        initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
-                        animate={{
-                            scale: [0, 1.2, 0.9],
-                            opacity: [0, 1, 0],
-                            x: targetX,
-                            y: targetY,
-                        }}
-                        transition={{
-                            duration: 10 + Math.random() * 10,
-                            repeat: Infinity,
-                            delay: i * 1.5,
-                            ease: "easeOut"
-                        }}
-                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 whitespace-nowrap"
-                    >
-                        <div className={`flex items-center justify-center w-5 h-5 rounded-full ${isTon ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]'}`}>
-                            <div className="p-1">
-                                <CryptoIcon name={isTon ? 'TON' : 'USDT'} />
-                            </div>
+            {profitItems.map((item) => (
+                <m.div
+                    key={item.id}
+                    initial={{ scale: 0, opacity: 0, x: 0, y: 0 }}
+                    animate={{
+                        scale: [0, 1, 0.8, 0],
+                        opacity: [0, 1, 0.8, 0],
+                        x: [0, item.targetX],
+                        y: [0, item.targetY],
+                    }}
+                    transition={{
+                        duration: item.duration,
+                        repeat: Infinity,
+                        delay: item.delay,
+                        ease: "easeOut"
+                    }}
+                    className="absolute left-1/2 top-1/2 flex items-center gap-2 whitespace-nowrap"
+                    style={{
+                        translateX: '-50%',
+                        translateY: '-50%',
+                        willChange: 'transform, opacity'
+                    }}
+                >
+                    <div className={`flex items-center justify-center w-5 h-5 rounded-full ${item.isTon ? 'bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)]' : 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]'}`}>
+                        <div className="p-1">
+                            <CryptoIcon name={item.isTon ? 'TON' : 'USDT'} />
                         </div>
-                        <span className={`text-caption font-bold tracking-tight drop-shadow-md ${isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
-                            +{isTon ? `${amount} TON` : `$${amount}.00`}
-                        </span>
-                    </m.div>
-                );
-            })}
+                    </div>
+                    <span className={`text-caption font-bold tracking-tight drop-shadow-md ${item.isTon ? 'text-blue-400' : 'text-emerald-400'}`}>
+                        +{item.isTon ? `${item.amount} TON` : `$${item.amount}.00`}
+                    </span>
+                </m.div>
+            ))}
         </div>
     );
 });
