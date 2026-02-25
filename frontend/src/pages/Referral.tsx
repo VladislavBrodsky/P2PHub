@@ -427,7 +427,7 @@ export default function ReferralPage() {
                                     <div className="text-center pb-2">
                                         <p className="text-label text-slate-400 font-medium">
                                             <Trans t={t} i18nKey="referral.modal.boost_desc" ns="social">
-                                                Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>.
+                                                Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>
                                             </Trans>
                                         </p>
                                     </div>
@@ -465,8 +465,8 @@ export default function ReferralPage() {
                                     </h3>
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                                         <Trans t={t} i18nKey="referral.qr.desc">
-                                            Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner. <br />
-                                            Build your empire now.
+                                            Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner <br />
+                                            Build your empire now
                                         </Trans>
                                     </p>
                                 </div>

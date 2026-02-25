@@ -21,14 +21,14 @@
       "joined_date": "Joined {{date}}",
       "active_status": "Active Status",
       "no_match": "No Matches Found",
-      "try_adjust_search": "Try adjusting your search or filters.",
-      "growth_start": "Growth starts with the first seed. Invite friends to start earning.",
+      "try_adjust_search": "Try adjusting your search or filters",
+      "growth_start": "Growth starts with the first seed. Invite friends to start earning",
       "share_invitation": "Share Invitation",
       "global_strength": "Global Strength",
       "active_nodes": "Active Nodes",
       "invite_btn": "Invite",
       "quiet_on_level": "Level {{level}} is Quiet",
-      "growth_desc": "Growth is just one invite away. Expand your network.",
+      "growth_desc": "Growth is just one invite away. Expand your network",
       "xp_focus": "XP Focus",
       "unlock_more_streams": "Unlock More Streams",
       "locked_levels_desc_free": "Upgrade to PRO to unlock 9 levels",
@@ -87,7 +87,7 @@
     "global_milestones": "Global Milestones",
     "mission": "Mission {{level}}",
     "how_to_unlock": "How to unlock",
-    "unlock_locked": "Reach Level {{level}} to unlock this milestone.",
+    "unlock_locked": "Reach Level {{level}} to unlock this milestone",
     "share_link": "Share Link",
     "invite": "Invite",
     "unlocked_badge": "UNLOCKED",
@@ -99,7 +99,7 @@
     "progression_phase": "Progression Phase",
     "ultimate_horizon": "GLOBAL HORIZON",
     "lvl_100_title": "LEVEL 100 ACHIEVEMENTS",
-    "lvl_100_desc": "Open your <1>Global Influence Passport</1>. Get your Platinum Card and 0% fees forever.",
+    "lvl_100_desc": "Open your <1>Global Influence Passport</1>. Get your Platinum Card and 0% fees forever",
     "discover_btn": "DISCOVER LEVEL 100 BENEFITS",
     "fanocracy_stat": "Only 0.1% reach this level",
     "locked_badge": "LOCKED"
@@ -108,7 +108,7 @@
     "active_missions": "Active Missions",
     "available": "available",
     "all_clear_title": "All Missions Clear",
-    "all_clear_desc": "Check back later for more missions.",
+    "all_clear_desc": "Check back later for more missions",
     "verifying": "Verifying...",
     "in_progress": "In Progress",
     "progress": "Progress",
@@ -117,98 +117,98 @@
     "start": "Initiate Mission",
     "status": "Status",
     "review": "REVIEW",
-    "error_not_met": "Task requirement not met.",
+    "error_not_met": "Task requirement not met",
     "level_short": "Lvl.",
     "pro_multiplier": "PRO x1.5 / PRO+ x3.0 XP Boost",
     "telegram_bot": {
       "title": "Open Pintopay Bot",
-      "desc": "Start your journey with the official bot."
+      "desc": "Start your journey with the official bot"
     },
     "academy_basics": {
       "title": "Complete 3 Academy Stages",
-      "desc": "Master the basics and earn your first badges."
+      "desc": "Master the basics and earn your first badges"
     },
     "read_blog": {
       "title": "Read Strategy Article",
-      "desc": "Unlock viral growth secrets in our blog."
+      "desc": "Unlock viral growth secrets in our blog"
     },
     "banking_app": {
       "title": "Join Super App",
-      "desc": "Connect to the future of finance."
+      "desc": "Connect to the future of finance"
     },
     "community_chat": {
       "title": "Strategy Chat",
-      "desc": "Sync with partners and exchange techniques."
+      "desc": "Sync with partners and exchange techniques"
     },
     "boost": "Tasks Boost",
     "ambassador_hub": {
       "title": "Partner Hub",
-      "desc": "Priority resources and system updates."
+      "desc": "Priority resources and system updates"
     },
     "invite_1_friend": {
       "title": "Invite 1 Friend",
-      "desc": "Your first step to building a network."
+      "desc": "Your first step to building a network"
     },
     "invite_3_friends": {
       "title": "Invite 3 Friends",
-      "desc": "Create your network for Level 2."
+      "desc": "Create your network for Level 2"
     },
     "invite_5_friends": {
       "title": "Team of Five",
-      "desc": "Expand your circle to 5 partners."
+      "desc": "Expand your circle to 5 partners"
     },
     "daily_checkin_5": {
       "title": "5 Days Streak",
-      "desc": "Enter the app 5 days in a row."
+      "desc": "Enter the app 5 days in a row"
     },
     "invite_10_friends": {
       "title": "Network Builder",
-      "desc": "Expand your team to 10 partners."
+      "desc": "Expand your team to 10 partners"
     },
     "invite_25_friends": {
       "title": "Community Leader",
-      "desc": "Lead a team of 25 partners."
+      "desc": "Lead a team of 25 partners"
     },
     "invite_50_friends": {
       "title": "Influencer Status",
-      "desc": "Grow your network to 50 partners."
+      "desc": "Grow your network to 50 partners"
     },
     "invite_100_friends": {
       "title": "Viral Master",
-      "desc": "Reach 100 direct referrals."
+      "desc": "Reach 100 direct referrals"
     },
     "invite_250_friends": {
       "title": "Great Connector",
-      "desc": "Build a massive network of 250 partners."
+      "desc": "Build a massive network of 250 partners"
     },
     "invite_500_friends": {
       "title": "Network Architect",
-      "desc": "Reach the ultimate goal: 500 partners."
+      "desc": "Reach the ultimate goal: 500 partners"
     },
     "add_to_home_screen": {
       "title": "Pin to Home Screen",
-      "desc": "Add 'My Partner Center' to your phone Home Screen for 1-tap access."
+      "desc": "Add 'My Partner Center' to your phone Home Screen for 1-tap access"
     },
     "network_catalyst": {
       "title": "Network Catalyst",
-      "desc": "First partner in your network upgrades to PRO."
+      "desc": "First partner in your network upgrades to PRO"
     },
     "sprint_master_3": {
       "title": "Sprint Master",
-      "desc": "Onboard 3 active partners in a single week."
+      "desc": "Onboard 3 active partners in a single week"
     }
   },
   "referral": {
     "title": "Growth & Levels",
-    "subtitle": "Track your progress and grow your network.",
+    "subtitle": "Track your progress and grow your network",
     "members": "Partners",
     "xp_progress": "XP Progress",
     "total_xp": "Total XP",
     "partners": "Partners",
     "info": "Learn how the referral system works",
     "viral": {
-      "hook": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀",
-      "subtitle": "Create your source of passive income. $1 every minute. 📈",
+      "hook": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES!",
+      "subtitle": "📈 Create your source of passive income. $1 every minute 24/7",
       "text": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀\n\nThe world of finance is evolving. Be part of the change. 🦅\n\nJoin the Pintopay Partner Hub and start building your partner network with income up to $1 per minute.\n\n✅ No barriers\n✅ No bureaucracy\n✅ Full financial freedom\n\nStart your journey to success right now! 👇",
       "share_template": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES! \nCreate your source of passive income - $1 every minute \n\nJoin my Network - {{link}}"
     },
@@ -220,13 +220,13 @@
       "viral_btn": "Send Card",
       "share_more": "Share...",
       "copy_link": "Copy link",
-      "boost_desc": "Each referral boosts your Viral Network and moves you closer to the <1>$1 per minute strategy</1>."
+      "boost_desc": "Each referral boosts your Viral Network and moves you closer to the <1>$1 per minute strategy</1>"
     },
     "qr": {
       "title": "Achieve Your \nFinancial Independence",
       "title_img": "Your Referral QR Code",
       "sovereignty": "Financial Independence",
-      "desc": "Earn <1>$1/minute</1> from your network's activity. <br />\nStart growing your project today.",
+      "desc": "Earn <1>$1/minute</1> from your network's activity. <br />\nStart growing your project today",
       "copy": "Copy link",
       "save": "Save QR"
     },
@@ -278,21 +278,21 @@
       },
       "all_unlocked": "Full Achievement List",
       "instructions": {
-        "early_1": "Start! Begin your journey in the Growth Hub.",
-        "ghost_share": "First step: Share your direct link.",
-        "early_3": "Consistency: Open the app for 3 consecutive days.",
-        "viral_blitz": "Top speed: Bring in 3 partners within 24 hours.",
-        "early_5": "Confidence: Reach Level 5.",
-        "early_7": "Experience: Stay active and support your team.",
-        "early_10": "Silver status: A mark of an active network builder.",
-        "growth_15": "Breakthrough: New opportunities at Level 15.",
-        "legacy_20": "Pioneer: Claim your first virtual card.",
-        "legacy_44": "Recognition: Unlock the -10% Physical Card discount.",
-        "milestone_60": "Grandmaster: Lead the network from Level 60.",
-        "milestone_70": "VIP: Diamond status achieved.",
-        "milestone_80": "Global Leader: A robust network at Level 80.",
-        "milestone_90": "Legendary: Your legacy is permanent.",
-        "milestone_100": "Summit: The Physical Platinum Card is yours."
+        "early_1": "Start! Begin your journey in the Growth Hub",
+        "ghost_share": "First step: Share your direct link",
+        "early_3": "Consistency: Open the app for 3 consecutive days",
+        "viral_blitz": "Top speed: Bring in 3 partners within 24 hours",
+        "early_5": "Confidence: Reach Level 5",
+        "early_7": "Experience: Stay active and support your team",
+        "early_10": "Silver status: A mark of an active network builder",
+        "growth_15": "Breakthrough: New opportunities at Level 15",
+        "legacy_20": "Pioneer: Claim your first virtual card",
+        "legacy_44": "Recognition: Unlock the -10% Physical Card discount",
+        "milestone_60": "Grandmaster: Lead the network from Level 60",
+        "milestone_70": "VIP: Diamond status achieved",
+        "milestone_80": "Global Leader: A robust network at Level 80",
+        "milestone_90": "Legendary: Your legacy is permanent",
+        "milestone_100": "Summit: The Physical Platinum Card is yours"
       },
       "next_milestones": "Next Goals"
     }
@@ -304,19 +304,19 @@
     "read_line1": "Read",
     "read_line2": "Guide",
     "goal_title": "Our Goal",
-    "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1>Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream.</3>",
+    "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1>Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream</3>",
     "manual_title": "Path to Success",
-    "manual_step_1": "Share your personal growth link or QR code.",
-    "manual_step_2": "Help partners activate cards and PRO status.",
-    "manual_step_3": "Track progress and scale with the Content Studio.",
+    "manual_step_1": "Share your personal growth link or QR code",
+    "manual_step_2": "Help partners activate cards and PRO status",
+    "manual_step_3": "Track progress and scale with the Content Studio",
     "rules_title": "Growth Rules",
     "rule_1_title": "Transparency First",
-    "rule_1_desc": "Be honest about the opportunities and risks.",
+    "rule_1_desc": "Be honest about the opportunities and risks",
     "rule_2_title": "Community Focus",
-    "rule_2_desc": "Support your partners on their journey.",
+    "rule_2_desc": "Support your partners on their journey",
     "antibot_active": "ANTI-BOT ACTIVE",
     "motivation_title": "Start Building",
-    "motivation_desc": "Your future in the digital economy starts with the first member.",
+    "motivation_desc": "Your future in the digital economy starts with the first member",
     "cta": "I UNDERSTAND"
   },
   "ranks": {
@@ -354,22 +354,22 @@
   "level100": {
     "ultimate_horizon": "GLOBAL HORIZON",
     "achievements_title": "ELITE ACHIEVEMENTS UP TO LEVEL 100",
-    "achievements_desc": "Deploy the <1>Sovereignty Program</1>. Get your Platinum Card and 0% fees indefinitely.",
+    "achievements_desc": "Deploy the <1>Sovereignty Program</1>. Get your Platinum Card and 0% fees indefinitely",
     "discover_btn": "EXPLORE LEVEL 100 PRIVILEGES",
     "apex_achievement": "HIGHEST PRIORITY",
     "fanocracy_title": "LvL 100 <1>Sovereignty</1>",
-    "fanocracy_quote": "Absolute status for architects of the decentralized future.",
+    "fanocracy_quote": "Absolute status for architects of the decentralized future",
     "claim_btn": "ACTIVATE LEVEL 100 FOCUS",
     "limited_slots": "LIMITED OFFER",
     "benefit_1_title": "Platinum Card (Metal)",
-    "benefit_1_desc": "Ultimate vertical design. Zero annual maintenance.",
+    "benefit_1_desc": "Ultimate vertical design. Zero annual maintenance",
     "benefit_2_title": "Hierarchy Priority",
-    "benefit_2_desc": "Special governance rights and early access to liquidity.",
+    "benefit_2_desc": "Special governance rights and early access to liquidity",
     "benefit_3_title": "0% Platform Fees",
-    "benefit_3_desc": "Maximum income from all transactions in the network.",
+    "benefit_3_desc": "Maximum income from all transactions in the network",
     "benefit_4_title": "Executive Support",
-    "benefit_4_desc": "24/7 Personal Manager for your growing team.",
-    "share_text": "I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together! 🚀",
+    "benefit_4_desc": "24/7 Personal Manager for your growing team",
+    "share_text": "🎯 I'm climbing to Level 100 in Pintopay! Join my network to unlock Fanocracy benefits together!",
     "share_title": "Join P2PHub"
   },
   "partner_dashboard": {
@@ -402,14 +402,14 @@
       "ton_stats": "TON Analytics",
       "usdt_stats": "USDT Analytics",
       "no_activity": "Initial Phase",
-      "no_activity_desc": "No crypto events recorded in the last 72 hours.",
+      "no_activity_desc": "No crypto events recorded in the last 72 hours",
       "performance_history": "Performance History",
       "monthly_summary": "Monthly Summary",
       "events": "EVENTS",
       "current": "Current",
       "inflow_short": "In",
       "outflow_short": "Out",
-      "failed_load": "Failed to load stats."
+      "failed_load": "Failed to load stats"
     }
   }
 }
