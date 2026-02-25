@@ -107,7 +107,7 @@
   "tasks": {
     "active_missions": "Активные миссии",
     "available": "Доступно",
-    "all_clear_title": "Все миссии выполнены!",
+    "all_clear_title": "Все миссии выполнены",
     "all_clear_desc": "Новые задачи скоро появятся",
     "verifying": "Верификация...",
     "in_progress": "В процессе",
@@ -121,8 +121,8 @@
     "level_short": "Ур.",
     "pro_multiplier": "PRO x1.5 / PRO+ x3.0 Буст XP",
     "telegram_bot": {
-      "title": "Открыть P2PHub Бот",
-      "desc": "Начни свой путь с official ботом"
+      "title": "P2PHub Бот",
+      "desc": "Начни свой путь с официальным ботом"
     },
     "academy_basics": {
       "title": "Пройти 3 этапа Академии",

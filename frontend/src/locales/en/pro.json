@@ -570,6 +570,7 @@
       }
     },
     "academy": {
+      "direct_action_label": "Direct Action",
       "title": "Intelligence Hub",
       "desc": "Elite knowledge stack for social domination.",
       "sync_status": "Synchronization Status",

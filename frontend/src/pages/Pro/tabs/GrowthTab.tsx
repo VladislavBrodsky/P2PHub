@@ -34,7 +34,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
         const parts = [];
         if (intro && intro !== `academy_content.stage_${stage.id}_lesson_intro`) parts.push(intro);
         if (body && body !== `academy_content.stage_${stage.id}_lesson_body`) parts.push(body);
-        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!${t('academy.badge_important')}]\n> **${t('academy.badge_secret')}:** ${secret}`);
+        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!IMPORTANT]\n> **${t('academy.badge_secret')}:** ${secret}`);
         if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**${t('academy.badge_viral_rule')}:** ${viralRule}`);
         if (outro && outro !== `academy_content.stage_${stage.id}_lesson_outro`) parts.push(outro);
 
@@ -204,7 +204,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
     );
 });
 
-const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode }: any) => (
+const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode, t }: any) => (
     <motion.div
         whileHover={lowPowerMode ? {} : { y: -4 }}
         className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
@@ -238,7 +238,7 @@ const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode }: an
                     <Play size={8} className="text-emerald-500 fill-emerald-500/20" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">Direct Action</span>
+                    <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">{t('pro_dashboard.academy.direct_action_label', 'Direct Action')}</span>
                     <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
                         {item.action}
                     </span>
@@ -769,7 +769,7 @@ export const GrowthTab = ({
                             const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
                             const stratsList = Array.isArray(strats) ? strats : [];
                             return stratsList.map((item: any, i: number) => (
-                                <PsychStrategyCard key={i} item={item} i={i} selection={selection} impact={impact} lowPowerMode={lowPowerMode} />
+                                <PsychStrategyCard key={i} item={item} i={i} selection={selection} impact={impact} lowPowerMode={lowPowerMode} t={t} />
                             ));
                         })()}
                     </div>
