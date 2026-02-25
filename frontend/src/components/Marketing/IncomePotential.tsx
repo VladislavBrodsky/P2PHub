@@ -235,7 +235,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-2 vibing-emerald-animated h-14 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/20"
+                                                className="w-full group relative flex items-center justify-center gap-2 vibing-emerald-animated h-11 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/20"
                                             >
                                                 <Lock className="w-4 h-4 text-white" />
                                                 <span className="text-white uppercase">{t('income.profit.unlock_btn')}</span>
@@ -494,10 +494,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                             onNavigateToPartner?.();
                                         }}
-                                        className="w-full bg-linear-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-[200%_auto] hover:bg-pos-right text-white font-black h-14 rounded-full text-xs tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/30 transition-all duration-500 uppercase group"
+                                        className="w-full bg-linear-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-[200%_auto] hover:bg-pos-right text-white font-black h-11 rounded-full text-xs tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/30 transition-all duration-500 uppercase group"
                                     >
                                         {t('marketing:income.math.cta_urgency')}
-                                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                                     </m.button>
                                 </div>
 
@@ -576,11 +575,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                     onNavigateToPartner?.();
                                 }}
-                                className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-14 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
+                                className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-11 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
                             >
                                 <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
                                     {t('income.math.cta_urgency')}
-                                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
                                 </span>
                                 {/* Glass overlay */}
                                 <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
@@ -599,7 +597,6 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
                             >
                                 {t('income.cta.lead')}
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
                                 <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
                             </m.button>
                             <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
@@ -763,7 +760,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         }}
                                                         className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                                                     >
-                                                        {t('income_details.start_earning')} <ArrowRight className="w-4 h-4" />
+                                                        {t('income_details.start_earning')}
                                                     </button>
                                                 </>
                                             )}

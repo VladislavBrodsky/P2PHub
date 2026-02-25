@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useNotificationStore } from '../../store/useNotificationStore';
 import { useHaptic } from '../../hooks/useHaptic';
 import clsx from 'clsx';
+import { usePerformance } from '../../hooks/usePerformance';
 
 const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
     <m.div
@@ -35,8 +36,9 @@ const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
 );
 
 const NeuralBackground = React.memo(() => {
+    const { lowPowerMode } = usePerformance();
     // Stabilize random data to prevent jumping and expensive SVG recalculations on re-render
-    const particles = useMemo(() => [...Array(8)].map((_, i) => ({
+    const particles = useMemo(() => lowPowerMode ? [] : [...Array(8)].map((_, i) => ({
         id: i,
         x: Math.random() * 400,
         y: Math.random() * 200,
@@ -46,7 +48,7 @@ const NeuralBackground = React.memo(() => {
         delay: Math.random() * 5,
         size: i % 2 === 0 ? '1' : '1.5',
         color: i % 3 === 0 ? 'bg-blue-400' : i % 3 === 1 ? 'bg-indigo-400' : 'bg-cyan-400'
-    })), []);
+    })), [lowPowerMode]);
 
     return (
         <>
@@ -55,29 +57,30 @@ const NeuralBackground = React.memo(() => {
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.15),transparent_70%)]" />
                 <div className="circuit-decor opacity-40 dark:opacity-60" />
 
-                {/* Visual Neural Connections */}
-                <svg className="absolute inset-0 w-full h-full opacity-50">
-                    <m.path
-                        d="M100,250 Q250,100 400,250 T700,250"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        fill="none"
-                        className="text-indigo-500/40"
-                        animate={{ strokeDashoffset: [0, 100] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "8, 8" }}
-                    />
-                    <m.path
-                        d="M-50,400 Q200,550 450,400 T950,400"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        fill="none"
-                        className="text-emerald-500/40"
-                        animate={{ strokeDashoffset: [100, 0] }}
-                        transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                        style={{ strokeDasharray: "8, 8" }}
-                    />
-                </svg>
+                {!lowPowerMode && (
+                    <svg className="absolute inset-0 w-full h-full opacity-50">
+                        <m.path
+                            d="M100,250 Q250,100 400,250 T700,250"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            fill="none"
+                            className="text-indigo-500/40"
+                            animate={{ strokeDashoffset: [0, 100] }}
+                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                            style={{ strokeDasharray: "8, 8" }}
+                        />
+                        <m.path
+                            d="M-50,400 Q200,550 450,400 T950,400"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            fill="none"
+                            className="text-emerald-500/40"
+                            animate={{ strokeDashoffset: [100, 0] }}
+                            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                            style={{ strokeDasharray: "8, 8" }}
+                        />
+                    </svg>
+                )}
             </div>
 
             <div className="absolute inset-0 z-0">

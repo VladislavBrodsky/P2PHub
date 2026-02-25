@@ -110,8 +110,9 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
     # Pre-calculate full ancestry for accurate chain slicing
     # path_ids: [root_id, L1_id, L2_id, ..., L(N-1)_id]
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
-    full_lineage_ids = [*path_ids, partner.referrer_id] if partner.referrer_id else path_ids
     # full_lineage_names: names corresponding to full_lineage_ids
+    # Use dict.fromkeys to preserve order while removing potential duplicates (Bug: direct referrer often already in path)
+    full_lineage_ids = list(dict.fromkeys([*path_ids, partner.referrer_id])) if partner.referrer_id else path_ids
     full_lineage_names = [format_partner_name(ancestor_map[aid]) for aid in full_lineage_ids if aid in ancestor_map]
     
     for level in range(1, 21):

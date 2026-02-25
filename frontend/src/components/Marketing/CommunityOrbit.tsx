@@ -5,6 +5,7 @@ import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { useUser } from '../../context/UserContext';
 import { getSafeLaunchParams } from '../../utils/tma';
+import { usePerformance } from '../../hooks/usePerformance';
 
 // #comment: Asset constants for fallback avatars and crypto icons.
 const ALL_AVATARS = Object.values(AVATAR_DATA);
@@ -125,9 +126,9 @@ export const CommunityOrbit = memo(() => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
             </div>
 
-            {/* Background Particles Decoration (Single CSS Keyframe instead of 12 independent JS loops) */}
-            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-50">
-                <div className="circuit-decor absolute inset-0 animate-soft-breath" />
+            {/* Honeycomb Background Decoration (Replacing dot grid) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="honeycomb-decor absolute inset-0 animate-soft-breath" />
             </div>
 
             {/* Central Logic */}
@@ -232,9 +233,12 @@ const CentralLogo = memo(() => {
 });
 
 const FractalProfits = memo(() => {
+    const { lowPowerMode } = usePerformance();
+    const count = lowPowerMode ? 4 : 12;
+
     return (
         <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
-            {[...Array(12)].map((_, i) => {
+            {[...Array(count)].map((_, i) => {
                 const isTon = i % 2 !== 0;
                 const amount = isTon
                     ? Math.floor(Math.random() * 33) + 1
