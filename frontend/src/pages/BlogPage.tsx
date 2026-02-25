@@ -627,7 +627,7 @@ const BlogDetail = ({
                 </h1>
 
                 <div className="flex items-center gap-3 py-4 border-y border-slate-200 dark:border-white/5">
-                    <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-blue-500 to-blue-600 p-px shadow-lg shadow-blue-500/30 flex items-center justify-center relative overflow-hidden group">
+                    <div className="w-10 h-10 rounded-2xl bg-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.3)] p-px flex items-center justify-center relative group">
                         <div className="w-full h-full rounded-[calc(1rem-1px)] bg-bg-app flex items-center justify-center font-bold text-base text-blue-500 relative z-10 border border-white/5 overflow-hidden">
                             {post.authorImage ? (
                                 <img src={post.authorImage} className="w-full h-full object-cover" alt={post.author} />
