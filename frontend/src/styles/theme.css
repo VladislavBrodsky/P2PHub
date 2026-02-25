@@ -43,8 +43,8 @@
   --bottom-nav-height: 80px;
   /* Safe Areas + Telegram Header padding for bot buttons visibility */
   --header-offset-base: 64px;
-  --header-content-clearance: 40px;
-  --header-total-offset: 104px;
+  --header-content-clearance: 30px;
+  --header-total-offset: 94px;
   --header-total-height: var(--header-total-offset);
 
 
