@@ -173,7 +173,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                                     className="w-full h-11 sm:h-12 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-amber-400/30"
                                                 >
                                                     <span>{t('pro_dashboard.academy.unlock_for', { cost: stage.xpCost })}</span>
-                                                    <div className={`w-1.5 h-1.5 rounded-full bg-white/50 ${lowPowerMode ? '' : 'animate-pulse'}`} />
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
                                                     <Lock size={14} />
                                                 </button>
                                             </div>

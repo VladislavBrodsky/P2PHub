@@ -144,7 +144,7 @@ export const PartnerDashboard = () => {
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
-                                className={`mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-pro-glass ${lowPowerMode ? '' : 'animate-soft-breath'}`}
+                                className="mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-pro-glass animate-soft-breath"
                             >
                                 {t('partner_dashboard.upgrade_pro_btn')}
                             </button>
