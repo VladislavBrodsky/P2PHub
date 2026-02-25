@@ -40,7 +40,7 @@ export const BlogCarousel = () => {
     if (isLoading) return null;
 
     return (
-        <section className="py-2 space-y-2">
+        <section className="py-2 space-y-2 min-h-[450px]">
             <div className="flex items-center justify-between px-4">
                 <SectionHeader
                     title={t('blog.latest')}

@@ -53,7 +53,10 @@
     "ai_desc": "Our exclusive PRO engine creates viral content on autopilot 24/7. It posts automatically to your target audience while you focus on scaling. This is how you spend less time and achieve maximum results.",
     "learn_how": "Learn How It Works",
     "build_empire": "Step by step, we will build your legacy. By stage 20, your foundation will be unshakeable. Beyond that, we enter the world of high-ticket sales and AI-powered growth.",
-    "complete_stage": "Complete Stage {{stage}}"
+    "complete_stage": "Complete Stage {{stage}}",
+    "badge_important": "IMPORTANT",
+    "badge_secret": "THE SECRET",
+    "badge_viral_rule": "VIRAL RULE"
   },
   "academy_content": {
     "stage_1_title": "THE SOVEREIGN MINDSET",

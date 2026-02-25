@@ -143,21 +143,21 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         description={t('dashboard:evolution.desc')}
                     />
                 </div>
-                <ThrottledSuspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-[440px] animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
                     <BentoGrid />
                 </ThrottledSuspense>
             </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<div className="h-80 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-[1100px] animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </ThrottledSuspense>
             </m.div>
 
             {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<div className="h-64 animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<div className="h-[450px] animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
                     <BlogCarousel />
                 </ThrottledSuspense>
             </m.div>

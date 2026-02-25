@@ -34,8 +34,8 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
         const parts = [];
         if (intro && intro !== `academy_content.stage_${stage.id}_lesson_intro`) parts.push(intro);
         if (body && body !== `academy_content.stage_${stage.id}_lesson_body`) parts.push(body);
-        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!IMPORTANT]\n> **THE SECRET:** ${secret}`);
-        if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**VIRAL RULE:** ${viralRule}`);
+        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!${t('academy.badge_important')}]\n> **${t('academy.badge_secret')}:** ${secret}`);
+        if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**${t('academy.badge_viral_rule')}:** ${viralRule}`);
         if (outro && outro !== `academy_content.stage_${stage.id}_lesson_outro`) parts.push(outro);
 
         fullContent = parts.join('\n\n');
@@ -181,16 +181,15 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                             <button
                                                 onClick={() => handleComplete(stageIdStr)}
                                                 disabled={isLoading}
-                                                className={`w-full h-11 sm:h-12 ${isCompleted ? 'bg-emerald-500/10 text-emerald-500 pointer-events-none' : 'vibing-blue-animated text-white'} border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] sm:tracking-[0.2em] shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all`}
+                                                className={`w-full h-9 sm:h-10 ${isCompleted ? 'bg-emerald-500/10 text-emerald-500 pointer-events-none' : 'vibing-blue-animated text-white'} border border-transparent dark:border-white/10 rounded-xl font-bold text-label sm:text-caption uppercase tracking-[0.1em] shadow-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all px-4`}
                                             >
                                                 {isLoading ? (
                                                     <Loader2 className="w-5 h-5 animate-spin" />
                                                 ) : (
-                                                    <>
-                                                        <span>{t('pro_dashboard.academy.mark_accomplished')}</span>
-                                                        <div className={`w-1.5 h-1.5 rounded-full bg-emerald-500 ${lowPowerMode ? '' : 'animate-pulse'}`} />
-                                                        <span className="opacity-60 text-xs">+{stage.rewardXp} XP</span>
-                                                    </>
+                                                    <div className="flex items-center justify-between w-full">
+                                                        <span className="truncate whitespace-nowrap overflow-hidden mr-auto">{t('pro_dashboard.academy.mark_accomplished')}</span>
+                                                        <span className="shrink-0 opacity-80 text-[10px] sm:text-xs font-black bg-white/10 px-1.5 py-0.5 rounded-md border border-white/10">+{stage.rewardXp} XP</span>
+                                                    </div>
                                                 )}
                                             </button>
                                         )}
@@ -534,32 +533,37 @@ export const GrowthTab = ({
 
                 <div className="space-y-4 relative z-10">
                     {(() => {
-                        return ACADEMY_STAGES.map((stage: any, i: number) => (
-                            <AcademyStageItem
-                                key={stage.id}
-                                stage={stage}
-                                isCompleted={completedStages.includes(String(stage.id))}
-                                isLoading={isCompletingStage === String(stage.id)}
-                                isExpanded={expandedModuleId === String(stage.id)}
-                                isLocked={stage.isPro && !status?.is_pro}
-                                unlockedStages={unlockedStages}
-                                toggleExpand={() => {
-                                    if (stage.isPro && !status?.is_pro) {
-                                        impact('heavy');
-                                        setShowSetup(true);
-                                        return;
-                                    }
-                                    selection();
-                                    impact('light');
-                                    setExpandedModuleId(expandedModuleId === String(stage.id) ? null : String(stage.id));
-                                }}
-                                handleUnlock={handleUnlockAcademyStage}
-                                handleComplete={handleCompleteAcademyStage}
-                                t={t}
-                                lowPowerMode={lowPowerMode}
-                                renderMarkdown={renderMarkdown}
-                            />
-                        ));
+                        return ACADEMY_STAGES.map((stage: any, i: number) => {
+                            const isPreviousCompleted = i === 0 || completedStages.includes(String(ACADEMY_STAGES[i - 1].id));
+                            const isSequentialLocked = !isPreviousCompleted;
+
+                            return (
+                                <AcademyStageItem
+                                    key={stage.id}
+                                    stage={stage}
+                                    isCompleted={completedStages.includes(String(stage.id))}
+                                    isLoading={isCompletingStage === String(stage.id)}
+                                    isExpanded={expandedModuleId === String(stage.id)}
+                                    isLocked={(stage.isPro && !status?.is_pro) || isSequentialLocked}
+                                    unlockedStages={unlockedStages}
+                                    toggleExpand={() => {
+                                        if (stage.isPro && !status?.is_pro) {
+                                            impact('heavy');
+                                            setShowSetup(true);
+                                            return;
+                                        }
+                                        selection();
+                                        impact('light');
+                                        setExpandedModuleId(expandedModuleId === String(stage.id) ? null : String(stage.id));
+                                    }}
+                                    handleUnlock={handleUnlockAcademyStage}
+                                    handleComplete={handleCompleteAcademyStage}
+                                    t={t}
+                                    lowPowerMode={lowPowerMode}
+                                    renderMarkdown={renderMarkdown}
+                                />
+                            );
+                        });
                     })()}
                 </div>
             </div>

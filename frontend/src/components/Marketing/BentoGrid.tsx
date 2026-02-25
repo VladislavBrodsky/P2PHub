@@ -112,7 +112,7 @@ export const BentoGrid = () => {
     };
 
     return (
-        <section className="px-0 py-4 flex flex-col relative z-50 min-h-[400px]">
+        <section className="px-0 py-4 flex flex-col relative z-50 min-h-[440px]">
             {/* Carousel Container */}
             <div className="relative w-full h-[410px]">
                 <div

@@ -130,7 +130,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const displayLoss = dailyLoss > 0 ? dailyLoss : 0;
 
     return (
-        <section className="px-4 py-2">
+        <section className="px-4 py-2 min-h-[1100px]">
             <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}

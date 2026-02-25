@@ -16,7 +16,7 @@ export const ThrottledSuspense: React.FC<ThrottledSuspenseProps> = ({
     children,
     fallback = null,
     threshold = 0.01,
-    rootMargin = '100px',
+    rootMargin = '600px',
     className = ''
 }) => {
     const [isIntersecting, setIntersecting] = useState(false);
