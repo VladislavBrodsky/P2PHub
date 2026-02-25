@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, CheckCircle2, Play, Zap } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation } from 'react-i18next';
 import { renderInline } from '../../utils/renderMarkdown';
+import { usePerformance } from '../../hooks/usePerformance';
 
 interface AcademyStageNodeProps {
     stage: AcademyStage;
@@ -13,8 +14,9 @@ interface AcademyStageNodeProps {
     index: number;
 }
 
-export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, status, onClick, index }) => {
+export const AcademyStageNode = memo(({ stage, status, onClick, index }: AcademyStageNodeProps) => {
     const { t } = useTranslation(['academy', 'common']);
+    const { lowPowerMode } = usePerformance();
     const isLocked = status === 'locked';
     const isCompleted = status === 'completed';
     const isCurrent = status === 'current';
@@ -22,12 +24,10 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
     // Alternating card position logic: Stage 1 (index 0), 3, 5 -> Right; Stage 2 (index 1), 4, 6 -> Left
     const isRightSide = index % 2 === 0;
 
-    const getStageContent = (id: number) => {
-        return {
-            titleKey: `academy_content.stage_${id}_title`,
-            descKey: `academy_content.stage_${id}_desc`
-        };
-    };
+    const getStageContent = (id: number) => ({
+        titleKey: `academy_content.stage_${id}_title`,
+        descKey: `academy_content.stage_${id}_desc`
+    });
 
     const { titleKey, descKey } = getStageContent(stage.id);
     const title = t(titleKey, { defaultValue: stage.title });
@@ -40,25 +40,20 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             viewport={{ once: true, margin: "-50px" }}
             whileHover={{ scale: 1.02, zIndex: 50 }}
             whileTap={{ scale: 0.98 }}
-            style={{}}
             onClick={() => !isLocked && onClick(stage)}
             className={cn(
                 "relative group cursor-pointer w-full h-[85px]",
-                isLocked && "cursor-not-allowed opacity-60"
+                isLocked && "cursor-not-allowed opacity-60",
+                lowPowerMode && "low-power-mode"
             )}
         >
             {/* Connecting Line (Spine of the roadmap) */}
             {index > 0 && (
                 <div className={cn(
-                    "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10"
+                    "absolute -top-5 left-1/2 -translate-x-1/2 w-0.5 h-10 -z-10 bg-slate-200 dark:bg-white/10 overflow-hidden"
                 )}>
-                    {(isCompleted || isCurrent) && (
-                        <motion.div
-                            initial={{ y: "-100%" }}
-                            animate={{ y: "100%" }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                            className="w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent shadow-[0_0_8px_rgba(59,130,246,0.5)]"
-                        />
+                    {(isCompleted || isCurrent) && !lowPowerMode && (
+                        <div className="absolute inset-x-0 w-full h-1/2 bg-linear-to-b from-transparent via-blue-500 to-transparent shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-academy-flow" />
                     )}
                 </div>
             )}
@@ -78,11 +73,7 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
                 )}>
                 {/* Visual indicator for current stage */}
                 {isCurrent && (
-                    <motion.div
-                        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.6, 0.3] }}
-                        transition={{ duration: 3, repeat: Infinity }}
-                        className="absolute inset-0 bg-blue-400 blur-2xl rounded-full -z-10"
-                    />
+                    <div className="absolute inset-0 bg-blue-400 blur-2xl rounded-full -z-10 animate-academy-pulse" />
                 )}
 
                 {/* Icon */}
@@ -156,4 +147,4 @@ export const AcademyStageNode: React.FC<AcademyStageNodeProps> = ({ stage, statu
             </div>
         </motion.div>
     );
-};
+});

@@ -15,6 +15,11 @@ export const AcademyCareerStair = () => {
     const [visibleStages, setVisibleStages] = useState(10);
     const [selectedStage, setSelectedStage] = useState<AcademyStage | null>(null);
 
+    // #comment Memoize completed stages as numbers for faster lookups in children
+    const completedAsNumbers = useMemo(() => {
+        return (user?.completed_stages ?? []).map(Number);
+    }, [user?.completed_stages]);
+
     const stages = useMemo(() => {
         return ACADEMY_STAGES.slice(0, visibleStages);
     }, [visibleStages]);
@@ -55,9 +60,6 @@ export const AcademyCareerStair = () => {
         <div className="relative flex flex-col items-center w-full mx-auto">
             <div className="w-full flex flex-col items-center">
                 {stages.map((stage, index) => {
-                    // Normalize to number for comparison — backend may return ints,
-                    // localStorage cache may restore them as strings.
-                    const completedAsNumbers = (user?.completed_stages ?? []).map(Number);
                     const isCompleted = completedAsNumbers.includes(stage.id);
                     const isAvailable = stage.id === 1 || completedAsNumbers.includes(stage.id - 1);
                     const isCurrent = isAvailable && !isCompleted;

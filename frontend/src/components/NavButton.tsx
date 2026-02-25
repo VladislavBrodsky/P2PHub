@@ -1,4 +1,5 @@
-import { m, AnimatePresence } from 'framer-motion';
+import React, { memo } from 'react';
+import { m } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 
 interface NavButtonProps {
@@ -9,7 +10,7 @@ interface NavButtonProps {
     label: string;
 }
 
-export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavButtonProps) => {
+export const NavButton = memo(({ active, onClick, onMouseEnter, icon, label }: NavButtonProps) => {
     const { selection } = useHaptic();
 
     const handleClick = () => {
@@ -28,8 +29,6 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                 }`}
             aria-label={label}
         >
-
-
             {/* Icon with lift animation */}
             <m.div
                 animate={active ? { y: -1, scale: 1.15 } : { y: 0, scale: 1 }}
@@ -37,7 +36,6 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
                 className="relative z-10"
             >
                 {icon}
-
             </m.div>
 
             {/* Label */}
@@ -50,4 +48,4 @@ export const NavButton = ({ active, onClick, onMouseEnter, icon, label }: NavBut
             </m.span>
         </button>
     );
-};
+});

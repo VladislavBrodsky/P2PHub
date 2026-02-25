@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Crown, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTMALock } from '../../hooks/useTMALock';
+import { usePerformance } from '../../hooks/usePerformance';
+import { cn } from '../../lib/utils';
 
 interface PremiumModalProps {
     isOpen: boolean;
@@ -11,12 +13,13 @@ interface PremiumModalProps {
 
 export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) {
     const { t } = useTranslation(['cards', 'common']);
+    const { lowPowerMode } = usePerformance();
     useTMALock(isOpen);
 
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+                <div className={cn("fixed inset-0 z-100 flex items-center justify-center p-6", lowPowerMode && "low-power-mode")}>
                     {/* Overlay */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -49,11 +52,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                                 <div className="h-20 w-20 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                     <Crown size={40} className="text-white fill-white/20" />
                                 </div>
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                    className="absolute -inset-2 border-2 border-dashed border-indigo-200 rounded-full opacity-50"
-                                />
+                                <div className="absolute -inset-2 border-2 border-dashed border-indigo-200 rounded-full opacity-50 animate-slow-rotate" />
                             </div>
 
                             <h2 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight">

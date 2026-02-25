@@ -59,87 +59,7 @@ export const TopPartnersList = () => {
 
             <div className="space-y-2">
                 {topPartners.slice(0, isExpanded ? undefined : 10).map((partner, index) => (
-                    <motion.div
-                        key={partner.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className={`group relative flex items-center justify-between p-3 rounded-2xl border backdrop-blur-md shadow-sm active:scale-[0.98] transition-all ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
-                            index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
-                                index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
-                                    'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
-                            }`}
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="relative">
-                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden relative">
-                                    <User className="absolute w-5 h-5 text-slate-400 z-0" />
-                                    {partner.photo_file_id || partner.photo_url ? (
-                                        <img
-                                            src={partner.photo_file_id
-                                                ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
-                                                : partner.photo_url
-                                            }
-                                            className="absolute w-full h-full object-cover z-10 transition-opacity duration-300"
-                                            alt=""
-                                            onError={(e) => {
-                                                const target = e.target as HTMLImageElement;
-                                                target.style.opacity = '0';
-                                                setTimeout(() => { target.style.display = 'none'; }, 300);
-                                            }}
-                                        />
-                                    ) : null}
-                                </div>
-                                {index < 3 && (
-                                    <div className={`absolute -top-1.5 -left-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
-                                        index === 1 ? 'bg-slate-400' :
-                                            'bg-orange-400'
-                                        }`}>
-                                        <Crown className="w-3 h-3 text-white" />
-                                    </div>
-                                )}
-                                {(partner.subscription_plan || '').includes('PLUS') && (
-                                    <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
-                                        <ProPlusBadge size="xs" />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="flex flex-col">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-sm font-bold text-slate-900 dark:text-white">
-                                        {partner.first_name} {partner.last_name}
-                                    </span>
-                                    <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
-                                        {t(`ranks.${partner.rank.charAt(0).toUpperCase()}${partner.rank.slice(1).toLowerCase()}`, partner.rank) as string}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-1">
-                                        <TrendingUp className="w-3 h-3 text-emerald-500" />
-                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400">
-                                            {partner.xp.toLocaleString()} XP
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-1">
-                                        <Users className="w-3 h-3 text-blue-400" />
-                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400">
-                                            {partner.referrals_count} {t('referral.members')}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col items-end">
-                            <div className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
-                            <div className={`text-lg font-bold ${index === 0 ? 'text-amber-500' :
-                                index === 1 ? 'text-slate-400' :
-                                    index === 2 ? 'text-orange-400' :
-                                        'text-slate-900 dark:text-white'
-                                }`}>#{index + 1}</div>
-                        </div>
-                    </motion.div>
+                    <TopPartnerRow key={partner.id} partner={partner} index={index} />
                 ))}
             </div>
 
@@ -164,3 +84,96 @@ export const TopPartnersList = () => {
         </div>
     );
 };
+
+interface TopPartnerRowProps {
+    partner: any;
+    index: number;
+}
+
+const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
+    const { t } = useTranslation(['social', 'common']);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
+            className={`group relative flex items-center justify-between p-3 rounded-2xl border backdrop-blur-md shadow-sm active:scale-[0.98] transition-all ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
+                index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
+                    index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
+                        'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
+                }`}
+        >
+            <div className="flex items-center gap-3">
+                <div className="relative">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden relative">
+                        <User className="absolute w-5 h-5 text-slate-400 z-0" />
+                        {partner.photo_file_id || partner.photo_url ? (
+                            <img
+                                src={partner.photo_file_id
+                                    ? `${getApiUrl()}/api/partner/photo/${partner.photo_file_id}`
+                                    : partner.photo_url
+                                }
+                                className="absolute w-full h-full object-cover z-10 transition-opacity duration-300"
+                                alt=""
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.style.opacity = '0';
+                                    setTimeout(() => { target.style.display = 'none'; }, 300);
+                                }}
+                            />
+                        ) : null}
+                    </div>
+                    {index < 3 && (
+                        <div className={`absolute -top-1.5 -left-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
+                            index === 1 ? 'bg-slate-400' :
+                                'bg-orange-400'
+                            }`}>
+                            <Crown className="w-3 h-3 text-white" />
+                        </div>
+                    )}
+                    {(partner.subscription_plan || '').includes('PLUS') && (
+                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
+                            <ProPlusBadge size="xs" />
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col">
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-bold text-slate-900 dark:text-white">
+                            {partner.first_name} {partner.last_name}
+                        </span>
+                        <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
+                            {t(`ranks.${partner.rank.charAt(0).toUpperCase()}${partner.rank.slice(1).toLowerCase()}`, partner.rank) as string}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1">
+                            <TrendingUp className="w-3 h-3 text-emerald-500" />
+                            <span className="text-label font-bold text-slate-500 dark:text-slate-400">
+                                {partner.xp.toLocaleString()} XP
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <Users className="w-3 h-3 text-blue-400" />
+                            <span className="text-label font-bold text-slate-500 dark:text-slate-400">
+                                {partner.referrals_count} {t('referral.members')}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col items-end">
+                <div className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
+                <div className={`text-lg font-bold ${index === 0 ? 'text-amber-500' :
+                    index === 1 ? 'text-slate-400' :
+                        index === 2 ? 'text-orange-400' :
+                            'text-slate-900 dark:text-white'
+                    }`}>#{index + 1}</div>
+            </div>
+        </motion.div>
+    );
+});
+TopPartnerRow.displayName = 'TopPartnerRow';

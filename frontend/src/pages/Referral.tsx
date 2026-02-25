@@ -5,6 +5,7 @@ import { EarnHeader } from '../components/Earn/EarnHeader';
 // import { TaskCard } from '../components/Earn/TaskCard'; // Unused
 import { ReferralWidget } from '../components/Earn/ReferralWidget';
 import { LazyLoader } from '../components/ui/LazyLoader';
+import { useSystemClock } from '../hooks/usePerformance';
 
 import { MilestonePath } from '../components/Earn/MilestonePath';
 import { TaskGrid } from '../components/Earn/TaskGrid';
@@ -97,37 +98,37 @@ export default function ReferralPage() {
         if (storedClaimable) setClaimableTasks(JSON.parse(storedClaimable) as string[]);
     }, [user?.completed_tasks, user?.completed_stages]);
 
-    // Timer Logic for Verification
+    const tick = useSystemClock();
+
+    // Timer Logic for Verification - Consolidated to Global Heartbeat
     useEffect(() => {
-        const timer = setInterval(() => {
-            setVerifyingTasks(prev => {
-                const next = { ...prev };
-                let changed = false;
+        if (Object.keys(verifyingTasks).length === 0) return;
 
-                Object.keys(next).forEach(taskId => {
-                    if (next[taskId] > 1) {
-                        next[taskId] -= 1;
-                        changed = true;
-                    } else {
-                        delete next[taskId];
-                        setClaimableTasks(p => {
-                            if (!p.includes(taskId)) {
-                                const updated = [...p, taskId];
-                                localStorage.setItem('p2p_claimable_tasks', JSON.stringify(updated));
-                                return updated;
-                            }
-                            return p;
-                        });
-                        changed = true;
-                    }
-                });
+        setVerifyingTasks(prev => {
+            const next = { ...prev };
+            let changed = false;
 
-                return changed ? next : prev;
+            Object.keys(next).forEach(taskId => {
+                if (next[taskId] > 1) {
+                    next[taskId] -= 1;
+                    changed = true;
+                } else {
+                    delete next[taskId];
+                    setClaimableTasks(p => {
+                        if (!p.includes(taskId)) {
+                            const updated = [...p, taskId];
+                            localStorage.setItem('p2p_claimable_tasks', JSON.stringify(updated));
+                            return updated;
+                        }
+                        return p;
+                    });
+                    changed = true;
+                }
             });
-        }, 1000);
 
-        return () => clearInterval(timer);
-    }, []);
+            return changed ? next : prev;
+        });
+    }, [tick]);
 
     const handleClaim = async (task: Task) => {
         if (completedTaskIds.includes(task.id)) return;

@@ -1,8 +1,9 @@
-import { m, useAnimation } from 'framer-motion';
-import { useEffect } from 'react';
+import { m } from 'framer-motion';
 import { Menu, Crown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../context/UserContext';
+import { usePerformance } from '../hooks/usePerformance';
+import { cn } from '../lib/utils';
 
 // #comment: Header.tsx - Fixed top navigation bar.
 // Uses left-1/2 -translate-x-1/2 for precise centering of the fixed container.
@@ -16,33 +17,14 @@ interface HeaderProps {
 export const Header = ({ onOpenMenu }: HeaderProps) => {
     const { t } = useTranslation('common');
     const { user } = useUser();
-    const controls = useAnimation();
-
-    useEffect(() => {
-        let timeoutId: ReturnType<typeof setTimeout>;
-        const triggerAnimation = () => {
-            const delay = 5000 + Math.random() * 10000;
-            timeoutId = setTimeout(async () => {
-                await controls.start({
-                    scale: [1, 1.05, 0.95, 1.02, 1],
-                    borderColor: ["var(--color-border-glass)", "rgba(59, 130, 246, 0.5)", "var(--color-border-glass)"],
-                    boxShadow: [
-                        "var(--shadow-premium)",
-                        "0 0 20px 2px rgba(59, 130, 246, 0.4), var(--shadow-premium)",
-                        "var(--shadow-premium)"
-                    ],
-                    transition: { duration: 0.8, ease: "easeInOut" }
-                });
-                triggerAnimation();
-            }, delay);
-        };
-        triggerAnimation();
-        return () => clearTimeout(timeoutId);
-    }, [controls]);
+    const { lowPowerMode } = usePerformance();
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
+            className={cn(
+                "fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none",
+                lowPowerMode && "low-power-mode"
+            )}
             style={{
                 paddingTop: 'calc(var(--spacing-safe-top, 32px) + 48px)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
@@ -65,9 +47,11 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
                     <div className="flex-1" /> {/* Spacer */}
 
-                    <m.button
-                        animate={controls}
-                        className="flex items-center gap-1.5 sm:gap-2 rounded-2xl border border-border-glass bg-bg-glass px-2 sm:px-2.5 py-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 mr-1 sm:mr-0"
+                    <button
+                        className={cn(
+                            "flex items-center gap-1.5 sm:gap-2 rounded-2xl border border-border-glass bg-bg-glass px-2 sm:px-2.5 py-1 shadow-premium backdrop-blur-2xl transition-all shrink-0 mr-1 sm:mr-0",
+                            !lowPowerMode && "animate-header-pulse"
+                        )}
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1">
@@ -86,7 +70,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             </span>
                             <span className="text-[9px] sm:text-label font-bold uppercase tracking-wider text-success dark:text-emerald-400">XP</span>
                         </div>
-                    </m.button>
+                    </button>
                 </div>
             </div>
         </header>
