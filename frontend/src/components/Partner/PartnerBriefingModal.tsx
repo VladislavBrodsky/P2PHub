@@ -110,7 +110,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 40 }}
                 transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-2xl border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-2xl overscroll-none"
+                className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-2xl border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-xl overscroll-none"
                 style={{ overscrollBehavior: 'none' }}
             >
                 {/* Background Decoration Glows */}

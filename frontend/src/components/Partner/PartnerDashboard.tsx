@@ -16,12 +16,14 @@ import { TopPartnersList } from '../Community/TopPartnersList';
 import { ProWelcomeCard } from './ProWelcomeCard';
 import { FinanceStatsModal } from './FinanceStatsModal';
 import { useUI } from '../../context/UIContext';
+import { usePerformance } from '../../hooks/usePerformance';
 import { USDTLogo, TONLogo } from '../ui/CryptoIcons';
 
 export const PartnerDashboard = () => {
     const { t } = useTranslation(['social', 'common']);
     const { notification, selection } = useHaptic();
     const { setFooterVisible } = useUI();
+    const { lowPowerMode } = usePerformance();
     const { user, updateUser, refreshUser } = useUser();
     const [isExplorerOpen, setIsExplorerOpen] = React.useState(false);
     const [isQrOpen, setIsQrOpen] = React.useState(false);
@@ -142,7 +144,7 @@ export const PartnerDashboard = () => {
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
-                                className="mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-pro-glass animate-soft-breath"
+                                className={`mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-pro-glass ${lowPowerMode ? '' : 'animate-soft-breath'}`}
                             >
                                 {t('partner_dashboard.upgrade_pro_btn')}
                             </button>

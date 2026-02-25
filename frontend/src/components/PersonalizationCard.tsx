@@ -13,7 +13,7 @@ interface PersonalizationCardProps {
 }
 
 export function PersonalizationCard({ className, variant = 'default' }: PersonalizationCardProps) {
-    const { t } = useTranslation(['common']);
+    const { t, i18n } = useTranslation(['common']);
     const { user, isLoading: isUserLoading } = useUser();
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [imgError, setImgError] = React.useState(false);
@@ -46,6 +46,14 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
     const isProPlus = user?.is_pro_plus || (user?.subscription_plan || '').toLowerCase().includes('plus');
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
+
+    const formatXP = (num: number) => {
+        const lang = i18n.language || 'en';
+        if (num >= 1000) {
+            return (num / 1000).toLocaleString(lang, { maximumFractionDigits: 1 }) + 'K';
+        }
+        return num.toLocaleString(lang);
+    };
 
     return (
         <div className={`relative overflow-visible pt-4 ${className}`}>
@@ -196,12 +204,12 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
                                     <span className="text-label font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
-                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{Math.floor(stats.xp).toLocaleString()} {t('xp')}</span>
+                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
                                 </motion.div>
                                 <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
-                                    <span>{xpProgress.current.toLocaleString()}</span>
+                                    <span>{formatXP(xpProgress.current)}</span>
                                     <span className="text-text-secondary font-medium">/</span>
-                                    <span>{xpProgress.total.toLocaleString()}</span>
+                                    <span>{formatXP(xpProgress.total)}</span>
                                     <span className="text-label text-text-secondary uppercase ml-0.5 shrink-0">{t('next_lvl')}</span>
                                 </span>
                             </div>
