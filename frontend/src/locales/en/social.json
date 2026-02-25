@@ -208,9 +208,9 @@
     "info": "Learn how the referral system works",
     "viral": {
       "hook": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES!",
-      "subtitle": "📈 Create your source of passive income. $1 every minute 24/7",
+      "subtitle": "📈 Create your source of passive income. $1 per minute 24/7",
       "text": "🚀 UNLOCK NEW FINANCIAL OPPORTUNITIES! 🚀\n\nThe world of finance is evolving. Be part of the change. 🦅\n\nJoin the Pintopay Partner Hub and start building your partner network with income up to $1 per minute.\n\n✅ No barriers\n✅ No bureaucracy\n✅ Full financial freedom\n\nStart your journey to success right now! 👇",
-      "share_template": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES! \nCreate your source of passive income - $1 every minute \n\nJoin my Network - {{link}}"
+      "share_template": "🎯 UNLOCK NEW FINANCIAL OPPORTUNITIES! \nCreate your source of passive income - $1 per minute \n\nJoin my Network - {{link}}"
     },
     "modal": {
       "invite_image_alt": "Your financial ecosystem",
@@ -304,7 +304,7 @@
     "read_line1": "Read",
     "read_line2": "Guide",
     "goal_title": "Our Goal",
-    "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1>Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1/minute passive income stream</3>",
+    "goal_desc": "Our mission is to build the world's largest decentralized partner network. <1>Your goal is simple:</1> Expand the network, earn XP, and unlock the <3>$1 per minute strategy</3>",
     "manual_title": "Path to Success",
     "manual_step_1": "Share your personal growth link or QR code",
     "manual_step_2": "Help partners activate cards and PRO status",

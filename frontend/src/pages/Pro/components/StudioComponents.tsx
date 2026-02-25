@@ -191,7 +191,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                             {t('pro_dashboard.studio.partners_strategy.mode')}
                                         </span>
                                     </div>
-                                    <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-snug pr-4 italic opacity-80">
+                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug pr-4 italic opacity-80">
                                         <Trans i18nKey="pro_dashboard.studio.partners_strategy.desc">
                                             Using geometric growth protocols and specialized Web App referral links for <span className="text-purple-500 font-bold">maximum geometric scaling</span>.
                                         </Trans>

@@ -153,7 +153,7 @@ export const PremiumSelect = ({
                         ? `border-slate-300 dark:border-white/20 shadow-lg ${theme.shadow}`
                         : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'}`}
             >
-                <span className={`text-[12px] sm:text-[13px] font-bold truncate pr-4 ${value ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+                <span className={`text-caption sm:text-[13px] font-bold truncate pr-4 ${value ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                     {selectedLabel || placeholder}
                 </span>
 

@@ -16,13 +16,13 @@ When you bring 10 active builders into your Pintopay organization, you haven't j
 
 
 
-## Phase 1: The Architect (0-10 Founders)
+## Step 1: The Architect (0-10 Founders)
 
 Most people fail here because they treat it like a "referral program. " It isn't. You are recruiting your **Board of Directors**. **The Profile**: Look for someone who is frustrated with 3-day bank delays. Look for the expat, the digital nomad, or the tech enthusiast. **The KPI**: Don't count "signups. " Count "Active Cards. " A signup is a wish. An active Pintopay card is a committed node in the grid. **The Mission**: Ensure your first 10 founders understand the [Pinto Ecosystem](internal:8). They must be able to explain the difference between a custodial bank and a sovereign crypto card in 30 seconds.
 
 
 
-## Phase 2: The Multiplier (10-100 Nodes)
+## Step 2: The Multiplier (10-100 Nodes)
 
 This is where the "$1/Minute" begins to manifest. At this stage, your network is processing volume across multiple time zones.
 
@@ -32,7 +32,7 @@ Traditional sales pay you once. Infrastructure pays you **forever**. Every time 
 
 
 
-## Phase 3: The Hegemony (100-1000+ Legends)
+## Step 3: The Hegemony (100-1000+ Legends)
 
 When you cross the 100-node barrier, you have reached **Escape Velocity**. The gravity of the old economy (bills, debt, time-for-money) no longer pulls you down.
 
@@ -144,9 +144,7 @@ Humans are wired to value physical objects—gold, cash, buildings. Digital weal
 
 
 
-## Step 1: The Sovereign Audit
-
-Look at your current financial setup. How much of it requires someone else's approval? If more than 50% of your wealth is under custodial control, you are at risk. **The Fix**: Start by moving your daily spending to Pintopay. Experience what it feels like to have USDT converted to coffee in 1 second without a bank "clearing" the transaction.
+Look at your current financial setup. How much of it requires someone else's approval? If more than 50% of your wealth is under custodial control, you are at risk. **Step 1: The Sovereign Audit**. **The Fix**: Start by moving your daily spending to Pintopay. Experience what it feels like to have USDT converted to coffee in 1 second without a bank "clearing" the transaction.
 
 
 
@@ -228,7 +226,7 @@ For years, the "crypto elite" had a problem: they were rich on paper, but poor i
 
 ## The Liquidity Ladder
 
-Not all assets are created equal. **Tier 1 (Cash)**: High liquidity, zero growth (losing value to inflation). **Tier 2 (Stocks/Real Estate)**: High growth, zero liquidity (takes weeks to sell). **Tier 3 (Pintopay Crypto)**: **High growth AND high liquidity.** By holding your wealth in USDT or BTC within the Pintopay ecosystem, you stay positioned for market upside while maintaining the ability to pay for a latte in 3 seconds.
+Not all assets are created equal. **Step 1 (Cash)**: High liquidity, zero growth (losing value to inflation). **Step 2 (Stocks/Real Estate)**: High growth, zero liquidity (takes weeks to sell). **Step 3 (Pintopay Crypto)**: **High growth AND high liquidity.** By holding your wealth in USDT or BTC within the Pintopay ecosystem, you stay positioned for market upside while maintaining the ability to pay for a latte in 3 seconds.
 
 
 
@@ -387,25 +385,25 @@ To truly master the Pintopay ecosystem, you need the full **Sovereign Tech Stack
 
 
 
-## Layer 1: The Gateway (Hardware & VPN)
+## Step 1: The Gateway (Hardware & VPN)
 
 The foundation of your stack is your hardware. **Biometrics**: Use a device with advanced biometric security (FaceID/TouchID). This is how Pintopay ensures that *only you* can authorize a transaction. **Encrypted Tunnel**: Never access your Pintopay dashboard or crypto wallet on a public Wi-Fi without a high-grade VPN. Your IP address is your digital footprint; hide it.
 
 
 
-## Layer 2: The Wallet (The Vault)
+## Step 2: The Wallet (The Vault)
 
 Your wallet is your "personal bank branch. "**Non-Custodial**: Use wallets where you own the private keys (Seed Phrase). **Multi-Chain Compatibility**: Ensure your wallet supports the major liquidity layers (Ethereum, Tron, TON). Pintopay integrates with these networks to pull USDT for your spending.
 
 
 
-## Layer 3: The Spend (The Pintopay Card)
+## Step 3: The Spend (The Pintopay Card)
 
 This is where the magic happens. The Pintopay card is the interface between the sovereign digital world and the old fiat world. **Virtual Cards**: Generate a one-time virtual card for online subscriptions to stay anonymous. **Physical Cards**: Use the Platinum physical card for real-world presence and ATM withdrawals.
 
 
 
-## Layer 4: The Network (The Community)
+## Step 4: The Network (The Community)
 
 Sovereignty isn't a solo sport. You need a trusted network of other partners.
 

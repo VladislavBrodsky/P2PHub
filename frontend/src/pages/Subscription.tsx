@@ -393,9 +393,6 @@ export default function SubscriptionPage() {
                     >
                         <X size={20} className="text-slate-600 dark:text-white/60" />
                     </button>
-                    <div className="flex flex-col items-center">
-                        <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40">{t('pro:subscription.upgrade.badge')}</span>
-                    </div>
                     <div className="w-10" />
                 </div>
 
