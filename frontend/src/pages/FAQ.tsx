@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     HelpCircle, Search, ChevronRight, MessageCircle,
@@ -46,6 +46,19 @@ export default function FAQPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+    const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+
+    // UI Controls
+    useEffect(() => {
+        setHeaderVisible(false);
+        setFooterVisible(false);
+        setNotificationsVisible(false);
+        return () => {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            setNotificationsVisible(true);
+        };
+    }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     // Listen for faq-search events dispatched by the task system
     React.useEffect(() => {
@@ -181,7 +194,7 @@ export default function FAQPage() {
     return (
         <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
-            <div className="relative pt-4 pb-16 px-6">
+            <div className="relative pt-[calc(var(--spacing-safe-top,32px)+1rem)] pb-16 px-6">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full -z-10" />
 
                 <div className="flex items-center gap-3 mb-6">

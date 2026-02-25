@@ -17,6 +17,7 @@ import { useConfig } from '../context/ConfigContext';
 import { useSystemClock } from '../hooks/usePerformance';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
+import { useUI } from '../context/UIContext';
 
 // --- ISOLATED PERFORMANCE COMPONENTS ---
 const FomoTimer = React.memo(() => {
@@ -108,6 +109,19 @@ export default function SubscriptionPage() {
     const upgradePrice = proPlusPrice - proPrice; // 30
 
     const paymentRef = React.useRef<HTMLDivElement>(null);
+    const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+
+    // UI Cleanup 
+    useEffect(() => {
+        setHeaderVisible(false);
+        setFooterVisible(false);
+        setNotificationsVisible(false);
+        return () => {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            setNotificationsVisible(true);
+        };
+    }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     useEffect(() => {
         const fetchStats = async () => {
@@ -297,7 +311,9 @@ export default function SubscriptionPage() {
 
     // ─── CONTENT BLOCKS ───
     const proActiveContent = (user?.is_pro && !showPaymentOptionsForPro) ? (
-        <div className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-4 text-center relative overflow-hidden font-sans`}>
+        <div
+            className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-[calc(var(--spacing-safe-top,32px)+1rem)] text-center relative overflow-hidden font-sans`}
+        >
             {/* Navigation Header */}
             <div className="w-full flex items-center justify-between mb-8 relative z-20">
                 <button
@@ -384,7 +400,7 @@ export default function SubscriptionPage() {
 
     return (
         <>
-            <div className="flex flex-col px-3 pb-24 pt-0 max-w-lg mx-auto overflow-x-hidden">
+            <div className="flex flex-col px-3 pb-24 pt-(--spacing-safe-top,32px) max-w-lg mx-auto overflow-x-hidden">
                 {/* Main Navigation Header */}
                 <div className="sticky top-0 w-full flex items-center justify-between py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
                     <button
