@@ -284,7 +284,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
 
             {/* Premium Header */}
             <div className={cn(
-                "relative z-40 transition-all duration-300 px-5 pt-[94px] pb-3",
+                "relative z-40 transition-all duration-300 px-5 pt-[138px] pb-3",
                 isScrolled ? "bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5" : ""
             )}>
                 <div className="flex items-center justify-between mb-4">
