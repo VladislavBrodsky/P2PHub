@@ -19,6 +19,41 @@ const BlogCarousel = lazy(() => import('../components/Marketing/BlogCarousel').t
 const IncomePotential = lazy(() => import('../components/Marketing/IncomePotential').then(m => ({ default: m.IncomePotential })));
 const Footer = lazy(() => import('../components/Layout/Footer').then(m => ({ default: m.Footer })));
 
+// #comment: Skeleton Loaders to prevent layout shifts during lazy loading.
+const SkeletonCard = ({ className }: { className?: string }) => (
+    <div className={`animate-pulse bg-slate-200/50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/50 dark:border-white/5 ${className}`} />
+);
+
+const BentoSkeleton = () => (
+    <div className="flex gap-4 overflow-hidden px-6 h-[410px]">
+        <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
+        <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
+        <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
+    </div>
+);
+
+const IncomeSkeleton = () => (
+    <div className="mx-4 p-5 md:p-8 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 min-h-[1100px] flex flex-col gap-8 animate-pulse">
+        <div className="h-8 w-48 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto" />
+        <div className="h-10 w-64 bg-slate-200 dark:bg-slate-800 rounded mx-auto" />
+        <div className="h-48 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
+        <div className="space-y-4">
+            <div className="h-24 w-full bg-slate-200 dark:bg-slate-800 rounded-xl" />
+            <div className="h-24 w-full bg-slate-200 dark:bg-slate-800 rounded-xl" />
+        </div>
+    </div>
+);
+
+const BlogSkeleton = () => (
+    <div className="mx-4 p-6 rounded-3xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 h-[450px] flex flex-col gap-6 animate-pulse">
+        <div className="h-8 w-32 bg-slate-200 dark:bg-slate-800 rounded-full" />
+        <div className="flex gap-4 overflow-hidden">
+            <SkeletonCard className="shrink-0 w-[240px] h-[300px]" />
+            <SkeletonCard className="shrink-0 w-[240px] h-[300px]" />
+        </div>
+    </div>
+);
+
 interface DashboardProps {
     setActiveTab?: (tab: string) => void;
 }
@@ -143,21 +178,21 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         description={t('dashboard:evolution.desc')}
                     />
                 </div>
-                <ThrottledSuspense fallback={<div className="h-[440px] animate-pulse bg-bg-surface/10 rounded-2xl border border-border-glass" />}>
+                <ThrottledSuspense fallback={<BentoSkeleton />}>
                     <BentoGrid />
                 </ThrottledSuspense>
             </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<div className="h-[1100px] animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<IncomeSkeleton />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </ThrottledSuspense>
             </m.div>
 
             {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<div className="h-[450px] animate-pulse bg-bg-surface/10 rounded-3xl mx-4 border border-border-glass" />}>
+                <ThrottledSuspense fallback={<BlogSkeleton />}>
                     <BlogCarousel />
                 </ThrottledSuspense>
             </m.div>
@@ -185,7 +220,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* 7. Footer */}
-            <Suspense fallback={null}>
+            <Suspense fallback={<div className="h-20" />}>
                 <Footer />
             </Suspense>
         </m.div>

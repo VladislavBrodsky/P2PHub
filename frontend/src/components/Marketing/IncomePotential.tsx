@@ -349,10 +349,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 <AnimatePresence>
                     {showMathSection && (
                         <m.div
-                            initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                            initial={{ opacity: 0, height: 0, scale: 0.98 }}
                             animate={{ opacity: 1, height: 'auto', scale: 1 }}
-                            exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                            transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+                            exit={{ opacity: 0, height: 0, scale: 0.98 }}
+                            transition={{
+                                height: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
+                                opacity: { duration: 0.3, delay: 0.1 },
+                                scale: { duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }
+                            }}
                             className="overflow-hidden"
                         >
                             <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-3 space-y-1 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">

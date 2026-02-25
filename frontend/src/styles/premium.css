@@ -165,8 +165,8 @@
 }
 
 .vibing-blue-animated {
-  background: linear-gradient(135deg, #0066FF 0%, #3B82F6 25%, #60A5FA 50%, #3B82F6 75%, #0052D9 100%);
-  background-size: 300% 300%;
+  background: linear-gradient(135deg, #0066FF 0%, #60A5FA 50%, #0052D9 100%);
+  background-size: 200% 200%;
   animation: vibing-gradient 4s ease-in-out infinite;
   color: #FFFFFF;
   font-weight: 700;
@@ -463,10 +463,11 @@
 }
 
 .vibing-yellow-animated {
-  background: linear-gradient(135deg, #FFD700 0%, #F59E0B 25%, #FBBF24 50%, #F59E0B 75%, #D97706 100%);
-  background-size: 300% 300%;
+  background: linear-gradient(135deg, #FFD700 0%, #FBBF24 50%, #D97706 100%);
+  background-size: 200% 200%;
   animation: vibing-gradient 4s ease-in-out infinite;
-  color: #0A1000;
+  color: #0F172A;
+  /* Harmonized dark text color (slate-900 equivalent) */
   font-weight: 800;
 }
 

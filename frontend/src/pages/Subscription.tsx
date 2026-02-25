@@ -708,7 +708,7 @@ export default function SubscriptionPage() {
                         <AnimatePresence mode="wait">
                             {!isSelectingCurrency ? (
                                 <motion.button
-                                    key="buy-btn"
+                                    key={`buy-btn-${selectedPlan}`}
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
