@@ -607,10 +607,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 <div className="flex items-center justify-center gap-4">
                                     <div className="flex -space-x-2">
                                         {[
-                                            "/avatars/real_person_1.png",
-                                            "/avatars/real_person_2.png",
-                                            "/avatars/real_person_3.png",
-                                            "/avatars/real_person_4.png"
+                                            "https://randomuser.me/api/portraits/women/44.jpg",
+                                            "https://randomuser.me/api/portraits/men/32.jpg",
+                                            "https://randomuser.me/api/portraits/women/68.jpg",
+                                            "https://randomuser.me/api/portraits/men/45.jpg"
                                         ].map((url, i) => (
                                             <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
                                                 <img src={url} alt="user" className="w-full h-full object-cover" />
