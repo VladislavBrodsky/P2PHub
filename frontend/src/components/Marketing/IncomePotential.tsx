@@ -107,9 +107,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
         return () => obs.disconnect();
     }, [showMathSection]);
 
-    // Trigger math section once plan is unlocked
-    const estimatedMonthlyRaw = activePartners * 45;
-    const estimatedMonthly = estimatedMonthlyRaw.toLocaleString();
+    // Profit Math
+    const estimatedMonthlyRaw = useMemo(() => activePartners * 45, [activePartners]);
+    const estimatedMonthly = useMemo(() => estimatedMonthlyRaw.toLocaleString(), [estimatedMonthlyRaw]);
 
     // Trigger math section once plan is unlocked
     useEffect(() => {

@@ -55,10 +55,12 @@ export const PartnerDashboard = () => {
     const handleCloseProWelcome = async () => {
         setIsProWelcomeOpen(false);
         try {
-            await apiClient.post('/api/partner/notification/seen');
+            // Optimistically update local state to prevent re-triggering while API is pending
             updateUser({ pro_notification_seen: true });
+            await apiClient.post('/api/partner/notification/seen');
         } catch (e) {
             console.error('Failed to mark notification as seen', e);
+            // Revert if API fail is critical, but here seeing the card once is usually enough
         }
     };
 
@@ -140,7 +142,7 @@ export const PartnerDashboard = () => {
                         {!user?.is_pro && (user?.balance || 0) >= 39 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-label font-bold uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95 animate-pulse"
+                                className="mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-pro-glass animate-soft-breath"
                             >
                                 {t('partner_dashboard.upgrade_pro_btn')}
                             </button>
@@ -148,7 +150,7 @@ export const PartnerDashboard = () => {
                         {user?.is_pro && user?.subscription_plan !== 'PRO_PLUS_MONTHLY' && (user?.balance || 0) >= 69 && (
                             <button
                                 onClick={(e) => { e.stopPropagation(); handleUpgradeFromBalance('PRO_PLUS'); }}
-                                className="mt-2 w-full py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-label font-bold uppercase tracking-widest rounded-lg transition-all shadow-md active:scale-95"
+                                className="mt-2 w-full py-2 btn-upgrade-glass btn-upgrade-plus-glass"
                             >
                                 {t('partner_dashboard.upgrade_plus_btn')}
                             </button>

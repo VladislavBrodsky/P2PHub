@@ -360,7 +360,6 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
 
     const [showFunnel, setShowFunnel] = useState(false);
     const [funnelStep, setFunnelStep] = useState(0);
-    const [isCalculating, setIsCalculating] = useState(true);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
@@ -618,7 +617,7 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
                                         </button>
 
                                         <button
-                                            onClick={() => { setShowFunnel(false); setFunnelStep(0); setIsCalculating(false); }}
+                                            onClick={() => { setShowFunnel(false); setFunnelStep(0); }}
                                             className="text-label font-bold text-slate-400 uppercase tracking-[0.3em] hover:text-slate-900 dark:hover:text-white transition-colors"
                                         >
                                             {t('common:close', { defaultValue: 'Close' })}
