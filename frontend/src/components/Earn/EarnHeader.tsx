@@ -194,11 +194,11 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white/5 dark:border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-md flex flex-col justify-between min-h-[64px] sm:min-h-[76px] shadow-inner"
+                                className="stat-block-premium p-2.5 sm:p-3.5 flex flex-col justify-between min-h-[64px] sm:min-h-[76px]"
                             >
                                 <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1.5 sm:gap-2 w-full mb-1">
-                                    <div className="flex items-center justify-center shrink-0">
-                                        <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+                                    <div className="stat-icon-glow text-amber-400 shrink-0">
+                                        <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                     </div>
                                     <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-primary opacity-60 truncate w-full">
                                         {t('referral.partners')}
@@ -212,11 +212,6 @@ export const EarnHeader = () => {
                                 </div>
                                 {/* Subtle highlight */}
                                 <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-amber-500/20 to-transparent" />
-                                {/* Ambient glow */}
-                                <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full blur-xl opacity-10 pointer-events-none"
-                                    style={{ background: '#fbbf24' }} />
-                                {/* Glass shine overlay */}
-                                <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
 
                             {/* Total XP */}
@@ -224,11 +219,11 @@ export const EarnHeader = () => {
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="relative overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 border border-white/5 dark:border-white/10 bg-black/40 dark:bg-black/60 backdrop-blur-md flex flex-col justify-between min-h-[64px] sm:min-h-[76px] shadow-inner"
+                                className="stat-block-premium p-2.5 sm:p-3.5 flex flex-col justify-between min-h-[64px] sm:min-h-[76px]"
                             >
                                 <div className="flex flex-col xl:flex-row items-start xl:items-center gap-1.5 sm:gap-2 w-full mb-1">
-                                    <div className="flex items-center justify-center shrink-0">
-                                        <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: badgeColor }} />
+                                    <div className="stat-icon-glow shrink-0" style={{ color: badgeColor }}>
+                                        <Zap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                     </div>
                                     <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-text-primary opacity-60 truncate w-full">
                                         {t('referral.total_xp')}
@@ -241,11 +236,6 @@ export const EarnHeader = () => {
                                 </div>
                                 {/* Subtle highlight */}
                                 <div className="absolute inset-x-0 top-0 h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${badgeColor}30, transparent)` }} />
-                                {/* Ambient glow */}
-                                <div className="absolute -bottom-4 -right-4 w-12 h-12 rounded-full blur-xl opacity-10 pointer-events-none"
-                                    style={{ background: badgeColor }} />
-                                {/* Glass shine overlay */}
-                                <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent pointer-events-none" />
                             </motion.div>
                         </div>
                     </div>
