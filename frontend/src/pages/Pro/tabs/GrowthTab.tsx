@@ -18,6 +18,33 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
     const CategoryIcon = stage.icon;
     const isUnlocked = unlockedStages.includes(stageIdStr) || stage.xpCost === 0;
 
+    // Fetch localized content from 'academy' namespace
+    const localizedTitle = t(`academy_content.stage_${stage.id}_title`, { ns: 'academy' });
+    const localizedDesc = t(`academy_content.stage_${stage.id}_desc`, { ns: 'academy' });
+
+    // Construct full lesson content if expanded
+    let fullContent = '';
+    if (isExpanded) {
+        const intro = t(`academy_content.stage_${stage.id}_lesson_intro`, { ns: 'academy' });
+        const body = t(`academy_content.stage_${stage.id}_lesson_body`, { ns: 'academy' });
+        const secret = t(`academy_content.stage_${stage.id}_lesson_secret`, { ns: 'academy' });
+        const outro = t(`academy_content.stage_${stage.id}_lesson_outro`, { ns: 'academy' });
+        const viralRule = t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { ns: 'academy' });
+
+        const parts = [];
+        if (intro && intro !== `academy_content.stage_${stage.id}_lesson_intro`) parts.push(intro);
+        if (body && body !== `academy_content.stage_${stage.id}_lesson_body`) parts.push(body);
+        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!IMPORTANT]\n> **THE SECRET:** ${secret}`);
+        if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**VIRAL RULE:** ${viralRule}`);
+        if (outro && outro !== `academy_content.stage_${stage.id}_lesson_outro`) parts.push(outro);
+
+        fullContent = parts.join('\n\n');
+    }
+
+    const displayTitle = (localizedTitle && localizedTitle !== `academy_content.stage_${stage.id}_title`) ? localizedTitle : stage.title;
+    const displayDesc = (localizedDesc && localizedDesc !== `academy_content.stage_${stage.id}_desc`) ? localizedDesc : stage.description;
+
+
     return (
         <motion.div
             initial={lowPowerMode ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
@@ -74,13 +101,13 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                 {stage.category}
                             </div>
                             <h4 className={`text-sm sm:text-base font-bold uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
-                                {stage.title}
+                                {displayTitle}
                             </h4>
                         </div>
                         {!isExpanded && (
                             <div className="flex items-center gap-3 opacity-60">
                                 <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none truncate max-w-[200px] italic">
-                                    {stage.description}
+                                    {displayDesc}
                                 </span>
                             </div>
                         )}
@@ -128,7 +155,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                             </p>
                                         </div>
                                     ) : (
-                                        renderMarkdown(stage.content || stage.description)
+                                        renderMarkdown(fullContent || stage.content || displayDesc)
                                     )}
                                 </div>
 
@@ -265,7 +292,7 @@ export const GrowthTab = ({
     selection,
     impact
 }: GrowthTabProps) => {
-    const { t } = useTranslation('pro');
+    const { t } = useTranslation(['pro', 'academy']);
     const { lowPowerMode } = usePerformance();
     const [expandedModuleId, setExpandedModuleId] = useState<string | null>(null);
     const hasInitialAutoExpanded = useRef(false);
