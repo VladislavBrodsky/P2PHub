@@ -18,6 +18,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
 }) => {
     const [displaySrc, setDisplaySrc] = useState<string | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [hasError, setHasError] = useState(false);
     const [isInView, setIsInView] = useState(false);
     const imgRef = useRef<HTMLDivElement>(null);
 
@@ -66,19 +67,27 @@ export const LazyImage: React.FC<LazyImageProps> = ({
                 )}
             </AnimatePresence>
 
-            {displaySrc && (
+            {displaySrc && !hasError ? (
                 <img
                     src={displaySrc}
                     alt={alt}
                     onLoad={() => setIsLoaded(true)}
                     onError={(e) => {
+                        console.error(`LazyImage failed to load: ${src}`);
+                        setHasError(true);
                         setIsLoaded(true); // Stop the pulse
                         if (props.onError) props.onError(e);
                     }}
                     className={`${className} transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                     {...props}
                 />
-            )}
+            ) : hasError ? (
+                <div className={`absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-white/5 ${placeholderClassName}`}>
+                    <div className="text-[10px] font-bold text-slate-400 dark:text-white/20 uppercase tracking-tighter">
+                        {alt.charAt(0).toUpperCase()}
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 };

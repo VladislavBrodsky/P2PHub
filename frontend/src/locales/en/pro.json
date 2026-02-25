@@ -1236,6 +1236,11 @@
     },
     "alerts": {
       "expired": "Payment window expired. Please try again."
+    },
+    "subscription": {
+      "upgrade": {
+        "hash_help": "Copy the Transaction Hash (TxID) from your wallet after the transaction is confirmed."
+      }
     }
   }
 }
