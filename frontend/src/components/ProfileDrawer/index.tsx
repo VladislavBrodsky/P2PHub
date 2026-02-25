@@ -120,7 +120,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
                             {/* Drawer Navigation Bar */}
-                            <div className="pt-[120px] px-4 pb-2 flex items-center justify-between z-20">
+                            <div className="pt-[104px] px-4 pb-2 flex items-center justify-between z-20">
                                 <button
                                     onClick={onClose}
                                     className="p-2 rounded-full bg-card-bg border border-card-border text-text-primary shadow-sm active:scale-90 transition-all outline-none"
