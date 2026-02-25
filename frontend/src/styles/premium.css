@@ -1,4 +1,4 @@
-@reference "tailwindcss";
+@import "tailwindcss" reference;
 
 /* === LIQUID CRYSTAL PROGRESS BAR === */
 @keyframes liquid-crystal-shift {

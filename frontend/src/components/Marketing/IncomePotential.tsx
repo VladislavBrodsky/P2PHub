@@ -607,10 +607,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 <div className="flex items-center justify-center gap-4">
                                     <div className="flex -space-x-2">
                                         {[
-                                            "/Users/grandmaestro/.gemini/antigravity/brain/5542e9e1-5c52-47d4-95dd-cf1f4495b34a/real_person_1_webp_1771985286235.png",
-                                            "/Users/grandmaestro/.gemini/antigravity/brain/5542e9e1-5c52-47d4-95dd-cf1f4495b34a/real_person_2_webp_1771985378309.png",
-                                            "/Users/grandmaestro/.gemini/antigravity/brain/5542e9e1-5c52-47d4-95dd-cf1f4495b34a/real_person_3_webp_1771985611210.png",
-                                            "/Users/grandmaestro/.gemini/antigravity/brain/5542e9e1-5c52-47d4-95dd-cf1f4495b34a/real_person_4_webp_1771985452021.png"
+                                            "/avatars/real_person_1.png",
+                                            "/avatars/real_person_2.png",
+                                            "/avatars/real_person_3.png",
+                                            "/avatars/real_person_4.png"
                                         ].map((url, i) => (
                                             <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
                                                 <img src={url} alt="user" className="w-full h-full object-cover" />
