@@ -15,6 +15,8 @@ const BlogPage = lazy(prefetchPages.blog);
 const AdminPage = lazy(prefetchPages.admin);
 const ProPage = lazy(prefetchPages.pro);
 const FAQPage = lazy(prefetchPages.faq);
+const StripeReturnPage = lazy(() => import('./pages/StripeReturnPage').then(m => ({ default: m.StripeReturnPage })));
+
 // #comment: Strategic Lazy Loading for non-critical features.
 // SupportChat is a heavy component (icons + framer-motion animations).
 // By lazy-loading it, we reduce the initial bundle size, speeding up TTI.
@@ -100,7 +102,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     useEffect(() => {
         const handlePathSync = () => {
             const rawPath = window.location.pathname.replace(/^\//, '');
-            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription', 'faq', 'home'];
+            const validTabs = ['pro', 'admin', 'cards', 'partner', 'earn', 'league', 'blog', 'subscription', 'faq', 'home', 'stripe-return'];
 
             // Map aliases
             let path = rawPath;
@@ -307,6 +309,13 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                         {(visitedTabs.has('faq') || activeTab === 'faq') && (
                             <FeatureErrorBoundary featureName={t('system.features.faq')}>
                                 <FAQPage />
+                            </FeatureErrorBoundary>
+                        )}
+                    </div>
+                    <div className={activeTab === 'stripe-return' ? 'block relative' : 'hidden'}>
+                        {(visitedTabs.has('stripe-return') || activeTab === 'stripe-return') && (
+                            <FeatureErrorBoundary featureName="Stripe Return">
+                                <StripeReturnPage />
                             </FeatureErrorBoundary>
                         )}
                     </div>

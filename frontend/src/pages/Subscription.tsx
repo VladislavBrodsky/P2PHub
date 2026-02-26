@@ -138,8 +138,13 @@ export default function SubscriptionPage() {
                 const res = await apiClient.get('/api/payment/my-transactions');
                 const transactions = res.data;
                 const manualPending = transactions.find((t: any) => t.status === 'manual_review');
+                const stripePending = transactions.find((t: any) => t.status === 'pending' && t.network === 'STRIPE');
+
                 if (manualPending) {
                     setStatus('manual_review');
+                } else if (stripePending) {
+                    // Start polling if we see a pending stripe transaction
+                    setStatus('pending');
                 }
             } catch (e) {
                 console.error("Failed to fetch my transactions", e);
@@ -152,6 +157,68 @@ export default function SubscriptionPage() {
         const timer = setTimeout(() => setIsReady(true), 150);
         return () => clearTimeout(timer);
     }, []);
+
+    // ─── POST-STRIPE RETURN AUTO-REFRESH ───
+    useEffect(() => {
+        // When the user closes the native Telegram link browser, the window regains visibility
+        const handleVisibilityChange = async () => {
+            if (document.visibilityState === 'visible' && paymentMethod === 'STRIPE' && status === 'pending') {
+                console.log('[STRIPE] User returned. Refreshing user state...');
+                await refreshUser();
+
+                // Secondary check in case the webhook was delayed
+                // Secondary check in case the webhook was delayed
+                const checkStatus = async () => {
+                    try {
+                        const res = await apiClient.get('/api/payment/my-transactions');
+                        const hasSuccess = res.data.some((t: any) => t.status === 'success' && t.network === 'STRIPE');
+
+                        if (hasSuccess) {
+                            setStatus('success');
+                            notification('success');
+                            return true;
+                        }
+                        return false;
+                    } catch (e) {
+                        console.error("Failed to check transaction status on return", e);
+                        return false;
+                    }
+                };
+
+                const initialSuccess = await checkStatus();
+
+                // If not successful immediately, start a short polling mechanism (max 15 seconds)
+                if (!initialSuccess) {
+                    let attempts = 0;
+                    const maxAttempts = 5; // 5 * 3s = 15s max polling
+
+                    const pollInterval = setInterval(async () => {
+                        attempts++;
+                        console.log(`[STRIPE] Polling webhook status... Attempt ${attempts}/${maxAttempts}`);
+
+                        const success = await checkStatus();
+                        if (success || attempts >= maxAttempts) {
+                            clearInterval(pollInterval);
+                            if (!success && attempts >= maxAttempts) {
+                                console.log('[STRIPE] Polling timed out. Returning to idle state.');
+                                setStatus('idle'); // Give up and let the user try again or assume it failed
+                            } else if (success) {
+                                await refreshUser(); // Final refresh when succeed
+                            }
+                        }
+                    }, 3000);
+                }
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleVisibilityChange);
+        };
+    }, [paymentMethod, status, refreshUser, notification]);
 
     // Unified FOMO Effects - slotsLeft and deadLine removed from here
     // as they are now managed in isolated sub-components to prevent full-page re-renders.
@@ -298,6 +365,9 @@ export default function SubscriptionPage() {
         try {
             const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
             if (res.data.checkout_url) {
+                // Set pending status BEFORE opening the link so the visibility listener knows what to look for
+                setStatus('pending');
+
                 // Open Stripe Checkout in an external/in-app browser to avoid TWA UI overlap
                 if (typeof window !== 'undefined' && window.Telegram?.WebApp?.openLink) {
                     window.Telegram.WebApp.openLink(res.data.checkout_url);
@@ -309,6 +379,7 @@ export default function SubscriptionPage() {
             }
         } catch (error: any) {
             console.error('[STRIPE] Session creation failed:', error);
+            setStatus('idle');
             notification('error');
             // Reset loading so user can try again if it was a transient error
             setIsLoading(false);
