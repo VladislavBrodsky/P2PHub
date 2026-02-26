@@ -781,20 +781,33 @@ export default function SubscriptionPage() {
                                             {t('common:cancel', 'CANCEL')}
                                         </button>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-3 gap-2">
                                         <button
-                                            onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); }}
-                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
+                                            onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                            className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm"
                                         >
-                                            <Wallet size={20} className="text-blue-500 group-hover:scale-110 transition-transform" />
-                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
+                                            <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                                <TONLogo className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
                                         </button>
                                         <button
-                                            onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); }}
-                                            className="group h-18 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
+                                            onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                            className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm"
                                         >
-                                            <CreditCard size={20} className="text-emerald-500 group-hover:scale-110 transition-transform" />
-                                            <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
+                                            <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                                <USDTLogo className="w-5 h-5" />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); handleStripePayment(); setIsSelectingCurrency(false); }}
+                                            className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm"
+                                        >
+                                            <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                                <CreditCard size={18} />
+                                            </div>
+                                            <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.stripe_card')}</span>
                                         </button>
                                     </div>
                                 </motion.div>
@@ -955,12 +968,12 @@ export default function SubscriptionPage() {
                                     <div className="grid grid-cols-3 gap-2">
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('TON'); }}
-                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
+                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-blue-500/5 hover:border-blue-500/30 active:scale-95"
                                         >
                                             <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                                 <TONLogo className="w-5 h-5" />
                                             </div>
-                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'TON')}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet')}</span>
                                         </button>
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
@@ -969,17 +982,17 @@ export default function SubscriptionPage() {
                                             <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
                                                 <USDTLogo className="w-5 h-5" />
                                             </div>
-                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'USDT')}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address')}</span>
                                         </button>
                                         <button
                                             disabled={isLoading}
-                                            onClick={handleStripePayment}
+                                            onClick={() => { selection(); handleStripePayment(); }}
                                             className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-indigo-500/5 hover:border-indigo-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
                                                 {isLoading ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
                                             </div>
-                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.stripe_card', 'CARD')}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.stripe_card')}</span>
                                         </button>
                                     </div>
                                     <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
