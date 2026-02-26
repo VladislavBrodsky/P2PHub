@@ -633,63 +633,64 @@ export default function SubscriptionPage() {
                                         </p>
                                     </div>
 
-                                    <div className="relative flex items-stretch gap-3 px-1.5">
-                                        <motion.div
-                                            layoutId="plan-selector-bg"
-                                            className={`absolute inset-y-1.5 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] rounded-xl shadow-[0_0_25px_rgba(255,255,255,0.1)] ${selectedPlan === 'PRO'
-                                                ? 'left-1.5 w-[calc(50%-0.75rem)] vibing-yellow-animated border border-yellow-400/30 shadow-[0_0_20px_rgba(234,179,8,0.2)]'
-                                                : 'left-[calc(50%+0.15rem)] w-[calc(50%-0.6rem)] vibing-crystal-purple-animated border border-white/20 shadow-[0_0_20px_rgba(168,85,247,0.2)]'
-                                                }`}
-                                        />
+                                    {/* ── COMPACT PLAN SELECTOR CARDS ── */}
+                                    <div className="flex items-stretch gap-2 px-1">
 
-                                        {/* PRO Card Action */}
+                                        {/* PRO Card */}
                                         <button
                                             onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                                            className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
+                                            className={`relative flex-1 rounded-2xl px-3 py-3 flex flex-col items-center gap-0.5 transition-all duration-300 border overflow-hidden
+                                                ${selectedPlan === 'PRO'
+                                                    ? 'vibing-yellow-animated border-yellow-400/30 shadow-[0_6px_20px_-4px_rgba(234,179,8,0.3)] scale-100'
+                                                    : 'bg-white/5 dark:bg-white/3 border-slate-200/30 dark:border-white/8 opacity-50 scale-[0.97] hover:opacity-70'
+                                                }`}
                                         >
-                                            <span className={`text-label font-bold tracking-widest uppercase mb-0.5 ${selectedPlan === 'PRO' ? 'text-black/60' : 'text-slate-400 dark:text-white/40'}`}>
+                                            <span className={`text-[9px] font-black tracking-[0.2em] uppercase leading-none ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400 dark:text-white/30'}`}>
                                                 {t('pro:subscription.upgrade.pro_title')}
                                             </span>
-                                            <div className="flex items-baseline gap-0.5">
-                                                <span className={`text-caption font-bold ${selectedPlan === 'PRO' ? 'text-black/30' : 'text-slate-400/30'}`}>$</span>
-                                                <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-900/40 dark:text-white/40'}`}>
-                                                    39
-                                                </span>
+                                            <div className="flex items-baseline gap-0.5 mt-0.5">
+                                                <span className={`text-label font-bold leading-none ${selectedPlan === 'PRO' ? 'text-black/40' : 'text-slate-400/50'}`}>$</span>
+                                                <span className={`text-[28px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-400/40 dark:text-white/25'}`}>39</span>
                                             </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-black/50' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                            <span className={`text-[8px] font-black uppercase tracking-[0.18em] leading-none mt-0.5 ${selectedPlan === 'PRO' ? 'text-black/40' : 'text-slate-400/30 dark:text-white/20'}`}>
                                                 {t('pro:subscription.upgrade.monthly_label')}
                                             </span>
                                         </button>
 
-                                        {/* PRO+ Card Action */}
+                                        {/* Divider */}
+                                        <div className="flex items-center justify-center shrink-0 w-4">
+                                            <div className="w-px h-8 bg-slate-200/60 dark:bg-white/10 rounded-full" />
+                                        </div>
+
+                                        {/* PRO+ Card */}
                                         <button
                                             onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                                            className={`relative flex-1 py-4 flex flex-col items-center gap-0.5 z-10 transition-all duration-300 ${selectedPlan === 'PRO_PLUS' ? 'scale-105 active:scale-100' : 'opacity-40 scale-95 hover:opacity-70'}`}
+                                            className={`relative flex-1 rounded-2xl px-3 py-3 flex flex-col items-center gap-0.5 transition-all duration-300 border overflow-hidden
+                                                ${selectedPlan === 'PRO_PLUS'
+                                                    ? 'vibing-crystal-purple-animated border-white/20 shadow-[0_6px_20px_-4px_rgba(168,85,247,0.35)] scale-100'
+                                                    : 'bg-white/5 dark:bg-white/[0.03] border-slate-200/30 dark:border-white/8 opacity-50 scale-[0.97] hover:opacity-70'
+                                                }`}
                                         >
-                                            <AnimatePresence>
-                                                {selectedPlan === 'PRO_PLUS' && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, y: -10, scale: 0.5 }}
-                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                        exit={{ opacity: 0, y: -10, scale: 0.5 }}
-                                                        className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-linear-to-r from-indigo-500 via-fuchsia-500 to-rose-500 text-white text-[8px] font-black rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] z-20 flex items-center gap-1 border border-white/20 whitespace-nowrap"
-                                                    >
-                                                        <Zap size={7} className="fill-white animate-pulse" />
-                                                        <span className="leading-none">{t('pro:subscription.upgrade.viral_badge')}</span>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
+                                            {/* Always-visible FASTER badge */}
+                                            <div className={`absolute -top-px left-1/2 -translate-x-1/2 flex items-center gap-0.5 px-2 py-0.5 rounded-b-lg text-[7px] font-black tracking-[0.1em] uppercase transition-all duration-300
+                                                ${selectedPlan === 'PRO_PLUS'
+                                                    ? 'bg-linear-to-r from-fuchsia-500 to-indigo-500 text-white shadow-[0_4px_12px_rgba(168,85,247,0.4)]'
+                                                    : 'bg-slate-200/60 dark:bg-white/10 text-slate-400 dark:text-white/30'
+                                                }`}>
+                                                <Zap size={6} className={selectedPlan === 'PRO_PLUS' ? 'fill-white animate-pulse' : ''} />
+                                                <span>{t('pro:subscription.upgrade.viral_badge')}</span>
+                                            </div>
 
-                                            <span className={`text-label font-bold tracking-[0.15em] uppercase mb-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/90' : 'text-slate-400 dark:text-white/40'}`}>
+                                            <span className={`text-[9px] font-black tracking-[0.15em] uppercase leading-none mt-2.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/80' : 'text-slate-400 dark:text-white/30'}`}>
                                                 {isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title')}
                                             </span>
-                                            <div className="flex items-baseline gap-0.5">
-                                                <span className={`text-caption font-bold ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/30'}`}>$</span>
-                                                <span className={`text-3xl font-bold tracking-tighter leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-900/40 dark:text-white/40'}`}>
+                                            <div className="flex items-baseline gap-0.5 mt-0.5">
+                                                <span className={`text-label font-bold leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white/50' : 'text-slate-400/50'}`}>$</span>
+                                                <span className={`text-[28px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO_PLUS' ? 'text-white' : 'text-slate-400/40 dark:text-white/25'}`}>
                                                     {isStandardPro ? upgradePrice : proPlusPrice}
                                                 </span>
                                             </div>
-                                            <span className={`text-[10px] font-black uppercase tracking-widest ${selectedPlan === 'PRO_PLUS' ? 'text-white/70' : 'text-slate-400/30 dark:text-white/20'}`}>
+                                            <span className={`text-[8px] font-black uppercase tracking-[0.18em] leading-none mt-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/60' : 'text-slate-400/30 dark:text-white/20'}`}>
                                                 {isStandardPro ? t('pro:subscription.upgrade.upgrade_label') : t('pro:subscription.upgrade.lifetime_label')}
                                             </span>
                                         </button>
@@ -699,17 +700,17 @@ export default function SubscriptionPage() {
 
                             {/* ── DEADLINE STICKY HEADER ── */}
                             <div className="mb-4 mt-1 px-1 sticky top-[72px] z-40">
-                                <div className="rounded-xl overflow-hidden px-3 py-2 bg-yellow-400/90 backdrop-blur-md border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-lg">
+                                <div className="rounded-xl overflow-hidden px-2.5 py-1.5 bg-yellow-400/90 backdrop-blur-md border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-lg">
                                     <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
                                     <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
 
                                     <div className="relative z-10 flex items-center gap-2 min-w-0">
-                                        <div className="w-7 h-7 rounded-lg bg-black/10 flex items-center justify-center text-black shrink-0">
-                                            <Clock size={14} className="animate-pulse" />
+                                        <div className="w-6 h-6 rounded-md bg-black/10 flex items-center justify-center text-black shrink-0">
+                                            <Clock size={12} className="animate-pulse" />
                                         </div>
                                         <div className="flex flex-col min-w-0">
-                                            <span className="text-[9px] font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                            <span className="text-label font-black text-black uppercase tracking-tighter leading-normal truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                            <span className="text-[8px] font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                            <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-normal truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                                         </div>
                                     </div>
 

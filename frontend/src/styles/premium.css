@@ -505,6 +505,12 @@
   animation: vibing-gradient 4s ease-in-out infinite;
   color: #FFFFFF;
   font-weight: 800;
+  will-change: background-position;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  isolation: isolate;
+  contain: paint;
 }
 
 .vibing-yellow-text {
