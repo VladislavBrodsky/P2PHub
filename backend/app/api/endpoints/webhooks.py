@@ -11,6 +11,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import get_session
 from app.services.ton_webhook_service import ton_webhook_service
+from app.services.stripe_service import stripe_service
 
 logger = logging.getLogger(__name__)
 
@@ -66,3 +67,38 @@ async def ton_payment_webhook(
         logger.error(f"❌ Webhook processing failed: {e}", exc_info=True)
         # Return 200 to prevent TonAPI from retrying (avoid duplicate upgrades)
         return {"status": "error", "detail": "Processing failed — manual review required"}
+
+@router.post(
+    "/stripe",
+    summary="Stripe Payment Webhook",
+    description="Receives events from Stripe (e.g., checkout.session.completed) to automate user upgrades.",
+    status_code=status.HTTP_200_OK,
+)
+async def stripe_webhook(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    stripe_signature: str | None = Header(default=None, alias="Stripe-Signature"),
+):
+    """
+    Endpoint registered in Stripe Dashboard.
+    Validates signature and processes successful checkout sessions.
+    """
+    if not stripe_signature:
+        logger.warning("🚫 Stripe Webhook: Missing Stripe-Signature header.")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing signature")
+
+    raw_body = await request.body()
+
+    try:
+        success = await stripe_service.handle_webhook(raw_body, stripe_signature, session)
+        if success:
+            # Commit the session upgrades
+            await session.commit()
+            return {"status": "success"}
+        else:
+            return {"status": "ignored"}
+    except Exception as e:
+        logger.error(f"❌ Stripe Webhook failed: {e}", exc_info=True)
+        # We still return 200/Success to Stripe to avoid infinite retries if the error is non-transient,
+        # but we log it for manual intervention.
+        return {"status": "error", "detail": str(e)}

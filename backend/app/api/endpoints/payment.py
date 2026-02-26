@@ -16,6 +16,7 @@ from app.models.transaction import PartnerTransaction
 from app.services.audit_service import audit_service
 from app.services.notification_service import notification_service
 from app.services.payment_service import payment_service
+from app.services.stripe_service import stripe_service
 
 router = APIRouter()
 @router.get("/config")
@@ -418,3 +419,48 @@ async def upgrade_from_balance(
 
     # Note: upgrade_to_pro commits the session
     return {"status": "success", "message": f"Upgraded to {plan} using balance"}
+
+@router.post("/stripe/session")
+async def create_stripe_session(
+    plan: str = Body(..., embed=True), # "PRO" or "PRO_PLUS"
+    user_data: dict = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Creates a Stripe Checkout session and returns the URL.
+    """
+    try:
+        tg_user = get_tg_user(user_data)
+        tg_id = str(tg_user.get("id"))
+    except Exception as e:
+        logger.warning(f"Invalid user data in create_stripe_session: {e}")
+        raise HTTPException(status_code=400, detail="Malformed user data")
+
+    partner = (await session.exec(select(Partner).where(Partner.telegram_id == tg_id))).first()
+    if not partner:
+        raise HTTPException(status_code=404, detail="Partner not found")
+
+    if plan not in ["PRO", "PRO_PLUS"]:
+        raise HTTPException(status_code=400, detail="Invalid plan selection")
+
+    # Detect if this is an upgrade (Standard PRO -> PRO+)
+    is_standard_pro = partner.is_pro and not (partner.subscription_plan or "").startswith("PRO_PLUS")
+    is_upgrade = (plan == "PRO_PLUS" and is_standard_pro)
+
+    # Construct absolute URLs for Stripe to redirect back to using FRONTEND_URL
+    base_url = settings.FRONTEND_URL.rstrip('/')
+    success_url = f"{base_url}/subscription?stripe=success"
+    cancel_url = f"{base_url}/subscription?stripe=cancel"
+
+    checkout_url = await stripe_service.create_checkout_session(
+        partner_id=partner.id,
+        plan=plan,
+        success_url=success_url,
+        cancel_url=cancel_url,
+        is_upgrade=is_upgrade
+    )
+
+    if not checkout_url:
+        raise HTTPException(status_code=500, detail="Failed to create checkout session")
+
+    return {"checkout_url": checkout_url}

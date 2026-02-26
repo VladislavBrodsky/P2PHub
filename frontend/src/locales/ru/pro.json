@@ -1330,6 +1330,8 @@
       "monthly_label": "30 ДНЕЙ",
       "lifetime_label": "НАВСЕГДА",
       "ton_wallet": "ОПЛАТИТЬ В TON",
+      "stripe_card": "МЕЖДУНАРОДНАЯ КАРТА (STRIPE)",
+      "stripe_desc": "Оплата через Visa, Mastercard или Apple/Google Pay.",
       "select_currency": "ВЫБЕРИ ВАЛЮТУ ОПЛАТЫ",
       "secure_encryption_active": "PRO АКТИВЕН",
       "change_method": "ИЗМЕНИТЬ СПОСОБ",
@@ -1356,9 +1358,11 @@
     "status": {
       "verifying": "Проверка...",
       "welcome_pro": "ДОБРО ПОЖАЛОВАТЬ В ЭЛИТУ",
+      "welcome_pro_plus": "ДОБРО ПОЖАЛОВАТЬ В ВИРАЛЬНУЮ ЭЛИТУ",
       "submitted": "ОТПРАВЛЕНО",
       "verifying_p": "Наши узлы подтверждают вашу транзакцию в блокчейне.",
       "welcome_pro_p": "Ваш статус PRO активирован. Система готова к работе.",
+      "welcome_pro_plus_p": "Ваш статус PRO+ активирован. Виральная сеть разблокирована.",
       "submitted_p": "Ваш запрос находится на ручной модерации. Обычно это занимает 5-15 минут.",
       "got_it": "ПОНЯТНО"
     },

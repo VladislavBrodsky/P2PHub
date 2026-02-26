@@ -1182,6 +1182,8 @@
       "monthly_label": "30 DAYS",
       "lifetime_label": "FOREVER",
       "ton_wallet": "PAY IN TON",
+      "stripe_card": "INTERNATIONAL CARD (STRIPE)",
+      "stripe_desc": "Pay with Visa, Mastercard, or Apple/Google Pay.",
       "select_currency": "SELECT PAYMENT CURRENCY",
       "secure_encryption_active": "PRO ACTIVE",
       "change_method": "CHANGE METHOD",
@@ -1208,9 +1210,11 @@
     "status": {
       "verifying": "Verifying...",
       "welcome_pro": "WELCOME TO ELITE",
+      "welcome_pro_plus": "WELCOME TO VIRAL ELITE",
       "submitted": "SUBMITTED",
       "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
       "welcome_pro_p": "Your PRO status is activated. System ready.",
+      "welcome_pro_plus_p": "Your PRO+ status is activated. Viral network unlocked.",
       "submitted_p": "Your request is under manual moderation. Usually takes 5-15 minutes.",
       "got_it": "GOT IT"
     },

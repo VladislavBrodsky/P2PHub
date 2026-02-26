@@ -8,6 +8,7 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 // The custom chunking was causing "undefined is not an object (evaluating 'yo.useState')" in production.
 // Definitively removing all manualChunks and optimization plugins to restore a monolithic-like stable bundle.
 
+// #comment: CACHE BUST - Forced re-evaluation to resolve stale asset references like promo_fixed.jpg
 export default defineConfig({
   plugins: [
     react(),

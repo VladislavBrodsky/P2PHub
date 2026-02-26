@@ -639,7 +639,22 @@ class PaymentService:
             )
 
 
-            # 4.3 Admin Notification (Specific User Request)
+            # 4.3 Log Payment Event for Admin Dashboard Feed
+            base_plan = 'PRO+' if is_plus else 'PRO'
+            plan_name = f"{base_plan} Upgrade" if is_pro_to_plus_upgrade else base_plan
+            
+            await audit_service.log_payment(
+                session=session,
+                partner_id=partner.id,
+                transaction_id=transaction.id,
+                amount=amount,
+                currency=currency,
+                plan=plan_name,
+                status="verified",
+                tx_hash=tx_hash
+            )
+
+            # 4.4 Admin Notification (Specific User Request)
             # Notify management (@uslincoln) about the successful high-value purchase.
             try:
                 username_display = f"@{partner.username}" if partner.username else "No Username"

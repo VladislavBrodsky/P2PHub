@@ -88,7 +88,7 @@ export default function SubscriptionPage() {
     const { selection, notification, impact } = useHaptic();
     const [tonConnectUI] = useTonConnectUI();
     const [isLoading, setIsLoading] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | 'STRIPE' | null>(null);
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
     const [manualHash, setManualHash] = useState('');
     const [sessionData, setSessionData] = useState<{ expires_at: string; transaction_id: number } | null>(null);
@@ -163,6 +163,19 @@ export default function SubscriptionPage() {
         }
         return () => { if (scroller) scroller.style.overflow = 'auto'; };
     }, [infoModal, status]);
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('stripe') === 'success') {
+            setStatus('success');
+            notification('success');
+            refreshUser();
+            window.history.replaceState({}, '', window.location.pathname);
+        } else if (urlParams.get('stripe') === 'cancel') {
+            setStatus('idle');
+            window.history.replaceState({}, '', window.location.pathname);
+        }
+    }, [notification, refreshUser]);
 
     // Handle Auto-Upgrade/Purchase Flow from other parts of the app
     useEffect(() => {
@@ -270,6 +283,21 @@ export default function SubscriptionPage() {
             }
         }
         finally { setIsLoading(false); }
+    };
+
+    const handleStripePayment = async () => {
+        setIsLoading(true); selection();
+        try {
+            const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
+            if (res.data.checkout_url) {
+                window.location.href = res.data.checkout_url;
+            }
+        } catch (error: any) {
+            console.error('Stripe session creation failed:', error);
+            notification('error');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const scrollToPayment = (e?: React.MouseEvent) => {
@@ -919,24 +947,33 @@ export default function SubscriptionPage() {
                                         <div className="w-12 h-1 bg-linear-to-r from-blue-500 to-yellow-500 mx-auto rounded-full opacity-60" />
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-3 gap-2">
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('TON'); }}
                                             className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-yellow-500/5 hover:border-yellow-500/30 active:scale-95"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
+                                            <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                                 <TONLogo className="w-5 h-5" />
                                             </div>
-                                            <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'PAY WITH TON')}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet', 'TON')}</span>
                                         </button>
                                         <button
                                             onClick={() => { selection(); setPaymentMethod('CRYPTO'); }}
                                             className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-emerald-500/5 hover:border-emerald-500/30 active:scale-95"
                                         >
-                                            <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                                            <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
                                                 <USDTLogo className="w-5 h-5" />
                                             </div>
-                                            <span className="text-label font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'PAY WITH USDT')}</span>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'USDT')}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => { selection(); handleStripePayment(); }}
+                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-indigo-500/5 hover:border-indigo-500/30 active:scale-95"
+                                        >
+                                            <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+                                                <CreditCard size={18} />
+                                            </div>
+                                            <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.stripe_card', 'CARD')}</span>
                                         </button>
                                     </div>
                                     <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
@@ -1154,10 +1191,10 @@ export default function SubscriptionPage() {
                                     {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
                                     {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}
                                     <h2 className="text-md font-bold text-slate-900 dark:text-white uppercase mb-2">
-                                        {status === 'pending' ? t('pro:subscription.status.verifying') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro') : t('pro:subscription.status.welcome_pro')) : t('pro:subscription.status.submitted')}
+                                        {status === 'pending' ? t('pro:subscription.status.verifying') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus') : t('pro:subscription.status.welcome_pro')) : t('pro:subscription.status.submitted')}
                                     </h2>
-                                    <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6">
-                                        {status === 'pending' ? t('pro:subscription.status.verifying_p') : t('pro:subscription.status.welcome_pro_p')}
+                                    <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6 px-4">
+                                        {status === 'pending' ? t('pro:subscription.status.verifying_p') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus_p') : t('pro:subscription.status.welcome_pro_p')) : t('pro:subscription.status.submitted_p')}
                                     </p>
                                     <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">{t('pro:subscription.status.got_it')}</button>
                                 </div>

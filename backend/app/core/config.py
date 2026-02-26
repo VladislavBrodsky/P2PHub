@@ -120,6 +120,14 @@ class Settings(BaseSettings):
     TON_WEBHOOK_SECRET: str | None = Field(default=None, validation_alias="TON_WEBHOOK_SECRET")
     TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
 
+    # --- STRIPE PAYMENTS ---
+    STRIPE_API_KEY: str | None = Field(default=None, validation_alias="STRIPE_API_KEY")
+    STRIPE_WEBHOOK_SECRET: str | None = Field(default=None, validation_alias="STRIPE_WEBHOOK_SECRET")
+    STRIPE_PRO_PRICE_ID: str | None = Field(default=None, validation_alias="STRIPE_PRO_PRICE_ID")
+    STRIPE_PRO_PLUS_PRICE_ID: str | None = Field(default=None, validation_alias="STRIPE_PRO_PLUS_PRICE_ID")
+    STRIPE_UPGRADE_PRICE_ID: str | None = Field(default=None, validation_alias="STRIPE_UPGRADE_PRICE_ID")
+
+
     # --- BUSINESS LOGIC ---
     PRO_PRICE_USD: float = 39.0
     PRO_PLUS_PRICE_USD: float = 69.0
