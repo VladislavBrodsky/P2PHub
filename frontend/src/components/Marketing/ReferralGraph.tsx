@@ -339,7 +339,8 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
     const [animatedCount, setAnimatedCount] = useState(0);
 
     useEffect(() => {
-        const duration = 3000;
+        const duration = 5000;
+        const hardcodedTarget = 43200;
         const startTime = Date.now();
         let rafId: number;
 
@@ -352,17 +353,17 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
                 ? 2 * progress * progress
                 : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-            setAnimatedCount(targetAmount * ease);
+            setAnimatedCount(hardcodedTarget * ease);
 
             if (progress < 1) {
                 rafId = requestAnimationFrame(animate);
             } else {
-                setAnimatedCount(targetAmount);
+                setAnimatedCount(hardcodedTarget);
             }
         };
         rafId = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(rafId);
-    }, [targetAmount]);
+    }, []);
 
     const partnersCount = useMemo(() => {
         const seed = Math.floor(Date.now() / (3 * 60 * 60 * 1000));
