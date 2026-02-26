@@ -6,7 +6,7 @@ import {
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
     Flame, Brain, Rocket, Network, Star, Lock, Infinity as InfinityIcon, Target, TrendingUp, Bot,
-    Send, BarChart2, Radio, X, Fingerprint, AlertTriangle
+    Send, BarChart2, Radio, X, Fingerprint, AlertTriangle, RefreshCw
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -299,7 +299,7 @@ export default function SubscriptionPage() {
 
     const handleTonPayment = async () => {
         if (!tonConnectUI.connected) { tonConnectUI.openModal(); return; }
-        setIsLoading(true); selection();
+        setIsLoading(true); impact('medium');
         try {
             const sessionRes = await apiClient.post('/api/payment/session', { amount: planPrice, currency: 'TON', network: 'TON' });
             const { amount, address } = sessionRes.data;
@@ -361,7 +361,7 @@ export default function SubscriptionPage() {
         if (isLoading) return;
         setIsLoading(true);
         setPaymentMethod('STRIPE');
-        selection();
+        impact('medium');
         try {
             const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
             if (res.data.checkout_url) {
@@ -1275,6 +1275,26 @@ export default function SubscriptionPage() {
                                     ))}
                                 </div>
                             </section>
+
+                            <motion.button
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                                onClick={async () => {
+                                    impact('light');
+                                    const prevStatus = isPro;
+                                    await refreshUser();
+                                    if (user?.is_pro && !prevStatus) {
+                                        notification('success');
+                                    } else {
+                                        impact('rigid');
+                                    }
+                                }}
+                                className="mx-auto flex items-center gap-2 px-4 py-2 mt-2 mb-6 text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors active:scale-95"
+                            >
+                                <RefreshCw size={14} />
+                                <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
+                            </motion.button>
 
                             <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.15-ELITE</div>
                         </div>
