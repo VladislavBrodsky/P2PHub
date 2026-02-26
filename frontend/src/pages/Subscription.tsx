@@ -1238,7 +1238,7 @@ export default function SubscriptionPage() {
                             </motion.div>
 
                             {/* ── FAQ SECTION ─────────────────────────────────────────────── */}
-                            <section className="mb-10 pt-[128px]">
+                            <section className="mb-10 pt-32">
                                 <SectionHeader
                                     badge={t('subscription.faq.teaser_badge')}
                                     title={<>{t('subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('subscription.faq.header_highlight')}</span></>}
