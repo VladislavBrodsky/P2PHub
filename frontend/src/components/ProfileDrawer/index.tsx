@@ -36,6 +36,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
     const [copied, setCopied] = React.useState(false);
     const [isAnimating, setIsAnimating] = React.useState(false);
+    const [disconnectConfirm, setDisconnectConfirm] = React.useState(false);
 
     // Prevent body scroll and TMA swipes when drawer is open
     useTMALock(isOpen);
@@ -95,13 +96,16 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.15 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/60 cursor-pointer pointer-events-auto"
+                        className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer pointer-events-auto"
                     />
 
                     {/* Drawer Content Wrapper */}
                     <div className="fixed inset-0 z-10000 pointer-events-none flex justify-center">
                         <motion.div
                             key="drawer-panel"
+                            role="dialog"
+                            aria-modal="true"
+                            aria-label="Main Menu"
                             initial={{ x: '-100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '-100%', pointerEvents: 'none' }}
@@ -154,12 +158,28 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                     </div>
                                 )}
 
+                                {disconnectConfirm && (
+                                    <div className="w-full rounded-2xl bg-card-bg border border-card-border p-4 flex flex-col gap-3">
+                                        <p className="text-sm font-bold text-text-primary text-center">Disconnect wallet?</p>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => setDisconnectConfirm(false)}
+                                                className="flex-1 py-2 rounded-xl border border-card-border text-text-secondary text-xs font-bold uppercase active:scale-95 transition-transform"
+                                            >Cancel</button>
+                                            <button
+                                                onClick={() => { tonConnectUI.disconnect(); setDisconnectConfirm(false); }}
+                                                className="flex-1 py-2 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold uppercase active:scale-95 transition-transform"
+                                            >Disconnect</button>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="px-1">
                                     <motion.button
                                         whileTap={{ scale: 0.98 }}
                                         onClick={() => {
                                             selection();
-                                            if (wallet) tonConnectUI.disconnect();
+                                            if (wallet) setDisconnectConfirm(true);
                                             else tonConnectUI.openModal();
                                         }}
                                         className={`w-full rounded-full py-1.5 px-3 border transition-all ${wallet
@@ -192,7 +212,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
                                 <div className="mt-8 mb-4">
                                     <p className="text-center text-label font-bold uppercase tracking-[0.3em] text-text-secondary opacity-50">
-                                        P2PHub v1.8.3 (Stable)
+                                        P2PHub v{import.meta.env.VITE_APP_VERSION ?? '1.8.3'} (Stable)
                                     </p>
                                 </div>
                             </div>

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Settings,
@@ -161,7 +162,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
 
     const isAdmin = user?.username === 'uslincoln' || user?.username === 'uslincon' || user?.is_admin;
 
-    const menuItems = [
+    const menuItems = useMemo(() => [
         ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('navigation.admin_panel') }] : []),
         ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: t('navigation.pro_panel') }] : []),
         { id: 'settings', icon: <Settings />, label: t('navigation.settings') },
@@ -169,7 +170,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         { id: 'community', icon: <Users />, label: t('navigation.community') },
         { id: 'faq', icon: <HelpCircle />, label: t('navigation.faq') },
         { id: 'support', icon: <Headphones />, label: t('navigation.support') },
-    ];
+    ], [isAdmin, user?.is_pro, t]);
 
     return (
         <div className="flex flex-1 flex-col gap-2">

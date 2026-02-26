@@ -149,7 +149,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
             }
             try {
                 // Initialize SDK components
-                console.log('[DEBUG] initTMA: Starting...');
+                if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Starting...');
 
                 // 1. Mount components (Safety first)
                 if (miniApp.mount.isAvailable() && !miniApp.isMounted()) miniApp.mount();
@@ -164,13 +164,13 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                         // Aggressive expansion
                         if (viewport.expand.isAvailable()) {
                             viewport.expand();
-                            console.log('[DEBUG] initTMA: viewport expanded');
+                            if (import.meta.env.DEV) console.log('[DEBUG] initTMA: viewport expanded');
                         }
 
                         // Support for new Fullscreen API if available
                         if ((viewport as any).requestFullscreen && (viewport as any).requestFullscreen.isAvailable?.()) {
                             (viewport as any).requestFullscreen();
-                            console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
+                            if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
                         }
                     } catch (e) {
                         console.warn('Viewport error:', e);
@@ -189,16 +189,15 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                     }
                 }
 
-                // 4. Fallback for older environments / direct JS
                 if (window.Telegram?.WebApp) {
                     window.Telegram.WebApp.ready();
                     if ((window.Telegram.WebApp as any).requestFullscreen) {
                         (window.Telegram.WebApp as any).requestFullscreen();
                     }
-                    console.log('[DEBUG] initTMA: SDK methods executing...');
+                    if (import.meta.env.DEV) console.log('[DEBUG] initTMA: SDK methods executing...');
                 }
 
-                console.log('[DEBUG] initTMA: Complete');
+                if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Complete');
                 updateProgress(98, 'Interface Ready');
             } catch (e) {
                 console.error('[CRITICAL] initTMA: Initialization failure:', e);
