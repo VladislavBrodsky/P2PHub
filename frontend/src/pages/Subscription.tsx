@@ -652,9 +652,6 @@ export default function SubscriptionPage() {
                                                 <span className={`text-label font-bold leading-none ${selectedPlan === 'PRO' ? 'text-black/40' : 'text-slate-400/50'}`}>$</span>
                                                 <span className={`text-[28px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-black' : 'text-slate-400/40 dark:text-white/25'}`}>39</span>
                                             </div>
-                                            <span className={`text-[8px] font-black uppercase tracking-[0.18em] leading-none mt-0.5 ${selectedPlan === 'PRO' ? 'text-black/40' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                                {t('pro:subscription.upgrade.monthly_label')}
-                                            </span>
                                         </button>
 
                                         {/* Divider */}
@@ -668,7 +665,7 @@ export default function SubscriptionPage() {
                                             className={`relative flex-1 rounded-2xl px-3 py-3 flex flex-col items-center gap-0.5 transition-all duration-300 border overflow-hidden
                                                 ${selectedPlan === 'PRO_PLUS'
                                                     ? 'vibing-crystal-purple-animated border-white/20 shadow-[0_6px_20px_-4px_rgba(168,85,247,0.35)] scale-100'
-                                                    : 'bg-white/5 dark:bg-white/[0.03] border-slate-200/30 dark:border-white/8 opacity-50 scale-[0.97] hover:opacity-70'
+                                                    : 'bg-white/5 dark:bg-white/3 border-slate-200/30 dark:border-white/8 opacity-50 scale-[0.97] hover:opacity-70'
                                                 }`}
                                         >
                                             {/* Always-visible FASTER badge */}
@@ -690,9 +687,6 @@ export default function SubscriptionPage() {
                                                     {isStandardPro ? upgradePrice : proPlusPrice}
                                                 </span>
                                             </div>
-                                            <span className={`text-[8px] font-black uppercase tracking-[0.18em] leading-none mt-0.5 ${selectedPlan === 'PRO_PLUS' ? 'text-white/60' : 'text-slate-400/30 dark:text-white/20'}`}>
-                                                {isStandardPro ? t('pro:subscription.upgrade.upgrade_label') : t('pro:subscription.upgrade.lifetime_label')}
-                                            </span>
                                         </button>
                                     </div>
                                 </div>
