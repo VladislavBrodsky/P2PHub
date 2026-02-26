@@ -176,39 +176,44 @@ async def get_growth_advice(
     growth_7d = await get_network_growth_metrics(session, partner.id, '7D')
     
     # 2. Build contextual prompt
-    prompt = f"""
-    Analyze the following Partner Network metrics and provide 3-4 actionable 'Growth Hacks' or strategic advice for the next 30 days.
-    
-    Current State:
-    - Level: {partner.level}
-    - XP: {partner.xp}
-    - Total Network Size: {sum(tree_stats.values())}
-    - Level 1 (Direct): {tree_stats.get('1', 0)}
-    - Level 2 (Indirect): {tree_stats.get('2', 0)}
-    - Total Earned: {partner.total_earned_usdt} USDT
-    - 7D Growth: {growth_7d['growth_pct']}% (+{growth_7d['current_count']} members)
-    
-    Constraints:
-    - Language: {payload.language}
-    - Tone: Visionary, Authoritative, High-Status (Elite CMO).
-    - Format: 3-4 concise points with a summary.
-    """
+    system_prompt = prompts.build_growth_advice_system_prompt(
+        payload.language.capitalize() if payload.language == "en" else "Russian"
+    )
+    user_prompt = prompts.build_growth_advice_user_prompt(
+        partner_level=partner.level,
+        xp=partner.xp,
+        total_size=sum(tree_stats.values()),
+        l1=tree_stats.get('1', 0),
+        l2=tree_stats.get('2', 0),
+        earned=partner.total_earned_usdt,
+        growth_7d=growth_7d['growth_pct'],
+        new_members_7d=growth_7d['current_count']
+    )
     
     try:
         # Use the flagship model for strategy
         advice_json, _ = await viral_studio._get_text_content(
-            "You are the Lead Growth Architect for Pintopay. Your goal is to turn PRO members into network whales.",
-            prompt,
+            system_prompt,
+            user_prompt,
             is_pro_plus=True
         )
         
+        if not advice_json:
+            raise ValueError("Empty response from synthesis engine")
+
         # Deduct tokens only on success
         partner.pro_tokens -= 5
         session.add(partner)
         await session.commit()
         
+        # Robust extraction of the formatted body
+        advice_text = advice_json.get("body") or advice_json.get("text")
+        if not advice_text and isinstance(advice_json, dict):
+            # If AI returned a flat JSON with keys like "analysis" etc, reconstruct it
+            advice_text = "\n\n".join([f"## {k.upper()}\n{v}" for k, v in advice_json.items() if k not in ["title", "tokens_remaining"]])
+        
         return {
-            "advice": advice_json.get("text") or advice_json.get("body") or str(advice_json),
+            "advice": advice_text or str(advice_json),
             "tokens_remaining": partner.pro_tokens
         }
     except Exception as e:
