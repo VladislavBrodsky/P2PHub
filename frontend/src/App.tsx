@@ -23,8 +23,10 @@ const StripeReturnPage = lazy(() => import('./pages/StripeReturnPage').then(m =>
 const SupportChat = lazy(() => import('./components/Support/SupportChat').then(m => ({ default: m.SupportChat })));
 
 
-import { miniApp, backButton, viewport, swipeBehavior } from '@telegram-apps/sdk-react';
 import { isTMA } from './utils/tma';
+import { initTMA } from './utils/tmaInit';
+import { parseDeepLink, getStartParam } from './utils/deepLink';
+import { backButton } from '@telegram-apps/sdk-react';
 import { useUser } from './context/UserContext';
 import { useTranslation } from 'react-i18next';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
@@ -68,25 +70,14 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 
     // Handle deep linking via startapp param
     useEffect(() => {
-        const startParam = window.Telegram?.WebApp?.initDataUnsafe?.start_param;
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlStartParam = urlParams.get('start_param') || urlParams.get('startapp');
+        const result = parseDeepLink(getStartParam());
+        if (!result) return;
 
-        if (startParam === 'network' || urlStartParam === 'network') {
-            setActiveTab('partner');
-        } else if (startParam?.startsWith('blog_') || urlStartParam?.startsWith('blog_')) {
-            const slug = (startParam || urlStartParam)?.replace('blog_', '');
-            setActiveTab('blog');
-            // Small delay to ensure BlogPage component is mounted and event listener is ready
+        setActiveTab(result.tab);
+        if (result.payload) {
+            const eventName = result.tab === 'blog' ? 'nav-blog-post' : 'nav-pro-tab';
             setTimeout(() => {
-                window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: slug }));
-            }, 500);
-        } else if (startParam?.startsWith('pro_') || urlStartParam?.startsWith('pro_')) {
-            const tab = (startParam || urlStartParam)?.replace('pro_', '');
-            setActiveTab('pro');
-            // Small delay to ensure ProPage component is mounted and event listener is ready
-            setTimeout(() => {
-                window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail: tab }));
+                window.dispatchEvent(new CustomEvent(eventName, { detail: result.payload }));
             }, 500);
         }
     }, []);
@@ -140,71 +131,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 
     // Initialize TMA SDK once
     useEffect(() => {
-        const initTMA = async () => {
-            if (!isTMA()) {
-                if (import.meta.env.DEV) {
-                    console.log('[DEBUG] initTMA: Not in TMA, skipping SDK initialization');
-                }
-                return;
-            }
-            try {
-                // Initialize SDK components
-                if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Starting...');
-
-                // 1. Mount components (Safety first)
-                if (miniApp.mount.isAvailable() && !miniApp.isMounted()) miniApp.mount();
-                if (miniApp.ready.isAvailable()) miniApp.ready();
-                if (backButton.mount.isAvailable() && !backButton.isMounted()) backButton.mount();
-
-                // 2. Expansion & Fullscreen (Immersive Mode)
-                if (viewport.mount.isAvailable()) {
-                    try {
-                        if (!viewport.isMounted()) await viewport.mount();
-
-                        // Aggressive expansion
-                        if (viewport.expand.isAvailable()) {
-                            viewport.expand();
-                            if (import.meta.env.DEV) console.log('[DEBUG] initTMA: viewport expanded');
-                        }
-
-                        // Support for new Fullscreen API if available
-                        if ((viewport as any).requestFullscreen && (viewport as any).requestFullscreen.isAvailable?.()) {
-                            (viewport as any).requestFullscreen();
-                            if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
-                        }
-                    } catch (e) {
-                        console.warn('Viewport error:', e);
-                    }
-                }
-
-                // 3. Swipe Locking (Single pass)
-                if (swipeBehavior.mount.isAvailable()) {
-                    try {
-                        if (!swipeBehavior.isMounted()) await swipeBehavior.mount();
-                        if (swipeBehavior.disableVertical.isAvailable()) {
-                            swipeBehavior.disableVertical();
-                        }
-                    } catch (e) {
-                        console.warn('Swipe error:', e);
-                    }
-                }
-
-                if (window.Telegram?.WebApp) {
-                    window.Telegram.WebApp.ready();
-                    if ((window.Telegram.WebApp as any).requestFullscreen) {
-                        (window.Telegram.WebApp as any).requestFullscreen();
-                    }
-                    if (import.meta.env.DEV) console.log('[DEBUG] initTMA: SDK methods executing...');
-                }
-
-                if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Complete');
-                updateProgress(98, 'Interface Ready');
-            } catch (e) {
-                console.error('[CRITICAL] initTMA: Initialization failure:', e);
-            }
-        };
-
-        const tmaTimeout = setTimeout(initTMA, 100);
+        const tmaTimeout = setTimeout(() => initTMA(updateProgress), 100);
         return () => clearTimeout(tmaTimeout);
     }, [updateProgress]);
 
