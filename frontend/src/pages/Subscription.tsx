@@ -355,16 +355,8 @@ export default function SubscriptionPage() {
         <div
             className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-[calc(var(--spacing-safe-top,32px)+1rem)] text-center relative overflow-hidden font-sans`}
         >
-            {/* Navigation Header */}
-            <div className="w-full flex items-center justify-between mb-8 relative z-20">
-                <button
-                    onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                    className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform"
-                >
-                    <X size={20} className="text-slate-600 dark:text-white/60" />
-                </button>
+            <div className="w-full flex items-center justify-center mb-8 relative z-20">
                 <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('pro:subscription.pro_active.title')}</span>
-                <div className="w-10" />
             </div>
 
             <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 bg-bg-app`} />
@@ -468,15 +460,8 @@ export default function SubscriptionPage() {
                     className="w-full"
                 >
                     <div className="flex flex-col px-3 pb-24 pt-(--spacing-safe-top,32px) max-w-lg mx-auto overflow-x-hidden">
-                        {/* Main Navigation Header */}
-                        <div className="sticky top-0 w-full flex items-center justify-between py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
-                            <button
-                                onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
-                                className="w-10 h-10 rounded-full bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center active:scale-90 transition-transform shadow-sm"
-                            >
-                                <X size={20} className="text-slate-600 dark:text-white/60" />
-                            </button>
-                            <div className="w-10" />
+                        <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
+                            <div className="h-10" />
                         </div>
 
                         <div className="relative overflow-hidden rounded-xl bg-white dark:bg-bg-app border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
@@ -1178,7 +1163,7 @@ export default function SubscriptionPage() {
                             </motion.div>
 
                             {/* ── FAQ SECTION ─────────────────────────────────────────────── */}
-                            <section className="mb-10">
+                            <section className="mb-10 pt-[128px]">
                                 <SectionHeader
                                     badge={t('subscription.faq.teaser_badge')}
                                     title={<>{t('subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('subscription.faq.header_highlight')}</span></>}
