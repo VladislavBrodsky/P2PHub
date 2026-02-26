@@ -598,27 +598,89 @@
       "live_signal": "ACTIVE",
       "synced": "CONNECTED",
       "protocols": {
-        "title": "Viral Marketing Studio",
-        "subtitle": "Master the algorithm",
+        "title": "Learning Programs",
+        "subtitle": "TRAINING MATERIALS",
+        "stats_label": "ACADEMIC SCORE",
+        "progress_label": "MASTERY",
         "difficulty_levels": {
-          "easy": "Apprentice",
-          "medium": "Specialist",
-          "hard": "Growth Hacker"
+          "easy": "Foundation",
+          "medium": "Growth Engineering",
+          "hard": "Ecosystem Leadership"
         },
-        "stats_label": "EXPERIENCE POINTS",
         "modules": [
           {
-            "id": "1",
-            "title": "Growth Hacking 101"
+            "id": "m1",
+            "diff": "easy",
+            "title": "The Digital Gold Rush 2026",
+            "hook": "Why $1 per minute is the new standard.",
+            "content": "Welcome to the Digital Gold Rush. In 2026, money is moving from banks to decentralized systems. Pintopay is the bridge. Every time someone uses a Pintopay card, a micro-transaction fee is generated. As a TOP partner, you own a piece of this global financial shift. Your goal isn't to sell, but to educate people on financial sovereignty.",
+            "task": "Join the Pintopay Partner Network bot and get your referral link.",
+            "link": "https://t.me/pintopay_probot?start=P2P-425DA3DB",
+            "cta": "Get Link",
+            "points": 500,
+            "tokens": 1,
+            "xp_cost": 0
           },
           {
-            "id": "2",
-            "title": "Engagement Metrics"
+            "id": "m2",
+            "diff": "easy",
+            "title": "The Pintopay Card Utility",
+            "hook": "Complete separation of state and money.",
+            "content": "Pintopay crypto cards work everywhere Visa/Mastercard are accepted. No bank account required. You spend directly from your crypto wallet. This is the ultimate product because it solves a real problem: using crypto in the real world every day.",
+            "task": "Order or view the card in the main bot to understand the UX you are promoting.",
+            "link": "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3",
+            "cta": "Explore Cards",
+            "points": 500,
+            "tokens": 1,
+            "xp_cost": 0
+          },
+          {
+            "id": "m3",
+            "diff": "medium",
+            "title": "Viral Hook Engineering",
+            "hook": "Stop the scroll or lose.",
+            "content": "In 2026, attention is the only currency. Your posts must stop a thumb in 0.5 seconds. Use 'The Gap' technique: show the result (e.g., $1/min earnings) and the hidden method. Use content from our Viral Assets section.",
+            "task": "Create a post using one of the 'Acid Yellow' assets and a hook from our library.",
+            "points": 2000,
+            "tokens": -1,
+            "xp_cost": 20
+          },
+          {
+            "id": "m4",
+            "diff": "medium",
+            "title": "AI-Powered Growth Autopilot",
+            "hook": "Grow your network while you sleep.",
+            "content": "Stop posting manually. Use the Viral Studio to schedule posts for the next 7 days. AI handles the target market research. Set and forget. Focus on responding to DMs, not creating content.",
+            "task": "Schedule 3 posts in the Viral Studio for different platforms.",
+            "points": 5000,
+            "tokens": -2,
+            "xp_cost": 500
+          },
+          {
+            "id": "m5",
+            "diff": "hard",
+            "title": "Ecosystem Dominance",
+            "hook": "Scaling your network to 10,000+ users.",
+            "content": "Real wealth comes from depth, not width. Focus on training your Level 1 partners to become TOP partners like you. If they earn, you earn more. This is ecosystem engineering. Use the leaderboards to find top performers and provide support.",
+            "task": "Find your top 3 referrals and send them a private message with a strategy.",
+            "points": 10000,
+            "tokens": -3,
+            "xp_cost": 2000
+          },
+          {
+            "id": "m6",
+            "diff": "hard",
+            "title": "ADVANCED SYNCHRONIZATION",
+            "hook": "Advanced analytics for your entire network.",
+            "content": "You've reached the top of the Growth Program. You now have mastery of content branding and network growth strategy. Apply cross-channel insights to lead effectively across your network.",
+            "task": "Request a Global Marketing Audit and execute the recommended CMO strategy.",
+            "points": 50000,
+            "tokens": -5,
+            "xp_cost": 10000
           }
         ],
-        "growth_promo": "Scale globally.",
-        "methodology_title": "Methodology",
-        "methodology_desc": "Based on millions of viral data points."
+        "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
+        "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
       },
       "articles": {
         "title": "Intelligence Dossier",
@@ -892,91 +954,6 @@
         "readTime": 8
       }
     ],
-    "protocols": {
-      "title": "Learning Programs",
-      "subtitle": "TRAINING MATERIALS",
-      "stats_label": "ACADEMIC SCORE",
-      "progress_label": "MASTERY",
-      "difficulty_levels": {
-        "easy": "Foundation",
-        "medium": "Growth Engineering",
-        "hard": "Ecosystem Leadership"
-      },
-      "modules": [
-        {
-          "id": "m1",
-          "diff": "easy",
-          "title": "The Digital Gold Rush 2026",
-          "hook": "Why $1 per minute is the new standard.",
-          "content": "Welcome to the Digital Gold Rush. In 2026, money is moving from banks to decentralized systems. Pintopay is the bridge. Every time someone uses a Pintopay card, a micro-transaction fee is generated. As a TOP partner, you own a piece of this global financial shift. Your goal isn't to sell, but to educate people on financial sovereignty.",
-          "task": "Join the Pintopay Partner Network bot and get your referral link.",
-          "link": "https://t.me/pintopay_probot?start=P2P-425DA3DB",
-          "cta": "Get Link",
-          "points": 500,
-          "tokens": 1,
-          "xp_cost": 0
-        },
-        {
-          "id": "m2",
-          "diff": "easy",
-          "title": "The Pintopay Card Utility",
-          "hook": "Complete separation of state and money.",
-          "content": "Pintopay crypto cards work everywhere Visa/Mastercard are accepted. No bank account required. You spend directly from your crypto wallet. This is the ultimate product because it solves a real problem: using crypto in the real world every day.",
-          "task": "Order or view the card in the main bot to understand the UX you are promoting.",
-          "link": "https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3",
-          "cta": "Explore Cards",
-          "points": 500,
-          "tokens": 1,
-          "xp_cost": 0
-        },
-        {
-          "id": "m3",
-          "diff": "medium",
-          "title": "Viral Hook Engineering",
-          "hook": "Stop the scroll or lose.",
-          "content": "In 2026, attention is the only currency. Your posts must stop a thumb in 0.5 seconds. Use 'The Gap' technique: show the result (e.g., $1/min earnings) and the hidden method. Use content from our Viral Assets section.",
-          "task": "Create a post using one of the 'Acid Yellow' assets and a hook from our library.",
-          "points": 2000,
-          "tokens": -1,
-          "xp_cost": 20
-        },
-        {
-          "id": "m4",
-          "diff": "medium",
-          "title": "AI-Powered Growth Autopilot",
-          "hook": "Grow your network while you sleep.",
-          "content": "Stop posting manually. Use the Viral Studio to schedule posts for the next 7 days. AI handles the target market research. Set and forget. Focus on responding to DMs, not creating content.",
-          "task": "Schedule 3 posts in the Viral Studio for different platforms.",
-          "points": 5000,
-          "tokens": -2,
-          "xp_cost": 500
-        },
-        {
-          "id": "m5",
-          "diff": "hard",
-          "title": "Ecosystem Dominance",
-          "hook": "Scaling your network to 10,000+ users.",
-          "content": "Real wealth comes from depth, not width. Focus on training your Level 1 partners to become TOP partners like you. If they earn, you earn more. This is ecosystem engineering. Use the leaderboards to find top performers and provide support.",
-          "task": "Find your top 3 referrals and send them a private message with a strategy.",
-          "points": 10000,
-          "tokens": -3,
-          "xp_cost": 2000
-        },
-        {
-          "id": "m6",
-          "diff": "hard",
-          "title": "ADVANCED SYNCHRONIZATION",
-          "hook": "Advanced analytics for your entire network.",
-          "content": "You've reached the top of the Growth Program. You now have mastery of content branding and network growth strategy. Apply cross-channel insights to lead effectively across your network.",
-          "task": "Request a Global Marketing Audit and execute the recommended CMO strategy.",
-          "points": 50000,
-          "tokens": -5,
-          "xp_cost": 10000
-        }
-      ],
-      "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
-      "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
-    },
     "growth_strategist": {
       "title": "AI Growth Strategist",
       "version": "Neural Network Analyzer v2.0",
