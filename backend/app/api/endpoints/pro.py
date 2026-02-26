@@ -17,7 +17,7 @@ from app.models.schemas import (
     GrowthMetrics,
 )
 from app.services.viral_analytics_service import viral_analytics
-from app.services.viral_studio import viral_studio
+from app.services.viral_studio import viral_studio, prompts
 from app.services.analytics_service import get_referral_tree_stats, get_network_growth_metrics
 from bot import bot
 
