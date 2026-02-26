@@ -24,15 +24,17 @@ export const SubscriptionStatusModal = React.memo(({
 }: SubscriptionStatusModalProps) => {
     if (typeof document === 'undefined') return null;
 
+    // Early return to ensure the portal is destroyed immediately when idle
+    if (status === 'idle' && !infoModal) return null;
+
     return createPortal(
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             {(status !== 'idle' || infoModal) && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
-                    style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
+                    className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
                 >
                     {infoModal ? (
                         <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
@@ -57,7 +59,13 @@ export const SubscriptionStatusModal = React.memo(({
                             </div>
                         </div>
                     ) : (
-                        <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center">
+                        <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative">
+                            <button
+                                onClick={() => { selection(); setStatus('idle'); }}
+                                className="absolute top-3 right-3 text-slate-400 hover:text-slate-900 dark:text-white/30 dark:hover:text-white transition-colors p-1"
+                            >
+                                <X size={18} />
+                            </button>
                             {status === 'pending' && <Loader2 size={32} className="text-amber-500 animate-spin mx-auto mb-4" />}
                             {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
                             {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}
@@ -67,7 +75,12 @@ export const SubscriptionStatusModal = React.memo(({
                             <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6 px-4">
                                 {status === 'pending' ? t('pro:subscription.status.verifying_p') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus_p') : t('pro:subscription.status.welcome_pro_p')) : t('pro:subscription.status.submitted_p')}
                             </p>
-                            <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">{t('pro:subscription.status.got_it')}</button>
+                            <button
+                                onClick={() => { selection(); setStatus('idle'); }}
+                                className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95"
+                            >
+                                {t('pro:subscription.status.got_it')}
+                            </button>
                         </div>
                     )}
                 </motion.div>
