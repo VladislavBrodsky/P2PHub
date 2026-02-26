@@ -118,15 +118,16 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 </p>
                             </m.button>
                         ) : (
-                            <m.div
-                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2.5 shadow-[0_0_20px_rgba(0,102,255,0.3)]"
+                            <m.button
+                                onClick={() => setActiveTab?.('subscription')}
+                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2.5 shadow-[0_0_20px_rgba(0,102,255,0.3)] cursor-pointer active:scale-95 transition-all outline-none hover:brightness-110"
                                 animate={{ scale: [1, 1.05, 1] }}
                                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                             >
                                 <p className="text-label font-bold uppercase tracking-[0.2em] text-white">
                                     {t('dashboard:hero_badge')}
                                 </p>
-                            </m.div>
+                            </m.button>
                         )}
 
                         {user?.is_admin && user?.username !== 'uslincoln' && (
