@@ -17,6 +17,8 @@ import { useConfig } from '../context/ConfigContext';
 import { useSystemClock } from '../hooks/usePerformance';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { TONLogo, USDTLogo } from '../components/ui/CryptoIcons';
+import { ROUTES } from '../utils/routes';
+import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
 
 // --- ISOLATED PERFORMANCE COMPONENTS ---
@@ -86,6 +88,7 @@ export default function SubscriptionPage() {
     const { user, refreshUser } = useUser();
     const { config: globalConfig } = useConfig();
     const { selection, notification, impact } = useHaptic();
+    const { navigateTo } = useNavigation();
     const [tonConnectUI] = useTonConnectUI();
     const [isLoading, setIsLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | 'STRIPE' | null>(null);
@@ -472,7 +475,7 @@ export default function SubscriptionPage() {
                     </div>
 
                     <button
-                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' })); }}
+                        onClick={() => { selection(); navigateTo(ROUTES.PRO); }}
                         className={`w-full h-11 rounded-full font-bold text-label tracking-widest uppercase shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] flex items-center justify-center gap-2 transition-all active:scale-[0.98] hover:brightness-110 overflow-hidden ${(user?.subscription_plan?.includes('PLUS')) ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
                     >
                         <Trophy size={13} />
@@ -532,8 +535,15 @@ export default function SubscriptionPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="w-full"
+                    className="w-full relative"
                 >
+                    {/* --- BACK BUTTON --- */}
+                    <button
+                        onClick={() => { selection(); window.history.back(); }}
+                        className="absolute left-4 top-4 z-50 w-8 h-8 rounded-full bg-slate-100/10 dark:bg-white/10 backdrop-blur-md border border-slate-200/20 dark:border-white/20 flex items-center justify-center text-slate-900/50 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/20 dark:hover:bg-white/20 transition-all active:scale-95 shadow-sm"
+                    >
+                        <ChevronLeft size={16} />
+                    </button>
                     <div className="flex flex-col px-3 pb-24 pt-(--spacing-safe-top,32px) max-w-lg mx-auto overflow-x-hidden">
                         <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
                             <div className="h-10" />
