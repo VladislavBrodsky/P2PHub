@@ -200,7 +200,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
         selection();
         if (selectedPost) {
             const blogId = selectedPost.slug || selectedPost.id;
-            const shareUrl = `https://t.me/ViralStudioBot/app?startapp=blog_${blogId}`;
+            const shareUrl = `https://t.me/pintopay_probot/app?startapp=blog_${blogId}`;
 
             if (navigator.share) {
                 navigator.share({
