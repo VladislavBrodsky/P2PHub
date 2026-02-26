@@ -316,9 +316,13 @@ export default function SubscriptionPage() {
                 // Set pending status BEFORE opening the link
                 setStatus('pending');
 
-                // Using internal redirect to keep the layout strictly inside the Telegram Mini App window.
-                // Note: This may cause the Telegram header to overlap the top of the Stripe page.
-                window.location.assign(res.data.checkout_url);
+                // Using Telegram.WebApp.openLink to open Stripe in a native overlay browser.
+                // This natively respects safe areas and avoids the Mini App header overlap.
+                if (window.Telegram?.WebApp && 'openLink' in window.Telegram.WebApp) {
+                    (window.Telegram.WebApp as any).openLink(res.data.checkout_url);
+                } else {
+                    window.location.assign(res.data.checkout_url);
+                }
             } else {
                 throw new Error('No checkout URL received');
             }
@@ -394,7 +398,7 @@ export default function SubscriptionPage() {
                     className="w-full"
                 >
                     <div
-                        className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-[calc(var(--spacing-safe-top,32px)+1rem)] text-center relative overflow-hidden font-sans`}
+                        className={`flex flex-col items-center min-h-dvh w-full px-6 pb-32 pt-[calc(var(--header-total-offset,138px)+1rem)] text-center relative overflow-hidden font-sans`}
                     >
                         <div className="w-full flex items-center justify-center mb-8 relative z-20">
                             <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('pro:subscription.pro_active.title')}</span>
@@ -484,7 +488,7 @@ export default function SubscriptionPage() {
                     >
                         <ChevronLeft size={16} />
                     </button>
-                    <div className="flex flex-col px-3 pb-24 pt-(--spacing-safe-top,32px) max-w-lg mx-auto overflow-x-hidden">
+                    <div className="flex flex-col px-3 pb-24 pt-(--header-total-offset,138px) max-w-lg mx-auto overflow-x-hidden">
                         <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
                             <div className="h-10" />
                         </div>

@@ -26,8 +26,7 @@ export const StripeReturnPage = () => {
 
     return (
         <div
-            className="fixed inset-0 min-h-dvh w-full bg-white dark:bg-bg-app flex flex-col items-center justify-center p-6 text-center z-9999"
-            style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
+            className="fixed inset-0 min-h-dvh w-full bg-white dark:bg-bg-app flex flex-col items-center justify-center p-6 pt-(--header-total-offset,138px) text-center z-9999"
         >
             <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
