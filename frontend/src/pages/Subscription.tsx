@@ -856,9 +856,11 @@ export default function SubscriptionPage() {
                                 <div className={`absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 -mr-12 -mt-12 ${selectedPlan === 'PRO' ? 'bg-blue-500' : 'bg-yellow-500'} transition-colors duration-500`} />
                                 <div className="relative z-10">
                                     <div className={`text-label font-bold uppercase tracking-[0.25em] mb-1 ${selectedPlan === 'PRO' ? 'text-blue-600 dark:text-blue-400' : 'text-yellow-600 dark:text-yellow-500'}`}>
-                                        {selectedPlan === 'PRO' ? t('pro:subscription.upgrade.pro_title') : t('pro:subscription.upgrade.pro_plus_title')} — {t('pro:subscription.plan_headline')}
+                                        {selectedPlan === 'PRO'
+                                            ? `${t('pro:subscription.upgrade.pro_title')} — ${t('pro:subscription.plan_headline')}`
+                                            : t('pro:subscription.plan_headline_plus')}
                                     </div>
-                                    <p className="text-[10px] sm:text-caption font-black text-slate-700 dark:text-white leading-none uppercase tracking-tight whitespace-nowrap">
+                                    <p className="text-caption font-bold text-slate-700 dark:text-white/80 leading-snug">
                                         {selectedPlan === 'PRO' ? t('pro:subscription.plan_desc_pro') : t('pro:subscription.plan_desc_plus')}
                                     </p>
                                 </div>
