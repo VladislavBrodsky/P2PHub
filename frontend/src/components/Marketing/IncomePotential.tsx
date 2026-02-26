@@ -175,10 +175,10 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 {/* Dual Mode Calculator / Unlocked Network Status */}
                 <div className={clsx(
-                    "p-6 rounded-xl md:rounded-2xl relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col gap-6",
+                    "rounded-xl md:rounded-2xl relative z-10 backdrop-blur-md transition-all duration-700 border flex flex-col overflow-hidden",
                     !isStrategyUnlocked
-                        ? "bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
-                        : "bg-white/40 dark:bg-[#020805]/80 border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)]"
+                        ? "p-6 gap-6 bg-slate-50/50 dark:bg-slate-900/50 border-slate-200 dark:border-white/10"
+                        : "border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] bg-slate-50 dark:bg-slate-950"
                 )}>
                     {!isStrategyUnlocked ? (
                         <>
@@ -323,24 +323,26 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         <m.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="space-y-6"
+                            className="relative w-full h-[520px] md:h-[580px]"
                         >
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
+                            <ReferralGraph targetAmount={estimatedMonthlyRaw} isFullscreen={true} />
+
+                            <div className="absolute top-0 inset-x-0 p-4 md:p-6 flex items-center justify-between z-20 pointer-events-none">
+                                <div className="flex items-center gap-2 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg pointer-events-auto">
                                     <TrendingUp className="w-4 h-4 text-emerald-500" />
                                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-500">{t('income.network.title')}</span>
                                 </div>
                                 <button
                                     onClick={() => setIsStrategyUnlocked(false)}
-                                    className="text-label font-bold text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                                    className="text-label font-bold text-white/70 hover:text-white transition-colors bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 shadow-lg uppercase tracking-widest pointer-events-auto"
                                 >
                                     {t('income.network.close')}
                                 </button>
                             </div>
 
-                            <ReferralGraph targetAmount={estimatedMonthlyRaw} />
-
-                            <ViralMessages messages={viralMessages} isEnabled={isStrategyUnlocked} />
+                            <div className="absolute top-16 inset-x-0 z-20 pointer-events-none">
+                                <ViralMessages messages={viralMessages} isEnabled={isStrategyUnlocked} />
+                            </div>
                         </m.div>
                     )}
                 </div>

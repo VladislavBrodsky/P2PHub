@@ -329,7 +329,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
     );
 });
 
-export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmount?: number }) => {
+export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = false }: { targetAmount?: number, isFullscreen?: boolean }) => {
     const { t } = useTranslation(['marketing', 'common']);
     const { user } = useUser();
     const { selection, impact } = useHaptic();
@@ -415,9 +415,10 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200 }: { targetAmoun
 
     return (
         <div className={clsx(
-            "relative w-full h-[460px] md:h-[520px] flex items-center justify-center overflow-hidden rounded-3xl md:rounded-2xl border transition-all duration-700",
-            "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl",
-            "group"
+            "relative w-full flex items-center justify-center overflow-hidden transition-all duration-700 group",
+            isFullscreen
+                ? "h-full bg-slate-50 dark:bg-slate-950"
+                : "h-[460px] md:h-[520px] rounded-3xl md:rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl"
         )}>
             <NeuralBackground />
 
