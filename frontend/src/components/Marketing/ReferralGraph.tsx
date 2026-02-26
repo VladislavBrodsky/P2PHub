@@ -4,6 +4,8 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useUser } from '../../context/UserContext';
 import { USDTLogo } from '../ui/USDTLogo';
 import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { useNotificationStore } from '../../store/useNotificationStore';
 import { useHaptic } from '../../hooks/useHaptic';
 import clsx from 'clsx';
@@ -332,6 +334,7 @@ const YieldCounter = React.memo(({ targetAmount, onComplete }: { targetAmount: n
 export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = false }: { targetAmount?: number, isFullscreen?: boolean }) => {
     const { t } = useTranslation(['marketing', 'common']);
     const { user } = useUser();
+    const { navigateTo } = useNavigation();
     const { selection, impact } = useHaptic();
 
     const [showFunnel, setShowFunnel] = useState(false);
@@ -374,12 +377,12 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
     const handleUpgrade = useCallback(() => {
         impact('heavy');
         if (user?.is_pro) {
-            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+            navigateTo(ROUTES.PRO);
         } else {
-            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+            navigateTo(ROUTES.SUBSCRIPTION);
         }
         setShowFunnel(false);
-    }, [impact, user?.is_pro]);
+    }, [impact, user?.is_pro, navigateTo]);
 
     const nextStep = useCallback(() => {
         selection();

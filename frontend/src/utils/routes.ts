@@ -5,8 +5,8 @@
  * Prevents typos, enables IDE autocomplete, and makes refactoring trivial.
  *
  * Usage:
- *   window.dispatchEvent(new CustomEvent('nav-tab', { detail: ROUTES.PRO }));
- *   navigateTo(ROUTES.HOME);
+ *   const { navigateTo } = useNavigation();
+ *   navigateTo(ROUTES.PRO);
  */
 export const ROUTES = {
     HOME: 'home',

@@ -9,6 +9,8 @@ import {
 import { proService } from '../../../services/proService';
 import { useNotificationStore } from '../../../store/useNotificationStore';
 import { renderMarkdown } from '../utils/renderMarkdown';
+import { ROUTES } from '../../../utils/routes';
+import { useNavigation } from '../../../hooks/useNavigation';
 import { Trans, useTranslation } from 'react-i18next';
 import { socialLogos } from '../utils/socialLogos';
 
@@ -68,6 +70,7 @@ export const ProDashboardModals = ({
     setShowGrowthModal
 }: ProModalsProps) => {
     const { t } = useTranslation('pro');
+    const { navigateTo } = useNavigation();
     const { showNotification } = useNotificationStore();
 
     // Setup Local State
@@ -485,7 +488,7 @@ export const ProDashboardModals = ({
                                                     onClick={() => {
                                                         selection();
                                                         localStorage.setItem('auto_upgrade_pro_plus', 'true');
-                                                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                                        navigateTo(ROUTES.SUBSCRIPTION);
                                                         setShowSetup(false);
                                                     }}
                                                     className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-label font-bold uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"

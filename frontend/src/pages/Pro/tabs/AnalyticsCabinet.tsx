@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { BarChart3, TrendingUp, Eye, ThumbsUp, Share2, BrainCircuit, Target, Sparkles, Zap, Send, X, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { proService } from '../../../services/proService';
+import { ROUTES } from '../../../utils/routes';
+import { useNavigation } from '../../../hooks/useNavigation';
 import { useUser } from '../../../context/UserContext';
 import { usePerformance } from '../../../hooks/usePerformance';
 
@@ -148,6 +150,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
 export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
     const { t } = useTranslation('pro');
     const { user } = useUser();
+    const { navigateTo } = useNavigation();
     const { lowPowerMode } = usePerformance();
     const [stats, setStats] = useState<any>(null);
     const [resonance, setResonance] = useState<any>(null);
@@ -396,7 +399,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => {
                                 impact('heavy');
-                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                navigateTo(ROUTES.SUBSCRIPTION);
                             }}
                             className="group relative px-8 py-3.5 rounded-2xl bg-linear-to-r from-purple-600 via-fuchsia-500 to-purple-600 bg-size-[200%_auto] animate-gradient-xy text-white text-label font-bold uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(168,85,247,0.4)] border border-white/20 overflow-hidden"
                         >

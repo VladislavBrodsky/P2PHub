@@ -16,6 +16,8 @@ import { UpgradeButton } from '../ui/UpgradeButton';
 import { useTranslation } from 'react-i18next';
 import { createPortal } from 'react-dom';
 import { DrawerMenu } from './DrawerMenu';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { useUser } from '../../context/UserContext';
 import { useTMALock } from '../../hooks/useTMALock';
 
@@ -32,6 +34,7 @@ interface ProfileDrawerProps {
 export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDrawerProps) {
     const { selection } = useHaptic();
     const { t } = useTranslation('common');
+    const { navigateTo } = useNavigation();
     const { user } = useUser();
 
     const [copied, setCopied] = React.useState(false);
@@ -151,7 +154,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                         <UpgradeButton
                                             onClick={() => {
                                                 onClose();
-                                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                                navigateTo(ROUTES.SUBSCRIPTION);
                                             }}
                                             className="shadow-xl shadow-amber-500/10"
                                         />

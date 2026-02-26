@@ -12,6 +12,8 @@ import { getApiUrl } from '../../utils/api';
 import { cn } from '../../lib/utils';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { ShareSheet } from '../ShareSheet';
 import { ProPlusBadge } from '../ui/ProPlusBadge';
 
@@ -138,6 +140,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const { t } = useTranslation('social');
     const { selection, impact, notification } = useHaptic();
     const { user } = useUser();
+    const { navigateTo } = useNavigation();
     const queryClient = useQueryClient();
 
     // UI State
@@ -437,7 +440,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                     <button
                                         onClick={() => {
                                             selection();
-                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                            navigateTo(ROUTES.SUBSCRIPTION);
                                             if (onClose) onClose();
                                         }}
                                         className="w-full max-w-[200px] h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-label uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2"

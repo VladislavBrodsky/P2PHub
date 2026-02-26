@@ -25,6 +25,8 @@ import { getApiUrl } from '../utils/api';
 import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
+import { ROUTES } from '../utils/routes';
+import { useNavigation } from '../hooks/useNavigation';
 import { SectionHeader } from '../components/ui/SectionHeader';
 // #comment: Root-relative path /images/ used for public assets.
 
@@ -33,6 +35,7 @@ export default function ReferralPage() {
     const { notification, selection } = useHaptic();
     const { user, updateUser, refreshUser, isLoading } = useUser();
     const { showNotification } = useNotificationStore();
+    const { navigateTo } = useNavigation();
     const { setFooterVisible } = useUI();
 
     // Local State for Instant Feedback
@@ -200,7 +203,7 @@ export default function ReferralPage() {
 
             // Handle internal navigation via rigid tab system
             if (task.link === '/blog') {
-                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
+                navigateTo(ROUTES.BLOG);
             } else if (task.link === '/dashboard/academy') {
                 // For academy, we ensure the task is started if it's not already
                 if (task.type === 'academy') {
@@ -211,10 +214,10 @@ export default function ReferralPage() {
                     // #comment: Direct sub-tab navigation
                     window.dispatchEvent(new Event('nav-academy'));
                 }
-                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'partner' }));
+                navigateTo(ROUTES.PARTNER);
             } else if (task.link.startsWith('/faq')) {
                 // Navigate to FAQ tab and pre-fill search
-                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' }));
+                navigateTo(ROUTES.FAQ);
                 // Also pass the search query for FAQ to pick up
                 const searchParam = new URL(task.link, 'http://x').searchParams.get('q');
                 if (searchParam) {
@@ -583,7 +586,7 @@ export default function ReferralPage() {
                 <UpgradeButton
                     onClick={() => {
                         selection();
-                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                        navigateTo(ROUTES.SUBSCRIPTION);
                     }}
                     className="shadow-xl shadow-amber-500/10"
                 />

@@ -12,6 +12,8 @@ import {
 } from '@telegram-apps/sdk-react';
 import { isTMA } from '../utils/tma';
 import { useHaptic } from '../hooks/useHaptic';
+import { ROUTES } from '../utils/routes';
+import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
 import { proService, PROStatus } from '../services/proService';
 import { useNotificationStore } from '../store/useNotificationStore';
@@ -29,6 +31,7 @@ type Tab = 'studio' | 'tools' | 'growth' | 'analytics';
 export const ProDashboard = () => {
     const { t, i18n } = useTranslation('pro');
     const { selection, impact, notification: hapticNotification } = useHaptic();
+    const { navigateTo } = useNavigation();
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();
     const { lowPowerMode } = usePerformance();
@@ -584,7 +587,7 @@ export const ProDashboard = () => {
                                     {t('pro_dashboard.locked.desc')}
                                 </p>
                                 <button
-                                    onClick={() => window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }))}
+                                    onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
                                     className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
                                 >
                                     {t('pro_dashboard.locked.upgrade_btn')}

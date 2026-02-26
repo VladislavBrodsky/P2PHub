@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../hooks/useHaptic';
+import { ROUTES } from '../utils/routes';
+import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
 
 interface FAQItem {
@@ -41,6 +43,7 @@ const renderFormattedText = (text: string) => {
 export default function FAQPage() {
     const { t } = useTranslation('common');
     const { selection, notification } = useHaptic();
+    const { navigateTo } = useNavigation();
     const { setSupportOpen } = useUI();
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -199,7 +202,7 @@ export default function FAQPage() {
 
                 <div className="flex items-center gap-3 mb-6">
                     <button
-                        onClick={() => { selection(); window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'home' })); }}
+                        onClick={() => { selection(); navigateTo(ROUTES.HOME); }}
                         className="p-2.5 rounded-xl bg-card-bg border border-card-border text-text-primary active:scale-95 transition-all backdrop-blur-md shadow-xl"
                     >
                         <ArrowLeft size={18} />

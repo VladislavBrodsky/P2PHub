@@ -4,11 +4,14 @@ import { ChevronRight, ArrowUpRight, Clock } from 'lucide-react';
 import { blogService } from '../../services/blogService';
 import { BlogPost } from '../../data/blogPosts';
 import { useTranslation } from 'react-i18next';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { useHaptic } from '../../hooks/useHaptic';
 import { SectionHeader } from '../ui/SectionHeader';
 
 export const BlogCarousel = () => {
     const { t } = useTranslation(['marketing', 'common']);
+    const { navigateTo } = useNavigation();
     const { selection } = useHaptic();
     const [posts, setPosts] = useState<BlogPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +32,7 @@ export const BlogCarousel = () => {
 
     const navigateToBlog = (postId?: string) => {
         selection();
-        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
+        navigateTo(ROUTES.BLOG);
         if (postId) {
             setTimeout(() => {
                 window.dispatchEvent(new CustomEvent('nav-blog-post', { detail: postId }));

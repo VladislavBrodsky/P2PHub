@@ -6,6 +6,8 @@ import { AcademyStage } from '../../data/academyData';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { useTMALock } from '../../hooks/useTMALock';
 import { renderMarkdown, renderInline, sanitizeAIGeneratedText } from '../../utils/renderMarkdown';
 import { getSafeLaunchParams } from '../../utils/tma';
@@ -20,6 +22,7 @@ interface AcademyContentPortalProps {
 export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stage, onClose, onComplete, isLocked }) => {
     const { t } = useTranslation(['academy', 'common']);
     const { user } = useUser();
+    const { navigateTo } = useNavigation();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);
 
@@ -198,7 +201,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 <button
                                     onClick={() => {
                                         onClose();
-                                        window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                        navigateTo(ROUTES.SUBSCRIPTION);
                                     }}
                                     className="w-full py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
                                 >
@@ -657,7 +660,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                         <button
                             onClick={() => {
                                 onClose();
-                                window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'subscription' }));
+                                navigateTo(ROUTES.SUBSCRIPTION);
                             }}
                             className="flex-1 py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
                         >

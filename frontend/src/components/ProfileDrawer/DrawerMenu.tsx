@@ -17,14 +17,16 @@ import { blogService } from '../../services/blogService';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
+import { ROUTES } from '../../utils/routes';
+import { useNavigation } from '../../hooks/useNavigation';
 import { DrawerSettings } from './DrawerSettings';
 
 // Items that navigate away to a specific app tab on click
 const NAV_TABS: Record<string, string> = {
-    blog: 'blog',
-    pro: 'pro',
-    admin: 'admin',
-    faq: 'faq',
+    blog: ROUTES.BLOG,
+    pro: ROUTES.PRO,
+    admin: ROUTES.ADMIN,
+    faq: ROUTES.FAQ,
 };
 
 interface DrawerMenuProps {
@@ -34,6 +36,7 @@ interface DrawerMenuProps {
 
 export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const { t, i18n } = useTranslation('common');
+    const { navigateTo } = useNavigation();
     const { user } = useUser();
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
@@ -107,7 +110,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     <button
                                         onClick={() => {
                                             onClose();
-                                            window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
+                                            navigateTo(ROUTES.PRO);
                                         }}
                                         className="w-full mt-2 py-2 rounded-lg bg-linear-to-r from-blue-500 to-indigo-600 text-white text-label font-bold uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-transform">
                                         {t('faq.pro_promo.cta')}
@@ -209,7 +212,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                 selection();
                                 if (NAV_TABS[item.id]) {
                                     onClose();
-                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: NAV_TABS[item.id] }));
+                                    navigateTo(NAV_TABS[item.id]);
                                 } else {
                                     toggleSection(item.id);
                                 }
