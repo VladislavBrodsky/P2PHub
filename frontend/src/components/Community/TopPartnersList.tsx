@@ -4,7 +4,7 @@ import { TrendingUp, Users, Crown, ChevronDown, ChevronUp, User } from 'lucide-r
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
-import { ProPlusBadge } from '../ui/ProPlusBadge';
+import { ProPlusBadge, ProBadge } from '../ui/ProPlusBadge';
 
 export const TopPartnersList = () => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
@@ -132,9 +132,12 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
                             <Crown className="w-3 h-3 text-white" />
                         </div>
                     )}
-                    {(partner.subscription_plan || '').includes('PLUS') && (
+                    {(partner.subscription_plan || '').includes('PRO') && (
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
-                            <ProPlusBadge size="xs" />
+                            <ProBadge
+                                variant={(partner.subscription_plan || '').includes('PLUS') ? 'pro-plus' : 'pro'}
+                                size="xs"
+                            />
                         </div>
                     )}
                 </div>

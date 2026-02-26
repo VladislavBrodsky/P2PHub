@@ -4,7 +4,7 @@ import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress, getRankGradient } from '../utils/ranking';
-import { ProPlusBadge } from './ui/ProPlusBadge';
+import { ProPlusBadge, ProBadge } from './ui/ProPlusBadge';
 import { getSafeLaunchParams } from '../utils/tma';
 
 interface PersonalizationCardProps {
@@ -44,7 +44,9 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
         xp: 0
     };
 
-    const isProPlus = user?.is_pro_plus || (user?.subscription_plan || '').toLowerCase().includes('plus');
+    const plan = (user?.subscription_plan || '').toLowerCase();
+    const isProPlus = user?.is_pro_plus || plan.includes('plus');
+    const isPro = user?.is_pro || plan.includes('pro');
     const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
 
     const formatXP = (num: number) => {
@@ -60,7 +62,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             {/* Premium Background Glow */}
             {/* Premium Background Glow - Disabled for compact variant to avoid glitches in menu */}
             {variant !== 'compact' && (
-                <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
+                <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : isPro ? 'bg-amber-400/20 shadow-[0_0_80px_rgba(251,191,36,0.3)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
             )}
 
             {/* Vibing Purple Crown for PRO Users - Outside container to avoid clipping */}
@@ -82,7 +84,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 >
                     <Crown
                         size={variant === 'compact' ? 24 : 30}
-                        className="text-fuchsia-500 fill-fuchsia-500/10"
+                        className={`${isProPlus ? 'text-fuchsia-500 fill-fuchsia-500/10' : 'text-amber-500 fill-amber-500/10'}`}
                         strokeWidth={2.5}
                     />
                 </motion.div>
@@ -92,7 +94,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             <div className={`
                 relative rounded-[2.5rem] bg-bg-glass backdrop-blur-xl border border-border-glass group
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
-                ${isProPlus ? 'ring-2 ring-blue-400/20' : ''}
+                ${isProPlus ? 'ring-2 ring-blue-400/20' : isPro ? 'ring-2 ring-amber-400/10' : ''}
             `}>
                 <div className="flex items-center gap-5 p-3.5 rounded-[inherit] overflow-hidden">
                     {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
@@ -121,7 +123,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 className={`
                                 ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-xl'} 
                                 overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
-                                ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : 'border-border-glass'}
+                                ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : isPro ? 'border-amber-400/60 ring-1 ring-amber-500/20' : 'border-border-glass'}
                                 bg-bg-app 
                             `}
                             >
@@ -137,7 +139,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                     <img
                                         src={avatarSrc}
                                         alt={`${user?.first_name || t('partner_fallback')}'s avatar`}
-                                        className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus ? 'scale-110' : ''}`}
+                                        className={`h-full w-full object-cover transition-opacity duration-200 ${imageLoaded ? 'opacity-100' : 'opacity-0'} ${isProPlus || isPro ? 'scale-110' : ''}`}
                                         onLoad={() => setImageLoaded(true)}
                                         loading="eager"
                                         fetchPriority="high"
@@ -157,15 +159,19 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 )}
                             </motion.div>
 
-                            {!isProPlus && (
+                            {!(isProPlus || isPro) && (
                                 <div className={`absolute -bottom-1 -right-1 flex ${variant === 'compact' ? 'h-5 w-5' : 'h-6 w-6'} items-center justify-center rounded-lg bg-blue-500 text-white shadow-premium ring-2 ring-bg-app z-20`}>
                                     <span className="text-label font-bold">{user?.level || 1}</span>
                                 </div>
                             )}
 
-                            {isProPlus && (
+                            {(isProPlus || isPro) && (
                                 <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-40 transform">
-                                    <ProPlusBadge size="sm" className="shadow-[0_0_15px_rgba(34,211,238,0.5)]" />
+                                    <ProBadge
+                                        variant={isProPlus ? 'pro-plus' : 'pro'}
+                                        size="sm"
+                                        className={isProPlus ? "shadow-[0_0_15px_rgba(34,211,238,0.5)]" : "shadow-[0_0_12px_rgba(251,191,36,0.4)]"}
+                                    />
                                 </div>
                             )}
                         </div>

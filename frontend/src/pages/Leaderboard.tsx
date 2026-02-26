@@ -12,7 +12,7 @@ import { useState, useMemo, memo } from 'react';
 import { PartnerBriefingModal } from '../components/Partner/PartnerBriefingModal';
 import { Trophy, Shield, Star, Crown } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
-import { ProPlusBadge } from '../components/ui/ProPlusBadge';
+import { ProPlusBadge, ProBadge } from '../components/ui/ProPlusBadge';
 import { useUser } from '../context/UserContext';
 
 interface LeaderboardUser {
@@ -111,9 +111,12 @@ const PartnerRow = memo(({ user, index, onModalOpen, t }: {
                                 </div>
                             )}
                         </div>
-                        {(user.subscription_plan || '').includes('PLUS') && (
+                        {(user.subscription_plan || '').includes('PRO') && (
                             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
-                                <ProPlusBadge size="xs" />
+                                <ProBadge
+                                    variant={(user.subscription_plan || '').includes('PLUS') ? 'pro-plus' : 'pro'}
+                                    size="xs"
+                                />
                             </div>
                         )}
                     </div>

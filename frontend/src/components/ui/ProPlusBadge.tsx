@@ -1,17 +1,36 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-interface ProPlusBadgeProps {
+interface ProBadgeProps {
     className?: string;
     size?: 'xs' | 'sm' | 'md' | 'lg';
+    variant?: 'pro' | 'pro-plus';
 }
 
-export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size = 'md' }) => {
+export const ProBadge: React.FC<ProBadgeProps> = ({ className = '', size = 'md', variant = 'pro-plus' }) => {
+    const isPlus = variant === 'pro-plus';
+
     const sizeClasses = {
         xs: 'px-1.5 py-0.5 text-[7px] gap-0 rounded-[4px] border-[0.5px]',
         sm: 'px-2 py-0.5 text-[8px] gap-0.5 rounded-lg border-[1px]',
         md: 'px-3 py-1 text-[10px] gap-1 rounded-xl border-[1.5px]',
         lg: 'px-4 py-1.5 text-caption gap-1.5 rounded-2xl border-[2px]'
+    };
+
+    const colors = isPlus ? {
+        border: 'border-amber-400/50',
+        glow: 'shadow-[0_4px_20px_rgba(168,85,247,0.4),0_0_15px_rgba(234,179,8,0.2)]',
+        bg: 'from-[#1e1b4b] via-[#4c1d95] to-[#7e22ce]',
+        text: 'from-white via-slate-200 to-amber-200',
+        innerGlow: 'rgba(251,191,36,0.3)',
+        innerGlowActive: 'rgba(251,191,36,0.6)'
+    } : {
+        border: 'border-amber-400/60',
+        glow: 'shadow-[0_4px_15px_rgba(234,179,8,0.4),0_0_10px_rgba(251,191,36,0.2)]',
+        bg: 'from-[#78350f] via-[#b45309] to-[#d97706]',
+        text: 'from-white via-yellow-100 to-amber-300',
+        innerGlow: 'rgba(252,211,77,0.3)',
+        innerGlowActive: 'rgba(252,211,77,0.6)'
     };
 
     return (
@@ -20,8 +39,9 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
             animate={{ scale: 1, opacity: 1 }}
             className={`
                 relative flex items-center justify-center font-bold uppercase tracking-tighter
-                shadow-[0_4px_20px_rgba(168,85,247,0.4),0_0_15px_rgba(234,179,8,0.2)]
-                overflow-hidden select-none border-amber-400/50
+                overflow-hidden select-none
+                ${colors.border}
+                ${colors.glow}
                 ${sizeClasses[size]}
                 ${className}
             `}
@@ -36,7 +56,7 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
-                className="absolute inset-0 bg-linear-to-br from-[#1e1b4b] via-[#4c1d95] to-[#7e22ce] bg-size-[200%_200%] z-0"
+                className={`absolute inset-0 bg-linear-to-br ${colors.bg} bg-size-[200%_200%] z-0`}
             />
 
             {/* Ultra-Premium Glass Overlay */}
@@ -58,8 +78,8 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
             />
 
             {/* Metallic Text Effect */}
-            <span className="relative z-20 font-bold italic tracking-widest bg-linear-to-b from-white via-slate-200 to-amber-200 bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-                PRO+
+            <span className={`relative z-20 font-bold italic tracking-widest bg-linear-to-b ${colors.text} bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]`}>
+                {isPlus ? 'PRO+' : 'PRO'}
             </span>
 
             {/* Golden Pulsing Glow Border */}
@@ -67,9 +87,9 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
                 animate={{
                     opacity: [0.3, 0.7, 0.3],
                     boxShadow: [
-                        "inset 0 0 5px rgba(251,191,36,0.3)",
-                        "inset 0 0 12px rgba(251,191,36,0.6)",
-                        "inset 0 0 5px rgba(251,191,36,0.3)"
+                        `inset 0 0 5px ${colors.innerGlow}`,
+                        `inset 0 0 12px ${colors.innerGlowActive}`,
+                        `inset 0 0 5px ${colors.innerGlow}`
                     ]
                 }}
                 transition={{
@@ -97,3 +117,8 @@ export const ProPlusBadge: React.FC<ProPlusBadgeProps> = ({ className = '', size
         </motion.div>
     );
 };
+
+// Maintain compatibility with existing code
+export const ProPlusBadge: React.FC<ProBadgeProps> = (props) => (
+    <ProBadge {...props} variant="pro-plus" />
+);
