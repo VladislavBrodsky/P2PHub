@@ -42,6 +42,7 @@ import { LOGO_DATA } from './data/avatars';
 
 import { RevealSkeleton } from './components/Skeletons/RevealSkeleton';
 import { UIProvider } from './context/UIContext';
+import { TabPanel } from './components/ui/TabPanel';
 
 // #comment: Removed hard import of SupportChat to enable the Lazy load strategy defined above.
 import { useUI } from './context/UIContext';
@@ -166,85 +167,49 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>
             <div className={showOnboarding ? 'hidden' : 'block'}>
                 <Suspense fallback={<RevealSkeleton />}>
-                    <div className={activeTab === 'home' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('home') || activeTab === 'home') && (
-                            <FeatureErrorBoundary featureName={t('system.features.dashboard')}>
-                                <Suspense fallback={<DashboardSkeleton />}>
-                                    <Dashboard setActiveTab={navigateTo} />
-                                </Suspense>
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'cards' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('cards') || activeTab === 'cards') && (
-                            <FeatureErrorBoundary featureName={t('system.features.cards')}>
-                                <CardsPage setActiveTab={navigateTo} />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'partner' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('partner') || activeTab === 'partner') && (
-                            <FeatureErrorBoundary featureName={t('system.features.community')}>
-                                <CommunityPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'earn' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('earn') || activeTab === 'earn') && (
-                            <FeatureErrorBoundary featureName={t('system.features.referral')}>
-                                <ReferralPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'league' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('league') || activeTab === 'league') && (
-                            <FeatureErrorBoundary featureName={t('system.features.leaderboard')}>
-                                <LeaderboardPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'subscription' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('subscription') || activeTab === 'subscription') && (
-                            <FeatureErrorBoundary featureName={t('system.features.subscription')}>
-                                <SubscriptionPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'blog' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('blog') || activeTab === 'blog') && (
-                            <FeatureErrorBoundary featureName={t('system.features.blog')}>
-                                <BlogPage setActiveTab={navigateTo} currentTab={activeTab} />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'admin' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('admin') || activeTab === 'admin') && (
-                            <FeatureErrorBoundary featureName={t('system.features.admin')}>
-                                <AdminPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'pro' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('pro') || activeTab === 'pro') && (
-                            <FeatureErrorBoundary featureName={t('system.features.pro_dashboard')}>
-                                <ProPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'faq' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('faq') || activeTab === 'faq') && (
-                            <FeatureErrorBoundary featureName={t('system.features.faq')}>
-                                <FAQPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
-                    <div className={activeTab === 'stripe-return' ? 'block relative' : 'hidden'}>
-                        {(visitedTabs.has('stripe-return') || activeTab === 'stripe-return') && (
-                            <FeatureErrorBoundary featureName="Stripe Return">
-                                <StripeReturnPage />
-                            </FeatureErrorBoundary>
-                        )}
-                    </div>
+                    <TabPanel id="home" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.dashboard')} fallback={<DashboardSkeleton />}>
+                        <Dashboard setActiveTab={navigateTo} />
+                    </TabPanel>
+
+                    <TabPanel id="cards" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.cards')}>
+                        <CardsPage setActiveTab={navigateTo} />
+                    </TabPanel>
+
+                    <TabPanel id="partner" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.community')}>
+                        <CommunityPage />
+                    </TabPanel>
+
+                    <TabPanel id="earn" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.referral')}>
+                        <ReferralPage />
+                    </TabPanel>
+
+                    <TabPanel id="league" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.leaderboard')}>
+                        <LeaderboardPage />
+                    </TabPanel>
+
+                    <TabPanel id="subscription" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.subscription')}>
+                        <SubscriptionPage />
+                    </TabPanel>
+
+                    <TabPanel id="blog" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.blog')}>
+                        <BlogPage setActiveTab={navigateTo} currentTab={activeTab} />
+                    </TabPanel>
+
+                    <TabPanel id="admin" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.admin')}>
+                        <AdminPage />
+                    </TabPanel>
+
+                    <TabPanel id="pro" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.pro_dashboard')}>
+                        <ProPage />
+                    </TabPanel>
+
+                    <TabPanel id="faq" activeTab={activeTab} visitedTabs={visitedTabs} featureName={t('system.features.faq')}>
+                        <FAQPage />
+                    </TabPanel>
+
+                    <TabPanel id="stripe-return" activeTab={activeTab} visitedTabs={visitedTabs} featureName="Stripe Return">
+                        <StripeReturnPage />
+                    </TabPanel>
 
                     {['coming_soon'].includes(activeTab) && (
                         <div className="flex flex-col items-center justify-center text-center px-10 h-full">
