@@ -42,6 +42,8 @@ backend/app_images/generated/
 *.jpeg
 *.webp
 !frontend/public/**/*.webp
+!frontend/public/**/*.jpg
+!frontend/public/**/*.jpeg
 !frontend/src/assets/**/*
 
 # Audit Reports & Checklists
