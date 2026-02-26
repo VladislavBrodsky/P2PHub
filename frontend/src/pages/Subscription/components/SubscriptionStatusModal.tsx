@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { Loader2, Trophy, CheckCircle2, X } from 'lucide-react';
 
@@ -25,50 +25,54 @@ export const SubscriptionStatusModal = React.memo(({
     if (typeof document === 'undefined') return null;
 
     return createPortal(
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
-            style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
-        >
-            {infoModal ? (
-                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
-                    <div className="circuit-decor opacity-30" />
-                    <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
-                    <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] rounded-full opacity-20 -mr-20 -mt-20 ${infoModal.color === 'emerald' ? 'bg-emerald-500' : infoModal.color === 'amber' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+        <AnimatePresence>
+            {(status !== 'idle' || infoModal) && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
+                    style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
+                >
+                    {infoModal ? (
+                        <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
+                            <div className="circuit-decor opacity-30" />
+                            <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
+                            <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] rounded-full opacity-20 -mr-20 -mt-20 ${infoModal.color === 'emerald' ? 'bg-emerald-500' : infoModal.color === 'amber' ? 'bg-amber-500' : 'bg-blue-500'}`} />
 
-                    <div className="relative z-10 flex flex-col items-center">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
-                            {React.createElement(infoModal.icon, { size: 24, className: "text-white drop-shadow-md" })}
+                            <div className="relative z-10 flex flex-col items-center">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>
+                                    {React.createElement(infoModal.icon, { size: 24, className: "text-white drop-shadow-md" })}
+                                </div>
+                                <h3 className={`text-lg font-bold uppercase mb-2 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
+                                <div className="px-1 mb-6">
+                                    <p className="text-label text-slate-600 dark:text-white/70 uppercase font-bold tracking-widest leading-normal overflow-y-auto max-h-[100px] scrollbar-hide">{infoModal.desc}</p>
+                                </div>
+                                <button
+                                    onClick={() => { selection(); setInfoModal(null); }}
+                                    className={`w-full h-10 rounded-full font-bold text-label uppercase tracking-[0.2em] transition-all active:scale-95 shadow-xl border border-white/10 ${infoModal.color === 'emerald' ? 'vibing-emerald-animated text-white' : infoModal.color === 'amber' ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
+                                >
+                                    {t('common:close')}
+                                </button>
+                            </div>
                         </div>
-                        <h3 className={`text-lg font-bold uppercase mb-2 tracking-tighter leading-none ${infoModal.color === 'emerald' ? 'text-emerald-500' : infoModal.color === 'amber' ? 'text-amber-500' : 'text-blue-500'}`}>{infoModal.title}</h3>
-                        <div className="px-1 mb-6">
-                            <p className="text-label text-slate-600 dark:text-white/70 uppercase font-bold tracking-widest leading-normal overflow-y-auto max-h-[100px] scrollbar-hide">{infoModal.desc}</p>
+                    ) : (
+                        <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center">
+                            {status === 'pending' && <Loader2 size={32} className="text-amber-500 animate-spin mx-auto mb-4" />}
+                            {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
+                            {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}
+                            <h2 className="text-md font-bold text-slate-900 dark:text-white uppercase mb-2">
+                                {status === 'pending' ? t('pro:subscription.status.verifying') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus') : t('pro:subscription.status.welcome_pro')) : t('pro:subscription.status.submitted')}
+                            </h2>
+                            <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6 px-4">
+                                {status === 'pending' ? t('pro:subscription.status.verifying_p') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus_p') : t('pro:subscription.status.welcome_pro_p')) : t('pro:subscription.status.submitted_p')}
+                            </p>
+                            <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">{t('pro:subscription.status.got_it')}</button>
                         </div>
-                        <button
-                            onClick={() => { selection(); setInfoModal(null); }}
-                            className={`w-full h-10 rounded-full font-bold text-label uppercase tracking-[0.2em] transition-all active:scale-95 shadow-xl border border-white/10 ${infoModal.color === 'emerald' ? 'vibing-emerald-animated text-white' : infoModal.color === 'amber' ? 'vibing-yellow-animated text-[#0a1000]' : 'vibing-blue-animated text-white'}`}
-                        >
-                            {t('common:close')}
-                        </button>
-                    </div>
-                </div>
-            ) : (
-                <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center">
-                    {status === 'pending' && <Loader2 size={32} className="text-amber-500 animate-spin mx-auto mb-4" />}
-                    {status === 'success' && <Trophy size={32} className="text-emerald-500 mx-auto mb-4" />}
-                    {status === 'manual_review' && <CheckCircle2 size={32} className="text-blue-500 mx-auto mb-4" />}
-                    <h2 className="text-md font-bold text-slate-900 dark:text-white uppercase mb-2">
-                        {status === 'pending' ? t('pro:subscription.status.verifying') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus') : t('pro:subscription.status.welcome_pro')) : t('pro:subscription.status.submitted')}
-                    </h2>
-                    <p className="text-label text-slate-500 dark:text-white/40 uppercase font-bold tracking-widest mb-6 px-4">
-                        {status === 'pending' ? t('pro:subscription.status.verifying_p') : status === 'success' ? (selectedPlan === 'PRO_PLUS' ? t('pro:subscription.status.welcome_pro_plus_p') : t('pro:subscription.status.welcome_pro_p')) : t('pro:subscription.status.submitted_p')}
-                    </p>
-                    <button onClick={() => setStatus('idle')} className="w-full h-10 bg-indigo-600 hover:bg-indigo-700 text-white dark:bg-white dark:hover:bg-slate-100 dark:text-indigo-900 rounded-full font-bold text-label uppercase tracking-[0.2em] shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] transition-all active:scale-95">{t('pro:subscription.status.got_it')}</button>
-                </div>
+                    )}
+                </motion.div>
             )}
-        </motion.div>,
+        </AnimatePresence>,
         document.body
     );
 });
