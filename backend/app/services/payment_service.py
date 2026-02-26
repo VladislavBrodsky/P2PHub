@@ -339,6 +339,16 @@ class PaymentService:
             if fresh_partner:
                 partner = fresh_partner
                 
+            # --- BALANCE DEDUCTION (RETRY-SAFE) ---
+            # If this is a balance upgrade, we deduct it here inside the retry block.
+            # This ensures that if a rollback happens, the deduction is re-applied in the next attempt.
+            if currency == "BALANCE":
+                if partner.balance < amount:
+                    raise ValueError(f"Insufficient balance during upgrade: {partner.balance} < {amount}")
+                partner.balance -= amount
+                session.add(partner)
+                await session.flush()
+
             sentry_sdk.add_breadcrumb(
                 category="payment",
                 message=f"Executing PRO upgrade for partner {getattr(partner, 'telegram_id', 'unknown')} at {now}",

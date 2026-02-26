@@ -37,7 +37,7 @@ export const BlogCarousel = () => {
         }
     };
 
-    if (isLoading) return null;
+    if (isLoading) return <div className="py-2 space-y-2 min-h-[466px] w-full" />;
 
     return (
         <section className="py-2 space-y-2 min-h-[450px]">

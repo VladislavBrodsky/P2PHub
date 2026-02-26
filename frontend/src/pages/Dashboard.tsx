@@ -25,7 +25,7 @@ const SkeletonCard = ({ className }: { className?: string }) => (
 );
 
 const BentoSkeleton = () => (
-    <div className="flex gap-4 overflow-hidden px-6 h-[410px]">
+    <div className="flex gap-4 overflow-hidden px-6 h-[410px] items-start">
         <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
         <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
         <SkeletonCard className="shrink-0 w-[280px] sm:w-[320px] h-[360px]" />
@@ -33,7 +33,7 @@ const BentoSkeleton = () => (
 );
 
 const IncomeSkeleton = () => (
-    <div className="mx-4 p-5 md:p-8 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 min-h-[1100px] flex flex-col gap-8 animate-pulse">
+    <div className="mx-4 p-5 md:p-8 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 min-h-[1116px] flex flex-col gap-8 animate-pulse">
         <div className="h-8 w-48 bg-slate-200 dark:bg-slate-800 rounded-full mx-auto" />
         <div className="h-10 w-64 bg-slate-200 dark:bg-slate-800 rounded mx-auto" />
         <div className="h-48 w-full bg-slate-200 dark:bg-slate-800 rounded-2xl" />
@@ -45,7 +45,7 @@ const IncomeSkeleton = () => (
 );
 
 const BlogSkeleton = () => (
-    <div className="mx-4 p-6 rounded-3xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 h-[450px] flex flex-col gap-6 animate-pulse">
+    <div className="mx-4 p-6 rounded-3xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 h-[466px] flex flex-col gap-6 animate-pulse">
         <div className="h-8 w-32 bg-slate-200 dark:bg-slate-800 rounded-full" />
         <div className="flex gap-4 overflow-hidden">
             <SkeletonCard className="shrink-0 w-[240px] h-[300px]" />
@@ -178,23 +178,23 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         description={t('dashboard:evolution.desc')}
                     />
                 </div>
-                <ThrottledSuspense fallback={<BentoSkeleton />}>
+                <Suspense fallback={<BentoSkeleton />}>
                     <BentoGrid />
-                </ThrottledSuspense>
+                </Suspense>
             </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<IncomeSkeleton />}>
+                <Suspense fallback={<IncomeSkeleton />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
-                </ThrottledSuspense>
+                </Suspense>
             </m.div>
 
             {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
             <m.div variants={item} className="w-full">
-                <ThrottledSuspense fallback={<BlogSkeleton />}>
+                <Suspense fallback={<BlogSkeleton />}>
                     <BlogCarousel />
-                </ThrottledSuspense>
+                </Suspense>
             </m.div>
 
             {/* #comment: 6. Final CTA - Clear conversion point. */}

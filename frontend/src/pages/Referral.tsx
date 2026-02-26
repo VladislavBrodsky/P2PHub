@@ -26,7 +26,7 @@ import { PageSkeleton } from '../components/Skeletons/PageSkeleton';
 import { useUI } from '../context/UIContext';
 import { useTMALock } from '../hooks/useTMALock';
 import { SectionHeader } from '../components/ui/SectionHeader';
-import referralPromoImage from '../assets/images/v3_referral_promo.jpg';
+import referralPromoImage from '../assets/images/promo_fixed.jpg';
 
 export default function ReferralPage() {
     const { t } = useTranslation(['social', 'common', 'marketing']);

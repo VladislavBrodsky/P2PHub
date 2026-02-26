@@ -403,17 +403,10 @@ async def upgrade_from_balance(
     if plan == "PRO_PLUS" and partner.subscription_plan == "PRO_PLUS_MONTHLY":
          raise HTTPException(status_code=400, detail="User is already PRO+")
 
-    # Check Balance
-    if partner.balance < price:
-        raise HTTPException(status_code=400, detail=f"Insufficient balance. Need ${price}")
-
-    # Deduct Balance (In-memory subtraction keeps the instance dirty for the subsequent upgrade call)
-    partner.balance -= price
-    session.add(partner)
-    await session.flush()
-
     # Process Upgrade
     # We call upgrade_to_pro which handles the logic, commissions, and notifications
+    # #comment: We no longer deduct balance here; it's handled inside the retryable service
+    # to ensure atomicity in case of transient DB errors.
     await payment_service.upgrade_to_pro(
         session=session,
         partner=partner,
