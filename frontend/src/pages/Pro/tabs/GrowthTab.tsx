@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, memo } from 'react';
+import { useState, useEffect, useRef, memo, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Info, CheckCircle2, Bot, TrendingUp, ArrowRight, ShieldCheck,
@@ -6,14 +6,39 @@ import {
     Loader2, Brain, Lock, Play, ChevronDown
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { PROStatus } from '../../../services/proService';
 import { renderMarkdown } from '../utils/renderMarkdown';
 import { LiquidCounter } from '../utils/LiquidCounter';
 import { socialLogos } from '../utils/socialLogos';
-import { ACADEMY_STAGES, getCategoryColor } from '../../../data/academyData';
+import { ACADEMY_STAGES, AcademyStage, getCategoryColor } from '../../../data/academyData';
 import { usePerformance } from '../../../hooks/usePerformance';
 
-const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLocked, unlockedStages, toggleExpand, handleUnlock, handleComplete, t, lowPowerMode, renderMarkdown }: any) => {
+interface AcademyStageItemProps {
+    stage: AcademyStage;
+    isCompleted: boolean;
+    isLoading: boolean;
+    isExpanded: boolean;
+    isLocked: boolean;
+    unlockedStages: string[];
+    toggleExpand: () => void;
+    handleUnlock: (id: string) => void;
+    handleComplete: (id: string) => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    t: TFunction<readonly ['pro', 'academy'], undefined>;
+    lowPowerMode: boolean;
+    renderMarkdown: (content: string) => React.ReactNode;
+}
+
+interface PsychStrategyItem {
+    id?: string;
+    trigger: string;
+    title: string;
+    desc: string;
+    action: string;
+}
+
+const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLocked, unlockedStages, toggleExpand, handleUnlock, handleComplete, t, lowPowerMode, renderMarkdown }: AcademyStageItemProps) => {
     const stageIdStr = String(stage.id);
     const CategoryIcon = stage.icon;
     const isUnlocked = unlockedStages.includes(stageIdStr) || stage.xpCost === 0;
@@ -204,7 +229,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
     );
 });
 
-const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode, t }: any) => (
+const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode, t }: { item: PsychStrategyItem; i: number; selection: () => void; impact: (style: 'light' | 'medium' | 'heavy') => void; lowPowerMode: boolean; t: TFunction<readonly ['pro', 'academy'], undefined> }) => (
     <motion.div
         whileHover={lowPowerMode ? {} : { y: -4 }}
         className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
@@ -297,20 +322,48 @@ export const GrowthTab = ({
     const hasInitialAutoExpanded = useRef(false);
     const isSetupComplete = !!(status?.setup?.telegram_channel_id || status?.setup?.x_access_token);
 
+    // Memoize expensive t() array lookups so they don't re-run on every render
+    const modulesList = useMemo(() => {
+        const raw = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+        return Array.isArray(raw) ? raw : [];
+    }, [t]);
+
+    const articlesList = useMemo(() => {
+        const raw = t('pro_dashboard.academy.articles.items', { returnObjects: true });
+        return Array.isArray(raw) ? raw : [];
+    }, [t]);
+
+    const hacksList = useMemo(() => {
+        const raw = t('pro_dashboard.academy.lifehacks.items', { returnObjects: true });
+        return Array.isArray(raw) ? raw : [];
+    }, [t]);
+
+    const stratsList = useMemo(() => {
+        const raw = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
+        return Array.isArray(raw) ? raw as PsychStrategyItem[] : [];
+    }, [t]);
+
+    const platformsList = useMemo(() => {
+        const raw = t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
+        return Array.isArray(raw) ? raw : [];
+    }, [t, status?.bot_username]);
+
+    const academyProgress = useMemo(() => {
+        const moduleCount = modulesList.length || 6;
+        const uniqueCompleted = [...new Set(completedStages)].filter(id => modulesList.some((m: { id: string }) => m.id === id)).length;
+        return Math.min(Math.round((uniqueCompleted / moduleCount) * 100), 100);
+    }, [completedStages, modulesList]);
+
     // Initial auto-expand of the first uncompleted module
     useEffect(() => {
-        if (!hasInitialAutoExpanded.current) {
-            const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
-            const modulesList = Array.isArray(modules) ? modules : [];
-            if (modulesList.length > 0) {
-                const firstUncompletedId = modulesList.find((m: any) => !completedStages.includes(m.id))?.id;
-                if (firstUncompletedId) {
-                    setExpandedModuleId(firstUncompletedId);
-                    hasInitialAutoExpanded.current = true;
-                }
+        if (!hasInitialAutoExpanded.current && modulesList.length > 0) {
+            const firstUncompletedId = modulesList.find((m: { id: string }) => !completedStages.includes(m.id))?.id;
+            if (firstUncompletedId) {
+                setExpandedModuleId(firstUncompletedId);
+                hasInitialAutoExpanded.current = true;
             }
         }
-    }, [completedStages, t]);
+    }, [completedStages, modulesList]);
 
     return (
         <motion.div
@@ -385,47 +438,38 @@ export const GrowthTab = ({
 
                 {/* Performance Visualizer - Segmented Bars */}
                 <div className="space-y-3 relative z-10 w-full mt-0 bg-slate-50 dark:bg-white/2 p-2.5 sm:p-3 rounded-2xl border border-slate-100 dark:border-white/5">
-                    {(() => {
-                        const modules = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
-                        const moduleCount = Array.isArray(modules) ? modules.length : 6;
-                        const uniqueCompleted = [...new Set(completedStages)].filter(id => Array.isArray(modules) && modules.some((m: any) => m.id === id)).length;
-                        const progress = Math.min(Math.round((uniqueCompleted / moduleCount) * 100), 100);
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center justify-between">
+                            <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.sync_status')}</span>
+                            <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
+                                {academyProgress}% {t('pro_dashboard.academy.deployed')}
+                            </span>
+                        </div>
 
-                        return (
-                            <div className="flex flex-col gap-3">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.sync_status')}</span>
-                                    <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
-                                        {progress}% {t('pro_dashboard.academy.deployed')}
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-1 h-2">
-                                    {Array.from({ length: 12 }).map((_, i) => {
-                                        const threshold = (i + 1) * (100 / 12);
-                                        const isActive = progress >= threshold;
-                                        return (
-                                            <div
-                                                key={i}
-                                                className={`flex-1 rounded-sm transition-all duration-700 relative overflow-hidden ${isActive
-                                                    ? 'bg-linear-to-t from-indigo-500 to-blue-400 shadow-[0_0_10px_rgba(79,70,229,0.3)]'
-                                                    : 'bg-slate-200 dark:bg-white/5'
-                                                    }`}
-                                            >
-                                                {isActive && !lowPowerMode && (
-                                                    <motion.div
-                                                        className="absolute inset-0 bg-white/30"
-                                                        animate={{ opacity: [0, 0.5, 0] }}
-                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
-                                                    />
-                                                )}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        );
-                    })()}
+                        <div className="flex gap-1 h-2">
+                            {Array.from({ length: 12 }).map((_, i) => {
+                                const threshold = (i + 1) * (100 / 12);
+                                const isActive = academyProgress >= threshold;
+                                return (
+                                    <div
+                                        key={i}
+                                        className={`flex-1 rounded-sm transition-all duration-700 relative overflow-hidden ${isActive
+                                            ? 'bg-linear-to-t from-indigo-500 to-blue-400 shadow-[0_0_10px_rgba(79,70,229,0.3)]'
+                                            : 'bg-slate-200 dark:bg-white/5'
+                                            }`}
+                                    >
+                                        {isActive && !lowPowerMode && (
+                                            <motion.div
+                                                className="absolute inset-0 bg-white/30"
+                                                animate={{ opacity: [0, 0.5, 0] }}
+                                                transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                                            />
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -458,47 +502,43 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 pt-2 no-scrollbar -mx-4 px-4 snap-x">
-                    {(() => {
-                        const articles = t('pro_dashboard.academy.articles.items', { returnObjects: true });
-                        const articlesList = Array.isArray(articles) ? articles : [];
-                        return articlesList.map((article: any, i: number) => {
-                            const mockProgress = [35, 72, 100, 15, 60][i % 5];
-                            return (
-                                <motion.div
-                                    key={article.id || i}
-                                    whileHover={{ y: -4 }}
-                                    onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
-                                    className="min-w-[220px] sm:min-w-[280px] snap-center bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-[20px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_4px_15px_rgb(0,0,0,0.03)] flex flex-col"
-                                >
-                                    <div className="flex items-center justify-between mb-5">
-                                        <div className="flex items-center gap-3">
-                                            <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-label sm:text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
-                                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.min_read')}</span>
-                                        </div>
-                                        {mockProgress === 100 && (
-                                            <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-                                                <CheckCircle2 size={14} />
-                                            </div>
-                                        )}
+                    {articlesList.map((article: { id?: string; category: string; readTime: string; title: string; desc: string }, i: number) => {
+                        const mockProgress = [35, 72, 100, 15, 60][i % 5];
+                        return (
+                            <motion.div
+                                key={article.id || i}
+                                whileHover={{ y: -4 }}
+                                onClick={() => { selection(); setSelectedArticle(article); impact('light'); }}
+                                className="min-w-[220px] sm:min-w-[280px] snap-center bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-[20px] border border-slate-100 dark:border-slate-800 relative overflow-hidden group cursor-pointer active:scale-95 transition-all shadow-[0_4px_15px_rgb(0,0,0,0.03)] flex flex-col"
+                            >
+                                <div className="flex items-center justify-between mb-5">
+                                    <div className="flex items-center gap-3">
+                                        <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-label sm:text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
+                                        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.min_read')}</span>
                                     </div>
-                                    <h5 className="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
-                                    <p className="text-label sm:text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-4 flex-1 line-clamp-2">"{article.desc}"</p>
+                                    {mockProgress === 100 && (
+                                        <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                            <CheckCircle2 size={14} />
+                                        </div>
+                                    )}
+                                </div>
+                                <h5 className="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                <p className="text-label sm:text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-4 flex-1 line-clamp-2">"{article.desc}"</p>
 
-                                    <div className="flex items-center justify-between mt-auto">
-                                        <div className="flex items-center gap-1.5 text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
-                                            {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                                <div className="h-full bg-indigo-300 dark:bg-indigo-500/50 rounded-full" style={{ width: `${mockProgress}%` }} />
-                                            </div>
-                                            <span className="text-label font-bold text-slate-400">{mockProgress}%</span>
-                                        </div>
+                                <div className="flex items-center justify-between mt-auto">
+                                    <div className="flex items-center gap-1.5 text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
+                                        {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
                                     </div>
-                                </motion.div>
-                            );
-                        });
-                    })()}
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                            <div className="h-full bg-indigo-300 dark:bg-indigo-500/50 rounded-full" style={{ width: `${mockProgress}%` }} />
+                                        </div>
+                                        <span className="text-label font-bold text-slate-400">{mockProgress}%</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -585,29 +625,25 @@ export const GrowthTab = ({
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(() => {
-                        const hacks = t('pro_dashboard.academy.lifehacks.items', { returnObjects: true });
-                        const hacksList = Array.isArray(hacks) ? hacks : [];
-                        return hacksList.map((hack: any, i: number) => (
-                            <div
-                                key={i}
-                                onClick={() => {
-                                    navigator.clipboard.writeText(hack.desc);
-                                    impact('medium');
-                                }}
-                                className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-pointer active:scale-95 shadow-xs relative"
-                            >
-                                <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-bold text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
-                                <div className="space-y-0.5 pr-6">
-                                    <h5 className="text-label font-bold uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
-                                    <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
-                                </div>
-                                <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
-                                    <Share size={12} />
-                                </div>
+                    {hacksList.map((hack: { id?: string; title: string; desc: string; label?: string }, i: number) => (
+                        <div
+                            key={i}
+                            onClick={() => {
+                                navigator.clipboard.writeText(hack.desc);
+                                impact('medium');
+                            }}
+                            className="flex gap-3 p-3.5 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:border-pink-500/20 transition-all group/hack cursor-pointer active:scale-95 shadow-xs relative"
+                        >
+                            <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-bold text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
+                            <div className="space-y-0.5 pr-6">
+                                <h5 className="text-label font-bold uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
+                                <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
                             </div>
-                        ));
-                    })()}
+                            <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
+                                <Share size={12} />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
