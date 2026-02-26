@@ -91,11 +91,8 @@ export default function SubscriptionPage() {
                 const manualPending = transactions.find((t: any) => t.status === 'manual_review');
                 const stripePending = transactions.find((t: any) => t.status === 'pending' && t.network === 'STRIPE');
 
-                if (manualPending) {
-                    setStatus('manual_review');
-                } else if (stripePending) {
-                    // Start polling if we see a pending stripe transaction
-                    setStatus('pending');
+                if (manualPending || stripePending) {
+                    console.log("[Subscription] Found pending transactions, but keeping UI idle as requested.");
                 }
             } catch (e) {
                 console.error("Failed to fetch my transactions", e);
