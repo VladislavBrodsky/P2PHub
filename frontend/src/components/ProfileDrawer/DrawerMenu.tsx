@@ -84,7 +84,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                 );
             case 'faq':
                 return (
-                    <div className="space-y-3 pt-2 max-h-[400px] overflow-y-auto">
+                    <div className="space-y-3 pt-[calc(var(--spacing-safe-top,0px)+138px)] max-h-[400px] overflow-y-auto">
                         {!user?.is_pro && (
                             <div className="relative group overflow-hidden rounded-xl p-3 border-2 border-blue-500/30 bg-linear-to-br from-blue-500/10 to-indigo-600/10 backdrop-blur-sm">
                                 <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity" />
