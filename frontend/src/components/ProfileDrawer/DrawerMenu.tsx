@@ -19,6 +19,14 @@ import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { DrawerSettings } from './DrawerSettings';
 
+// Items that navigate away to a specific app tab on click
+const NAV_TABS: Record<string, string> = {
+    blog: 'blog',
+    pro: 'pro',
+    admin: 'admin',
+    faq: 'faq',
+};
+
 interface DrawerMenuProps {
     onClose: () => void;
     selection: () => void;
@@ -198,18 +206,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
 
                         <button
                             onClick={() => {
-                                if (item.id === 'blog') {
+                                selection();
+                                if (NAV_TABS[item.id]) {
                                     onClose();
-                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'blog' }));
-                                } else if (item.id === 'pro') {
-                                    onClose();
-                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'pro' }));
-                                } else if (item.id === 'admin') {
-                                    onClose();
-                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'admin' }));
-                                } else if (item.id === 'faq') {
-                                    onClose();
-                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: 'faq' }));
+                                    window.dispatchEvent(new CustomEvent('nav-tab', { detail: NAV_TABS[item.id] }));
                                 } else {
                                     toggleSection(item.id);
                                 }

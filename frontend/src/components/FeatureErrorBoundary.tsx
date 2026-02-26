@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { ErrorView } from './ErrorView';
+import * as Sentry from '@sentry/react';
 
 interface Props {
     children: ReactNode;
@@ -23,6 +24,9 @@ export class FeatureErrorBoundary extends Component<Props, State> {
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error(`[FeatureErrorBoundary] Error in ${this.props.featureName}:`, error, errorInfo);
+        Sentry.captureException(error, {
+            extra: { featureName: this.props.featureName, ...errorInfo },
+        });
     }
 
     private handleRetry = () => {
@@ -37,4 +41,3 @@ export class FeatureErrorBoundary extends Component<Props, State> {
         return this.props.children;
     }
 }
-
