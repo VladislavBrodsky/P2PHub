@@ -34,8 +34,8 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
         const parts = [];
         if (intro && intro !== `academy_content.stage_${stage.id}_lesson_intro`) parts.push(intro);
         if (body && body !== `academy_content.stage_${stage.id}_lesson_body`) parts.push(body);
-        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!IMPORTANT]\n> **${t('academy.badge_secret')}:** ${secret}`);
-        if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**${t('academy.badge_viral_rule')}:** ${viralRule}`);
+        if (secret && secret !== `academy_content.stage_${stage.id}_lesson_secret`) parts.push(`> [!IMPORTANT]\n> **${t('academy.badge_secret', { ns: 'academy' })}:** ${secret}`);
+        if (viralRule && viralRule !== `academy_content.stage_${stage.id}_lesson_viral_rule`) parts.push(`**${t('academy.badge_viral_rule', { ns: 'academy' })}:** ${viralRule}`);
         if (outro && outro !== `academy_content.stage_${stage.id}_lesson_outro`) parts.push(outro);
 
         fullContent = parts.join('\n\n');
@@ -145,7 +145,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                 <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-caption sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                                     <div className="flex items-center gap-2 mb-4">
                                         <CategoryIcon size={16} className="text-indigo-500" />
-                                        <span className="text-label font-bold uppercase tracking-widest text-indigo-400">MISSION PROTOCOL v2026.4</span>
+                                        <span className="text-label font-bold uppercase tracking-widest text-indigo-400">{t('academy.mission_protocol', { ns: 'academy', defaultValue: 'MISSION PROTOCOL v2026.4' })}</span>
                                     </div>
                                     {!isUnlocked ? (
                                         <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">

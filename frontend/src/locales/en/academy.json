@@ -56,7 +56,8 @@
     "complete_stage": "Complete Stage {{stage}}",
     "badge_important": "IMPORTANT",
     "badge_secret": "THE SECRET",
-    "badge_viral_rule": "VIRAL RULE"
+    "badge_viral_rule": "VIRAL RULE",
+    "mission_protocol": "MISSION PROTOCOL v2026.4"
   },
   "academy_content": {
     "stage_1_title": "THE SOVEREIGN MINDSET",

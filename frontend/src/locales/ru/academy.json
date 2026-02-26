@@ -56,7 +56,8 @@
     "complete_stage": "Завершить уровень {{stage}}",
     "badge_important": "ВАЖНО",
     "badge_secret": "СЕКРЕТ",
-    "badge_viral_rule": "ВИРАЛЬНОЕ ПРАВИЛО"
+    "badge_viral_rule": "ВИРАЛЬНОЕ ПРАВИЛО",
+    "mission_protocol": "ПРОТОКОЛ МИССИИ v2026.4"
   },
   "academy_content": {
     "stage_1_title": "СУВЕРЕННОЕ МЫШЛЕНИЕ",
