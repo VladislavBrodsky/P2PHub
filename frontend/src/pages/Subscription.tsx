@@ -1306,7 +1306,13 @@ export default function SubscriptionPage() {
                     {typeof document !== 'undefined' && createPortal(
                         <AnimatePresence>
                             {(status !== 'idle' || infoModal) && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl">
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/90 backdrop-blur-2xl"
+                                    style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
+                                >
                                     {infoModal ? (
                                         <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
                                             <div className="circuit-decor opacity-30" />

@@ -25,7 +25,10 @@ export const StripeReturnPage = () => {
     }, [setHeaderVisible, setFooterVisible, setNotificationsVisible, notification]);
 
     return (
-        <div className="fixed inset-0 min-h-dvh w-full bg-white dark:bg-bg-app flex flex-col items-center justify-center p-6 text-center z-9999">
+        <div
+            className="fixed inset-0 min-h-dvh w-full bg-white dark:bg-bg-app flex flex-col items-center justify-center p-6 text-center z-9999"
+            style={{ paddingTop: 'var(--header-total-offset, 138px)' }}
+        >
             <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
