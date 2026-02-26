@@ -298,8 +298,12 @@ export default function SubscriptionPage() {
         try {
             const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
             if (res.data.checkout_url) {
-                // Use location.assign for more reliable navigation in some mobile browsers
-                window.location.assign(res.data.checkout_url);
+                // Open Stripe Checkout in an external/in-app browser to avoid TWA UI overlap
+                if (typeof window !== 'undefined' && window.Telegram?.WebApp?.openLink) {
+                    window.Telegram.WebApp.openLink(res.data.checkout_url);
+                } else {
+                    window.location.assign(res.data.checkout_url);
+                }
             } else {
                 throw new Error('No checkout URL received');
             }
