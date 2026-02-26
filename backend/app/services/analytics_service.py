@@ -107,6 +107,9 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
     if timeframe == '24H': delta = timedelta(hours=24)
     elif timeframe == '7D': delta = timedelta(days=7)
     elif timeframe == '1M': delta = timedelta(days=30)
+    elif timeframe == '3M': delta = timedelta(days=90)
+    elif timeframe == '6M': delta = timedelta(days=180)
+    elif timeframe == '1Y': delta = timedelta(days=365)
     else: delta = timedelta(days=7)
 
     current_start = now - delta
@@ -166,7 +169,7 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
         '24H': ('hour', now - timedelta(hours=24), 24),
         '7D':  ('day',  now - timedelta(days=7),   7),
         '1M':  ('day',  now - timedelta(days=30),  30),
-        '3M':  ('day',  now - timedelta(days=90),  9),
+        '3M':  ('day',  now - timedelta(days=90),  90),
         '6M':  ('month',now - timedelta(days=180), 6),
         '1Y':  ('month',now - timedelta(days=365), 12)
     }
