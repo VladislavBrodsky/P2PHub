@@ -94,7 +94,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     const sections = SECTIONS_CONFIG(t);
 
     return createPortal(
-        <div className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[138px] pb-[calc(var(--spacing-safe-bottom)+20px)]">
+        <div className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[128px] pb-[calc(var(--spacing-safe-bottom)+20px)]">
             {/* Backdrop with enhanced blur */}
             <motion.div
                 initial={{ opacity: 0 }}
