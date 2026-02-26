@@ -286,16 +286,21 @@ export default function SubscriptionPage() {
     };
 
     const handleStripePayment = async () => {
-        setIsLoading(true); selection();
+        if (isLoading) return;
+        setIsLoading(true);
+        selection();
         try {
             const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
             if (res.data.checkout_url) {
-                window.location.href = res.data.checkout_url;
+                // Use location.assign for more reliable navigation in some mobile browsers
+                window.location.assign(res.data.checkout_url);
+            } else {
+                throw new Error('No checkout URL received');
             }
         } catch (error: any) {
-            console.error('Stripe session creation failed:', error);
+            console.error('[STRIPE] Session creation failed:', error);
             notification('error');
-        } finally {
+            // Reset loading so user can try again if it was a transient error
             setIsLoading(false);
         }
     };
@@ -967,11 +972,12 @@ export default function SubscriptionPage() {
                                             <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address', 'USDT')}</span>
                                         </button>
                                         <button
-                                            onClick={() => { selection(); handleStripePayment(); }}
-                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-indigo-500/5 hover:border-indigo-500/30 active:scale-95"
+                                            disabled={isLoading}
+                                            onClick={handleStripePayment}
+                                            className="group relative h-20 bg-slate-50/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all duration-300 hover:scale-[1.02] hover:bg-indigo-500/5 hover:border-indigo-500/30 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
-                                                <CreditCard size={18} />
+                                                {isLoading ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
                                             </div>
                                             <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.stripe_card', 'CARD')}</span>
                                         </button>

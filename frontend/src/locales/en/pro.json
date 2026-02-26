@@ -1182,7 +1182,7 @@
       "monthly_label": "30 DAYS",
       "lifetime_label": "FOREVER",
       "ton_wallet": "PAY IN TON",
-      "stripe_card": "INTERNATIONAL CARD (STRIPE)",
+      "stripe_card": "BANK CARD",
       "stripe_desc": "Pay with Visa, Mastercard, or Apple/Google Pay.",
       "select_currency": "SELECT PAYMENT CURRENCY",
       "secure_encryption_active": "PRO ACTIVE",

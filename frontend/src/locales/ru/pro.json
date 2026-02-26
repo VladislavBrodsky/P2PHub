@@ -1330,7 +1330,7 @@
       "monthly_label": "30 ДНЕЙ",
       "lifetime_label": "НАВСЕГДА",
       "ton_wallet": "ОПЛАТИТЬ В TON",
-      "stripe_card": "МЕЖДУНАРОДНАЯ КАРТА (STRIPE)",
+      "stripe_card": "БАНКОВСКАЯ КАРТА",
       "stripe_desc": "Оплата через Visa, Mastercard или Apple/Google Pay.",
       "select_currency": "ВЫБЕРИ ВАЛЮТУ ОПЛАТЫ",
       "secure_encryption_active": "PRO АКТИВЕН",
