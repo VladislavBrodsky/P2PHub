@@ -368,15 +368,12 @@ export default function SubscriptionPage() {
         try {
             const res = await apiClient.post('/api/payment/stripe/session', { plan: selectedPlan });
             if (res.data.checkout_url) {
-                // Set pending status BEFORE opening the link so the visibility listener knows what to look for
+                // Set pending status BEFORE opening the link
                 setStatus('pending');
 
-                // Open Stripe Checkout in an external/in-app browser to avoid TWA UI overlap
-                if (typeof window !== 'undefined' && window.Telegram?.WebApp?.openLink) {
-                    window.Telegram.WebApp.openLink(res.data.checkout_url);
-                } else {
-                    window.location.assign(res.data.checkout_url);
-                }
+                // Using internal redirect to keep the layout strictly inside the Telegram Mini App window.
+                // Note: This may cause the Telegram header to overlap the top of the Stripe page.
+                window.location.assign(res.data.checkout_url);
             } else {
                 throw new Error('No checkout URL received');
             }
