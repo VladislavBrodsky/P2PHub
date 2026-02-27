@@ -10,6 +10,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { ROUTES } from '../utils/routes';
 import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
+import { useTabActive } from '../components/ui/TabPanel';
 
 interface FAQItem {
     q: string;
@@ -49,19 +50,26 @@ export default function FAQPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedFaq, setSelectedFaq] = useState<number | null>(null);
+    const isActive = useTabActive();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
 
     // UI Controls
     useEffect(() => {
-        setHeaderVisible(false);
-        setFooterVisible(false);
-        setNotificationsVisible(false);
+        if (isActive) {
+            setHeaderVisible(false);
+            setFooterVisible(false);
+            setNotificationsVisible(false);
+        } else {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            setNotificationsVisible(true);
+        }
         return () => {
             setHeaderVisible(true);
             setFooterVisible(true);
             setNotificationsVisible(true);
         };
-    }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
+    }, [isActive, setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     // Listen for faq-search events dispatched by the task system
     React.useEffect(() => {
@@ -197,7 +205,7 @@ export default function FAQPage() {
     return (
         <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
-            <div className="relative pt-[calc(var(--spacing-safe-top,0px)+138px)] pb-16 px-6">
+            <div className="relative pt-[calc(var(--spacing-safe-top,0px)+40px)] pb-16 px-6">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full -z-10" />
 
                 <div className="flex items-center gap-3 mb-6">

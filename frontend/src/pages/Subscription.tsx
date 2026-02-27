@@ -17,6 +17,7 @@ import { useConfig } from '../context/ConfigContext';
 import { ROUTES } from '../utils/routes';
 import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
+import { useTabActive } from '../components/ui/TabPanel';
 
 // --- Sub-components ---
 import { FomoTimer, PaymentSessionTimer, StickyFomoHeader } from './Subscription/components/SubscriptionTimers';
@@ -62,18 +63,25 @@ export default function SubscriptionPage() {
 
     const paymentRef = React.useRef<HTMLDivElement>(null);
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+    const isActive = useTabActive();
 
     // UI Cleanup 
     useEffect(() => {
-        setHeaderVisible(false);
-        setFooterVisible(false);
-        setNotificationsVisible(false);
+        if (isActive) {
+            setHeaderVisible(false);
+            setFooterVisible(false);
+            setNotificationsVisible(false);
+        } else {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            setNotificationsVisible(true);
+        }
         return () => {
             setHeaderVisible(true);
             setFooterVisible(true);
             setNotificationsVisible(true);
         };
-    }, [setHeaderVisible, setFooterVisible, setNotificationsVisible]);
+    }, [isActive, setHeaderVisible, setFooterVisible, setNotificationsVisible]);
 
     useEffect(() => {
         const fetchStats = async () => {

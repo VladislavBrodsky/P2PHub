@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, createContext, useContext } from 'react';
 import { FeatureErrorBoundary } from '../FeatureErrorBoundary';
 
 interface TabPanelProps {
@@ -9,6 +9,10 @@ interface TabPanelProps {
     featureName?: string;
     children: React.ReactNode;
 }
+
+const TabActiveContext = createContext<boolean>(false);
+
+export const useTabActive = () => useContext(TabActiveContext);
 
 /**
  * TabPanel - Centralized component for conditional tab rendering.
@@ -30,13 +34,15 @@ export const TabPanel = React.memo(({
     if (!hasVisited && !isActive) return null;
 
     return (
-        <div className={isActive ? 'block relative' : 'hidden'} id={`tab-panel-${id}`}>
-            <FeatureErrorBoundary featureName={featureName || id}>
-                <Suspense fallback={fallback || null}>
-                    {children}
-                </Suspense>
-            </FeatureErrorBoundary>
-        </div>
+        <TabActiveContext.Provider value={isActive}>
+            <div className={isActive ? 'block relative' : 'hidden'} id={`tab-panel-${id}`}>
+                <FeatureErrorBoundary featureName={featureName || id}>
+                    <Suspense fallback={fallback || null}>
+                        {children}
+                    </Suspense>
+                </FeatureErrorBoundary>
+            </div>
+        </TabActiveContext.Provider>
     );
 });
 

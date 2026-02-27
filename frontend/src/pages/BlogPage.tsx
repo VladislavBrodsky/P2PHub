@@ -10,6 +10,7 @@ import { backButton } from '@telegram-apps/sdk-react';
 import { blogService, BlogEngagement } from '../services/blogService';
 import { BlogPost } from '../data/blogPosts';
 import { useUI } from '../context/UIContext';
+import { useTabActive } from '../components/ui/TabPanel';
 import { BlogSkeleton } from '../components/Skeletons/BlogSkeleton';
 import { Skeleton } from '../components/Skeleton';
 import { authorAvatars } from '../data/authorAvatars';
@@ -39,6 +40,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
     const { t } = useTranslation('marketing');
     const { selection, impact, notification } = useHaptic();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
+    const isActive = useTabActive();
 
     const [posts, setPosts] = useState<(BlogPost & BlogEngagement)[]>([]);
     const [selectedPost, setSelectedPost] = useState<(BlogPost & BlogEngagement & { content?: string }) | null>(null);
@@ -87,6 +89,13 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
 
     // UI Cleanup on Post Select
     useEffect(() => {
+        if (!isActive) {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            setNotificationsVisible(true);
+            return;
+        }
+
         if (selectedPost && currentTab === 'blog') {
             setFooterVisible(false);
             setNotificationsVisible(false);
@@ -99,7 +108,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
 
             return () => clearTimeout(timer);
         }
-    }, [selectedPost, currentTab, setHeaderVisible, setFooterVisible, setNotificationsVisible]);
+    }, [selectedPost, currentTab, setHeaderVisible, setFooterVisible, setNotificationsVisible, isActive]);
 
     // Reset scroll when post changes
     useEffect(() => {

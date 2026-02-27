@@ -15,6 +15,7 @@ import { useHaptic } from '../hooks/useHaptic';
 import { ROUTES } from '../utils/routes';
 import { useNavigation } from '../hooks/useNavigation';
 import { useUI } from '../context/UIContext';
+import { useTabActive } from '../components/ui/TabPanel';
 import { proService, PROStatus } from '../services/proService';
 import { useNotificationStore } from '../store/useNotificationStore';
 import { usePerformance } from '../hooks/usePerformance';
@@ -35,6 +36,7 @@ export const ProDashboard = () => {
     const { showNotification } = useNotificationStore();
     const { setFooterVisible, setHeaderVisible } = useUI();
     const { lowPowerMode } = usePerformance();
+    const isActive = useTabActive();
 
     const [status, setStatus] = useState<PROStatus | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('studio');
@@ -300,6 +302,12 @@ export const ProDashboard = () => {
     // --- Lifecycle Effects ---
 
     useEffect(() => {
+        if (!isActive) {
+            setHeaderVisible(true);
+            setFooterVisible(true);
+            return;
+        }
+
         const anyModalOpen = showSetup || showManual || selectedArticle || selectedAsset || showAuditModal || showHeadlineModal || showBioModal;
         setFooterVisible(!anyModalOpen);
         setHeaderVisible(!anyModalOpen);
@@ -326,7 +334,7 @@ export const ProDashboard = () => {
                 if (backButton && backButton.hide && backButton.hide.isAvailable()) backButton.hide();
             } catch (e) { console.warn(e); }
         }
-    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, showHeadlineModal, showBioModal, setFooterVisible, setHeaderVisible]);
+    }, [showSetup, showManual, selectedArticle, selectedAsset, showAuditModal, showHeadlineModal, showBioModal, setFooterVisible, setHeaderVisible, isActive]);
 
     useEffect(() => {
         const initSDK = async () => {
