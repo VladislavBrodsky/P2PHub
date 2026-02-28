@@ -43,7 +43,7 @@ exec gunicorn app.main:app \
     -w "$WORKERS" \
     -k uvicorn.workers.UvicornWorker \
     --bind 0.0.0.0:"${PORT:-8080}" \
-    --timeout 120 \
+    --timeout 60 \
     --log-level info \
     --access-logfile - \
     --error-logfile /dev/stdout

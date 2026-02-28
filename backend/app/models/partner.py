@@ -41,6 +41,7 @@ class Partner(SQLModel, table=True):
     completed_stages: str = Field(default="[]") # Store Academy stage IDs as JSON string
     unlocked_stages: str = Field(default="[]") # Store paid/unlocked Academy stage IDs as JSON string
     academy_score: float = Field(default=0.0) # Track Academy points
+    is_verified: bool = Field(default=False, index=True) # KYC Verification Status
 
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)
@@ -221,10 +222,14 @@ if database_url and not any(database_url.startswith(prefix) for prefix in ["post
 # SQLite specific arguments
 connect_args = {"check_same_thread": False} if "sqlite" in database_url else {}
 
-# #comment: Robust Engine configuration for multi-worker (4 Gunicorn) environments.
-# pool_pre_ping=True ensures stale connections are discarded before use.
-# pool_size and max_overflow are tuned to stay within Railway's Postgres connection limits
-# across all workers and TaskIQ processes. pool_recycle helps with cloud firewalls.
+# #comment: Robust Engine configuration for multi-worker Gunicorn environments.
+# Railway PostgreSQL (free tier) allows ~97 connections via the proxy.
+# Math: pool_size=5 × max_overflow=5 = 10 per worker.
+#       2 Gunicorn workers × 10 = 20. Plus worker + scheduler ≈ 40 total. Well within limit.
+# pool_use_lifo=True: reuses recently-used connections first, keeping fewer connections warm.
+# pool_recycle=1800: recycle connections every 30 min (proxy closes idle after ~60s, but
+#   pool_pre_ping handles stale detection so aggressive recycling is not needed).
+# pool_pre_ping=True: validates connections before use, discards stale ones silently.
 engine_args = {
     "echo": settings.DEBUG,
     "future": True,
@@ -234,10 +239,11 @@ engine_args = {
 
 if "sqlite" not in database_url:
     engine_args.update({
-        "pool_size": 10,       # Reduced from 15 to stay safer within Railway connection limits
-        "max_overflow": 10,
-        "pool_timeout": 30,
-        "pool_recycle": 45,   # Further reduced to 45 (from 60) to stay ahead of Railway/Proxy idle timeouts.
+        "pool_size": 5,         # 5 per worker × 2 workers = 10 base connections
+        "max_overflow": 5,      # Burst capacity → max 10 per worker = 20 total
+        "pool_timeout": 20,     # Fail fast if no connection available (was 30)
+        "pool_recycle": 1800,   # Recycle every 30 min; pool_pre_ping handles stale detection
+        "pool_use_lifo": True,  # Reuse hot connections; reduces total connections kept warm
     })
 
 try:

@@ -110,7 +110,7 @@ slowapi==0.1.9
 sniffio==1.3.1
 sortedcontainers==2.4.0
 soupsieve==2.8
-sqladmin==0.23.0
+# sqladmin removed — was unused but created its own sync engine causing connection leaks
 SQLAlchemy==2.0.45
 sqlmodel==0.0.32
 starlette==0.50.0
