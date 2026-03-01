@@ -29,11 +29,9 @@ class FraudDetectionService:
                 
             if count > 20:
                 logger.warning(f"🚨 FRAUD ALERT: High referral velocity for partner {referrer_id} ({count} refs/1hr). Max allowed is 20/hr.")
-                from app.models.audit_log import ActionType
-                from app.services.audit_service import audit_service
-                
-                # Using a generic DB session may be tricky here, but we can just use logging or run a fire-and-forget task
-                # A simple log is sufficient per the requirement "Logging of violations"
+                # #comment: Phase 3: Auto-block the partner immediately in Redis.
+                # We need a telegram_id to block by- flag by partner DB ID as a fallback.
+                await self.block_suspicious_partner(referrer_id, reason=f"High referral velocity: {count}/hr")
                 return False
                 
             return True
@@ -44,10 +42,18 @@ class FraudDetectionService:
 
     async def block_suspicious_partner(self, partner_id: int, reason: str):
         """
-        Placeholder for future automated blocking logic.
-        Currently just logs the event for manual admin review.
+        Automatically flags a suspicious partner.
+        Sets a 7-day Redis block on the partner to prevent notifications and further system abuse.
         """
         logger.error(f"🚫 SUSPICIOUS ACTIVITY: Partner {partner_id} flagged. Reason: {reason}")
-        # In the future, we could set a 'is_blocked' flag on the Partner model.
+        
+        # #comment: Phase 3: Actively block the partner in Redis for 7 days.
+        # rate_limit_service.mark_user_blocked works on telegram_id OR partner_id string.
+        from app.services.rate_limit_service import rate_limit_service
+        try:
+            await rate_limit_service.mark_user_blocked(str(partner_id), duration=86400 * 7)
+            logger.warning(f"🔒 Partner {partner_id} blocked in Redis for 7 days.")
+        except Exception as e:
+            logger.error(f"Failed to auto-block partner {partner_id} in Redis: {e}")
 
 fraud_service = FraudDetectionService()

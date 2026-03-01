@@ -294,6 +294,18 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     if not partner:
         return
 
+    # #comment: Phase 3 Idempotency Guard
+    # If this function is retried by TaskIQ (due to network error, DB timeout, etc.),
+    # we must NOT re-insert all Earning records. Check for existing records first.
+    if transaction_id:
+        idempotency_key = f"upg_agg_t{transaction_id}"
+        existing_earning = await session.exec(
+            select(Earning).where(Earning.reference_id.like(f"{idempotency_key}%")).limit(1)
+        )
+        if existing_earning.first():
+            logger.warning(f"Commission for t{transaction_id} already distributed. Skipping retry.")
+            return
+
     # Deterministic Reference Prefix (Ensures Idempotency per Transaction)
     ref_prefix = f"t{transaction_id}" if transaction_id else f"p{partner.id}"
 

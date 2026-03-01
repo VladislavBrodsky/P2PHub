@@ -343,6 +343,10 @@ class PaymentService:
         try:
             now = datetime.now(UTC).replace(tzinfo=None)
             
+            # #comment: Phase 3 Bug Fix: Initialize before branching so PRO+ path
+            # doesn't hit NameError when referencing lifetime_granted in promo_details.
+            lifetime_granted = False
+            
             # Re-fetch partner to prevent lazy-loading issues if there was a rollback in a prior retry attempt
             from sqlalchemy import inspect
             state = inspect(partner)
@@ -371,7 +375,6 @@ class PaymentService:
                 level="info"
             )
             # Determine Plan Details
-            # Determine Plan Details
             # Direct PRO+ purchase
             is_direct_plus = amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
             # Upgrade from PRO to PRO+ (paying the difference)
@@ -382,6 +385,9 @@ class PaymentService:
             )
             
             is_plus = is_direct_plus or is_pro_to_plus_upgrade
+            
+            # Initialize before conditional assignment to prevent UnboundLocalError on PRO+ path
+            lifetime_granted = False
             
             # Tiered PRO Logic: First 300 get Lifetime, others get 30 days.
             # PRO+ is unaffected by the 300 limit (usually remains lifetime or handled separately)
