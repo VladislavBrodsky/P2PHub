@@ -1,3 +1,4 @@
+import urllib.parse
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -11,9 +12,12 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
         web_app=types.WebAppInfo(url=url)
     ))
     if referral_link:
+        share_text = get_msg(lang, "share_text")
+        encoded_text = urllib.parse.quote(share_text)
+        share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={encoded_text}"
         builder.row(types.InlineKeyboardButton(
             text=get_msg(lang, "btn_share_link"),
-            url=referral_link
+            url=share_url
         ))
 
     # Ensure Send Premium Card is ALWAYS visible

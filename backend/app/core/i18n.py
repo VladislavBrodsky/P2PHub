@@ -2,13 +2,13 @@
 MESSAGES = {
     "en": {
         "welcome": (
-            "💎 **Welcome, {name}!**\n\n"
-            "🔥 **Transition from consumer to architect.**\n\n"
-            "You are officially a **Core Partner**! You are early 🚀\n\n"
-            "You’ve just entered the **future of decentralized finance**. While others observe, you’re already building a sovereign legacy.\n\n"
-            "💰 **Earn XP. Grow your influence. Secure strategic rewards.**\n\n"
-            "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
-            "👇 **Tap below to start your journey**"
+            "💎 *Welcome, {name}!*\n\n"
+            "🔥 *Transition from consumer to architect.*\n\n"
+            "You are officially a *Core Partner*! You are early 🚀\n\n"
+            "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\n"
+            "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
+            "🔗 *Your Personal Gateway:*\n`{referral_link}`\n\n"
+            "👇 *Tap below to start your journey*"
         ),
         "welcome_back": (
             "👋 *Welcome Back, {name}!*\n\n"
@@ -229,16 +229,16 @@ MESSAGES = {
 
         # Onboarding & Verification
         "onboarding_welcome": (
-            "💎 **Welcome, {name}!**\n\n"
-            "🔥 **Transition from consumer to architect.**\n\n"
-            "You are officially a **Core Partner**! You are early 🚀\n\n"
-            "You’ve just entered the **future of decentralized finance**. While others observe, you’re already building a sovereign legacy.\n\n"
-            "💰 **Earn XP. Grow your influence. Secure strategic rewards.**\n\n"
-            "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
-            "👇 **Tap below to start your journey**"
+            "💎 *Welcome, {name}!*\n\n"
+            "🔥 *Transition from consumer to architect.*\n\n"
+            "You are officially a *Core Partner*! You are early 🚀\n\n"
+            "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\n"
+            "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
+            "🔗 *Your Personal Gateway:*\n`{referral_link}`\n\n"
+            "👇 *Tap below to start your journey*"
         ),
-        "onboarding_info_text": "💎 *Why Verify?*\n\n1. **High Limits**: Move capital without restrictions.\n2. **Card Access**: Order virtual and physical Pintopay Mastercards.\n3. **Network Rewards**: Unlock 20 levels of affiliate revenue.\n\nChoose your verification method below.",
-        "verification_start": "📝 *Digital Identity Verification*\n\nPlease choose a verification method. For testing purposes, you can use the **Test Verify** option.",
+        "onboarding_info_text": "💎 *Why Verify?*\n\n1. *High Limits*: Move capital without restrictions.\n2. *Card Access*: Order virtual and physical Pintopay Mastercards.\n3. *Network Rewards*: Unlock 20 levels of affiliate revenue.\n\nChoose your verification method below.",
+        "verification_start": "📝 *Digital Identity Verification*\n\nPlease choose a verification method. For testing purposes, you can use the *Test Verify* option.",
         "verification_success": "✅ *Verification Complete!*\n\nWelcome, Architect. Your identity is now synced with the Pintopay Network. You have full access to our financial instruments.",
         "prompt_phone": "📱 Please share your phone number using the button below to verify your account.",
         "prompt_passport": "🛂 Please upload a clear photo of your Passport or ID card for verification.",
@@ -259,13 +259,13 @@ MESSAGES = {
     },
     "ru": {
         "welcome": (
-            "💎 **Добро пожаловать, {name}!**\n\n"
-            "🔥 **Путь от потребителя к архитектору.**\n\n"
-            "Вы официально — **Core Partner**! Вы в числе первых 🚀\n\n"
-            "Вы только что вошли в **будущее децентрализованных финансов**. Пока другие наблюдают, вы уже строите суверенное наследие.\n\n"
-            "💰 **Зарабатывайте XP. Растите влияние. Получайте стратегические награды.**\n\n"
-            "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
-            "👇 **Нажмите ниже, чтобы начать путь**"
+            "💎 *Добро пожаловать, {name}!*\n\n"
+            "🔥 *Путь от потребителя к архитектору.*\n\n"
+            "Вы официально — *Core Partner*! Вы в числе первых 🚀\n\n"
+            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие наблюдают, вы уже строите суверенное наследие.\n\n"
+            "💰 *Зарабатывайте XP. Растите влияние. Получайте стратегические награды.*\n\n"
+            "🔗 *Ваш персональный вход:*\n`{referral_link}`\n\n"
+            "👇 *Нажмите ниже, чтобы начать путь*"
         ),
         "welcome_back": (
             "👋 *С возвращением, {name}!*\n\n"
@@ -486,16 +486,16 @@ MESSAGES = {
 
         # Onboarding & Verification (Russian)
         "onboarding_welcome": (
-            "💎 **Добро пожаловать, {name}!**\n\n"
-            "🔥 **Путь от потребителя к архитектору.**\n\n"
-            "Вы официально — **Core Partner**! Вы в числе первых 🚀\n\n"
-            "Вы только что вошли в **будущее децентрализованных финансов**. Пока другие наблюдают, вы уже строите суверенное наследие.\n\n"
-            "💰 **Зарабатывайте XP. Растите влияние. Получайте стратегические награды.**\n\n"
-            "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
-            "👇 **Нажмите ниже, чтобы начать путь**"
+            "💎 *Добро пожаловать, {name}!*\n\n"
+            "🔥 *Путь от потребителя к архитектору.*\n\n"
+            "Вы официально — *Core Partner*! Вы в числе первых 🚀\n\n"
+            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие наблюдают, вы уже строите суверенное наследие.\n\n"
+            "💰 *Зарабатывайте XP. Растите влияние. Получайте стратегические награды.*\n\n"
+            "🔗 *Ваш персональный вход:*\n`{referral_link}`\n\n"
+            "👇 *Нажмите ниже, чтобы начать путь*"
         ),
-        "onboarding_info_text": "💎 *Зачем нужна верификация?*\n\n1. **Высокие лимиты**: Перемещайте капитал без ограничений.\n2. **Доступ к картам**: Заказывайте виртуальные и физические карты PINTOPAY Mastercard.\n3. **Сетевые награды**: Откройте 20 уровней партнерского дохода.\n\nВыберите метод верификации ниже.",
-        "verification_start": "📝 *Верификация Цифровой Личности*\n\nПожалуйста, выберите метод верификации. Для целей тестирования вы можете использовать опцию **Тестовая верификация**.",
+        "onboarding_info_text": "💎 *Зачем нужна верификация?*\n\n1. *Высокие лимиты*: Перемещайте капитал без ограничений.\n2. *Доступ к картам*: Заказывайте виртуальные и физические карты PINTOPAY Mastercard.\n3. *Сетевые награды*: Откройте 20 уровней партнерского дохода.\n\nВыберите метод верификации ниже.",
+        "verification_start": "📝 *Верификация Цифровой Личности*\n\nПожалуйста, выберите метод верификации. Для целей тестирования вы можете использовать опцию *Тестовая верификация*.",
         "verification_success": "✅ *Верификация завершена!*\n\nДобро пожаловать, Архитектор. Ваша личность синхронизирована с сетью PINTOPAY. У вас есть полный доступ к нашим финансовым инструментам.",
         "prompt_phone": "📱 Пожалуйста, поделитесь своим номером телефона, используя кнопку ниже, чтобы подтвердить ваш аккаунт.",
         "prompt_passport": "🛂 Пожалуйста, загрузите четкое фото вашего паспорта или удостоверения личности для верификации.",
