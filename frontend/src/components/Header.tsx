@@ -19,16 +19,11 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     const { user } = useUser();
     const { lowPowerMode } = usePerformance();
 
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const paddingTopStyle = isIOS
-        ? '108px'
-        : 'calc(var(--tg-content-safe-area-inset-top, 24px) + 24px)';
-
     return (
         <header
             className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{
-                paddingTop: paddingTopStyle,
+                paddingTop: 'var(--dynamic-header-padding, 108px)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
                 paddingRight: 'var(--spacing-safe-right, 0px)'
             }}
