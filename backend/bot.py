@@ -194,19 +194,20 @@ async def handle_passport_photo(message: types.Message, state: FSMContext):
 
     await message.answer(get_msg(lang, "processing_verification"))
     
-    # Simulate approval after short delay or just approve immediately for testing
-    async for session in get_session():
-        partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
-        if partner:
-            partner.is_verified = True
-            session.add(partner)
-            await session.commit()
-            
-            await message.answer(get_msg(lang, "verification_success"), reply_markup=get_main_active_menu_keyboard(lang))
-            await state.clear()
-        break
+    try:
+        # Simulate approval after short delay or just approve immediately for testing
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if partner:
+                partner.is_verified = True
+                session.add(partner)
+                await session.commit()
+                
+                await message.answer(get_msg(lang, "verification_success"), reply_markup=get_main_active_menu_keyboard(lang))
+                await state.clear()
+            break
     except Exception as e:
-        logging.error(f"Error in cmd_start: {e}")
+        logging.error(f"Error in handle_passport_photo: {e}")
         sentry_sdk.capture_exception(e)
         await message.answer(f"⚠️ Error: {e!s}")
 
