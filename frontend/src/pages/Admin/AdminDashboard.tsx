@@ -93,37 +93,45 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = React.memo(({
     return (
         <div className="p-4 pb-[calc(var(--spacing-safe-bottom,20px)+80px)] space-y-6">
             {/* Header */}
-            <div className="flex flex-col items-center justify-center w-full py-3 space-y-4 text-center">
-                <div className="flex items-center justify-center w-full">
-                    <div className="w-14 h-14 rounded-3xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20 shadow-lg shadow-blue-500/5">
-                        <ShieldCheck className="text-blue-500" size={28} />
+            <div className="relative overflow-hidden w-full rounded-3xl bg-white/40 dark:bg-[#1A1D24]/60 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-5 md:p-6 shadow-xl shadow-black/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                {/* Background Glows */}
+                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[64px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[64px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
+
+                {/* Left Side: Icon & Title */}
+                <div className="flex flex-col md:flex-row items-center gap-4 z-10 w-full md:w-auto">
+                    <div className="w-16 h-16 rounded-3xl bg-linear-to-br from-blue-500/20 to-blue-600/5 flex items-center justify-center border border-blue-500/30 shadow-lg shadow-blue-500/10 shrink-0">
+                        <ShieldCheck className="text-blue-500 drop-shadow-md" size={32} />
+                    </div>
+                    <div className="text-center md:text-left space-y-1">
+                        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                            {t('admin_portal.command_center')}
+                        </h1>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm font-medium tracking-wide">
+                            {t('admin_portal.performance_control')}
+                        </p>
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-                        {t('admin_portal.command_center')}
-                    </h1>
-
-                    <div className="flex flex-col items-center justify-center gap-4 pt-1">
-                        <div className="flex items-center gap-2">
-                            <p className="text-slate-500 text-label font-bold uppercase tracking-[0.2em] whitespace-nowrap">{t('admin_portal.performance_control')}</p>
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
-                                <span className={`w-2 h-2 rounded-full ${stats?.events.audit?.is_healthy ? 'bg-emerald-500 shadow-[0_0_8px_#10b981]' : 'bg-red-500 shadow-[0_0_8px_#ef4444]'} animate-pulse`} />
-                                <span className="text-label font-bold uppercase text-slate-500 dark:text-slate-300">
-                                    {stats?.events.audit?.is_healthy ? t('admin_portal.system_optimal') : t('admin_portal.attention_required')}
-                                </span>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={() => fetchData(true, true)}
-                            className={`w-14 h-14 rounded-3xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/20 active:scale-90 transition-all shadow-xl shadow-black/5 dark:shadow-black/20 flex items-center justify-center ${isRefreshing ? 'animate-spin' : ''}`}
-                            title={t('admin_portal.refresh_data')}
-                        >
-                            <RefreshCw size={24} className="text-blue-500 dark:text-blue-400" />
-                        </button>
+                {/* Right Side: Status & Actions */}
+                <div className="flex items-center gap-4 z-10 w-full md:w-auto justify-center md:justify-end">
+                    <div className="flex items-center gap-2.5 px-4 py-2 bg-black/5 dark:bg-black/20 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md">
+                        <span className="relative flex h-3 w-3">
+                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${stats?.events.audit?.is_healthy ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                            <span className={`relative inline-flex rounded-full h-3 w-3 ${stats?.events.audit?.is_healthy ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+                        </span>
+                        <span className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                            {stats?.events.audit?.is_healthy ? t('admin_portal.system_optimal') : t('admin_portal.attention_required')}
+                        </span>
                     </div>
+
+                    <button
+                        onClick={() => fetchData(true, true)}
+                        className="w-12 h-12 rounded-2xl bg-white dark:bg-white/10 hover:bg-slate-50 dark:hover:bg-white/20 border border-slate-200 dark:border-white/10 transition-all flex items-center justify-center shadow-md active:scale-95 group shrink-0"
+                        title={t('admin_portal.refresh_data')}
+                    >
+                        <RefreshCw size={20} className={`text-slate-600 dark:text-slate-300 group-hover:text-blue-500 transition-colors ${isRefreshing ? 'animate-spin text-blue-500' : ''}`} />
+                    </button>
                 </div>
             </div>
 
