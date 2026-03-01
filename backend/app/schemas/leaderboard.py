@@ -11,6 +11,7 @@ class LeaderboardPartner(BaseModel):
     xp: float
     level: int
     referral_count: int = 0
+    total_earned_usdt: float = 0.0
     subscription_plan: str | None = None
 
     @property

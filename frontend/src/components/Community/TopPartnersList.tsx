@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 import { ProPlusBadge, ProBadge } from '../ui/ProPlusBadge';
+import { USDTLogo } from '../ui/USDTLogo';
+import { LiquidCounter } from '../../pages/Pro/utils/LiquidCounter';
 
 export const TopPartnersList = () => {
     // #comment: Removed unused 't' variable from useTranslation to address linting warnings
@@ -158,10 +160,10 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
                                 {partner.xp.toLocaleString()} XP
                             </span>
                         </div>
-                        <div className="flex items-center gap-1">
-                            <Users className="w-3 h-3 text-blue-400" />
-                            <span className="text-label font-bold text-slate-500 dark:text-slate-400">
-                                {partner.referrals_count} {t('referral.members')}
+                        <div className="flex items-center gap-1.5 text-emerald-500 font-bold bg-emerald-500/5 px-2 py-0.5 rounded-full border border-emerald-500/10">
+                            <USDTLogo className="w-3 h-3" />
+                            <span className="text-[10px] tracking-tight">
+                                <LiquidCounter value={partner.total_earned_usdt || 0} className="inline" /> USDT
                             </span>
                         </div>
                     </div>

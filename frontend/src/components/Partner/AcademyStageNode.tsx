@@ -94,7 +94,7 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
                     {stage.isPro && isLocked && (
                         <div className="bg-amber-500 px-1.5 py-0.5 rounded-lg shadow-lg flex items-center gap-1 border border-white/20">
                             <Zap className="w-2.5 h-2.5 text-white fill-white" />
-                            <span className="text-label font-bold text-white uppercase">PRO</span>
+                            <span className="text-label font-bold text-white uppercase">{t('common:navigation.pro')}</span>
                         </div>
                     )}
                 </div>

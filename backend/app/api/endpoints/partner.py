@@ -491,6 +491,7 @@ async def get_top_partners(
             "photo_url": safe_photo_url,
             "xp": p.xp,
             "referrals_count": display_refs,
+            "total_earned_usdt": p.total_earned_usdt,
             "rank": get_rank(p.xp),
             "subscription_plan": p.subscription_plan
         })

@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { Trophy, Shield, Zap, Star, Flame } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ProPlusBadge, ProBadge } from '../ui/ProPlusBadge';
+import { LiquidCounter } from '../../pages/Pro/utils/LiquidCounter';
+import { USDTLogo } from '../ui/USDTLogo';
 
 export type LeagueTier = 'wooden' | 'silver' | 'metal' | 'gold' | 'platinum';
 
@@ -10,7 +12,7 @@ interface LeagueCardProps {
     league: LeagueTier;
     rank: number;
     score: number;
-    referrals: number;
+    total_earned_usdt: number;
     subscription_plan?: string;
 }
 
@@ -61,7 +63,7 @@ const useLeagueConfig = () => {
     };
 };
 
-export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, referrals, subscription_plan }) => {
+export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, total_earned_usdt, subscription_plan }) => {
     const { t } = useTranslation(['social', 'common']);
     const LEAGUE_CONFIG = useLeagueConfig();
     const config = LEAGUE_CONFIG[league];
@@ -121,9 +123,12 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, ref
                     </div>
                     <div className="min-w-0">
                         <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
-                            {t('leaderboard.referrals')}
+                            {t('partner_dashboard.total_earned')}
                         </p>
-                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>{referrals}</p>
+                        <div className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md flex items-center gap-1.5`}>
+                            <USDTLogo className="w-4 h-4" />
+                            <LiquidCounter value={total_earned_usdt} />
+                        </div>
                     </div>
                 </div>
 

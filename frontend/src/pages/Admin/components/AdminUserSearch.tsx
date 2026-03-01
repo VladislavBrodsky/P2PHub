@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Search, User, Zap, RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface AdminUserSearchProps {
     searchId: string;
@@ -19,6 +20,8 @@ export const AdminUserSearch: React.FC<AdminUserSearchProps> = React.memo(({
     searchResults,
     fetchPartnerDetails
 }) => {
+    const { t } = useTranslation('common');
+
     return (
         <motion.div
             key="search"
@@ -30,17 +33,17 @@ export const AdminUserSearch: React.FC<AdminUserSearchProps> = React.memo(({
             <div className="p-4 rounded-2xl bg-indigo-500/5 border border-indigo-500/10 flex items-start gap-3 mb-6">
                 <Search className="text-indigo-500 shrink-0 mt-0.5" size={16} />
                 <div>
-                    <h3 className="text-xs font-bold text-indigo-500 uppercase tracking-widest">Global Partner Database</h3>
-                    <p className="text-label text-slate-500 font-medium mt-1">Look up and analyze the dossier of any partner traversing the system. Used for manual support requests or direct metric mutation (adjusting XP/PRO status).</p>
+                    <h3 className="text-xs font-bold text-indigo-500 uppercase tracking-widest">{t('admin_portal.user_search.title')}</h3>
+                    <p className="text-label text-slate-500 font-medium mt-1">{t('admin_portal.user_search.desc')}</p>
                 </div>
             </div>
 
             <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Search Engine Target</h2>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{t('admin_portal.user_search.engine_target')}</h2>
                 <div className="flex gap-2">
                     <input
                         type="text"
-                        placeholder="Telegram ID or @username..."
+                        placeholder={t('admin_portal.user_search.placeholder')}
                         value={searchId}
                         onChange={(e) => setSearchId(e.target.value)}
                         className="flex-1 bg-white/5 border border-black/5 dark:border-white/5 rounded-2xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-hidden transition-all placeholder:text-slate-600"
@@ -52,14 +55,14 @@ export const AdminUserSearch: React.FC<AdminUserSearchProps> = React.memo(({
                         className="px-6 rounded-2xl bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-500/25 flex items-center gap-2"
                     >
                         {isSearching ? <RefreshCw className="animate-spin" size={16} /> : <Search size={16} />}
-                        Execute
+                        {t('admin_portal.user_search.execute')}
                     </button>
                 </div>
             </div>
 
             <div className="space-y-3">
                 <div className="flex items-center justify-between px-1">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Search Results ({searchResults.length})</h2>
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{t('admin_portal.user_search.results', { count: searchResults.length })}</h2>
                 </div>
                 <div className="space-y-2">
                     {searchResults.map((p) => (
@@ -94,13 +97,13 @@ export const AdminUserSearch: React.FC<AdminUserSearchProps> = React.memo(({
                             </div>
                             <div className="text-right">
                                 <div className="text-xs font-bold text-slate-900 dark:text-slate-100">${p.usdt_balance || 0}</div>
-                                <div className="text-label font-bold text-slate-400 uppercase">Balance</div>
+                                <div className="text-label font-bold text-slate-400 uppercase">{t('admin_portal.user_search.balance')}</div>
                             </div>
                         </button>
                     ))}
                     {searchResults.length === 0 && !isSearching && searchId && (
                         <div className="p-12 text-center glass-panel-premium rounded-3xl text-slate-500 text-xs font-bold">
-                            No partners found matching "{searchId}"
+                            {t('admin_portal.user_search.no_partners', { query: searchId })}
                         </div>
                     )}
                 </div>

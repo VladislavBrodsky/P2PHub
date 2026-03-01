@@ -10,6 +10,7 @@ import {
 import { apiClient } from '../../api/client';
 import { useHaptic } from '../../hooks/useHaptic';
 import { USDTLogo, TONLogo } from '../ui/CryptoIcons';
+import { formatEarningDescription } from './components/Earnings/utils';
 
 interface FinanceStatsProps {
     isOpen: boolean;
@@ -265,7 +266,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                             <div className="flex flex-col min-w-0">
                                                                 <div className="flex items-center gap-1.5 flex-wrap">
                                                                     <span className="text-label font-bold text-slate-900 dark:text-white leading-tight truncate">
-                                                                        {item.description}
+                                                                        {formatEarningDescription(item.description, t)}
                                                                     </span>
                                                                     {item.status && item.status !== 'completed' && (
                                                                         <span className={`px-1 rounded text-label font-bold uppercase tracking-tighter shrink-0 ${item.status === 'pending' || item.status === 'manual_review'
@@ -336,7 +337,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             >
                                                 <div className="flex items-center gap-2.5">
                                                     <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                                                        {stats.monthly_history[selectedMonthIdx]?.month}
+                                                        {new Date(stats.monthly_history[selectedMonthIdx]?.timestamp).toLocaleDateString([], { month: 'long', year: 'numeric' })}
                                                     </span>
                                                     {selectedMonthIdx === 0 && (
                                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
@@ -374,7 +375,9 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                 : 'hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-300'
                                                                 } ${idx > 0 ? 'border-t border-slate-100 dark:border-white/5' : ''}`}
                                                         >
-                                                            <span className="text-label font-bold uppercase tracking-tight">{m.month}</span>
+                                                            <span className="text-label font-bold uppercase tracking-tight">
+                                                                {new Date(m.timestamp).toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                                                            </span>
                                                             {idx === 0 && (
                                                                 <span className="text-label font-bold text-indigo-500 uppercase tracking-wider">● {t('partner_dashboard.finance_stats.current', 'Current')}</span>
                                                             )}
@@ -408,7 +411,9 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
 
                                                 {/* Net Summary row */}
                                                 <div className="flex items-center justify-between mb-4 relative z-10">
-                                                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Net Balance</span>
+                                                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                                                        {t('partner_dashboard.finance_stats.net_balance')}
+                                                    </span>
                                                     <div className="flex items-center gap-3">
                                                         <span className={`text-label font-bold tabular-nums ${netUSDT >= 0 ? 'text-emerald-500' : 'text-red-400'
                                                             }`}>

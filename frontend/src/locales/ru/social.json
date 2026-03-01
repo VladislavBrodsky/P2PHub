@@ -18,8 +18,8 @@
       "try_refresh": "Обновить",
       "level_performer": "ТОП УРОВНЯ",
       "avg_xp": "Ср. {{xp}} XP",
-      "joined_date": "Вступил {{date}}",
-      "active_status": "Статус Активности",
+      "joined_date": "С {{date}}",
+      "active_status": "Активен",
       "no_match": "Совпадений не найдено",
       "try_adjust_search": "Попробуйте изменить поиск или фильтры",
       "growth_start": "Рост начинается с первого семени. Приглашайте друзей, чтобы начать зарабатывать",
@@ -409,7 +409,19 @@
       "current": "Текущий",
       "inflow_short": "Вход",
       "outflow_short": "Выход",
-      "failed_load": "Не удалось загрузить данные."
+      "failed_load": "Не удалось загрузить данные.",
+      "net_balance": "Чистый баланс"
     }
+  },
+  "commissions": {
+    "pro": "PRO Комиссия",
+    "pro_plus": "PRO+ Комиссия",
+    "referral_joined": "Новый партнер в сети",
+    "active_referral": "Активный реферал",
+    "growth_revenue": "Доход от роста сети",
+    "review_payment": "Проверка платежа",
+    "pending_payment": "Ожидание платежа",
+    "failed_payment": "Ошибка платежа",
+    "purchase": "Покупка"
   }
 }

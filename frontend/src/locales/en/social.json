@@ -18,8 +18,8 @@
       "try_refresh": "Try Refresh",
       "level_performer": "LEVEL PERFORMER",
       "avg_xp": "Avg {{xp}} XP",
-      "joined_date": "Joined {{date}}",
-      "active_status": "Active Status",
+      "joined_date": "Since {{date}}",
+      "active_status": "Active",
       "no_match": "No Matches Found",
       "try_adjust_search": "Try adjusting your search or filters",
       "growth_start": "Growth starts with the first seed. Invite friends to start earning",
@@ -38,7 +38,7 @@
     "levels": {
       "direct": "Direct Partners",
       "indirect": "Level 2 Squad",
-      "generic": "Level {{l}} Network"
+      "generic": "Level {{level}} Network"
     }
   },
   "leaderboard": {
@@ -409,7 +409,19 @@
       "current": "Current",
       "inflow_short": "In",
       "outflow_short": "Out",
-      "failed_load": "Failed to load stats"
+      "failed_load": "Failed to load stats",
+      "net_balance": "Net Balance"
     }
+  },
+  "commissions": {
+    "pro": "PRO Commission",
+    "pro_plus": "PRO+ Commission",
+    "referral_joined": "Referral Partner Joined",
+    "active_referral": "Active Referral",
+    "growth_revenue": "Network Growth Revenue",
+    "review_payment": "Review Payment",
+    "pending_payment": "Pending Payment",
+    "failed_payment": "Failed Payment",
+    "purchase": "Purchase"
   }
 }

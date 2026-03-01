@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PintopayCard, CardVariant } from '../components/PintopayCard';
+import { OnexCard, CardVariant } from '../components/OnexCard';
 import { Apple, ChevronRight, CheckCircle2, Crown } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             notification('warning');
             return;
         }
-        window.open('https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3', '_blank');
+        window.open('https://t.me/onex ecosystem_bot?start=p_6977c29c66ed9faa401342f3', '_blank');
     };
 
     const handleUpgradeSelect = () => {
@@ -95,7 +95,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="w-full flex justify-center absolute inset-0"
                         >
-                            <PintopayCard variant={selectedTab} />
+                            <OnexCard variant={selectedTab} />
                         </motion.div>
                     </AnimatePresence>
                 </div>

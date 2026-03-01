@@ -14,6 +14,7 @@ interface User {
     photo_file_id?: string | null;
     balance: number;
     total_earned?: number; // Sum of all PRO commissions
+    total_earned_usdt?: number; // Materialized total for leaderboard
     level: number;
     xp: number;
     referral_code: string;
@@ -230,6 +231,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         total_network_size: 25,
                         pro_notification_seen: false,
                         is_pro_plus: true,
+                        total_earned_usdt: 1250.50,
                         last_checkin_at: new Date().toISOString(),
                         checkin_streak: 5,
                         notifications_paused: false

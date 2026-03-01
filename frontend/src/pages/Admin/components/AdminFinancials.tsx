@@ -7,6 +7,7 @@ import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
     ResponsiveContainer, Cell
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { DashboardStats } from '../types';
 
 interface AdminFinancialsProps {
@@ -14,6 +15,8 @@ interface AdminFinancialsProps {
 }
 
 export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ stats }) => {
+    const { t } = useTranslation('common');
+
     return (
         <motion.div
             key="financials"
@@ -25,8 +28,8 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
             <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 flex items-start gap-3">
                 <Wallet className="text-emerald-500 shrink-0 mt-0.5" size={16} />
                 <div>
-                    <h3 className="text-xs font-bold text-emerald-500 uppercase tracking-widest">Financial Intelligence</h3>
-                    <p className="text-label text-slate-500 font-medium mt-1">Deep dive into gross revenue, net profit margin, and exact distribution logic across the 20-level commission array. Monitor fiat (USDT) vs crypto (TON) asset inflow.</p>
+                    <h3 className="text-xs font-bold text-emerald-500 uppercase tracking-widest">{t('admin_portal.financials.title')}</h3>
+                    <p className="text-label text-slate-500 font-medium mt-1">{t('admin_portal.financials.desc')}</p>
                 </div>
             </div>
 
@@ -36,40 +39,40 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
                     <Wallet size={120} />
                 </div>
                 <div className="space-y-1 relative z-10">
-                    <span className="text-blue-600 dark:text-blue-400 text-label font-bold uppercase tracking-widest">Profit Income to Company (Net)</span>
+                    <span className="text-blue-600 dark:text-blue-400 text-label font-bold uppercase tracking-widest">{t('admin_portal.financials.profit_net')}</span>
                     <div className="flex items-end justify-between">
                         <div className="text-4xl font-bold text-slate-900 dark:text-white flex items-baseline gap-1">
                             <span className="text-2xl text-blue-500 font-bold">$</span>
                             {stats?.financials.net_profit}
                         </div>
                         <div className="text-right">
-                            <div className="text-label font-bold text-slate-500 uppercase">Gross Margin</div>
+                            <div className="text-label font-bold text-slate-500 uppercase">{t('admin_portal.financials.gross_margin')}</div>
                             <div className="text-xl font-bold text-emerald-500">{stats?.financials.gross_margin}%</div>
                         </div>
                     </div>
-                    <p className="text-slate-500 dark:text-slate-500 text-label font-bold">Total revenue retained by the company</p>
+                    <p className="text-slate-500 dark:text-slate-500 text-label font-bold">{t('admin_portal.financials.revenue_retained')}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                     <div>
-                        <div className="text-slate-500 text-label font-bold uppercase">Paid to Referral Network (Actual)</div>
+                        <div className="text-slate-500 text-label font-bold uppercase">{t('admin_portal.financials.paid_referral')}</div>
                         <div className="text-lg font-bold text-slate-900 dark:text-white">${stats?.financials.total_commissions}</div>
-                        <div className="text-label text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}% of Revenue</div>
+                        <div className="text-label text-blue-600 dark:text-blue-400 font-bold">{stats?.financials.actual_payout_ratio}{t('admin_portal.financials.revenue_of')}</div>
                     </div>
                     <div>
-                        <div className="text-slate-500 text-label font-bold uppercase">Referral Network Target Split (56/44)</div>
+                        <div className="text-slate-500 text-label font-bold uppercase">{t('admin_portal.financials.target_split')}</div>
                         <div className="text-lg font-bold text-slate-400 dark:text-slate-400">{stats?.financials.theoretical_payout_ratio}%</div>
-                        <div className="text-label text-slate-400 dark:text-slate-600 font-bold italic">Max possible distribution</div>
+                        <div className="text-label text-slate-400 dark:text-slate-600 font-bold italic">{t('admin_portal.financials.max_distribution')}</div>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 relative z-10 pt-4 border-t border-slate-200 dark:border-white/5">
                     <div>
-                        <div className="text-slate-500 text-label font-bold uppercase">Gross Revenue (Total)</div>
+                        <div className="text-slate-500 text-label font-bold uppercase">{t('admin_portal.financials.gross_revenue')}</div>
                         <div className="text-lg font-bold text-slate-900 dark:text-white">${stats?.financials.total_revenue}</div>
                     </div>
                     <div>
-                        <div className="text-slate-500 text-label font-bold uppercase">Revenue USDT / TON</div>
+                        <div className="text-slate-500 text-label font-bold uppercase">{t('admin_portal.financials.revenue_usdt_ton')}</div>
                         <div className="text-xs font-bold text-slate-700 dark:text-white">
                             USDT: ${stats?.financials.total_revenue_usdt}
                         </div>
@@ -83,7 +86,7 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
             {/* Revenue Performance Chart */}
             <div className="p-5 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Revenue Performance</h2>
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{t('admin_portal.financials.performance')}</h2>
                     <PieChart size={14} className="text-slate-500" />
                 </div>
                 <div className="h-[180px] w-full">
@@ -118,7 +121,7 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
 
             {/* Recent Successful Sales */}
             <div className="space-y-3">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">Recent Successful Sales</h2>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1">{t('admin_portal.financials.recent_sales')}</h2>
                 <div className="space-y-2">
                     {stats?.recent_sales.map((sale) => (
                         <div key={sale.id} className="p-3 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-center justify-between">
@@ -156,7 +159,7 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
             {/* Commissions Breakdown */}
             <div className="space-y-3">
                 <div className="flex items-center justify-between px-1">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">20-Level Comission Split</h2>
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{t('admin_portal.financials.commission_split')}</h2>
                     <PieChart size={14} className="text-slate-500" />
                 </div>
                 <div className="space-y-2">
@@ -166,7 +169,7 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
                                 <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-xs font-bold text-slate-500">
                                     L{line.level}
                                 </div>
-                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">Level {line.level} Partners</span>
+                                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.financials.level_partners', { level: line.level })}</span>
                             </div>
                             <span className="text-sm font-bold text-slate-700 dark:text-slate-100">${line.amount}</span>
                         </div>

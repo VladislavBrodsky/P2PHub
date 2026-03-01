@@ -263,6 +263,7 @@ class PartnerTopResponse(BaseModel):
     photo_file_id: str | None = None
     xp: float
     referrals_count: int
+    total_earned_usdt: float = 0.0
     rank: str
     subscription_plan: str | None = None
 

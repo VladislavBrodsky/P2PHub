@@ -114,6 +114,7 @@ class LeaderboardService:
                     "photo_file_id": p.photo_file_id,
                     "level": p.level,
                     "referral_count": p.referral_count,
+                    "total_earned_usdt": p.total_earned_usdt,
                     "subscription_plan": p.subscription_plan
                 }
                 new_cache_map[p.id] = p_data
@@ -137,6 +138,7 @@ class LeaderboardService:
                 xp=scores.get(pid, 0.0),
                 level=p_data.get("level", 1),
                 referral_count=p_data.get("referral_count", 0),
+                total_earned_usdt=p_data.get("total_earned_usdt", 0.0),
                 subscription_plan=p_data.get("subscription_plan")
             )
             hydrated.append(item.model_dump(mode='json'))

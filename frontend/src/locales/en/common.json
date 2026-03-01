@@ -35,6 +35,12 @@
   "cancel": "Cancel",
   "delete": "Delete",
   "total": "Total",
+  "error_boundary": {
+    "title": "Something went wrong",
+    "desc": "The mission encountered an unexpected error. Don't worry, your progress is safe.",
+    "reload": "Reload App",
+    "report": "Report Issue to Developers"
+  },
   "next_lvl": "NXT LVL",
   "xp": "XP",
   "admin": "ADMIN",
@@ -90,7 +96,7 @@
     "terms_title": "Terms of Service",
     "privacy_title": "Privacy Policy",
     "disclaimer_title": "DISCLAIMER",
-    "disclaimer_desc": "We are a community of digital nomads and online entrepreneurs tracking global trends. We act as a <1>third-party ambassador agency</1> and have no official corporate connection with Pintopay.",
+    "disclaimer_desc": "We are a community of digital nomads and online entrepreneurs tracking global trends. We act as a <1>third-party ambassador agency</1> and have no official corporate connection with ONEX.",
     "risk_warning": "RISK WARNING: High-speed P2P settlements involve market risk. Past performance does not guarantee future returns. Only participate with assets you are willing to use as leverage.",
     "understand": "I UNDERSTAND",
     "copyright": "© 2026 Ambassador Network. All rights reserved.",
@@ -156,14 +162,14 @@
     "manager": "Personal Manager",
     "online": "ONLINE",
     "priority_badge": "VIP SUPPORT",
-    "welcome": "Welcome! I'm your personal manager at Pintopay. My goal is to help you get the most out of the platform simply and effectively. How can I help you today?",
+    "welcome": "Welcome! I'm your personal manager at ONEX. My goal is to help you get the most out of our elite ecosystem simply and effectively. How can I help you today?",
     "input_placeholder": "Your question...",
     "user_context": "Active: {{name}} • Lvl {{level}}",
     "session_closed": "Chat closed • History saved",
     "still_here": "Still here? I'm ready to help with any question.",
     "error_technical": "Connection error. Please try again later or check the FAQ section.",
     "suggested_topics": "FREQUENTLY ASKED QUESTIONS",
-    "powered_by": "Pintopay Support Service",
+    "powered_by": "ONEX Elite Support Service",
     "categories": {
       "card_details": "Card Issuance",
       "issue_setup": "Configuration",
@@ -180,7 +186,7 @@
     "subtitle": "Your Questions, Answered",
     "knowledge_base": "KNOWLEDGE BASE",
     "header_title": "HELP <0>CENTER</0>",
-    "header_desc": "Everything you need to know to grow with the Pintopay partner network.",
+    "header_desc": "Everything you need to know to grow with the ONEX partner network.",
     "search_placeholder": "Search for answers...",
     "still_have_questions": "STILL HAVE <0>QUESTIONS?</0>",
     "still_have_questions_desc": "Can't find what you're looking for? Join our community or contact 24/7 support.",
@@ -208,11 +214,11 @@
     },
     "questions": [
       {
-        "q": "What is Pintopay Partner Club?",
+        "q": "What is ONEX Partner Club?",
         "a": "A global P2P network where you earn from your card usage and your team's activity. Free plan: 3 commission levels. PRO: 9 levels. PRO+: 20 levels. Build your financial legacy with crypto cards and automated rewards."
       },
       {
-        "q": "How do I earn with my Pintopay card?",
+        "q": "How do I earn with my ONEX card?",
         "a": "Every transaction on your card generates cashback. Plus, you earn commissions from your partner network (Free: 3 levels, PRO: 9 levels, PRO+: 20 levels deep). The more you and your team use cards, the more passive income flows to you."
       },
       {
@@ -233,7 +239,7 @@
       },
       {
         "q": "Can I withdraw my earnings anytime?",
-        "a": "Yes! Earnings are instantly available. Withdraw to your Pintopay card, crypto wallet, or bank account with minimal fees. No holding periods."
+        "a": "Yes! Earnings are instantly available. Withdraw to your ONEX card, crypto wallet, or bank account with minimal fees. No holding periods."
       },
       {
         "q": "What is the Academy?",
@@ -280,7 +286,7 @@
     "stories": [
       {
         "title": "Welcome, Partner",
-        "desc": "You are now part of the Pintopay partner network. Begin your journey toward financial independence through P2P."
+        "desc": "You are now part of the ONEX partner network. Begin your journey toward financial independence through P2P."
       },
       {
         "title": "Build Your Network",
@@ -297,7 +303,7 @@
     ]
   },
   "income": {
-    "desc": "Traditional finance is a <1>closed garden</1>. As a <3>Pintopay Partner</3>, you are the bridge. Every global transaction becomes your dividends.",
+    "desc": "Traditional finance is a <1>closed garden</1>. As a <3>ONEX Partner</3>, you are the bridge. Every global transaction becomes your dividends.",
     "waiting": {
       "desc": "While you trade hours for a fixed wage, the digital economy creates value 24/7. <1>Every minute you wait is a tax on your potential</1><2>Unlock the strategy to stop calculating losses and start capturing profits.</2>"
     },
@@ -344,6 +350,33 @@
       "reconciliation": "RECONCILIATION",
       "system": "SYSTEM",
       "misc": "MISC"
+    },
+    "financials": {
+      "title": "Financial Intelligence",
+      "desc": "Deep dive into gross revenue, net profit margin, and exact distribution logic across the 20-level commission array. Monitor fiat (USDT) vs crypto (TON) asset inflow.",
+      "profit_net": "Profit Income to Company (Net)",
+      "gross_margin": "Gross Margin",
+      "revenue_retained": "Total revenue retained by the company",
+      "paid_referral": "Paid to Referral Network (Actual)",
+      "revenue_of": "% of Revenue",
+      "target_split": "Referral Network Target Split (56/44)",
+      "max_distribution": "Max possible distribution",
+      "gross_revenue": "Gross Revenue (Total)",
+      "revenue_usdt_ton": "Revenue USDT / TON",
+      "performance": "Revenue Performance",
+      "recent_sales": "Recent Successful Sales",
+      "commission_split": "20-Level Commission Split",
+      "level_partners": "Level {{level}} Partners"
+    },
+    "user_search": {
+      "title": "Global Partner Database",
+      "desc": "Look up and analyze the dossier of any partner traversing the system. Used for manual support requests or direct metric mutation (adjusting XP/PRO status).",
+      "engine_target": "Search Engine Target",
+      "placeholder": "Telegram ID or @username...",
+      "execute": "Execute",
+      "results": "Search Results ({{count}})",
+      "balance": "Balance",
+      "no_partners": "No partners found matching \"{{query}}\""
     }
   }
 }

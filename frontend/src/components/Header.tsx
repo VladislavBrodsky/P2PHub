@@ -65,7 +65,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             <span className="text-label sm:text-caption font-bold text-text-primary leading-none">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
-                            <span className="text-[9px] sm:text-label font-bold uppercase tracking-wider text-success dark:text-emerald-400">XP</span>
+                            <span className="text-[9px] sm:text-label font-bold uppercase tracking-wider text-success dark:text-emerald-400">{t('xp')}</span>
                         </div>
                     </button>
                 </div>

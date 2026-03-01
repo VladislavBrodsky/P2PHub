@@ -1,5 +1,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import * as Sentry from "@sentry/react";
+import i18next from 'i18next';
 
 interface Props {
     children?: ReactNode;
@@ -19,14 +20,11 @@ export class ErrorBoundary extends Component<Props, State> {
     };
 
     public static getDerivedStateFromError(error: Error): State {
-        // Update state so the next render will show the fallback UI.
         return { hasError: true, error, eventId: null };
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('Uncaught error:', error, errorInfo);
-
-        // Capture error in Sentry
         const eventId = Sentry.captureException(error, { extra: { ...errorInfo } });
         this.setState({ eventId });
     }
@@ -36,22 +34,26 @@ export class ErrorBoundary extends Component<Props, State> {
     };
 
     public render() {
+        const t = (key: string) => i18next.t(key, { ns: 'common' });
+
         if (this.state.hasError) {
             return (
                 <div className="flex flex-col items-center justify-center min-h-screen bg-slate-950 text-white p-10 text-center">
                     <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mb-6 animate-pulse">
                         <span className="text-4xl text-red-500">⚠️</span>
                     </div>
-                    <h1 className="text-2xl font-bold mb-4 uppercase tracking-tighter">Something went wrong</h1>
+                    <h1 className="text-2xl font-bold mb-4 uppercase tracking-tighter">
+                        {t('error_boundary.title')}
+                    </h1>
                     <p className="text-slate-400 text-sm mb-8 max-w-xs leading-relaxed">
-                        The mission encountered an unexpected error. Don't worry, your progress is safe.
+                        {t('error_boundary.desc')}
                     </p>
 
                     <button
                         onClick={this.handleReload}
                         className="w-full max-w-xs h-14 bg-blue-600 rounded-2xl font-bold uppercase tracking-widest text-sm shadow-lg shadow-blue-500/20 active:scale-95 transition-all mb-4"
                     >
-                        Reload App
+                        {t('error_boundary.reload')}
                     </button>
 
                     {this.state.eventId && (
@@ -59,7 +61,7 @@ export class ErrorBoundary extends Component<Props, State> {
                             onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId! })}
                             className="text-slate-500 text-xs hover:text-white transition-colors uppercase tracking-widest font-bold"
                         >
-                            Report Issue to Developers
+                            {t('error_boundary.report')}
                         </button>
                     )}
 

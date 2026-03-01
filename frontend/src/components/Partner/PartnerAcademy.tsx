@@ -48,7 +48,7 @@ export const PartnerAcademy = () => {
                             </div>
                             <div className="w-px h-4 bg-slate-900/10 dark:bg-white/10" />
                             <div className="flex flex-col items-center">
-                                <span className="text-label font-bold text-orange-600 dark:text-orange-400">PRO</span>
+                                <span className="text-label font-bold text-orange-600 dark:text-orange-400">{t('common:navigation.pro')}</span>
                                 <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_elite')}</span>
                             </div>
                         </div>

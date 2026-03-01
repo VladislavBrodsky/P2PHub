@@ -14,6 +14,8 @@ import { Trophy, Shield, Star, Crown } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { ProPlusBadge, ProBadge } from '../components/ui/ProPlusBadge';
 import { useUser } from '../context/UserContext';
+import { LiquidCounter } from './Pro/utils/LiquidCounter';
+import { USDTLogo } from '../components/ui/USDTLogo';
 
 interface LeaderboardUser {
     id: number;
@@ -24,6 +26,7 @@ interface LeaderboardUser {
     photo_url?: string;
     photo_file_id?: string;
     referral_count: number;
+    total_earned_usdt: number;
     subscription_plan?: string;
 }
 
@@ -128,9 +131,11 @@ const PartnerRow = memo(({ user, index, onModalOpen, t }: {
                             <div className="flex items-center gap-1 text-label font-bold text-slate-500 dark:text-slate-400">
                                 <span>{t('common:lvl')} {user.level}</span>
                                 <div className="h-0.5 w-0.5 rounded-full bg-slate-300 dark:bg-slate-600" />
-                                <div className="flex items-center gap-1 text-blue-500/70">
-                                    <Crown size={8} className="stroke-3" />
-                                    <span className="font-bold">{user.referral_count.toLocaleString()} {t('referral.members')}</span>
+                                <div className="flex items-center gap-1.5 text-emerald-500 font-bold bg-emerald-500/5 px-2 py-0.5 rounded-full border border-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.1)] group-hover:shadow-[0_0_15px_rgba(16,185,129,0.2)] transition-shadow">
+                                    <USDTLogo className="w-3.5 h-3.5 drop-shadow-[0_0_5px_rgba(38,161,123,0.4)]" />
+                                    <span className="text-label tracking-tight">
+                                        <LiquidCounter value={user.total_earned_usdt} className="inline" /> USDT
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -245,7 +250,7 @@ export default function LeaderboardPage() {
                         league={userLeague}
                         rank={userStats.rank}
                         score={userStats.xp}
-                        referrals={userStats.referrals}
+                        total_earned_usdt={currentUser?.total_earned_usdt || 0}
                         subscription_plan={currentUser?.subscription_plan || undefined}
                     />
                 </div>

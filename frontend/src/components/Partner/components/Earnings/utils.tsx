@@ -4,17 +4,31 @@ import { DollarSign, Gift, Users } from 'lucide-react';
 export const formatEarningDescription = (desc: string, t: any) => {
     if (!desc) return '';
 
+    // Task Rewards
     if (desc.startsWith('Task Reward: ')) {
         const taskId = desc.replace('Task Reward: ', '').trim();
         const taskTitleKey = `tasks.${taskId}.title`;
         const translatedTitle = t(taskTitleKey);
 
         if (translatedTitle && translatedTitle !== taskTitleKey) {
-            return `${translatedTitle}`;
+            return translatedTitle;
         }
 
         return taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     }
+
+    // Commissions & Referral XP
+    if (desc.includes('PRO+ Commission')) return desc.replace('PRO+ Commission', t('commissions.pro_plus'));
+    if (desc.includes('PRO Commission')) return desc.replace('PRO Commission', t('commissions.pro'));
+    if (desc.includes('Referral Partner Joined')) return desc.replace('Referral Partner Joined', t('commissions.referral_joined'));
+    if (desc.includes('Active Referral XP')) return desc.replace('Active Referral XP', t('commissions.active_referral'));
+    if (desc.includes('Global Network Revenue')) return desc.replace('Global Network Revenue', t('commissions.growth_revenue'));
+
+    // Payments / Outcomes
+    if (desc.includes('Review:') && desc.includes('Payment')) return t('commissions.review_payment') + ' ' + desc.split(' ').pop();
+    if (desc.includes('Pending:') && desc.includes('Payment')) return t('commissions.pending_payment') + ' ' + desc.split(' ').pop();
+    if (desc.includes('Failed:') && desc.includes('Payment')) return t('commissions.failed_payment') + ' ' + desc.split(' ').pop();
+    if (desc.includes('Purchase:')) return t('commissions.purchase') + ': ' + desc.split(': ').pop();
 
     return desc.replace('(Level ', '(L');
 };
