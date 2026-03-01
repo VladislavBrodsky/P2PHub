@@ -163,5 +163,24 @@
     "ledger": {
         "title": "Live Reconciliation Check",
         "desc": "Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches."
+    },
+    "tabs": {
+        "kpis": "KPIs",
+        "financials": "Financials",
+        "payments": "Payments",
+        "network": "Network",
+        "search": "Search",
+        "palantir": "Palantir",
+        "nexus": "Nexus",
+        "ledger": "Ledger",
+        "maintenance": "System"
+    },
+    "loading": "Loading System...\nConnecting to Database",
+    "kpis_header": {
+        "title": "Command Center KPIs",
+        "desc": "Real-time overview of primary growth, retention, and engagement metrics. Use these indicators to assess platform health, user adoption speed, and viral intelligence (K-Factor).",
+        "growth_matrix": "Network Growth Matrix",
+        "trajectory": "14-Day Tactical Trajectory",
+        "new_partners": "New Partners"
     }
 }

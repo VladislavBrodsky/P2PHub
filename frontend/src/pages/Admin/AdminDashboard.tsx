@@ -2,8 +2,9 @@ import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, RefreshCw, AlertTriangle, Activity, Wallet,
-    Layers, Eye, Megaphone, BookOpen
+    Layers, Eye, Megaphone, BookOpen, Search
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { AdminKPIs } from './components/AdminKPIs';
 import { AdminFinancials } from './components/AdminFinancials';
 import { AdminPayments } from './components/AdminPayments';
@@ -67,24 +68,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = React.memo(({
     ledgerProps,
     partnerDetailProps
 }) => {
+    const { t: tAdmin } = useTranslation(['admin', 'common']);
     const tabs = useMemo(() => [
-        { id: 'kpis', label: 'KPIs', icon: Activity },
-        { id: 'financials', label: 'Financials', icon: Wallet },
-        { id: 'payments', label: 'Payments', icon: Wallet, badge: transactions.length },
-        { id: 'network', label: 'Network', icon: Layers },
-        { id: 'search', label: 'Search', icon: Layers }, // Icon fallback or specialized one
-        { id: 'palantir', label: 'Palantir', icon: Eye, color: 'text-indigo-500' },
-        { id: 'nexus', label: 'Nexus', icon: Megaphone, color: 'text-orange-500' },
-        { id: 'ledger', label: 'Ledger', icon: BookOpen, color: 'text-emerald-500' },
-        { id: 'maintenance', label: 'System', icon: ShieldCheck },
-    ], [transactions.length]);
+        { id: 'kpis', label: tAdmin('admin:tabs.kpis'), icon: Activity },
+        { id: 'financials', label: tAdmin('admin:tabs.financials'), icon: Wallet },
+        { id: 'payments', label: tAdmin('admin:tabs.payments'), icon: Wallet, badge: transactions.length },
+        { id: 'network', label: tAdmin('admin:tabs.network'), icon: Layers },
+        { id: 'search', label: tAdmin('admin:tabs.search'), icon: Search },
+        { id: 'palantir', label: tAdmin('admin:tabs.palantir'), icon: Eye, color: 'text-indigo-500' },
+        { id: 'nexus', label: tAdmin('admin:tabs.nexus'), icon: Megaphone, color: 'text-orange-500' },
+        { id: 'ledger', label: tAdmin('admin:tabs.ledger'), icon: BookOpen, color: 'text-emerald-500' },
+        { id: 'maintenance', label: tAdmin('admin:tabs.maintenance'), icon: ShieldCheck },
+    ], [transactions.length, tAdmin]);
 
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
                 <RefreshCw className="w-8 h-8 text-blue-500 animate-spin" />
                 <p className="text-slate-500 font-medium whitespace-pre-line text-center">
-                    {'Loading System...\nConnecting to Database'}
+                    {tAdmin('admin:loading')}
                 </p>
             </div>
         );

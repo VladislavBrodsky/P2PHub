@@ -15,6 +15,7 @@ interface AdminKPIsProps {
 }
 
 const CustomTooltip = ({ active, payload, label }: any) => {
+    const { t } = useTranslation(['admin']);
     if (active && payload && payload.length) {
         return (
             <div className="bg-slate-900/95 backdrop-blur-2xl border border-white/10 p-4 rounded-xl shadow-2xl relative overflow-hidden group ring-1 ring-white/10">
@@ -29,7 +30,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                             <div className="text-xl font-bold text-white leading-none">
                                 {payload[0].value}
                             </div>
-                            <div className="text-label font-bold text-blue-400 uppercase tracking-widest mt-1">New Partners</div>
+                            <div className="text-label font-bold text-blue-400 uppercase tracking-widest mt-1">{t('admin:kpis_header.new_partners')}</div>
                         </div>
                     </div>
                 </div>
@@ -112,8 +113,8 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
             <div className="p-4 rounded-2xl bg-blue-500/5 border border-blue-500/10 flex items-start gap-3">
                 <Activity className="text-blue-500 shrink-0 mt-0.5" size={16} />
                 <div>
-                    <h3 className="text-xs font-bold text-blue-500 uppercase tracking-widest">Command Center KPIs</h3>
-                    <p className="text-label text-slate-500 font-medium mt-1">Real-time overview of primary growth, retention, and engagement metrics. Use these indicators to assess platform health, user adoption speed, and viral intelligence (K-Factor).</p>
+                    <h3 className="text-xs font-bold text-blue-500 uppercase tracking-widest">{t('admin:kpis_header.title')}</h3>
+                    <p className="text-label text-slate-500 font-medium mt-1">{t('admin:kpis_header.desc')}</p>
                 </div>
             </div>
 
@@ -188,11 +189,11 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
                             <div className="p-1.5 bg-blue-500/10 rounded-lg text-blue-500">
                                 <TrendingUp size={14} />
                             </div>
-                            Network Growth Matrix
+                            {t('admin:kpis_header.growth_matrix')}
                         </h2>
                         <div className="flex items-center gap-2">
                             <div className="h-1 w-8 bg-blue-500 rounded-full" />
-                            <p className="text-label font-bold text-blue-500/60 uppercase tracking-widest">14-Day Tactical Trajectory</p>
+                            <p className="text-label font-bold text-blue-500/60 uppercase tracking-widest">{t('admin:kpis_header.trajectory')}</p>
                         </div>
                     </div>
                     <div className="p-2.5 bg-slate-100 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5 text-slate-500 shadow-sm">

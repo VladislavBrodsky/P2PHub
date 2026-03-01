@@ -7,30 +7,34 @@ import { useTranslation } from 'react-i18next';
 
 interface AdminMaintenanceProps {
     health: any | null;
-    auditResults: any | null;
-    treeAuditResults: any | null;
-    isProcessing: boolean;
-    isAuditing: boolean;
+    stats: any | null;
+    notifStats: any | null;
+    isRefreshing: boolean;
+    isEconomyAuditing: boolean;
     isTreeAuditing: boolean;
-    onRecalculateStats: () => void;
-    onFlushCache: () => void;
-    onRunAudit: () => void;
-    onRunTreeAudit: () => void;
-    onRetryNotifications: () => void;
+    economyAudit: any | null;
+    treeAudit: any | null;
+    handleRecalculate: () => void;
+    handleClearCache: () => void;
+    handleEconomyAudit: () => void;
+    handleTreeAudit: () => void;
+    handleRetryNotifications: () => void;
 }
 
 export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
     health,
-    auditResults,
-    treeAuditResults,
-    isProcessing,
-    isAuditing,
+    stats,
+    notifStats,
+    isRefreshing,
+    isEconomyAuditing,
     isTreeAuditing,
-    onRecalculateStats,
-    onFlushCache,
-    onRunAudit,
-    onRunTreeAudit,
-    onRetryNotifications
+    economyAudit,
+    treeAudit,
+    handleRecalculate,
+    handleClearCache,
+    handleEconomyAudit,
+    handleTreeAudit,
+    handleRetryNotifications
 }) => {
     const { t } = useTranslation(['admin', 'common']);
 
@@ -38,7 +42,7 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
         {
             title: t('admin:maintenance.consistency.title'),
             desc: t('admin:maintenance.consistency.desc'),
-            action: onRecalculateStats,
+            action: handleRecalculate,
             label: t('admin:maintenance.consistency.button'),
             loadingLabel: t('admin:maintenance.consistency.processing'),
             icon: RefreshCw,
@@ -48,7 +52,7 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
         {
             title: t('admin:maintenance.cache.title'),
             desc: t('admin:maintenance.cache.desc'),
-            action: onFlushCache,
+            action: handleClearCache,
             label: t('admin:maintenance.cache.button'),
             loadingLabel: t('admin:maintenance.cache.clearing'),
             icon: Zap,
@@ -58,13 +62,13 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
         {
             title: t('admin:maintenance.economy.title'),
             desc: t('admin:maintenance.economy.desc'),
-            action: onRunAudit,
+            action: handleEconomyAudit,
             label: t('admin:maintenance.economy.button'),
             loadingLabel: t('admin:maintenance.economy.auditing'),
             icon: ShieldAlert,
             color: 'text-rose-500',
             bg: 'bg-rose-500/10',
-            audit: auditResults,
+            audit: economyAudit,
             auditLabels: {
                 healthy: t('admin:maintenance.economy.healthy'),
                 anomalies: t('admin:maintenance.economy.anomalies'),
@@ -76,13 +80,13 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
         {
             title: t('admin:maintenance.tree.title'),
             desc: t('admin:maintenance.tree.desc'),
-            action: onRunTreeAudit,
+            action: handleTreeAudit,
             label: t('admin:maintenance.tree.button'),
             loadingLabel: t('admin:maintenance.tree.auditing'),
             icon: Layers,
             color: 'text-indigo-500',
             bg: 'bg-indigo-500/10',
-            audit: treeAuditResults,
+            audit: treeAudit,
             auditLabels: {
                 healthy: t('admin:maintenance.tree.healthy'),
                 anomalies: t('admin:maintenance.tree.anomalies'),
@@ -94,13 +98,13 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
         {
             title: t('admin:maintenance.notifications.title'),
             desc: t('admin:maintenance.notifications.desc'),
-            action: onRetryNotifications,
+            action: handleRetryNotifications,
             label: t('admin:maintenance.notifications.button'),
             loadingLabel: t('admin:maintenance.notifications.retrying'),
             icon: Send,
             color: 'text-emerald-500',
             bg: 'bg-emerald-500/10',
-            stats: health?.counts,
+            stats: notifStats,
             labels: {
                 sent: t('admin:maintenance.notifications.sent'),
                 pending: t('admin:maintenance.notifications.pending'),
@@ -198,10 +202,10 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
 
                         <button
                             onClick={section.action}
-                            disabled={isProcessing || isAuditing || isTreeAuditing}
+                            disabled={isRefreshing || isEconomyAuditing || isTreeAuditing}
                             className="w-full py-3 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[10px] font-bold uppercase tracking-widest hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2 shadow-lg disabled:opacity-50"
                         >
-                            {(isProcessing || isAuditing || isTreeAuditing) ? (
+                            {(isRefreshing || isEconomyAuditing || isTreeAuditing) ? (
                                 <>
                                     <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                     {section.loadingLabel}
