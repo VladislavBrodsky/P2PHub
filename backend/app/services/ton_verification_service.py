@@ -60,56 +60,80 @@ class TonVerificationService:
 
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
-            # 1. Fetch all pending TON transactions from the last 2 hours
+            # 1. Fetch all pending TON/USDT transactions from the last 2 hours
             cutoff = datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=2)
             stmt = select(PartnerTransaction).where(
                 PartnerTransaction.status == "pending",
-                PartnerTransaction.currency == "TON",
+                PartnerTransaction.currency.in_(["TON", "USDT"]),
                 PartnerTransaction.created_at >= cutoff
             )
             pending_txs = (await session.exec(stmt)).all()
             if not pending_txs:
                 return
 
-            # 2. Fetch last 20 transactions from Admin Wallet via TonCenter
+            # 2. Fetch last 20 transactions from Admin Wallet 
+            # We use TonAPI for the observer as it has superior native Jetton support
             client = await http_client.get_client()
-            params = {"address": settings.ADMIN_TON_ADDRESS, "limit": 20, "api_key": self.api_key}
+            headers = {"Authorization": f"Bearer {settings.TON_API_KEY}"} if settings.TON_API_KEY else {}
+            url = f"https://tonapi.io/v2/blockchain/accounts/{settings.ADMIN_TON_ADDRESS}/transactions?limit=20"
+            
             try:
-                response = await client.get(f"{self.base_url}/getTransactions", params=params, timeout=10.0)
-                if response.status_code != 200 or not response.json().get("ok"):
+                response = await client.get(url, headers=headers, timeout=12.0)
+                if response.status_code != 200:
                     return
                 
-                blockchain_txs = response.json().get("result", [])
+                blockchain_txs = response.json().get("transactions", [])
                 
                 # 3. Correlation Loop
                 for _ptx in pending_txs:
-                    # Search hash in blockchain response
                     for btx in blockchain_txs:
                         _btx_hash = self._normalize_hash(btx.get("hash", ""))
                         
                         # Match by Hash if user provided it
                         hash_match = _ptx.tx_hash and self._normalize_hash(_ptx.tx_hash) == _btx_hash
                         
-                        # Heuristic match: Amount + Time
-                        # We allow a small difference in amount due to rounding (0.0001 TON)
-                        # We check if the on-chain transaction happened AFTER the session was created
-                        in_msg = btx.get("in_msg", {})
-                        if not in_msg: continue
+                        # Heuristic match logic
+                        btx_match = False
                         
-                        btx_amount_ton = int(in_msg.get("value", 0)) / 1_000_000_000
-                        expected_amount = _ptx.amount_crypto or 0
-                        
-                        amount_match = abs(btx_amount_ton - expected_amount) < 0.0002
-                        
-                        utime = int(btx.get("utime", 0))
-                        btx_time = datetime.fromtimestamp(utime, UTC).replace(tzinfo=None)
-                        time_match = btx_time >= (_ptx.created_at - timedelta(seconds=60))
-                        
-                        if hash_match or (amount_match and time_match):
-                            logger.info(f"✅ Observer found match for PTX {_ptx.id} (Partner {_ptx.partner_id})")
+                        if _ptx.currency == "TON":
+                            in_msg = btx.get("in_msg", {})
+                            if not in_msg: continue
                             
-                            # Upgrade the user
-                            # We fetch the partner here to pass to the service
+                            btx_amount = int(in_msg.get("value", 0)) / 1_000_000_000
+                            expected_amount = _ptx.amount_crypto or 0
+                            
+                            # Amount match (0.0002 margin) + Time match (within 60s of PTX creation)
+                            amount_match = abs(btx_amount - expected_amount) < 0.0002
+                            utime = int(btx.get("utime", 0))
+                            btx_time = datetime.fromtimestamp(utime, UTC).replace(tzinfo=None)
+                            time_match = btx_time >= (_ptx.created_at - timedelta(seconds=60))
+                            
+                            if hash_match or (amount_match and time_match):
+                                btx_match = True
+                        
+                        elif _ptx.currency == "USDT":
+                            # Scan actions for JettonTransfer
+                            for action in btx.get("actions", []):
+                                if action.get("type") == "JettonTransfer":
+                                    details = action.get("JettonTransfer", {})
+                                    jetton_addr = details.get("jetton", {}).get("address", "")
+                                    
+                                    if jetton_addr.lower() == self.usdt_master.lower():
+                                        btx_amount = int(details.get("amount", 0)) / 1_000_000
+                                        expected_amount = _ptx.amount
+                                        
+                                        amount_match = abs(btx_amount - expected_amount) < 0.01
+                                        utime = int(btx.get("utime", 0))
+                                        btx_time = datetime.fromtimestamp(utime, UTC).replace(tzinfo=None)
+                                        time_match = btx_time >= (_ptx.created_at - timedelta(seconds=60))
+                                        
+                                        if hash_match or (amount_match and time_match):
+                                            btx_match = True
+                                            break
+
+                        if btx_match:
+                            logger.info(f"✅ Observer auto-detected match for PTX {_ptx.id} ({_ptx.currency})")
+                            
                             stmt_p = select(Partner).where(Partner.id == _ptx.partner_id)
                             res_p = await session.exec(stmt_p)
                             partner = res_p.first()
@@ -125,7 +149,8 @@ class TonVerificationService:
                                     transaction_id=_ptx.id
                                 )
                                 logger.info(f"🚀 Auto-upgraded Partner {partner.id} via Observer")
-                                break # Move to next pending transaction
+                                break # Move to next pending PTX
+
 
             except Exception as e:
                 logger.error(f"Observer loop error: {e}")
