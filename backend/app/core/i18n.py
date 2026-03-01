@@ -2,13 +2,14 @@
 MESSAGES = {
     "en": {
         "welcome": (
-            "💎 *Welcome, {name}!*\n\n"
-            "🔥 *Transition from consumer to architect.*\n\n"
-            "You are officially a *Core Partner*! You are early 🚀\n\n"
-            "You’ve just entered the *future of decentralized finance*. While others observe, you’re already building a sovereign legacy.\n\n"
-            "💰 *Earn XP. Grow your influence. Secure strategic rewards.*\n\n"
-            "🔗 *Your Personal Gateway:*\n`{referral_link}`\n\n"
-            "👇 *Tap below to start your journey*"
+            "🚀 *Welcome to ONEX, {name}!* 🚀\n\n"
+            "You have just entered the elite circle of the digital economy. While others wonder about the future, you are already building it.\n\n"
+            "💎 *Your Path to Sovereignty:*\n"
+            "• **Earn XP** through strategic actions\n"
+            "• **Scale your Network** to 20 levels deep\n"
+            "• **Unlock Premium Cards** for global freedom\n\n"
+            "🔗 *Your Personal Referral Gateway:*\n`{referral_link}`\n\n"
+            "👇 *Launch the ONEX ecosystem below*"
         ),
         "welcome_back": (
             "👋 *Welcome Back, {name}!*\n\n"
@@ -53,36 +54,36 @@ MESSAGES = {
             "You earned *+{reward} XP*.\n"
             "🌟 Your journey to the top continues!"
         ),
-        "share_text": "🚀 Join me on Pintopay and earn $1 per minute! Join the revolution in decentralized payments. 💎",
+        "share_text": "🚀 Join me on ONEX and build your financial legacy! The future of decentralized payments is here. 💎",
         "pro_welcome": (
-            "👑 *WELCOME TO THE CORE!* 👑\n\n"
-            "You have just unlocked the *Advanced Infrastructure* of the Pintopay Partner Network!\n\n"
-            "🚀 *Key Strategic Advantages:*\n"
-            "• *20-Level Network:* You now earn from every participant in your structure down to Level 20. The scaling potential is immense! 📈\n"
-            "• *X3 Fast XP:* Your professional progression is now hyper-accelerated. Reach top tiers with maximum efficiency.\n"
-            "• *Network Leadership:* You are now a recognized leader. Drive your community's growth and optimize your long-term rewards.\n\n"
-            "✨ *Your marketing influence is now significantly enhanced.* Build your sovereign legacy! 🏰"
+            "👑 *WELCOME TO THE ONEX CORE!* 👑\n\n"
+            "You have just unlocked the *Advanced Infrastructure* of the ONEX Network!\n\n"
+            "🚀 *Your Strategic Advantages:*\n"
+            "• *20-Level Empire:* Earn from every participant in your structure down to Level 20.\n"
+            "• *3x XP Acceleration:* Reach top tiers with maximum efficiency.\n"
+            "• *Leadership Status:* You are now a recognized architect of the network.\n\n"
+            "✨ *Your influence is now significantly enhanced. Build your legacy!* 🏰"
         ),
         "pro_plus_welcome": (
-            "👑 *WELCOME TO THE PRO+ EMPIRE!* 👑\n\n"
-            "You are PRO+ now! You have just unlocked the *Ultimate Infrastructure* of the Pintopay Partner Network!\n\n"
-            "🚀 *Key Strategic Advantages:*\n"
-            "• *20-Level Network:* You now earn from every participant in your structure down to Level 20. The maximum scaling potential!\n"
-            "• *X3 Fast XP & Priority AI:* Your professional progression is hyper-accelerated with our best tools.\n"
-            "• *Omni-Channel Sync & VIP Access:* Seamless multi-network management to dominate the market.\n\n"
-            "✨ *Your marketing influence is unstoppable.* Build your sovereign legacy! 🏰"
+            "👑 *WELCOME TO THE ONEX PRO+ EMPIRE!* 👑\n\n"
+            "You have unlocked the *Ultimate Infrastructure* of our ecosystem!\n\n"
+            "🚀 *Elite Strategic Advantages:*\n"
+            "• *Maximum Scale:* Full 20-level revenue sync enabled.\n"
+            "• *AI Priority:* Hyper-accelerated growth with our best tools.\n"
+            "• *VIP Omni-Channel:* Seamless management to dominate the market.\n\n"
+            "✨ *Your influence is unstoppable. Welcome to the top.* 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *MEGA ANNOUNCEMENT!* 🔥\n\n"
-            "I just went *PRO* on Pintopay Partner Network! 💎\n\n"
+            "I just went *PRO* on the ONEX Network! 💎\n\n"
             "I've unlocked *20 levels of affiliate commissions* and powerful network boosts. This is the absolute peak of decentralized networking.\n\n"
             "Don't stay on the sidelines while we build the future of payments. 🚀\n\n"
             "🔗 *Join my structure now:* {referral_link}"
         ),
         "pro_plus_viral_announcement": (
             "🚀 *THE EMPIRE HAS ARRIVED!* 🚀\n\n"
-            "I just upgraded to *PRO+ ELITE* status on Pintopay! 👑\n\n"
-            "I've unlocked the *Maximum Multiplier* (x100 performance), VIP AI Priority, and full 20-level revenue sync. This is not just a plan, it's a structural advantage. 🏰\n\n"
+            "I just upgraded to *PRO+ ELITE* status on ONEX! 👑\n\n"
+            "I've unlocked the *Maximum Multiplier*, VIP AI Priority, and full 20-level revenue sync. This is structural superiority. 🏰\n\n"
             "Ready to build at the highest level? My structure is open for architects. 💎\n\n"
             "🔗 *Secure your spot under me:* {referral_link}"
         ),
@@ -105,7 +106,7 @@ MESSAGES = {
         ),
         "viral_share_caption": (
             "🛑 EVOLVE BEYOND TRADITIONAL BANKING! \n"
-            "Join the Global Partner Network and achieve financial sovereignty. $1 Every Minute"
+            "Join the ONEX Global Partner Network and achieve financial sovereignty. 🚀"
         ),
         "pro_fomo_missed": (
             "🔒 *POTENTIAL REWARD MISSED!* 🔒\n\n"
@@ -152,9 +153,9 @@ MESSAGES = {
         "my_network_empty": "\n_You haven't invited anyone yet. Share your link to start earning!_",
         
         "support_intro": (
-            "🌟 *PINTOPAY CUSTOMER CARE*\n\n"
-            "How can we improve your experience today?\n"
-            "Select a category below for instant instructions and 5-star support."
+            "🌟 *ONEX CUSTOMER CARE*\n\n"
+            "How can we optimize your ecosystem today?\n"
+            "Select a category below for instant guidance and 5-star support from our expert team."
         ),
         "support_category_details": (
             "📍 *{category_name}*\n\n"
@@ -171,13 +172,13 @@ MESSAGES = {
         "cat_partner": "🤝 Partner Network & Earnings",
         "cat_safety": "🔒 Account Security & Safety",
         "cat_trading": "⚡ Trading & Transactions",
-        "cat_vip": "☎️ VIP Priority Support",
+        "powered_by": "Powered by ONEX Elite Support",
         "cat_general": "General",
         
         "already_pro": "✅ You are already a PRO member! Enjoy your benefits.",
         "upgrade_pro_details": (
             "👑 *UPGRADE TO PRO*\n\n"
-            "Unlock the full potential of Pintopay:\n"
+            "Unlock the full potential of ONEX:\n"
             "• 20-Level Empire System\n"
             "• Fast XP Boost (up to 3x)\n"
             "• Priority Payouts\n"
@@ -211,7 +212,7 @@ MESSAGES = {
         "btn_share_link": "📲 Share Link (Immediate)",
         "btn_send_card": "💎 Send Premium Card",
         "btn_join_community": "📢 Join Community",
-        "btn_super_app": "💎 Pintopay Super App",
+        "btn_super_app": "💎 ONEX Ecosystem",
         "btn_pay_ton": "💎 Pay {amount} TON",
         "btn_verify_payment": "✅ Verify Payment",
         "btn_cancel": "❌ Cancel",
@@ -225,17 +226,40 @@ MESSAGES = {
         "btn_sup_trading": "⚡ Trading",
         "btn_sup_vip": "☎️ VIP VIP",
         "btn_try_again": "🔄 Try Again",
-        "you": "You"
+        "you": "You",
+
+        # Onboarding & Verification
+        "onboarding_welcome": "🌟 *Welcome to the ONEX Matrix!* 🌟\n\nTo unlock the full potential of our elite decentralized ecosystem, we need to verify your digital identity.\n\nThis is a one-time process to ensure the security of your global settlements.",
+        "onboarding_info_text": "💎 *Why Verify?*\n\n1. **High Limits**: Move capital without restrictions.\n2. **Card Access**: Order virtual and physical ONEX Mastercards.\n3. **Network Rewards**: Unlock 20 levels of affiliate revenue.\n\nChoose your verification method below.",
+        "verification_start": "📝 *Digital Identity Verification*\n\nPlease choose a verification method. For testing purposes, you can use the **Test Verify** option.",
+        "verification_success": "✅ *Verification Complete!*\n\nWelcome, Architect. Your identity is now synced with the ONEX Network. You have full access to our financial instruments.",
+        "prompt_phone": "📱 Please share your phone number using the button below to verify your account.",
+        "prompt_passport": "🛂 Please upload a clear photo of your Passport or ID card for verification.",
+        "processing_verification": "⏳ *Processing your data...* This usually takes 5-10 minutes. We will notify you once approved.",
+
+        # Main Menu Buttons
+        "btn_verify_now": "🚀 Verify Now",
+        "btn_learn_more": "🔍 Learn More",
+        "btn_verify_phone": "📱 Verify Phone",
+        "btn_verify_passport": "🛂 Verify Passport",
+        "btn_test_verify": "🛠️ Test Verify (Dev)",
+        "btn_menu_profile": "👤 Profile",
+        "btn_menu_balance": "💰 Balance",
+        "btn_menu_topup": "💳 Top-up",
+        "btn_menu_payout": "💸 Payout",
+        "btn_menu_purchase": "🔄 Purchase",
+        "btn_menu_history": "📊 History"
     },
     "ru": {
         "welcome": (
-            "💎 *Добро пожаловать, {name}!*\n\n"
-            "🔥 *Путь от пользователя к архитектору экосистемы.*\n\n"
-            "Вы официально — *Ключевой Партнер*! Вы в числе первых 🚀\n\n"
-            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие наблюдают, вы уже строите свое суверенное наследие.\n\n"
-            "💰 *Зарабатывайте XP. Растите влияние. Создавайте стратегические активы.*\n\n"
+            "🚀 *Добро пожаловать в ONEX, {name}!* 🚀\n\n"
+            "Вы вошли в элитный круг цифровой экономики. Пока другие гадают о будущем, вы уже строите его.\n\n"
+            "💎 *Ваш путь к суверенитету:*\n"
+            "• **Зарабатывайте XP** через стратегические действия\n"
+            "• **Масштабируйте сеть** до 20 уровней в глубину\n"
+            "• **Карты Premium** для глобальной свободы\n\n"
             "🔗 *Ваш персональный вход:*\n`{referral_link}`\n\n"
-            "👇 *Нажмите ниже, чтобы начать путь*"
+            "👇 *Запустите экосистему ONEX ниже*"
         ),
         "welcome_back": (
             "👋 *С возвращением, {name}!*\n\n"
@@ -280,36 +304,36 @@ MESSAGES = {
             "Вы получили *+{reward} XP*.\n"
             "🌟 Ваш путь к вершине продолжается!"
         ),
-        "share_text": "🚀 Присоединяйся ко мне в Pintopay и зарабатывай $1 в минуту! Стань частью революции децентрализованных платежей. 💎",
+        "share_text": "🚀 Присоединяйся ко мне в ONEX и строй свое финансовое наследие! Будущее децентрализованных платежей уже здесь. 💎",
         "pro_welcome": (
-            "👑 *ДОБРО ПОЖАЛОВАТЬ В ЭЛИТУ!* 👑\n\n"
-            "Вы только что открыли *Полную Мощь* партнерской сети Pintopay!\n\n"
-            "🚀 *Почему это меняет правила игры для вас:*\n"
-            "• *Сеть до 20 уровней:* Теперь вы зарабатываете с каждого человека в вашей структуре до 20-го уровня. Масштаб просто сумасшедший! 📈\n"
-            "• *X3 Быстрый XP:* Ваша прогрессия ускорена. Достигайте топовых рангов быстрее всех остальных.\n"
-            "• *Лидерство:* Вы теперь лидер. Помогайте своей команде расти и наблюдайте, как ваш пассивный доход взлетает.\n\n"
-            "✨ *Ваши маркетинговые усилия стали в 10 раз сильнее.* Идите и стройте свою империю! 🏰"
+            "👑 *ДОБРО ПОЖАЛОВАТЬ В ЯДРО ONEX!* 👑\n\n"
+            "Вы только что открыли *Продвинутую Инфраструктуру* сети ONEX!\n\n"
+            "🚀 *Ваши стратегические преимущества:*\n"
+            "• *Империя 20 уровней:* Доход с каждого участника вашей структуры до 20 уровня.\n"
+            "• *X3 Ускорение XP:* Достигайте топовых рангов с максимальной эффективностью.\n"
+            "• *Статус Лидера:* Теперь вы признанный архитектор сети.\n\n"
+            "✨ *Ваше влияние теперь на новом уровне. Стройте свое наследие!* 🏰"
         ),
         "pro_plus_welcome": (
-            "👑 *ДОБРО ПОЖАЛОВАТЬ В ИМПЕРИЮ PRO+!* 👑\n\n"
-            "Теперь вы PRO+! Вы только что открыли *Ультимативную Инфраструктуру* партнерской сети Pintopay!\n\n"
-            "🚀 *Стратегические преимущества:*\n"
-            "• *Сеть 20 уровней:* Максимальный масштаб монетизации с каждого участника!\n"
-            "• *X3 Быстрый XP & Priority AI:* Ваш рост турбирован лучшими инструментами сети.\n"
-            "• *Омни-канальность & VIP:* Бесшовное управление для доминирования на рынке.\n\n"
-            "✨ *Ваше влияние неудержимо.* Стройте свою империю! 🏰"
+            "👑 *ДОБРО ПОЖАЛОВАТЬ В ИМПЕРИЮ ONEX PRO+!* 👑\n\n"
+            "Теперь вы PRO+! Вы открыли *Ультимативную Инфраструктуру* нашей экосистемы!\n\n"
+            "🚀 *Элитные преимущества:*\n"
+            "• *Максимальный Масштаб:* Полная синхронизация дохода на 20 уровней.\n"
+            "• *Приоритетный AI:* Гипер-ускоренный рост с нашими лучшими инструментами.\n"
+            "• *VIP Омни-канал:* Бесшовное управление для доминирования на рынке.\n\n"
+            "✨ *Ваше влияние неудержимо. Добро пожаловать на вершину.* 🏰"
         ),
         "pro_viral_announcement": (
             "🔥 *МЕГА АНОНС!* 🔥\n\n"
-            "Я только что стал *PRO* в партнерской сети Pintopay! 💎\n\n"
-            "Я открыл *20 уровней партнерских комиссий* и мощные бонусы для сети. Это абсолютный пик децентрализованного нетворкинга.\n\n"
+            "Я только что стал *PRO* в сети ONEX! 💎\n\n"
+            "Я открыл *20 уровней партнерских комиссий* и мощные бонусы. Это абсолютный пик децентрализованного нетворкинга.\n\n"
             "Не оставайся в стороне, пока мы строим будущее платежей. 🚀\n\n"
             "🔗 *Присоединяйся к моей структуре:* {referral_link}"
         ),
         "pro_plus_viral_announcement": (
             "🚀 *ИМПЕРИЯ ПРИБЫЛА!* 🚀\n\n"
-            "Я только что перешел на статус *PRO+ ELITE* в Pintopay! 👑\n\n"
-            "Я разблокировал *Максимальный Множитель* (x100 перформанс), VIP AI приоритет и полную синхронизацию дохода на 20 уровней. Это не просто план, это структурное преимущество. 🏰\n\n"
+            "Я только что перешел на статус *PRO+ ELITE* в ONEX! 👑\n\n"
+            "Я разблокировал *Максимальный Множитель*, VIP AI приоритет и полную синхронизацию дохода. Это структурное превосходство. 🏰\n\n"
             "Готов строить на высшем уровне? Моя структура открыта для архитекторов. 💎\n\n"
             "🔗 *Займи свое место под моим началом:* {referral_link}"
         ),
@@ -332,7 +356,7 @@ MESSAGES = {
         ),
         "viral_share_caption": (
             "🛑 ЭВОЛЮЦИЯ ВНЕ ТРАДИЦИОННОГО БАНКИНГА! 🛑\n"
-            "Присоединяйся к Глобальной Сети и достигни финансового суверенитета. $1 в минуту. 🚀"
+            "Присоединяйся к Глобальной Сети ONEX и достигни финансового суверенитета. 🚀"
         ),
         "pro_fomo_missed": (
             "🔒 *УПУЩЕНО ВОЗНАГРАЖДЕНИЕ!* 🔒\n\n"
@@ -379,9 +403,9 @@ MESSAGES = {
         "my_network_empty": "\n_Вы еще никого не пригласили. Поделитесь ссылкой, чтобы начать зарабатывать!_",
         
         "support_intro": (
-            "🌟 *СЛУЖБА ЗАБОТЫ PINTOPAY*\n\n"
-            "Как мы можем улучшить ваш опыт сегодня?\n"
-            "Выберите категорию ниже для получения мгновенных инструкций и поддержки 5 звезд."
+            "🌟 *СЛУЖБА ЗАБОТЫ ONEX*\n\n"
+            "Как мы можем оптимизировать ваш опыт сегодня?\n"
+            "Выберите категорию ниже для получения мгновенных инструкций и поддержки 5 звезд от нашей экспертной команды."
         ),
         "support_category_details": (
             "📍 *{category_name}*\n\n"
@@ -404,7 +428,7 @@ MESSAGES = {
         "already_pro": "✅ Вы уже PRO участник! Наслаждайтесь преимуществами.",
         "upgrade_pro_details": (
             "👑 *АПГРЕЙД ДО PRO*\n\n"
-            "Откройте полный потенциал Pintopay:\n"
+            "Откройте полный потенциал ONEX:\n"
             "• 20-Уровневая Империя\n"
             "• Быстрый XP Буст (до x3)\n"
             "• Приоритетные Выплаты\n"
@@ -438,7 +462,7 @@ MESSAGES = {
         "btn_share_link": "📲 Поделиться (Моментально)",
         "btn_send_card": "💎 Отправить Премиум Карту",
         "btn_join_community": "📢 Вступить в Сообщество",
-        "btn_super_app": "💎 Pintopay Супер Апп",
+        "btn_super_app": "💎 Экосистема ONEX",
         "btn_pay_ton": "💎 Оплатить {amount} TON",
         "btn_verify_payment": "✅ Проверить Платеж",
         "btn_cancel": "❌ Отмена",
@@ -452,7 +476,29 @@ MESSAGES = {
         "btn_sup_trading": "⚡ Трейдинг",
         "btn_sup_vip": "☎️ VIP Доступ",
         "btn_try_again": "🔄 Попробовать Снова",
-        "you": "Ты"
+        "you": "Ты",
+
+        # Onboarding & Verification (Russian)
+        "onboarding_welcome": "🌟 *Добро пожаловать в Матрицу ONEX!* 🌟\n\nЧтобы раскрыть полный потенциал нашей элитной децентрализованной экосистемы, нам нужно верифицировать вашу цифровую личность.\n\nЭто разовый процесс для обеспечения безопасности ваших глобальных расчетов.",
+        "onboarding_info_text": "💎 *Зачем нужна верификация?*\n\n1. **Высокие лимиты**: Перемещайте капитал без ограничений.\n2. **Доступ к картам**: Заказывайте виртуальные и физические карты ONEX Mastercard.\n3. **Сетевые награды**: Откройте 20 уровней партнерского дохода.\n\nВыберите метод верификации ниже.",
+        "verification_start": "📝 *Верификация Цифровой Личности*\n\nПожалуйста, выберите метод верификации. Для целей тестирования вы можете использовать опцию **Тестовая верификация**.",
+        "verification_success": "✅ *Верификация завершена!*\n\nДобро пожаловать, Архитектор. Ваша личность синхронизирована с сетью ONEX. У вас есть полный доступ к нашим финансовым инструментам.",
+        "prompt_phone": "📱 Пожалуйста, поделитесь своим номером телефона, используя кнопку ниже, чтобы подтвердить ваш аккаунт.",
+        "prompt_passport": "🛂 Пожалуйста, загрузите четкое фото вашего паспорта или удостоверения личности для верификации.",
+        "processing_verification": "⏳ *Обработка ваших данных...* Обычно это занимает 5-10 минут. Мы уведомим вас после одобрения.",
+
+        # Main Menu Buttons (Russian)
+        "btn_verify_now": "🚀 Пройти верификацию",
+        "btn_learn_more": "🔍 Узнать больше",
+        "btn_verify_phone": "📱 Верификация телефона",
+        "btn_verify_passport": "🛂 Верификация паспорта",
+        "btn_test_verify": "🛠️ Тест верификация (Dev)",
+        "btn_menu_profile": "👤 Профиль",
+        "btn_menu_balance": "💰 Баланс",
+        "btn_menu_topup": "💳 Пополнение",
+        "btn_menu_payout": "💸 Вывод",
+        "btn_menu_purchase": "🔄 Покупка",
+        "btn_menu_history": "📊 История"
     }
 }
 

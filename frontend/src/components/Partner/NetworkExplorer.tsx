@@ -116,19 +116,24 @@ const NetworkMemberRow = memo(({ member, index, t, onSelect }: NetworkMemberRowP
                             @{member.username}
                         </a>
                     )}
-                    <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter">
-                        • {t('network.explorer.joined_date', { date: new Date(member.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) })}
+                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-tighter whitespace-nowrap">
+                        • {t('network.explorer.joined_date', {
+                            date: new Date(member.created_at).toLocaleDateString('ru-RU', {
+                                day: '2-digit',
+                                month: '2-digit'
+                            })
+                        })}
                     </span>
                 </div>
             </div>
 
-            <div className="text-right flex flex-col items-end">
-                <div className="text-label font-bold text-blue-600 dark:text-blue-400 tabular-nums">
+            <div className="text-right flex flex-col items-end shrink-0 pl-2">
+                <div className="text-xs font-bold text-blue-600 dark:text-blue-400 tabular-nums leading-none mb-1">
                     {member.xp.toLocaleString()} XP
                 </div>
-                <div className="flex items-center gap-1 mt-0.5">
+                <div className="flex items-center gap-1">
                     <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                    <span className="text-label font-bold text-emerald-500/80 uppercase">{t('network.explorer.active_status')}</span>
+                    <span className="text-[10px] font-bold text-emerald-500/90 uppercase whitespace-nowrap leading-none">{t('network.explorer.active_status')}</span>
                 </div>
             </div>
             <div className="absolute right-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 rounded-r-full transition-opacity" />
@@ -331,7 +336,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             <button
                                 onClick={() => { impact('medium'); setIsGlobalMode(!isGlobalMode); setLevel(1); }}
                                 className={cn(
-                                    "px-2 py-1 rounded-lg text-label font-bold uppercase transition-all border",
+                                    "px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase transition-all border outline-none",
                                     isGlobalMode
                                         ? "bg-amber-500/10 border-amber-500/20 text-amber-500"
                                         : "bg-slate-100 dark:bg-white/5 border-transparent text-slate-400"

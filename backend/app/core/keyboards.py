@@ -73,3 +73,53 @@ def get_support_keyboard(lang: str = "en"):
         builder.row(*row)
     
     return builder.as_markup()
+
+def get_onboarding_keyboard(lang: str = "en"):
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(
+        text=get_msg(lang, "btn_verify_now"),
+        callback_data="start_verification"
+    ))
+    builder.row(types.InlineKeyboardButton(
+        text=get_msg(lang, "btn_learn_more"),
+        callback_data="onboarding_info"
+    ))
+    return builder.as_markup()
+
+def get_verification_keyboard(lang: str = "en"):
+    builder = InlineKeyboardBuilder()
+    builder.row(types.InlineKeyboardButton(
+        text=get_msg(lang, "btn_verify_phone"),
+        callback_data="verify_phone"
+    ))
+    builder.row(types.InlineKeyboardButton(
+        text=get_msg(lang, "btn_verify_passport"),
+        callback_data="verify_passport"
+    ))
+    # Test Environment Bypass
+    builder.row(types.InlineKeyboardButton(
+        text=get_msg(lang, "btn_test_verify"),
+        callback_data="test_verify_bypass"
+    ))
+    return builder.as_markup()
+
+def get_main_active_menu_keyboard(lang: str = "en"):
+    # Using ReplyKeyboardMarkup for persistent presence
+    kb = [
+        [
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_profile")),
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_balance"))
+        ],
+        [
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_topup")),
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_payout"))
+        ],
+        [
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_purchase")),
+            types.KeyboardButton(text=get_msg(lang, "btn_menu_history"))
+        ],
+        [
+            types.KeyboardButton(text=get_msg(lang, "btn_open_app")) # Keeping Mini App access e.g. for TMA
+        ]
+    ]
+    return types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)

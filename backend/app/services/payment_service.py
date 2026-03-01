@@ -252,22 +252,38 @@ class PaymentService:
                 logger.warning(f"🚨 FRAUD ATTEMPT: Partner {partner.id} tried to use USDT Hash {tx_hash} already used by {existing.partner_id}")
                 return False
 
-        # 2. Find the most recent pending USDT transaction for this partner on this network
-        thirty_mins_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(minutes=30)
+        # 2. Find the most recent pending USDT transaction for this partner on this network.
+        # We look back 2 hours to support users who created a session earlier.
+        two_hours_ago = datetime.now(UTC).replace(tzinfo=None) - timedelta(hours=2)
         stmt_session = select(PartnerTransaction).where(
             PartnerTransaction.partner_id == partner.id,
             PartnerTransaction.status.in_(["pending", "manual_review"]),
             PartnerTransaction.currency == "USDT",
             PartnerTransaction.network == network,
-            PartnerTransaction.created_at >= thirty_mins_ago
+            PartnerTransaction.created_at >= two_hours_ago
         ).order_by(PartnerTransaction.created_at.desc())
 
         res_session = await session.exec(stmt_session.with_for_update())
         active_session = res_session.first()
 
         if not active_session:
-            logger.warning(f"No active USDT/{network} session found for partner {partner.id}")
-            return False
+            # No session found. Create an ad-hoc one so users who paid directly
+            # (without going through the in-app payment flow) can still be auto-verified.
+            # Default to PRO+ price; the blockchain verification will confirm the actual amount.
+            logger.info(
+                f"No active USDT/{network} session for partner {partner.id}. "
+                "Creating ad-hoc session to allow direct-payment verification."
+            )
+            active_session = PartnerTransaction(
+                partner_id=partner.id,
+                amount=settings.PRO_PLUS_PRICE_USD,
+                amount_crypto=settings.PRO_PLUS_PRICE_USD,  # 1:1 for USDT
+                currency="USDT",
+                network=network,
+                status="pending"
+            )
+            session.add(active_session)
+            await session.flush()  # Get the ID without committing
 
         expected_usdt = active_session.amount
 

@@ -9,6 +9,8 @@ import sentry_sdk
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import Command, CommandStart
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 
 from app.core.config import settings
 from app.core.i18n import get_msg
@@ -40,99 +42,169 @@ async def sentry_middleware(handler, event, data):
     return await handler(event, data)
 
 
-@dp.message(CommandStart())
-async def cmd_start(message: types.Message):
-    logging.info(f"📥 Received /start command from user {message.from_user.id} (@{message.from_user.username})")
+class OnboardingStates(StatesGroup):
+    waiting_for_onboarding = State()
+    waiting_for_verification_method = State()
+    waiting_for_phone = State()
+    waiting_for_passport = State()
 
-    from app.core.keyboards import get_main_menu_keyboard
+
+@dp.message(CommandStart())
+async def cmd_start(message: types.Message, state: FSMContext):
+    logging.info(f"📥 Received /start command from user {message.from_user.id}")
+
+    from app.core.keyboards import get_main_menu_keyboard, get_onboarding_keyboard, get_main_active_menu_keyboard
     from app.services.partner_service import create_partner, get_partner_by_telegram_id
 
-    # Extract referral code from /start link if any
+    # Extract referral code
     referrer_code = None
     args = message.text.split()
     if len(args) > 1:
         referrer_code = args[1]
-        logging.info(f"User {message.from_user.id} joined with referral code: {referrer_code}")
 
-    # Capture language from telegram user (Default)
-    tg_lang = message.from_user.language_code or "en"
-    if tg_lang not in ["en", "ru"]:
-        tg_lang = "en"
-    
-    # Init lang with default
-    lang = tg_lang
-
-    # Fetch user profile photo file_id
-    photo_file_id = None
-    try:
-        user_photos = await bot.get_user_profile_photos(message.from_user.id, limit=1)
-        if user_photos.total_count > 0:
-            # Store the file_id which we can use to fetch the photo anytime
-            photo_file_id = user_photos.photos[0][0].file_id
-            logging.info(f"✅ Captured photo file_id for user {message.from_user.id}")
-    except Exception as e:
-        logging.error(f"❌ Error fetching profile photo: {e}")
+    lang = message.from_user.language_code if message.from_user.language_code in ["en", "ru"] else "en"
 
     try:
         async for session in get_session():
-            # Check for existing partner to respect their chosen language
-            existing_partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
-            if existing_partner and existing_partner.language_code:
-                lang = existing_partner.language_code
-                request_lang = lang # We still pass this to create_partner to potentially update other fields
-            else:
-                request_lang = tg_lang
-
-            # Get or create partner
-            # Note: create_partner handles updates if they exist
             partner, is_new = await create_partner(
                 session=session,
                 telegram_id=str(message.from_user.id),
                 username=message.from_user.username,
                 first_name=message.from_user.first_name,
                 last_name=message.from_user.last_name,
-                language_code=request_lang, 
-                referrer_code=referrer_code,
-                photo_file_id=photo_file_id
+                language_code=lang, 
+                referrer_code=referrer_code
             )
             
-            # If it's an existing partner, ensure we use their stored preference (in case create_partner logic overrode it with request_lang)
-            if not is_new and partner.language_code:
-                lang = partner.language_code
+            lang = partner.language_code or lang
 
-            # Personal referral link
-            bot_info = await bot.get_me()
-            referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
-            
-            # Localized messaging
-            share_text = get_msg(lang, "share_text")
-            # Construct direct sharing URL
-            share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
-            
-            # Always show the informative welcome message
-            full_name = f"{partner.first_name or ''} {partner.last_name or ''}".strip() or "Partner"
-            welcome_text = get_msg(lang, "welcome", name=full_name, referral_link=referral_link)
-            
-            if is_new:
-                logging.info(f"✨ New partner registered: {partner.id}")
-            else:
-                logging.info(f"👋 Returning partner: {partner.id}")
-                # Resumed after block - check if notifications were paused
-                if getattr(partner, "notifications_paused", False):
-                    partner.notifications_paused = False
-                    session.add(partner)
-                    await session.commit()
-                    from app.services.rate_limit_service import rate_limit_service
-                    await rate_limit_service.unmark_user_blocked(int(message.from_user.id))
-                    logging.info(f"🔓 Resumed notifications for partner {partner.id}")
+            # If user is verified, show main menu immediately
+            if partner.is_verified:
+                await message.answer(
+                    get_msg(lang, "welcome_back", name=partner.first_name or "Partner"),
+                    reply_markup=get_main_active_menu_keyboard(lang)
+                )
+                return
 
-            await message.answer(
-                welcome_text,
-                parse_mode="Markdown",
-                reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code, lang=lang)
-            )
+            # Otherwise, start onboarding
+            welcome_image_path = "/Users/grandmaestro/Developer/ONEX /3D иллюстрации/иллюстрация.png"
+            try:
+                from aiogram.types import FSInputFile
+                photo = FSInputFile(welcome_image_path)
+                await message.answer_photo(
+                    photo=photo,
+                    caption=get_msg(lang, "onboarding_welcome"),
+                    parse_mode="Markdown",
+                    reply_markup=get_onboarding_keyboard(lang)
+                )
+            except Exception:
+                await message.answer(
+                    get_msg(lang, "onboarding_welcome"),
+                    parse_mode="Markdown",
+                    reply_markup=get_onboarding_keyboard(lang)
+                )
+            
+            await state.set_state(OnboardingStates.waiting_for_onboarding)
+            break
+    except Exception as e:
+        logging.error(f"Error in cmd_start: {e}")
+        await message.answer(f"⚠️ Error: {e!s}")
 
-            break # We only need one session
+@dp.callback_query(F.data == "onboarding_info")
+async def process_onboarding_info(callback: types.CallbackQuery, state: FSMContext):
+    lang = callback.from_user.language_code if callback.from_user.language_code in ["en", "ru"] else "en"
+    from app.core.keyboards import get_onboarding_keyboard
+    await callback.message.edit_caption(
+        caption=get_msg(lang, "onboarding_info_text"),
+        reply_markup=get_onboarding_keyboard(lang)
+    )
+    await callback.answer()
+
+@dp.callback_query(F.data == "start_verification")
+async def process_start_verification(callback: types.CallbackQuery, state: FSMContext):
+    lang = callback.from_user.language_code if callback.from_user.language_code in ["en", "ru"] else "en"
+    from app.core.keyboards import get_verification_keyboard
+    await callback.message.edit_caption(
+        caption=get_msg(lang, "verification_start"),
+        reply_markup=get_verification_keyboard(lang)
+    )
+    await state.set_state(OnboardingStates.waiting_for_verification_method)
+    await callback.answer()
+
+@dp.callback_query(F.data == "verify_phone")
+async def process_verify_phone(callback: types.CallbackQuery, state: FSMContext):
+    lang = callback.from_user.language_code if callback.from_user.language_code in ["en", "ru"] else "en"
+    kb = types.ReplyKeyboardMarkup(
+        keyboard=[[types.KeyboardButton(text=get_msg(lang, "btn_verify_phone"), request_contact=True)]],
+        resize_keyboard=True,
+        one_time_keyboard=True
+    )
+    await callback.message.answer(get_msg(lang, "prompt_phone"), reply_markup=kb)
+    await state.set_state(OnboardingStates.waiting_for_phone)
+    await callback.answer()
+
+@dp.callback_query(F.data == "verify_passport")
+async def process_verify_passport(callback: types.CallbackQuery, state: FSMContext):
+    lang = callback.from_user.language_code if callback.from_user.language_code in ["en", "ru"] else "en"
+    await callback.message.answer(get_msg(lang, "prompt_passport"))
+    await state.set_state(OnboardingStates.waiting_for_passport)
+    await callback.answer()
+
+@dp.callback_query(F.data == "test_verify_bypass")
+async def process_test_verify(callback: types.CallbackQuery, state: FSMContext):
+    lang = callback.from_user.language_code if callback.from_user.language_code in ["en", "ru"] else "en"
+    from app.core.keyboards import get_main_active_menu_keyboard
+    from app.services.partner_service import get_partner_by_telegram_id
+
+    async for session in get_session():
+        partner = await get_partner_by_telegram_id(session, str(callback.from_user.id))
+        if partner:
+            partner.is_verified = True
+            session.add(partner)
+            await session.commit()
+            
+            await callback.message.answer(get_msg(lang, "verification_success"), reply_markup=get_main_active_menu_keyboard(lang))
+            await state.clear()
+        break
+    await callback.answer()
+
+@dp.message(OnboardingStates.waiting_for_phone, F.contact)
+async def handle_contact(message: types.Message, state: FSMContext):
+    lang = message.from_user.language_code if message.from_user.language_code in ["en", "ru"] else "en"
+    from app.core.keyboards import get_main_active_menu_keyboard
+    from app.services.partner_service import get_partner_by_telegram_id
+
+    async for session in get_session():
+        partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+        if partner:
+            partner.is_verified = True
+            # In real system, we might store the phone
+            session.add(partner)
+            await session.commit()
+            
+            await message.answer(get_msg(lang, "verification_success"), reply_markup=get_main_active_menu_keyboard(lang))
+            await state.clear()
+        break
+
+@dp.message(OnboardingStates.waiting_for_passport, F.photo)
+async def handle_passport_photo(message: types.Message, state: FSMContext):
+    lang = message.from_user.language_code if message.from_user.language_code in ["en", "ru"] else "en"
+    from app.core.keyboards import get_main_active_menu_keyboard
+    from app.services.partner_service import get_partner_by_telegram_id
+
+    await message.answer(get_msg(lang, "processing_verification"))
+    
+    # Simulate approval after short delay or just approve immediately for testing
+    async for session in get_session():
+        partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+        if partner:
+            partner.is_verified = True
+            session.add(partner)
+            await session.commit()
+            
+            await message.answer(get_msg(lang, "verification_success"), reply_markup=get_main_active_menu_keyboard(lang))
+            await state.clear()
+        break
     except Exception as e:
         logging.error(f"Error in cmd_start: {e}")
         sentry_sdk.capture_exception(e)
@@ -255,6 +327,37 @@ async def inline_handler(inline_query: types.InlineQuery):
         with contextlib.suppress(Exception):
             await inline_query.answer([], is_personal=True, cache_time=0)
 
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_profile"), get_msg("ru", "btn_menu_profile")]))
+async def menu_profile(message: types.Message):
+    # Reuse existing /profile logic or commands
+    await message.answer("👤 *Profile Section*\n\nYour advanced stats are available in the Mini App.", parse_mode="Markdown")
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_balance"), get_msg("ru", "btn_menu_balance")]))
+async def menu_balance(message: types.Message):
+    from app.services.partner_service import get_partner_by_telegram_id
+    async for session in get_session():
+        partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+        if partner:
+            lang = partner.language_code or "en"
+            await message.answer(f"💰 *Your Balance*\n\nAvailable: `{partner.balance}` USDT\nXP Score: `{partner.xp}`", parse_mode="Markdown")
+        break
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_topup"), get_msg("ru", "btn_menu_topup")]))
+async def menu_topup(message: types.Message):
+    await message.answer("💳 *Deposit Funds*\n\nChoose your network in the Mini App to generate a deposit address.", parse_mode="Markdown")
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_payout"), get_msg("ru", "btn_menu_payout")]))
+async def menu_payout(message: types.Message):
+    await message.answer("💸 *Withdraw Funds*\n\nMinimum payout is 10 USDT. Manage your withdrawals in the Finance tab.", parse_mode="Markdown")
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_purchase"), get_msg("ru", "btn_menu_purchase")]))
+async def menu_purchase(message: types.Message):
+    await message.answer("🔄 *Exchange & Purchase*\n\nSwap your assets or buy gift cards and vouchers instantly.", parse_mode="Markdown")
+
+@dp.message(F.text.in_([get_msg("en", "btn_menu_history"), get_msg("ru", "btn_menu_history")]))
+async def menu_history(message: types.Message):
+    await message.answer("📊 *Transaction History*\n\nView your full audit trail in the History section of the app.", parse_mode="Markdown")
 
 @dp.message(Command("support", "care", "help"))
 async def cmd_support(message: types.Message):

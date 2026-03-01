@@ -53,7 +53,7 @@ export const Footer = () => {
                     </h5>
                     <p className="text-label leading-relaxed text-slate-500 dark:text-slate-400 font-medium">
                         <Trans i18nKey="legal.disclaimer_desc">
-                            We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to Pintopay.
+                            We are a community of digital nomads and online entrepreneurs who search for global trends. We act as a <span className="text-slate-900 dark:text-white font-bold">Third-Party Ambassador Agency</span> and do not have an official corporate connection to ONEX.
                         </Trans>
                     </p>
 

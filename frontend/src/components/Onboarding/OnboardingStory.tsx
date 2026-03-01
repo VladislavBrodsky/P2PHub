@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, Zap, Target, Shield, Rocket } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
@@ -11,10 +11,10 @@ interface OnboardingStoryProps {
 }
 
 const STORIES_LIST = [
-    { key: '0', icon: <Zap className="w-12 h-12 text-yellow-400" />, color: 'from-blue-600 to-indigo-600' },
-    { key: '1', icon: <Target className="w-12 h-12 text-emerald-400" />, color: 'from-emerald-600 to-teal-600' },
-    { key: '2', icon: <Shield className="w-12 h-12 text-blue-400" />, color: 'from-indigo-600 to-purple-600' },
-    { key: '3', icon: <Rocket className="w-12 h-12 text-rose-400" />, color: 'from-rose-600 to-pink-600' }
+    { key: '0', image: '/images/onex/welcome.png', color: 'from-[#0A0F1E] to-[#1A2B5A]' },
+    { key: '1', image: '/images/onex/globe.png', color: 'from-[#1A2B5A] to-[#0A1E3C]' },
+    { key: '2', image: '/images/onex/profile.png', color: 'from-[#0A1E3C] to-[#1E0A3C]' },
+    { key: '3', image: '/images/onex/card.png', color: 'from-[#1E0A3C] to-[#0A0F1E]' }
 ];
 
 export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
@@ -62,7 +62,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
             {showSystemLink ? (
                 <SystemLink key="system-link" onComplete={() => setShowSystemLink(false)} />
             ) : (
-                <motion.div
+                <m.div
                     key="onboarding-main"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -72,7 +72,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                     style={{ overscrollBehavior: 'none' }}
                 >
                     {/* Smooth Dynamic Background */}
-                    <motion.div
+                    <m.div
                         className={`absolute inset-0 bg-linear-to-br transition-colors duration-1000 ${currentStory.color}`}
                         initial={false}
                         animate={{ opacity: 1 }}
@@ -83,7 +83,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                         <div className="absolute left-6 right-6 flex gap-1.5 z-30" style={{ top: 'calc(env(safe-area-inset-top) + 2rem)' }}>
                             {STORIES_LIST.map((_, i) => (
                                 <div key={i} className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden">
-                                    <motion.div
+                                    <m.div
                                         initial={{ width: 0 }}
                                         animate={{ width: i < index ? '100%' : i === index ? '100%' : '0%' }}
                                         transition={{ duration: i === index ? 5 : 0, ease: 'linear' }}
@@ -105,7 +105,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
 
                         {/* Animated Content Layer */}
                         <AnimatePresence mode="wait">
-                            <motion.div
+                            <m.div
                                 key={index}
                                 initial={{ opacity: 0, y: 10, filter: 'blur(10px)' }}
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -114,24 +114,36 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                 className="absolute inset-0 flex flex-col items-center justify-center p-8 pt-[calc(env(safe-area-inset-top)+6rem)] pb-[calc(env(safe-area-inset-bottom)+8rem)] will-change-[transform,filter,opacity]"
                             >
                                 <div className="relative z-10 text-center space-y-8 max-w-sm w-full h-full flex flex-col justify-center">
-                                    <motion.div
-                                        initial={{ scale: 0.8, rotate: -10 }}
-                                        animate={{ scale: 1, rotate: 0 }}
-                                        className="w-24 h-24 bg-white/10 backdrop-blur-2xl rounded-2xl border border-white/20 flex items-center justify-center mx-auto shadow-2xl shadow-black/20"
+                                    <m.div
+                                        animate={{
+                                            y: [-10, 10, -10],
+                                            rotate: [-1, 1, -1]
+                                        }}
+                                        transition={{
+                                            duration: 6,
+                                            repeat: Infinity,
+                                            ease: "easeInOut"
+                                        }}
+                                        className="relative w-64 h-64 mx-auto perspective-1000"
                                     >
-                                        {currentStory.icon}
-                                    </motion.div>
+                                        <div className="absolute inset-0 bg-blue-500/20 blur-[60px] rounded-full animate-pulse" />
+                                        <img
+                                            src={currentStory.image}
+                                            alt="Onboarding Visual"
+                                            className="w-full h-full object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                                        />
+                                    </m.div>
 
-                                    <div className="space-y-4">
-                                        <h2 className="text-4xl font-bold text-white tracking-tighter">
+                                    <div className="space-y-4 relative z-10">
+                                        <h2 className="text-4xl font-black text-white tracking-tighter leading-none bg-clip-text text-transparent bg-linear-to-b from-white to-white/60">
                                             {t(`onboarding.stories.${index}.title`)}
                                         </h2>
-                                        <p className="text-lg text-white/80 font-bold leading-relaxed px-4">
+                                        <p className="text-[17px] text-white/70 font-medium leading-relaxed px-4">
                                             {t(`onboarding.stories.${index}.desc`)}
                                         </p>
 
                                         {index === STORIES_LIST.length - 1 && (
-                                            <motion.div
+                                            <m.div
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
                                                 transition={{ delay: 0.3 }}
@@ -146,11 +158,11 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                                         <span className="text-white/60 underline decoration-white/20 underline-offset-2 cursor-pointer hover:text-white transition-colors">Marketing Activities</span>.
                                                     </Trans>
                                                 </p>
-                                            </motion.div>
+                                            </m.div>
                                         )}
                                     </div>
                                 </div>
-                            </motion.div>
+                            </m.div>
                         </AnimatePresence>
 
                         {/* Bottom Action Area */}
@@ -168,8 +180,8 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                 />
                             </button>
                         </div>
-                    </motion.div>
-                </motion.div>
+                    </m.div>
+                </m.div>
             )}
         </AnimatePresence>
     );

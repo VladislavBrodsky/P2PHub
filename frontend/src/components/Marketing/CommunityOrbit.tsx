@@ -214,16 +214,14 @@ const CentralLogo = memo(() => {
                             ease: "easeInOut"
                         }}
                         src={logoSrc}
-                        alt="Pintopay Logo"
-                        width="56"
-                        height="56"
+                        alt="ONEX Logo"
+                        width="80"
+                        height="80"
                         loading="eager"
-                        className="relative z-20 w-14 h-14 object-contain"
+                        className="relative z-20 w-20 h-20 object-contain drop-shadow-2xl"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            if (!target.src.includes('raw.githubusercontent.com')) {
-                                target.src = 'https://raw.githubusercontent.com/VladislavBrodsky/P2PHub/main/frontend/public/logo.svg';
-                            }
+                            target.src = '/images/onex/welcome.png';
                         }}
                     />
                 )}
