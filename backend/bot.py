@@ -86,22 +86,23 @@ async def cmd_start(message: types.Message, state: FSMContext):
                 )
                 return
 
-            # Otherwise, start onboarding
+            # Otherwise, start onboarding (or just show main menu as requested)
             welcome_image_path = "assets/branding/welcome_illustration.png"
+            referral_link = f"https://t.me/{settings.BOT_USERNAME}?start={partner.referral_code}"
             try:
                 from aiogram.types import FSInputFile
                 photo = FSInputFile(welcome_image_path)
                 await message.answer_photo(
                     photo=photo,
-                    caption=get_msg(lang, "onboarding_welcome"),
+                    caption=get_msg(lang, "onboarding_welcome", name=partner.first_name or "Partner", referral_link=referral_link),
                     parse_mode="Markdown",
-                    reply_markup=get_onboarding_keyboard(lang)
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link=referral_link, referral_code=partner.referral_code, lang=lang)
                 )
             except Exception:
                 await message.answer(
-                    get_msg(lang, "onboarding_welcome"),
+                    get_msg(lang, "onboarding_welcome", name=partner.first_name or "Partner", referral_link=referral_link),
                     parse_mode="Markdown",
-                    reply_markup=get_onboarding_keyboard(lang)
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link=referral_link, referral_code=partner.referral_code, lang=lang)
                 )
             
             await state.set_state(OnboardingStates.waiting_for_onboarding)
