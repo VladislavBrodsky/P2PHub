@@ -99,7 +99,7 @@ export const EarningsList: React.FC<EarningsListProps> = ({ isExpanded = false }
                     </div>
                 ) : (
                     displayItems.map((item: any, idx: number) => (
-                        <EarningRow key={item.id || idx} item={item} idx={idx} t={t} />
+                        <EarningRow key={item.id || idx} item={item} idx={idx} />
                     ))
                 )}
             </div>

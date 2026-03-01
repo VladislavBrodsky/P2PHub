@@ -1,227 +1,182 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-    Megaphone, UserPlus, Users, Zap, User, Layers, Clock,
-    Filter, RefreshCw, PlayCircle, StopCircle
+    Zap, Send, RefreshCw, Clock, Users, Cpu
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { BroadcastTarget } from '../types';
 
 interface AdminNexusProps {
-    broadcastForm: { audience: string; text: string };
-    setBroadcastForm: (updater: (prev: any) => any) => void;
+    broadcastHistory: any[];
     isBroadcasting: boolean;
-    handleCreateBroadcast: () => void;
-    handleCancelBroadcast: (id: number) => void;
-    activeBroadcasts: any[];
-    broadcasts: any[];
+    onLaunchBroadcast: (target: BroadcastTarget, message: string) => void;
 }
 
 export const AdminNexus: React.FC<AdminNexusProps> = React.memo(({
-    broadcastForm,
-    setBroadcastForm,
+    broadcastHistory,
     isBroadcasting,
-    handleCreateBroadcast,
-    handleCancelBroadcast,
-    activeBroadcasts,
-    broadcasts
+    onLaunchBroadcast
 }) => {
+    const { t } = useTranslation(['admin', 'common']);
+    const [payload, setPayload] = React.useState('');
+    const [target, setTarget] = React.useState<BroadcastTarget>('all');
+
     return (
         <motion.div
             key="nexus"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
             className="space-y-6"
         >
-            {/* Nexus Proactive Broadcast Hub */}
-            <div className="p-6 rounded-[2.5rem] glass-panel-premium border border-orange-500/20 shadow-2xl shadow-orange-500/5 space-y-6">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-2xl bg-orange-500/10 flex items-center justify-center">
-                            <Megaphone className="text-orange-500" size={24} />
-                        </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest">Broadcast Nexus</h3>
-                            <p className="text-label text-slate-500 font-bold uppercase">Multi-Target Communication Hub</p>
-                        </div>
-                    </div>
-                    <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-label font-bold text-emerald-500 uppercase tracking-widest animate-pulse">
-                        System Ready
-                    </div>
+            <div className="p-10 rounded-[3rem] bg-linear-to-br from-slate-900 via-indigo-950 to-slate-900 border border-white/10 relative overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
+                    <Zap size={150} className="text-white" />
                 </div>
 
-                {/* Audience Switcher */}
-                <div className="space-y-3">
-                    <label className="text-label font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <UserPlus size={12} /> Target Audience
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                        {[
-                            { id: 'all', label: 'All Partners', icon: Users },
-                            { id: 'pro_only', label: 'PRO Members', icon: Zap },
-                            { id: 'free_only', label: 'Free Tier', icon: User },
-                            { id: 'level_1', label: 'Level 1 Only', icon: Layers },
-                            { id: 'inactive_7d', label: 'Inactive (7d+)', icon: Clock }
-                        ].map(aud => (
-                            <button
-                                key={aud.id}
-                                onClick={() => setBroadcastForm(prev => ({ ...prev, audience: aud.id }))}
-                                className={`px-3 py-2 rounded-xl border text-label font-bold uppercase tracking-tight transition-all flex items-center gap-1.5
-                                    ${broadcastForm.audience === aud.id
-                                        ? 'bg-orange-500 border-orange-600 text-white shadow-lg'
-                                        : 'bg-white/5 border-white/10 text-slate-500 hover:bg-white/10'}`}
-                            >
-                                <aud.icon size={12} />
-                                {aud.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Stylized Message Editor */}
-                <div className="space-y-3">
-                    <label className="text-label font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Filter size={12} /> Payload Message
-                    </label>
-                    <div className="relative group">
-                        <textarea
-                            value={broadcastForm.text}
-                            onChange={(e) => setBroadcastForm(prev => ({ ...prev, text: e.target.value }))}
-                            placeholder="Message to your fleet..."
-                            className="w-full h-32 p-4 bg-black/20 border border-white/5 rounded-3xl text-sm font-medium text-slate-100 placeholder:text-slate-600 focus:border-orange-500/50 outline-none transition-all resize-none shadow-inner"
-                        />
-                        <div className="absolute bottom-4 right-4 text-label font-mono text-slate-600 font-bold uppercase pr-2 border-r border-white/10">
-                            {broadcastForm.text.length} chars
+                <div className="relative z-10 space-y-8">
+                    <div className="flex items-center justify-between">
+                        <div className="space-y-1">
+                            <h3 className="text-4xl font-black text-white tracking-tighter flex items-center gap-3">
+                                {t('admin:nexus.title')}
+                                <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1.5">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{t('admin:nexus.status_ready')}</span>
+                                </div>
+                            </h3>
+                            <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.2em]">{t('admin:nexus.subtitle')}</p>
+                        </div>
+                        <div className="p-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md">
+                            <Send className="text-indigo-400" size={24} />
                         </div>
                     </div>
-                    <div className="flex items-center gap-2 text-label text-slate-500 font-bold uppercase italic opacity-60 px-2">
-                        <span className="w-1 h-1 rounded-full bg-slate-500"></span>
-                        HTML tags supported (b, i, u, a). Use with caution.
-                    </div>
-                </div>
 
-                <button
-                    onClick={handleCreateBroadcast}
-                    disabled={isBroadcasting || !broadcastForm.text.trim()}
-                    className={`w-full py-4 rounded-3xl bg-linear-to-r from-orange-500 to-rose-600 text-white text-xs font-bold uppercase tracking-[0.2em] shadow-xl shadow-orange-500/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:grayscale`}
-                >
-                    {isBroadcasting ? <RefreshCw className="animate-spin" size={16} /> : <PlayCircle size={16} />}
-                    Launch Broadcast Campaign
-                </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                        <div className="space-y-4">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 px-1">
+                                <Users size={14} /> {t('admin:nexus.target_audience')}
+                            </label>
+                            <div className="grid grid-cols-2 gap-2">
+                                {(['all', 'pro_only', 'free_only', 'level_1', 'inactive_7d'] as BroadcastTarget[]).map((type) => (
+                                    <button
+                                        key={type}
+                                        onClick={() => setTarget(type)}
+                                        className={`px-4 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest transition-all border ${target === type ? 'bg-white text-slate-900 border-white shadow-xl' : 'bg-white/5 text-white/40 border-white/5 hover:bg-white/10'}`}
+                                    >
+                                        {t(`admin:nexus.audiences.${type}`)}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 px-1">
+                                <Cpu size={14} /> {t('admin:nexus.payload_message')}
+                            </label>
+                            <div className="relative">
+                                <textarea
+                                    value={payload}
+                                    onChange={(e) => setPayload(e.target.value)}
+                                    placeholder={t('admin:nexus.placeholder')}
+                                    className="w-full h-32 bg-white/5 border border-white/10 rounded-3xl p-4 text-white text-sm placeholder:text-white/10 focus:outline-hidden focus:border-indigo-500/50 transition-all resize-none"
+                                />
+                                <div className="absolute bottom-4 right-4 flex items-center gap-3">
+                                    <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{t('admin:nexus.char_count', { count: payload.length })}</span>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 px-1">
+                                <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                                <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:nexus.html_warning')}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => {
+                            if (!payload.trim()) return;
+                            onLaunchBroadcast(target, payload);
+                            setPayload('');
+                        }}
+                        disabled={isBroadcasting || !payload.trim()}
+                        className="w-full py-5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black uppercase tracking-[0.3em] flex items-center justify-center gap-4 transition-all active:scale-[0.98] disabled:opacity-50 shadow-2xl shadow-indigo-500/20"
+                    >
+                        {isBroadcasting ? (
+                            <>
+                                <RefreshCw className="animate-spin" size={20} />
+                                {t('admin:nexus.launching')}
+                            </>
+                        ) : (
+                            <>
+                                <Send size={20} />
+                                {t('admin:nexus.launch_button')}
+                            </>
+                        )}
+                    </button>
+                </div>
             </div>
 
-            {/* Active Operations Center */}
-            {activeBroadcasts.length > 0 && (
-                <div className="space-y-3">
-                    <h4 className="text-label font-bold text-slate-400 uppercase tracking-widest px-2">Active Operations</h4>
-                    <div className="space-y-2">
-                        {activeBroadcasts.map(b => {
-                            const progress = b.total_targets > 0 ? (b.sent_count / b.total_targets) * 100 : 0;
-                            return (
-                                <div key={b.id} className="p-4 rounded-[1.75rem] glass-panel-premium border border-white/5 space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-8 h-8 rounded-xl bg-orange-500/10 flex items-center justify-center relative">
-                                                <Megaphone className="text-orange-500 animate-pulse" size={14} />
-                                            </div>
-                                            <div>
-                                                <div className="text-label font-bold text-slate-100 uppercase tracking-widest">
-                                                    Operation #{b.id}
-                                                </div>
-                                                <div className="text-label text-slate-500 font-bold uppercase">
-                                                    Audience: {b.audience_type}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => handleCancelBroadcast(b.id)}
-                                            className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 transition-all active:scale-90"
-                                        >
-                                            <StopCircle size={14} />
-                                        </button>
-                                    </div>
-
-                                    <div className="space-y-1.5">
-                                        <div className="flex items-center justify-between text-label font-bold uppercase tracking-tight">
-                                            <span className="text-orange-500">{progress.toFixed(1)}% Completed</span>
-                                            <span className="text-slate-400 font-mono tracking-tighter">{b.sent_count} / {b.total_targets}</span>
-                                        </div>
-                                        <div className="h-2 rounded-full bg-black/40 overflow-hidden p-0.5 border border-white/5">
-                                            <motion.div
-                                                className="h-full bg-linear-to-r from-orange-500 via-orange-400 to-yellow-400 rounded-full"
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${progress}%` }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
+            <div className="p-8 rounded-[3rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 space-y-6">
+                <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
+                        {t('admin:nexus.history')}
+                        <span className="bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg text-[10px] text-slate-500 font-bold">{broadcastHistory.length}</span>
+                    </h4>
+                    <Clock size={18} className="text-slate-400" />
                 </div>
-            )}
 
-            {/* Mission History */}
-            <div className="space-y-3">
-                <h4 className="text-label font-bold text-slate-400 uppercase tracking-widest px-2">Campaign History</h4>
-                <div className="rounded-[2.5rem] glass-panel-premium border border-white/5 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="border-b border-white/5 bg-white/5">
-                                    <th className="px-6 py-4 text-label font-bold text-slate-500 uppercase tracking-widest">Date</th>
-                                    <th className="px-6 py-4 text-label font-bold text-slate-500 uppercase tracking-widest">Message Snapshot</th>
-                                    <th className="px-6 py-4 text-label font-bold text-slate-500 uppercase tracking-widest text-center">Outcome</th>
-                                    <th className="px-6 py-4 text-label font-bold text-slate-500 uppercase tracking-widest text-center">Status</th>
+                <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-white/10">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-50 dark:bg-white/5">
+                                <th className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:nexus.table.date')}</th>
+                                <th className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:nexus.table.snapshot')}</th>
+                                <th className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:nexus.table.outcome')}</th>
+                                <th className="px-4 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-right">{t('admin:nexus.table.status')}</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-200 dark:divide-white/10">
+                            {broadcastHistory.length === 0 ? (
+                                <tr>
+                                    <td colSpan={4} className="px-4 py-10 text-center text-xs font-bold text-slate-400 uppercase tracking-widest opacity-30 italic">
+                                        {t('admin:nexus.history_empty')}
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {broadcasts.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={4} className="px-6 py-12 text-center text-label font-bold text-slate-500 uppercase tracking-[0.2em] italic">Nexus History Empty</td>
+                            ) : (
+                                broadcastHistory.map((campaign) => (
+                                    <tr key={campaign.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                                        <td className="px-4 py-4 whitespace-nowrap">
+                                            <div className="text-[10px] font-bold text-slate-900 dark:text-white">{new Date(campaign.created_at).toLocaleDateString()}</div>
+                                            <div className="text-[8px] font-medium text-slate-400">{new Date(campaign.created_at).toLocaleTimeString()}</div>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <div className="text-[10px] font-bold text-slate-500 line-clamp-1 max-w-[200px]">{campaign.message}</div>
+                                            <div className="text-[8px] font-black text-indigo-500 uppercase tracking-widest mt-1">
+                                                {t('admin:nexus.audience_label', { type: campaign.target_type })}
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4">
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-[10px] font-bold text-slate-900 dark:text-white">{campaign.processed_count}</div>
+                                                <div className="text-[10px] font-bold text-slate-400">/ {campaign.total_targets}</div>
+                                            </div>
+                                            <div className="w-24 h-1 bg-slate-100 dark:bg-white/10 rounded-full mt-1 overflow-hidden">
+                                                <div
+                                                    className="h-full bg-emerald-500 transition-all duration-1000"
+                                                    style={{ width: `${(campaign.processed_count / campaign.total_targets) * 100}%` }}
+                                                />
+                                            </div>
+                                        </td>
+                                        <td className="px-4 py-4 text-right whitespace-nowrap">
+                                            <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest ${campaign.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : campaign.status === 'PROCESSING' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20 animate-pulse' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'}`}>
+                                                {campaign.status}
+                                            </span>
+                                        </td>
                                     </tr>
-                                ) : (
-                                    broadcasts.map(b => (
-                                        <tr key={b.id} className="group hover:bg-white/5 transition-colors">
-                                            <td className="px-6 py-4">
-                                                <div className="text-label font-bold text-slate-300 uppercase whitespace-nowrap">
-                                                    {new Date(b.created_at).toLocaleDateString()}
-                                                </div>
-                                                <div className="text-label font-bold text-slate-500 uppercase font-mono">
-                                                    {new Date(b.created_at).toLocaleTimeString()}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 max-w-[200px]">
-                                                <div className="text-label font-medium text-slate-400 truncate group-hover:text-slate-200 transition-colors">
-                                                    {b.message_text}
-                                                </div>
-                                                <div className="text-label font-bold text-indigo-500 uppercase tracking-tight mt-1">
-                                                    Targets: {b.audience_type}
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <div className="text-label font-bold text-slate-200 font-mono tracking-tighter">
-                                                    {b.sent_count} <span className="text-label opacity-40">OK</span>
-                                                </div>
-                                                {b.failed_count > 0 && (
-                                                    <div className="text-label font-bold text-rose-500 font-mono tracking-tighter">
-                                                        {b.failed_count} <span className="text-label opacity-60 uppercase">Err</span>
-                                                    </div>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-4 text-center">
-                                                <span className={`px-2 py-0.5 rounded-lg text-label font-bold uppercase tracking-widest
-                                                    ${b.status === 'completed' ? 'bg-emerald-500/10 text-emerald-500' :
-                                                        b.status === 'cancelled' ? 'bg-rose-500/10 text-rose-500' :
-                                                            'bg-blue-500/10 text-blue-500'}`}>
-                                                    {b.status}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </motion.div>

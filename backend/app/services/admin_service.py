@@ -167,9 +167,12 @@ class AdminService:
                 try:
                     total_partners = (await session.exec(select(func.count(Partner.id)))).one() or 0
                     
-                    # Grouped query to reduce round-trips
+                    # Filter out non-spending transactions (Gifts, Grants)
                     rev_stmt = select(PartnerTransaction.currency, func.sum(PartnerTransaction.amount_crypto if PartnerTransaction.currency == "TON" else PartnerTransaction.amount)) \
-                        .where(PartnerTransaction.status == "completed") \
+                        .where(
+                            PartnerTransaction.status == "completed",
+                            ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+                        ) \
                         .group_by(PartnerTransaction.currency)
                     
                     results = await session.exec(rev_stmt)
@@ -320,11 +323,22 @@ class AdminService:
         regardless of crypto price fluctuations after purchase.
         """
         # Rev Ton/USDT breakdown for granular view
-        rev_ton_crypto = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "TON"))).one() or 0.0
-        rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.currency == "USDT"))).one() or 0.0
+        rev_ton_crypto = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).where(
+            PartnerTransaction.status == "completed", 
+            PartnerTransaction.currency == "TON",
+            ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+        ))).one() or 0.0
+        rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(
+            PartnerTransaction.status == "completed", 
+            PartnerTransaction.currency == "USDT",
+            ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+        ))).one() or 0.0
         
         # Total Revenue in USD (Sum of all transaction amount_usd)
-        total_revenue = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed"))).one() or 0.0
+        total_revenue = (await session.exec(select(func.sum(PartnerTransaction.amount)).where(
+            PartnerTransaction.status == "completed",
+            ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+        ))).one() or 0.0
         
         # Current effective TON revenue (if we sold it all now)
         ton_price = await payment_service.get_ton_price()
@@ -364,7 +378,11 @@ class AdminService:
         growth_res = await session.exec(select(cast(Partner.created_at, Date).label("day"), func.count(Partner.id)).where(Partner.created_at >= cutoff).group_by("day"))
         growth_map = {row[0]: row[1] for row in growth_res.all() if row[0]}
         
-        rev_res = await session.exec(select(cast(PartnerTransaction.created_at, Date).label("day"), func.sum(PartnerTransaction.amount)).where(PartnerTransaction.status == "completed", PartnerTransaction.created_at >= cutoff).group_by("day"))
+        rev_res = await session.exec(select(cast(PartnerTransaction.created_at, Date).label("day"), func.sum(PartnerTransaction.amount)).where(
+            PartnerTransaction.status == "completed", 
+            PartnerTransaction.created_at >= cutoff,
+            ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+        ).group_by("day"))
         rev_map = {row[0]: row[1] for row in rev_res.all() if row[0]}
         
         daily_g, daily_r = [], []
@@ -379,7 +397,10 @@ class AdminService:
         # Optimized: Use selectinload to avoid N+1 queries when fetching partner details for transactions
         stmt = (
             select(PartnerTransaction)
-            .where(PartnerTransaction.status == "completed")
+            .where(
+                PartnerTransaction.status == "completed",
+                ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
+            )
             .options(selectinload(PartnerTransaction.partner)) 
             .order_by(PartnerTransaction.created_at.desc())
             .limit(15)

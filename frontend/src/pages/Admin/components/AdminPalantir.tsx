@@ -4,6 +4,7 @@ import {
     Eye, RefreshCw, Send, ShieldAlert, Database, Activity,
     Zap, CreditCard, Wallet, Cpu, Search
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface AdminPalantirProps {
     palantirFeed: any[];
@@ -26,6 +27,8 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
     fetchPalantirFeed,
     setSelectedPartnerId
 }) => {
+    const { t } = useTranslation(['admin', 'common', 'social']);
+
     return (
         <motion.div
             key="palantir"
@@ -34,31 +37,28 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
             exit={{ opacity: 0, y: -10 }}
             className="space-y-6"
         >
-            {/* Palantir Header & Health Integration (God-Mode Overlay) */}
-            <div className="space-y-4">
-                <div className="p-5 rounded-3xl glass-panel-premium border border-indigo-500/20 shadow-2xl shadow-indigo-500/10 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
-                        <Eye size={120} />
-                    </div>
-                    <div className="flex items-center justify-between mb-4 relative z-10">
+            {/* Palantir Hero Header (Restored) */}
+            <div className="p-8 rounded-[2.5rem] bg-slate-900 border border-white/10 relative overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-rose-500/10 opacity-50" />
+                <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                    <Eye size={120} className="text-white" />
+                </div>
+
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div className="space-y-2">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-indigo-500/10 flex items-center justify-center relative">
-                                <Eye className="text-indigo-500" size={20} />
-                                {isPalantirPolling && (
-                                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
-                                    </span>
-                                )}
+                            <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">{t('admin:palantir.running')}</span>
                             </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-widest flex items-center gap-2">
-                                    God-Mode Palantir
-                                    <span className="text-label px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-500 font-bold animate-pulse">LIVE</span>
-                                </h3>
-                                <p className="text-label text-slate-500 font-bold uppercase tracking-tight">Active Matrix Feed · Real-time Observability</p>
-                            </div>
+                            <span className="text-white/20">|</span>
+                            <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t('admin:palantir.events')}: {palantirFeed.length}</span>
                         </div>
+                        <h3 className="text-3xl font-black text-white tracking-tighter">{t('admin:palantir.title')}</h3>
+                        <p className="text-slate-400 text-xs font-medium max-w-md">{t('admin:palantir.subtitle')}</p>
+                    </div>
+
+                    <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10">
                         <button
                             onClick={() => fetchPalantirFeed(true)}
                             className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 active:scale-90 transition-all border border-white/5"
@@ -66,42 +66,33 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                             <RefreshCw size={16} className={isRefreshing ? 'animate-spin text-indigo-500' : 'text-slate-500'} />
                         </button>
                     </div>
-
-                    {/* Health Micro-Panel (Integrated Deliverability Monitoring) */}
-                    {notificationsHealth && (
-                        <div className="grid grid-cols-3 gap-2 py-3 border-t border-indigo-500/10 relative z-10">
-                            <div className="space-y-1">
-                                <div className="text-label font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                                    <Send size={8} /> Sent
-                                </div>
-                                <div className="text-lg font-bold text-emerald-500 font-mono tracking-tighter">
-                                    {notificationsHealth.counts?.sent || 0}
-                                </div>
-                            </div>
-                            <div className="space-y-1 border-x border-indigo-500/10 px-3">
-                                <div className="text-label font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                                    <ShieldAlert size={8} /> Failed
-                                </div>
-                                <div className="text-lg font-bold text-rose-500 font-mono tracking-tighter">
-                                    {notificationsHealth.counts?.failed || 0}
-                                </div>
-                            </div>
-                            <div className="space-y-1 pl-3">
-                                <div className="text-label font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                                    <Database size={8} /> Queued
-                                </div>
-                                <div className={`text-lg font-bold font-mono tracking-tighter ${notificationsHealth.redis_queue_depth > 0 ? 'text-indigo-400' : 'text-slate-400'}`}>
-                                    {notificationsHealth.redis_queue_depth || 0}
-                                </div>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 
-            {/* Audit Feed List */}
+            {/* Notifications Micro-Health (Restored Logic) */}
+            {notificationsHealth && (
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-center justify-between">
+                        <div className="text-label font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            <Database size={12} /> {t('admin:maintenance.notifications.pending')}
+                        </div>
+                        <div className={`text-lg font-bold font-mono tracking-tighter ${notificationsHealth.redis_queue_depth > 0 ? 'text-indigo-400' : 'text-slate-400'}`}>
+                            {notificationsHealth.redis_queue_depth || 0}
+                        </div>
+                    </div>
+                    <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 flex items-center justify-between">
+                        <div className="text-label font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            <ShieldAlert size={12} /> {t('admin:maintenance.notifications.failed')}
+                        </div>
+                        <div className="text-lg font-bold font-mono tracking-tighter text-rose-500">
+                            {notificationsHealth.counts?.failed || 0}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Audit Feed List (Restored) */}
             <div className="space-y-2 relative">
-                {/* Vertical Line Connector (Matrix Feel) */}
                 <div className="absolute left-[3.15rem] top-6 bottom-6 w-px bg-linear-to-b from-indigo-500/20 via-indigo-500/40 to-indigo-500/20 hidden sm:block"></div>
 
                 {palantirFeed.length === 0 ? (
@@ -109,7 +100,7 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                         <div className="w-16 h-16 rounded-full bg-slate-500/5 flex items-center justify-center mx-auto border border-white/5">
                             <Activity size={32} className="text-slate-500 opacity-20" />
                         </div>
-                        <div className="text-slate-500 font-bold uppercase text-label tracking-[0.2em]">Matrix Offline — No Events Captured</div>
+                        <div className="text-slate-500 font-bold uppercase text-label tracking-[0.2em]">{t('admin:palantir.no_events')}</div>
                     </div>
                 ) : (
                     palantirFeed.map(log => (
@@ -117,7 +108,6 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                             key={log.id}
                             className="p-4 rounded-[1.75rem] glass-panel-premium border border-black/5 dark:border-white/5 flex items-start gap-4 group hover:border-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 relative z-10"
                         >
-                            {/* Action Icon Component */}
                             <div className={`w-12 h-12 shrink-0 rounded-2xl flex items-center justify-center border border-black/5 dark:border-white/5 shadow-inner relative overflow-hidden
                                 ${log.action_type === 'UPGRADE' ? 'bg-amber-500/10 text-amber-500' :
                                     log.action_type === 'PAYMENT' ? 'bg-blue-500/10 text-blue-500' :
@@ -173,33 +163,18 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                                         </button>
                                     )}
                                 </div>
-
-                                {/* Technical Details Reveal */}
-                                {log.details && Object.keys(log.details).length > 0 && (
-                                    <div className="mt-3 bg-black/20 rounded-xl border border-white/5 p-3 overflow-hidden">
-                                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                                            {Object.entries(log.details).slice(0, 4).map(([key, val]) => (
-                                                <div key={key} className="flex flex-col gap-0.5">
-                                                    <span className="text-label font-bold uppercase text-slate-500 tracking-widest">{key.replace(/_/g, ' ')}</span>
-                                                    <span className="text-label font-mono text-indigo-400 font-bold truncate">
-                                                        {typeof val === 'object' ? JSON.stringify(val) : String(val)}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         </div>
                     ))
                 )}
+
                 <div className="flex items-center justify-between pt-4 pb-2">
                     <button
                         onClick={() => setPalantirPage(p => Math.max(0, p - 1))}
                         disabled={palantirPage === 0}
                         className="px-4 py-2 rounded-xl bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 text-xs font-bold uppercase transition-colors"
                     >
-                        Previous
+                        {t('common:back')}
                     </button>
                     <span className="text-xs font-bold text-slate-600">Page {palantirPage + 1}</span>
                     <button
@@ -207,7 +182,7 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                         disabled={palantirFeed.length < 100}
                         className="px-4 py-2 rounded-xl bg-white/5 text-slate-500 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-white/5 text-xs font-bold uppercase transition-colors"
                     >
-                        Next
+                        {t('common:next')}
                     </button>
                 </div>
             </div>

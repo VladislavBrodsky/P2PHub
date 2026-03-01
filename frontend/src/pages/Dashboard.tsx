@@ -138,7 +138,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 className="p-2.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-xl border border-white/10 flex items-center gap-2 px-5 transition-transform active:scale-90"
                             >
                                 <ShieldCheck size={14} className="text-blue-500" />
-                                <span className="text-label font-bold uppercase tracking-widest">Admin</span>
+                                <span className="text-label font-bold uppercase tracking-widest">{t('common:admin')}</span>
                             </m.button>
                         )}
                     </div>

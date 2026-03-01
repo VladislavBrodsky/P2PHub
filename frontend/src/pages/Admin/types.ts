@@ -75,7 +75,13 @@ export interface DashboardStats {
     };
     tasks: Record<string, number>;
     top_partners: { username: string; telegram_id: string; earnings: number }[];
+    partners?: {
+        avg_xp: number;
+        growth_24h: number;
+    };
 }
+
+export type BroadcastTarget = 'all' | 'pro_only' | 'free_only' | 'level_1' | 'inactive_7d';
 
 export interface Transaction {
     id: number;

@@ -2,7 +2,6 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
 import {
     X, Clock, Calendar, ChevronDown,
     ArrowUpRight, ArrowDownRight, Activity
@@ -19,7 +18,7 @@ interface FinanceStatsProps {
 }
 
 export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
-    const { t } = useTranslation('social');
+    const { t, i18n } = useTranslation('social');
     const { selection } = useHaptic();
     const [stats, setStats] = React.useState<any>(null);
     const [loading, setLoading] = React.useState(true);

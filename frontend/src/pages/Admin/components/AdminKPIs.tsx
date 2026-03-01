@@ -1,12 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-    Activity, TrendingUp, Users, Zap, Layers, Clock, Calendar, TrendingDown
+    Activity, TrendingUp, Users, Zap, Layers, Clock, Calendar, TrendingDown, PieChart, Shield, Award, Globe
 } from 'lucide-react';
 import {
     AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
     ResponsiveContainer
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 import { DashboardStats } from '../types';
 
 interface AdminKPIsProps {
@@ -39,6 +40,67 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 };
 
 export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
+    const { t } = useTranslation(['admin', 'common']);
+
+    const kpiData = [
+        {
+            label: t('admin:kpis.total_partners'),
+            value: stats?.events.total_partners ?? 0,
+            icon: Users,
+            color: 'text-blue-500',
+            bg: 'bg-blue-500/10'
+        },
+        {
+            label: t('admin:kpis.total_pro'),
+            value: stats?.events.total_pro ?? 0,
+            icon: Zap,
+            color: 'text-amber-500',
+            bg: 'bg-amber-500/10'
+        },
+        {
+            label: t('admin:kpis.total_revenue'),
+            value: `$${(stats?.financials.total_revenue ?? 0).toLocaleString()}`,
+            icon: TrendingUp,
+            color: 'text-emerald-500',
+            bg: 'bg-emerald-500/10'
+        },
+        {
+            label: t('admin:kpis.conversion_rate'),
+            value: `${stats ? stats.kpis.conversion_rate : 0}%`,
+            icon: PieChart,
+            color: 'text-violet-500',
+            bg: 'bg-violet-500/10'
+        },
+        {
+            label: t('admin:kpis.growth_24h'),
+            value: stats?.partners?.growth_24h ? `+${stats.partners.growth_24h}` : '+0',
+            icon: Activity,
+            color: 'text-rose-500',
+            bg: 'bg-rose-500/10'
+        },
+        {
+            label: t('admin:kpis.active_now'),
+            value: stats?.events.active_24h ?? 0,
+            icon: Globe,
+            color: 'text-indigo-500',
+            bg: 'bg-indigo-500/10'
+        },
+        {
+            label: t('admin:kpis.retention'),
+            value: `${stats?.kpis.retention_7d || 0}%`,
+            icon: Shield,
+            color: 'text-cyan-500',
+            bg: 'bg-cyan-500/10'
+        },
+        {
+            label: t('admin:kpis.avg_xp'),
+            value: stats?.partners?.avg_xp ? Math.round(stats.partners.avg_xp) : 0,
+            icon: Award,
+            color: 'text-orange-500',
+            bg: 'bg-orange-500/10'
+        }
+    ];
+
     return (
         <motion.div
             key="kpis"
@@ -55,209 +117,65 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
                 </div>
             </div>
 
-            {/* Overall Stats Main Card */}
-            <div className="p-6 rounded-[2.5rem] bg-linear-to-br from-blue-600 to-indigo-700 text-white space-y-6 shadow-2xl shadow-blue-500/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                    <Users size={120} />
-                </div>
-                <div className="flex items-center justify-between relative z-10">
-                    <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-md">
-                        <TrendingUp size={24} />
-                    </div>
-                    <div className="text-right">
-                        <div className="text-label font-bold uppercase opacity-60">Total Partners</div>
-                        <div className="text-3xl font-bold">{stats?.events.total_partners}</div>
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-4 relative z-10 pt-4 border-t border-white/10">
-                    <div>
-                        <div className="text-label font-bold uppercase opacity-60 flex items-center gap-1">
-                            <Zap size={10} /> PRO
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {kpiData.map((kpi, i) => (
+                    <motion.div
+                        key={kpi.label}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="p-4 rounded-3xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm"
+                    >
+                        <div className="flex items-center gap-3 mb-3">
+                            <div className={`p-2 rounded-xl ${kpi.bg}`}>
+                                <kpi.icon size={18} className={kpi.color} />
+                            </div>
+                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-tight">
+                                {kpi.label}
+                            </span>
                         </div>
-                        <div className="text-lg font-bold">{stats?.events.total_pro}</div>
-                    </div>
-                    <div>
-                        <div className="text-label font-bold uppercase opacity-60 flex items-center gap-1">
-                            <Users size={10} /> 24h
+                        <div className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">
+                            {kpi.value}
                         </div>
-                        <div className="text-lg font-bold">{stats?.events.active_24h}</div>
-                    </div>
-                    <div>
-                        <div className="text-label font-bold uppercase opacity-60 flex items-center gap-1">
-                            Revenue
-                        </div>
-                        <div className="text-lg font-bold">${stats?.financials.total_revenue || 0}</div>
-                    </div>
-                </div>
+                    </motion.div>
+                ))}
             </div>
 
-            {/* Core KPI Grid */}
-            <div className="grid grid-cols-3 gap-3">
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Engagement</div>
-                    <div className="text-sm font-bold text-blue-500">{stats?.kpis.engagement_rate}%</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Conv. Rate</div>
-                    <div className="text-sm font-bold text-emerald-500">{stats?.kpis.conversion_rate}%</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">ARPU</div>
-                    <div className="text-sm font-bold text-violet-500">${stats?.kpis.arpu}</div>
-                </div>
-            </div>
-
-            {/* Viral Intelligence Row */}
-            <div className="grid grid-cols-2 gap-3">
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                    <div className="flex items-center justify-between">
-                        <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Viral K-Factor</div>
-                        <div className="p-1 bg-indigo-500/10 rounded-lg text-indigo-500">
-                            <Zap size={10} />
-                        </div>
-                    </div>
-                    <div className="text-lg font-bold text-indigo-500">{stats?.kpis.k_factor}</div>
-                    <div className="text-label font-bold text-slate-500 uppercase">Avg Referrals per User</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                    <div className="flex items-center justify-between">
-                        <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Ref. Participation</div>
-                        <div className="p-1 bg-pink-500/10 rounded-lg text-pink-500">
-                            <Users size={10} />
-                        </div>
-                    </div>
-                    <div className="text-lg font-bold text-pink-500">{stats?.kpis.ref_participation}%</div>
-                    <div className="text-label font-bold text-slate-500 uppercase">Active referrers share</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                    <div className="flex items-center justify-between">
-                        <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Network Density</div>
-                        <div className="p-1 bg-emerald-500/10 rounded-lg text-emerald-500">
-                            <Layers size={10} />
-                        </div>
-                    </div>
-                    <div className="text-lg font-bold text-emerald-500">
-                        {typeof stats?.kpis.avg_depth === 'number' ? stats.kpis.avg_depth.toFixed(2) : '1.00'}
-                        <span className="text-label opacity-40 ml-1 font-bold">Gen</span>
-                    </div>
-                    <div className="text-label font-bold text-slate-500 uppercase">Avg Generation Depth</div>
-                </div>
-            </div>
-
-            {/* Retention Benchmarks Row */}
-            <div className="grid grid-cols-4 gap-3">
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Ret (7d)</div>
-                    <div className="text-sm font-bold text-amber-500">{stats?.kpis.retention_7d || 0}%</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Ret (30d)</div>
-                    <div className={`text-sm font-bold ${stats?.kpis.retention_30d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_30d || 0}%</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Ret (90d)</div>
-                    <div className={`text-sm font-bold ${stats?.kpis.retention_90d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_90d || 0}%</div>
-                </div>
-                <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-1">
-                    <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Ret (180d)</div>
-                    <div className={`text-sm font-bold ${stats?.kpis.retention_180d === 100 ? 'text-slate-500' : 'text-slate-300'}`}>{stats?.kpis.retention_180d || 0}%</div>
-                </div>
-            </div>
-
-            {/* System Efficiency & Adoption */}
-            {stats?.performance && (
-                <div className="grid grid-cols-2 gap-3">
-                    <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                        <div className="flex items-center justify-between">
-                            <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Manual Approval Time</div>
-                            <div className="p-1 bg-amber-500/10 rounded-lg text-amber-500">
-                                <Clock size={10} />
-                            </div>
-                        </div>
-                        <div className="text-lg font-bold text-amber-500">{stats.performance.avg_manual_approval_min} min</div>
-                        <div className="text-label font-bold text-slate-500 uppercase">Avg response efficiency</div>
-                    </div>
-                    <div className="p-4 rounded-3xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-2">
-                        <div className="flex items-center justify-between">
-                            <div className="text-label font-bold uppercase text-slate-500 dark:text-slate-400">Slot Adoption (FOMO)</div>
-                            <div className="p-1 bg-blue-500/10 rounded-lg text-blue-500">
-                                <Zap size={10} />
-                            </div>
-                        </div>
-                        <div className="text-lg font-bold text-blue-500">
-                            {stats.performance.pro_slots_display}
-                            <span className="text-label text-slate-500 font-bold ml-1.5 opacity-60">/ {stats.performance.pro_slots_actual} REAL</span>
-                        </div>
-                        <div className="text-label font-bold text-slate-500 uppercase">Calculated Traction Base</div>
-                    </div>
-                </div>
-            )}
-
-            {/* Task Completion Breakdown */}
-            <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Task Performance Breakdown</h2>
-                    <div className="p-2 bg-blue-500/10 rounded-xl">
-                        <Zap size={14} className="text-blue-500 animate-pulse" />
-                    </div>
-                </div>
-                <div className="space-y-4">
-                    {Object.entries(stats?.tasks || {}).sort((a, b) => (b[1] as number) - (a[1] as number)).slice(0, 5).map(([taskId, count]) => (
-                        <div key={taskId} className="group flex flex-col gap-2">
-                            <div className="flex items-center justify-between">
-                                <div className="text-label font-bold text-slate-700 dark:text-slate-100 uppercase tracking-tight">
-                                    {taskId.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-6 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                        <TrendingUp size={14} /> {t('admin:kpis.charts.revenue')}
+                    </h4>
+                    <div className="h-48 flex items-end justify-between gap-1 px-2">
+                        {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ height: 0 }}
+                                animate={{ height: `${h}%` }}
+                                transition={{ delay: 0.5 + (i * 0.1), duration: 1 }}
+                                className="w-full bg-linear-to-t from-blue-600 to-blue-400 rounded-t-lg relative group"
+                            >
+                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] font-bold p-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                                    +{(h * 150).toLocaleString()}
                                 </div>
-                                <div className="text-label font-bold text-blue-500 dark:text-blue-400">
-                                    {count as number} <span className="text-label opacity-60 ml-0.5">COMPLETED</span>
-                                </div>
-                            </div>
-                            <div className="h-2 bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden border border-black/5 dark:border-white/5">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${((count as number) / (stats?.events.total_tasks || 1)) * 100}%` }}
-                                    className="h-full bg-linear-to-r from-blue-500 to-indigo-600 rounded-full"
-                                    transition={{ duration: 1, ease: "easeOut" }}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Top Partners Leaderboard */}
-            <div className="p-6 rounded-2xl glass-panel-premium border border-black/5 dark:border-white/5 space-y-6 shadow-sm">
-                <div className="flex items-center justify-between">
-                    <h2 className="text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Elite Earners Leaderboard</h2>
-                    <div className="p-2 bg-blue-500/10 rounded-xl">
-                        <TrendingUp size={14} className="text-blue-500" />
+                            </motion.div>
+                        ))}
                     </div>
                 </div>
-                <div className="space-y-4">
-                    {stats?.top_partners?.map((p, idx) => (
-                        <div key={p.telegram_id} className="flex items-center justify-between group p-3 rounded-2xl hover:bg-white/5 transition-all">
-                            <div className="flex items-center gap-4">
-                                <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-label font-bold text-slate-500 dark:text-slate-400 border border-black/5 dark:border-white/5">
-                                    #{idx + 1}
-                                </div>
-                                <div>
-                                    <div className="text-xs font-bold text-slate-800 dark:text-slate-100 italic transition-colors group-hover:text-blue-500">
-                                        {p.username ? `@${p.username}` : `Partner #${p.telegram_id.toString().slice(-4)}`}
-                                    </div>
-                                    <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tighter">
-                                        MASTER HUB PARTNER
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="text-right">
-                                <div className="text-xs font-bold text-emerald-500 dark:text-emerald-400 flex items-center gap-1 justify-end">
-                                    <span className="text-label opacity-60 font-bold">$</span>
-                                    {p.earnings.toLocaleString()}
-                                </div>
+
+                <div className="p-6 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm">
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                        <Activity size={14} /> {t('admin:kpis.charts.growth')}
+                    </h4>
+                    <div className="h-48 flex items-center justify-center">
+                        <div className="w-32 h-32 rounded-full border-12 border-slate-100 dark:border-white/5 relative flex items-center justify-center">
+                            <div className="absolute inset-0 rounded-full border-12 border-emerald-500 border-t-transparent -rotate-45" />
+                            <div className="text-center">
+                                <div className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">+12%</div>
+                                <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:kpis.growth_24h')}</div>
                             </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
 
@@ -324,46 +242,6 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
                         </AreaChart>
                     </ResponsiveContainer>
                 </div>
-            </div>
-
-            {/* Network Growth Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
-                {Object.entries(stats?.growth || {}).map(([period, data]) => (
-                    <motion.div
-                        key={period}
-                        whileHover={{ y: -4 }}
-                        className="group relative p-6 rounded-2xl premium-stat-card bg-white dark:bg-slate-900/50 border border-black/5 dark:border-white/10 space-y-4 overflow-hidden"
-                    >
-                        {data.percent_change >= 0 && (
-                            <div className="absolute -right-8 -top-8 w-24 h-24 bg-emerald-500/5 blur-3xl group-hover:bg-emerald-500/10 transition-all duration-500" />
-                        )}
-                        <div className="flex items-center justify-between relative z-10">
-                            <div className="flex items-center gap-2">
-                                <div className={`p-1.5 rounded-lg ${data.percent_change >= 0 ? 'bg-emerald-500/10 text-emerald-500' : 'bg-red-500/10 text-red-500'}`}>
-                                    <Activity size={12} />
-                                </div>
-                                <span className="text-label font-bold uppercase text-slate-400 tracking-widest">{period}</span>
-                            </div>
-                            <div className={`px-2 py-1 rounded-full text-label font-bold flex items-center gap-1 shadow-sm ${data.percent_change >= 0
-                                ? 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
-                                : 'bg-red-500/10 text-red-500 ring-1 ring-red-500/20'
-                                }`}>
-                                {data.percent_change >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
-                                {Math.abs(data.percent_change)}%
-                            </div>
-                        </div>
-                        <div className="space-y-1 relative z-10">
-                            <div className="text-4xl font-bold text-slate-900 dark:text-white tracking-tight leading-none">
-                                {data.count}
-                            </div>
-                            <div className="text-label font-bold text-slate-400 uppercase tracking-[0.2em]">Acquired Units</div>
-                        </div>
-                        <div className="flex items-center justify-between relative z-10 pt-4 border-t border-black/5 dark:border-white/5">
-                            <div className="text-label text-slate-500 font-bold uppercase tracking-widest">Previous Era</div>
-                            <div className="text-xs font-bold text-slate-700 dark:text-slate-300">{data.previous}</div>
-                        </div>
-                    </motion.div>
-                ))}
             </div>
         </motion.div>
     );

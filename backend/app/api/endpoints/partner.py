@@ -1635,6 +1635,11 @@ async def get_finance_stats(
     # Add Spent Transactions
     for t in transactions:
         if t.created_at >= threshold_72h:
+            # #comment: Elite Filter - Exclude non-spending transactions (Gifts, Grants)
+            # These are administrative actions, NOT user outcome/spending.
+            if t.network and t.network.upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]:
+                continue
+
             # We treat payments as outcome
             amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
             
@@ -1681,6 +1686,11 @@ async def get_finance_stats(
                 
     for t in transactions:
         if t.status != "completed": continue
+        
+        # #comment: Elite Filter - Exclude non-spending transactions from Monthly Outflow
+        if t.network and t.network.upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]:
+            continue
+
         t_month_start = t.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         for m in monthly_history:
             if m["timestamp"] == t_month_start.isoformat():

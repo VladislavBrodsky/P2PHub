@@ -1,0 +1,126 @@
+{
+    "kpis": {
+        "total_partners": "Total Partners",
+        "total_pro": "PRO Members",
+        "total_revenue": "Total Revenue",
+        "conversion_rate": "Conv. Rate",
+        "growth_24h": "Growth (24h)",
+        "active_now": "Active Now",
+        "retention": "Retention",
+        "avg_xp": "Avg XP",
+        "charts": {
+            "revenue": "Revenue Distribution",
+            "growth": "Network Growth",
+            "activity": "System Activity"
+        }
+    },
+    "palantir": {
+        "title": "Palantir Engine",
+        "subtitle": "Real-time System Intelligence",
+        "running": "Engine Running",
+        "events": "Events",
+        "filter_all": "All Activities",
+        "filter_payments": "Payments Only",
+        "filter_system": "System Only",
+        "no_events": "No live events detected"
+    },
+    "maintenance": {
+        "title": "System Maintenance",
+        "desc": "Critical tools for database consistency and performance optimization.",
+        "db_latency": "DB Latency",
+        "orphaned": "Orphaned Partners",
+        "consistency": {
+            "title": "Data Consistency Fix",
+            "desc": "Recalculates all referral counts, 20-level lineage paths, and caches depth.",
+            "button": "Recalculate Network Stats",
+            "processing": "Processing..."
+        },
+        "cache": {
+            "title": "System Cache Flush",
+            "desc": "Flushes Redis cache for TON prices, leaderboards and dashboard KPIs.",
+            "button": "Flush System Cache",
+            "clearing": "Clearing..."
+        },
+        "economy": {
+            "title": "Economy Integrity Audit",
+            "desc": "Verifies current XP and USDT Balance against transaction logs.",
+            "button": "Run Economy Audit",
+            "auditing": "Auditing Economy...",
+            "healthy": "HEALTHY",
+            "anomalies": "ANOMALIES",
+            "not_run": "NOT RUN",
+            "checked": "Checked",
+            "discrepancies": "Discrepancies"
+        },
+        "tree": {
+            "title": "Network Tree Integrity Audit",
+            "desc": "Validates materialized path and depth for the 20-level network matrix.",
+            "button": "Run Tree Integrity Audit",
+            "auditing": "Auditing Network...",
+            "healthy": "HEALTHY",
+            "anomalies": "ANOMALIES",
+            "not_run": "NOT RUN",
+            "checked": "Checked",
+            "anomalies_label": "Anomalies"
+        },
+        "notifications": {
+            "title": "Notification System",
+            "desc": "Monitor Global Notification System health.",
+            "button": "Trigger Notif Retries",
+            "retrying": "Retrying...",
+            "sent": "Sent",
+            "pending": "Pending",
+            "failed": "Failed",
+            "congested": "CONGESTED",
+            "healthy": "HEALTHY"
+        }
+    },
+    "nexus": {
+        "title": "Broadcast Nexus",
+        "subtitle": "Multi-Target Communication Hub",
+        "status_ready": "System Ready",
+        "target_audience": "Target Audience",
+        "payload_message": "Payload Message",
+        "placeholder": "Message to your fleet...",
+        "char_count": "{{count}} chars",
+        "html_warning": "HTML tags supported (b, i, u, a).",
+        "launch_button": "Launch Broadcast Campaign",
+        "launching": "Launching...",
+        "active_ops": "Active OperationsCenter",
+        "operation_id": "Operation #{{id}}",
+        "audience_label": "Audience: {{type}}",
+        "progress": "{{percent}}% Completed",
+        "history": "Campaign History",
+        "history_empty": "Nexus History Empty",
+        "table": {
+            "date": "Date",
+            "snapshot": "Message Snapshot",
+            "outcome": "Outcome",
+            "status": "Status"
+        },
+        "audiences": {
+            "all": "All Partners",
+            "pro_only": "PRO Members",
+            "free_only": "Free Tier",
+            "level_1": "Level 1 Only",
+            "inactive_7d": "Inactive (7d+)"
+        }
+    },
+    "financials": {
+        "title": "Financial Audit",
+        "desc": "Real-time revenue monitoring and commission distribution analysis.",
+        "profit_net": "Net Profit",
+        "gross_margin": "Gross Margin",
+        "revenue_retained": "Revenue retained after network distribution.",
+        "paid_referral": "Paid to Network",
+        "revenue_of": " of gross revenue",
+        "target_split": "Target Split",
+        "max_distribution": "Max theoretical distribution",
+        "gross_revenue": "Gross Revenue",
+        "performance": "Revenue Performance",
+        "recent_sales": "Recent Successful Sales",
+        "commission_split": "Commissions Breakdown",
+        "level_partners": "Level {{level}} Partners",
+        "revenue_usdt_ton": "Revenue (USDT / TON)"
+    }
+}

@@ -2,15 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TONLogo, USDTLogo } from '../../../ui/CryptoIcons';
 import { formatEarningDescription, getTypeStyles } from './utils';
-import i18n from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 interface EarningRowProps {
     item: any;
     idx: number;
-    t: any;
 }
 
-export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx, t }) => {
+export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) => {
+    const { t, i18n } = useTranslation('social');
     const styles = getTypeStyles(item.type);
 
     return (
@@ -59,10 +59,10 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx, t 
                     </div>
                 )}
                 <div className="flex items-center gap-1">
-                    <span className={`font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
-                        {item.isTransaction ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
+                    <span className={`font-bold ${(item.isTransaction && !item.is_grant) ? 'text-slate-400' : styles.text} text-sm tracking-tight leading-none`}>
+                        {(item.isTransaction && !item.is_grant) ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                     </span>
-                    <span className={`text-label font-bold ${item.isTransaction ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
+                    <span className={`text-label font-bold ${(item.isTransaction && !item.is_grant) ? 'text-slate-400' : styles.text} opacity-70 uppercase tracking-widest self-end pb-0.5`}>
                         {item.currency}
                     </span>
                 </div>

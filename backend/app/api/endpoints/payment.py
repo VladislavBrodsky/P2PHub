@@ -366,7 +366,8 @@ async def get_my_transactions(
             "network": t.network,
             "status": t.status,
             "tx_hash": t.tx_hash,
-            "created_at": t.created_at.isoformat()
+            "created_at": t.created_at.isoformat(),
+            "is_grant": (t.network or "").upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]
         } for t in txs
     ]
 
