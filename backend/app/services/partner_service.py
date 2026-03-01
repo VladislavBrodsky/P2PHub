@@ -197,6 +197,16 @@ async def _resolve_referrer(session: AsyncSession, code: str | None, current_id:
     try:
         referrer = await get_partner_by_referral_code(session, code)
         if referrer and referrer.id != current_id:
+            # #comment: Security Fix - Prevent Circular Matrix Exploits
+            # If the current_id (the person trying to join under 'referrer') 
+            # is ALREADY an ancestor of the 'referrer', this creates an infinite loop.
+            if current_id and referrer.path:
+                # Check if current_id is in referrer's path (e.g. current_id is 5, path is "1.5.12")
+                path_parts = [int(p) for p in referrer.path.split('.') if p]
+                if current_id in path_parts:
+                    logger.warning(f"🚫 BLOCKED CIRCULAR REFERRAL: User {current_id} tried to join under their own descendant {referrer.id}")
+                    return None
+            
             # #comment: Fraud Check - Prevent 'XP Farming' via abnormal referral velocity.
             # If a referrer hits the limit, we still allow the new user to join,
             # but they won't be credited to the suspicious referrer.
