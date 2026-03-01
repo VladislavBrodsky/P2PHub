@@ -3,10 +3,10 @@ MESSAGES = {
     "en": {
         "welcome": (
             "💎 **Welcome, {name}!**\n\n"
-            "🔥 *Stop being just a user. Become an owner.*\n\n"
-            "You are officially **Elite Partner**! You are early 🚀\n\n"
-            "You’ve just entered the *future of decentralized finance*. While others wait, you’re already building an empire.\n\n"
-            "💰 *Earn XP. Grow your influence. Unlock limitless rewards.*\n\n"
+            "🔥 **Transition from consumer to architect.**\n\n"
+            "You are officially a **Core Partner**! You are early 🚀\n\n"
+            "You’ve just entered the **future of decentralized finance**. While others observe, you’re already building a sovereign legacy.\n\n"
+            "💰 **Earn XP. Grow your influence. Secure strategic rewards.**\n\n"
             "🔗 **Your Personal Gateway:**\n`{referral_link}`\n\n"
             "👇 **Tap below to start your journey**"
         ),
@@ -252,10 +252,10 @@ MESSAGES = {
     "ru": {
         "welcome": (
             "💎 **Добро пожаловать, {name}!**\n\n"
-            "🔥 *Хватит быть просто пользователем. Станьте владельцем.*\n\n"
-            "Вы официально — **Элитный Партнер**! Вы в числе первых 🚀\n\n"
-            "Вы только что вошли в *будущее децентрализованных финансов*. Пока другие ждут, вы уже строите свою империю.\n\n"
-            "💰 *Зарабатывайте XP. Растите влияние. Открывайте безграничные награды.*\n\n"
+            "🔥 **Путь от потребителя к архитектору.**\n\n"
+            "Вы официально — **Core Partner**! Вы в числе первых 🚀\n\n"
+            "Вы только что вошли в **будущее децентрализованных финансов**. Пока другие наблюдают, вы уже строите суверенное наследие.\n\n"
+            "💰 **Зарабатывайте XP. Растите влияние. Получайте стратегические награды.**\n\n"
             "🔗 **Ваш персональный вход:**\n`{referral_link}`\n\n"
             "👇 **Нажмите ниже, чтобы начать путь**"
         ),
