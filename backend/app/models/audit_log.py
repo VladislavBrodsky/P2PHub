@@ -33,6 +33,12 @@ class AuditLog(SQLModel, table=True):
     action_type: ActionType = Field(default=ActionType.MISC, index=True) # Core system action category
     description: str | None = Field(default=None) # Human-readable reason/description
     
+    # #comment Performance Optimization (Scaling): 
+    # Promoting these from JSON to top-level columns to fix external queries 
+    # and improve indexing performance at 200K+ user scale.
+    amount: float | None = Field(default=None, index=True)
+    level: int | None = Field(default=None, index=True)
+
     actor_id: str | None = Field(default="system", index=True)
     details: dict | None = Field(default=None, sa_column=Column(JSON)) # Metadata (hashes, states)
     ip_address: str | None = Field(default=None)

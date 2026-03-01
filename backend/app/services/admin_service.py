@@ -26,27 +26,43 @@ class AdminService:
         Uses the notification_service for asynchronous delivery.
         """
         async for session in get_session():
-            statement = select(Partner.telegram_id, Partner.language_code)
+            base_stmt = select(Partner.telegram_id)
 
             if filters:
                 if "is_pro" in filters:
-                    statement = statement.where(Partner.is_pro == filters["is_pro"])
+                    base_stmt = base_stmt.where(Partner.is_pro == filters["is_pro"])
                 if "min_level" in filters:
-                    statement = statement.where(Partner.level >= filters["min_level"])
+                    base_stmt = base_stmt.where(Partner.level >= filters["min_level"])
 
-            result = await session.exec(statement)
-            partners = result.all()
-
+            # #comment: Performance Optimization (Scaling): 
+            # Chunked processing prevents OOM when broadcasting to 100K-200K users.
+            # We fetch 5000 telegram_ids at a time.
+            CHUNK_SIZE = 5000
+            offset = 0
             broadcast_count = 0
-            for tg_id, _lang in partners:
-                if tg_id:
-                    # Enqueue for each user
-                    await notification_service.send_low_prio(
-                        chat_id=int(tg_id),
-                        text=text,
-                        salt=f"broadcast_{int(time.time())}_{tg_id}"
-                    )
-                    broadcast_count += 1
+            
+            while True:
+                # We order by ID to ensure deterministic chunks across offset calls
+                chunk_stmt = base_stmt.order_by(Partner.id).offset(offset).limit(CHUNK_SIZE)
+                result = await session.exec(chunk_stmt)
+                tg_ids = result.all()
+                
+                if not tg_ids:
+                    break
+                    
+                for tg_id in tg_ids:
+                    if tg_id:
+                        # Enqueue for each user
+                        await notification_service.send_low_prio(
+                            chat_id=int(tg_id),
+                            text=text,
+                            salt=f"broadcast_{int(time.time())}_{tg_id}"
+                        )
+                        broadcast_count += 1
+                
+                offset += CHUNK_SIZE
+                if len(tg_ids) < CHUNK_SIZE:
+                    break
 
             return {
                 "status": "enqueued",

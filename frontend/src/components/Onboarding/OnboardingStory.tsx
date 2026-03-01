@@ -135,7 +135,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                     </m.div>
 
                                     <div className="space-y-4 relative z-10">
-                                        <h2 className="text-4xl font-black text-white tracking-tighter leading-none bg-clip-text text-transparent bg-linear-to-b from-white to-white/60">
+                                        <h2 className="text-4xl font-black tracking-tighter leading-none bg-clip-text text-transparent bg-linear-to-b from-white to-white/60">
                                             {t(`onboarding.stories.${index}.title`)}
                                         </h2>
                                         <p className="text-[17px] text-white/70 font-medium leading-relaxed px-4">
@@ -175,7 +175,7 @@ export const OnboardingStory = ({ onComplete }: OnboardingStoryProps) => {
                                     {index === STORIES_LIST.length - 1 ? t('onboarding.get_started') : t('onboarding.next')}
                                     <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
                                 </div>
-                                <motion.div
+                                <m.div
                                     className="absolute inset-0 bg-slate-100 opacity-0 group-hover:opacity-100 transition-opacity"
                                 />
                             </button>

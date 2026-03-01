@@ -154,10 +154,32 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     logger.info("🔧 Starting High-Performance Network Reconciliation...")
     start_time = datetime.now(UTC).replace(tzinfo=None)
     
-    # 1. Fetch minimum required data for all partners
-    result = await session.exec(select(Partner.id, Partner.referrer_id, Partner.path, Partner.depth, Partner.referral_count))
-    partners = result.all()
-    partner_map = {p.id: {"ref": p.referrer_id, "path": p.path, "depth": p.depth, "count": p.referral_count} for p in partners}
+    # 1. Fetch minimum required data for all partners in chunks to prevent OOM
+    partner_map = {}
+    FETCH_CHUNK = 10000
+    offset = 0
+    
+    while True:
+        stmt = (
+            select(Partner.id, Partner.referrer_id, Partner.path, Partner.depth, Partner.referral_count)
+            .order_by(Partner.id)
+            .offset(offset)
+            .limit(FETCH_CHUNK)
+        )
+        result = await session.exec(stmt)
+        chunk = result.all()
+        if not chunk:
+            break
+            
+        for p in chunk:
+            partner_map[p.id] = {"ref": p.referrer_id, "path": p.path, "depth": p.depth, "count": p.referral_count}
+            
+        offset += FETCH_CHUNK
+        if len(chunk) < FETCH_CHUNK:
+            break
+
+    total_partners = len(partner_map)
+    logger.info(f"📊 Mapping built for {total_partners} partners.")
     
     # 2. Reconcile Structures & Calculate Counts in memory
     path_updates, count_map = _calculate_network_fixes(partner_map)
@@ -175,7 +197,7 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     result_data = {
         "status": "success",
         "duration_sec": round(duration, 2),
-        "total_partners": len(partners),
+        "total_partners": total_partners,
         "structural_fixes": len(path_updates),
         "count_fixes": len(diff_counts)
     }
@@ -401,8 +423,7 @@ async def run_economy_audit(session: AsyncSession, auto_fix: bool = False) -> di
     """
     from app.services.audit_service import audit_service
 
-    result = await session.exec(select(Partner))
-    partners = result.all()
+    # 1. Fetch XP and Balance sums from ledger (already grouped, relatively small)
 
     xp_sums_result = await session.exec(
         select(XPTransaction.partner_id, func.sum(XPTransaction.amount).label("total"))
@@ -419,73 +440,91 @@ async def run_economy_audit(session: AsyncSession, auto_fix: bool = False) -> di
 
     flags = 0
     anomalies = []
+    total_checked = 0
+    FETCH_CHUNK = 5000
+    offset = 0
     
-    for partner in partners:
-        p_id = partner.id
-        p_tg_id = partner.telegram_id
-        p_xp = partner.xp
-        p_balance = partner.balance
-
-        xp_sum = xp_sums.get(p_id, 0.0)
-        bal_sum = bal_sums.get(p_id, 0.0)
-
-        xp_diff = float(p_xp) - xp_sum
-        bal_diff = float(p_balance) - bal_sum
-
-        if abs(xp_diff) > 0.01:
-            logger.warning(f"⚠️ XP Discrepancy for {p_tg_id}: DB={p_xp}, Sum={xp_sum}")
-            await audit_service.log_event(
-                session=session,
-                entity_type="system",
-                entity_id=str(p_tg_id),
-                action="integrity_discrepancy",
-                details={"type": "XP", "db_value": float(p_xp), "sum_value": xp_sum, "diff": xp_diff}
-            )
+    while True:
+        # Fetch partners in chunks to avoid OOM
+        stmt = select(Partner).order_by(Partner.id).offset(offset).limit(FETCH_CHUNK)
+        result = await session.exec(stmt)
+        partners_chunk = result.all()
+        if not partners_chunk:
+            break
             
-            if auto_fix:
-                partner.xp = xp_sum
-                session.add(partner)
-                logger.info(f"✅ Fixed XP for {p_tg_id}: aligned to {xp_sum}")
+        for partner in partners_chunk:
+            total_checked += 1
+            p_id = partner.id
+            p_tg_id = partner.telegram_id
+            p_xp = partner.xp
+            p_balance = partner.balance
 
-            flags += 1
-            anomalies.append({
-                "type": "XP", 
-                "partner_id": p_tg_id, 
-                "expected": xp_sum, 
-                "actual": float(p_xp), 
-                "diff": xp_diff
-            })
+            xp_sum = xp_sums.get(p_id, 0.0)
+            bal_sum = bal_sums.get(p_id, 0.0)
 
-        if abs(bal_diff) > 0.01:
-            logger.warning(f"⚠️ Balance Discrepancy for {p_tg_id}: DB={p_balance}, Sum={bal_sum}")
-            await audit_service.log_event(
-                session=session,
-                entity_type="system",
-                entity_id=str(p_tg_id),
-                action="integrity_discrepancy",
-                details={"type": "BALANCE", "db_value": float(p_balance), "sum_value": bal_sum, "diff": bal_diff}
-            )
+            xp_diff = float(p_xp) - xp_sum
+            bal_diff = float(p_balance) - bal_sum
 
-            if auto_fix:
-                partner.balance = bal_sum
-                session.add(partner)
-                logger.info(f"✅ Fixed Balance for {p_tg_id}: aligned to {bal_sum}")
+            if abs(xp_diff) > 0.01:
+                logger.warning(f"⚠️ XP Discrepancy for {p_tg_id}: DB={p_xp}, Sum={xp_sum}")
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="system",
+                    entity_id=str(p_tg_id),
+                    action="integrity_discrepancy",
+                    details={"type": "XP", "db_value": float(p_xp), "sum_value": xp_sum, "diff": xp_diff}
+                )
+                
+                if auto_fix:
+                    partner.xp = xp_sum
+                    session.add(partner)
 
-            flags += 1
-            anomalies.append({
-                "type": "BALANCE", 
-                "partner_id": p_tg_id, 
-                "expected": bal_sum, 
-                "actual": float(p_balance), 
-                "diff": bal_diff
-            })
+                flags += 1
+                anomalies.append({
+                    "type": "XP", 
+                    "partner_id": p_tg_id, 
+                    "expected": xp_sum, 
+                    "actual": float(p_xp), 
+                    "diff": xp_diff
+                })
+
+            if abs(bal_diff) > 0.01:
+                logger.warning(f"⚠️ Balance Discrepancy for {p_tg_id}: DB={p_balance}, Sum={bal_sum}")
+                await audit_service.log_event(
+                    session=session,
+                    entity_type="system",
+                    entity_id=str(p_tg_id),
+                    action="integrity_discrepancy",
+                    details={"type": "BALANCE", "db_value": float(p_balance), "sum_value": bal_sum, "diff": bal_diff}
+                )
+
+                if auto_fix:
+                    partner.balance = bal_sum
+                    session.add(partner)
+
+                flags += 1
+                anomalies.append({
+                    "type": "BALANCE", 
+                    "partner_id": p_tg_id, 
+                    "expected": bal_sum, 
+                    "actual": float(p_balance), 
+                    "diff": bal_diff
+                })
+        
+        # Partially commit to release locks or clear session memory if needed
+        # But caution: automatic commit here might interfere with the caller's transaction
+        # So we just keep going. session.add(partner) is fine.
+        
+        offset += FETCH_CHUNK
+        if len(partners_chunk) < FETCH_CHUNK:
+            break
 
     if flags > 0:
         await session.commit()
         
     return {
         "status": "anomalous" if flags > 0 else "healthy",
-        "total_checked": len(partners),
+        "total_checked": total_checked,
         "discrepancies_found": flags,
         "anomalies": anomalies[:50]
     }

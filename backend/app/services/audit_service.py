@@ -53,7 +53,9 @@ class AuditService:
         ip_address: str | None = None,
         partner_id: int | None = None,
         action_type: ActionType = ActionType.MISC,
-        description: str | None = None
+        description: str | None = None,
+        amount: float | None = None,
+        level: int | None = None
     ) -> AuditLog | None:
         """
         Core audit log method. Used by all specialized helpers below.
@@ -69,7 +71,9 @@ class AuditService:
                 action=action,
                 actor_id=actor_id,
                 details=details or {},
-                ip_address=ip_address
+                ip_address=ip_address,
+                amount=amount,
+                level=level
             )
             session.add(log_entry)
             return log_entry
@@ -122,6 +126,8 @@ class AuditService:
             entity_type="partner",
             entity_id=str(partner_id),
             action="xp_award",
+            amount=xp_amount,
+            level=level,
             details={
                 "new_user_id": new_user_id,
                 "buyer_id": buyer_id,
@@ -158,6 +164,8 @@ class AuditService:
             entity_type="partner",
             entity_id=str(partner_id),
             action="commission_award",
+            amount=amount,
+            level=level,
             details={
                 "buyer_id": buyer_id,
                 "amount": amount,
@@ -332,6 +340,7 @@ class AuditService:
             entity_type="transaction",
             entity_id=str(transaction_id),
             action=f"payment_{status}",
+            amount=amount,
             details={
                 "transaction_id": transaction_id,
                 "amount": amount,
