@@ -215,7 +215,7 @@ export default function LeaderboardPage() {
                 </h1>
 
                 {/* Timeframe Toggle */}
-                <div className="flex p-0.5 bg-slate-900/5 dark:bg-slate-900/20 backdrop-blur-3xl rounded-xl mt-2 w-full max-w-[300px] border border-slate-900/5 dark:border-white/5 shadow-premium relative">
+                <div className="flex p-0.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-xl mt-2 w-full max-w-[300px] border border-slate-900/5 dark:border-white/5 shadow-premium relative">
                     {(['weekly', 'monthly', 'all'] as const).map((tf) => (
                         <button
                             key={tf}
@@ -233,7 +233,8 @@ export default function LeaderboardPage() {
                             {timeframe === tf && (
                                 <motion.div
                                     layoutId="activeTimeframe"
-                                    className="absolute inset-0 bg-linear-to-r from-indigo-600 via-indigo-500 to-indigo-600 bg-size-[200%_auto] animate-vibing-gradient rounded-lg shadow-lg -z-10"
+                                    initial={false}
+                                    className="absolute inset-0 bg-linear-to-r from-indigo-600 via-indigo-500 to-indigo-600 rounded-lg shadow-lg -z-10"
                                     transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                                 >
                                     <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-lg" />

@@ -521,7 +521,7 @@ export const ProDashboard = () => {
                 </div>
 
                 {/* Tab Switcher - Fixed Padding/Tracking and rounded-3xl */}
-                <div className="flex p-0.5 bg-slate-900/5 dark:bg-slate-900/20 backdrop-blur-3xl rounded-3xl border border-slate-900/5 dark:border-white/5 shadow-premium mt-1 mx-auto max-w-[420px] w-full relative">
+                <div className="flex p-0.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-3xl border border-slate-900/5 dark:border-white/5 shadow-premium mt-1 mx-auto max-w-[420px] w-full relative">
                     {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
                         const tabConfig = {
                             studio: {
@@ -553,7 +553,8 @@ export const ProDashboard = () => {
                                 {activeTab === tab && (
                                     <motion.div
                                         layoutId="activeTabGlow"
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} bg-size-[200%_auto] animate-vibing-gradient rounded-2xl ${tabConfig[tab].shadow} shadow-lg`}
+                                        initial={false}
+                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} rounded-2xl ${tabConfig[tab].shadow} shadow-lg`}
                                         transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                     >
                                         <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl" />
