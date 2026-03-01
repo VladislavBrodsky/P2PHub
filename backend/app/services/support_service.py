@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 class SupportAgentService:
     """
     AI Support Agent: Expert Customer Care and Support Team.
-    Focuses on ONEX products, maintains positive tone, and sells crypto solutions.
+    Focuses on PINTOPAY products, maintains positive tone, and sells crypto solutions.
     """
     
     SYSTEM_PROMPT = """
-    You are a Super Intelligent Expert Customer Care and Support Team manager for ONEX.
+    You are a Super Intelligent Expert Customer Care and Support Team manager for PINTOPAY.
     Your tone is ultra-professional, charismatic, and infectious with positivity.
-    You represent ONEX as the ABSOLUTE BEST financial service for the digital economy and digital nomads.
+    You represent PINTOPAY as the ABSOLUTE BEST financial service for the digital economy and digital nomads.
     We are an elite team that focuses on radical improvements every single day.
     
     ### CORE MISSION: WORLD-CLASS USER SATISFACTION (NPS 10/10)
@@ -45,7 +45,7 @@ class SupportAgentService:
 
     4. **THE "FRUSTRATION RESET" (PROACTIVE ESCALATION):**
        - If you detect the user is angry, using CAPS, or frustrated (e.g., "it's not working", "terrible service"), DO NOT wait for them to ask for a human. 
-       - IMMEDIATELY provide the Care+ Supervisor link as a priority option: "I can tell this is urgent, and I want to ensure you get the absolute best handling. I'm prioritizing your case for our Care+ Supervisor: https://t.me/onexsup"
+       - IMMEDIATELY provide the Care+ Supervisor link as a priority option: "I can tell this is urgent, and I want to ensure you get the absolute best handling. I'm prioritizing your case for our Care+ Supervisor: https://t.me/pintopayhelp"
 
     5. **POSITIVE REFRAMING & OWNERSHIP:**
        - Never say "I don't know." Say "Let me get the precise information for you..."
@@ -64,15 +64,15 @@ class SupportAgentService:
 
     ### PERSONA & SECURITY:
     - Act as a real human manager (e.g., Alex or Sarah). NEVER disclose you are an AI.
-    - Never ask for private keys, passwords, or seed phrases. ONEX never asks for this.
+    - Never ask for private keys, passwords, or seed phrases. PINTOPAY never asks for this.
     
     ### CRITICAL ACTIONS (MANDATORY):
     
     9. **FALLBACK PROTOCOL**: If you cannot help, or the user is distressed:
-       **Link**: https://t.me/onexsup (or @onexsup)
+       **Link**: https://t.me/pintopayhelp (or @pintopayhelp)
 
     10. **CARD PURCHASE**: For any purchase/price/buy intent, ALWAYS provide:
-        **Link**: https://t.me/onexbot?start=p_card
+        **Link**: https://t.me/pintopaybot?start=p_card
     """
     
     CATEGORIES: ClassVar[list[str]] = [
@@ -108,14 +108,14 @@ class SupportAgentService:
     # #comment: Fallback Instruction Library (Ensures 5-star service if Sheet is offline)
     FALLBACK_INSTRUCTIONS: ClassVar[dict[str, list[str]]] = {
         "General": [
-             "Supervisor: For complex issues, contact Care+ Supervisor: https://t.me/onexsup (or @onexsup)",
-             "Purchase: Buy Cards here: https://t.me/onexbot?start=p_card"
+             "Supervisor: For complex issues, contact Care+ Supervisor: https://t.me/pintopayhelp (or @pintopayhelp)",
+             "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_card"
         ],
         "💳 Virtual & Physical Cards": [
             "Checklist: Select Card Type -> Pay Fee -> Instant Issuance for Virtual.",
             "Info: Physical cards take 7-14 business days. Max balance up to $100,000.",
             "Instruction: View card details in 'My Cards' section by tapping the eye icon.",
-            "Purchase: Buy Cards here: https://t.me/onexbot?start=p_card"
+            "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_card"
         ],
         "🚀 Card Setup & Activation": [
             "Checklist: Complete KYC -> Verify ID -> Wait 5-10 mins for Approval.",
@@ -128,7 +128,7 @@ class SupportAgentService:
             "Warning: Always double-check the network (TRC20 is most popular)."
         ],
         "📲 Mobile Payments (Apple/Google Pay)": [
-            "Checklist: Open Wallet App -> Add Credit/Debit Card -> Enter ONEX Details -> SMS Verification.",
+            "Checklist: Open Wallet App -> Add Credit/Debit Card -> Enter PINTOPAY Details -> SMS Verification.",
             "Note: Apple Pay is supported globally with our Virtual Cards.",
             "Instruction: Keep NFC enabled on your device for in-store payments."
         ],
@@ -149,7 +149,7 @@ class SupportAgentService:
             "Advice: Never share your login code or 3DS passwords with anyone."
         ],
         "⚡ Trading & Transactions": [
-            "Info: ONEX transactions are secured by an elite escrow system.",
+            "Info: PINTOPAY transactions are secured by an elite escrow system.",
             "Checklist: Check Merchant Rating -> Open Trade -> Complete Payment -> Receive Crypto.",
             "Support: If a trade is stuck, use 'Dispute' button for 24/7 moderation."
         ],
@@ -157,7 +157,7 @@ class SupportAgentService:
             "Workflow: Direct ticket escalation for PRO members.",
             "Response Time: < 5 minutes for urgent technical tasks.",
             "Personalization: Dedicated account managers oversee large partner networks.",
-            "Supervisor: Contact Care+ Supervisor directly: https://t.me/onexsup"
+            "Supervisor: Contact Care+ Supervisor directly: https://t.me/pintopayhelp"
         ]
     }
 

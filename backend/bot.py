@@ -87,7 +87,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
                 return
 
             # Otherwise, start onboarding
-            welcome_image_path = "/Users/grandmaestro/Developer/ONEX /3D иллюстрации/иллюстрация.png"
+            welcome_image_path = "assets/branding/welcome_illustration.png"
             try:
                 from aiogram.types import FSInputFile
                 photo = FSInputFile(welcome_image_path)

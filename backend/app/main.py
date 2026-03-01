@@ -259,11 +259,11 @@ async def lifespan(app: FastAPI):
                 logger.error(f"❌ Error cancelling polling extender task: {e}")
 
 
-app = FastAPI(title="ONEX ecosystem API", lifespan=lifespan)
+app = FastAPI(title="Pintopay ecosystem API", lifespan=lifespan)
 
 @app.get("/")
 async def root_health():
-    return {"status": "healthy", "service": "ONEX Backend"}
+    return {"status": "healthy", "service": "Pintopay Backend"}
 
 @app.get("/sentry-debug")
 async def trigger_error():
