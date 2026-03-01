@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { TONLogo, USDTLogo } from '../../../ui/CryptoIcons';
 import { formatEarningDescription, getTypeStyles } from './utils';
+import i18n from 'i18next';
 
 interface EarningRowProps {
     item: any;
@@ -17,7 +18,7 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx, t 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.03 }}
-            className="bg-[--color-bg-glass] rounded-xl p-2 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+            className="bg-[--color-bg-glass] rounded-xl p-1.5 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
         >
             <div className="flex items-center gap-2">
                 <div className={`w-6.5 h-6.5 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
@@ -34,7 +35,7 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx, t 
                         {formatEarningDescription(item.description, t)}
                     </span>
                     <span className="text-label text-slate-500 opacity-50 font-medium">
-                        {new Date(item.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        {new Date(item.created_at).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import {
     X, Clock, Calendar, ChevronDown,
     ArrowUpRight, ArrowDownRight, Activity
@@ -277,7 +278,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                     )}
                                                                 </div>
                                                                 <span className="text-label font-bold text-slate-400 uppercase tracking-tight mt-0.5">
-                                                                    {new Date(item.created_at).toLocaleDateString([], {
+                                                                    {new Date(item.created_at).toLocaleDateString(i18n.language, {
                                                                         month: 'short', day: 'numeric',
                                                                         hour: '2-digit', minute: '2-digit'
                                                                     })}
@@ -287,9 +288,9 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                         <div className="text-right shrink-0 ml-3">
                                                             <div className={`text-sm font-bold tabular-nums ${isIncome ? 'text-emerald-500' : 'text-slate-400'}`}>
                                                                 {isIncome ? '+' : '-'}{(item.amount ?? 0).toFixed(2)}
-                                                                <span className="text-label ml-0.5 uppercase opacity-60">{item.currency}</span>
+                                                                <span className="text-[10px] ml-0.5 uppercase opacity-60 font-medium">{item.currency}</span>
                                                             </div>
-                                                            <div className="text-label font-bold uppercase tracking-widest text-slate-400 mt-0.5">
+                                                            <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mt-[-2px]">
                                                                 {isIncome
                                                                     ? t('partner_dashboard.finance_stats.income', 'INFLOW')
                                                                     : t('partner_dashboard.finance_stats.outcome', 'OUTFLOW')
@@ -337,7 +338,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                             >
                                                 <div className="flex items-center gap-2.5">
                                                     <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                                                        {new Date(stats.monthly_history[selectedMonthIdx]?.timestamp).toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                                                        {new Date(stats.monthly_history[selectedMonthIdx]?.timestamp).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' })}
                                                     </span>
                                                     {selectedMonthIdx === 0 && (
                                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
@@ -376,7 +377,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                 } ${idx > 0 ? 'border-t border-slate-100 dark:border-white/5' : ''}`}
                                                         >
                                                             <span className="text-label font-bold uppercase tracking-tight">
-                                                                {new Date(m.timestamp).toLocaleDateString([], { month: 'long', year: 'numeric' })}
+                                                                {new Date(m.timestamp).toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' })}
                                                             </span>
                                                             {idx === 0 && (
                                                                 <span className="text-label font-bold text-indigo-500 uppercase tracking-wider">● {t('partner_dashboard.finance_stats.current', 'Current')}</span>
