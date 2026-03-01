@@ -13,8 +13,8 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
     ))
     if referral_link:
         share_text = get_msg(lang, "share_text")
-        encoded_text = urllib.parse.quote(share_text)
-        share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={encoded_text}"
+        full_message = f"🏆 {share_text} - {referral_link}"
+        share_url = f"https://t.me/share/url?text={urllib.parse.quote(full_message)}"
         builder.row(types.InlineKeyboardButton(
             text=get_msg(lang, "btn_share_link"),
             url=share_url

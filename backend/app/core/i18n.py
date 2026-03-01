@@ -53,7 +53,7 @@ MESSAGES = {
             "You earned *+{reward} XP*.\n"
             "🌟 Your journey to the top continues!"
         ),
-        "share_text": "🚀 Join me on Pintopay and build your financial legacy! The future of decentralized payments is here. 💎",
+        "share_text": "Join me on Pintopay and build your financial legacy! The future of decentralized payments is here",
         "pro_welcome": (
             "👑 *WELCOME TO THE PINTOPAY CORE!* 👑\n\n"
             "You have just unlocked the *Advanced Infrastructure* of the Pintopay Network!\n\n"
@@ -310,7 +310,7 @@ MESSAGES = {
             "Вы получили *+{reward} XP*.\n"
             "🌟 Ваш путь к вершине продолжается!"
         ),
-        "share_text": "🚀 Присоединяйся ко мне в Pintopay и строй свое финансовое наследие! Будущее децентрализованных платежей уже здесь. 💎",
+        "share_text": "Присоединяйся ко мне в Pintopay и строй свое финансовое наследие! Будущее децентрализованных платежей уже здесь",
         "pro_welcome": (
             "👑 *ДОБРО ПОЖАЛОВАТЬ В ЯДРО PINTOPAY!* 👑\n\n"
             "Вы только что открыли *Продвинутую Инфраструктуру* сети PINTOPAY!\n\n"
