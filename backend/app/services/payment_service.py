@@ -522,12 +522,18 @@ class PaymentService:
             session.add(partner)
 
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
-            from app.services.referral_service import distribute_pro_commissions
-            await distribute_pro_commissions(
-                session, partner.id, amount, 
-                plan_type=partner.subscription_plan,
-                transaction_id=transaction.id
-            )
+            # #comment: Elite Quality Filter - Skip commissions for non-spending upgrades (Gifts, Grants)
+            # This prevents referral leakage and internal system inflation.
+            is_gift = (network or "").upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]
+            if not is_gift:
+                from app.services.referral_service import distribute_pro_commissions
+                await distribute_pro_commissions(
+                    session, partner.id, amount, 
+                    plan_type=partner.subscription_plan,
+                    transaction_id=transaction.id
+                )
+            else:
+                logger.info(f"🎁 Skipping commission distribution for gift upgrade (Network: {network}) for partner {partner.id}")
             
             # 3.1 Trigger "Network Catalyst" milestone for direct referrer (L1)
             # This fires the first time ANY of their direct referrals upgrades to PRO.
