@@ -229,14 +229,14 @@ export const AdminLedger: React.FC<AdminLedgerProps> = React.memo(({
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <AlertOctagon size={14} className="text-red-400" />
-                        <span className="text-label font-bold text-white uppercase tracking-widest">Live Reconciliation Check</span>
+                        <span className="text-label font-bold text-white uppercase tracking-widest">{t('admin:ledger.title')}</span>
                     </div>
                     <button onClick={handleLiveReconcile} disabled={isReconciling}
                         className={`px-4 py-2 rounded-xl text-label font-bold uppercase tracking-widest flex items-center gap-1.5 transition-all ${isReconciling ? 'bg-red-500/5 text-red-400 animate-pulse' : 'bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20'}`}>
                         {isReconciling ? <><Radio size={12} className="animate-spin" /> Running…</> : <><CheckSquare size={12} /> Run Check</>}
                     </button>
                 </div>
-                <p className="text-label text-slate-500">Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches.</p>
+                <p className="text-label text-slate-500">{t('admin:ledger.desc')}</p>
                 {reconcileResult && (
                     <div className="space-y-2 mt-1">
                         <div className={`flex items-center gap-2 text-xs font-bold ${reconcileResult.status === 'healthy' ? 'text-emerald-400' : 'text-red-400'}`}>

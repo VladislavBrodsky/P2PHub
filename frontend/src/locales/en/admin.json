@@ -122,5 +122,46 @@
         "commission_split": "Commissions Breakdown",
         "level_partners": "Level {{level}} Partners",
         "revenue_usdt_ton": "Revenue (USDT / TON)"
+    },
+    "network": {
+        "title": "Network Matrix Topography",
+        "desc": "Visualize and inspect the exact dimensional shape of the 20-generation lineage matrix. Drill into any generation depth to audit individual partner structures.",
+        "tree_title": "Network Generation Tree",
+        "gen": "Gen {{depth}}",
+        "partners": "Generation {{depth}} Partners",
+        "earnings": "EARNINGS"
+    },
+    "payments": {
+        "title": "Manual TX Verification Hub",
+        "desc": "Cross-reference decentralized network transactions (TON/TRON). Approval automatically distributes the 20-level commissions to upper referrers. Rejection dispatches a Telegram notice to the user. Ensure the Amount and Destination Wallet match before confirming.",
+        "pending": "Pending Review",
+        "action_required": "Action Required",
+        "select_all": "Select All",
+        "reject": "Reject",
+        "reject_count": "Reject ({{count}})",
+        "approve": "Approve",
+        "approve_count": "Approve ({{count}})",
+        "queue_empty": "Queue Empty",
+        "up_to_date": "All payments are up to date",
+        "recently": "Recently",
+        "tx_hash": "TX Hash:",
+        "manual_verification": "Manual Verification Required"
+    },
+    "partner_details": {
+        "fetching": "Fetching Dossier...",
+        "account_rank": "Account Rank",
+        "total_xp": "{{xp}} Total XP",
+        "pro_status": "PRO Status",
+        "active": "ACTIVE",
+        "inactive": "INACTIVE",
+        "tokens": "{{tokens}} Tokens",
+        "admin_actions": "Administrative Actions",
+        "direct_referrals": "Direct Referrals",
+        "tasks_completed": "Tasks Completed",
+        "current_balance": "Current Balance"
+    },
+    "ledger": {
+        "title": "Live Reconciliation Check",
+        "desc": "Cross-checks every partner's XP & USDT balance against sum of all transaction records. Flags mismatches."
     }
 }

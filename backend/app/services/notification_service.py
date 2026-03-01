@@ -103,7 +103,12 @@ async def send_telegram_task(payload_dict: dict):
 
     except TelegramRetryAfter as e:
         logger.warning(f"⚠️ Telegram Rate Limit (429): Wait {e.retry_after}s for {payload.chat_id}")
-        # Explicit sleep to respect Telegram's demand
+        
+        # #comment: Advanced Reliability (Phase 2)
+        # Circuit Breaker: Trip the breaker universally so other tasks pause
+        await rate_limit_service.trip_circuit_breaker(e.retry_after)
+        
+        # Explicit sleep to respect Telegram's demand for this specific task
         await asyncio.sleep(e.retry_after)
         raise e # Let TaskIQ retry
     except TelegramForbiddenError:
@@ -191,6 +196,13 @@ class NotificationService:
             return
 
         try:
+            # #comment: Advanced Reliability (Phase 2)
+            # Circuit Breaker Check: If Telegram is actively rate-limiting us, pause enqueuing
+            # or delay the task processing.
+            if await rate_limit_service.is_circuit_breaker_tripped():
+                logger.warning(f"🔌 Circuit Breaker Active. Delaying enqueue for {chat_id}")
+                await asyncio.sleep(5) # Add backpressure
+                
             # 0. Check if user blocked the bot (Redis-cached check)
             if priority != "high" and await rate_limit_service.is_blocked(str(chat_id)):
                 logger.info(f"🚫 [BLOCKED] Skipping message for {chat_id}")

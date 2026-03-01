@@ -6,7 +6,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 // Instead of bundling ~400KB of JSON directly into the main JS bundle, 
 // we use dynamic imports. This allows Vite to split each language/sector 
 // into its own small chunk, loaded only when needed.
-const namespaces = ['common', 'dashboard', 'marketing', 'academy', 'pro', 'social', 'cards', 'other'];
+const namespaces = ['common', 'dashboard', 'marketing', 'academy', 'pro', 'social', 'cards', 'admin', 'other'];
 
 const loadResources = async (language: string, namespace: string) => {
     const parts = language.split('-');

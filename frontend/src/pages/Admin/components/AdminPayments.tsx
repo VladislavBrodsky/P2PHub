@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     ShieldCheck, CheckCircle, Clock, RefreshCw, User, ExternalLink
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Transaction } from '../types';
 
 interface AdminPaymentsProps {
@@ -30,6 +31,8 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
     handleApprove,
     handleReject
 }) => {
+    const { t } = useTranslation(['admin', 'common']);
+
     return (
         <motion.div
             key="payments"
@@ -42,14 +45,14 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
             <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/10 flex items-start gap-3">
                 <ShieldCheck className="text-amber-500 shrink-0 mt-0.5" size={16} />
                 <div className="flex-1 space-y-2">
-                    <h3 className="text-xs font-bold text-amber-500 uppercase tracking-widest">Manual TX Verification Hub</h3>
-                    <p className="text-label text-slate-500 font-medium leading-relaxed">Cross-reference decentralized network transactions (TON/TRON). Approval automatically distributes the 20-level commissions to upper referrers. Rejection dispatches a Telegram notice to the user. Ensure the Amount and Destination Wallet match before confirming.</p>
+                    <h3 className="text-xs font-bold text-amber-500 uppercase tracking-widest">{t('admin:payments.title')}</h3>
+                    <p className="text-label text-slate-500 font-medium leading-relaxed">{t('admin:payments.desc')}</p>
                 </div>
             </div>
 
             <div className="flex items-center justify-between px-1">
-                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Pending Review ({transactions.length})</h2>
-                <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-label font-bold uppercase">Action Required</div>
+                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">{t('admin:payments.pending')} ({transactions.length})</h2>
+                <div className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-500 text-label font-bold uppercase">{t('admin:payments.action_required')}</div>
             </div>
 
             {transactions.length > 0 && (
@@ -61,16 +64,16 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
                             checked={transactions.length > 0 && selectedPayments.size === transactions.length}
                             onChange={toggleAllPayments}
                         />
-                        <span className="text-xs font-bold text-slate-500 uppercase">Select All</span>
+                        <span className="text-xs font-bold text-slate-500 uppercase">{t('admin:payments.select_all')}</span>
                     </label>
                     {selectedPayments.size > 0 && (
                         <div className="flex items-center gap-2">
                             <button onClick={handleBatchReject} disabled={isBatchProcessing} className="px-3 py-1.5 rounded-lg bg-red-500/10 text-red-500 text-xs font-bold uppercase hover:bg-red-500/20 disabled:opacity-50 transition-colors">
-                                Reject ({selectedPayments.size})
+                                {t('admin:payments.reject_count', { count: selectedPayments.size })}
                             </button>
                             <button onClick={handleBatchApprove} disabled={isBatchProcessing} className="px-3 py-1.5 rounded-lg bg-blue-500 text-white text-xs font-bold uppercase hover:bg-blue-600 disabled:opacity-50 flex items-center gap-1 shadow-md shadow-blue-500/20 transition-colors">
                                 {isBatchProcessing && <RefreshCw size={12} className="animate-spin" />}
-                                Approve ({selectedPayments.size})
+                                {t('admin:payments.approve_count', { count: selectedPayments.size })}
                             </button>
                         </div>
                     )}
@@ -87,8 +90,8 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
                         <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                             <CheckCircle className="text-blue-500" size={32} />
                         </div>
-                        <div className="text-slate-500 font-bold">Queue Empty</div>
-                        <p className="text-slate-500 dark:text-slate-400 text-xs">All payments are up to date</p>
+                        <div className="text-slate-500 font-bold">{t('admin:payments.queue_empty')}</div>
+                        <p className="text-slate-500 dark:text-slate-400 text-xs">{t('admin:payments.up_to_date')}</p>
                     </motion.div>
                 ) : (
                     transactions.map((tx) => (
@@ -126,15 +129,15 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
                                 </div>
                                 <div className="text-right">
                                     <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase">
-                                        {tx.created_at ? new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'}
+                                        {tx.created_at ? new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t('admin:payments.recently')}
                                     </div>
                                 </div>
                             </div>
 
                             <div className="p-3 rounded-2xl bg-black/20 font-mono text-label break-all flex items-start justify-between gap-3 border border-black/5 dark:border-white/5">
-                                <span className="text-slate-500 shrink-0 uppercase font-bold">TX Hash:</span>
+                                <span className="text-slate-500 shrink-0 uppercase font-bold">{t('admin:payments.tx_hash')}</span>
                                 <span className={`select-all flex-1 ${!tx.tx_hash ? "text-red-400 italic" : "text-slate-500 dark:text-slate-400"}`}>
-                                    {tx.tx_hash || "Manual Verification Required"}
+                                    {tx.tx_hash || t('admin:payments.manual_verification')}
                                 </span>
                                 {tx.tx_hash && (
                                     <a
@@ -153,7 +156,7 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
                                     onClick={() => handleReject(tx.id)}
                                     className="py-3.5 rounded-[1.25rem] bg-white/5 text-slate-500 font-bold text-xs uppercase tracking-widest active:scale-95 transition-all"
                                 >
-                                    Reject
+                                    {t('admin:payments.reject')}
                                 </button>
                                 <button
                                     onClick={() => handleApprove(tx.id)}
@@ -165,7 +168,7 @@ export const AdminPayments: React.FC<AdminPaymentsProps> = React.memo(({
                                     ) : (
                                         <>
                                             <CheckCircle size={16} />
-                                            Approve
+                                            {t('admin:payments.approve')}
                                         </>
                                     )}
                                 </button>

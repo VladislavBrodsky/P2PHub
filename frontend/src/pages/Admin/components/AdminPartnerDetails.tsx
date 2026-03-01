@@ -41,7 +41,7 @@ export const AdminPartnerDetails: React.FC<AdminPartnerDetailsProps> = React.mem
                         {!partnerDetails || isDetailsLoading ? (
                             <div className="p-20 flex flex-col items-center gap-4">
                                 <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
-                                <p className="text-xs font-bold text-slate-500 uppercase">Fetching Dossier...</p>
+                                <p className="text-xs font-bold text-slate-500 uppercase">{t('admin:partner_details.fetching')}</p>
                             </div>
                         ) : (
                             <>
@@ -69,24 +69,24 @@ export const AdminPartnerDetails: React.FC<AdminPartnerDetailsProps> = React.mem
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                                        <div className="text-label font-bold text-slate-500 uppercase">Account Rank</div>
+                                        <div className="text-label font-bold text-slate-500 uppercase">{t('admin:partner_details.account_rank')}</div>
                                         <div className="text-xl font-bold text-blue-500">
                                             {(partnerDetails.is_pro && (partnerDetails.subscription_plan || "").includes('PLUS')) ? 'PRO+' : `Level ${partnerDetails.level}`}
                                         </div>
-                                        <div className="text-label font-bold text-slate-400 uppercase">{partnerDetails.xp} Total XP</div>
+                                        <div className="text-label font-bold text-slate-400 uppercase">{t('admin:partner_details.total_xp', { xp: partnerDetails.xp })}</div>
                                     </div>
                                     <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 space-y-1">
-                                        <div className="text-label font-bold text-slate-500 uppercase">PRO Status</div>
+                                        <div className="text-label font-bold text-slate-500 uppercase">{t('admin:partner_details.pro_status')}</div>
                                         <div className={`text-xl font-bold ${partnerDetails.is_pro ? 'text-amber-500' : 'text-slate-400'}`}>
-                                            {partnerDetails.is_pro ? 'ACTIVE' : 'INACTIVE'}
+                                            {partnerDetails.is_pro ? t('admin:partner_details.active') : t('admin:partner_details.inactive')}
                                         </div>
-                                        <div className="text-label font-bold text-slate-400 uppercase">{partnerDetails.pro_tokens} Tokens</div>
+                                        <div className="text-label font-bold text-slate-400 uppercase">{t('admin:partner_details.tokens', { tokens: partnerDetails.pro_tokens })}</div>
                                     </div>
                                 </div>
 
                                 {/* Admin Actions */}
                                 <div className="space-y-3">
-                                    <h4 className="text-label font-bold uppercase text-slate-500 tracking-widest px-1">Administrative Actions</h4>
+                                    <h4 className="text-label font-bold uppercase text-slate-500 tracking-widest px-1">{t('admin:partner_details.admin_actions')}</h4>
                                     <div className="grid grid-cols-2 gap-2">
                                         <button
                                             onClick={() => updatePartner({ is_pro: !partnerDetails.is_pro })}
@@ -115,21 +115,21 @@ export const AdminPartnerDetails: React.FC<AdminPartnerDetailsProps> = React.mem
                                     <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                         <div className="flex items-center gap-3">
                                             <Users size={18} className="text-slate-400" />
-                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.direct_referrals')}</span>
+                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin:partner_details.direct_referrals')}</span>
                                         </div>
                                         <span className="text-sm font-bold">{partnerDetails.referral_count}</span>
                                     </div>
                                     <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                         <div className="flex items-center gap-3">
                                             <CheckCircle size={18} className="text-slate-400" />
-                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.tasks_completed')}</span>
+                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin:partner_details.tasks_completed')}</span>
                                         </div>
                                         <span className="text-sm font-bold">{partnerDetails.tasks?.length || 0}</span>
                                     </div>
                                     <div className="flex items-center justify-between p-4 rounded-2xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5">
                                         <div className="flex items-center gap-3">
                                             <Wallet size={18} className="text-slate-400" />
-                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin_portal.stats.current_balance')}</span>
+                                            <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin:partner_details.current_balance')}</span>
                                         </div>
                                         <span className="text-sm font-bold text-emerald-500">${partnerDetails.balance}</span>
                                     </div>

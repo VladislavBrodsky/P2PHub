@@ -375,7 +375,7 @@ export const AdminPage = () => {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchData(false, true); // Force refresh on initial mount
     }, []);
 
     const tick = useSystemClock();
@@ -404,6 +404,9 @@ export const AdminPage = () => {
             setIsPalantirPolling(false);
         } else if (viewMode === 'network') {
             fetchNetworkStats();
+            setIsPalantirPolling(false);
+        } else if (['kpis', 'financials', 'payments'].includes(viewMode)) {
+            fetchData(true, true); // Force refresh when switching to these tabs
             setIsPalantirPolling(false);
         } else {
             setIsPalantirPolling(false);

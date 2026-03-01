@@ -2,6 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Layers, Users, Zap } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
+
 interface AdminNetworkProps {
     networkStats: Record<string, number> | null;
     selectedNetworkDepth: number | null;
@@ -17,6 +19,8 @@ export const AdminNetwork: React.FC<AdminNetworkProps> = React.memo(({
     fetchNetworkMembers,
     fetchPartnerDetails
 }) => {
+    const { t } = useTranslation(['admin']);
+
     return (
         <motion.div
             key="network"
@@ -28,15 +32,15 @@ export const AdminNetwork: React.FC<AdminNetworkProps> = React.memo(({
             <div className="p-4 rounded-2xl bg-violet-500/5 border border-violet-500/10 flex items-start gap-3">
                 <Layers className="text-violet-500 shrink-0 mt-0.5" size={16} />
                 <div>
-                    <h3 className="text-xs font-bold text-violet-500 uppercase tracking-widest">Network Matrix Topography</h3>
-                    <p className="text-label text-slate-500 font-medium mt-1">Visualize and inspect the exact dimensional shape of the 20-generation lineage matrix. Drill into any generation depth to audit individual partner structures.</p>
+                    <h3 className="text-xs font-bold text-violet-500 uppercase tracking-widest">{t('admin:network.title')}</h3>
+                    <p className="text-label text-slate-500 font-medium mt-1">{t('admin:network.desc')}</p>
                 </div>
             </div>
 
             {/* Tree Distribution Grid */}
             <div className="space-y-3">
                 <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 px-1 flex items-center gap-2">
-                    <Layers size={14} /> Network Generation Tree
+                    <Layers size={14} /> {t('admin:network.tree_title')}
                 </h2>
                 <div className="grid grid-cols-3 gap-2">
                     {Array.from({ length: 20 }).map((_, i) => {
@@ -52,7 +56,7 @@ export const AdminNetwork: React.FC<AdminNetworkProps> = React.memo(({
                                     : 'glass-panel-premium border-black/5 dark:border-white/5 text-slate-500 hover:border-blue-500/30'
                                     }`}
                             >
-                                <div className={`text-label font-bold uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>Gen {depth}</div>
+                                <div className={`text-label font-bold uppercase ${isSelected ? 'opacity-80' : 'text-slate-400'}`}>{t('admin:network.gen', { depth })}</div>
                                 <div className={`text-xl font-bold ${isSelected ? 'text-white' : 'text-slate-900 dark:text-slate-100'}`}>{count}</div>
                             </button>
                         );
@@ -65,7 +69,7 @@ export const AdminNetwork: React.FC<AdminNetworkProps> = React.memo(({
                 <div className="space-y-3">
                     <div className="flex items-center justify-between px-1">
                         <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
-                            Generation {selectedNetworkDepth} Partners ({networkMembers.length})
+                            {t('admin:network.partners', { depth: selectedNetworkDepth })} ({networkMembers.length})
                         </h2>
                     </div>
                     <div className="space-y-2">
@@ -95,7 +99,7 @@ export const AdminNetwork: React.FC<AdminNetworkProps> = React.memo(({
                                 </div>
                                 <div className="text-right">
                                     <div className="text-xs font-bold text-slate-900 dark:text-slate-100">${member.usdt_balance || 0}</div>
-                                    <div className="text-label font-bold text-slate-400 uppercase">EARNINGS</div>
+                                    <div className="text-label font-bold text-slate-400 uppercase">{t('admin:network.earnings')}</div>
                                 </div>
                             </div>
                         ))}

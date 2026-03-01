@@ -132,5 +132,27 @@ class RateLimitService:
         except Exception:
             pass
 
+    async def trip_circuit_breaker(self, duration: int):
+        """
+        Trips a global circuit breaker to pause all outgoing notifications 
+        (except high priority) due to severe Telegram rate limiting.
+        """
+        try:
+            redis = await self.get_redis()
+            # We add a 2 second buffer to whatever Telegram told us to wait
+            safe_duration = duration + 2
+            await redis.set("circuit_breaker:telegram", "tripped", ex=safe_duration)
+            logger.warning(f"🔌 CIRCUIT BREAKER TRIPPED for {safe_duration}s.")
+        except Exception as e:
+            logger.error(f"Failed to trip circuit breaker: {e}")
+
+    async def is_circuit_breaker_tripped(self) -> bool:
+        """Checks if the global Telegram notification circuit breaker is currently active."""
+        try:
+            redis = await self.get_redis()
+            return await redis.exists("circuit_breaker:telegram") > 0
+        except Exception:
+            # If Redis fails, we generally want to fail open to keep the system running,
+            return False
 
 rate_limit_service = RateLimitService()
