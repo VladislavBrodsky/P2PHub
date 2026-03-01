@@ -32,13 +32,13 @@ def upgrade() -> None:
 
     # 4. Backfill AuditLog data
     # We use a raw SQL UPDATE for performance
-    op.execute(\"\"\"
+    op.execute("""
         UPDATE audit_log 
         SET amount = (details->>'amount')::float, 
             level = (details->>'level')::int
         WHERE action_type IN ('COMMISSION', 'XP_AWARD', 'PAYMENT') 
           AND (details->>'amount' IS NOT NULL OR details->>'level' IS NOT NULL)
-    \"\"\")
+    """)
     
     # 5. Refresh the auditlog view (it might be used by external analytics)
     op.execute("DROP VIEW IF EXISTS auditlog")
