@@ -20,138 +20,110 @@ from app.services.redis_service import redis_service
 
 
 class AdminService:
-    async def broadcast_message(self, text: str, filters: dict | None = None):
-        """
-        Broadcasting a message to all or filtered partners.
-        Uses the notification_service for asynchronous delivery.
-        """
-        async for session in get_session():
-            base_stmt = select(Partner.telegram_id)
-
-            if filters:
-                if "is_pro" in filters:
-                    base_stmt = base_stmt.where(Partner.is_pro == filters["is_pro"])
-                if "min_level" in filters:
-                    base_stmt = base_stmt.where(Partner.level >= filters["min_level"])
-
-            # #comment: Performance Optimization (Scaling): 
-            # Chunked processing prevents OOM when broadcasting to 100K-200K users.
-            # We fetch 5000 telegram_ids at a time.
-            CHUNK_SIZE = 5000
-            offset = 0
-            broadcast_count = 0
-            
-            while True:
-                # We order by ID to ensure deterministic chunks across offset calls
-                chunk_stmt = base_stmt.order_by(Partner.id).offset(offset).limit(CHUNK_SIZE)
-                result = await session.exec(chunk_stmt)
-                tg_ids = result.all()
-                
-                if not tg_ids:
-                    break
-                    
-                for tg_id in tg_ids:
-                    if tg_id:
-                        # Enqueue for each user
-                        await notification_service.send_low_prio(
-                            chat_id=int(tg_id),
-                            text=text,
-                            salt=f"broadcast_{int(time.time())}_{tg_id}"
-                        )
-                        broadcast_count += 1
-                
-                offset += CHUNK_SIZE
-                if len(tg_ids) < CHUNK_SIZE:
-                    break
-
-            return {
-                "status": "enqueued",
-                "count": broadcast_count
-            }
-
     async def get_dashboard_stats(self, force_refresh: bool = False) -> dict[str, Any]:
         """Calculates KPIs for the admin dashboard with materialization."""
+        from sqlalchemy.exc import DBAPIError
 
         async for session in get_session():
             if not force_refresh:
                 cached = await self._get_cached_stats(session)
                 if cached: return cached
 
-            # Heavy Computation Start
-            now = datetime.now(UTC).replace(tzinfo=None)
+            # #comment: Advanced Reliability (Phase 2)
+            # Prevent dashboard queries from locking up DB connections.
+            # If queries take longer than 5 seconds, throw a timeout error.
+            try:
+                await session.execute(text("SET statement_timeout = '5s'"))
+                
+                # Heavy Computation Start
+                now = datetime.now(UTC).replace(tzinfo=None)
             
-            # 1. Growth Stats
-            growth = await self._calculate_growth_metrics(session, now)
-            
-            # 2. General Totals
-            totals = await self._calculate_general_totals(session, now)
-            
-            # 3. Financials
-            financials = await self._calculate_financial_metrics(session)
-            
-            # 4. Daily Performance Charts
-            daily_growth, daily_revenue = await self._calculate_daily_performance(session, now)
+                # 1. Growth Stats
+                growth = await self._calculate_growth_metrics(session, now)
+                
+                # 2. General Totals
+                totals = await self._calculate_general_totals(session, now)
+                
+                # 3. Financials
+                financials = await self._calculate_financial_metrics(session)
+                
+                # 4. Daily Performance Charts
+                daily_growth, daily_revenue = await self._calculate_daily_performance(session, now)
 
-            # 5. Recent Sales
-            recent_sales = await self._calculate_recent_sales(session)
+                # 5. Recent Sales
+                recent_sales = await self._calculate_recent_sales(session)
 
-            # 6. Task Breakdown
-            task_breakdown = await self._calculate_task_breakdown(session)
+                # 6. Task Breakdown
+                task_breakdown = await self._calculate_task_breakdown(session)
 
-            # 7. Viral Metrics
-            viral_metrics = await self._calculate_viral_metrics(session, totals["total_partners"])
+                # 7. Viral Metrics
+                viral_metrics = await self._calculate_viral_metrics(session, totals["total_partners"])
 
-            # 8. System Audit (Lightweight)
-            audit_summary = await self._perform_system_audit(session)
-            
-            # Additional Performance KPI: Avg Manual Approval Time
-            # Calculates average minutes from transaction creation to manual approval
-            stmt_approval = text(
-                "SELECT AVG(EXTRACT(EPOCH FROM (updated_at - created_at))) / 60 "
-                "FROM partnertransaction WHERE status = 'completed' AND tx_hash IS NULL"
-            )
-            avg_approval_min = (await session.execute(stmt_approval)).scalar() or 0.0
-            
-            # 9. Sync & Materialize
-            # Auto-align the slots_sold counter with reality if it drifts too far
-            pro_lifetime_count = (await session.exec(select(func.count(Partner.id)).where(Partner.subscription_plan == "PRO_LIFETIME"))).one() or 0
-            
-            from app.models.partner import SystemSetting
-            setting_sold = (await session.exec(select(SystemSetting).where(SystemSetting.key == "pro_slots_sold"))).first()
-            
-            # Historical Baseline: We start at 147 as requested by user to show momentum.
-            base_slots = 147
-            current_effective_sold = base_slots + pro_lifetime_count
-            
-            if not setting_sold:
-                session.add(SystemSetting(key="pro_slots_sold", value=str(current_effective_sold)))
-                await session.commit()
-            elif int(setting_sold.value) < current_effective_sold:
-                setting_sold.value = str(current_effective_sold)
-                session.add(setting_sold)
-                await session.commit()
-            
-            # Final Assembly
-            stats = {
-                "growth": growth,
-                "daily_growth": daily_growth,
-                "daily_revenue": daily_revenue,
-                "recent_sales": recent_sales,
-                "performance": {
-                    "avg_manual_approval_min": round(float(avg_approval_min), 1),
-                    "pro_slots_actual": pro_lifetime_count,
-                    "pro_slots_display": int(setting_sold.value) if setting_sold else current_effective_sold
-                },
-                "events": {**totals, "audit": audit_summary},
-                "kpis": {**self._calculate_kpis(totals, financials["total_revenue"]), **viral_metrics},
-                "financials": financials,
-                "tasks": task_breakdown,
-                "top_partners": await self.get_top_partners(limit=10),
-                "server_time": now.isoformat()
-            }
+                # 8. System Audit (Lightweight)
+                audit_summary = await self._perform_system_audit(session)
+                
+                # Additional Performance KPI: Avg Manual Approval Time
+                # Calculates average minutes from transaction creation to manual approval
+                stmt_approval = text(
+                    "SELECT AVG(EXTRACT(EPOCH FROM (updated_at - created_at))) / 60 "
+                    "FROM partnertransaction WHERE status = 'completed' AND tx_hash IS NULL"
+                )
+                avg_approval_min = (await session.execute(stmt_approval)).scalar() or 0.0
+                
+                # 9. Sync & Materialize
+                # Auto-align the slots_sold counter with reality if it drifts too far
+                pro_lifetime_count = (await session.exec(select(func.count(Partner.id)).where(Partner.subscription_plan == "PRO_LIFETIME"))).one() or 0
+                
+                from app.models.partner import SystemSetting
+                setting_sold = (await session.exec(select(SystemSetting).where(SystemSetting.key == "pro_slots_sold"))).first()
+                
+                # Historical Baseline: We start at 147 as requested by user to show momentum.
+                base_slots = 147
+                current_effective_sold = base_slots + pro_lifetime_count
+                
+                if not setting_sold:
+                    session.add(SystemSetting(key="pro_slots_sold", value=str(current_effective_sold)))
+                    await session.commit()
+                elif int(setting_sold.value) < current_effective_sold:
+                    setting_sold.value = str(current_effective_sold)
+                    session.add(setting_sold)
+                    await session.commit()
+                
+                # Final Assembly
+                stats = {
+                    "growth": growth,
+                    "daily_growth": daily_growth,
+                    "daily_revenue": daily_revenue,
+                    "recent_sales": recent_sales,
+                    "performance": {
+                        "avg_manual_approval_min": round(float(avg_approval_min), 1),
+                        "pro_slots_actual": pro_lifetime_count,
+                        "pro_slots_display": int(setting_sold.value) if setting_sold else current_effective_sold
+                    },
+                    "events": {**totals, "audit": audit_summary},
+                    "kpis": {**self._calculate_kpis(totals, financials["total_revenue"]), **viral_metrics},
+                    "financials": financials,
+                    "tasks": task_breakdown,
+                    "top_partners": await self.get_top_partners(limit=10),
+                    "server_time": now.isoformat()
+                }
 
-            await self._materialize_stats(session, stats)
-            return stats
+                await self._materialize_stats(session, stats)
+                return stats
+            except DBAPIError as e:
+                # Catch query timeouts (QueryCanceledError) and other DB errors
+                logger.error(f"🚨 DB Error during get_dashboard_stats (likely timeout): {e}")
+                
+                # Try to fall back to the last known good cache, even if force_refresh was requested
+                cached_fallback = await self._get_cached_stats(session)
+                if cached_fallback:
+                    logger.warning("Falling back to cached dashboard stats due to DB timeout.")
+                    cached_fallback["_is_fallback"] = True
+                    return cached_fallback
+                    
+                # If no cache exists, raise an HTTP error so the frontend knows to retry later
+                from fastapi import HTTPException
+                raise HTTPException(status_code=503, detail="Analytics database is currently overloaded. Please try again in a few minutes.")
 
     async def get_public_kpis(self) -> dict[str, Any]:
         """
