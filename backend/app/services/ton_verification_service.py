@@ -13,8 +13,8 @@ class TonVerificationService:
         # We use toncenter.com as requested by the user's setup
         self.base_url = "https://toncenter.com/api/v2"
         self.api_key = settings.TON_API_KEY
-        # Official USDT Jetton Master Address on TON Mainnet
-        self.usdt_master = "EQCxE6mS_9gjv_y9pL4F6mI1xU3G8E9U4J6L5"
+        # Official USDT Jetton Master Address on TON Mainnet (Tether — verified 2024)
+        self.usdt_master = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"
 
     async def verify_transaction(self, tx_hash: str, expected_amount: float, expected_address: str, currency: str = "TON") -> bool:
         """
