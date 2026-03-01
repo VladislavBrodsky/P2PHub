@@ -88,10 +88,10 @@ export const AdminUserSearch: React.FC<AdminUserSearchProps> = React.memo(({
                                 </div>
                                 <div>
                                     <div className="text-sm font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-500 transition-colors">
-                                        {p.username ? `@${p.username}` : `${p.first_name || 'Partner'}`}
+                                        {p.username ? `@${p.username}` : `${p.first_name || t('admin:kpis.partner_fallback')}`}
                                     </div>
                                     <div className="text-label font-bold text-slate-500 uppercase tracking-tighter">
-                                        ID: {p.telegram_id} · {p.level} LVL · {(p.subscription_plan || 'FREE').toUpperCase()}
+                                        {t('admin:kpis.id_label')}: {p.telegram_id} · {p.level} {t('admin:kpis.level_label')} · {(p.subscription_plan || 'FREE').toUpperCase()}
                                     </div>
                                 </div>
                             </div>

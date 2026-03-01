@@ -8,6 +8,9 @@
         "active_now": "Active Now",
         "retention": "Retention",
         "avg_xp": "Avg XP",
+        "level_label": "LVL",
+        "id_label": "ID",
+        "partner_fallback": "Partner",
         "charts": {
             "revenue": "Revenue Distribution",
             "growth": "Network Growth",
@@ -129,7 +132,10 @@
         "tree_title": "Network Generation Tree",
         "gen": "Gen {{depth}}",
         "partners": "Generation {{depth}} Partners",
-        "earnings": "EARNINGS"
+        "earnings": "EARNINGS",
+        "usdt": "USDT",
+        "ton": "TON",
+        "level_short": "L{{level}}"
     },
     "payments": {
         "title": "Manual TX Verification Hub",
@@ -182,5 +188,21 @@
         "growth_matrix": "Network Growth Matrix",
         "trajectory": "14-Day Tactical Trajectory",
         "new_partners": "New Partners"
+    },
+    "common": {
+        "status": "Status",
+        "core": "CORE",
+        "page": "Page",
+        "actions": {
+            "upgrade": "UPGRADE",
+            "payment": "PAYMENT",
+            "commission": "COMMISSION",
+            "penalty": "PENALTY",
+            "system": "SYSTEM"
+        },
+        "campaign_status": {
+            "completed": "COMPLETED",
+            "processing": "PROCESSING"
+        }
     }
 }

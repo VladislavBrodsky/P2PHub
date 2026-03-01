@@ -169,7 +169,7 @@ export const AdminNexus: React.FC<AdminNexusProps> = React.memo(({
                                         </td>
                                         <td className="px-4 py-4 text-right whitespace-nowrap">
                                             <span className={`px-2 py-0.5 rounded-lg text-[8px] font-black uppercase tracking-widest ${campaign.status === 'COMPLETED' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20' : campaign.status === 'PROCESSING' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20 animate-pulse' : 'bg-slate-500/10 text-slate-500 border border-slate-500/20'}`}>
-                                                {campaign.status}
+                                                {t(`admin:common.campaign_status.${campaign.status.toLowerCase()}`)}
                                             </span>
                                         </td>
                                     </tr>

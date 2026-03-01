@@ -74,10 +74,10 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
                     <div>
                         <div className="text-slate-500 text-label font-bold uppercase">{t('admin:financials.revenue_usdt_ton')}</div>
                         <div className="text-xs font-bold text-slate-700 dark:text-white">
-                            USDT: ${stats?.financials.total_revenue_usdt}
+                            {t('admin:network.usdt')}: ${stats?.financials.total_revenue_usdt}
                         </div>
                         <div className="text-xs font-bold text-blue-600 dark:text-blue-400">
-                            TON: {stats?.financials.total_revenue_ton} (${stats?.financials.current_ton_value})
+                            {t('admin:network.ton')}: {stats?.financials.total_revenue_ton} (${stats?.financials.current_ton_value})
                         </div>
                     </div>
                 </div>
@@ -167,7 +167,7 @@ export const AdminFinancials: React.FC<AdminFinancialsProps> = React.memo(({ sta
                         <div key={line.level} className="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-white/5 border border-slate-100 dark:border-white/5">
                             <div className="flex items-center gap-3">
                                 <div className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center text-xs font-bold text-slate-500">
-                                    L{line.level}
+                                    {t('admin:network.level_short', { level: line.level })}
                                 </div>
                                 <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{t('admin:financials.level_partners', { level: line.level })}</span>
                             </div>

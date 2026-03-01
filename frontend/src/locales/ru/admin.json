@@ -8,6 +8,9 @@
         "active_now": "В сети",
         "retention": "Удержание",
         "avg_xp": "Средний XP",
+        "level_label": "УР",
+        "id_label": "ID",
+        "partner_fallback": "Партнер",
         "charts": {
             "revenue": "Распределение выручки",
             "growth": "Рост сети",
@@ -129,7 +132,10 @@
         "tree_title": "Дерево Поколений Сети",
         "gen": "Пок. {{depth}}",
         "partners": "Партнеры {{depth}} Поколения",
-        "earnings": "ЗАРАБОТОК"
+        "earnings": "ДОХОД",
+        "usdt": "USDT",
+        "ton": "TON",
+        "level_short": "L{{level}}"
     },
     "payments": {
         "title": "Центр Ручной Верификации Транзакций",
@@ -182,5 +188,21 @@
         "growth_matrix": "Матрица Роста Сети",
         "trajectory": "14-Дневная Тактическая Траектория",
         "new_partners": "Новые Партнеры"
+    },
+    "common": {
+        "status": "Статус",
+        "core": "ЯДРО",
+        "page": "Страница",
+        "actions": {
+            "upgrade": "АПГРЕЙД",
+            "payment": "ПЛАТЕЖ",
+            "commission": "КОМИССИЯ",
+            "penalty": "ШТРАФ",
+            "system": "СИСТЕМА"
+        },
+        "campaign_status": {
+            "completed": "ЗАВЕРШЕНО",
+            "processing": "ОБРАБОТКА"
+        }
     }
 }

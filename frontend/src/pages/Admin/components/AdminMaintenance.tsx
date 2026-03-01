@@ -162,7 +162,7 @@ export const AdminMaintenance: React.FC<AdminMaintenanceProps> = React.memo(({
                         {section.audit && (
                             <div className="p-3 bg-slate-50 dark:bg-black/20 rounded-xl border border-black/5 dark:border-white/5 flex items-center justify-between">
                                 <div className="space-y-1">
-                                    <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">Status</div>
+                                    <div className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">{t('admin:common.status')}</div>
                                     <div className={`text-[10px] font-black uppercase tracking-widest ${section.audit.healthy ? 'text-emerald-500' : 'text-rose-500'}`}>
                                         {section.audit.healthy ? section.auditLabels?.healthy : section.auditLabels?.anomalies}
                                     </div>

@@ -134,10 +134,10 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                                                         log.action_type === 'PENALTY' ? 'bg-rose-500/10 text-rose-500' :
                                                             'bg-slate-500/10 text-slate-500'}`}
                                         >
-                                            {log.action_type}
+                                            {t(`admin:common.actions.${log.action_type.toLowerCase()}`)}
                                         </span>
                                         <span className="text-label font-bold text-slate-900 dark:text-slate-100 truncate flex items-center gap-1.5">
-                                            {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? log.telegram_id : <span className="text-slate-400 font-medium">CORE</span>}
+                                            {log.username ? `@${log.username}` : log.telegram_id !== 'system' ? log.telegram_id : <span className="text-slate-400 font-medium">{t('admin:common.core')}</span>}
                                             {log.partner_is_pro && (
                                                 <div className="w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
                                                     <Zap size={8} className="text-white fill-white" />
@@ -176,7 +176,7 @@ export const AdminPalantir: React.FC<AdminPalantirProps> = React.memo(({
                     >
                         {t('common:back')}
                     </button>
-                    <span className="text-xs font-bold text-slate-600">Page {palantirPage + 1}</span>
+                    <span className="text-xs font-bold text-slate-600">{t('admin:common.page')} {palantirPage + 1}</span>
                     <button
                         onClick={() => setPalantirPage(p => p + 1)}
                         disabled={palantirFeed.length < 100}
