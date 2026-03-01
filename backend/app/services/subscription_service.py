@@ -34,8 +34,19 @@ class SubscriptionService:
             await self.send_expiration_warning(partner, 5)
 
         # 2. Check for 3-day warning
+        three_days_start = now + timedelta(days=3)
+        three_days_end = three_days_start + timedelta(hours=1)
 
-        # 2. Check for 1-day warning
+        stmt_3d = select(Partner).where(
+            Partner.is_pro,
+            Partner.pro_expires_at >= three_days_start,
+            Partner.pro_expires_at < three_days_end
+        )
+        res_3d = await session.exec(stmt_3d)
+        for partner in res_3d.all():
+            await self.send_expiration_warning(partner, 3)
+
+        # 3. Check for 1-day warning
         one_day_start = now + timedelta(days=1)
         one_day_end = one_day_start + timedelta(hours=1)
 
@@ -48,43 +59,58 @@ class SubscriptionService:
         for partner in res_1d.all():
             await self.send_expiration_warning(partner, 1)
 
-        # 3. Handle actually expired
-        # Exclude LIFETIME plans as they never expire
-        stmt_expired = select(Partner).where(
-            Partner.is_pro,
-            Partner.pro_expires_at < now,
-            Partner.subscription_plan != "PRO_LIFETIME"
-        )
-        res_expired = await session.exec(stmt_expired)
-        for partner in res_expired.all():
-            partner.is_pro = False
-            last_plan = partner.subscription_plan or "PRO"
-            partner.subscription_plan = None
-            session.add(partner)
-            
-            # Log Audit — Membership Expired
-            from app.services.audit_service import audit_service
-            await audit_service.log_payment(
-                session=session,
-                partner_id=partner.id,
-                transaction_id=0, # Fixed virtual ID for expiration events
-                amount=0.0,
-                currency="USD",
-                plan=last_plan,
-                status="expired"
+        # 4. Handle actually expired
+        # #comment: Phase 4: Chunked processing to prevent OOM at 200K users.
+        # At scale, many subscriptions may expire simultaneously (e.g., after a promo batch).
+        CHUNK = 500
+        offset = 0
+        while True:
+            stmt_expired = (
+                select(Partner)
+                .where(
+                    Partner.is_pro,
+                    Partner.pro_expires_at < now,
+                    Partner.subscription_plan != "PRO_LIFETIME"
+                )
+                .order_by(Partner.id)
+                .offset(offset)
+                .limit(CHUNK)
             )
-            
-            # Invalidate Redis Cache to ensure UI reflects the change immediately
-            from app.services.redis_service import redis_service
-            try:
-                await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
-            except Exception as e:
-                # Log warning as cache invalidation failure might show stale data for a short while
-                logger.warning(f"Failed to invalidate cache for expired user {partner.telegram_id}: {e}")
-            
-            await self.send_expired_notification(partner)
+            expired_chunk = (await session.exec(stmt_expired)).all()
+            if not expired_chunk:
+                break
 
-        await session.commit()
+            from app.services.audit_service import audit_service
+            from app.services.redis_service import redis_service
+
+            for partner in expired_chunk:
+                partner.is_pro = False
+                last_plan = partner.subscription_plan or "PRO"
+                partner.subscription_plan = None
+                session.add(partner)
+
+                await audit_service.log_payment(
+                    session=session,
+                    partner_id=partner.id,
+                    transaction_id=0,
+                    amount=0.0,
+                    currency="USD",
+                    plan=last_plan,
+                    status="expired"
+                )
+
+                try:
+                    await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+                except Exception as e:
+                    logger.warning(f"Failed to invalidate cache for expired user {partner.telegram_id}: {e}")
+
+                await self.send_expired_notification(partner)
+
+            # Commit each chunk to avoid long-running transactions
+            await session.commit()
+            offset += CHUNK
+            if len(expired_chunk) < CHUNK:
+                break
 
     async def send_expiration_warning(self, partner: Partner, days_left: int):
         lang = partner.language_code or "en"
