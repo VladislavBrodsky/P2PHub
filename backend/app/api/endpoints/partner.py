@@ -320,7 +320,14 @@ async def get_my_profile(
     now_dt = datetime.now(UTC).replace(tzinfo=None)
     today_date = now_dt.date()
     
-    if partner.last_checkin_at:
+    # Idempotency guard: compute the ref key for today and skip if XP already awarded.
+    # This prevents duplicate XP from concurrent /me requests arriving at the same time.
+    checkin_ref = f"checkin_{partner.id}_{today_date.strftime('%Y-%m-%d')}"
+    existing_checkin_today = (await session.exec(
+        select(XPTransaction).where(XPTransaction.reference_id == checkin_ref).limit(1)
+    )).first()
+    
+    if not existing_checkin_today and partner.last_checkin_at:
         last_date = partner.last_checkin_at.date()
         if last_date < today_date:
             if last_date == today_date - timedelta(days=1):
@@ -348,7 +355,6 @@ async def get_my_profile(
             )
             
             # Log Base Reward
-            checkin_ref = f"checkin_{partner.id}_{now_dt.strftime('%Y-%m-%d')}"
             session.add(XPTransaction(
                 partner_id=partner.id,
                 amount=total_reward,
@@ -368,8 +374,8 @@ async def get_my_profile(
             await session.commit()
             await session.refresh(partner)
             await redis_service.client.delete(cache_key)
-    else:
-        # First check-in
+    elif not existing_checkin_today:
+        # First check-in ever
         partner.checkin_streak = 1
         partner.last_checkin_at = now_dt
         
@@ -385,7 +391,7 @@ async def get_my_profile(
             {"inc": checkin_xp, "p_id": partner.id}
         )
         
-        checkin_ref = f"checkin_{partner.id}_{now_dt.strftime('%Y-%m-%d')}"
+        # checkin_ref already set above
         session.add(XPTransaction(
             partner_id=partner.id,
             amount=checkin_xp,
