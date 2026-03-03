@@ -62,6 +62,19 @@ async def test_academy_completion_persistence(session: AsyncSession, create_refe
 
     print("\n✅ Academy Persistence & Duplicate Prevention Verified")
 
+    # 6. Verify security: Cannot complete stage > 20 without unlock
+    result_locked = await complete_academy_stage(stage_id="21", partner=partner, session=session)
+    assert result_locked["status"] == "locked"
+    assert "unlocked" in result_locked["msg"]
+
+    # 7. Verify security: Cannot complete module with cost without unlock
+    # Assuming m4 has an xp_cost > 0
+    result_m4_locked = await complete_academy_stage(stage_id="m4", partner=partner, session=session)
+    assert result_m4_locked["status"] == "locked"
+    assert "unlocked" in result_m4_locked["msg"]
+
+    print("\n✅ Academy Security (Unlock Required) Verified")
+
 @pytest.mark.asyncio
 async def test_academy_unlock_normalization(session: AsyncSession, create_referral_chain):
     chain = await create_referral_chain(levels=1)
@@ -83,3 +96,32 @@ async def test_academy_unlock_normalization(session: AsyncSession, create_referr
     assert result_again["status"] == "already_unlocked"
     
     print("✅ Academy Unlock Normalization Verified")
+
+@pytest.mark.asyncio
+async def test_academy_unlock_math(session: AsyncSession, create_referral_chain):
+    chain = await create_referral_chain(levels=1)
+    partner = chain[0]
+    partner.is_pro = True
+    
+    from app.api.endpoints.pro import unlock_academy_stage
+    
+    # 1. Test 21: 350 XP
+    partner.xp = 400
+    result = await unlock_academy_stage(stage_id="21", partner=partner, session=session)
+    assert result["status"] == "success"
+    assert partner.xp == 400 - 350
+    
+    # 2. Test 22: 500 XP
+    partner.xp = 600
+    result = await unlock_academy_stage(stage_id="22", partner=partner, session=session)
+    assert result["status"] == "success"
+    assert partner.xp == 600 - 500
+    
+    # 3. Test 70: 7500 XP
+    # Formula: 700 + (70 - 23) * 145 = 7515. Rounded = 7500.
+    partner.xp = 8000
+    result = await unlock_academy_stage(stage_id="70", partner=partner, session=session)
+    assert result["status"] == "success"
+    assert partner.xp == 8000 - 7500
+    
+    print("✅ Academy Unlock Math (New Curve) Verified")
