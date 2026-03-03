@@ -127,7 +127,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
                             {/* Drawer Navigation Bar */}
-                            <div className="pt-[94px] px-4 pb-2 flex items-center justify-between z-20">
+                            <div className="pt-[64px] px-4 pb-1.5 flex items-center justify-between z-20">
                                 <button
                                     onClick={onClose}
                                     className="p-2 rounded-full bg-card-bg border border-card-border text-text-primary shadow-sm active:scale-90 transition-all outline-none"
@@ -142,7 +142,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto px-5 pb-10 flex flex-col gap-4 overscroll-none" style={{ overscrollBehavior: 'none' }}>
+                            <div className="flex-1 overflow-y-auto px-5 pb-8 flex flex-col gap-3 overscroll-none" style={{ overscrollBehavior: 'none' }}>
                                 <div className="mt-4 overflow-visible">
                                     <PersonalizationCard variant="compact" />
                                 </div>
@@ -213,7 +213,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                                     </motion.button>
                                 </div>
 
-                                <div className="mt-8 mb-4">
+                                <div className="mt-4 mb-3">
                                     <p className="text-center text-label font-bold uppercase tracking-[0.3em] text-text-secondary opacity-50">
                                         P2PHub v{import.meta.env.VITE_APP_VERSION ?? '1.8.3'} (Stable)
                                     </p>

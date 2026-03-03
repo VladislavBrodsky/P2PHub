@@ -184,7 +184,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     ], [isAdmin, user?.is_pro, t]);
 
     return (
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-1 flex-col gap-1.5">
             {menuItems.map((item) => {
                 const isProItem = item.id === 'pro';
 
@@ -217,13 +217,13 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     toggleSection(item.id);
                                 }
                             }}
-                            className={`w-full flex items-center justify-between p-3 transition-colors relative z-10 ${isProItem
+                            className={`w-full flex items-center justify-between p-2.5 transition-colors relative z-10 ${isProItem
                                 ? 'bg-transparent text-black dark:text-black active:bg-white/10'
                                 : 'bg-transparent active:bg-brand-blue/5'
                                 }`}
                         >
-                            <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-xl transition-all duration-300 ${isProItem
+                            <div className="flex items-center gap-2.5">
+                                <div className={`p-1.5 rounded-xl transition-all duration-300 ${isProItem
                                     ? 'bg-black/10 dark:bg-black/20 border border-black/10 dark:border-black/30 text-black group-hover:scale-110 group-hover:rotate-12 shadow-md shadow-black/5'
                                     : 'bg-card-bg border border-card-border text-text-secondary group-hover:text-text-primary'
                                     }`}>

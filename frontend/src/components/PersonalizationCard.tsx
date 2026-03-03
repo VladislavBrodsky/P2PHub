@@ -84,7 +84,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : isPro ? 'ring-2 ring-amber-400/10' : ''}
             `}>
-                <div className="flex items-center gap-5 p-3.5 rounded-[inherit] overflow-hidden">
+                <div className={`flex items-center ${variant === 'compact' ? 'gap-3.5 p-2.5' : 'gap-5 p-3.5'} rounded-[inherit] overflow-hidden`}>
                     {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
                     {isProPlus && variant !== 'compact' && (
                         <div
@@ -100,7 +100,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             <motion.div
                                 whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
                                 className={`
-                                ${variant === 'compact' ? 'h-14 w-14 rounded-2xl' : 'h-16 w-16 rounded-xl'} 
+                                ${variant === 'compact' ? 'h-12 w-12 rounded-xl' : 'h-16 w-16 rounded-xl'} 
                                 overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
                                 ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : isPro ? 'border-amber-400/60 ring-1 ring-amber-500/20' : 'border-border-glass'}
                                 bg-bg-app 
@@ -166,7 +166,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 const displayName = fullName.length > 20 ? firstName : fullName;
 
                                 return (
-                                    <h2 className={`${variant === 'compact' ? 'text-base' : 'text-lg'} font-bold tracking-tight text-text-primary whitespace-nowrap`}>
+                                    <h2 className={`${variant === 'compact' ? 'text-sm' : 'text-lg'} font-bold tracking-tight text-text-primary whitespace-nowrap`}>
                                         {t('hi')}, {displayName}!
                                     </h2>
                                 );
