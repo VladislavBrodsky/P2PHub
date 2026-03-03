@@ -522,54 +522,48 @@ export const ProDashboard = () => {
 
                 {/* Tab Switcher - Fixed Padding/Tracking and rounded-3xl */}
                 <div className="flex p-0.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-3xl border border-slate-900/5 dark:border-white/5 shadow-premium mt-1 mx-auto max-w-[420px] w-full relative">
-                    {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => {
-                        const tabConfig = {
-                            studio: {
-                                gradient: 'from-blue-600 via-indigo-500 to-blue-600',
-                                shadow: 'shadow-indigo-500/10'
-                            },
-                            tools: {
-                                gradient: 'from-amber-500 via-orange-500 to-amber-500',
-                                shadow: 'shadow-orange-500/10'
-                            },
-                            growth: {
-                                gradient: 'from-emerald-500 via-teal-500 to-emerald-500',
-                                shadow: 'shadow-emerald-500/10'
-                            },
-                            analytics: {
-                                gradient: 'from-purple-600 via-fuchsia-500 to-purple-600',
-                                shadow: 'shadow-purple-500/10'
-                            }
-                        };
+                    {/* Active Indicator Background */}
+                    <div className="absolute inset-0.5 flex pointer-events-none" aria-hidden="true">
+                        <motion.div
+                            className={`absolute inset-y-0 bg-linear-to-r rounded-2xl shadow-lg z-0 ${activeTab === 'studio'
+                                ? 'from-blue-600 via-indigo-500 to-blue-600 shadow-indigo-500/10'
+                                : activeTab === 'tools'
+                                    ? 'from-amber-500 via-orange-500 to-amber-500 shadow-orange-500/10'
+                                    : activeTab === 'growth'
+                                        ? 'from-emerald-500 via-teal-500 to-emerald-500 shadow-emerald-500/10'
+                                        : 'from-purple-600 via-fuchsia-500 to-purple-600 shadow-purple-500/10'
+                                }`}
+                            initial={false}
+                            animate={{
+                                x: activeTab === 'studio' ? '0%' : activeTab === 'tools' ? '100%' : activeTab === 'growth' ? '200%' : '300%',
+                            }}
+                            style={{
+                                width: '25%',
+                                left: 0
+                            }}
+                            transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
+                        >
+                            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl" />
+                        </motion.div>
+                    </div>
 
-                        return (
-                            <button
-                                key={tab}
-                                onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
-                                className={`flex-1 relative py-1.5 rounded-2xl transition-all duration-500 ${activeTab === tab
-                                    ? 'text-white font-bold'
-                                    : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
-                            >
-                                {activeTab === tab && (
-                                    <motion.div
-                                        layoutId="activeTabGlow"
-                                        initial={false}
-                                        className={`absolute inset-0 bg-linear-to-r ${tabConfig[tab].gradient} rounded-2xl ${tabConfig[tab].shadow} shadow-lg`}
-                                        transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
-                                    >
-                                        <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl" />
-                                    </motion.div>
-                                )}
-                                <span className="relative z-10 flex flex-col items-center justify-center gap-0.5">
-                                    {tab === 'studio' && <Cpu size={12} />}
-                                    {tab === 'tools' && <Settings size={12} />}
-                                    {tab === 'growth' && <Users size={12} />}
-                                    {tab === 'analytics' && <BarChart3 size={12} />}
-                                    <span className="text-[10px] uppercase tracking-wide leading-none">{t(`pro_dashboard.tab_${tab}`)}</span>
-                                </span>
-                            </button>
-                        );
-                    })}
+                    {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => (
+                        <button
+                            key={tab}
+                            onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
+                            className={`flex-1 py-1.5 rounded-2xl transition-colors duration-500 relative z-10 ${activeTab === tab
+                                ? 'text-white font-bold'
+                                : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
+                        >
+                            <span className="relative z-10 flex flex-col items-center justify-center gap-0.5">
+                                {tab === 'studio' && <Cpu size={12} />}
+                                {tab === 'tools' && <Settings size={12} />}
+                                {tab === 'growth' && <Users size={12} />}
+                                {tab === 'analytics' && <BarChart3 size={12} />}
+                                <span className="text-[10px] uppercase tracking-wide leading-none">{t(`pro_dashboard.tab_${tab}`)}</span>
+                            </span>
+                        </button>
+                    ))}
                 </div>
 
                 <div className="relative min-h-[40vh] mt-3">
