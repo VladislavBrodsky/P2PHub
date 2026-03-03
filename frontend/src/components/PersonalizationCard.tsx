@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Crown, User } from 'lucide-react';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
-import { getRank, getXPProgress, getRankGradient } from '../utils/ranking';
+import { getRank, getXPProgress, getRankGradient, getRankTextColor } from '../utils/ranking';
 import { ProPlusBadge, ProBadge } from './ui/ProPlusBadge';
 import { getSafeLaunchParams } from '../utils/tma';
 
@@ -179,8 +179,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 <div
                                     className="flex items-baseline gap-1 whitespace-nowrap animate-pulse-subtle"
                                 >
-                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
-                                    <span className="text-label font-bold text-blue-500 dark:text-blue-300">{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
+                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)} tracking-tight uppercase shrink-0`}>{t('total')}:</span>
+                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)} opacity-90`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
                                 </div>
                                 <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{formatXP(xpProgress.current)}</span>

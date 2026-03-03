@@ -87,3 +87,18 @@ export function getRankGradient(level: number): string {
     if (level < 100) return 'from-blue-600 to-indigo-700';      // PRO Deep Blue
     return 'from-slate-900 via-blue-900 to-slate-900';          // Immortal Cosmic
 }
+
+/**
+ * Returns a CSS text color class based on the user's level.
+ * Matches the start color of getRankGradient.
+ */
+export function getRankTextColor(level: number): string {
+    if (level < 12) return 'text-slate-400';
+    if (level < 24) return 'text-blue-400';
+    if (level < 36) return 'text-emerald-400';
+    if (level < 52) return 'text-amber-400';
+    if (level < 68) return 'text-purple-400';
+    if (level < 84) return 'text-rose-400';
+    if (level < 100) return 'text-blue-600';
+    return 'text-blue-900';
+}
