@@ -84,7 +84,7 @@ export const ProDashboard = () => {
             if (data?.completed_stages) {
                 try {
                     const parsed = typeof data.completed_stages === 'string' ? JSON.parse(data.completed_stages) : data.completed_stages;
-                    setCompletedStages(Array.isArray(parsed) ? parsed : []);
+                    setCompletedStages(Array.isArray(parsed) ? parsed.map(String) : []);
                 } catch (e) {
                     setCompletedStages([]);
                 }
@@ -92,7 +92,7 @@ export const ProDashboard = () => {
             if (data?.unlocked_stages) {
                 try {
                     const parsed = typeof data.unlocked_stages === 'string' ? JSON.parse(data.unlocked_stages) : data.unlocked_stages;
-                    setUnlockedStages(Array.isArray(parsed) ? parsed : []);
+                    setUnlockedStages(Array.isArray(parsed) ? parsed.map(String) : []);
                 } catch (e) {
                     setUnlockedStages([]);
                 }

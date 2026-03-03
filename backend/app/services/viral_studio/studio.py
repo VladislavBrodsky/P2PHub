@@ -151,12 +151,16 @@ class ViralMarketingStudio:
             # Define if we should append to story history based on the current mode
             is_story_mode = tone_of_voice and ("empath" in tone_of_voice.lower() or "story" in tone_of_voice.lower())
 
+            # 🛡️ BRAND DENSITY CONTROL (30% Explicit / 70% Subtle)
+            # Decide if we name-drop 'Pintopay' or sell 'Between the Lines'
+            brand_mention = secrets.randbelow(100) < 30
+            
             # Prepare Prompts
-            system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history)
-            user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history)
+            system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, resonance_data=resonance_data, story_history=story_history, brand_mention=brand_mention)
+            user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, story_history=story_history, brand_mention=brand_mention)
             
             # 🖼️ GENERATE IMAGE PROMPT (Baseline for parallel execution)
-            image_prompt = prompts.build_viral_image_prompt(intel, tone=tone_of_voice, post_content="")
+            image_prompt = prompts.build_viral_image_prompt(intel, tone=tone_of_voice, post_content="", brand_mention=brand_mention)
 
             text_task = self._get_text_content(system_prompt, user_prompt, is_pro_plus=is_pro_plus)
             image_task = self._generate_image(image_prompt, partner.id, is_pro_plus=is_pro_plus)
@@ -403,13 +407,16 @@ class ViralMarketingStudio:
 
         yield {"type": "status", "content": "Architecting narrative..."}
 
+        # 🛡️ BRAND DENSITY CONTROL
+        brand_mention = secrets.randbelow(100) < 30
+        
         # 2. Parallel Image Task (Don't wait, yield when ready)
-        baseline_image_prompt = prompts.build_viral_image_prompt(intel, "")
+        baseline_image_prompt = prompts.build_viral_image_prompt(intel, "", brand_mention=brand_mention)
         image_task = asyncio.create_task(self._generate_image(baseline_image_prompt, partner.id, is_pro_plus=is_pro_plus))
 
         # 3. Stream Text Generation (OpenAI Priority for Streaming)
-        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {})
-        user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel)
+        system_prompt = prompts.build_viral_system_prompt(language, target_audience, post_type, tone_of_voice, ref_link, intel, {}, brand_mention=brand_mention)
+        user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, brand_mention=brand_mention)
         
         full_text = ""
         current_field = None

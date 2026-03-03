@@ -26,7 +26,7 @@ def build_viral_audience_intel(target_audience: str, post_type: str, language: s
         "dna": NativeLanguageOptimization.LANGUAGE_DNA.get(language, {})
     }
 
-def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices, resonance_data=None, story_history=None) -> str:
+def build_viral_system_prompt(language, target_audience, post_type, tone, ref_link, intel, best_practices, resonance_data=None, story_history=None, brand_mention=True) -> str:
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     language_dna = intel["dna"]
@@ -110,8 +110,11 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
 **YOUR TASK:**
 Write a HUMANIZED, NATIVE-level post in {language} for {target_audience} using the {post_type} strategy.
 Persona Tone: {tone.upper()}
-Product: Pintopay Ecosystem (Crypto Cards & Partner Center)
+Product: {"Pintopay Ecosystem (Crypto Cards & Partner Center)" if brand_mention else "A sovereign, borderless wealth ecosystem (DO NOT MENTION PINTOPAY BY NAME)"}
 Referral Link (MUST INCLUDE): {ref_link}
+
+**BRANDING STRATEGY:**
+{"EXPLICIT: You MUST mention 'Pintopay' naturally in the narrative." if brand_mention else "BETWEEN THE LINES: DO NOT mention the word 'Pintopay'. Sell the lifestyle, the autonomy, and the geometric growth results instead. Let the referral link handle the destination."}
 
 **CRITICAL INSTRUCTION: LENGTH & FORMATTING.**
 Generate the entire content (title, body) as a single coherent narrative. DO NOT split the message into multiple parts.
@@ -130,11 +133,11 @@ Your primary objective is to satisfy the audience's hidden need: **{audience_int
   "body": "**[HUMANIZED ALPHA HOOK]**\\n\\n[Paragraph 1 - short, 1-2 sentences]\\n\\n[Paragraph 2 - short, 1-2 sentences]\\n\\n[Paragraph 3 - short, 1-2 sentences]\\n\\n**[{cta_text}]({ref_link})**",
 "hashtags": "#Tag1 #Tag2 #Tag3" 
 }}
-(Choose exactly 2-4 unique hashtags. Output them ONLY in the 'hashtags' field. DO NOT include them in the 'body' string. This is a strict formatting rule to avoid duplication.)
+(Choose exactly 2-4 unique hashtags. Output them ONLY in the 'hashtags' field. DO NOT include them in the 'body' string. This is a strict formatting rule to avoid duplication. {"Exclude #Pintopay from hashtags." if not brand_mention else ""})
 
 """
 
-def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel, story_history=None) -> str:
+def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel, story_history=None, brand_mention=True) -> str:
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     hook_examples = audience_intel.get("hooks", []) if audience_intel else []
@@ -183,7 +186,7 @@ Referral Link: {ref_link}
 **HUMANIZATION & CM-LEVEL COPYWRITING:**
 1. **DITCH THE CLICHES:** No "In today's world", no "Unlock potential". Write with the authority of someone who has managed $100M+ budgets.
 2. **PATTERN INTERRUPT:** Start with a hook that stops the scroll. 
-3. **SALES BY SUBTLETY:** Weave the product (Pintopay) into the narrative as an essential tool for the desired lifestyle.
+3. **SALES BY SUBTLETY:** {"Weave the product (Pintopay) into the narrative as an essential tool." if brand_mention else "Sell the TRANSFORMATION and the SOVEREIGNTY. DO NOT mention 'Pintopay' by name. Sell the idea between the lines."}
 4. **EMOTIONAL RESONANCE:** Agitate a real, visceral pain point before presenting the elegant solution.
 5. **NATIVE FLUENCY:** Use business idioms and cultural nuances specific to {language}.
 6. **ARCHETYPE VOICE:** Embody the **{audience_intel.get('archetype', 'The Visionary')}** archetype. Speak to their hidden need for **{audience_intel.get('hidden_need', 'Autonomy')}**.
@@ -216,7 +219,7 @@ _GENDER_VARIANTS = [
 ]
 
 
-def build_viral_image_prompt(intel: dict, tone: str | None = None, post_content: str = "") -> str:
+def build_viral_image_prompt(intel: dict, tone: str | None = None, post_content: str = "", brand_mention: bool = True) -> str:
     """
     Builds a high-status, photorealistic image prompt using a Layered Architecture.
     Layers: Foundation (Rules) -> Environment (Scene) -> Subject (Audience) -> Grading (Tone) -> Detail (Strategy)

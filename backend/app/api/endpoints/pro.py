@@ -221,7 +221,7 @@ async def get_growth_advice(
         raise HTTPException(status_code=500, detail="Elite synthesis engine failure. Try again in 5 minutes.")
 
 # Academy Config: Cost (negative) or Reward (positive)
-ACADEMY_RULES = {
+MODULE_DETAILS = {
     "m1": {"tokens": 1, "xp_reward": 500},
     "m2": {"tokens": 1, "xp_reward": 500},
     "m3": {"tokens": -1, "xp_cost": 20, "xp_reward": 2000},
@@ -239,13 +239,10 @@ async def unlock_academy_stage(
     """
     Handles XP-based unlocking of Academy stages after level 20.
     """
-    import json
-    unlocked = json.loads(partner.unlocked_stages or "[]")
+    unlocked_raw = json.loads(partner.unlocked_stages or "[]")
+    unlocked = [str(s) for s in unlocked_raw] if isinstance(unlocked_raw, list) else []
     
-    stage_key = stage_id
-    if stage_id.isdigit():
-        stage_key = int(stage_id)
-
+    stage_key = str(stage_id)
     if stage_key in unlocked:
         return {"status": "already_unlocked", "unlocked_stages": unlocked}
 
@@ -312,13 +309,13 @@ async def complete_academy_stage(
     """
     Handles completion of Academy stages. 
     """
-    import json
-    completed = json.loads(partner.completed_stages or "[]")
-    unlocked = json.loads(partner.unlocked_stages or "[]")
+    completed_raw = json.loads(partner.completed_stages or "[]")
+    completed = [str(s) for s in completed_raw] if isinstance(completed_raw, list) else []
     
-    stage_key = stage_id
-    if stage_id.isdigit():
-        stage_key = int(stage_id)
+    unlocked_raw = json.loads(partner.unlocked_stages or "[]")
+    unlocked = [str(s) for s in unlocked_raw] if isinstance(unlocked_raw, list) else []
+    
+    stage_key = str(stage_id)
 
     if stage_key in completed:
         return {"status": "already_completed", "academy_score": partner.academy_score}

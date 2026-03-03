@@ -336,47 +336,50 @@ class AudienceProfile:
         
         "partners": {
             "name": "Global Network Architects",
-            "performing_keywords_2026": ["Geometric Network", "Viral Infrastructure", "Global Sovereignty", "Team Duplication"],
+            "performing_keywords_2026": ["Geometric Network", "Viral Infrastructure", "Global Sovereignty", "Team Duplication", "Leverage Architecture", "Revenue Velocity"],
             "psychographics": {
                 "pain_points": [
                     "Manual marketing limitations",
                     "Network stagnation",
                     "Low duplication velocity",
                     "Lack of global viral infrastructure",
-                    "Centralized payment bottlenecks"
+                    "Centralized payment bottlenecks",
+                    "Fragmentation of team energy"
                 ],
                 "desires": [
                     "Geometric network expansion",
                     "Global team authority",
                     "Automated viral growth loops",
                     "High-status leadership positioning",
-                    "Synergistic revenue acceleration"
+                    "Synergistic revenue acceleration",
+                    "Absolute operational autonomy"
                 ],
-                "values": ["Universal Growth", "Velocity of Trust", "Leveraged Leadership", "Visionary Abundance"],
-                "language_patterns": ["Professional Native Mastery", "Authoritative yet Inspiring", "Global Context", "Viral Dynamics"],
-                "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery", "Universal Synergy"],
+                "values": ["Universal Growth", "Velocity of Trust", "Leveraged Leadership", "Visionary Abundance", "Infrastructure over Hustle"],
+                "language_patterns": ["Professional Native Mastery", "Authoritative yet Inspiring", "Global Context", "Viral Dynamics", "Strategic Minimalist"],
+                "triggers": ["Exponential Opportunity", "Global Financial Shift", "Team Empowerment", "Systemic Mastery", "Universal Synergy", "Institutional Alpha"],
             },
-            "archetype": "The Visionary",
-            "hidden_need": "Global Impact",
+            "archetype": "The Global Architect",
+            "hidden_need": "Global Impact through Infrastructure",
             "tov": {
-                "style": "Global Leader, Professional Native Speaker, Viral Influencer",
+                "style": "Global Leader, Professional Native Speaker, Viral Strategist",
                 "formality": "High-status professional with magnetic visionary energy",
                 "humor": "Sophisticated, global, empowering",
-                "emojis": "✨🌍🤝💎👑",
+                "emojis": "✨🌍🤝💎👑⚡",
                 "sentence_length": "Rhythmic, powerful, and impeccably structured.",
-                "power_words": ["velocity", "transformation", "geometric", "synergy", "global", "ecosystem"]
+                "power_words": ["velocity", "transformation", "geometric", "synergy", "global", "ecosystem", "leverage", "infrastructure"]
             },
             "hooks": [
                 "The Global Financial Shift isn't a challenge; it's our greatest shared opportunity.",
                 "How to architect a viral powerhouse that scales across borders while you inspire.",
                 "The 100x Growth Blueprint: Turning geometric networking into a global standard.",
-                "Universal Abundance: The leadership strategy for the Digital Gold Rush."
+                "Universal Abundance: The leadership strategy for the Digital Gold Rush.",
+                "Why the elite 1% are abandoning manual hustle for automated global systems."
             ],
-            "visual_base": "A world-class Global Network Architect embodying 'Investment Banking' status. Dressed in bespoke, sun-drenched luxury. A posture of international authority and expansive vision, looking towards a global future.",
+            "visual_base": "A world-class Global Network Architect embodying 'Investment Banking' status. Dressed in bespoke, sun-drenched luxury. A posture of international authority and expansive vision, looking towards a global future. Shot on Leica M11, 50mm f/0.95.",
             "lead_magnets": ["The Global Expansion Protocol", "Cross-Border Wealth: The 2026 Masterplan", "The Universal Viral Reach Guide"],
             "cta_style": "High-status, visionary, collaborative",
-            "scene_pool": ["airport_lounge", "conference", "fintech_bank", "luxury_car"],
-            "viral_hashtags": ["#NetworkArchitect", "#GlobalGrowth", "#ViralLeadership", "#GeometricWealth"]
+            "scene_pool": ["airport_lounge", "conference", "fintech_bank", "luxury_car", "rooftop_dubai"],
+            "viral_hashtags": ["#NetworkArchitect", "#GlobalGrowth", "#ViralLeadership", "#GeometricWealth", "#SovereignPartner"]
         },
         
         "passive_seekers": {
@@ -761,17 +764,18 @@ class ContentCategory:
                 "Status",
                 "Utility",
                 "Freedom",
-                "Tangibility"
+                "Tangibility",
+                "Social Significance"
             ],
             "formatting_rules": {
-                "bold": ["FINANCIAL SOVEREIGNTY", "NO BANKS", "INSTANT PAYMENTS", "CRYPTO CARD", "GLOBAL ACCEPTANCE"],
+                "bold": ["FINANCIAL SOVEREIGNTY", "NO BANKS", "INSTANT PAYMENTS", "CRYPTO CARD", "GLOBAL ACCEPTANCE", "ELITE STATUS"],
                 "italic": ["Chapter 1: The Escape", "Total control of your money"],
                 "hyperlink": ["Order Your Elite Card", "Get Early Access", "Secure My Card"]
             },
-            "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catches the intricate etchings and the 'authorized' status pulse.",
+            "visual_scene": "A macro shot of the bespoke Pintopay card resting on a marble surface in an elite lounge. The light catches the intricate etchings and the 'authorized' status pulse. Highly detailed, cinematic texture.",
             "scene_bias": ["airport_lounge", "luxury_life", "luxury_car"],
-            "viral_hashtags": ["#CryptoCard", "#LiquidityFreedom", "#PintopayElite"],
-            "seo_keywords": ["Crypto Debit Card", "Financial Freedom", "Legacy Banking Exit"]
+            "viral_hashtags": ["#CryptoCard", "#LiquidityFreedom", "#PintopayElite", "#StatusSymbol"],
+            "seo_keywords": ["Crypto Debit Card", "Financial Freedom", "Legacy Banking Exit", "Premium Crypto Banking"]
         },
         "partners_network": {
             "name": "Empire Scaling (Network Focus)",
@@ -796,17 +800,18 @@ class ContentCategory:
                 "Leverage",
                 "Exponential scaling",
                 "Legacy",
-                "Wealth velocity"
+                "Wealth velocity",
+                "Duplication Magic"
             ],
             "formatting_rules": {
-                "bold": ["GEOMETRIC SCALING", "VIRAL LOOPS", "RESIDUAL INCOME", "NETWORK EMPIRE", "AUTOMATED GROWTH"],
+                "bold": ["GEOMETRIC SCALING", "VIRAL LOOPS", "RESIDUAL INCOME", "NETWORK EMPIRE", "AUTOMATED GROWTH", "DUPLICATION VELOCITY"],
                 "italic": ["Episode 1: The Architecture", "Grow while you sleep"],
                 "hyperlink": ["Build My Empire", "Join Elite Partners", "Scale My Network"]
             },
-            "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a minimalist, cinematic representation of global geometric scale.",
-            "scene_bias": ["conference", "fintech_bank", "rooftop_dubai"],
-            "viral_hashtags": ["#EmpireScaling", "#ViralLoops", "#WealthMachine"],
-            "seo_keywords": ["Network Architecture", "Passive Income Systems", "Geometric Scaling"]
+            "visual_scene": "Inside a high-stakes vision suite. A partner observes a 3D golden network expanding across continents—a minimalist, cinematic representation of global geometric scale. Warm, high-status illumination.",
+            "scene_bias": ["conference", "fintech_bank", "rooftop_dubai", "luxury_car"],
+            "viral_hashtags": ["#EmpireScaling", "#ViralLoops", "#WealthMachine", "#GeometricGrowth", "#LegacyNetwork"],
+            "seo_keywords": ["Network Architecture", "Passive Income Systems", "Geometric Scaling", "Viral Marketing Automation"]
         }
     }
 
