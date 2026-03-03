@@ -261,11 +261,22 @@ def build_viral_image_prompt(intel: dict, tone: str | None = None, post_content:
     # Gender diversity injection
     gender = random.choice(_GENDER_VARIANTS)
     gender_directive = (
-        f"SUBJECT GENDER (MANDATORY): The central human subject MUST be {gender['subject']} "
-        f"({gender['descriptors']}). This is a strict requirement — do not substitute "
-        f"with the opposite gender or a group of people.\n"
+        f"CENTRAL SUBJECT: {gender['subject']} ({gender['descriptors']}). "
+        f"This is a strict requirement — do not substitute with a group.\n"
     )
-    subject_layer = f"SUBJECT DESCRIPTION: {audience_visual}\n{gender_directive}"
+    
+    # ── 3.1 BRAND INTEGRATION (Pintopay Card) ─────────────────────────────
+    brand_layer = ""
+    if brand_mention:
+        brand_layer = (
+            "PRODUCT FOCUS: A matte charcoal Pintopay Card with laser-etched details and a subtle charcoal titanium texture. "
+            "It must be featured as an elite accessory — held elegantly, resting on a marble/leather surface, or catching the light. "
+            "The card itself is a work of industrial art.\n"
+        )
+    else:
+        brand_layer = "PRODUCT FOCUS: No explicit brand logos. Focus on the high-status lifestyle accessories: a luxury watch, a premium leather passport holder, or a sleek custom smartphone.\n"
+
+    subject_layer = f"SUBJECT DESCRIPTION: {audience_visual}\n{gender_directive}{brand_layer}"
 
     # ── 4. GRADING & MOOD LAYER (Tone Resonance) ────────────────────────────
     # Fallback to 'authoritative' grading if tone is unknown
@@ -291,8 +302,8 @@ def build_viral_image_prompt(intel: dict, tone: str | None = None, post_content:
         f"{detail_layer}\n"
         f"EMOTION: High-status human resonance and deep authenticity. \n"
         f"ATMOSPHERE: Visionary breakthrough, calm authority, and absolute freedom. \n"
-        f"SPECS: Photorealistic 8K, shallow depth of field, sharp focus on eyes, rich organic textures, award-winning photography.\n"
-        f"CRITICAL: DO NOT render any text, words, letters, logos, or titles. The image must be completely TEXT-FREE."
+        f"SPECS: Photorealistic 8K, VIBRANT NATURAL COLORS, shallow depth of field, sharp focus on eyes, rich organic textures, award-winning luxury photography.\n"
+        f"CRITICAL: DO NOT render any text, words, letters, or gibberish logos (except the Pintopay card details if mentioned). The image must be completely TEXT-FREE."
     )
 
 

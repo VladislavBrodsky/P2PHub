@@ -140,38 +140,42 @@ IMAGE_RULES: Final[str] = """
 ULTRA-REALISTIC PHOTOGRAPHIC SPECIFICATION (2026 ELITE CMO STANDARD):
 
 **1. ARCHITECTURAL PHOTOGRAPHY RULES:**
-- NEVER use DALL-E or any model that produces "AI-typical" glossy, plastic, or over-saturated textures.
-- Photography Style: Raw, candid DSLR shot (Leica M11 or Sony A7R V energy). 
-- Lens: 35mm or 50mm prime focus, f/1.4 - f/2.8 for natural, creamy bokeh (shallow depth of field).
-- Lighting: Authentic natural light (Golden Hour, moody interior ambient, or professional rim light). NO artificial neon glows.
-- Quality: 8K hyper-realism, cinematic color grading (analog film stock vibes like Kodak Portra 400).
+- NEVER use DALL-E/stock-style glossy or plastic textures.
+- Photography Style: RAW, unedited DSLR shot (Leica M11, Sony A7R V, or Phase One XF).
+- Lens: 35mm, 50mm, or 85mm G-Master prime, f/1.2 - f/2.0 for razor-sharp focus on the subject and creamy, organic bokeh.
+- Lighting: Sophisticated natural color. No black and white. Use Golden Hour, cinematic volumetric lighting, or high-end ambient interior glow.
+- Quality: 8K hyper-realism, deep color depth, cinematic color grading (analog film stocks like Kodak Portra 800 or Fujifilm 400H).
+- Always provide VIBRANT, NATURAL COLORS. No grayscale.
 
 **2. SUBJECT & COMPOSITION:**
-- Authentic Humans: Skin must have real texture, pores, and natural imperfections. Eyes must be sharp with natural reflections.
-- Environment: High-status, real-world locations (Private executive suites, Lisbon rooftop cafes, Dubai crypto hubs, minimalistic Swiss coworking).
-- Mood: Minimalist mastery. The image should feel like a high-end luxury editorial (Vogue Business / Monocle style).
+- Authentic Humans: Real skin texture, visible pores, natural highlights, and expressive, intelligent eyes.
+- Environments: High-status, expensive-looking real-world locations (Private banks, elite summits, luxury car interiors, sunset beach clubs).
+- Product Integration: The Pintopay Card (matte black, laser-etched, charcoal titanium) should be featured as a high-status accessory — resting on a marble table, held between lean fingers, or subtly visible in a premium wallet.
+- Style: Editorial luxury (Vogue Business, Monocle, or Robb Report quality).
 
 **3. STRICT EXCLUSIONS:**
-- **STRICTLY FORBIDDEN:** No DALL-E-style glossy textures. No "cartoonish" or "plastic" faces.
-- No sci-fi, no cyberpunk, no floating coins, no neon lines, no 3D renders.
-- No stereotypical "stock photo" smiles.
+- NO glossy textures. NO plastic faces. NO stereotypical stock photos.
+- NO sci-fi, cyberpunk, or 3D Render artifacts. 
+- NO text, logos (other than the Pintopay card), or watermarks.
 
 **4. TECHNICAL GOAL:**
-- The image must be indistinguishable from a professional photograph taken by a high-end lifestyle photographer.
+- Indistinguishable from a professional high-end lifestyle photograph. Cinematic, stylish, and premium.
 """
 
 
 # Luxury Scene Library for Dynamic Image Generation
 LUXURY_SCENE_POOL: Final[dict[str, str]] = {
-    "fintech_bank": "Inside a high-stakes investment bank trading floor. Multiple glowing Bloomberg terminals, a sleek mahogany desk, and the city skyline visible through floor-to-ceiling glass at dusk. Shot on Leica M11, 35mm f/1.4.",
-    "coworking": "Inside an ultra-modern, minimalist co-working sanctuary with exposed concrete, lush indoor plants, premium Herman Miller seating, and soft, natural overhead lighting. Rhythmic and focused atmosphere.",
-    "conference": "The backstage keynote speakers' lounge at a global Web3 summit. High-resolution holographic displays in the background, cinematic side-lighting, name lanyard subtly visible. Atmosphere of elite intellectual mastery.",
-    "airport_lounge": "The private upper deck of a quiet international aviation hub (VIP Business Lounge). Golden hour light hitting champagne flutes and premium leather seating. A sense of absolute calm and global mobility.",
-    "luxury_life": "A high-end urban environment at night. Evening light reflecting off sleek glass and steel. The subject stepping out of a high-status establishment (e.g., a private club or Michelin-star restaurant).",
-    "luxury_car": "Leaning against a polished black Porsche Cayenne or high-performance electric SUV in a private, well-lit underground facility or outside a minimalist modern villa. High-status and powerful.",
-    "rooftop_dubai": "On a private rooftop terrace in Dubai Marina at sunset. Luxury high-rises surrounding, a sleek glass table with a laptop, warm amber light giving a cinematic editorial feel.",
-    "cafe_nomad": "At a high-end oceanfront café in Lisbon or Bali. The subject in premium casual wear, MacBook open with financial tools, turquoise sea in the background. Professional but completely free.",
-    "luxury_train": "Inside a wood-paneled, high-status luxury train compartment (e.g., Orient Express style but modern). Looking at a smartphone with financial charts, a view of the Swiss Alps rushing by through the window."
+    "fintech_bank": "Inside a high-stakes private banking vault or trading floor. Sleek mahogany, glowing Bloomberg screens, and a matte charcoal Pintopay card resting on a leather desk pad. Shot on Leica M11, 35mm f/1.4.",
+    "coworking": "An ultra-modern minimalist co-working sanctuary. Natural light, premium furniture, and a high-status individual checking a financial dashboard on a sleek device. Atmosphere of quiet power.",
+    "conference": "The main stage or VIP lounge of a global fintech summit. Volumetric lighting, blurred crowd of elite professionals in the background, cinematic depth. High-status intellectual energy.",
+    "airport_lounge": "Private VIP Business Lounge. Golden hour light, premium leather, and a Pintopay card subtly visible next to a high-end passport holder. Absolute calm and global mobility.",
+    "luxury_life": "Late-evening urban luxury. Reflections of city lights on glass. A subject in bespoke attire holding a matte charcoal Pintopay card while preparing to pay at a high-status establishment.",
+    "luxury_car": "The interior of a high-performance luxury car (Porsche or Bentley). Focus on the hand on the steering wheel or gear shift, with the Pintopay card catching the light on the center console.",
+    "rooftop_dubai": "Rooftop terrace overlooking Dubai Marina at sunset. Warm amber tones, cinematic editorial feel. A lifestyle of unreachable success and technological mastery.",
+    "cafe_nomad": "Exclusive beach club in Bali or Lisbon. Subject in premium linen wear, turquoise ocean view, and a Pintopay card resting on a marble table next to an iced espresso.",
+    "luxury_train": "Modern luxury train compartment crossing the Alps. Wood panels, smartphone showing rapid growth charts, and a sense of sophisticated, sovereign travel.",
+    "banking_lounge": "A private wealth management lounge with deep velvet textures, crystal carafes, and a world-class banker presenting a charcoal Pintopay card with absolute reverence. Stylish and ultra-realistic.",
+    "nomad_beach": "A Digital Nomad sovereign working from a remote, pristine beach in the Maldives. A high-end solar-powered workstation, crystal clear water, and the aura of absolute geographic and financial freedom."
 }
 
 # Tone-Specific Visual Grading for high-resonance images
