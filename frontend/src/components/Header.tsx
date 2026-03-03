@@ -23,7 +23,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
         <header
             className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{
-                paddingTop: 'var(--dynamic-header-padding, 108px)',
+                paddingTop: 'var(--dynamic-header-padding, 106px)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
                 paddingRight: 'var(--spacing-safe-right, 0px)'
             }}

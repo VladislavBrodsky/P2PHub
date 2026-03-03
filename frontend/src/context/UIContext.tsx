@@ -29,14 +29,14 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         if (isIOS) {
             // Hardcoded values that perfect the iPhone EXPERIENCE (as per user feedback)
             root.style.setProperty('--dynamic-safe-top', '32px');
-            root.style.setProperty('--dynamic-header-offset', '138px');
-            root.style.setProperty('--dynamic-header-padding', '108px');
+            root.style.setProperty('--dynamic-header-offset', '136px');
+            root.style.setProperty('--dynamic-header-padding', '106px');
         } else {
             // Dynamic values that fix the "too low" bug on Android/Desktop
             // We use a smaller base margin for Android because they don't have the same safe area overhead as iOS
             root.style.setProperty('--dynamic-safe-top', 'var(--tg-content-safe-area-inset-top, 0px)');
-            root.style.setProperty('--dynamic-header-offset', 'calc(var(--tg-content-safe-area-inset-top, 0px) + 96px)');
-            root.style.setProperty('--dynamic-header-padding', 'calc(var(--tg-content-safe-area-inset-top, 0px) + 64px)');
+            root.style.setProperty('--dynamic-header-offset', 'calc(var(--tg-content-safe-area-inset-top, 0px) + 94px)');
+            root.style.setProperty('--dynamic-header-padding', 'calc(var(--tg-content-safe-area-inset-top, 0px) + 62px)');
         }
 
         const handleResize = () => {
