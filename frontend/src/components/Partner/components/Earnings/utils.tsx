@@ -4,9 +4,20 @@ import { DollarSign, Gift, Users } from 'lucide-react';
 export const formatEarningDescription = (desc: string, t: any) => {
     if (!desc) return '';
 
+    // Step 1: Handle Usernames (Unescape underscores)
+    let processed = desc.replace(/\\_/g, '_');
+
+    // Step 2: Translate "Referral Reward"
+    if (processed.includes('Referral Reward:')) {
+        processed = processed.replace('Referral Reward:', t('commissions.referral_reward') + ':');
+    }
+
+    // Step 3: Simplify Level Ranges (e.g., (L3-L20) -> (L3))
+    processed = processed.replace(/\(L(\d+)-L\d+\)/g, '(L$1)');
+
     // Task Rewards
-    if (desc.startsWith('Task Reward: ')) {
-        const taskId = desc.replace('Task Reward: ', '').trim();
+    if (processed.startsWith('Task Reward: ')) {
+        const taskId = processed.replace('Task Reward: ', '').trim();
         const taskTitleKey = `tasks.${taskId}.title`;
         const translatedTitle = t(taskTitleKey);
 
@@ -18,19 +29,19 @@ export const formatEarningDescription = (desc: string, t: any) => {
     }
 
     // Commissions & Referral XP
-    if (desc.includes('PRO+ Commission')) return desc.replace('PRO+ Commission', t('commissions.pro_plus'));
-    if (desc.includes('PRO Commission')) return desc.replace('PRO Commission', t('commissions.pro'));
-    if (desc.includes('Referral Partner Joined')) return desc.replace('Referral Partner Joined', t('commissions.referral_joined'));
-    if (desc.includes('Active Referral XP')) return desc.replace('Active Referral XP', t('commissions.active_referral'));
-    if (desc.includes('Global Network Revenue')) return desc.replace('Global Network Revenue', t('commissions.growth_revenue'));
+    if (processed.includes('PRO+ Commission')) processed = processed.replace('PRO+ Commission', t('commissions.pro_plus'));
+    if (processed.includes('PRO Commission')) processed = processed.replace('PRO Commission', t('commissions.pro'));
+    if (processed.includes('Referral Partner Joined')) processed = processed.replace('Referral Partner Joined', t('commissions.referral_joined'));
+    if (processed.includes('Active Referral XP')) processed = processed.replace('Active Referral XP', t('commissions.active_referral'));
+    if (processed.includes('Global Network Revenue')) processed = processed.replace('Global Network Revenue', t('commissions.growth_revenue'));
 
     // Payments / Outcomes
-    if (desc.includes('Review:') && desc.includes('Payment')) return t('commissions.review_payment') + ' ' + desc.split(' ').pop();
-    if (desc.includes('Pending:') && desc.includes('Payment')) return t('commissions.pending_payment') + ' ' + desc.split(' ').pop();
-    if (desc.includes('Failed:') && desc.includes('Payment')) return t('commissions.failed_payment') + ' ' + desc.split(' ').pop();
-    if (desc.includes('Purchase:')) return t('commissions.purchase') + ': ' + desc.split(': ').pop();
+    if (processed.includes('Review:') && processed.includes('Payment')) processed = t('commissions.review_payment') + ' ' + processed.split(' ').pop();
+    if (processed.includes('Pending:') && processed.includes('Payment')) processed = t('commissions.pending_payment') + ' ' + processed.split(' ').pop();
+    if (processed.includes('Failed:') && processed.includes('Payment')) processed = t('commissions.failed_payment') + ' ' + processed.split(' ').pop();
+    if (processed.includes('Purchase:')) processed = t('commissions.purchase') + ': ' + processed.split(': ').pop();
 
-    return desc.replace('(Level ', '(L');
+    return processed.replace('(Level ', '(L');
 };
 
 export const getTypeStyles = (type: string) => {
