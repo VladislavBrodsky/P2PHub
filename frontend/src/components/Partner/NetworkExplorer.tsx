@@ -603,9 +603,17 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {targetPartner && (
+                        {targetPartner ? (
                             <button
                                 onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
+                                className="h-11 px-4 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
+                            >
+                                <span className="text-lg leading-none">&larr;</span>
+                                <span>{t('common:back', 'Back')}</span>
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => { selection(); if (onClose) onClose(); else window.history.back(); }}
                                 className="h-11 px-4 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <span className="text-lg leading-none">&larr;</span>
