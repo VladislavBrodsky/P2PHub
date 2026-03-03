@@ -910,11 +910,13 @@ class ViralFormulas:
     }
     
     CTA_FORMULAS = {
-        "scarcity": "⚡ **[Join the Network]({link})** — The window for this specific architecture won't stay open.",
-        "social_proof": "🚀 **[Join the Network]({link})** — We are building something unstoppable.",
-        "risk_reversal": "✅ **[Join the Network]({link})** | Step into absolute financial autonomy.",
-        "exclusivity": "💎 **[Join the Network]({link})** — An elite circle reserved for visionaries.",
-        "urgency": "⏰ **[Join the Network]({link})** — The Global Shift is happening. Choose your side."
+        "scarcity": "⚡ **[Secure My Slot]({link})** — The window for this specific architecture is closing.",
+        "social_proof": "🚀 **[Initiate My Protocol]({link})** — Join the thousands already architecting their future.",
+        "risk_reversal": "✅ **[Bridge to Independence]({link})** | Step into absolute financial autonomy.",
+        "exclusivity": "💎 **[Join the Sovereign Elite]({link})** — An elite circle reserved for the top 1%.",
+        "urgency": "⏰ **[Final 24 Hours to Pivot]({link})** — Choose your side of the global shift.",
+        "alpha": "📈 **[Claim My Alpha Advantage]({link})** — Frontrecord the legacy systems.",
+        "velocity": "🌪️ **[Locked in My Velocity]({link})** — Geometric growth starts here."
     }
 
 

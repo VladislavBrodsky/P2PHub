@@ -111,10 +111,21 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
 Write a HUMANIZED, NATIVE-level post in {language} for {target_audience} using the {post_type} strategy.
 Persona Tone: {tone.upper()}
 Product: {"Pintopay Ecosystem (Crypto Cards & Partner Center)" if brand_mention else "A sovereign, borderless wealth ecosystem (DO NOT MENTION PINTOPAY BY NAME)"}
-Referral Link (MUST INCLUDE): {ref_link}
+Referral Link (MANDATORY): {ref_link}
 
-**BRANDING STRATEGY:**
-{"EXPLICIT: You MUST mention 'Pintopay' naturally in the narrative." if brand_mention else "BETWEEN THE LINES: DO NOT mention the word 'Pintopay'. Sell the lifestyle, the autonomy, and the geometric growth results instead. Let the referral link handle the destination."}
+**BRANDING & CTA STRATEGY:**
+{"EXPLICIT: You MUST mention 'Pintopay' naturally in the narrative." if brand_mention else "BETWEEN THE LINES: DO NOT mention the word 'Pintopay'. Sell the lifestyle, the autonomy, and the geometric growth results instead."}
+CRITICAL: Even when selling 'Between the Lines', you MUST include the Referral Link with a high-status, FOMO-driven CTA.
+
+**CTA VARIATION PROTOCOL:**
+Do NOT use 'Join the Network' repeatedly. Use elite, varied, and deadline-oriented CTAs. Examples of high-conversion anchor text:
+- Secure My Slot
+- Initiate My Protocol
+- Bridge to Independence
+- Join the Sovereign Elite
+- Final 24 Hours to Pivot
+- Claim My Alpha Advantage
+- Locked in My Velocity
 
 **CRITICAL INSTRUCTION: LENGTH & FORMATTING.**
 Generate the entire content (title, body) as a single coherent narrative. DO NOT split the message into multiple parts.
@@ -194,7 +205,7 @@ Referral Link: {ref_link}
 **STRUCTURE & FORMATTING:**
 - Hook: **Bold**
 - Paragraphs: 3-5 short, sharp blocks with double line breaks.
-- CTA: Final line MUST be exactly: **[{cta_fallback}]({ref_link})**
+- CTA: Final line MUST be a high-conversion markdown link: **[Varied High-Status Anchor Text]({ref_link})**
 - Hashtags: 2-4 unique tags. DO NOT include them in the body text. ONLY in the hashtags field.
 
 **LENGTH PROTOCOL:**

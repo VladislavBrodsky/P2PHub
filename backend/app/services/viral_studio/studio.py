@@ -227,13 +227,27 @@ class ViralMarketingStudio:
         
         has_proper_link = f"({ref_link})" in body_text and "[" in body_text
         if not has_proper_link:
-            cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
+            # High-conversion fallback pool
+            CTA_VARIANTS = {
+                "Russian": [
+                    "Забронировать место", "Запустить мой протокол", "Перейти к независимости",
+                    "Присоединиться к элите", "Последние 24 часа", "Забрать преимущество", "Включить скорость"
+                ],
+                "English": [
+                    "Secure My Slot", "Initiate My Protocol", "Bridge to Independence",
+                    "Join the Sovereign Elite", "Final 24 Hours to Pivot", "Claim My Alpha Advantage", "Locked in My Velocity"
+                ]
+            }
+            fallbacks = CTA_VARIANTS.get(language, CTA_VARIANTS["English"])
+            cta_fallback = secrets.choice(fallbacks)
+            
             lines = body_text.split("\n")
             cta_fixed = False
             for i in range(len(lines)-1, -1, -1):
                 line = lines[i].strip()
                 if not line: continue
-                if "**" in line and len(line) < 120 and "]" in line:
+                # Look for a line that looks like it was meant to be a CTA
+                if ("**" in line or "[" in line) and len(line) < 120:
                     clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
                     if not clean_text or len(clean_text) < 3: clean_text = cta_fallback
                     lines[i] = f"**[{clean_text}]({ref_link})**"
