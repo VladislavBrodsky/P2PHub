@@ -216,6 +216,24 @@ export default function LeaderboardPage() {
 
                 {/* Timeframe Toggle */}
                 <div className="flex p-0.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-xl mt-2 w-full max-w-[300px] border border-slate-900/5 dark:border-white/5 shadow-premium relative">
+                    {/* Active Indicator Background */}
+                    <div className="absolute inset-0.5 flex pointer-events-none" aria-hidden="true">
+                        <motion.div
+                            className="absolute inset-y-0 bg-linear-to-r from-indigo-600 via-indigo-500 to-indigo-600 rounded-lg shadow-lg z-0"
+                            initial={false}
+                            animate={{
+                                x: timeframe === 'weekly' ? '0%' : timeframe === 'monthly' ? '100%' : '200%',
+                            }}
+                            style={{
+                                width: '33.333%',
+                                left: 0
+                            }}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        >
+                            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-lg" />
+                        </motion.div>
+                    </div>
+
                     {(['weekly', 'monthly', 'all'] as const).map((tf) => (
                         <button
                             key={tf}
@@ -224,22 +242,12 @@ export default function LeaderboardPage() {
                                 setTimeframe(tf);
                                 setShowAll(false);
                             }}
-                            className={`flex-1 py-1.5 text-label font-bold uppercase tracking-widest rounded-lg transition-all relative z-10 ${timeframe === tf
+                            className={`flex-1 py-1.5 text-label font-bold uppercase tracking-widest rounded-lg transition-colors duration-200 relative z-10 ${timeframe === tf
                                 ? 'text-white'
                                 : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500'
                                 }`}
                         >
                             {t(`leaderboard.timeframes.${tf}`)}
-                            {timeframe === tf && (
-                                <motion.div
-                                    layoutId="activeTimeframe"
-                                    initial={false}
-                                    className="absolute inset-0 bg-linear-to-r from-indigo-600 via-indigo-500 to-indigo-600 rounded-lg shadow-lg -z-10"
-                                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                                >
-                                    <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-lg" />
-                                </motion.div>
-                            )}
                         </button>
                     ))}
                 </div>
