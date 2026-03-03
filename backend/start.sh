@@ -7,8 +7,8 @@ export PYTHONUNBUFFERED=1
 
 # Sanitize PORT (prevent crash from invalid injection like '${PORT}')
 if [[ -n "${PORT}" ]] && ! [[ "${PORT}" =~ ^[0-9]+$ ]]; then
-    echo "⚠️ Invalid PORT environment variable detected: '${PORT}'. Falling back to 8080."
-    export PORT=8080
+    echo "⚠️ Invalid PORT environment variable detected: '${PORT}'. Falling back to 8000."
+    export PORT=8000
 fi
 
 # echo "🔍 Environment Variables (sanitized):"

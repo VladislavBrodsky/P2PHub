@@ -30,7 +30,19 @@ export default defineConfig({
     sourcemap: true,
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1200,
-    emptyOutDir: true
+    emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // #comment: Strategic splitting to reduce main bundle size while keeping execution order stable.
+          if (id.includes('node_modules')) {
+            if (id.includes('@telegram-apps') || id.includes('@tonconnect')) return 'vendor-tma';
+            if (id.includes('recharts') || id.includes('framer-motion') || id.includes('lucide-react')) return 'vendor-ui';
+            return 'vendor'; // All other stable dependencies
+          }
+        }
+      }
+    }
   },
 })
 

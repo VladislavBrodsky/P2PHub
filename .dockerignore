@@ -27,3 +27,15 @@ idea
 .python-version
 .env*
 !.env.example
+
+# Build Context Bloat Fix
+app_images
+archive_logs
+.npm-cache
+.pytest_cache
+.ruff_cache
+backup
+quarantine
+node_modules
+dist
+build

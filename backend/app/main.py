@@ -94,34 +94,28 @@ async def lifespan(app: FastAPI):
         
     logger.info(f"🔍 Process Discovery: Service='{service_name}', TaskIQ='{is_taskiq_worker}', IsWeb='{is_web_service}'")
 
-    # #comment: Distributed Startup Tasks (Offloaded to Workers)
-    # Using TaskIQ ensures these heavy operations don't block web worker startup.
-    # We use a leader lock to ensure only ONE worker queues these tasks during deployment.
-    from app.services.maintenance_service import migrate_blog_task, restore_names_task
-    from app.services.redis_service import redis_service
-    from app.services.support_service import warm_up_kb_task
-    
-    is_startup_leader = False
-    try:
-        startup_lock = "lock:startup_tasks_queued"
-        # Only the first process of the first service to boot will queue tasks.
-        is_startup_leader = await redis_service.client.set(startup_lock, "1", ex=300, nx=True)
-    except Exception as e:
-        logger.warning(f"⚠️ Could not check startup leader status (Redis issue): {e}")
-
-    if is_startup_leader:
+    # #comment: Distributed Startup Tasks (Backgrounded)
+    # Using asyncio.create_task ensures these operations don't block web worker startup.
+    async def run_warmup_tasks():
         try:
-            logger.info("📡 Leader Process: Dispatching startup tasks to workers...")
-            await warmup_redis.kiq()
-            await warm_up_kb_task.kiq()
-            await restore_names_task.kiq()
-            await migrate_blog_task.kiq()
-            logger.info("✅ Startup tasks successfully queued.")
+            from app.services.maintenance_service import migrate_blog_task, restore_names_task
+            from app.services.redis_service import redis_service
+            from app.services.support_service import warm_up_kb_task
+            
+            startup_lock = "lock:startup_tasks_queued"
+            # Only one process should queue these tasks
+            if await redis_service.client.set(startup_lock, "1", ex=300, nx=True):
+                logger.info("📡 Leader Process: Dispatching startup tasks to workers in background...")
+                await warmup_redis.kiq()
+                await warm_up_kb_task.kiq()
+                await restore_names_task.kiq()
+                await migrate_blog_task.kiq()
+                logger.info("✅ Startup tasks successfully queued.")
         except Exception as e:
-            logger.error(f"⚠️ Failed to queue startup tasks: {e}")
-            logger.warning("Application will continue to boot, but background warmup might be delayed.")
-    elif is_startup_leader is False:
-        logger.debug("ℹ️ Startup tasks already dispatched by another leader process.")
+            logger.error(f"⚠️ Background startup task failed: {e}")
+
+    # Start warmup tasks without awaiting them to keep lifespan fast
+    asyncio.create_task(run_warmup_tasks())
 
     # --- Bot Integration Section (Web Only) ---
     if is_web_service:

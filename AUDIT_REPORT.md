@@ -83,4 +83,27 @@ The P2PHub codebase was audited using static analysis tools (`Bandit`, `Safety`)
     - **Impact:** Reduces perceived latency by ~80%, providing a premium, interactive "Elite AI" experience.
 
 ---
+
+## 5. Deployment Performance Audit (2026-03-03)
+
+**Performed by:** Antigravity (AI Agent)  
+**Issue:** Deployment status remains in "Creating containers" for >5 minutes.
+
+### 5.1 Health Check Misalignment (Fixed)
+- **Status:** ✅ FIXED
+- **Action:** Increased `start-period` to 120s and `retries` to 5 in `backend/Dockerfile`. Aligned `start.sh` port fallback with 8000.
+
+### 5.2 Blocking Startup Sequence (Improved)
+- **Status:** ✅ IMPROVED
+- **Action:** Refactored `app/main.py` lifespan to background warmup tasks (Redis, KB, Blog) using `asyncio.create_task`, allowing the server to bound to the port instantly.
+
+### 5.3 Monolithic Frontend Bundle (Fixed)
+- **Status:** ✅ FIXED
+- **Action:** Re-implemented a safe `manualChunks` strategy in `vite.config.ts`, isolating `vendor-tma` and `vendor-ui` to reduce main bundle size.
+
+### 5.4 Build Context Bloat (Mitigated)
+- **Status:** ✅ MITIGATED
+- **Action:** Updated root `.dockerignore` to exclude `app_images`, `archive_logs`, and other non-source directories.
+
+---
 **Audit & Optimization Finished. The system is faster, smoother, and provides a state-of-the-art AI interface.**

@@ -48,6 +48,7 @@ COPY --chown=appuser:appuser . .
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 
 EXPOSE 8000
 COPY --chown=appuser:appuser start.sh /start.sh
@@ -55,7 +56,10 @@ RUN chmod +x /start.sh
 
 USER appuser
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+# --- Optimized Healthcheck ---
+# Increased start-period to 120s to allow for database migrations (see start.sh)
+# Reduced interval to 15s for faster recovery detection after migrations finish.
+HEALTHCHECK --interval=15s --timeout=10s --start-period=120s --retries=5 \
     CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
 
 CMD ["/start.sh"]
