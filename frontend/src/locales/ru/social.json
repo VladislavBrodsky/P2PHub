@@ -27,7 +27,7 @@
       "global_strength": "Глобальная Сила",
       "active_nodes": "Активные Узлы",
       "invite_btn": "Пригласить",
-      "quiet_on_level": "Уровень {{level}} Молчит",
+      "quiet_on_level": "Уровень {{level}}: Бездействует",
       "growth_desc": "Рост всего в одном приглашении. Расширяйте свою сеть",
       "xp_focus": "Фокус XP",
       "unlock_more_streams": "Открыть Больше Потоков",

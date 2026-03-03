@@ -27,7 +27,7 @@
       "global_strength": "Global Strength",
       "active_nodes": "Active Nodes",
       "invite_btn": "Invite",
-      "quiet_on_level": "Level {{level}} is Quiet",
+      "quiet_on_level": "Level {{level}}: Inactive",
       "growth_desc": "Growth is just one invite away. Expand your network",
       "xp_focus": "XP Focus",
       "unlock_more_streams": "Unlock More Streams",

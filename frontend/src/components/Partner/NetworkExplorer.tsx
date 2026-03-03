@@ -306,16 +306,14 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             </h3>
                             <div className="text-label font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
                                 {targetPartner ? (
-                                    <button
-                                        onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
-                                        className="text-blue-500 hover:text-blue-600 font-bold active:scale-95 transition-transform bg-blue-500/10 px-1.5 py-0.5 rounded-md"
-                                    >
-                                        &larr; {t('common:back', 'BACK')}
-                                    </button>
+                                    <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                        {t('network.explorer.viewing_sub_network', 'Sub-Network View')}
+                                    </>
                                 ) : (
                                     <>
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        {isGlobalMode ? t('network.explorer.global_architecture') : t('network.explorer.your_ecosystem')}
+                                        {isGlobalMode ? t('network.explorer.global_architecture', 'Global Architecture') : t('network.explorer.your_ecosystem', 'Your Ecosystem')}
                                     </>
                                 )}
                             </div>
@@ -605,6 +603,15 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                     </div>
 
                     <div className="flex items-center gap-2">
+                        {targetPartner && (
+                            <button
+                                onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
+                                className="h-11 px-4 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
+                            >
+                                <span className="text-lg leading-none">&larr;</span>
+                                <span>{t('common:back', 'Back')}</span>
+                            </button>
+                        )}
                         <button
                             onClick={() => { impact('medium'); setIsShareOpen(true); }}
                             className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 h-11 rounded-2xl flex items-center gap-2 font-bold text-label uppercase tracking-wider shadow-lg dark:shadow-white/5 active:scale-95 transition-all"
