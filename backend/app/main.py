@@ -229,7 +229,9 @@ async def lifespan(app: FastAPI):
             logger.info("   - Check if database service is running")
             logger.info("   - Ensure network connectivity")
 
-    logger.info("✅ Lifespan setup complete. App is live.")
+    # #comment: v1.9.0 "Refinement & Hardening" Release
+    # Stabilized core systems, hardened academy exploits, and unified versioning across stack.
+    logger.info("✅ Lifespan setup complete. App is live (v1.9.0).")
     yield
     logger.info("🛑 Shutting down Lifespan...")
 
@@ -259,7 +261,12 @@ async def lifespan(app: FastAPI):
                 logger.error(f"❌ Error cancelling polling extender task: {e}")
 
 
-app = FastAPI(title="Pintopay ecosystem API", lifespan=lifespan)
+app = FastAPI(
+    title="P2PHub API",
+    version="1.9.0",
+    description="P2PHub Core API - Refinement & Hardening Release",
+    lifespan=lifespan
+)
 
 @app.get("/")
 async def root_health():

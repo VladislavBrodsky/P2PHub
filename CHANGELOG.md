@@ -1,12 +1,28 @@
 # Changelog
 
 **Maintained by:** Antigravity (AI Agent)  
-**Last Updated:** 2026-02-20  
+**Last Updated:** 2026-03-03  
 **Status:** ✅ ACTIVE
 
 ---
 
 All notable changes to this project will be documented in this file.
+
+## [1.9.0] - 2026-03-03 "Refinement & Hardening"
+### Added
+- **Backend Resilience**: Implemented comprehensive startup process discovery to prevent bot polling/webhook conflicts in distributed environments (TaskIQ).
+- **Audit Logs**: Fixed "column amount does not exist" error in audit log queries and improved data typing.
+- **Security**: Hardened Academy completion endpoints against unearned XP exploits.
+
+### Changed
+- **Network Explorer**: Refined layout with "Back" button moved to footer for better accessibility on mobile.
+- **UI Experience**: Polished font sizes and element spacing in Partner Dashboard (Explore Network banner, Burger menu, XP score).
+- **History UI**: Improved compactness and localized referral reward strings for a premium dashboard feel.
+
+### Fixed
+- **Leaderboard**: Resolved animation glitch where period selection indicators would jump on initial load.
+- **Partner Logic**: Fixed "duplicate key" error during partner creation by improving ID handling.
+- **Stability**: Standardized backend title as "P2PHub API" and unified version stamps across frontend/backend.
 
 ## [1.8.0] - 2026-02-19 "Stable"
 ### Added

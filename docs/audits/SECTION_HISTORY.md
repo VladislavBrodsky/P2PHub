@@ -6,6 +6,10 @@ Use this to see the evolution of individual components.
 ## 🏫 Academy & Community
 **Current Status**: v1.6.1 (Updated)
 
+### v1.9.0 (2026-03-03) - "Refinement & Hardening"
+- **SECURITY HARDENING**: Implemented strict stage-unlock checks for Academy missions to prevent XP exploits.
+- **EXPLOIT FIX**: Identified and blocked unauthorized bypasses of mission completion logic.
+
 ### v1.7.0 (2026-02-14) - "Go-to-Market"
 - **UX IMPROVEMENT**: Overhauled loading animations for premium logo-free experience.
 - **ACADEMY FIX**: Resolved `UnboundLocalError` when completing already-finished stages; initialized `effective_xp` safely.
@@ -41,6 +45,11 @@ Use this to see the evolution of individual components.
 
 ## 🚀 Performance & Infrastructure
 **Current Status**: v1.5.0 (Improved)
+
+### v1.9.0 (2026-03-03)
+- **PROCESS DISCOVERY**: Implemented distributed health checks and process discovery to ensure stable bot integration across Web/Worker nodes.
+- **AUDIT LOG FIX**: Resolved database schema mismatch in audit logs.
+- **STABILITY**: Unified versioning (v1.9.0) across frontend, backend, and documentation.
 
 ### v1.7.0 (2026-02-14)
 - **NETWORK DATA SYNC**: Audited 1,000+ tree relationships; recalculated materialized paths and depths for global network (144 partners).

@@ -97,24 +97,49 @@ async def create_partner(
     referrer_code: str | None = None,
     photo_file_id: str | None = None
 ) -> tuple[Partner, bool]:
-    """Creates a new partner or retrieves an existing one."""
+    """
+    Creates a new partner or retrieves an existing one.
+    Optimized: Always updates profile data (username, names, photo) to keep DB fresh.
+    """
+    # 1. Check for existing partner
     partner = await get_partner_by_telegram_id(session, telegram_id)
     
-    if partner and (partner.referrer_id or not referrer_code):
+    if partner:
+        # Profile Data Sync (Keep DB fresh with Telegram state)
+        # Only update if data actually changed to avoid unnecessary DB writes
+        changed = False
+        if partner.username != username: 
+            partner.username = username
+            changed = True
+        if partner.first_name != first_name:
+            partner.first_name = first_name
+            changed = True
+        if partner.last_name != last_name:
+            partner.last_name = last_name
+            changed = True
+        if photo_file_id and partner.photo_file_id != photo_file_id:
+            partner.photo_file_id = photo_file_id
+            changed = True
+            
+        # Re-resolve referrer only if the user doesn't have one and a code was provided
+        if not partner.referrer_id and referrer_code:
+            referrer = await _resolve_referrer(session, referrer_code, partner.id)
+            if referrer:
+                await _update_existing_partner_referrer(session, partner, referrer)
+                # Ensure side-effects run for newly linked referrals
+                await handle_partner_creation_task.kiq(partner.id, referrer.id)
+                return partner, True # Count as "new" transition for bot flow
+        
+        if changed:
+            session.add(partner)
+            await session.commit()
+            await session.refresh(partner)
+
         return partner, False
 
-    # 2. Resolve Referrer
-    referrer = await _resolve_referrer(session, referrer_code, partner.id if partner else None)
+    # 2. Resolve Referrer for New User
+    referrer = await _resolve_referrer(session, referrer_code, None)
     
-    if partner and referrer:
-        await _update_existing_partner_referrer(session, partner, referrer)
-        
-        # Move side effects (Level 2-9 awards, notifications) to background task
-        await handle_partner_creation_task.kiq(partner.id, referrer.id)
-        
-        return partner, True
-
-    # 3. Create Record
     if referrer:
         path = f"{referrer.path or ''}.{referrer.id}".lstrip(".")
         depth = referrer.depth + 1
@@ -133,12 +158,11 @@ async def create_partner(
     partner, is_new = await _commit_partner_creation(session, partner, telegram_id)
     
     if is_new:
-        # #comment: Move side effects (Level 2-9 awards, notifications) to background task
+        # #comment: Side effects (Level 2-9 awards, notifications) handled in background
         try:
             await handle_partner_creation_task.kiq(partner.id, referrer.id if referrer else None)
         except Exception as e:
-            logger.error(f"Failed to enqueue partner creation task: {e}. Executing synchronously as fallback.")
-            # Mission-critical fallback: If queue is down, run side effects in-process to ensure DB integrity
+            logger.error(f"Failed to enqueue partner creation task: {e}. Executing synchronously.")
             await handle_partner_creation_task(partner.id, referrer_id=referrer.id if referrer else None)
 
     return partner, is_new
