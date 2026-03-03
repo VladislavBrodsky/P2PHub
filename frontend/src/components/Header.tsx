@@ -52,7 +52,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         aria-label="User stats"
                     >
                         <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('lvl')}</span>
+                            <span className="text-[10px] sm:text-label font-bold uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('lvl')}</span>
                             <span className="text-[14px] sm:text-caption font-bold text-text-primary leading-none">
                                 {user?.level ?? 1}
                             </span>
@@ -65,7 +65,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                             <span className="text-[14px] sm:text-caption font-bold text-text-primary leading-none">
                                 {Math.floor(user?.xp ?? 0).toLocaleString()}
                             </span>
-                            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-success dark:text-emerald-400">{t('xp')}</span>
+                            <span className="text-[10px] sm:text-label font-bold uppercase tracking-wider text-success dark:text-emerald-400">{t('xp')}</span>
                         </div>
                     </button>
                 </div>
