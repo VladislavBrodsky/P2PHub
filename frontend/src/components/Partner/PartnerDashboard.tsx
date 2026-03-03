@@ -183,8 +183,8 @@ export const PartnerDashboard = () => {
                                 <span className="w-5 h-5 flex items-center justify-center">🌐</span>
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
-                                <p className="text-label font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
+                                <h3 className="font-bold text-slate-900 dark:text-white text-label uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
+                                <p className="text-[9px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
                             </div>
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-400" />
