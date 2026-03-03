@@ -80,7 +80,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
             <div className={`
-                relative rounded-[2.5rem] bg-bg-glass backdrop-blur-xl border border-border-glass group
+                relative rounded-3xl bg-bg-glass backdrop-blur-xl border border-border-glass group
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : isPro ? 'ring-2 ring-amber-400/10' : ''}
             `}>
