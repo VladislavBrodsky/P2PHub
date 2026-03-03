@@ -93,12 +93,12 @@ export function getRankGradient(level: number): string {
  * Matches the start color of getRankGradient.
  */
 export function getRankTextColor(level: number): string {
-    if (level < 12) return 'text-slate-400';
-    if (level < 24) return 'text-blue-400';
-    if (level < 36) return 'text-emerald-400';
-    if (level < 52) return 'text-amber-400';
-    if (level < 68) return 'text-purple-400';
-    if (level < 84) return 'text-rose-400';
-    if (level < 100) return 'text-blue-600';
-    return 'text-blue-900';
+    if (level < 12) return 'text-slate-600 dark:text-slate-400';
+    if (level < 24) return 'text-blue-600 dark:text-blue-400';
+    if (level < 36) return 'text-emerald-600 dark:text-emerald-400';
+    if (level < 52) return 'text-amber-600 dark:text-amber-400';
+    if (level < 68) return 'text-purple-600 dark:text-purple-400';
+    if (level < 84) return 'text-rose-600 dark:text-rose-400';
+    if (level < 100) return 'text-blue-700 dark:text-blue-600';
+    return 'text-blue-900 dark:text-blue-500';
 }
