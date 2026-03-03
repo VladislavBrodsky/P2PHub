@@ -65,29 +65,17 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : isPro ? 'bg-amber-400/20 shadow-[0_0_80px_rgba(251,191,36,0.3)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
             )}
 
-            {/* Vibing Purple Crown for PRO Users - Outside container to avoid clipping */}
             {user?.is_pro && (
-                <motion.div
-                    initial={{ rotate: -15, y: 0 }}
-                    animate={{
-                        rotate: [-15, 15, -15],
-                        y: [-2, 2, -2],
-                        scale: [1, 1.1, 1]
-                    }}
-                    transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                    }}
+                <div
                     // Adjusted positioning to be top-left of the profile picture
-                    className={`absolute ${variant === 'compact' ? 'top-[30px] left-[18px]' : 'top-[34px] left-[14px]'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''}`}
+                    className={`absolute ${variant === 'compact' ? 'top-[30px] left-[18px]' : 'top-[34px] left-[14px]'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''} animate-float-subtle`}
                 >
                     <Crown
                         size={variant === 'compact' ? 24 : 30}
                         className={`${isProPlus ? 'text-fuchsia-500 fill-fuchsia-500/10' : 'text-amber-500 fill-amber-500/10'}`}
                         strokeWidth={2.5}
                     />
-                </motion.div>
+                </div>
             )}
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
@@ -99,17 +87,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                 <div className="flex items-center gap-5 p-3.5 rounded-[inherit] overflow-hidden">
                     {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
                     {isProPlus && variant !== 'compact' && (
-                        <motion.div
-                            animate={{
-                                opacity: [0.3, 0.7, 0.3],
-                                scale: [1, 1.05, 1]
-                            }}
-                            transition={{
-                                duration: 3,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-transparent to-cyan-400/20 pointer-events-none"
+                        <div
+                            className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-transparent to-cyan-400/20 pointer-events-none animate-pulse-subtle"
                         />
                     )}
 
@@ -197,21 +176,12 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         {/* XP Progress Bar - Horizontal Fit */}
                         <div className="w-full space-y-1">
                             <div className="flex justify-between items-baseline px-0.5 gap-2">
-                                <motion.div
-                                    animate={{
-                                        scale: [1, 1.05, 1],
-                                        filter: ['drop-shadow(0 0 0px transparent)', 'drop-shadow(0 0 4px rgba(59, 130, 246, 0.4))', 'drop-shadow(0 0 0px transparent)']
-                                    }}
-                                    transition={{
-                                        duration: 2,
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                    }}
-                                    className="flex items-baseline gap-1 whitespace-nowrap"
+                                <div
+                                    className="flex items-baseline gap-1 whitespace-nowrap animate-pulse-subtle"
                                 >
                                     <span className="text-label font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase shrink-0">{t('total')}:</span>
                                     <span className="text-label font-bold text-blue-500 dark:text-blue-300">{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
-                                </motion.div>
+                                </div>
                                 <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{formatXP(xpProgress.current)}</span>
                                     <span className="text-text-secondary font-medium">/</span>

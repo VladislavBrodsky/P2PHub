@@ -106,29 +106,22 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full sm:hidden z-20" />
 
                         {/* Animated Background Glow */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full pointer-events-none" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full pointer-events-none animate-pulse-subtle" />
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pb-10 sm:pb-8">
                             {/* Header */}
                             <div className="relative mb-4 pt-4">
-                                <motion.div
-                                    animate={{
-                                        scale: [1, 1.05, 1],
-                                        rotate: [0, 2, -2, 0]
-                                    }}
-                                    transition={{ duration: 5, repeat: Infinity }}
-                                    className="w-16 h-16 bg-linear-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20"
+                                <div
+                                    className="w-16 h-16 bg-linear-to-tr from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl shadow-blue-500/20 animate-float-subtle"
                                 >
                                     <Trophy className="w-8 h-8 text-white" />
-                                </motion.div>
+                                </div>
 
-                                <motion.div
-                                    className="absolute top-0 right-1/3"
-                                    animate={{ y: [-10, 10, -10], opacity: [0.3, 1, 0.3] }}
-                                    transition={{ duration: 3, repeat: Infinity }}
+                                <div
+                                    className="absolute top-0 right-1/3 animate-pulse-subtle"
                                 >
                                     <Sparkles className="w-5 h-5 text-yellow-500" />
-                                </motion.div>
+                                </div>
                             </div>
 
                             <div className="space-y-2 mb-6 text-left">

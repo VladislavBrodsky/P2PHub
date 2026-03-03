@@ -137,4 +137,107 @@
     /* Simplified vibing */
     animation: pulse-glow 4s ease-in-out infinite;
   }
+
+  /* Optimized Performance Animations */
+  .animate-float-subtle {
+    animation: float-subtle 4s ease-in-out infinite;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  .animate-glow-indigo {
+    animation: glow-indigo 4s ease-in-out infinite;
+  }
+
+  .animate-glow-blue {
+    animation: glow-blue 4s ease-in-out infinite;
+  }
+
+  .animate-glow-purple {
+    animation: glow-purple 4s ease-in-out infinite;
+  }
+
+  .animate-rotate-slow {
+    animation: rotate-slow 10s linear infinite;
+  }
+}
+
+@keyframes float-subtle {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.25;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes glow-indigo {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.2));
+    opacity: 0.4;
+  }
+
+  50% {
+    filter: drop-shadow(0 0 25px rgba(99, 102, 241, 0.5));
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow-blue {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+    opacity: 0.3;
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.5);
+    opacity: 0.6;
+  }
+}
+
+@keyframes glow-purple {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+    opacity: 0.3;
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(168, 85, 247, 0.5);
+    opacity: 0.6;
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }

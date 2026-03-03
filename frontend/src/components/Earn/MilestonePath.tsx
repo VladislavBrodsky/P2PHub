@@ -107,14 +107,7 @@ export const MilestonePath = () => {
                             {isUnlocked && (
                                 <>
                                     <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                                    <motion.div
-                                        animate={{
-                                            scale: [1, 1.2, 1],
-                                            opacity: [0.1, 0.2, 0.1]
-                                        }}
-                                        transition={{ duration: 4, repeat: Infinity }}
-                                        className="absolute -top-1/2 -left-1/2 w-full h-full bg-indigo-500/10 blur-3xl rounded-full pointer-events-none"
-                                    />
+                                    <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-indigo-500/10 blur-3xl rounded-full pointer-events-none animate-pulse-subtle" />
                                 </>
                             )}
 
@@ -131,17 +124,15 @@ export const MilestonePath = () => {
                                 ${iconBgClass}
                                 ${isUnlocked ? 'group-hover:shadow-[0_8px_20px_-4px_rgba(99,102,241,0.2)]' : ''}
                             `}>
-                                <motion.div
-                                    animate={isUnlocked ? { y: [0, -2, 0] } : {}}
-                                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                                    className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-105 sm:scale-110 drop-shadow-md` : 'scale-90 text-slate-400 dark:text-slate-600'}`}
+                                <div
+                                    className={`relative z-10 transition-all duration-500 ${isUnlocked ? `${iconColorClass} scale-105 sm:scale-110 drop-shadow-md` : 'scale-90 text-slate-400 dark:text-slate-600'} ${isUnlocked ? 'animate-float-subtle' : ''}`}
                                 >
                                     {isUnlocked ? (
                                         <item.icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
                                     ) : (
                                         <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
                                     )}
-                                </motion.div>
+                                </div>
 
                                 {isUnlocked && (
                                     <div className="absolute inset-0 rounded-[14px] sm:rounded-[18px] bg-linear-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -191,11 +182,7 @@ export const MilestonePath = () => {
                         `}>
                             {chapter.icon}
                             {(chapter.isPartiallyComplete || chapter.isUnlocked) && (
-                                <motion.div
-                                    className="absolute -inset-1 bg-indigo-500/20 blur-md rounded-full -z-10"
-                                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                                    transition={{ duration: 3, repeat: Infinity }}
-                                />
+                                <div className="absolute -inset-1 bg-indigo-500/20 blur-md rounded-full -z-10 animate-pulse-subtle" />
                             )}
                         </div>
                         <div className="flex flex-col">
@@ -239,22 +226,8 @@ export const MilestonePath = () => {
                                 <div className="circuit-decor opacity-20" />
                                 <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
                                 {/* Vibing Background Elements */}
-                                <motion.div
-                                    animate={{
-                                        scale: [1, 1.2, 1],
-                                        opacity: [0.3, 0.5, 0.3]
-                                    }}
-                                    transition={{ duration: 4, repeat: Infinity }}
-                                    className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 blur-2xl rounded-full pointer-events-none group-hover:bg-blue-400/30 transition-colors"
-                                />
-                                <motion.div
-                                    animate={{
-                                        scale: [1.2, 1, 1.2],
-                                        opacity: [0.3, 0.5, 0.3]
-                                    }}
-                                    transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-                                    className="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/20 blur-2xl rounded-full pointer-events-none group-hover:bg-purple-400/30 transition-colors"
-                                />
+                                <div className="absolute top-0 left-0 w-32 h-32 bg-blue-400/20 blur-2xl rounded-full pointer-events-none group-hover:bg-blue-400/30 transition-colors animate-pulse-subtle" />
+                                <div className="absolute bottom-0 right-0 w-32 h-32 bg-purple-400/20 blur-2xl rounded-full pointer-events-none group-hover:bg-purple-400/30 transition-colors animate-pulse-subtle" style={{ animationDelay: '1s' }} />
 
                                 <div className="relative z-10 flex flex-col items-center">
                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 mb-5">
@@ -395,40 +368,19 @@ export const MilestonePath = () => {
                                         {/* Dynamic Icon Hero with Vibing Effects */}
                                         <div className="relative mb-10">
                                             {/* Outer Glow Ring */}
-                                            <motion.div
-                                                animate={{
-                                                    scale: [1, 1.2, 1],
-                                                    opacity: [0.15, 0.3, 0.15],
-                                                }}
-                                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                                className={`absolute -inset-8 rounded-full blur-3xl ${selectedItem.color?.includes('orange') ? 'bg-orange-500' : selectedItem.color?.includes('red') ? 'bg-red-500' : 'bg-indigo-500'}`}
-                                            />
+                                            <div className={`absolute -inset-8 rounded-full blur-3xl ${selectedItem.color?.includes('orange') ? 'bg-orange-500' : selectedItem.color?.includes('red') ? 'bg-red-500' : 'bg-indigo-500'} animate-pulse-subtle`} />
 
-                                            <motion.div
-                                                initial={{ scale: 0.5, rotate: -20 }}
-                                                animate={{
-                                                    scale: 1,
-                                                    rotate: 0,
-                                                    y: [0, -10, 0]
-                                                }}
-                                                transition={{
-                                                    delay: 0.1,
-                                                    type: 'spring',
-                                                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-                                                }}
-                                                className={`relative p-9 rounded-[2.8rem] ${selectedItem.color || 'text-indigo-500'} bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-2xl backdrop-blur-md`}
+
+                                            <div
+                                                className={`relative p-9 rounded-[2.8rem] ${selectedItem.color || 'text-indigo-500'} bg-white/10 dark:bg-white/5 border border-white/20 dark:border-white/10 shadow-2xl backdrop-blur-md animate-float-subtle`}
                                             >
                                                 <selectedItem.icon className="w-14 h-14 drop-shadow-lg" strokeWidth={2} />
 
                                                 {/* Orbital Lights */}
-                                                <motion.div
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                                    className="absolute -inset-2 pointer-events-none"
-                                                >
+                                                <div className="absolute -inset-2 pointer-events-none animate-rotate-slow">
                                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_white]" />
-                                                </motion.div>
-                                            </motion.div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div className="text-center space-y-3 mb-10">
