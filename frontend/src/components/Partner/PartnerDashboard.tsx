@@ -11,6 +11,7 @@ import { getApiUrl } from '../../utils/api';
 
 import { TopPartnersList } from '../Community/TopPartnersList';
 import { useUI } from '../../context/UIContext';
+import { GLOBE_ICON_B64 } from '../../assets/icons';
 
 // Sub-components
 import { DashboardStats } from './components/DashboardStats';
@@ -181,7 +182,7 @@ export const PartnerDashboard = () => {
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
                                 <img
-                                    src="/images/explore_network.png"
+                                    src={GLOBE_ICON_B64}
                                     alt="Network"
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-screen"
                                 />
