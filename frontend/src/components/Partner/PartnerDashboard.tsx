@@ -175,12 +175,16 @@ export const PartnerDashboard = () => {
 
                     {/* Explore Network Entry */}
                     <div
-                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group"
                         onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="bg-blue-500/10 p-2 rounded-full text-blue-600 dark:text-blue-400">
-                                <span className="w-5 h-5 flex items-center justify-center">🌐</span>
+                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+                                <img
+                                    src="/images/explore_network.png"
+                                    alt="Network"
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-screen"
+                                />
                             </div>
                             <div>
                                 <h3 className="font-bold text-slate-900 dark:text-white text-label uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
