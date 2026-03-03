@@ -100,15 +100,15 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
-            className={`group relative flex items-center justify-between p-3 rounded-2xl border backdrop-blur-md shadow-sm active:scale-[0.98] transition-all ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
+            className={`group relative flex items-center justify-between p-2.5 rounded-xl border border-white/5 dark:border-white/5 backdrop-blur-md shadow-sm active:scale-[0.98] transition-all overflow-hidden ${index === 0 ? 'bg-amber-500/10 border-amber-500/30' :
                 index === 1 ? 'bg-slate-300/10 border-slate-400/30' :
                     index === 2 ? 'bg-orange-500/10 border-orange-500/30' :
                         'bg-white/60 dark:bg-slate-900/40 border-slate-200 dark:border-white/5'
                 }`}
         >
-            <div className="flex items-center gap-3">
-                <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden relative">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <div className="relative shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center overflow-hidden relative shadow-sm">
                         <User className="absolute w-5 h-5 text-slate-400 z-0" />
                         {partner.photo_file_id || partner.photo_url ? (
                             <img
@@ -144,25 +144,27 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
                     )}
                 </div>
 
-                <div className="flex flex-col">
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-bold text-slate-900 dark:text-white">
+                <div className="flex flex-col min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-0.5 min-w-0">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
                             {partner.first_name} {partner.last_name}
                         </span>
-                        <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-1.5 rounded-sm uppercase tracking-tighter">
-                            {t(`ranks.${partner.rank.charAt(0).toUpperCase()}${partner.rank.slice(1).toLowerCase()}`, partner.rank) as string}
-                        </span>
+                        <div className="shrink-0 max-w-[100px] overflow-hidden">
+                            <span className="text-[9px] font-bold text-blue-500 bg-blue-500/10 px-1.5 py-0.5 rounded-sm uppercase tracking-tighter block truncate">
+                                {t(`ranks.${partner.rank.charAt(0).toUpperCase()}${partner.rank.slice(1).toLowerCase()}`, partner.rank) as string}
+                            </span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-1 shrink-0">
                             <TrendingUp className="w-3 h-3 text-emerald-500" />
-                            <span className="text-label font-bold text-slate-500 dark:text-slate-400">
+                            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 whitespace-nowrap">
                                 {partner.xp.toLocaleString()} XP
                             </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-emerald-500 font-bold bg-emerald-500/5 px-2 py-0.5 rounded-full border border-emerald-500/10">
-                            <USDTLogo className="w-3 h-3" />
-                            <span className="text-[10px] tracking-tight">
+                        <div className="flex items-center gap-1 text-emerald-500 font-bold bg-emerald-500/5 px-1.5 py-0.5 rounded-full border border-emerald-500/10 min-w-0">
+                            <USDTLogo className="w-2.5 h-2.5 shrink-0" />
+                            <span className="text-[9px] tracking-tight truncate">
                                 <LiquidCounter value={partner.total_earned_usdt || 0} className="inline" /> USDT
                             </span>
                         </div>
@@ -170,9 +172,9 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
                 </div>
             </div>
 
-            <div className="flex flex-col items-end">
-                <div className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('referral.levelup.rank')}</div>
-                <div className={`text-lg font-bold ${index === 0 ? 'text-amber-500' :
+            <div className="flex flex-col items-end shrink-0 pl-2">
+                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">{t('referral.levelup.rank')}</div>
+                <div className={`text-base font-bold leading-none ${index === 0 ? 'text-amber-500' :
                     index === 1 ? 'text-slate-400' :
                         index === 2 ? 'text-orange-400' :
                             'text-slate-900 dark:text-white'

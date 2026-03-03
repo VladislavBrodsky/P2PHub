@@ -32,7 +32,7 @@ async def analyze_bonus_tx():
             desc_counts[tx.description] = desc_counts.get(tx.description, 0) + 1
             
         print("\nDescription counts:")
-        for desc, count in sorted(desc_counts.items(), key=lambda x: x[1], reverse=True)[:20]:
+        for desc, count in sorted(desc_counts.items(), key=lambda x: x[1], reverse=True):
             print(f"  {count}x: {desc}")
             
         # Sum of BONUS XP

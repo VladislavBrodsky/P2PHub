@@ -18,19 +18,19 @@ export const ProBadge: React.FC<ProBadgeProps> = ({ className = '', size = 'md',
     };
 
     const colors = isPlus ? {
-        border: 'border-amber-400/50',
-        glow: 'shadow-[0_4px_20px_rgba(168,85,247,0.4),0_0_15px_rgba(234,179,8,0.2)]',
+        border: 'border-amber-400/40',
+        glow: 'shadow-[0_2px_10px_rgba(168,85,247,0.2),0_0_8px_rgba(234,179,8,0.15)]',
         bg: 'from-[#1e1b4b] via-[#4c1d95] to-[#7e22ce]',
         text: 'from-white via-slate-200 to-amber-200',
-        innerGlow: 'rgba(251,191,36,0.3)',
-        innerGlowActive: 'rgba(251,191,36,0.6)'
+        innerGlow: 'rgba(251,191,36,0.2)',
+        innerGlowActive: 'rgba(251,191,36,0.4)'
     } : {
-        border: 'border-amber-400/60',
-        glow: 'shadow-[0_4px_15px_rgba(234,179,8,0.4),0_0_10px_rgba(251,191,36,0.2)]',
+        border: 'border-amber-400/50',
+        glow: 'shadow-[0_2px_8px_rgba(234,179,8,0.3),0_0_5px_rgba(251,191,36,0.15)]',
         bg: 'from-[#78350f] via-[#b45309] to-[#d97706]',
         text: 'from-white via-yellow-100 to-amber-300',
-        innerGlow: 'rgba(252,211,77,0.3)',
-        innerGlowActive: 'rgba(252,211,77,0.6)'
+        innerGlow: 'rgba(252,211,77,0.2)',
+        innerGlowActive: 'rgba(252,211,77,0.4)'
     };
 
     return (

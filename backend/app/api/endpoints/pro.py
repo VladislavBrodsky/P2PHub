@@ -254,14 +254,16 @@ async def unlock_academy_stage(
         elif stage_id.isdigit():
             s_id = int(stage_id)
             if s_id > 20:
-                # Replicating frontend academyData.ts scaling logic
-                if s_id <= 30: xp_cost = (s_id - 20) * 100
-                elif s_id <= 40: xp_cost = (s_id - 30) * 200 + 1000
-                elif s_id <= 50: xp_cost = (s_id - 40) * 200 + 3000
-                elif s_id <= 60: xp_cost = (s_id - 50) * 500 + 5000 # Correcting to match intended curve
-                elif s_id <= 80: xp_cost = (s_id - 60) * 500 + 10000
-                elif s_id <= 100: xp_cost = (s_id - 80) * 1000 + 30000
-                if s_id == 100: xp_cost = 200000
+                # Optimized progression curve
+                if s_id == 21: xp_cost = 350
+                elif s_id == 22: xp_cost = 500
+                elif s_id == 23: xp_cost = 700
+                else:
+                    # Linear extrapolation from 23 (700) to 70 (7500)
+                    # Slope = (7500 - 700) / (70 - 23) approx 145
+                    xp_cost = 700 + (s_id - 23) * 145
+                    # Round to nearest 50 for cleaner UI
+                    xp_cost = round(xp_cost / 50) * 50
     except ValueError:
         pass
 
@@ -269,7 +271,9 @@ async def unlock_academy_stage(
         return {
             "status": "insufficient_xp", 
             "required": xp_cost, 
-            "current": partner.xp
+            "current": partner.xp,
+            "msg": f"⚠️ ACCESS DENIED! Your network momentum is too low. You need {xp_cost - partner.xp} more XP to unlock this elite knowledge and join the top 1% earners. Go viral or complete tasks to gain access!",
+            "cta": "EARN XP NOW"
         }
 
     # Deduct XP
