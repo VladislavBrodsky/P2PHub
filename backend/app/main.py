@@ -264,7 +264,7 @@ app = FastAPI(
 
 @app.get("/")
 async def root_health():
-    return {"status": "healthy", "service": "Pintopay Backend"}
+    return {"status": "healthy", "service": "Pintopay Backend", "port": 8000}
 
 @app.get("/sentry-debug")
 async def trigger_error():

@@ -42,7 +42,7 @@ echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have $
 exec gunicorn app.main:app \
     -w "$WORKERS" \
     -k uvicorn.workers.UvicornWorker \
-    --bind 0.0.0.0:"${PORT:-8080}" \
+    --bind 0.0.0.0:"${PORT:-8000}" \
     --timeout 60 \
     --log-level info \
     --access-logfile - \
