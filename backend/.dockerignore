@@ -1,32 +1,54 @@
-# Backend .dockerignore - Prevent unneeded files from bloating the build context
+# Backend .dockerignore - Professional Grade Cleanup
 venv
 .venv
 __pycache__
-*.pyc
-*.pyo
-*.pyd
+**/*.pyc
+**/*.pyo
+**/*.pyd
 .DS_Store
 .git
+.github
 .vscode
 .pytest_cache
 .ruff_cache
-
-# Database and Logs
-*.db
+.coverage
+coverage.xml
+bandit_report.json
+ruff_errors.txt
+pytest_errors.txt
+debug_output*.txt
+test_notif_debug.txt
 *.log
-scripts/*.log
 
-# Audit and Temp Scripts (Run these locally, not in Prod)
+# Database
+*.db
+*.sqlite3
+
+# Media and Assets (CRITICAL: MUST BE EXCLUDED FROM BUILD CONTEXT)
+generated_media
+app_images
+media_test
+quarantine
+backup
+
+# Infrastructure
+Procfile
+docker-compose*
+.env*
+!.env.example
+
+# Temp / Local scripts (Keep out of prod image)
 audit_*.py
 check_*.py
 test_*.py
-sync_partner_totals.py
-debug_*.txt
-*.png
-generated_media/*
-media_test/*
-app_images/*
-
-# Environment files
-.env*
-! .env.example
+run_*.py
+deep_dive_*.py
+convert_*.py
+download_*.py
+sync_*.py
+p2p_config.env
+env.backend
+env_backend.env
+env_prod.txt
+p2p_config.env
+p2p_config_backup.env

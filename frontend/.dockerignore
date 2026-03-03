@@ -14,3 +14,15 @@ build_log.txt
 lint_results.txt
 local_npm_cache
 test_git_tracking.txt
+
+# Build Context Bloat Fix
+app_images
+archive_logs
+.npm-cache
+.pytest_cache
+.ruff_cache
+backup
+quarantine
+dist_backup_*
+public_deprecated
+public_corrupted

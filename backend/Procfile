@@ -1,3 +1,0 @@
-web: ./start.sh
-worker: bash scripts/start_worker.sh
-scheduler: bash scripts/start_scheduler.sh

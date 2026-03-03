@@ -56,10 +56,7 @@ RUN chmod +x /start.sh
 
 USER appuser
 
-# --- Optimized Healthcheck ---
-# Increased start-period to 120s to allow for database migrations (see start.sh)
-# Reduced interval to 15s for faster recovery detection after migrations finish.
-HEALTHCHECK --interval=15s --timeout=10s --start-period=120s --retries=5 \
-    CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
+# Note: Health checks are handled by Railway's native probe system.
+# The app binds to PORT (default 8000) and exposes /health/ping.
 
 CMD ["/start.sh"]
