@@ -118,13 +118,25 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     // Formatting prizes to handle newlines from translation
     const formatPrizes = (prizesString: string) => {
         return prizesString.split('\n').map((prize, idx) => {
-            const [bold, rest] = prize.split(':');
+            const separatorIndex = prize.indexOf(':');
+            const bold = separatorIndex !== -1 ? prize.substring(0, separatorIndex) : prize;
+            const rest = separatorIndex !== -1 ? prize.substring(separatorIndex + 1).trim() : '';
+
             return (
-                <div key={idx} className="flex items-start gap-2 mb-3 last:mb-0">
-                    <div className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-linear-to-r ${config.color}`} />
-                    <p className="text-white/90 text-[15px] leading-snug">
-                        <strong className="text-white font-semibold">{bold}:</strong> {rest}
-                    </p>
+                <div key={idx} className="flex items-center gap-3 bg-black/40 rounded-[14px] p-2.5 border border-white/5 hover:border-white/10 hover:bg-white/[0.02] transition-colors relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+
+                    <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-[10px] bg-linear-to-br ${config.color} shadow-md shadow-black/40 relative`}>
+                        <div className="absolute inset-0 bg-white/20 rounded-[10px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        {idx === 0 ? <Trophy className="w-4 h-4 text-white drop-shadow-md" /> : <Star className="w-4 h-4 text-white drop-shadow-md" />}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                        <div className="text-[13px] leading-tight">
+                            <span className="font-extrabold text-white tracking-wide inline-block mr-1.5">{bold}:</span>
+                            <span className="text-white/75 font-medium inline-block">{rest}</span>
+                        </div>
+                    </div>
                 </div>
             );
         });
@@ -149,10 +161,10 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         transition={{ type: 'spring', duration: 0.5, bounce: 0.3 }}
-                        className="relative w-full max-w-sm overflow-hidden rounded-[32px] bg-zinc-900 border border-white/10 shadow-2xl"
+                        className="relative w-full max-w-sm overflow-hidden rounded-[32px] bg-zinc-900 border border-white/10 shadow-y-2xl"
                     >
                         {/* Dynamic Top Gradient Area */}
-                        <div className={`relative h-48 bg-linear-to-br transition-colors duration-500 ${config.color}`}>
+                        <div className={`relative h-40 bg-linear-to-br transition-colors duration-500 ${config.color}`}>
                             {/* Glossy Overlay */}
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.2),transparent_70%)] mix-blend-overlay" />
 
@@ -171,8 +183,8 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 transition={{ delay: 0.1, type: "spring" }}
                                 className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
                             >
-                                <div className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30 rotate-3`}>
-                                    <Icon className="h-10 w-10 text-white drop-shadow-md" />
+                                <div className={`flex h-16 w-16 items-center justify-center rounded-[20px] bg-white/20 backdrop-blur-xl shadow-2xl border border-white/30 rotate-3`}>
+                                    <Icon className="h-8 w-8 text-white drop-shadow-md" />
                                 </div>
                             </motion.div>
 
@@ -184,23 +196,23 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-md border border-white/10"
                             >
                                 <Clock className="h-3.5 w-3.5 text-white/90" />
-                                <span className="text-xs font-semibold uppercase tracking-wider text-white/90">
+                                <span className="text-xs font-bold uppercase tracking-wider text-white/90">
                                     Ends in {timeLeft}
                                 </span>
                             </motion.div>
                         </div>
 
                         {/* Content Area */}
-                        <div className="p-6">
+                        <div className="p-5">
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <h2 className="text-xl font-bold tracking-tight text-white mb-2">
+                                <h2 className="text-[20px] font-black tracking-tight text-white mb-0.5">
                                     {t('league.rewards_popup.title')}
                                 </h2>
-                                <p className="text-[15px] leading-relaxed text-white/60 mb-6">
+                                <p className="text-[14px] font-medium leading-relaxed text-white/60 mb-4">
                                     {t('league.rewards_popup.subtitle')}
                                 </p>
                             </motion.div>
@@ -210,18 +222,22 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className={`relative overflow-hidden rounded-2xl border border-white/5 bg-white/5 p-5 mb-6`}
+                                className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-white/5 p-4 mb-5 shadow-2xl backdrop-blur-xl`}
                             >
-                                <div className={`absolute top-0 left-0 w-1 h-full bg-linear-to-b ${config.color}`} />
-                                <h3 className="text-base font-semibold text-white mb-1.5 border-none">
-                                    {config.title}
-                                </h3>
-                                <p className="text-sm text-white/70 leading-relaxed mb-4">
-                                    {config.desc}
-                                </p>
+                                <div className={`absolute top-0 left-0 w-1.5 h-full bg-linear-to-b ${config.color}`} />
+                                <div className={`absolute -right-12 -top-12 w-32 h-32 bg-linear-to-br ${config.color} opacity-20 blur-[30px] rounded-full pointer-events-none`} />
 
-                                <div className="rounded-xl bg-black/40 p-4 border border-white/5">
-                                    {formatPrizes(config.prizes)}
+                                <div className="relative z-10 pl-1.5">
+                                    <h3 className="text-[17px] font-black text-white tracking-wide mb-1 drop-shadow-sm">
+                                        {config.title}
+                                    </h3>
+                                    <p className="text-[13.5px] text-white/70 leading-relaxed mb-4 font-medium sm:max-w-[95%]">
+                                        {config.desc}
+                                    </p>
+
+                                    <div className="flex flex-col gap-2">
+                                        {formatPrizes(config.prizes)}
+                                    </div>
                                 </div>
                             </motion.div>
 
