@@ -214,24 +214,24 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             /* Lesson Content View */
                             <div className="space-y-10">
                                 {/* Viral Network Core - Dynamic Hero Section */}
-                                <div className="relative h-56 rounded-2xl -mx-1 shrink-0 bg-[#030712] border border-white/5 shadow-2xl group/core">
+                                <div className="relative h-56 rounded-2xl -mx-1 shrink-0 bg-slate-50 dark:bg-[#030712] border border-slate-200 dark:border-white/5 shadow-2xl overflow-hidden group/core text-slate-900 dark:text-white">
                                     <div className="absolute inset-0 rounded-2xl overflow-hidden">
                                         {/* Atmospheric Plasma Glows */}
                                         <motion.div
-                                            className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
+                                            className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
                                             animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
                                             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                                         />
                                         <motion.div
-                                            className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
+                                            className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
                                             animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
                                             transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
                                         />
 
                                         {/* Scanline Effect */}
-                                        <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.03]"
+                                        <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.05] dark:opacity-[0.03]"
                                             style={{
-                                                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
+                                                background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, currentColor 4px)',
                                                 backgroundSize: '100% 4px'
                                             }}
                                         />
@@ -337,7 +337,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                 cx="200"
                                                 cy="100"
                                                 r="68"
-                                                stroke="white"
+                                                stroke="currentColor"
                                                 strokeWidth="0.5"
                                                 fill="none"
                                                 strokeDasharray="4 60"
@@ -349,7 +349,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                     rotate: { duration: 2, repeat: Infinity, ease: "linear" },
                                                     scale: { duration: 1, repeat: Infinity, ease: "easeInOut" }
                                                 }}
-                                                className="opacity-40"
+                                                className="opacity-20 dark:opacity-40"
                                             />
                                             <motion.circle
                                                 cx="200"
@@ -418,9 +418,9 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             <motion.div
                                                 initial={{ scale: 0.8, opacity: 0 }}
                                                 animate={{ scale: 1, opacity: 1 }}
-                                                className="relative w-28 h-28 rounded-2xl p-1 bg-linear-to-br from-blue-500 via-indigo-500 to-cyan-400 shadow-[0_0_50px_rgba(59,130,246,0.5)] animate-rhythmic-pulse"
+                                                className="relative w-28 h-28 rounded-2xl p-1 bg-linear-to-br from-blue-500 via-indigo-500 to-cyan-400 shadow-[0_0_50px_rgba(59,130,246,0.3)] dark:shadow-[0_0_50px_rgba(59,130,246,0.5)] animate-rhythmic-pulse z-10"
                                             >
-                                                <div className="w-full h-full rounded-2xl overflow-hidden bg-slate-900 border border-white/30 backdrop-blur-md">
+                                                <div className="w-full h-full rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-white/60 dark:border-white/30 backdrop-blur-md">
                                                     <img
                                                         src={
                                                             (() => {
@@ -485,11 +485,11 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         </div>
                                     </div>
 
-                                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-8">
+                                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full px-8 z-30">
                                         <motion.div
                                             initial={{ y: 20, opacity: 0 }}
                                             animate={{ y: 0, opacity: 1 }}
-                                            className="w-full bg-white border-2 border-blue-500/20 rounded-2xl py-3 px-4 shadow-[0_0_50px_rgba(255,255,255,0.4)] flex items-center justify-center relative overflow-hidden group/badge animate-vibe-shift"
+                                            className="w-full bg-white dark:bg-white border-2 border-blue-500/20 rounded-2xl py-3 px-4 shadow-[0_0_50px_rgba(59,130,246,0.15)] dark:shadow-[0_0_50px_rgba(255,255,255,0.4)] flex items-center justify-center relative overflow-hidden group/badge animate-vibe-shift"
                                         >
                                             {/* High-Energy Fusion Pulse Border */}
                                             <div className="absolute inset-0 bg-linear-to-r from-blue-500/20 via-indigo-500/20 to-cyan-500/20 opacity-0 group-hover/badge:opacity-100 transition-opacity duration-500" />
@@ -590,24 +590,24 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         whileInView={{ opacity: 1, y: 0 }}
-                                        className="p-6 rounded-2xl bg-slate-900 dark:bg-white/5 border border-slate-800 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
+                                        className="p-6 rounded-2xl bg-blue-50 dark:bg-white/5 border border-blue-100 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
                                     >
-                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/mission:translate-x-full transition-transform duration-1000 pointer-events-none" />
+                                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 dark:via-white/5 to-transparent -translate-x-full group-hover/mission:translate-x-full transition-transform duration-1000 pointer-events-none" />
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                                                 <Target className="w-4 h-4" />
                                             </div>
-                                            <h4 className="text-caption font-bold text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
+                                            <h4 className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
                                         </div>
 
                                         <div
                                             onClick={() => setMissionAccomplished(!missionAccomplished)}
                                             className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-4 ${missionAccomplished
-                                                ? 'bg-blue-500/10 border-blue-500 text-blue-400'
-                                                : 'bg-white/5 border-white/10 text-slate-400 hover:border-white/20'
+                                                ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400'
+                                                : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-blue-200 dark:hover:border-white/20'
                                                 }`}
                                         >
-                                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500 rotate-0 scale-110 shadow-lg shadow-blue-500/20' : 'border-white/20 rotate-45 group-hover:rotate-0 group-hover:border-white/40'
+                                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500 rotate-0 scale-110 shadow-lg shadow-blue-500/20' : 'border-slate-300 dark:border-white/20 rotate-45 group-hover:rotate-0 group-hover:border-blue-400 dark:group-hover:border-white/40'
                                                 }`}>
                                                 {missionAccomplished ? <CheckCircle2 className="w-4 h-4 text-white" /> : <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
                                             </div>
