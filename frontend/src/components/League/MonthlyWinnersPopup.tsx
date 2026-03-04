@@ -4,6 +4,9 @@ import { Trophy, Crown, X, Star, Flame, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { LazyImage } from '../ui/LazyImage';
 import { USDTLogo } from '../ui/USDTLogo';
+import { Confetti } from '../ui/Confetti';
+import { useUI } from '../../context/UIContext';
+import { useTMALock } from '../../hooks/useTMALock';
 import { apiClient } from '../../api/client';
 import { getApiUrl } from '../../utils/api';
 
@@ -82,6 +85,18 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
     const [visible, setVisible] = useState(false);
     const [winners, setWinners] = useState<Winner[]>([]);
     const [loading, setLoading] = useState(true);
+    const { setFooterVisible } = useUI();
+
+    useTMALock(visible);
+
+    useEffect(() => {
+        if (visible) {
+            setFooterVisible(false);
+        } else {
+            setFooterVisible(true);
+        }
+        return () => setFooterVisible(true);
+    }, [visible, setFooterVisible]);
 
     useEffect(() => {
         const show = forceShow || shouldShowPopup();
@@ -136,9 +151,11 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-9998 bg-black/70 backdrop-blur-sm"
+                        className="fixed inset-0 z-9998 bg-black/80 backdrop-blur-md"
                         onClick={handleClose}
                     />
+
+                    <Confetti />
 
                     {/* Sheet */}
                     <motion.div
@@ -149,11 +166,11 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                         transition={{ type: 'spring', stiffness: 380, damping: 32, delay: 0.05 }}
                         className={[
                             'fixed inset-x-3 bottom-4 z-9999 max-h-[85vh] overflow-hidden',
-                            'rounded-3xl border',
+                            'rounded-[32px] border',
                             /* Light */
-                            'bg-white border-slate-200/80 shadow-[0_32px_80px_-10px_rgba(0,0,0,0.25)]',
+                            'bg-white/95 backdrop-blur-xl border-slate-200/80 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)]',
                             /* Dark */
-                            'dark:bg-[#0b0f1a] dark:border-white/10 dark:shadow-[0_32px_80px_-10px_rgba(0,0,0,0.7)]',
+                            'dark:bg-slate-950/80 dark:backdrop-blur-2xl dark:border-white/10 dark:shadow-[0_0_120px_-20px_rgba(99,102,241,0.15)]',
                         ].join(' ')}
                     >
                         {/* Animated gradient header strip */}
@@ -169,28 +186,16 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                         {/* Scrollable content */}
                         <div className="overflow-y-auto max-h-[calc(85vh-4px)] pb-6">
                             {/* Header */}
-                            <div className="relative px-5 pt-5 pb-4">
-                                {/* Close */}
-                                <button
-                                    onClick={handleClose}
-                                    className={[
-                                        'absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full transition-all active:scale-90',
-                                        'bg-slate-100 text-slate-500 hover:bg-slate-200',
-                                        'dark:bg-white/10 dark:text-white/60 dark:hover:bg-white/20',
-                                    ].join(' ')}
-                                >
-                                    <X size={15} />
-                                </button>
-
+                            <div className="relative px-5 pt-4 pb-3">
                                 {/* Icon + Title */}
-                                <div className="flex flex-col items-center gap-3 text-center pr-8">
+                                <div className="flex flex-col items-center gap-2 text-center">
                                     <motion.div
                                         animate={{ rotate: [0, -8, 8, -5, 5, 0] }}
                                         transition={{ duration: 1.2, ease: 'easeInOut', delay: 0.5 }}
                                         className="relative"
                                     >
-                                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-amber-400 to-yellow-500 shadow-[0_8px_24px_rgba(251,191,36,0.45)]">
-                                            <Crown size={30} className="text-white drop-shadow" />
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-amber-400 to-yellow-500 shadow-[0_8px_24px_rgba(251,191,36,0.45)]">
+                                            <Crown size={24} className="text-white drop-shadow" />
                                         </div>
                                         <motion.div
                                             animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
@@ -224,16 +229,16 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
 
                                     <div>
                                         <div className="flex items-center justify-center gap-1.5 mb-1">
-                                            <Sparkles size={13} className="text-amber-500" />
-                                            <span className="text-label font-bold uppercase tracking-[0.25em] text-amber-600 dark:text-amber-400">
+                                            <Sparkles size={12} className="text-amber-500" />
+                                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-600 dark:text-amber-400/90">
                                                 {t('league.monthly_winners', 'Победители месяца')}
                                             </span>
-                                            <Sparkles size={13} className="text-amber-500" />
+                                            <Sparkles size={12} className="text-amber-500" />
                                         </div>
-                                        <h1 className="text-heading font-bold text-slate-900 dark:text-white tracking-tight capitalize">
+                                        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight capitalize leading-none mb-1">
                                             {prevMonthName}
                                         </h1>
-                                        <p className="text-caption text-slate-500 dark:text-slate-400 mt-0.5">
+                                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
                                             {t('league.winners_subtitle', 'Топ-10 партнёров получают ежемесячные награды')}
                                         </p>
                                     </div>
@@ -270,28 +275,28 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                                 }}
                                                 className={[
                                                     'relative flex items-center gap-3 rounded-2xl p-2.5 overflow-hidden',
-                                                    'border transition-colors',
+                                                    'border transition-all active:scale-[0.98] group',
                                                     isTop3
-                                                        ? 'border-amber-500/20 bg-amber-50/60 dark:bg-amber-500/[0.07] dark:border-amber-500/20'
-                                                        : 'border-slate-200/70 bg-slate-50/60 dark:border-white/[0.07] dark:bg-white/4',
+                                                        ? 'border-amber-500/30 bg-amber-500/3 dark:bg-amber-500/5 dark:border-amber-500/20 backdrop-blur-md'
+                                                        : 'border-slate-200/50 bg-slate-50/50 dark:border-white/4 dark:bg-white/2 backdrop-blur-md',
                                                 ].join(' ')}
                                                 style={isTop3 ? {
-                                                    boxShadow: `0 0 24px -6px ${prize.glow}`,
+                                                    boxShadow: `inset 0 0 20px -10px ${prize.glow}, 0 4px 20px -8px ${prize.glow}`,
                                                 } : undefined}
                                             >
                                                 {/* Rank */}
                                                 <div className={[
-                                                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white text-label font-bold shadow-sm bg-linear-to-br',
+                                                    'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white text-[10px] font-bold shadow-sm bg-linear-to-br z-10',
                                                     prize.color,
                                                 ].join(' ')}
-                                                    style={{ boxShadow: `0 2px 10px -2px ${prize.glow}` }}
+                                                    style={{ boxShadow: `0 4px 12px -2px ${prize.glow}, inset 0 -2px 4px rgba(0,0,0,0.2)` }}
                                                 >
                                                     {isTop3 ? <RankIcon rank={winner.rank} /> : <span>#{winner.rank}</span>}
                                                 </div>
 
                                                 {/* Avatar */}
                                                 <div className={[
-                                                    'h-10 w-10 shrink-0 overflow-hidden rounded-full border-2',
+                                                    'h-8 w-8 shrink-0 overflow-hidden rounded-full border-2',
                                                     isTop3 ? 'border-amber-400/50' : 'border-slate-200 dark:border-white/10',
                                                 ].join(' ')}>
                                                     {(winner.photo_file_id || winner.photo_url) ? (
@@ -311,18 +316,18 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                                 </div>
 
                                                 {/* Name + XP */}
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight truncate">
+                                                <div className="flex-1 min-w-0 z-10">
+                                                    <p className="text-xs font-extrabold text-slate-900 dark:text-white leading-tight truncate group-hover:text-amber-500 dark:group-hover:text-amber-400 transition-colors">
                                                         {winner.first_name || winner.username}
                                                     </p>
-                                                    <p className="text-label text-slate-400 dark:text-slate-500 font-medium">
+                                                    <p className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold tracking-wide">
                                                         {Math.floor(winner.xp).toLocaleString()} XP
                                                     </p>
                                                 </div>
 
                                                 {/* Prize */}
                                                 <div className={[
-                                                    'shrink-0 flex items-center gap-1 rounded-xl px-2.5 py-1 text-label font-bold',
+                                                    'shrink-0 flex items-center gap-0.5 rounded-lg px-2 py-0.5 text-[10px] font-bold',
                                                     'bg-linear-to-r text-white shadow-sm',
                                                     prize.color,
                                                 ].join(' ')}
@@ -360,6 +365,19 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                 </motion.div>
                             )}
                         </div>
+
+                        {/* Close - Absolute perfectly positioned */}
+                        <button
+                            onClick={handleClose}
+                            className={[
+                                'absolute right-4 top-4 z-100 flex h-8 w-8 items-center justify-center rounded-full transition-all active:scale-90',
+                                'bg-white/80 text-slate-700 hover:bg-white border border-slate-200/50 backdrop-blur-md',
+                                'dark:bg-white/10 dark:text-white/80 dark:hover:bg-white/20 dark:border-white/10 dark:shadow-[0_0_15px_rgba(255,255,255,0.05)]',
+                            ].join(' ')}
+                            style={{ boxShadow: '0 4px 16px -4px rgba(0,0,0,0.1)' }}
+                        >
+                            <X size={15} />
+                        </button>
                     </motion.div>
                 </>
             )}
