@@ -148,19 +148,31 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
                         <TrendingUp size={14} /> {t('admin:kpis.charts.revenue')}
                     </h4>
                     <div className="h-48 flex items-end justify-between gap-1 px-2">
-                        {[40, 70, 45, 90, 65, 85, 100].map((h, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ height: 0 }}
-                                animate={{ height: `${h}%` }}
-                                transition={{ delay: 0.5 + (i * 0.1), duration: 1 }}
-                                className="w-full bg-linear-to-t from-blue-600 to-blue-400 rounded-t-lg relative group"
-                            >
-                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[8px] font-bold p-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                    +{(h * 150).toLocaleString()}
-                                </div>
-                            </motion.div>
-                        ))}
+                        {(() => {
+                            const revenueData = stats?.daily_revenue || [];
+                            const displayData = revenueData.length > 0 ? revenueData : Array(7).fill({ date: '', amount: 0 });
+                            const last7 = displayData.slice(-7);
+                            const maxRev = Math.max(...last7.map(d => d.amount), 1);
+
+                            return last7.map((d, i) => {
+                                const heightPercentage = maxRev > 0 ? (d.amount / maxRev) * 100 : 0;
+                                return (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ height: 0 }}
+                                        animate={{ height: `${Math.max(heightPercentage, 2)}%` }}
+                                        transition={{ delay: 0.5 + (i * 0.1), duration: 1 }}
+                                        className="w-full bg-linear-to-t from-blue-600 to-blue-400 rounded-t-lg relative group transition-all"
+                                    >
+                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 p-1.5 px-2.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 shadow-lg pointer-events-none">
+                                            <div className="text-[10px] font-bold">${d.amount > 0 ? d.amount.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }) : '0'}</div>
+                                            {d.date && <div className="text-[8px] font-medium opacity-70 mt-0.5">{new Date(d.date).toLocaleDateString()}</div>}
+                                            <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-white" />
+                                        </div>
+                                    </motion.div>
+                                );
+                            });
+                        })()}
                     </div>
                 </div>
 
@@ -169,13 +181,54 @@ export const AdminKPIs: React.FC<AdminKPIsProps> = React.memo(({ stats }) => {
                         <Activity size={14} /> {t('admin:kpis.charts.growth')}
                     </h4>
                     <div className="h-48 flex items-center justify-center">
-                        <div className="w-32 h-32 rounded-full border-12 border-slate-100 dark:border-white/5 relative flex items-center justify-center">
-                            <div className="absolute inset-0 rounded-full border-12 border-emerald-500 border-t-transparent -rotate-45" />
-                            <div className="text-center">
-                                <div className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">+12%</div>
-                                <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">{t('admin:kpis.growth_24h')}</div>
-                            </div>
-                        </div>
+                        {(() => {
+                            const percentChange = stats?.growth?.['24h']?.percent_change || 0;
+                            const isPositive = percentChange >= 0;
+                            const sign = isPositive && percentChange !== 0 ? '+' : '';
+                            const strokeColor = isPositive ? '#10b981' : '#f43f5e';
+
+                            const radius = 54;
+                            const circumference = 2 * Math.PI * radius;
+                            const fillPercentage = Math.min(Math.abs(percentChange), 100);
+                            const strokeDashoffset = circumference - (fillPercentage / 100) * circumference;
+
+                            return (
+                                <div className="relative w-32 h-32 flex items-center justify-center">
+                                    <svg className="w-full h-full -rotate-90 absolute inset-0" viewBox="0 0 128 128">
+                                        <circle
+                                            cx="64"
+                                            cy="64"
+                                            r={radius}
+                                            fill="none"
+                                            strokeWidth="12"
+                                            className="text-slate-100 dark:text-white/5"
+                                            stroke="currentColor"
+                                        />
+                                        <motion.circle
+                                            cx="64"
+                                            cy="64"
+                                            r={radius}
+                                            fill="none"
+                                            strokeWidth="12"
+                                            stroke={strokeColor}
+                                            strokeLinecap="round"
+                                            strokeDasharray={circumference}
+                                            initial={{ strokeDashoffset: circumference }}
+                                            animate={{ strokeDashoffset }}
+                                            transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+                                        />
+                                    </svg>
+                                    <div className="text-center z-10 relative">
+                                        <div className={`text-xl font-black tracking-tighter ${isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                            {sign}{percentChange}%
+                                        </div>
+                                        <div className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-1">
+                                            {t('admin:kpis.growth_24h')}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })()}
                     </div>
                 </div>
             </div>
