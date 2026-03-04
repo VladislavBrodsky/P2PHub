@@ -20,17 +20,17 @@ interface Winner {
 
 const STORAGE_KEY = 'p2phub_winners_popup_seen_month';
 
-const RANK_PRIZES: Record<number, { label: string; color: string; glow: string }> = {
-    1: { label: '$500 USDT', color: 'from-amber-400 to-yellow-500', glow: 'rgba(251,191,36,0.6)' },
-    2: { label: '$300 USDT', color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
-    3: { label: '$150 USDT', color: 'from-orange-400 to-amber-500', glow: 'rgba(251,146,60,0.5)' },
-    4: { label: '$100 USDT', color: 'from-indigo-400 to-violet-500', glow: 'rgba(129,140,248,0.4)' },
-    5: { label: '$75 USDT', color: 'from-indigo-400 to-violet-500', glow: 'rgba(129,140,248,0.4)' },
-    6: { label: '$50 USDT', color: 'from-purple-400 to-fuchsia-500', glow: 'rgba(192,132,252,0.35)' },
-    7: { label: '$50 USDT', color: 'from-purple-400 to-fuchsia-500', glow: 'rgba(192,132,252,0.35)' },
-    8: { label: '$25 USDT', color: 'from-sky-400 to-cyan-500', glow: 'rgba(125,211,252,0.3)' },
-    9: { label: '$25 USDT', color: 'from-sky-400 to-cyan-500', glow: 'rgba(125,211,252,0.3)' },
-    10: { label: '$25 USDT', color: 'from-sky-400 to-cyan-500', glow: 'rgba(125,211,252,0.3)' },
+const RANK_PRIZES: Record<number, { label: string; sublabel: string; color: string; glow: string; isUsdt?: boolean }> = {
+    1: { label: 'MacBook Pro', sublabel: 'Apple MacBook Pro M4', color: 'from-amber-400 to-yellow-500', glow: 'rgba(251,191,36,0.6)' },
+    2: { label: 'DJI Mini 5 Pro', sublabel: 'Профессиональный дрон', color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
+    3: { label: 'iPhone 17 Pro', sublabel: 'Apple iPhone 17 Pro', color: 'from-orange-400 to-amber-500', glow: 'rgba(251,146,60,0.5)' },
+    4: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    5: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    6: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    7: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    8: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    9: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    10: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
 };
 
 const RankIcon: React.FC<{ rank: number }> = ({ rank }) => {
@@ -328,7 +328,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                                 ].join(' ')}
                                                     style={{ boxShadow: `0 2px 10px -3px ${prize.glow}` }}
                                                 >
-                                                    <USDTLogo className="w-3 h-3" />
+                                                    {prize.isUsdt && <USDTLogo className="w-3 h-3" />}
                                                     {prize.label}
                                                 </div>
                                             </motion.div>

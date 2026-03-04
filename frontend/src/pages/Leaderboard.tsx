@@ -268,7 +268,7 @@ export default function LeaderboardPage() {
             )}
 
             {/* Monthly prizes for Top 10 */}
-            <LeaguePrizes />
+            <LeaguePrizes league={userLeague} />
 
             <Section
                 title={t('leaderboard.top_partners')}

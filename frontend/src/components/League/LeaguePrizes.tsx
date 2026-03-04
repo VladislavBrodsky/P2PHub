@@ -1,57 +1,135 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Crown, Star, Flame, Gift } from 'lucide-react';
+import { Trophy, Crown, Star, Flame, Gift, CreditCard, Laptop, Smartphone, Cpu } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { USDTLogo } from '../ui/USDTLogo';
+import { LeagueTier } from './LeagueCard';
 
 interface PrizeEntry {
-    rank: number | string;
+    rank: string;
     prize: string;
+    sublabel?: string;
     color: string;
     glow: string;
     icon: React.ReactNode;
 }
 
-const PRIZES: PrizeEntry[] = [
-    {
-        rank: '🥇 1',
-        prize: '$500 USDT',
-        color: 'from-amber-400 to-yellow-500',
-        glow: 'rgba(251,191,36,0.35)',
-        icon: <Crown size={16} className="text-white" />,
-    },
-    {
-        rank: '🥈 2',
-        prize: '$300 USDT',
-        color: 'from-slate-300 to-slate-400',
-        glow: 'rgba(148,163,184,0.3)',
-        icon: <Trophy size={16} className="text-white" />,
-    },
-    {
-        rank: '🥉 3',
-        prize: '$150 USDT',
-        color: 'from-orange-400 to-amber-500',
-        glow: 'rgba(251,146,60,0.3)',
-        icon: <Star size={16} className="text-white" />,
-    },
-    {
-        rank: '4–5',
-        prize: '$75–100 USDT',
-        color: 'from-indigo-400 to-violet-500',
-        glow: 'rgba(129,140,248,0.25)',
-        icon: <Flame size={16} className="text-white" />,
-    },
-    {
-        rank: '6–10',
-        prize: '$25–50 USDT',
-        color: 'from-sky-400 to-cyan-500',
-        glow: 'rgba(125,211,252,0.2)',
-        icon: <Gift size={16} className="text-white" />,
-    },
-];
+const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
+    wooden: [
+        {
+            rank: '🥇 1–3',
+            prize: 'Pintopay Virtual Card',
+            sublabel: 'Бесплатная карта',
+            color: 'from-amber-400 to-yellow-500',
+            glow: 'rgba(251,191,36,0.4)',
+            icon: <CreditCard size={15} className="text-white" />,
+        },
+        {
+            rank: '4–10',
+            prize: 'PRO Plan',
+            sublabel: '1 месяц бесплатно',
+            color: 'from-indigo-400 to-violet-500',
+            glow: 'rgba(129,140,248,0.3)',
+            icon: <Gift size={15} className="text-white" />,
+        },
+    ],
+    silver: [
+        {
+            rank: '🥇 1–3',
+            prize: 'Virtual + Physical Card',
+            sublabel: '2 карты Pintopay',
+            color: 'from-amber-400 to-yellow-500',
+            glow: 'rgba(251,191,36,0.4)',
+            icon: <CreditCard size={15} className="text-white" />,
+        },
+        {
+            rank: '4–10',
+            prize: 'PRO+ Plan',
+            sublabel: '1 месяц бесплатно',
+            color: 'from-violet-500 to-fuchsia-500',
+            glow: 'rgba(167,139,250,0.3)',
+            icon: <Gift size={15} className="text-white" />,
+        },
+    ],
+    metal: [
+        {
+            rank: '🥇 1–3',
+            prize: 'Virtual + Physical Card',
+            sublabel: '2 карты Pintopay',
+            color: 'from-amber-400 to-yellow-500',
+            glow: 'rgba(251,191,36,0.4)',
+            icon: <CreditCard size={15} className="text-white" />,
+        },
+        {
+            rank: '4–10',
+            prize: 'PRO+ Plan',
+            sublabel: '1 месяц бесплатно',
+            color: 'from-violet-500 to-fuchsia-500',
+            glow: 'rgba(167,139,250,0.3)',
+            icon: <Gift size={15} className="text-white" />,
+        },
+    ],
+    gold: [
+        {
+            rank: '🥇 1–3',
+            prize: 'Virtual + Physical Card',
+            sublabel: '2 карты Pintopay',
+            color: 'from-amber-400 to-yellow-500',
+            glow: 'rgba(251,191,36,0.4)',
+            icon: <CreditCard size={15} className="text-white" />,
+        },
+        {
+            rank: '4–10',
+            prize: 'PRO+ Plan',
+            sublabel: '1 месяц бесплатно',
+            color: 'from-violet-500 to-fuchsia-500',
+            glow: 'rgba(167,139,250,0.3)',
+            icon: <Gift size={15} className="text-white" />,
+        },
+    ],
+    platinum: [
+        {
+            rank: '🥇 #1',
+            prize: 'MacBook Pro',
+            sublabel: 'Apple MacBook Pro M4',
+            color: 'from-amber-400 to-yellow-500',
+            glow: 'rgba(251,191,36,0.5)',
+            icon: <Laptop size={15} className="text-white" />,
+        },
+        {
+            rank: '🥈 #2',
+            prize: 'DJI Mini 5 Pro',
+            sublabel: 'Профессиональный дрон',
+            color: 'from-slate-300 to-slate-400',
+            glow: 'rgba(148,163,184,0.4)',
+            icon: <Cpu size={15} className="text-white" />,
+        },
+        {
+            rank: '🥉 #3',
+            prize: 'iPhone 17 Pro',
+            sublabel: 'Apple iPhone 17 Pro',
+            color: 'from-orange-400 to-amber-500',
+            glow: 'rgba(251,146,60,0.4)',
+            icon: <Smartphone size={15} className="text-white" />,
+        },
+        {
+            rank: '4–10',
+            prize: '$300 USDT каждому',
+            sublabel: 'Денежная выплата',
+            color: 'from-emerald-400 to-teal-500',
+            glow: 'rgba(52,211,153,0.3)',
+            icon: <USDTLogo className="w-4 h-4" />,
+        },
+    ],
+};
 
-export const LeaguePrizes: React.FC = () => {
+interface LeaguePrizesProps {
+    league: LeagueTier;
+}
+
+export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league }) => {
     const { t } = useTranslation(['social', 'common']);
+    const prizes = LEAGUE_PRIZES[league];
 
     return (
         <div className="mt-4 mb-2">
@@ -68,21 +146,21 @@ export const LeaguePrizes: React.FC = () => {
                 </span>
             </div>
 
-            {/* Prizes grid */}
+            {/* Prize rows */}
             <div className="space-y-2">
-                {PRIZES.map((entry, i) => (
+                {prizes.map((entry, i) => (
                     <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -12 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.05 + i * 0.05, type: 'spring', stiffness: 400, damping: 30 }}
+                        transition={{ delay: 0.05 + i * 0.07, type: 'spring', stiffness: 400, damping: 30 }}
                         className={[
                             'flex items-center gap-3 rounded-2xl p-3 border transition-colors',
                             'bg-white/70 border-slate-200/70 dark:bg-white/4 dark:border-white/[0.07]',
                         ].join(' ')}
-                        style={{ boxShadow: `0 4px 20px -6px ${entry.glow}` }}
+                        style={{ boxShadow: `0 4px 20px -8px ${entry.glow}` }}
                     >
-                        {/* Gradient rank badge */}
+                        {/* Rank badge */}
                         <div
                             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${entry.color} shadow-sm`}
                             style={{ boxShadow: `0 4px 12px -4px ${entry.glow}` }}
@@ -91,15 +169,21 @@ export const LeaguePrizes: React.FC = () => {
                         </div>
 
                         {/* Rank label */}
-                        <p className="flex-1 text-xs font-bold text-slate-900 dark:text-white">
-                            {t('league.rank', 'Место')} {entry.rank}
-                        </p>
+                        <div className="flex-1 min-w-0">
+                            <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                                {t('league.rank', 'Место')} {entry.rank}
+                            </p>
+                            {entry.sublabel && (
+                                <p className="text-label text-slate-400 dark:text-slate-500">{entry.sublabel}</p>
+                            )}
+                        </div>
 
-                        {/* Prize amount */}
-                        <div className={`flex items-center gap-1.5 rounded-xl bg-linear-to-r ${entry.color} px-3 py-1.5 shadow-sm`}
-                            style={{ boxShadow: `0 2px 10px -3px ${entry.glow}` }}>
-                            <USDTLogo className="w-3 h-3" />
-                            <span className="text-label font-bold text-white">{entry.prize}</span>
+                        {/* Prize chip */}
+                        <div
+                            className={`shrink-0 flex items-center gap-1 rounded-xl bg-linear-to-r ${entry.color} px-2.5 py-1.5 shadow-sm`}
+                            style={{ boxShadow: `0 2px 10px -3px ${entry.glow}` }}
+                        >
+                            <span className="text-label font-bold text-white whitespace-nowrap">{entry.prize}</span>
                         </div>
                     </motion.div>
                 ))}
