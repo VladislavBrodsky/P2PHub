@@ -248,7 +248,8 @@ class ViralMarketingStudio:
                 if not line: continue
                 # Look for a line that looks like it was meant to be a CTA
                 if ("**" in line or "[" in line) and len(line) < 120:
-                    clean_text = line.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
+                    clean_text = re.sub(r'http[^\s\]]+', '', line)
+                    clean_text = clean_text.replace("**", "").split("](")[0].replace("[", "").replace("]", "").strip()
                     if not clean_text or len(clean_text) < 3: clean_text = cta_fallback
                     lines[i] = f"**[{clean_text}]({ref_link})**"
                     cta_fixed = True
