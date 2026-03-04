@@ -177,10 +177,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         <div className="w-full space-y-1">
                             <div className="flex justify-between items-baseline px-0.5 gap-2">
                                 <div
-                                    className="flex items-baseline gap-1 whitespace-nowrap animate-pulse-subtle"
+                                    className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
                                     <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)} tracking-tight uppercase shrink-0`}>{t('total')}:</span>
-                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)} opacity-90`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
+                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
                                 </div>
                                 <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
                                     <span>{formatXP(xpProgress.current)}</span>
