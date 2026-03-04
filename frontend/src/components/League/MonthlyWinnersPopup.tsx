@@ -25,15 +25,15 @@ const STORAGE_KEY = 'p2phub_winners_popup_seen_month';
 
 const RANK_PRIZES: Record<number, { label: string; sublabel: string; color: string; glow: string; isUsdt?: boolean }> = {
     1: { label: 'MacBook Pro', sublabel: 'Apple MacBook Pro M4', color: 'from-amber-400 to-yellow-500', glow: 'rgba(251,191,36,0.6)' },
-    2: { label: 'DJI Mini 5 Pro', sublabel: 'Профессиональный дрон', color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
+    2: { label: 'DJI Mini 5 Pro', sublabel: 'Professional drone', color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
     3: { label: 'iPhone 17 Pro', sublabel: 'Apple iPhone 17 Pro', color: 'from-orange-400 to-amber-500', glow: 'rgba(251,146,60,0.5)' },
-    4: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    5: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    6: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    7: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    8: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    9: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    10: { label: '$300 USDT', sublabel: 'Денежная выплата', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    4: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    5: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    6: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    7: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    8: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    9: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    10: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
 };
 
 const RankIcon: React.FC<{ rank: number }> = ({ rank }) => {
@@ -231,7 +231,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                         <div className="flex items-center justify-center gap-1.5 mb-1">
                                             <Sparkles size={12} className="text-amber-500" />
                                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-600 dark:text-amber-400/90">
-                                                {t('league.monthly_winners', 'Победители месяца')}
+                                                {t('league.monthly_winners', 'Monthly Winners')}
                                             </span>
                                             <Sparkles size={12} className="text-amber-500" />
                                         </div>
@@ -239,7 +239,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                             {prevMonthName}
                                         </h1>
                                         <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                                            {t('league.winners_subtitle', 'Топ-10 партнёров получают ежемесячные награды')}
+                                            {t('league.winners_subtitle', 'Top 10 partners receive monthly rewards')}
                                         </p>
                                     </div>
                                 </div>
@@ -256,7 +256,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                     ))
                                 ) : winners.length === 0 ? (
                                     <div className="py-8 text-center text-caption text-slate-400">
-                                        {t('league.no_winners_yet', 'Данные появятся в конце текущего месяца')}
+                                        {t('league.no_winners_yet', 'Data will appear at the end of the current month')}
                                     </div>
                                 ) : (
                                     winners.map((winner, i) => {
@@ -356,10 +356,10 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                         'dark:from-indigo-500/10 dark:to-purple-500/10 dark:border-indigo-500/20',
                                     ].join(' ')}>
                                         <p className="text-caption font-bold text-slate-900 dark:text-white">
-                                            🏆 {t('league.compete_next', 'Борись за место в топе следующего месяца!')}
+                                            🏆 {t('league.compete_next', 'Compete for a top spot next month!')}
                                         </p>
                                         <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">
-                                            {t('league.prizes_reset', 'Рейтинг обновляется 1-го числа каждого месяца')}
+                                            {t('league.prizes_reset', 'The rating is updated on the 1st of each month')}
                                         </p>
                                     </div>
                                 </motion.div>

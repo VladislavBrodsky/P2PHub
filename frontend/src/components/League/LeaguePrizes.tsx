@@ -19,7 +19,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '🥇 1–3',
             prize: 'Pintopay Virtual Card',
-            sublabel: 'Бесплатная карта',
+            sublabel: 'Free card',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
@@ -27,7 +27,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '4–10',
             prize: 'PRO Plan',
-            sublabel: '1 месяц бесплатно',
+            sublabel: '1 month free',
             color: 'from-indigo-400 to-violet-500',
             glow: 'rgba(129,140,248,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -37,7 +37,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '🥇 1–3',
             prize: 'Virtual + Physical Card',
-            sublabel: '2 карты Pintopay',
+            sublabel: '2 Pintopay cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
@@ -45,7 +45,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '4–10',
             prize: 'PRO+ Plan',
-            sublabel: '1 месяц бесплатно',
+            sublabel: '1 month free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -55,7 +55,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '🥇 1–3',
             prize: 'Virtual + Physical Card',
-            sublabel: '2 карты Pintopay',
+            sublabel: '2 Pintopay cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
@@ -63,7 +63,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '4–10',
             prize: 'PRO+ Plan',
-            sublabel: '1 месяц бесплатно',
+            sublabel: '1 month free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -73,7 +73,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '🥇 1–3',
             prize: 'Virtual + Physical Card',
-            sublabel: '2 карты Pintopay',
+            sublabel: '2 Pintopay cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
@@ -81,7 +81,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '4–10',
             prize: 'PRO+ Plan',
-            sublabel: '1 месяц бесплатно',
+            sublabel: '1 month free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -99,7 +99,7 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         {
             rank: '🥈 #2',
             prize: 'DJI Mini 5 Pro',
-            sublabel: 'Профессиональный дрон',
+            sublabel: 'Professional drone',
             color: 'from-slate-300 to-slate-400',
             glow: 'rgba(148,163,184,0.4)',
             icon: <Cpu size={15} className="text-white" />,
@@ -114,8 +114,8 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
         },
         {
             rank: '4–10',
-            prize: '$300 USDT каждому',
-            sublabel: 'Денежная выплата',
+            prize: '$300 USDT each',
+            sublabel: 'Cash reward',
             color: 'from-emerald-400 to-teal-500',
             glow: 'rgba(52,211,153,0.3)',
             icon: <USDTLogo className="w-4 h-4" />,
@@ -139,10 +139,10 @@ export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league }) => {
                     <Trophy size={11} className="text-white" />
                 </div>
                 <h3 className="text-subheading font-bold text-slate-900 dark:text-white tracking-tight">
-                    {t('league.prizes_title', 'Ежемесячные призы')}
+                    {t('league.prizes_title', 'Monthly Prizes')}
                 </h3>
                 <span className="ml-auto text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                    {t('league.top_10', 'ТОП-10')}
+                    {t('league.top_10', 'TOP 10')}
                 </span>
             </div>
 
@@ -171,7 +171,7 @@ export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league }) => {
                         {/* Rank label */}
                         <div className="flex-1 min-w-0">
                             <p className="text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                                {t('league.rank', 'Место')} {entry.rank}
+                                {t('league.rank', 'Rank')} {entry.rank}
                             </p>
                             {entry.sublabel && (
                                 <p className="text-label text-slate-400 dark:text-slate-500">{entry.sublabel}</p>
@@ -196,7 +196,7 @@ export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league }) => {
                 transition={{ delay: 0.4 }}
                 className="text-center text-label text-slate-400 dark:text-slate-500 mt-3"
             >
-                🔄 {t('league.prizes_reset_note', 'Обновляется 1-го числа каждого месяца')}
+                🔄 {t('league.prizes_reset_note', 'Updates on the 1st of each month')}
             </motion.p>
         </div>
     );
