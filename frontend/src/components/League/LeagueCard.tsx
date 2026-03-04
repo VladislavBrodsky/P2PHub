@@ -2,7 +2,7 @@ import * as React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, Shield, Zap, Star, Flame } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { ProPlusBadge, ProBadge } from '../ui/ProPlusBadge';
+import { ProBadge } from '../ui/ProPlusBadge';
 import { LiquidCounter } from '../../pages/Pro/utils/LiquidCounter';
 import { USDTLogo } from '../ui/USDTLogo';
 
@@ -71,31 +71,34 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, tot
 
     return (
         <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`relative overflow-hidden rounded-2xl border ${config.borderColor} bg-linear-to-br ${config.color} p-6 sm:p-8 shadow-2xl`}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            className={`relative overflow-hidden rounded-2xl border ${config.borderColor} bg-linear-to-br ${config.color} p-4 shadow-2xl`}
         >
-            {/* Background Decoration */}
-            <div className="absolute -right-8 -top-8 h-48 w-48 opacity-[0.03] text-white">
+            {/* Glossy Highlight */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.12),transparent)] pointer-events-none" />
+            {/* Big Icon Watermark */}
+            <div className="absolute -right-6 -top-6 h-36 w-36 opacity-[0.04] text-white pointer-events-none">
                 <Icon className="h-full w-full rotate-12" />
             </div>
 
-            {/* Glossy Highlight */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
-
             <div className="relative z-10">
-                <div className="flex items-center gap-3 sm:gap-5">
-                    <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-inner">
-                        <Icon className={`h-6 w-6 sm:h-8 sm:w-8 ${config.textColor}`} />
+                {/* Top Row: Icon + Name + Badge */}
+                <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-xl border border-white/20 shadow-inner">
+                        <Icon className={`h-5 w-5 ${config.textColor}`} />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <span className="text-[10px] sm:text-label font-bold uppercase tracking-widest sm:tracking-[0.2em] text-white/60 leading-none block whitespace-nowrap">
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-white/60 block leading-none">
                             {t('leaderboard.current_league')}
                         </span>
-                        <h2 className={`text-xl sm:text-3xl font-bold tracking-tighter ${config.textColor} mt-1 sm:mt-1.5 drop-shadow-sm whitespace-nowrap`}>{config.name}</h2>
+                        <h2 className={`text-subheading font-bold tracking-tight ${config.textColor} mt-0.5`}>
+                            {config.name}
+                        </h2>
                     </div>
                     {(subscription_plan || '').includes('PRO') && (
-                        <div className="ml-auto shrink-0 pl-2">
+                        <div className="shrink-0">
                             <ProBadge
                                 variant={(subscription_plan || '').includes('PLUS') ? 'pro-plus' : 'pro'}
                                 size="lg"
@@ -104,36 +107,34 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, tot
                     )}
                 </div>
 
-                <p className={`mt-5 text-caption font-bold ${config.textColor} text-white/90 leading-relaxed max-w-[95%] italic`}>
-                    {config.description}
-                </p>
-
-                <div className="mt-8 grid grid-cols-3 gap-6 border-t border-white/20 pt-8">
+                {/* Stats Row */}
+                <div className="mt-3 grid grid-cols-3 gap-3 border-t border-white/15 pt-3">
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
                             {t('leaderboard.global_rank')}
                         </p>
-                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
+                        <p className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
-                        <p className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md font-mono tracking-tighter`}>{Math.floor(score).toLocaleString()}</p>
+                        <p className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md font-mono`}>{Math.floor(score).toLocaleString()}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.15em] text-white/50 mb-2 truncate">
+                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
                             {t('partner_dashboard.total_earned')}
                         </p>
-                        <div className={`text-2xl font-bold tracking-tighter ${config.textColor} drop-shadow-md flex items-center gap-1.5`}>
-                            <USDTLogo className="w-4 h-4" />
+                        <div className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md flex items-center gap-1`}>
+                            <USDTLogo className="w-3.5 h-3.5" />
                             <LiquidCounter value={total_earned_usdt} />
                         </div>
                     </div>
                 </div>
 
+                {/* Platinum Badge */}
                 {league === 'platinum' && (
-                    <div className="mt-6 flex items-center gap-2 rounded-xl bg-black/30 py-1.5 px-3 backdrop-blur-md border border-white/10 shadow-lg group overflow-hidden relative w-fit">
+                    <div className="mt-3 flex items-center gap-1.5 rounded-xl bg-black/25 py-1.5 px-3 backdrop-blur-md border border-white/10 shadow-lg w-fit overflow-hidden relative group">
                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                         <Zap className="h-3 w-3 shrink-0 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
                         <span className="text-label font-bold uppercase tracking-widest text-white whitespace-nowrap">

@@ -16,6 +16,8 @@ import { ProPlusBadge, ProBadge } from '../components/ui/ProPlusBadge';
 import { useUser } from '../context/UserContext';
 import { LiquidCounter } from './Pro/utils/LiquidCounter';
 import { USDTLogo } from '../components/ui/USDTLogo';
+import { MonthlyWinnersPopup } from '../components/League/MonthlyWinnersPopup';
+import { LeaguePrizes } from '../components/League/LeaguePrizes';
 
 interface LeaderboardUser {
     id: number;
@@ -254,7 +256,7 @@ export default function LeaderboardPage() {
             </motion.div>
 
             {userStats && (
-                <div className="mb-8">
+                <div className="mb-3">
                     <LeagueCard
                         league={userLeague}
                         rank={userStats.rank}
@@ -264,6 +266,9 @@ export default function LeaderboardPage() {
                     />
                 </div>
             )}
+
+            {/* Monthly prizes for Top 10 */}
+            <LeaguePrizes />
 
             <Section
                 title={t('leaderboard.top_partners')}
@@ -298,6 +303,9 @@ export default function LeaderboardPage() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
+
+            {/* Monthly winners viral popup — auto-shown on 1st of month */}
+            <MonthlyWinnersPopup />
         </motion.div>
     );
 }
