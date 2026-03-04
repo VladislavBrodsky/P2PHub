@@ -527,7 +527,7 @@ async def handle_tx_hash(message: types.Message):
 
                 await message.answer(
                     get_msg(lang, "what_next"),
-                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, share_url, referral_code=partner.referral_code, lang=lang)
+                    reply_markup=get_main_menu_keyboard(WEB_APP_URL, referral_link=referral_link, referral_code=partner.referral_code, lang=lang)
                 )
 
             else:
