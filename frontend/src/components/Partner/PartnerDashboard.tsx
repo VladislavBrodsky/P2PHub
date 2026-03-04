@@ -176,23 +176,27 @@ export const PartnerDashboard = () => {
 
                     {/* Explore Network Entry */}
                     <div
-                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2.5 px-4 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors group"
+                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2 px-3 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98] group"
                         onClick={handleExplorerOpen}
                     >
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center overflow-hidden shrink-0 shadow-inner">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center overflow-hidden shrink-0 shadow-inner group-hover:scale-110 transition-transform">
                                 <img
                                     src={GLOBE_ICON_B64}
                                     alt="Network"
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 mix-blend-screen"
+                                    className="w-full h-full object-cover mix-blend-screen"
                                 />
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-900 dark:text-white text-label uppercase tracking-tight">{t('partner_dashboard.explore_connectivity')}</h3>
-                                <p className="text-[9px] font-bold text-slate-500 opacity-60 uppercase tracking-widest leading-none mt-1">{t('partner_dashboard.explore_desc')}</p>
+                                <h3 className="text-label font-bold uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight">
+                                    {t('partner_dashboard.explore_connectivity')}
+                                </h3>
+                                <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 opacity-60 leading-none mt-0.5">
+                                    {t('partner_dashboard.explore_desc')}
+                                </p>
                             </div>
                         </div>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                        <ChevronRight className="w-4 h-4 text-slate-400 mr-1" />
                     </div>
                 </div>
 
