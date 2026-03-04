@@ -17,6 +17,7 @@
     "@telegram-apps/sdk-react": "^2.0.0",
     "@tonconnect/ui-react": "^2.4.0",
     "axios": "^1.6.0",
+    "canvas-confetti": "^1.9.2",
     "clsx": "^2.1.1",
     "framer-motion": "^11.0.0",
     "i18next": "^25.8.4",
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@sentry/vite-plugin": "^2.22.6",
     "@tailwindcss/vite": "^4.0.0",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/node": "^22.13.4",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
