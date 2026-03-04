@@ -9,8 +9,8 @@ WORKDIR /app
 # 1. Copy ONLY the lockfiles first for better caching
 COPY package*.json ./
 
-# 2. Install dependencies (Clean Install)
-RUN npm ci
+# 2. Install dependencies
+RUN npm install --no-audit --no-fund
 
 # 3. Copy source files (filtered by .dockerignore)
 COPY . .
