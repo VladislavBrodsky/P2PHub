@@ -41,6 +41,39 @@
       "generic": "Level {{level}} Network"
     }
   },
+  "league": {
+    "competing_top10": "COMPETING FOR TOP 10 REWARDS",
+    "rewards_popup": {
+      "title": "League Rewards",
+      "subtitle": "Reach TOP-10 for exclusive prizes",
+      "wooden": {
+        "title": "Start Your Journey",
+        "desc": "Don't get left behind! Keep growing your network to reach Silver League.",
+        "prizes": "Top 3: Virtual Card\nTop 4-10: PRO Plan (1 month)"
+      },
+      "silver": {
+        "title": "Momentum Building",
+        "desc": "You're climbing! Push harder to reach Metal League for better rewards.",
+        "prizes": "Top 3: Virtual + Physical Card\nTop 4-10: PRO+ Plan (1 month)"
+      },
+      "metal": {
+        "title": "Serious Contender",
+        "desc": "Almost at the top! Push into Gold League for maximum impact.",
+        "prizes": "Top 3: Virtual + Physical Card\nTop 4-10: PRO+ Plan (1 month)"
+      },
+      "gold": {
+        "title": "Elite Status",
+        "desc": "You are in the Elite tier! Maintain your position and aim for Platinum.",
+        "prizes": "Top 3: Virtual + Physical Card\nTop 4-10: PRO+ Plan (1 month)"
+      },
+      "platinum": {
+        "title": "The Ultimate Battle",
+        "desc": "Legendary status requires legendary effort. Compete for top tier prizes!",
+        "prizes": "Top 3: MacBook Pro, DJI Mini 5 Pro, or iPhone 17 Pro\nTop 4-10: $300 USDT"
+      },
+      "close": "Close"
+    }
+  },
   "leaderboard": {
     "title": "GLOBAL LEADERBOARD",
     "top_partners": "Top Partners",

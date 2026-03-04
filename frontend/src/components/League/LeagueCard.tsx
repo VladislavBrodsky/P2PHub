@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ProBadge } from '../ui/ProPlusBadge';
 import { LiquidCounter } from '../../pages/Pro/utils/LiquidCounter';
 import { USDTLogo } from '../ui/USDTLogo';
+import { LeagueRewardsPopup } from './LeagueRewardsPopup';
 
 export type LeagueTier = 'wooden' | 'silver' | 'metal' | 'gold' | 'platinum';
 
@@ -65,6 +66,8 @@ const useLeagueConfig = () => {
 
 export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, total_earned_usdt, subscription_plan }) => {
     const { t } = useTranslation(['social', 'common']);
+    const [isRewardsPopupOpen, setIsRewardsPopupOpen] = React.useState(false);
+
     const LEAGUE_CONFIG = useLeagueConfig();
     const config = LEAGUE_CONFIG[league];
     const Icon = config.icon;
@@ -108,41 +111,48 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, tot
                 </div>
 
                 {/* Stats Row */}
-                <div className="mt-3 grid grid-cols-3 gap-3 border-t border-white/15 pt-3">
+                <div className="mt-3 grid grid-cols-3 gap-2 border-t border-white/15 pt-3">
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-white/50 mb-0.5 truncate">
                             {t('leaderboard.global_rank')}
                         </p>
-                        <p className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md`}>#{rank}</p>
+                        <p className={`text-xl font-bold tracking-tight ${config.textColor} drop-shadow-md`}>#{rank}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-white/50 mb-0.5 truncate">
                             {t('leaderboard.xp_score')}
                         </p>
-                        <p className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md font-mono`}>{Math.floor(score).toLocaleString()}</p>
+                        <p className={`text-xl font-bold tracking-tight ${config.textColor} drop-shadow-md font-mono`}>{Math.floor(score).toLocaleString()}</p>
                     </div>
                     <div className="min-w-0">
-                        <p className="text-label font-bold uppercase tracking-[0.12em] text-white/50 mb-0.5 truncate">
+                        <p className="text-[10px] font-bold uppercase tracking-wider text-white/50 mb-0.5 truncate">
                             {t('partner_dashboard.total_earned')}
                         </p>
-                        <div className={`text-heading font-bold tracking-tighter ${config.textColor} drop-shadow-md flex items-center gap-1`}>
+                        <div className={`text-xl font-bold tracking-tight ${config.textColor} drop-shadow-md flex items-center gap-1`}>
                             <USDTLogo className="w-3.5 h-3.5" />
                             <LiquidCounter value={total_earned_usdt} />
                         </div>
                     </div>
                 </div>
 
-                {/* Platinum Badge */}
-                {league === 'platinum' && (
-                    <div className="mt-3 flex items-center gap-1.5 rounded-xl bg-black/25 py-1.5 px-3 backdrop-blur-md border border-white/10 shadow-lg w-fit overflow-hidden relative group">
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                        <Zap className="h-3 w-3 shrink-0 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
-                        <span className="text-label font-bold uppercase tracking-widest text-white whitespace-nowrap">
-                            Competing for TOP 10 rewards
-                        </span>
-                    </div>
-                )}
+                {/* Rewards Badge */}
+                <button
+                    onClick={() => setIsRewardsPopupOpen(true)}
+                    className="mt-3 flex items-center gap-1.5 rounded-xl bg-black/25 py-2 px-3 backdrop-blur-md border border-white/10 shadow-lg w-full sm:w-fit overflow-hidden relative group transition-transform active:scale-95"
+                >
+                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                    <Zap className="h-3.5 w-3.5 shrink-0 text-yellow-400 animate-pulse drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]" />
+                    <span className="text-label font-bold uppercase tracking-widest text-white whitespace-nowrap">
+                        {t('league.competing_top10')}
+                    </span>
+                </button>
             </div>
+
+            <LeagueRewardsPopup
+                isOpen={isRewardsPopupOpen}
+                onClose={() => setIsRewardsPopupOpen(false)}
+                currentLeague={league}
+            />
         </motion.div>
     );
 };

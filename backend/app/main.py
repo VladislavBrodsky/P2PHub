@@ -73,6 +73,7 @@ else:
 async def lifespan(app: FastAPI):
     from app.models.partner import create_db_and_tables
     from app.services.warmup_service import warmup_redis
+    from app.services.redis_service import redis_service
     
     # #comment: Migrations are handled by Alembic in start.sh.
     # We no longer call create_db_and_tables() here to prevent noisy "relation already exists"
@@ -99,7 +100,6 @@ async def lifespan(app: FastAPI):
     async def run_warmup_tasks():
         try:
             from app.services.maintenance_service import migrate_blog_task, restore_names_task
-            from app.services.redis_service import redis_service
             from app.services.support_service import warm_up_kb_task
             
             startup_lock = "lock:startup_tasks_queued"
