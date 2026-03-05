@@ -8,6 +8,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.9.1] - 2026-03-05 "Stable"
+### Added
+- **Admin Dashboard**: Integrated real-time dynamic data for Revenue Distribution and Network Growth charts.
+- **Analytics**: Improved chart scalability with dynamic height calculation and precision tooltips.
+
+### Changed
+- **Versioning**: Promoted v1.9.1 to Stable and unified versioning across stack.
+
 ## [1.9.0] - 2026-03-03 "Refinement & Hardening"
 ### Added
 - **Backend Resilience**: Implemented comprehensive startup process discovery to prevent bot polling/webhook conflicts in distributed environments (TaskIQ).
