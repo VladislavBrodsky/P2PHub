@@ -636,7 +636,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                     )
                 }
-            </m.div >
+            </m.div>
             {/* Info Modals Portal */}
             {
                 typeof document !== 'undefined' && ReactDOM.createPortal(
