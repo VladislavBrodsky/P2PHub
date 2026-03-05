@@ -28,6 +28,7 @@ import { useTMALock } from '../hooks/useTMALock';
 import { ROUTES } from '../utils/routes';
 import { useNavigation } from '../hooks/useNavigation';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { shareToTelegram, shareUniversal } from '../utils/shareUtils';
 // #comment: Root-relative path /images/ used for public assets.
 
 export default function ReferralPage() {
@@ -267,15 +268,8 @@ export default function ReferralPage() {
         const botUsername = 'pintopay_probot';
         const shareLink = `https://t.me/${botUsername}?start=${referralCode}`;
         const shareText = t('referral.viral.share_template', { link: shareLink });
-        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent(shareText)}`;
 
-        if (window.Telegram?.WebApp) {
-            // #comment: Use direct share link to let user choose a contact immediately
-            window.Telegram.WebApp.openTelegramLink(shareUrl);
-        } else {
-            // Fallback for external browser
-            window.open(shareUrl, '_blank');
-        }
+        shareToTelegram(shareText, shareLink);
         setShowShareModal(false);
     };
 
@@ -290,21 +284,16 @@ export default function ReferralPage() {
 
     const handleNativeShare = async () => {
         selection();
-        if (navigator.share) {
-            try {
-                // #comment: Explicitly append link to text body for apps like WhatsApp that treat text as the primary message
-                const shareBody = `${VIRAL_TEXT}\n\n${referralLink}`;
-                await navigator.share({
-                    title: 'Pintopay Partner Hub',
-                    text: shareBody,
-                    url: referralLink,
-                });
-                setShowShareModal(false);
-            } catch (err) {
-                console.log('Share failed:', err);
-            }
-        } else {
-            handleCopyLink();
+        const shareBody = `${VIRAL_TEXT}\n\n${referralLink}`;
+        const result = await shareUniversal({
+            title: 'Pintopay Partner Hub',
+            text: shareBody,
+            url: referralLink,
+        });
+        if (result === 'shared') {
+            setShowShareModal(false);
+        } else if (result === 'copied') {
+            setShowShareModal(false);
         }
     };
 

@@ -558,229 +558,228 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 {t('income.waiting.title')}
                             </h4>
                             <div className="text-label leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
-                                <Trans
-                                    i18nKey="income.waiting.desc"
-                                    components={{
-                                        1: <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-bold bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]" />,
-                                        2: <span className="block opacity-80 dark:text-slate-300" />
-                                    }}
-                                >
+                                <Trans i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                    <1>Every minute you wait is a tax on your potential</1>
-                                <2>Unlock the strategy to stop calculating losses and start capturing profits.</2>
-                        </Trans>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-                {
-        !isStrategyUnlocked ? (
-            <div className="pt-4 relative z-10">
-                <button
-                    onClick={() => {
-                        localStorage.setItem('auto_purchase_pro', 'true');
-                        setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                        onNavigateToPartner?.();
-                    }}
-                    className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-11 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
-                >
-                    <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
-                        {t('income.math.cta_urgency')}
-                    </span>
-                    {/* Glass overlay */}
-                    <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
-                </button>
-                <p className="text-center mt-6 text-label font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
-                    {t('income.cta.beta')}
-                </p>
-            </div>
-        ) : (
-            /* Post-Unlock Content: "Lead the Market" Button Redesign */
-            <div className="pt-4 relative z-10 text-center">
-                <m.button
-                    initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
-                >
-                    {t('income.cta.lead')}
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
-                </m.button>
-                <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
-                    {t('income.cta.unlocked')}
-                </p>
-
-                <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
-                    <div className="flex items-center justify-center gap-4">
-                        <div className="flex -space-x-2">
-                            {[
-                                "https://randomuser.me/api/portraits/women/44.jpg",
-                                "https://randomuser.me/api/portraits/men/32.jpg",
-                                "https://randomuser.me/api/portraits/women/68.jpg",
-                                "https://randomuser.me/api/portraits/men/45.jpg"
-                            ].map((url, i) => (
-                                <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
-                                    <img src={url} alt="user" className="w-full h-full object-cover" />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="text-left">
-                            <div className="text-[10px] font-bold text-slate-900 dark:text-white leading-none">
-                                <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.people_joining_count', '721+ PARTNERS', { val: '721+' })}</span>
-                            </div>
-                            <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
-                                <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.joined_protocol', 'JOINED AI MARKETING STUDIO TODAY')}</span>
+                                    <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-bold bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
+                                        Every minute you wait is a tax on your potential
+                                    </span>
+                                    <span className="block opacity-80 dark:text-slate-300">
+                                        Unlock the strategy to stop calculating losses and start capturing profits.
+                                    </span>
+                                </Trans>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        )
-    }
-            </m.div >
-    {/* Info Modals Portal */ }
-{
-    typeof document !== 'undefined' && ReactDOM.createPortal(
-        <AnimatePresence>
-            {activeModal && (
-                <>
-                    <m.div
-                        key="modal-backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setActiveModal(null)}
-                        className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-sm"
-                    />
-                    <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 pointer-events-none">
-                        <m.div
-                            key="modal-content"
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full shadow-2xl relative overflow-hidden"
+
+            {
+                !isStrategyUnlocked ? (
+                    <div className="pt-4 relative z-10">
+                        <button
+                            onClick={() => {
+                                localStorage.setItem('auto_purchase_pro', 'true');
+                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                onNavigateToPartner?.();
+                            }}
+                            className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-11 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
                         >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
-                            <div className="relative z-10 space-y-4">
-                                {activeModal === 'market' && (
-                                    <>
-                                        <div className="relative">
-                                            <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
-                                                <TrendingUp className="w-6 h-6 text-white" />
-                                            </div>
-                                            <div className="absolute -top-1 -right-1">
-                                                <span className="relative flex h-3 w-3">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-                                                </span>
-                                            </div>
+                            <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
+                                {t('income.math.cta_urgency')}
+                            </span>
+                            {/* Glass overlay */}
+                            <div className="absolute inset-0 bg-linear-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
+                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                        </button>
+                        <p className="text-center mt-6 text-label font-bold text-neutral-500 uppercase tracking-[0.2em] opacity-60">
+                            {t('income.cta.beta')}
+                        </p>
+                    </div>
+                ) : (
+                    /* Post-Unlock Content: "Lead the Market" Button Redesign */
+                    <div className="pt-4 relative z-10 text-center">
+                        <m.button
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
+                        >
+                            {t('income.cta.lead')}
+                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                        </m.button>
+                        <p className="mt-4 text-label font-bold text-emerald-500 uppercase tracking-[0.2em] opacity-80">
+                            {t('income.cta.unlocked')}
+                        </p>
+
+                        <div className="mt-6 pt-6 border-t border-slate-100 dark:border-white/5">
+                            <div className="flex items-center justify-center gap-4">
+                                <div className="flex -space-x-2">
+                                    {[
+                                        "https://randomuser.me/api/portraits/women/44.jpg",
+                                        "https://randomuser.me/api/portraits/men/32.jpg",
+                                        "https://randomuser.me/api/portraits/women/68.jpg",
+                                        "https://randomuser.me/api/portraits/men/45.jpg"
+                                    ].map((url, i) => (
+                                        <div key={i} className="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 bg-slate-200 overflow-hidden shadow-sm">
+                                            <img src={url} alt="user" className="w-full h-full object-cover" />
                                         </div>
-
-                                        <h3 className="text-xl font-bold text-white leading-tight">
-                                            <Trans i18nKey="income_details.market_title" ns="marketing">
-                                                The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
-                                            </Trans>
-                                        </h3>
-
-                                        <div className="space-y-3 py-2">
-                                            <p className="text-sm text-slate-300 leading-relaxed">
-                                                <Trans i18nKey="income_details.market_desc" ns="marketing">
-                                                    Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
-                                                </Trans>
-                                            </p>
-                                            <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                <div className="flex justify-between items-center text-xs mb-1">
-                                                    <span className="text-slate-400">{t('income_details.adoption_curve')}</span>
-                                                    <span className="text-emerald-400 font-bold">{t('income_details.you_are_here')}</span>
+                                    ))}
+                                </div>
+                                <div className="text-left">
+                                    <div className="text-[10px] font-bold text-slate-900 dark:text-white leading-none">
+                                        <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.people_joining_count', '721+ PARTNERS', { val: '721+' })}</span>
+                                    </div>
+                                    <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+                                        <span className="vibing-crystal-text animate-text-shimmer">{t('marketing:income.math.joined_protocol', 'JOINED AI MARKETING STUDIO TODAY')}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        </m.div >
+    {/* Info Modals Portal */ }
+    {
+        typeof document !== 'undefined' && ReactDOM.createPortal(
+            <AnimatePresence>
+                {activeModal && (
+                    <>
+                        <m.div
+                            key="modal-backdrop"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setActiveModal(null)}
+                            className="fixed inset-0 z-9999 bg-black/60 backdrop-blur-sm"
+                        />
+                        <div className="fixed inset-0 z-10000 flex items-center justify-center p-4 pointer-events-none">
+                            <m.div
+                                key="modal-content"
+                                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                                className="pointer-events-auto bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-sm w-full shadow-2xl relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+                                <div className="relative z-10 space-y-4">
+                                    {activeModal === 'market' && (
+                                        <>
+                                            <div className="relative">
+                                                <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-4 shadow-lg shadow-blue-500/25">
+                                                    <TrendingUp className="w-6 h-6 text-white" />
                                                 </div>
-                                                <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
-                                                    <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
-                                                        <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/50 animate-pulse"></div>
+                                                <div className="absolute -top-1 -right-1">
+                                                    <span className="relative flex h-3 w-3">
+                                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <h3 className="text-xl font-bold text-white leading-tight">
+                                                <Trans i18nKey="income_details.market_title" ns="marketing">
+                                                    The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
+                                                </Trans>
+                                            </h3>
+
+                                            <div className="space-y-3 py-2">
+                                                <p className="text-sm text-slate-300 leading-relaxed">
+                                                    <Trans i18nKey="income_details.market_desc" ns="marketing">
+                                                        Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
+                                                    </Trans>
+                                                </p>
+                                                <div className="p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                    <div className="flex justify-between items-center text-xs mb-1">
+                                                        <span className="text-slate-400">{t('income_details.adoption_curve')}</span>
+                                                        <span className="text-emerald-400 font-bold">{t('income_details.you_are_here')}</span>
+                                                    </div>
+                                                    <div className="h-1.5 w-full bg-slate-700/50 rounded-full overflow-hidden">
+                                                        <div className="h-full w-[15%] bg-blue-500 rounded-full relative">
+                                                            <div className="absolute right-0 top-0 bottom-0 w-1 bg-white/50 animate-pulse"></div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <button
-                                            onClick={() => setActiveModal(null)}
-                                            className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
-                                        >
-                                            {t('income_details.maximize_btn')}
-                                        </button>
-                                    </>
-                                )}
+                                            <button
+                                                onClick={() => setActiveModal(null)}
+                                                className="w-full py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition-all hover:scale-[1.02] text-xs tracking-wider uppercase border border-slate-700"
+                                            >
+                                                {t('income_details.maximize_btn')}
+                                            </button>
+                                        </>
+                                    )}
 
-                                {activeModal === 'revenue' && (
-                                    <>
-                                        <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
-                                            <DollarSign className="w-6 h-6 text-white" />
-                                        </div>
+                                    {activeModal === 'revenue' && (
+                                        <>
+                                            <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/25">
+                                                <DollarSign className="w-6 h-6 text-white" />
+                                            </div>
 
-                                        <h3 className="text-xl font-bold text-white leading-tight">
-                                            <Trans i18nKey="income_details.revenue_title" ns="marketing">
-                                                Unlock <span className="text-emerald-400">True Passive Income</span>
-                                            </Trans>
-                                        </h3>
+                                            <h3 className="text-xl font-bold text-white leading-tight">
+                                                <Trans i18nKey="income_details.revenue_title" ns="marketing">
+                                                    Unlock <span className="text-emerald-400">True Passive Income</span>
+                                                </Trans>
+                                            </h3>
 
-                                        <p className="text-xs text-slate-400 font-medium">
-                                            {t('income_details.revenue_desc')}
-                                        </p>
+                                            <p className="text-xs text-slate-400 font-medium">
+                                                {t('income_details.revenue_desc')}
+                                            </p>
 
-                                        <div className="space-y-2.5 my-2">
-                                            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                <div className="mt-0.5 p-1 rounded-full bg-emerald-500/10">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                            <div className="space-y-2.5 my-2">
+                                                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                    <div className="mt-0.5 p-1 rounded-full bg-emerald-500/10">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
+                                                        <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <h5 className="text-sm font-bold text-white">{t('income_details.benefit_1_title')}</h5>
-                                                    <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_1_desc')}</p>
+
+                                                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                    <div className="mt-0.5 p-1 rounded-full bg-blue-500/10">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
+                                                        <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                                    <div className="mt-0.5 p-1 rounded-full bg-purple-500/10">
+                                                        <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                                                    </div>
+                                                    <div>
+                                                        <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
+                                                        <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                <div className="mt-0.5 p-1 rounded-full bg-blue-500/10">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                                </div>
-                                                <div>
-                                                    <h5 className="text-sm font-bold text-white">{t('income_details.benefit_2_title')}</h5>
-                                                    <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_2_desc')}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                                                <div className="mt-0.5 p-1 rounded-full bg-purple-500/10">
-                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                                                </div>
-                                                <div>
-                                                    <h5 className="text-sm font-bold text-white">{t('income_details.benefit_3_title')}</h5>
-                                                    <p className="text-label text-slate-400 uppercase tracking-wide">{t('income_details.benefit_3_desc')}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <button
-                                            onClick={() => {
-                                                localStorage.setItem('auto_purchase_pro', 'true');
-                                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                                setActiveModal(null);
-                                                onNavigateToPartner?.();
-                                            }}
-                                            className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
-                                        >
-                                            {t('income_details.start_earning')}
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </m.div>
-                    </div>
-                </>
-            )}
-        </AnimatePresence>,
-        document.body
-    )
-}
+                                            <button
+                                                onClick={() => {
+                                                    localStorage.setItem('auto_purchase_pro', 'true');
+                                                    setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                                    setActiveModal(null);
+                                                    onNavigateToPartner?.();
+                                                }}
+                                                className="w-full py-3.5 bg-linear-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                                            >
+                                                {t('income_details.start_earning')}
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </m.div>
+                        </div>
+                    </>
+                )}
+            </AnimatePresence>,
+            document.body
+        )
+    }
         </section >
     );
 };

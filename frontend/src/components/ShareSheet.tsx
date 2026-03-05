@@ -6,6 +6,7 @@ import { useTMALock } from '../hooks/useTMALock';
 import { apiClient } from '../api/client';
 
 import { socialLogos } from '../pages/Pro/utils/socialLogos';
+import { shareToTelegram, shareUniversal } from '../utils/shareUtils';
 
 interface ShareSheetProps {
     isOpen: boolean;
@@ -61,7 +62,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                     // Fallback to switch inline query
                     window.Telegram.WebApp.switchInlineQuery(referralCode || '');
                 } else {
-                    window.open(`https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`, '_blank');
+                    shareToTelegram(text, referralLink);
                 }
                 break;
             case 'whatsapp':
@@ -71,19 +72,11 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                 window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(text)}`, '_blank');
                 break;
             default:
-                if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: 'Join Pintopay',
-                            text: text,
-                            url: referralLink
-                        });
-                    } catch (e) {
-                        console.log('Share dismissed');
-                    }
-                } else {
-                    handleCopy();
-                }
+                await shareUniversal({
+                    title: 'Join Pintopay',
+                    text: text,
+                    url: referralLink
+                });
         }
     };
 

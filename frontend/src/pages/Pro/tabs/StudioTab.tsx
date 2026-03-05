@@ -14,6 +14,7 @@ import { postTypes as defaultPostTypes, audiences as defaultAudiences, languages
 import { PremiumSelect } from '../components/PremiumSelect';
 import { applyGlitchOverlay } from '../../../utils/glitchImageOverlay';
 import { usePerformance } from '../../../hooks/usePerformance';
+import { shareToTelegram, shareUniversal, stripMarkdown } from '../../../utils/shareUtils';
 import {
     StudioStepper,
     StudioMatrixStepper,
@@ -357,20 +358,7 @@ export const StudioTab = ({
 
     // Strip all markdown syntax for platforms that don't support it (X, WhatsApp, etc)
     const stripMarkdownForPlainText = (text: string): string => {
-        return text
-            // Remove **bold** and __bold__
-            .replace(/\*\*(.*?)\*\*/g, '$1')
-            .replace(/__(.*?)__/g, '$1')
-            // Remove *italic* and _italic_
-            .replace(/\*(.*?)\*/g, '$1')
-            .replace(/_(.*?)_/g, '$1')
-            // Remove headers (#, ##, ###)
-            .replace(/^#{1,3}\s+/gm, '')
-            // Remove [CTA:text](url) patterns to just url
-            .replace(/\[CTA:\s*(.*?)\]\s*\([^)]+\)/g, '$1')
-            // Clean up any double spaces or trailing spaces per line
-            .replace(/[ \t]{2,}/g, ' ')
-            .trim();
+        return stripMarkdown(text);
     };
 
     const getCleanShareText = (platform?: 'x' | 'telegram' | 'whatsapp' | 'linkedin' | 'pinterest' | 'threads' | 'facebook' | 'discord') => {
@@ -477,7 +465,15 @@ export const StudioTab = ({
                 }
             }
         } else {
-            handleCopyText();
+            // Use universal utility as fallback
+            const result = await shareUniversal({
+                title: shareData.title,
+                text: shareData.text,
+                url: undefined // text already contains links
+            });
+            if (result === 'copied') {
+                notification({ title: t('pro_dashboard.notifications.copied'), text: t('pro_dashboard.notifications.text_copied'), type: 'success' });
+            }
         }
         setIsSharingSystem(false);
     };
@@ -501,12 +497,8 @@ export const StudioTab = ({
 
         switch (platform) {
             case 'telegram':
-                // Using t.me/share/url?url={link}&text={text}
-                // If we have an image, we can use it as the 'url' to get a preview, 
-                // but usually the referral link is more important.
-                // However, the text already contains the referral link if synthesized correctly.
-                const tgUrl = imageUrl ? encodeURIComponent(imageUrl) : '';
-                window.open(`https://t.me/share/url?url=${tgUrl}&text=${encodedText}`, '_blank');
+                // Using centralized sharing utility for better reliability on Android TMA
+                shareToTelegram(textToShare);
                 break;
             case 'whatsapp':
                 window.open(`https://wa.me/?text=${encodedText}`, '_blank');
