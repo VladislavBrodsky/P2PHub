@@ -114,7 +114,7 @@ export const renderMarkdown = (text: string, isInline = false) => {
 
 // Internal helper for regex replacements
 function processMarkdown(text: string): string {
-    return text
+    let html = text
         .replace(/\*\*\*\*(.*?)\*\*\*\*/g, '<strong>$1</strong>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/__([^_]+)__/g, '<strong>$1</strong>')
@@ -123,9 +123,14 @@ function processMarkdown(text: string): string {
         // Special CTA Link
         .replace(/\[CTA:\s*(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-extrabold underline decoration-2 underline-offset-2 transition-colors uppercase tracking-wider text-sm">$1</a>')
         // Standard links - Allow spaces
-        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>')
-        // Autolink raw URLs (not already in a markdown link)
-        // This looks for URLs starting with http/https that are not preceded by `href="` or `">` or `](`
-        // and ensures they are not already wrapped in <a> tags.
-        .replace(/(?<!href="|">|\]\()((https?:\/\/[^\s<]+[^.,\s<)]))(?![^<]*<\/a>)/g, '<a href="$1" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
+        .replace(/\[(.*?)\]\s*\((.*?)\)/g, '<a href="$2" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">$1</a>');
+
+    // Autolink raw URLs (not already in an <a> tag)
+    // We do this by matching existing <a> tags OR raw URLs.
+    html = html.replace(/(<a\b[^>]*>[\s\S]*?<\/a>)|(https?:\/\/[^\s<]+[^.,\s<)])/gi, (match: string, aTag: string, url: string) => {
+        if (aTag) return aTag; // Already a link, leave untouched
+        return `<a href="${url}" target="_blank" class="text-indigo-500 hover:text-indigo-600 font-bold underline decoration-2 underline-offset-2 transition-colors">${url}</a>`;
+    });
+
+    return html;
 }

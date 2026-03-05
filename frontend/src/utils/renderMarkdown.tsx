@@ -14,8 +14,9 @@ export function sanitizeAIGeneratedText(text: string): string {
 
 export function renderInline(text: string): React.ReactNode[] {
     const parts: React.ReactNode[] = [];
-    // Regex that matches **bold**, _italic_, or `code`
-    const pattern = /(\*\*(.+?)\*\*|_(.+?)_|`(.+?)`)/g;
+    // Regex that matches **bold**, _italic_, `code`, or raw links without breaking Safari
+    // We match a URL if it starts with http:// or https://
+    const pattern = /(\*\*(.+?)\*\*|_(.+?)_|`(.+?)`|(https?:\/\/[^\s<]+[^.,\s<)])|\[(.*?)\]\((.*?)\))/gi;
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
@@ -31,6 +32,10 @@ export function renderInline(text: string): React.ReactNode[] {
             parts.push(<em key={match.index} className="italic">{match[3]}</em>);
         } else if (match[0].startsWith('`')) {
             parts.push(<code key={match.index} className="font-mono text-sm bg-slate-100 dark:bg-white/10 px-1 py-0.5 rounded text-blue-600 dark:text-blue-400">{match[4]}</code>);
+        } else if (match[0].startsWith('http')) {
+            parts.push(<a key={match.index} href={match[5]} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 underline font-medium">{match[5]}</a>);
+        } else if (match[0].startsWith('[')) {
+            parts.push(<a key={match.index} href={match[7]} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 underline font-medium">{match[6]}</a>);
         }
 
         lastIndex = match.index + match[0].length;
