@@ -16,7 +16,7 @@ export function renderInline(text: string): React.ReactNode[] {
     const parts: React.ReactNode[] = [];
     // Regex that matches **bold**, _italic_, `code`, or raw links without breaking Safari
     // We match a URL if it starts with http:// or https://
-    const pattern = /(\*\*(.+?)\*\*|_(.+?)_|`(.+?)`|(https?:\/\/[^\s<]+[^.,\s<)])|\[(.*?)\]\((.*?)\))/gi;
+    const pattern = /(\*\*(.+?)\*\*|_(.+?)_|`(.+?)`|(https?:\/\/[^\s<]+[^.,\s<)])|\[(.*?)\]\s*\((.*?)\))/gi;
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
