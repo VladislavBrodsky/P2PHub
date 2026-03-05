@@ -71,6 +71,7 @@
         "desc": "Legendary status requires legendary effort. Compete for top tier prizes!",
         "prizes": "Top 3: MacBook Pro, DJI Mini 5 Pro, or iPhone 17 Pro\nTop 4-10: $300 USDT"
       },
+      "ends_in": "Ends in {{time}}",
       "close": "Close"
     }
   },

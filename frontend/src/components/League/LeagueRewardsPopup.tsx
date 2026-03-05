@@ -145,7 +145,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
+                <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -190,14 +190,14 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
 
                             {/* Deadline Badge */}
                             <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="absolute bottom-4 left-4 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-md border border-white/10"
+                                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-md border border-white/10 whitespace-nowrap"
                             >
                                 <Clock className="h-3.5 w-3.5 text-white/90" />
                                 <span className="text-xs font-bold uppercase tracking-wider text-white/90">
-                                    Ends in {timeLeft}
+                                    {t('league.rewards_popup.ends_in', { time: timeLeft })}
                                 </span>
                             </motion.div>
                         </div>
