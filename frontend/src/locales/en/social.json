@@ -79,6 +79,21 @@
       "ends_in_format": "Ends in {{days}}d {{hours}}h",
       "ending_soon": "Ending soon!",
       "close": "Close"
+    },
+    "wooden_desc": "New Partner. Just getting started on the journey.",
+    "silver_desc": "Active Partner. Building momentum and gaining traction.",
+    "metal_desc": "Serious Partner. Consistent performance and steady growth.",
+    "gold_desc": "Elite Partner. High impact and strong influence.",
+    "platinum_desc": "Legendary Status. Top 10 Partners compete here.",
+    "prizes": {
+      "macbook": "MacBook Pro",
+      "macbook_sub": "Apple MacBook Pro M4",
+      "dji": "DJI Mini 5 Pro",
+      "dji_sub": "Professional drone",
+      "iphone": "iPhone 17 Pro",
+      "iphone_sub": "Apple iPhone 17 Pro",
+      "cash": "Cash reward",
+      "usdt_amount": "$300 USDT"
     }
   },
   "leaderboard": {
@@ -94,7 +109,14 @@
     "global_rank": "Global Rank",
     "xp_score": "XP Score",
     "referrals": "Referrals",
-    "live_rankings": "Live Rankings"
+    "live_rankings": "Live Rankings",
+    "levels": {
+      "wooden": "Wooden League",
+      "silver": "Silver League",
+      "metal": "Metal League",
+      "gold": "Gold League",
+      "platinum": "Platinum Tier"
+    }
   },
   "community": {
     "tabs": {

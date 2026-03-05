@@ -22,44 +22,44 @@ const useLeagueConfig = () => {
 
     return {
         wooden: {
-            name: t('leaderboard.levels.wooden', 'Wooden League'),
+            name: t('leaderboard.levels.wooden'),
             color: 'from-amber-700/90 via-amber-800 to-amber-950',
             textColor: 'text-amber-50',
             borderColor: 'border-amber-500/30',
             icon: Shield,
-            description: t('league.wooden_desc', 'New Partner. Just getting started on the journey.')
+            description: t('league.wooden_desc')
         },
         silver: {
-            name: t('leaderboard.levels.silver', 'Silver League'),
+            name: t('leaderboard.levels.silver'),
             color: 'from-slate-400 via-slate-500 to-slate-700',
             textColor: 'text-white',
             borderColor: 'border-white/20',
             icon: Trophy,
-            description: t('league.silver_desc', 'Active Partner. Building momentum and gaining traction.')
+            description: t('league.silver_desc')
         },
         metal: {
-            name: t('leaderboard.levels.metal', 'Metal League'),
+            name: t('leaderboard.levels.metal'),
             color: 'from-zinc-700 via-zinc-800 to-zinc-950',
             textColor: 'text-zinc-50',
             borderColor: 'border-zinc-500/40',
             icon: Shield,
-            description: t('league.metal_desc', 'Serious Partner. Consistent performance and steady growth.')
+            description: t('league.metal_desc')
         },
         gold: {
-            name: t('leaderboard.levels.gold', 'Gold League'),
+            name: t('leaderboard.levels.gold'),
             color: 'from-amber-400 via-yellow-500 to-orange-600',
             textColor: 'text-white',
             borderColor: 'border-yellow-400/40',
             icon: Star,
-            description: t('league.gold_desc', 'Elite Partner. High impact and strong influence.')
+            description: t('league.gold_desc')
         },
         platinum: {
-            name: t('leaderboard.levels.platinum', 'Platinum Tier'),
+            name: t('leaderboard.levels.platinum'),
             color: 'from-[#6366f1] via-[#a855f7] to-[#ec4899] bg-size-[200%_auto] animate-vibing-gradient',
             textColor: 'text-white',
             borderColor: 'border-white/30',
             icon: Flame,
-            description: t('league.platinum_desc', 'Legendary Status. Top 10 Partners compete here.')
+            description: t('league.platinum_desc')
         }
     };
 };

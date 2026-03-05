@@ -23,18 +23,18 @@ interface Winner {
 
 const STORAGE_KEY = 'p2phub_winners_popup_seen_month';
 
-const RANK_PRIZES: Record<number, { label: string; sublabel: string; color: string; glow: string; isUsdt?: boolean }> = {
-    1: { label: 'MacBook Pro', sublabel: 'Apple MacBook Pro M4', color: 'from-amber-400 to-yellow-500', glow: 'rgba(251,191,36,0.6)' },
-    2: { label: 'DJI Mini 5 Pro', sublabel: 'Professional drone', color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
-    3: { label: 'iPhone 17 Pro', sublabel: 'Apple iPhone 17 Pro', color: 'from-orange-400 to-amber-500', glow: 'rgba(251,146,60,0.5)' },
-    4: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    5: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    6: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    7: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    8: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    9: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-    10: { label: '$300 USDT', sublabel: 'Cash reward', color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
-};
+const getRankPrizes = (t: any): Record<number, { label: string; sublabel: string; color: string; glow: string; isUsdt?: boolean }> => ({
+    1: { label: t('league.prizes.macbook'), sublabel: t('league.prizes.macbook_sub'), color: 'from-amber-400 to-yellow-500', glow: 'rgba(251,191,36,0.6)' },
+    2: { label: t('league.prizes.dji'), sublabel: t('league.prizes.dji_sub'), color: 'from-slate-300 to-slate-400', glow: 'rgba(148,163,184,0.5)' },
+    3: { label: t('league.prizes.iphone'), sublabel: t('league.prizes.iphone_sub'), color: 'from-orange-400 to-amber-500', glow: 'rgba(251,146,60,0.5)' },
+    4: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    5: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    6: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    7: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    8: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    9: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+    10: { label: t('league.prizes.usdt_amount'), sublabel: t('league.prizes.cash'), color: 'from-emerald-400 to-teal-500', glow: 'rgba(52,211,153,0.4)', isUsdt: true },
+});
 
 const RankIcon: React.FC<{ rank: number }> = ({ rank }) => {
     if (rank === 1) return <Crown size={14} className="text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" />;
@@ -86,6 +86,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
     const [winners, setWinners] = useState<Winner[]>([]);
     const [loading, setLoading] = useState(true);
     const { setFooterVisible } = useUI();
+    const rankPrizes = getRankPrizes(t);
 
     useTMALock(visible);
 
@@ -258,9 +259,10 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                     <div className="py-8 text-center text-caption text-slate-400">
                                         {t('league.no_winners_yet', 'Data will appear at the end of the current month')}
                                     </div>
-                                ) : (
-                                    winners.map((winner, i) => {
-                                        const prize = RANK_PRIZES[winner.rank] || RANK_PRIZES[10];
+                                    {(() => {
+                                    const rankPrizes = getRankPrizes(t);
+                                    return winners.map((winner, i) => {
+                                        const prize = rankPrizes[winner.rank] || rankPrizes[10];
                                         const isTop3 = winner.rank <= 3;
                                         return (
                                             <motion.div
@@ -338,7 +340,8 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                                 </div>
                                             </motion.div>
                                         );
-                                    })
+                                    });
+                                })()}
                                 )}
                             </div>
 

@@ -79,6 +79,21 @@
       "ends_in_format": "До конца: {{days}}д {{hours}}ч",
       "ending_soon": "Скоро закончится!",
       "close": "Закрыть"
+    },
+    "wooden_desc": "Новый партнер. Только начинает свой путь.",
+    "silver_desc": "Активный партнер. Набирает обороты и привлекает внимание.",
+    "metal_desc": "Серьезный партнер. Стабильные показатели и уверенный рост.",
+    "gold_desc": "Элитный партнер. Высокое влияние и сильный авторитец.",
+    "platinum_desc": "Легендарный статус. Здесь соревнуются ТОП-10 партнеров.",
+    "prizes": {
+      "macbook": "MacBook Pro",
+      "macbook_sub": "Apple MacBook Pro M4",
+      "dji": "DJI Mini 5 Pro",
+      "dji_sub": "Профессиональный дрон",
+      "iphone": "iPhone 17 Pro",
+      "iphone_sub": "Apple iPhone 17 Pro",
+      "cash": "Денежная награда",
+      "usdt_amount": "$300 USDT"
     }
   },
   "leaderboard": {
@@ -94,7 +109,14 @@
     "global_rank": "Глобальный Ранг",
     "xp_score": "Счет XP",
     "referrals": "Рефералы",
-    "live_rankings": "Рейтинги в реальном времени"
+    "live_rankings": "Рейтинги в реальном времени",
+    "levels": {
+      "wooden": "Деревянная Лига",
+      "silver": "Серебряная Лига",
+      "metal": "Металлическая Лига",
+      "gold": "Золотая Лига",
+      "platinum": "Платиновая Лига"
+    }
   },
   "community": {
     "tabs": {

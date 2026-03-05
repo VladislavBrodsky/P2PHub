@@ -455,26 +455,21 @@ export const StudioTab = ({
             }
         }
 
-        if (navigator.share) {
-            try {
-                await navigator.share(shareData);
-            } catch (err: any) {
-                console.error('Share failed', err);
-                if (err.name !== 'AbortError') {
-                    handleCopyText();
-                }
-            }
-        } else {
-            // Use universal utility as fallback
-            const result = await shareUniversal({
-                title: shareData.title,
-                text: shareData.text,
-                url: undefined // text already contains links
+        const result = await shareUniversal({
+            title: shareData.title,
+            text: shareData.text,
+            url: undefined, // text already contains links in StudioTab logic
+            files: shareData.files
+        });
+
+        if (result === 'copied') {
+            notification({
+                title: t('pro_dashboard.notifications.copied'),
+                text: t('pro_dashboard.notifications.text_copied'),
+                type: 'success'
             });
-            if (result === 'copied') {
-                notification({ title: t('pro_dashboard.notifications.copied'), text: t('pro_dashboard.notifications.text_copied'), type: 'success' });
-            }
         }
+
         setIsSharingSystem(false);
     };
 

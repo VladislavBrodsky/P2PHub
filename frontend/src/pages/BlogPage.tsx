@@ -14,6 +14,7 @@ import { useTabActive } from '../components/ui/TabPanel';
 import { BlogSkeleton } from '../components/Skeletons/BlogSkeleton';
 import { Skeleton } from '../components/Skeleton';
 import { authorAvatars } from '../data/authorAvatars';
+import { shareUniversal } from '../utils/shareUtils';
 import React from 'react';
 
 // New Extracted Components
@@ -205,22 +206,17 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
         }
     };
 
-    const handleShare = () => {
+    const handleShare = async () => {
         selection();
         if (selectedPost) {
             const blogId = selectedPost.slug || selectedPost.id;
             const shareUrl = `https://t.me/pintopay_probot/app?startapp=blog_${blogId}`;
 
-            if (navigator.share) {
-                navigator.share({
-                    title: selectedPost.title,
-                    text: selectedPost.excerpt,
-                    url: shareUrl,
-                }).catch(console.error);
-            } else {
-                navigator.clipboard.writeText(shareUrl);
-                notification('success');
-            }
+            await shareUniversal({
+                title: selectedPost.title,
+                text: selectedPost.excerpt,
+                url: shareUrl,
+            });
         }
     };
 

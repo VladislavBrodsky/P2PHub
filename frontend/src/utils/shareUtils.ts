@@ -4,6 +4,8 @@ export interface ShareOptions {
     title?: string;
     text?: string;
     url?: string;
+    referralCode?: string;
+    files?: File[];
 }
 
 /**
@@ -37,16 +39,33 @@ export const shareToTelegram = (text: string, url?: string) => {
  * otherwise falls back to Telegram sharing or clipboard.
  */
 export const shareUniversal = async (options: ShareOptions): Promise<'shared' | 'copied' | 'failed'> => {
-    const { title, text, url } = options;
+    const { title, text, url, referralCode } = options;
 
-    // 1. Try native navigator.share (works well on mobile browsers and some TMA versions)
+    // 1. If referralCode is provided and we're in TMA, use switchInlineQuery for best UX
+    if (referralCode && window.Telegram?.WebApp) {
+        try {
+            window.Telegram.WebApp.switchInlineQuery(referralCode, ['users', 'groups', 'channels']);
+            return 'shared';
+        } catch (e) {
+            console.error('switchInlineQuery failed', e);
+        }
+    }
+
+    // 2. Try native navigator.share (works well on mobile browsers and some TMA versions)
     if (navigator.share) {
         try {
-            await navigator.share({
-                title,
-                text,
-                url
-            });
+            const shareData: ShareData = {
+                title: title,
+                text: text,
+                url: url
+            };
+
+            // Only add files if browser supports it
+            if (options.files && navigator.canShare && navigator.canShare({ files: options.files })) {
+                shareData.files = options.files;
+            }
+
+            await navigator.share(shareData);
             return 'shared';
         } catch (e: any) {
             // AbortError is normal (user cancelled)
@@ -55,14 +74,20 @@ export const shareUniversal = async (options: ShareOptions): Promise<'shared' | 
         }
     }
 
-    // 2. If navigator.share fails or is unavailable, use Telegram share as primary fallback
-    // because most of our users are on Telegram.
+    // 3. Fallback: Telegram direct link
     const shareText = `${text || ''}${url ? '\n' + url : ''}`;
     shareToTelegram(shareText);
 
-    // We return 'shared' here because we've opened the share window, 
-    // even if we don't know if the user completed it.
-    return 'shared';
+    // 4. Final fallback: Clipboard
+    try {
+        const fallbackText = `${title ? title + '\n' : ''}${text || ''}${url ? '\n' + url : ''}`;
+        await navigator.clipboard.writeText(fallbackText);
+        // If we opened Telegram, we already return 'shared', but let's be safe
+        return 'shared';
+    } catch (e) {
+        console.error('Clipboard fallback failed', e);
+        return 'failed';
+    }
 };
 
 /**

@@ -11,6 +11,7 @@ import { useNavigation } from '../../hooks/useNavigation';
 import { useTMALock } from '../../hooks/useTMALock';
 import { renderMarkdown, renderInline, sanitizeAIGeneratedText } from '../../utils/renderMarkdown';
 import { getSafeLaunchParams } from '../../utils/tma';
+import { shareUniversal } from '../../utils/shareUtils';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -71,21 +72,15 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
         setScrolledProgress(scrollPercent);
     };
 
-    const handleShareSecret = () => {
+    const handleShareSecret = async () => {
         const secret = t(`academy_content.stage_${stage.id}_lesson_secret`);
         const sanitizedSecret = sanitizeAIGeneratedText(secret);
         const text = `🔥 P2P Secret from Academy Stage ${stage.id}:\n\n"${sanitizedSecret}"\n\nJoin the elite floor with me: https://t.me/pintopay_bot?start=r_${user?.id}`;
 
-        if (navigator.share) {
-            navigator.share({
-                title: 'P2P Viral Secret',
-                text: text,
-            }).catch(() => { });
-        } else {
-            // Fallback to clipboard
-            navigator.clipboard.writeText(text);
-            alert(t('common:copied_to_clipboard'));
-        }
+        await shareUniversal({
+            title: 'P2P Viral Secret',
+            text: text,
+        });
     };
 
     return createPortal(

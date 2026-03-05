@@ -8,6 +8,7 @@ import { useUser } from '../../context/UserContext';
 import { useTranslation, Trans } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useTMALock } from '../../hooks/useTMALock';
+import { shareUniversal } from '../../utils/shareUtils';
 
 const Level100AchievementModal = lazy(() => import('./Level100AchievementModal').then(m => ({ default: m.Level100AchievementModal })));
 
@@ -427,11 +428,10 @@ export const MilestonePath = () => {
                                                     <button
                                                         onClick={() => {
                                                             const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
-                                                            if (navigator.share) {
-                                                                navigator.share({ title: 'P2PHub', url: link });
-                                                            } else {
-                                                                navigator.clipboard.writeText(link);
-                                                            }
+                                                            shareUniversal({
+                                                                title: 'P2PHub',
+                                                                url: link
+                                                            });
                                                         }}
                                                         className="h-18 rounded-[1.8rem] bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex flex-col items-center justify-center gap-1 shadow-lg shadow-indigo-600/30 transition-all group/btn overflow-hidden relative"
                                                     >

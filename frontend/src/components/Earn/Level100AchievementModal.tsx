@@ -7,6 +7,7 @@ import { useUser } from '../../context/UserContext';
 import { useUI } from '../../context/UIContext';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useTMALock } from '../../hooks/useTMALock';
+import { shareUniversal } from '../../utils/shareUtils';
 import { useEffect } from 'react';
 
 interface Level100AchievementModalProps {
@@ -66,19 +67,17 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
         }
     ];
 
-    const handleShare = () => {
+    const handleShare = async () => {
         impact('heavy');
         const link = `https://t.me/pintopay_probot?start=${user?.referral_code || ''}`;
         const referralCode = user?.referral_code || '';
 
-        if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.switchInlineQuery(referralCode);
-        } else if (navigator.share) {
-            const text = t('level100.share_text');
-            navigator.share({ title: t('level100.share_title'), text, url: link });
-        } else {
-            navigator.clipboard.writeText(link);
-        }
+        await shareUniversal({
+            title: t('level100.share_title'),
+            text: t('level100.share_text'),
+            url: link,
+            referralCode: referralCode
+        });
     };
 
     return (
