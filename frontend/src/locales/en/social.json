@@ -43,6 +43,11 @@
   },
   "league": {
     "competing_top10": "COMPETING FOR TOP 10 REWARDS",
+    "compete_next": "Compete for a top spot next month!",
+    "prizes_reset": "The rating is updated on the 1st of each month",
+    "monthly_winners": "Monthly Winners",
+    "winners_subtitle": "Top 10 partners receive monthly rewards",
+    "no_winners_yet": "Data will appear at the end of the current month",
     "rewards_popup": {
       "title": "League Rewards",
       "subtitle": "Reach TOP-10 for exclusive prizes",
@@ -71,7 +76,8 @@
         "desc": "Legendary status requires legendary effort. Compete for top tier prizes!",
         "prizes": "Top 3: MacBook Pro, DJI Mini 5 Pro, or iPhone 17 Pro\nTop 4-10: $300 USDT"
       },
-      "ends_in": "Ends in {{time}}",
+      "ends_in_format": "Ends in {{days}}d {{hours}}h",
+      "ending_soon": "Ending soon!",
       "close": "Close"
     }
   },

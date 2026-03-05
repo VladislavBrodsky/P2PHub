@@ -1,6 +1,10 @@
 {
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0"
   }
 }

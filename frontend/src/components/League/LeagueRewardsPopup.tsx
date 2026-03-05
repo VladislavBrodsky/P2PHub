@@ -17,7 +17,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     currentLeague,
 }) => {
     const { t } = useTranslation(['social']);
-    const [timeLeft, setTimeLeft] = useState('');
+    const [timeLeft, setTimeLeft] = useState<{ days: number, hours: number } | null>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -49,9 +49,9 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                 if (difference > 0) {
                     const days = Math.floor(difference / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-                    setTimeLeft(`${days}d ${hours}h`);
+                    setTimeLeft({ days, hours });
                 } else {
-                    setTimeLeft('Ending soon!');
+                    setTimeLeft(null);
                 }
             };
 
@@ -123,7 +123,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
             const rest = separatorIndex !== -1 ? prize.substring(separatorIndex + 1).trim() : '';
 
             return (
-                <div key={idx} className="flex items-center gap-3 bg-black/40 rounded-[14px] p-2.5 border border-white/5 hover:border-white/10 hover:bg-white/[0.02] transition-colors relative overflow-hidden group">
+                <div key={idx} className="flex items-center gap-3 bg-black/40 rounded-[14px] p-2.5 border border-white/5 hover:border-white/10 hover:bg-white/2 transition-colors relative overflow-hidden group">
                     <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/5 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
 
                     <div className={`flex shrink-0 items-center justify-center w-8 h-8 rounded-[10px] bg-linear-to-br ${config.color} shadow-md shadow-black/40 relative`}>
@@ -145,7 +145,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
+                <div className="fixed inset-0 z-200 flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -197,7 +197,9 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                             >
                                 <Clock className="h-3.5 w-3.5 text-white/90" />
                                 <span className="text-xs font-bold uppercase tracking-wider text-white/90">
-                                    {t('league.rewards_popup.ends_in', { time: timeLeft })}
+                                    {timeLeft
+                                        ? t('league.rewards_popup.ends_in_format', { days: timeLeft.days, hours: timeLeft.hours, defaultValue: `Ends in ${timeLeft.days}d ${timeLeft.hours}h` })
+                                        : t('league.rewards_popup.ending_soon', 'Ending soon!')}
                                 </span>
                             </motion.div>
                         </div>
@@ -209,7 +211,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <h2 className="text-[20px] font-black tracking-tight text-white mb-0.5">
+                                <h2 className="text-subheading font-black tracking-tight text-white mb-0.5">
                                     {t('league.rewards_popup.title')}
                                 </h2>
                                 <p className="text-[14px] font-medium leading-relaxed text-white/60 mb-4">
