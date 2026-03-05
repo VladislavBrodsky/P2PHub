@@ -259,9 +259,8 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                     <div className="py-8 text-center text-caption text-slate-400">
                                         {t('league.no_winners_yet', 'Data will appear at the end of the current month')}
                                     </div>
-                                    {(() => {
-                                    const rankPrizes = getRankPrizes(t);
-                                    return winners.map((winner, i) => {
+                                ) : (
+                                    winners.map((winner, i) => {
                                         const prize = rankPrizes[winner.rank] || rankPrizes[10];
                                         const isTop3 = winner.rank <= 3;
                                         return (
@@ -340,8 +339,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                                                 </div>
                                             </motion.div>
                                         );
-                                    });
-                                })()}
+                                    })
                                 )}
                             </div>
 
