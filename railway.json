@@ -5,18 +5,6 @@
         "Partner-Hub-Backend": {
             "root": "backend"
         },
-        "worker": {
-            "root": "backend",
-            "deploy": {
-                "startCommand": "bash scripts/start_worker.sh"
-            }
-        },
-        "scheduler": {
-            "root": "backend",
-            "deploy": {
-                "startCommand": "bash scripts/start_scheduler.sh"
-            }
-        },
         "Partner-Hub-Frontend": {
             "root": "frontend"
         }
