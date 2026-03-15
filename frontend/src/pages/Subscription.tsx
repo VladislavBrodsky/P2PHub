@@ -426,7 +426,7 @@ export default function SubscriptionPage() {
                                 </div>
                             </motion.div>
 
-                            <h1 className="text-[32px] sm:text-[42px] font-black mb-2 tracking-tighter text-slate-900 dark:text-white leading-[1.1] text-center max-w-[280px]">
+                            <h1 className="text-[32px] sm:text-[42px] font-black mb-2 tracking-tighter text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
                                 {(user?.subscription_plan?.includes('PLUS')) ? t('pro:subscription.pro_active.title_plus') : t('pro:subscription.pro_active.title')}
                             </h1>
 
@@ -839,7 +839,7 @@ export default function SubscriptionPage() {
                                         { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                                         { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
                                     ].map((stat) => (
-                                        <div key={stat.label} className="p-4 rounded-[1.5rem] bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-2 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
+                                        <div key={stat.label} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-2 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
                                             <div className={`w-9 h-9 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:rotate-12 transition-transform`}>
                                                 <stat.icon size={16} strokeWidth={2.5} />
                                             </div>

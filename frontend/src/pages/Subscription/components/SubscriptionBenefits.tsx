@@ -41,7 +41,7 @@ export const SubscriptionBenefits = React.memo(({
                 className="mb-12"
             >
                 {/* Plan headline - Modernized */}
-                <div className={`rounded-[2rem] p-6 mb-8 border-2 relative overflow-hidden transition-all duration-500 ${selectedPlan === 'PRO'
+                <div className={`rounded-2xl p-6 mb-8 border-2 relative overflow-hidden transition-all duration-500 ${selectedPlan === 'PRO'
                     ? 'bg-blue-600 border-blue-400 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.3)]'
                     : 'bg-yellow-400 border-yellow-300 shadow-[0_20px_40px_-10px_rgba(234,179,8,0.3)]'
                     }`}>
@@ -79,14 +79,14 @@ export const SubscriptionBenefits = React.memo(({
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: i * 0.05 }}
-                            className="glass-panel-premium group p-4 rounded-[1.5rem] border border-slate-100 dark:border-white/5 flex flex-col gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                            className="glass-panel-premium group p-4 rounded-xl border border-slate-100 dark:border-white/5 flex flex-col gap-3 transition-all hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <div className={`w-10 h-10 rounded-xl ${b.bg} flex items-center justify-center shrink-0 shadow-sm ${b.color} group-hover:rotate-6 transition-transform`}>
                                 <b.icon size={18} strokeWidth={2.5} />
                             </div>
                             <div className="space-y-1">
                                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-white/30 leading-none">{b.label}</span>
-                                <p className="text-[11px] font-bold text-slate-700 dark:text-white/80 leading-tight">
+                                <p className="text-label font-bold text-slate-700 dark:text-white/80 leading-tight">
                                     {b.desc.split('.')[0]}
                                 </p>
                             </div>
@@ -95,7 +95,7 @@ export const SubscriptionBenefits = React.memo(({
                 </div>
 
                 {/* Quick checklist - Premium Box */}
-                <div className="bg-slate-50 dark:bg-black/40 border-2 border-slate-100 dark:border-white/5 rounded-[1.5rem] p-5 space-y-3 shadow-xl">
+                <div className="bg-slate-50 dark:bg-black/40 border-2 border-slate-100 dark:border-white/5 rounded-xl p-5 space-y-3 shadow-xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Check size={14} className="text-emerald-500" strokeWidth={3} />
                         <span className="text-label font-black uppercase tracking-widest text-slate-400 dark:text-white/30">

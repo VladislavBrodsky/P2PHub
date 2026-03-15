@@ -4,6 +4,8 @@ import { Loader2, Wallet, Share2, AlertTriangle, Fingerprint, CheckCircle2, Help
 import { TonConnectButton } from '@tonconnect/ui-react';
 import { TONLogo, USDTLogo } from '../../../components/ui/CryptoIcons';
 import { PaymentSessionTimer } from './SubscriptionTimers';
+import { copyToClipboard } from '../../../utils/clipboard';
+import { useNotificationStore } from '../../../store/useNotificationStore';
 
 interface SubscriptionPaymentProps {
     paymentMethod: 'TON' | 'CRYPTO' | 'STRIPE' | null;
@@ -52,6 +54,23 @@ export const SubscriptionPayment = React.memo(({
     t,
     paymentRef
 }: SubscriptionPaymentProps) => {
+    const { showNotification } = useNotificationStore();
+
+    const handleCopyAddress = async () => {
+        const success = await copyToClipboard(adminUsdt);
+        selection();
+        
+        if (success) {
+            notification('success');
+            showNotification({
+                title: t('notifications.success'),
+                message: t('notifications.text_copied'),
+                type: 'success',
+                icon: <CheckCircle2 size={16} className="text-emerald-500" />
+            });
+        }
+    };
+
     return (
         <motion.div ref={paymentRef} className="mb-12 relative px-2">
             {/* Background Glows to match Home Style */}
@@ -136,6 +155,17 @@ export const SubscriptionPayment = React.memo(({
                                         {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
                                     </button>
                                 </div>
+                            ) : paymentMethod === 'STRIPE' ? (
+                                <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                                    <div className="relative">
+                                        <div className="w-16 h-16 rounded-full border-4 border-indigo-500/20 border-t-indigo-500 animate-spin" />
+                                        <CreditCard className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-indigo-500" size={24} />
+                                    </div>
+                                    <div className="text-center">
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('subscription.upgrade.processing_stripe')}</h3>
+                                        <p className="text-label text-slate-500 dark:text-white/40 uppercase tracking-widest mt-1">{t('subscription.upgrade.redirecting_to_bank')}</p>
+                                    </div>
+                                </div>
                             ) : (
                                 <div className="space-y-5">
                                     {/* STEP 1: COPY ADDRESS */}
@@ -144,10 +174,10 @@ export const SubscriptionPayment = React.memo(({
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-bold flex items-center justify-center shadow-lg">1</div>
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.copy_address')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.upgrade.steps.copy_address')}</span>
                                             </div>
                                             <div
-                                                onClick={() => { navigator.clipboard.writeText(adminUsdt); selection(); notification('success'); }}
+                                                onClick={handleCopyAddress}
                                                 className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
                                             >
                                                 <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
@@ -157,7 +187,7 @@ export const SubscriptionPayment = React.memo(({
                                                         <Share2 size={14} />
                                                     </div>
                                                 </div>
-                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:subscription.upgrade.tap_to_copy')}</span>
+                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('subscription.upgrade.tap_to_copy')}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -168,14 +198,14 @@ export const SubscriptionPayment = React.memo(({
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-bold flex items-center justify-center shadow-lg">2</div>
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.paste_hash')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.upgrade.steps.paste_hash')}</span>
                                             </div>
 
                                             {/* CRITICAL INSTRUCTION ALERT */}
                                             <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
                                                 <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
                                                 <p className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
-                                                    {t('pro:subscription.upgrade.final_instruction')}
+                                                    {t('subscription.upgrade.final_instruction')}
                                                 </p>
                                             </div>
 
@@ -194,7 +224,7 @@ export const SubscriptionPayment = React.memo(({
                                                 <div className="flex items-center gap-2 px-2">
                                                     <HelpCircle size={10} className="text-slate-400 shrink-0" />
                                                     <p className="text-label text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
-                                                        {t('pro:subscription.upgrade.hash_help')}
+                                                        {t('subscription.upgrade.hash_help')}
                                                     </p>
                                                 </div>
                                             </div>
@@ -211,7 +241,7 @@ export const SubscriptionPayment = React.memo(({
                                             {isLoading ? <Loader2 className="animate-spin" /> : (
                                                 <>
                                                     <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                                    <span>{status === 'manual_review' ? t('pro:subscription.upgrade.pending_review') : t('pro:subscription.upgrade.verify_transaction')}</span>
+                                                    <span>{status === 'manual_review' ? t('subscription.upgrade.pending_review') : t('subscription.upgrade.verify_transaction')}</span>
                                                 </>
                                             )}
                                         </div>
@@ -219,8 +249,8 @@ export const SubscriptionPayment = React.memo(({
 
                                     {/* HELP SECTION */}
                                     <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
-                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('pro:subscription.upgrade.help_title')}</p>
-                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('pro:subscription.upgrade.help_desc')}</p>
+                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('subscription.upgrade.help_title')}</p>
+                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('subscription.upgrade.help_desc')}</p>
                                     </div>
                                 </div>
                             )}

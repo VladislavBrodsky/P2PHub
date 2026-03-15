@@ -81,7 +81,7 @@ PaymentSessionTimer.displayName = 'PaymentSessionTimer';
 // --- RE-ADDED STICKY HEADER COMPONENT ---
 export const StickyFomoHeader = React.memo(({ t }: { t: any }) => (
     <div className="mb-6 mt-2 px-1 sticky top-[80px] z-40">
-        <div className="rounded-[1.5rem] overflow-hidden px-4 py-3 bg-yellow-400 dark:bg-yellow-500 border-2 border-yellow-300 dark:border-yellow-400/50 flex flex-row items-center justify-between gap-4 relative group shadow-[0_20px_40px_-10px_rgba(234,179,8,0.3)]">
+        <div className="rounded-xl overflow-hidden px-4 py-3 bg-yellow-400 dark:bg-yellow-500 border-2 border-yellow-300 dark:border-yellow-400/50 flex flex-row items-center justify-between gap-4 relative group shadow-[0_20px_40px_-10px_rgba(234,179,8,0.3)]">
             <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-white/20 to-yellow-500 opacity-50" />
             <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
 

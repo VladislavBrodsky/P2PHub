@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import AsyncMock, patch
 from datetime import UTC, datetime
+import pytest
 from sqlmodel import select
 from app.models.partner import Partner
 from app.services.payment_service import payment_service
@@ -34,6 +35,12 @@ async def test_balance_upgrade_pro_retry(session, create_test_partner):
     assert partner.is_pro is True
     assert partner.subscription_plan in ["PRO_LIFETIME", "PRO_MONTHLY"]
     assert float(partner.balance) == 11.0 # 50 - 39
+
+    # Verify Ledger (Negative Earning)
+    from app.models.partner import Earning
+    stmt_earn = select(Earning).where(Earning.partner_id == partner.id, Earning.type == "PAYMENT")
+    res_earn = await session.exec(stmt_earn)
+    assert res_earn.first().amount == -39.0
 
 @pytest.mark.asyncio
 async def test_balance_upgrade_pro_plus_retry(session, create_test_partner):

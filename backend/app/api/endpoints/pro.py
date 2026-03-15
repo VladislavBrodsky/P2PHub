@@ -279,7 +279,18 @@ async def unlock_academy_stage(
     # Deduct XP
     partner.xp -= xp_cost
     
+    from app.models.partner import XPTransaction
     from app.services.audit_service import audit_service
+    
+    # Log XP Spend in Ledger
+    session.add(XPTransaction(
+        partner_id=partner.id,
+        amount=-float(xp_cost),
+        type="ACADEMY_UNLOCK",
+        description=f"Academy Stage {stage_id} Unlocked",
+        reference_id=f"acad_unlock_{stage_id}_{partner.id}"
+    ))
+
     await audit_service.log_event(
         session=session,
         partner_id=partner.id,
@@ -372,6 +383,16 @@ async def complete_academy_stage(
     partner.academy_score += xp_reward
     partner.xp += xp_reward
     
+    from app.models.partner import XPTransaction
+    # Log XP Reward in Ledger
+    session.add(XPTransaction(
+        partner_id=partner.id,
+        amount=float(xp_reward),
+        type="ACADEMY_REWARD",
+        description=f"Academy Stage {stage_id} Completed",
+        reference_id=f"acad_comp_{stage_id}_{partner.id}"
+    ))
+
     session.add(partner)
     await session.commit()
     await session.refresh(partner)

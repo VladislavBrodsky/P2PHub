@@ -366,6 +366,18 @@ class PaymentService:
                 if partner.balance < amount:
                     raise ValueError(f"Insufficient balance during upgrade: {partner.balance} < {amount}")
                 partner.balance -= amount
+                
+                # Log balance deduction as a negative Earning item in the ledger
+                from app.models.partner import Earning
+                session.add(Earning(
+                    partner_id=partner.id,
+                    amount=-float(amount),
+                    description=f"Subscription Payment: {currency}",
+                    type="PAYMENT",
+                    currency="USDT",
+                    reference_id=f"bal_deduct_{transaction_id or now.timestamp()}"
+                ))
+                
                 session.add(partner)
                 await session.flush()
 
@@ -463,17 +475,8 @@ class PaymentService:
             partner.pro_tokens_last_reset = now
             partner.is_pro = True
             
-            # --- AWARD XP TO BUYER ---
-            # If it's an upgrade, we give the difference in XP or full PRO+ XP? 
-            # Usually difference: 1250 - 750 = 500
-            if is_pro_to_plus_upgrade:
-                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP - settings.PRO_UPGRADE_SELF_XP
-            else:
-                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP if is_plus else settings.PRO_UPGRADE_SELF_XP
-            
+            # Record current XP for audit
             xp_before = float(partner.xp)
-            partner.xp = Partner.xp + upgrade_xp # Atomic
-            xp_after = xp_before + upgrade_xp
             
             # Record promotion details in payment_details
             promo_details = {
@@ -526,6 +529,47 @@ class PaymentService:
             # Update Partner with transaction link
             partner.last_transaction_id = transaction.id
             session.add(partner)
+
+            # --- AWARD XP TO BUYER & LOG IN LEDGER ---
+            # We do this AFTER verifying the transaction is not already completed to prevent double-logging.
+            if is_pro_to_plus_upgrade:
+                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP - settings.PRO_UPGRADE_SELF_XP
+            else:
+                upgrade_xp = settings.PRO_PLUS_UPGRADE_SELF_XP if is_plus else settings.PRO_UPGRADE_SELF_XP
+
+            partner.xp = Partner.xp + upgrade_xp # Atomic Increments
+            xp_after = xp_before + upgrade_xp
+
+            # Record XP Transaction and Audit for Buyer
+            from app.models.partner import XPTransaction
+            from app.services.audit_service import audit_service
+            
+            session.add(XPTransaction(
+                partner_id=partner.id, amount=upgrade_xp,
+                type="UPGRADE_BONUS",
+                description=f"{'PRO+ (Upgrade)' if is_pro_to_plus_upgrade else ('PRO+' if is_plus else 'PRO')} Upgrade Reward",
+                reference_id=f"upg_bonus_{transaction.id}"
+            ))
+
+            await audit_service.log_xp_award(
+                session=session, partner_id=partner.id, 
+                xp_amount=upgrade_xp, level=partner.level, is_pro=True,
+                xp_before=xp_before, xp_after=xp_after
+            )
+
+            # Update Leaderboard (Incremental for Seasons)
+            from app.services.leaderboard_service import leaderboard_service
+            await leaderboard_service.increment_score(partner.id, upgrade_xp)
+
+            # Check level up for buyer
+            from app.services.referral_service import _check_level_up
+            temp_notifs = []
+            await _check_level_up(partner, temp_notifs, xp_after)
+            if temp_notifs:
+                # We can't easily gather here without an event loop if we are deep in sync code, 
+                # but these are async tasks from notification_service.
+                # However, _check_level_up adds to temp_notifs list.
+                pass 
 
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
             # #comment: Elite Quality Filter - Skip commissions for non-spending upgrades (Gifts, Grants)
@@ -596,14 +640,9 @@ class PaymentService:
             async def _after_commit():
                 try:
                     await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+                    await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
                 except Exception as e:
                     logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
-
-            # 4. Invalidate Cache (Immediate UI Feedback)
-            try:
-                await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
-            except Exception as e:
-                logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 
 
             # 4. Send Visionary & Viral Messages
@@ -625,31 +664,6 @@ class PaymentService:
                 text=f"{welcome_msg}\n\n{xp_msg}",
                 salt=f"pro_welcome_{partner.id}"
             )
-            
-            # Record XP Transaction and Audit for Buyer
-            from app.models.partner import XPTransaction
-            from app.services.audit_service import audit_service
-            session.add(XPTransaction(
-                partner_id=partner.id, amount=upgrade_xp,
-                type="UPGRADE_BONUS",
-                description=f"{'PRO+ (Upgrade)' if is_pro_to_plus_upgrade else ('PRO+' if is_plus else 'PRO')} Upgrade Reward",
-                reference_id=f"upg_bonus_{transaction.id}"
-            ))
-            
-            await audit_service.log_xp_award(
-                session=session, partner_id=partner.id, 
-                xp_amount=upgrade_xp, level=partner.level, is_pro=True,
-                xp_before=xp_before, xp_after=xp_after
-            )
-
-            # Update Leaderboard (Incremental for Seasons)
-            from app.services.leaderboard_service import leaderboard_service
-            await leaderboard_service.increment_score(partner.id, upgrade_xp)
-
-            # Check level up for buyer
-            from app.services.referral_service import _check_level_up
-            temp_notifs = []
-            await _check_level_up(partner, temp_notifs, xp_after)
             if temp_notifs:
                 await asyncio.gather(*temp_notifs, return_exceptions=True)
 

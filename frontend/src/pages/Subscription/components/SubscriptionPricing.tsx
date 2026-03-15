@@ -35,7 +35,7 @@ export const SubscriptionPricing = React.memo(({
                     <span className="text-label font-bold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
-                <h2 className="text-[28px] sm:text-[36px] font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] text-center mb-4 uppercase px-2 max-w-[360px] mx-auto">
+                <h2 className="text-[28px] sm:text-[36px] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-4 uppercase px-2 max-w-[360px] mx-auto">
                     {t('pro:subscription.upgrade.dominate_network')}
                 </h2>
 
@@ -48,7 +48,7 @@ export const SubscriptionPricing = React.memo(({
                 {/* PRO Card */}
                 <button
                     onClick={() => { selection(); setSelectedPlan('PRO'); }}
-                    className={`relative rounded-[2rem] p-5 flex flex-col items-center gap-2 transition-all duration-500 border-2 text-center group
+                    className={`relative rounded-2xl p-5 flex flex-col items-center gap-2 transition-all duration-500 border-2 text-center group
                         ${selectedPlan === 'PRO'
                             ? 'bg-blue-600 border-blue-400 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)] scale-100 z-10'
                             : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.96] hover:opacity-100'
@@ -73,7 +73,7 @@ export const SubscriptionPricing = React.memo(({
                 {/* PRO+ Card */}
                 <button
                     onClick={() => { selection(); setSelectedPlan('PRO_PLUS'); }}
-                    className={`relative rounded-[2rem] p-5 flex flex-col items-center gap-2 transition-all duration-500 border-2 text-center group
+                    className={`relative rounded-2xl p-5 flex flex-col items-center gap-2 transition-all duration-500 border-2 text-center group
                         ${selectedPlan === 'PRO_PLUS'
                             ? 'vibing-yellow-animated border-yellow-400 shadow-[0_20px_40px_-10px_rgba(234,179,8,0.4)] scale-100 z-10'
                             : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.96] hover:opacity-100'
