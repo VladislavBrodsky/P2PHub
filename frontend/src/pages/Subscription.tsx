@@ -30,6 +30,7 @@ import { SubscriptionStatusModal } from './Subscription/components/SubscriptionS
 import { TONLogo } from '../components/ui/CryptoIcons';
 import { USDTLogo } from '../components/ui/USDTLogo';
 import { SectionHeader } from '../components/ui/SectionHeader';
+import { useNotificationStore } from '../store/useNotificationStore';
 
 
 
@@ -40,6 +41,7 @@ export default function SubscriptionPage() {
     const { selection, notification, impact } = useHaptic();
     const { navigateTo } = useNavigation();
     const [tonConnectUI] = useTonConnectUI();
+    const { showNotification } = useNotificationStore();
     const [isLoading, setIsLoading] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState<'TON' | 'CRYPTO' | 'STRIPE' | null>(null);
     const [status, setStatus] = useState<'idle' | 'pending' | 'success' | 'manual_review'>('idle');
@@ -308,7 +310,11 @@ export default function SubscriptionPage() {
                 setStatus('manual_review');
                 notification('success');
             } catch (innerError) {
-                alert(`Submission failed: ${error.response?.data?.detail || 'Error'}`);
+                showNotification({
+                    title: t('pro:notifications.error'),
+                    message: error.response?.data?.detail || t('common:error'),
+                    type: 'error'
+                });
             }
         }
         finally { setIsLoading(false); setIsSelectingCurrency(false); }
@@ -628,7 +634,7 @@ export default function SubscriptionPage() {
                                         <span className="text-slate-500 dark:text-white/30 font-bold italic">{t('marketing:income.math.formula_note')}</span>
                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20">
                                             <Flame className="w-2 h-2 text-rose-500 animate-pulse" />
-                                            <span className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('subscription.upgrade.selling_fast')}</span>
+                                            <span className="text-label font-bold text-rose-600 dark:text-rose-400 uppercase tracking-tight">{t('pro:subscription.upgrade.selling_fast')}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -835,9 +841,9 @@ export default function SubscriptionPage() {
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-1">
                                 <div className="grid grid-cols-3 gap-3">
                                     {[
-                                        { value: '5K+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-                                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-                                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+                                        { value: '5K+', label: t('pro:subscription.stats.partners'), icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                                        { value: '×100', label: t('pro:subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                                        { value: '24/7', label: t('pro:subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
                                     ].map((stat) => (
                                         <div key={stat.label} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-2 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
                                             <div className={`w-9 h-9 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:rotate-12 transition-transform`}>

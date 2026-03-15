@@ -89,11 +89,11 @@ export const SubscriptionPayment = React.memo(({
                                         ${planPrice}
                                     </span>
                                     <span className="text-label font-bold text-slate-400 dark:text-white/30 uppercase font-mono">
-                                        / {selectedPlan === 'PRO_PLUS' ? t('subscription.upgrade.lifetime_label') : t('subscription.upgrade.monthly_label')}
+                                        / {selectedPlan === 'PRO_PLUS' ? t('pro:subscription.upgrade.lifetime_label') : t('pro:subscription.upgrade.monthly_label')}
                                     </span>
                                 </div>
                                 <h4 className="text-label font-bold text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-blue-400 dark:via-yellow-400 dark:to-blue-400 dark:text-animate-shimmer uppercase tracking-[0.2em]">
-                                    {selectedPlan === 'PRO' ? t('subscription.upgrade.pro_title') : (isStandardPro ? t('subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('subscription.upgrade.pro_plus_title'))}
+                                    {selectedPlan === 'PRO' ? t('pro:subscription.upgrade.pro_title') : (isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') || 'PRO+ UPGRADE' : t('pro:subscription.upgrade.pro_plus_title'))}
                                 </h4>
                             </div>
                             <div className="w-12 h-1 bg-linear-to-r from-blue-500 to-yellow-500 mx-auto rounded-full opacity-60" />
@@ -108,7 +108,7 @@ export const SubscriptionPayment = React.memo(({
                                 <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
                                     {isLoading && paymentMethod === 'TON' ? <Loader2 className="w-5 h-5 animate-spin" /> : <TONLogo className="w-5 h-5" />}
                                 </div>
-                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.ton_wallet')}</span>
+                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('pro:subscription.upgrade.ton_wallet')}</span>
                             </button>
                             <button
                                 disabled={isLoading}
@@ -118,7 +118,7 @@ export const SubscriptionPayment = React.memo(({
                                 <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
                                     {isLoading && paymentMethod === 'CRYPTO' ? <Loader2 className="w-5 h-5 animate-spin" /> : <USDTLogo className="w-5 h-5" />}
                                 </div>
-                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.usdt_trc20_address')}</span>
+                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
                             </button>
                             <button
                                 disabled={isLoading}
@@ -128,21 +128,29 @@ export const SubscriptionPayment = React.memo(({
                                 <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
                                     {isLoading && (paymentMethod === 'STRIPE' || !paymentMethod) ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
                                 </div>
-                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('subscription.upgrade.stripe_card')}</span>
+                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('pro:subscription.upgrade.stripe_card')}</span>
                             </button>
                         </div>
                         <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
                             <Shield size={10} className="text-blue-600 dark:text-blue-400" />
-                            <p className="text-label text-slate-600 dark:text-white font-bold uppercase tracking-[0.2em]">{t('subscription.upgrade.protocol_initialized')}</p>
+                            <p className="text-label text-slate-600 dark:text-white font-bold uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.protocol_initialized')}</p>
                         </div>
                     </div>
                 ) : (
                     <div className="space-y-6">
                         <div className="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-white/5">
                             <button onClick={() => setPaymentMethod(null)} className="flex items-center gap-2 text-label font-bold uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-white/50 dark:hover:text-white transition-colors">
-                                <span className="text-caption">←</span> {t('subscription.upgrade.change_method')}
+                                <span className="text-caption">←</span> {t('pro:subscription.upgrade.change_method')}
                             </button>
-                            <PaymentSessionTimer expiresAt={sessionData?.expires_at} onExpire={() => { setPaymentMethod(null); setSessionData(null); alert(t('subscription.alerts.expired')); }} />
+                            <PaymentSessionTimer expiresAt={sessionData?.expires_at} onExpire={() => { 
+                                setPaymentMethod(null); 
+                                setSessionData(null); 
+                                showNotification({
+                                    title: t('pro:notifications.error'),
+                                    message: t('pro:subscription.alerts.expired'),
+                                    type: 'error'
+                                });
+                            }} />
                         </div>
                         <div className="mt-4">
                             {paymentMethod === 'TON' ? (
@@ -152,7 +160,7 @@ export const SubscriptionPayment = React.memo(({
                                         <div className="flex justify-center mb-4"><TonConnectButton /></div>
                                     </div>
                                     <button disabled={isLoading} onClick={handleTonPayment} className={`w-full h-12 rounded-full font-bold text-caption uppercase tracking-widest shadow-[0_15px_30px_-5px_rgba(0,102,255,0.3)] active:scale-[0.98] transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-50 ${selectedPlan === 'PRO' ? 'vibing-blue-animated text-white' : 'vibing-yellow-animated text-[#0a1000]'}`}>
-                                        {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('subscription.upgrade.complete_payment')}
+                                        {isLoading ? <Loader2 className="animate-spin mx-auto" /> : t('pro:subscription.upgrade.complete_payment')}
                                     </button>
                                 </div>
                             ) : paymentMethod === 'STRIPE' ? (
@@ -162,8 +170,8 @@ export const SubscriptionPayment = React.memo(({
                                         <CreditCard className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-indigo-500" size={24} />
                                     </div>
                                     <div className="text-center">
-                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('subscription.upgrade.processing_stripe')}</h3>
-                                        <p className="text-label text-slate-500 dark:text-white/40 uppercase tracking-widest mt-1">{t('subscription.upgrade.redirecting_to_bank')}</p>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('pro:subscription.upgrade.processing_stripe')}</h3>
+                                        <p className="text-label text-slate-500 dark:text-white/40 uppercase tracking-widest mt-1">{t('pro:subscription.upgrade.redirecting_to_bank')}</p>
                                     </div>
                                 </div>
                             ) : (
@@ -174,20 +182,20 @@ export const SubscriptionPayment = React.memo(({
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <div className="w-5 h-5 rounded-full bg-emerald-500 text-white text-label font-bold flex items-center justify-center shadow-lg">1</div>
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.upgrade.steps.copy_address')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.copy_address')}</span>
                                             </div>
                                             <div
                                                 onClick={handleCopyAddress}
                                                 className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
                                             >
-                                                <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('subscription.upgrade.tap_to_copy')}</p>
+                                                <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.tap_to_copy')}</p>
                                                 <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
                                                     <code className="text-label font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
                                                     <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
                                                         <Share2 size={14} />
                                                     </div>
                                                 </div>
-                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('subscription.upgrade.tap_to_copy')}</span>
+                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:subscription.upgrade.tap_to_copy')}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -198,14 +206,14 @@ export const SubscriptionPayment = React.memo(({
                                         <div className="flex flex-col gap-2">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <div className="w-5 h-5 rounded-full bg-blue-500 text-white text-label font-bold flex items-center justify-center shadow-lg">2</div>
-                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('subscription.upgrade.steps.paste_hash')}</span>
+                                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro:subscription.upgrade.steps.paste_hash')}</span>
                                             </div>
 
                                             {/* CRITICAL INSTRUCTION ALERT */}
                                             <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl mb-1 flex gap-2 items-start animate-pulse">
                                                 <AlertTriangle size={14} className="text-amber-500 shrink-0 mt-0.5" />
                                                 <p className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase leading-normal tracking-tight">
-                                                    {t('subscription.upgrade.final_instruction')}
+                                                    {t('pro:subscription.upgrade.final_instruction')}
                                                 </p>
                                             </div>
 
@@ -224,7 +232,7 @@ export const SubscriptionPayment = React.memo(({
                                                 <div className="flex items-center gap-2 px-2">
                                                     <HelpCircle size={10} className="text-slate-400 shrink-0" />
                                                     <p className="text-label text-slate-400 dark:text-white/30 font-bold uppercase leading-tight">
-                                                        {t('subscription.upgrade.hash_help')}
+                                                        {t('pro:subscription.upgrade.hash_help')}
                                                     </p>
                                                 </div>
                                             </div>
@@ -241,7 +249,7 @@ export const SubscriptionPayment = React.memo(({
                                             {isLoading ? <Loader2 className="animate-spin" /> : (
                                                 <>
                                                     <CheckCircle2 size={18} className="group-hover:scale-110 transition-transform" />
-                                                    <span>{status === 'manual_review' ? t('subscription.upgrade.pending_review') : t('subscription.upgrade.verify_transaction')}</span>
+                                                    <span>{status === 'manual_review' ? t('pro:subscription.upgrade.pending_review') : t('pro:subscription.upgrade.verify_transaction')}</span>
                                                 </>
                                             )}
                                         </div>
@@ -249,8 +257,8 @@ export const SubscriptionPayment = React.memo(({
 
                                     {/* HELP SECTION */}
                                     <div className="p-4 rounded-2xl bg-blue-500/5 dark:bg-white/2 border border-blue-500/10 dark:border-white/5 text-center">
-                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('subscription.upgrade.help_title')}</p>
-                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('subscription.upgrade.help_desc')}</p>
+                                        <p className="text-label font-bold text-blue-600/60 dark:text-blue-400/50 uppercase tracking-[0.2em] mb-1">{t('pro:subscription.upgrade.help_title')}</p>
+                                        <p className="text-label text-slate-500 dark:text-white/40 font-medium">{t('pro:subscription.upgrade.help_desc')}</p>
                                     </div>
                                 </div>
                             )}

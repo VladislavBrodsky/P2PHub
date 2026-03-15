@@ -1080,6 +1080,10 @@
     "plan_desc_plus": "The ultimate viral growth engine. PRO+ accelerates your network expansion 100x thanks to income from 20 levels, elite AI models, and total dominance in all social networks.",
     "plan_headline_plus": "LIFETIME PRO+ IS YOUR VIRAL GROWTH CENTER",
     "benefits": {
+      "badge": "ELITE BENEFITS",
+      "title": "SYSTEM ADVANTAGES",
+      "desc": "The most powerful tools for exponential growth and capital scaling in 2026.",
+      "full_access": "FULL ACCESS GRANTED",
       "ai_studio": "AI VIRALITY FACTORY",
       "ai_studio_desc_pro": "Your personal AI copywriter that never sleeps. Generate posts that stop the scroll and make people message you. 250 tokens — 100% coverage of your niche every day.",
       "ai_studio_desc_plus": "Elite AI stack without censorship or delays. Priority access to the most powerful 2026 models. 500 tokens a month — build a content empire on autopilot.",
@@ -1151,6 +1155,8 @@
       "buy_pro_btn": "UPGRADE TO PRO",
       "buy_pro_plus_btn": "BECOME PRO+ LEADER",
       "upgrade_to_pro_plus_btn": "UPGRADE TO PRO+",
+      "processing_stripe": "SECURE GATEWAY ACTIVE",
+      "redirecting_to_bank": "REDIRECTING TO SECURED BANK PAGE",
       "initialize_studio": "START VIRAL MACHINE",
       "content_factory_label": "CAPITAL FACTORY",
       "content_factory_desc_pro": "Collect profit from 9 levels of your structure.",
@@ -1180,10 +1186,31 @@
       "help_title": "Need Help?",
       "help_desc": "Contact our support node for assistance with activation.",
       "pending_review": "Pending Review",
+      "hash_help": "Copy Transaction Hash (TxID) from your wallet after confirmation.",
       "steps": {
         "copy_address": "Copy Address",
         "paste_hash": "Paste Hash"
-      }
+      },
+      "benefits_pro": [
+        "250 Powerful AI Tokens",
+        "Income from 9 network levels",
+        "Viral Studio Access",
+        "Viral Hook Engineer",
+        "2026 Trend Hunter",
+        "Academy Knowledge Base",
+        "30-Day License",
+        "CMO Marketing Audit"
+      ],
+      "benefits_pro_plus": [
+        "500 Elite AI Tokens",
+        "Full depth income (20 levels)",
+        "OmniSync: 5 Channels + Social",
+        "Priority Node Access",
+        "LIFETIME ACCESS — NO SUBSCRIPTION",
+        "All Premium AI Models",
+        "Multi-Platform Dominance",
+        "VIP Scaling Strategies"
+      ]
     },
     "status": {
       "verifying": "Verifying...",
@@ -1214,15 +1241,13 @@
       "a6": "PRO partners consistently grow their networks 5-10x faster using only the Viral Studio. Add the Growth Intelligence tools and OMNI-Sync publishing — and PRO+ partners report 100x faster team scaling compared to free members.",
       "q7": "Can I upgrade from PRO to PRO+ later?",
       "a7": "Yes. You can upgrade at any time from the app. Your current PRO period is credited towards the PRO+ upgrade price. Upgrading sooner means more passive income while the price is still at the current level.",
-      "view_faq_center": "OPEN FULL FAQ CENTER"
+      "view_faq_center": "OPEN FULL FAQ CENTER",
+      "badge": "SUPPORT",
+      "title": "KNOWLEDGE BASE",
+      "desc": "Everything you need to know about PRO status."
     },
     "alerts": {
       "expired": "Payment window expired. Please try again."
-    },
-    "subscription": {
-      "upgrade": {
-        "hash_help": "Copy the Transaction Hash (TxID) from your wallet after the transaction is confirmed."
-      }
     }
   }
 }

@@ -6,7 +6,7 @@ interface NotificationState {
         title: string;
         message: string;
         icon?: ReactNode;
-        type?: 'success' | 'info' | 'warning';
+        type?: 'success' | 'info' | 'warning' | 'error';
     } | null;
     showNotification: (notification: NotificationState['notification']) => void;
     hideNotification: () => void;

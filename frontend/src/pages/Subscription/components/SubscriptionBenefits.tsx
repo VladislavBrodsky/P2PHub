@@ -104,7 +104,7 @@ export const SubscriptionBenefits = React.memo(({
                     </div>
                     <div className="grid grid-cols-1 gap-2.5">
                         {(() => {
-                            const benefitsArr = t(selectedPlan === 'PRO' ? 'subscription.upgrade.benefits_pro' : 'subscription.upgrade.benefits_pro_plus', { returnObjects: true });
+                            const benefitsArr = t(selectedPlan === 'PRO' ? 'pro:subscription.upgrade.benefits_pro' : 'pro:subscription.upgrade.benefits_pro_plus', { returnObjects: true });
                             const benefitsList = Array.isArray(benefitsArr) ? benefitsArr : [];
                             return benefitsList.map((b: string, i: number) => (
                                 <div key={i} className="flex items-center gap-3">
