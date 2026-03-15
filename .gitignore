@@ -66,3 +66,20 @@ frontend/dist_backup_*/
 frontend/build.log
 backend/p2p_config.env
 
+# Project specific ignores
+quarantine/
+backup/
+*.txt
+*.json
+!package.json
+!package-lock.json
+!composer.json
+!backend/alembic.ini
+!frontend/tsconfig.json
+!*.md
+!frontend/public/**/*.json
+!frontend/src/assets/**/*.json
+!backend/app/locales/**/*.json
+!frontend/src/locales/**/*.json
+!frontend/public/locales/**/*.json
+
