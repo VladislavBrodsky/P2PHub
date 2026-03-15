@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, lazy, Suspense } from 'react';
+import { useState, useMemo, useEffect, lazy, Suspense, useRef, memo } from 'react';
 import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAllAchievements, getAllMilestones, Achievement } from '../../data/earnData';
@@ -20,7 +20,7 @@ const CHAPTER_TIERS = [
     { title: 'milestones.tier_5', range: [51, 100], icon: <Milestone className="w-3 h-3" /> },
 ];
 
-export const MilestonePath = () => {
+export const MilestonePath = memo(() => {
     const { t } = useTranslation(['social', 'common']);
     const { user } = useUser();
     const { selection } = useHaptic();
@@ -504,4 +504,4 @@ export const MilestonePath = () => {
             )}
         </motion.section>
     );
-};
+});

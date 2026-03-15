@@ -214,14 +214,14 @@ const CentralLogo = memo(() => {
                             ease: "easeInOut"
                         }}
                         src={logoSrc}
-                        alt="ONEX Logo"
+                        alt="Partner Center"
                         width="80"
                         height="80"
                         loading="eager"
                         className="relative z-20 w-20 h-20 object-contain drop-shadow-2xl"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = '/images/onex/welcome.png';
+                            target.src = '/images/logo.png';
                         }}
                     />
                 )}

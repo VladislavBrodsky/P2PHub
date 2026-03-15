@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import { Task } from '../../data/earnData';
@@ -21,7 +21,7 @@ interface TaskCardProps {
     onClaim?: () => void | Promise<void>;
 }
 
-export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak = 0, countdown, isPro, isProPlus, onClick, onClaim }: TaskCardProps) => {
+export const TaskCard = memo(({ task, status, progress, userReferrals, checkinStreak = 0, countdown, isPro, isProPlus, onClick, onClaim }: TaskCardProps) => {
     const { t } = useTranslation(['social', 'common']);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isClaiming, setIsClaiming] = useState(false);
@@ -239,4 +239,4 @@ export const TaskCard = ({ task, status, progress, userReferrals, checkinStreak 
             </motion.div>
         </motion.div>
     );
-};
+});

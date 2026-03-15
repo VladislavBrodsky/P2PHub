@@ -1,13 +1,14 @@
 import { Share2, QrCode } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { memo } from 'react';
 
 interface ReferralWidgetProps {
     onInvite: () => void;
     onShowQR: () => void;
 }
 
-export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
+export const ReferralWidget = memo(({ onInvite, onShowQR }: ReferralWidgetProps) => {
     const { t } = useTranslation(['social', 'common']);
 
     return (
@@ -45,5 +46,5 @@ export const ReferralWidget = ({ onInvite, onShowQR }: ReferralWidgetProps) => {
             </button>
         </div>
     );
-};
+});
 

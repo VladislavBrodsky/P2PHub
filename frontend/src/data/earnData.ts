@@ -32,13 +32,13 @@ export const EARN_TASKS: Task[] = [
     // Level 1: Onboarding
     {
         id: 'telegram_bot',
-        title: 'Open Pintopay Bot',
+        title: 'Open Official Bot',
         description: 'Start your journey with our official bot.',
         platform: 'telegram',
         icon: Send,
         reward: 25, // PRO: 125
         type: 'social',
-        link: 'https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3',
+        link: 'https://t.me/partnercenterbot?start=p_6977c29c66ed9faa401342f3',
         minLevel: 1
     },
     {
@@ -60,7 +60,7 @@ export const EARN_TASKS: Task[] = [
         icon: MessageCircle,
         reward: 25, // PRO: 125
         type: 'social',
-        link: 'https://t.me/pintopayworld',
+        link: 'https://t.me/partnercenterworld',
         minLevel: 1
     },
     {
@@ -71,7 +71,7 @@ export const EARN_TASKS: Task[] = [
         icon: Users,
         reward: 25, // PRO: 125
         type: 'social',
-        link: 'https://t.me/pintopaygrowth',
+        link: 'https://t.me/partnercentergrowth',
         minLevel: 1
     },
 

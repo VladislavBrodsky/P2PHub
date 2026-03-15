@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 export type CardVariant = 'virtual' | 'physical' | 'platinum';
 
-interface PintopayCardProps {
+interface PartnerCardProps {
     variant?: CardVariant;
 }
 
-export const PintopayCard = ({
+export const PartnerCard = ({
     variant = 'virtual',
-}: PintopayCardProps) => {
+}: PartnerCardProps) => {
     const [isFlipped, setIsFlipped] = useState(false);
     const { t } = useTranslation(['cards', 'common']);
 
@@ -124,7 +124,7 @@ export const PintopayCard = ({
                         {/* Logo Text */}
                         <div className="absolute bottom-6 left-6 z-20 transition-transform duration-300 group-hover:scale-110 drop-shadow-xl">
                             <span className={`text-xl font-bold tracking-tighter ${variant === 'platinum' ? 'text-slate-900' : 'text-white'}`}>
-                                Pintopay
+                                Partner Center
                             </span>
                         </div>
 

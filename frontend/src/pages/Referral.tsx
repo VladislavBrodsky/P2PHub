@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, lazy } from 'react';
+import { useState, useEffect, useMemo, lazy, useCallback, memo } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { useHaptic } from '../hooks/useHaptic';
 import { EarnHeader } from '../components/Earn/EarnHeader';
@@ -67,7 +67,7 @@ export default function ReferralPage() {
     const currentLevel = user?.level || 1;
     const referrals = user?.total_network_size || 0;
     const referralCode = user?.referral_code || 'ref_dev';
-    const referralLink = `https://t.me/pintopay_probot?start=${referralCode}`;
+    const referralLink = `https://t.me/partnercenterbot?start=${referralCode}`;
 
     // Translate tasks dynamically
     const localizedTasks = useMemo(() => {
@@ -134,7 +134,7 @@ export default function ReferralPage() {
         });
     }, [tick]);
 
-    const handleClaim = async (task: Task) => {
+    const handleClaim = useCallback(async (task: Task) => {
         if (completedTaskIds.includes(task.id)) return;
         selection();
         notification('success');
@@ -148,13 +148,17 @@ export default function ReferralPage() {
             const updatedData = response.data;
 
             // Update local state for task visibility immediately
-            const newCompleted = [...completedTaskIds, task.id];
-            setCompletedTaskIds(newCompleted);
-            localStorage.setItem('p2p_completed_tasks', JSON.stringify(newCompleted));
+            setCompletedTaskIds(prev => {
+                const updated = [...prev, task.id];
+                localStorage.setItem('p2p_completed_tasks', JSON.stringify(updated));
+                return updated;
+            });
 
-            const newClaimable = claimableTasks.filter(id => id !== task.id);
-            setClaimableTasks(newClaimable);
-            localStorage.setItem('p2p_claimable_tasks', JSON.stringify(newClaimable));
+            setClaimableTasks(prev => {
+                const updated = prev.filter(id => id !== task.id);
+                localStorage.setItem('p2p_claimable_tasks', JSON.stringify(updated));
+                return updated;
+            });
 
             // Feedback effects
             setConfettiActive(true);
@@ -184,10 +188,10 @@ export default function ReferralPage() {
                 type: 'warning'
             });
         }
-    };
+    }, [completedTaskIds, selection, notification, currentLevel, updateUser, t, showNotification]);
 
     // #comment: Helper to handle task start API call
-    const handleTaskStart = async (task: Task) => {
+    const handleTaskStart = useCallback(async (task: Task) => {
         try {
             await apiClient.post(`/api/partner/tasks/${task.id}/start`);
             // #comment: Force refresh user to get updated active_tasks state immediately
@@ -196,9 +200,9 @@ export default function ReferralPage() {
         } catch (e) {
             console.error("Failed to start task", e);
         }
-    };
+    }, [refreshUser]);
 
-    const handleTaskClick = async (task: Task) => {
+    const handleTaskClick = useCallback(async (task: Task) => {
         if (task.link) {
             selection();
 
@@ -255,17 +259,33 @@ export default function ReferralPage() {
                 setShowShareModal(true);
             }
         }
-    };
+    }, [selection, navigateTo, user?.active_tasks, completedTaskIds, handleTaskStart, verifyingTasks, claimableTasks]);
 
     const handleCopyLink = () => {
         selection();
         notification('success');
         navigator.clipboard.writeText(referralLink);
+        showNotification({
+            title: t('common:copied'),
+            message: t('social:referral.link_copied'),
+            type: 'success'
+        });
     };
+
+    const toggleShareModal = useCallback((val: boolean) => setShowShareModal(val), []);
+    const toggleQRModal = useCallback((val: boolean) => setShowQR(val), []);
+
+    const handleLevelUpClose = useCallback(() => {
+        setLevelUp(false);
+        setConfettiActive(false);
+    }, []);
+
+    const handleShowBrief = useCallback(() => setShowBriefModal(true), []);
+    const handleCloseBrief = useCallback(() => setShowBriefModal(false), []);
 
     const handleShareTelegram = () => {
         selection();
-        const botUsername = 'pintopay_probot';
+        const botUsername = 'partnercenterbot';
         const shareLink = `https://t.me/${botUsername}?start=${referralCode}`;
         const shareText = t('referral.viral.share_template', { link: shareLink });
 
@@ -286,7 +306,7 @@ export default function ReferralPage() {
         selection();
         const shareBody = `${VIRAL_TEXT}\n\n${referralLink}`;
         const result = await shareUniversal({
-            title: 'Pintopay Partner Hub',
+            title: 'Partner Center Hub',
             text: shareBody,
             url: referralLink,
         });
@@ -489,7 +509,7 @@ export default function ReferralPage() {
                                         onClick={() => {
                                             const link = document.createElement('a');
                                             link.href = `${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
-                                            link.download = 'Pintopay_Invite.png';
+                                            link.download = 'PartnerCenter_Invite.png';
                                             link.click();
                                         }}
                                     >
@@ -510,10 +530,7 @@ export default function ReferralPage() {
                         <LevelUpModal
                             isOpen={levelUp}
                             level={reachedLevel}
-                            onClose={() => {
-                                setLevelUp(false);
-                                setConfettiActive(false);
-                            }}
+                            onClose={handleLevelUpClose}
                         />
                     </LazyLoader>
                 )}
@@ -529,7 +546,7 @@ export default function ReferralPage() {
 
             <div className="flex justify-center mb-6">
                 <button
-                    onClick={() => setShowBriefModal(true)}
+                    onClick={handleShowBrief}
                     className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
                 >
                     <FileText className="w-3 h-3" />
@@ -537,7 +554,7 @@ export default function ReferralPage() {
                 </button>
             </div>
 
-            <BriefTermsModal isOpen={showBriefModal} onClose={() => setShowBriefModal(false)} />
+            <BriefTermsModal isOpen={showBriefModal} onClose={handleCloseBrief} />
 
             {/* Content Stack - Optimized for stability and z-index safety */}
             <div className="flex flex-col gap-3 relative w-full">
@@ -546,7 +563,7 @@ export default function ReferralPage() {
                 </div>
 
                 <div className="relative z-10 mt-0">
-                    <ReferralWidget onInvite={() => setShowShareModal(true)} onShowQR={() => setShowQR(true)} />
+                    <ReferralWidget onInvite={() => toggleShareModal(true)} onShowQR={() => toggleQRModal(true)} />
                 </div>
 
                 <div className="relative">

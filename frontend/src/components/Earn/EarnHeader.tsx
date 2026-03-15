@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
+import { memo } from 'react';
 import { Trophy, Zap, Users, TrendingUp } from 'lucide-react';
 import { getRank, getXPProgress } from '../../utils/ranking';
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from 'react-i18next';
 
-export const EarnHeader = () => {
+export const EarnHeader = memo(() => {
     const { t } = useTranslation(['social', 'common']);
     const { user } = useUser();
 
@@ -243,4 +244,4 @@ export const EarnHeader = () => {
             </div>
         </section>
     );
-};
+});

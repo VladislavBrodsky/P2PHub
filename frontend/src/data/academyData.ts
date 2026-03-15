@@ -82,7 +82,7 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     { id: 56, title: "Asset Management Elite", description: "High-volume content storage.", icon: Layers, category: 'ai', isPro: true, rewardXp: 6400, xpCost: 8000 },
     { id: 57, title: "Deep Growth Cycles", description: "Recursive neural marketing.", icon: InfinityIcon, category: 'ai', isPro: true, rewardXp: 6600, xpCost: 8500 },
     { id: 58, title: "Community Bot Logic", description: "Managing discord and TG via AI.", icon: MessageCircle, category: 'ai', isPro: true, rewardXp: 6800, xpCost: 9000 },
-    { id: 59, title: "P2PHub Algorithm Sync", description: "Aligning with the platform's engine.", icon: Zap, category: 'ai', isPro: true, rewardXp: 7000, xpCost: 9500 },
+    { id: 59, title: "Partner Center Algorithm Sync", description: "Aligning with the platform's engine.", icon: Zap, category: 'ai', isPro: true, rewardXp: 7000, xpCost: 9500 },
     { id: 60, title: "AI DOMINATION FINAL", description: "Review and certification of level 41-60.", icon: Award, category: 'ai', isPro: true, rewardXp: 7500, xpCost: 10000 },
 
     // --- PHASE 4: SALES CONVERSION (61-80) ---
@@ -118,7 +118,7 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     { id: 88, title: "Network Event Hosting", description: "Exclusive summits for your L1 whales.", icon: Video, category: 'elite', isPro: true, rewardXp: 27000, xpCost: 70000 },
     { id: 89, title: "Web3 Philanthropy", description: "Social impact for system branding.", icon: Heart, category: 'elite', isPro: true, rewardXp: 28000, xpCost: 75000 },
     { id: 90, title: "Sovereign Mindset", description: "Post-fiat existence strategy.", icon: Shield, category: 'elite', isPro: true, rewardXp: 29000, xpCost: 80000 },
-    { id: 91, title: "Ecosystem Governance", description: "Voting on Pintopay partner roadmap.", icon: Key, category: 'elite', isPro: true, rewardXp: 30000, xpCost: 85000 },
+    { id: 91, title: "Ecosystem Governance", description: "Voting on Partner Center partner roadmap.", icon: Key, category: 'elite', isPro: true, rewardXp: 30000, xpCost: 85000 },
     { id: 92, title: "Sub-Brand Development", description: "Creating your own partner identities.", icon: Star, category: 'elite', isPro: true, rewardXp: 31000, xpCost: 90000 },
     { id: 93, title: "Inter-Generation Wealth", description: "Legacy fund planning via P2P.", icon: Gem, category: 'elite', isPro: true, rewardXp: 32000, xpCost: 95000 },
     { id: 94, title: "Black-Swan Mitigation", description: "Protecting your network from market shifts.", icon: Shield, category: 'elite', isPro: true, rewardXp: 33000, xpCost: 100000 },
@@ -127,7 +127,7 @@ export const ACADEMY_STAGES: AcademyStage[] = [
     { id: 97, title: "Platinum Lifestyle Ops", description: "Living the dream you promote.", icon: Crown, category: 'elite', isPro: true, rewardXp: 36000, xpCost: 130000 },
     { id: 98, title: "Direct Hub Integration", description: "Connecting your network to core APIs.", icon: Cpu, category: 'elite', isPro: true, rewardXp: 37000, xpCost: 140000 },
     { id: 99, title: "Final Boss Challenge", description: "The ultimate network verification.", icon: Flag, category: 'elite', isPro: true, rewardXp: 40000, xpCost: 150000 },
-    { id: 100, title: "FANOCRACY ASCENSION", description: "The apex of the P2PHub ecosystem.", icon: InfinityIcon, category: 'elite', isPro: true, rewardXp: 100000, xpCost: 200000 },
+    { id: 100, title: "FANOCRACY ASCENSION", description: "The apex of the Partner Center ecosystem.", icon: InfinityIcon, category: 'elite', isPro: true, rewardXp: 100000, xpCost: 200000 },
 ];
 
 export const getCategoryColor = (category: AcademyStage['category']) => {

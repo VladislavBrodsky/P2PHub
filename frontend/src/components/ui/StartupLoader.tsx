@@ -8,7 +8,7 @@ interface StartupLoaderProps {
     statusText?: string;
 }
 
-export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing P2P Hub' }) => {
+export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusText = 'Initializing Partner Center' }) => {
     // Use the relative path directly to ensure it loads from the same origin (fastest)
     const logoSrc = LOGO_DATA;
     const [displayProgress, setDisplayProgress] = useState(0);
@@ -72,7 +72,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         {/* Logo - Pulsing with "vibe" */}
                         <img
                             src={logoSrc}
-                            alt="Pintopay"
+                            alt="Partner Center"
                             loading="eager"
                             className="relative w-12 h-12 object-contain z-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.15)] animate-bounce-slow"
                         />
@@ -95,7 +95,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
                         <div className="relative bg-blue-500/10 backdrop-blur-sm border border-blue-500/10 rounded-lg px-5 py-1.5 overflow-hidden min-w-[140px] flex justify-center">
                             <div className="relative z-10">
                                 <p className="text-text-primary font-bold tracking-[0.2em] uppercase text-label opacity-80">
-                                    {statusText.toUpperCase() === 'INITIALIZING P2P HUB' ? 'USER VERIFIED' : statusText.toUpperCase()}
+                                    {statusText.toUpperCase() === 'INITIALIZING PARTNER CENTER' ? 'USER VERIFIED' : statusText.toUpperCase()}
                                 </p>
                             </div>
                             {/* Scanning Light Beam */}

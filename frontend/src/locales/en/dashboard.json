@@ -15,7 +15,7 @@
       "title_2": "Through Technology"
     }
   },
-  "hero_desc": "Traditional finance is slow, closed, and failing. <1>Pintopay</1> is the bridge to a borderless era where you earn from the flow of world money.",
+  "hero_desc": "Traditional finance is slow, closed, and failing. <1>Partner Center</1> is the bridge to a borderless era where you earn from the flow of world money.",
   "movement_active": "Community active",
   "cta_title": "Become a partner\nand lead the change",
   "cta_desc": "Don't just watch the future unfold. Own a piece of the new global financial infrastructure.",
@@ -26,14 +26,14 @@
     "recent_join": "<0>+{{count}} new partners</0> joined Partner Center in the past 60 minutes"
   },
   "ticker": [
-    "EARN PINTOPAY TOKENS",
+    "EARN REWARDS",
     "GLOBAL PAYMENTS",
     "INSTANT WITHDRAWALS",
     "BECOME A PARTNER",
     "$1+ PER MIN 24/7"
   ],
   "onboarding": {
-    "welcome": "Welcome to Pintopay Partner",
+    "welcome": "Welcome to Partner Center",
     "early": "You're among the first!",
     "join": "Join the network",
     "start": "Initialize Your Path",
@@ -101,11 +101,11 @@
       },
       "4": {
         "title": "GLOBAL STANDARD",
-        "subtitle": "Pintopay QR",
+        "subtitle": "Global Standard",
         "desc": "Instant, global P2P settlements. The ultimate infrastructure for your digital business.",
         "status": "LEADER",
         "back_title": "GLOBAL P2P NETWORK",
-        "back_desc": "Pintopay leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial community."
+        "back_desc": "Partner Center leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial community."
       }
     }
   },

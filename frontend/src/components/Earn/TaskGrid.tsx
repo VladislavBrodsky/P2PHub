@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Task } from '../../data/earnData';
 import { TaskCard } from './TaskCard';
 import { CheckCircle2 } from 'lucide-react';
@@ -21,7 +21,7 @@ interface TaskGridProps {
     onClaim: (task: Task) => void;
 }
 
-export const TaskGrid = ({
+export const TaskGrid = memo(({
     tasks,
     completedTaskIds,
     verifyingTasks,
@@ -148,4 +148,4 @@ export const TaskGrid = ({
             </div>
         </div>
     );
-};
+});
