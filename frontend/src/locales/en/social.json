@@ -204,7 +204,7 @@
     },
     "boost": "Tasks Boost",
     "ambassador_hub": {
-      "title": "Partner Hub",
+      "title": "Pintopay Hub",
       "desc": "Priority resources and system updates"
     },
     "invite_1_friend": {
@@ -249,7 +249,7 @@
     },
     "add_to_home_screen": {
       "title": "Pin to Home Screen",
-      "desc": "Add 'My Partner Center' to your phone Home Screen for 1-tap access"
+      "desc": "Add 'My Pintopay' to your phone Home Screen for 1-tap access"
     },
     "network_catalyst": {
       "title": "Network Catalyst",

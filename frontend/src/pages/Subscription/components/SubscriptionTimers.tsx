@@ -21,13 +21,13 @@ export const FomoTimer = React.memo(() => {
     }, [tick]);
 
     return (
-        <div className="relative z-10 flex items-center gap-1 font-mono shrink-0 bg-black/5 p-1 rounded-lg">
+        <div className="flex items-center gap-1.5 shrink-0">
             {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
                 <React.Fragment key={i}>
-                    <div className="bg-black text-yellow-400 rounded-md px-1.5 py-0.5 text-label font-bold min-w-[28px] text-center shadow-lg">
+                    <div className="bg-black/90 text-yellow-400 rounded-lg px-2 py-1 text-label font-black min-w-[32px] text-center shadow-lg border border-yellow-400/20 tabular-nums">
                         {val.toString().padStart(2, '0')}
                     </div>
-                    {i < 2 && <span className="text-label font-bold text-black/80 animate-pulse">:</span>}
+                    {i < 2 && <span className="text-label font-black text-black/40 animate-pulse">:</span>}
                 </React.Fragment>
             ))}
         </div>
@@ -69,28 +69,29 @@ export const PaymentSessionTimer = React.memo(({ expiresAt, onExpire }: PaymentS
     if (!formattedTime) return null;
 
     return (
-        <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-white/10">
-            <Clock size={10} className="text-blue-600 dark:text-blue-400" />
-            <span className="text-label font-bold font-mono text-blue-600 dark:text-blue-400">{formattedTime}</span>
+        <div className="flex items-center gap-2 bg-blue-600/10 dark:bg-blue-500/5 px-3 py-1 rounded-full border border-blue-500/20 shadow-sm">
+            <Clock size={12} className="text-blue-600 dark:text-blue-400 animate-pulse" />
+            <span className="text-caption font-black font-mono text-blue-600 dark:text-blue-400 tabular-nums">{formattedTime}</span>
         </div>
     );
 });
 
 PaymentSessionTimer.displayName = 'PaymentSessionTimer';
+
 // --- RE-ADDED STICKY HEADER COMPONENT ---
 export const StickyFomoHeader = React.memo(({ t }: { t: any }) => (
-    <div className="mb-4 mt-1 px-1 sticky top-[72px] z-40">
-        <div className="rounded-xl overflow-hidden px-2.5 py-1.5 bg-yellow-400/90 backdrop-blur-md border border-yellow-500/30 flex flex-row items-center justify-between gap-2 relative group shadow-lg">
-            <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-yellow-300 to-yellow-500 opacity-100" />
-            <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
+    <div className="mb-6 mt-2 px-1 sticky top-[80px] z-40">
+        <div className="rounded-[1.5rem] overflow-hidden px-4 py-3 bg-yellow-400 dark:bg-yellow-500 border-2 border-yellow-300 dark:border-yellow-400/50 flex flex-row items-center justify-between gap-4 relative group shadow-[0_20px_40px_-10px_rgba(234,179,8,0.3)]">
+            <div className="absolute inset-0 bg-linear-to-r from-yellow-400 via-white/20 to-yellow-500 opacity-50" />
+            <div className="scanning-glow absolute inset-0 opacity-10 pointer-events-none" />
 
-            <div className="relative z-10 flex items-center gap-2 min-w-0">
-                <div className="w-6 h-6 rounded-md bg-black/10 flex items-center justify-center text-black shrink-0">
-                    <Clock size={12} className="animate-pulse" />
+            <div className="relative z-10 flex items-center gap-3 min-w-0">
+                <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
+                    <Clock size={16} strokeWidth={3} className="animate-pulse" />
                 </div>
                 <div className="flex flex-col min-w-0">
-                    <span className="text-[8px] font-bold text-black/60 uppercase tracking-widest leading-none truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                    <span className="text-[10px] font-black text-black uppercase tracking-tighter leading-normal truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                    <span className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] leading-none mb-1 truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                    <span className="text-caption font-black text-black uppercase tracking-widest leading-none truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                 </div>
             </div>
 

@@ -23,7 +23,7 @@
     "global_partners": "Global Partners",
     "volume_shifted": "Volume shifted",
     "countries_active": "countries active",
-    "recent_join": "<0>+{{count}} new partners</0> joined Partner Center in the past 60 minutes"
+    "recent_join": "<0>+{{count}} new partners</0> joined Pintopay in the past 60 minutes"
   },
   "ticker": [
     "EARN REWARDS",
@@ -105,7 +105,7 @@
         "desc": "Instant, global P2P settlements. The ultimate infrastructure for your digital business.",
         "status": "LEADER",
         "back_title": "GLOBAL P2P NETWORK",
-        "back_desc": "Partner Center leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial community."
+        "back_desc": "Pintopay leverages the power of decentralized networks for instant, borderless settlements. By participating in the ecosystem, partners contribute to a faster and more inclusive global financial community."
       }
     }
   },

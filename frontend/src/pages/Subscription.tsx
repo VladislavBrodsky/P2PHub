@@ -6,7 +6,8 @@ import {
     Loader2, Sparkles, Zap, ChevronDown, Trophy, Users,
     HelpCircle, Clock, Check, Globe, Shield, Share2, ChevronLeft,
     Flame, Brain, Rocket, Network, Star, Lock, Infinity as InfinityIcon, Target, TrendingUp, Bot,
-    Send, BarChart2, Radio, X, Fingerprint, AlertTriangle, RefreshCw
+    Send, BarChart2, Radio, X, Fingerprint, AlertTriangle, RefreshCw,
+    ArrowRight
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useTonConnectUI, TonConnectButton } from '@tonconnect/ui-react';
@@ -425,11 +426,11 @@ export default function SubscriptionPage() {
                                 </div>
                             </motion.div>
 
-                            <h1 className="text-heading font-bold mb-1.5 tracking-tight text-slate-900 dark:text-white leading-tight text-center max-w-[240px]">
+                            <h1 className="text-[32px] sm:text-[42px] font-black mb-2 tracking-tighter text-slate-900 dark:text-white leading-[1.1] text-center max-w-[280px]">
                                 {(user?.subscription_plan?.includes('PLUS')) ? t('pro:subscription.pro_active.title_plus') : t('pro:subscription.pro_active.title')}
                             </h1>
 
-                            <p className="text-slate-500 dark:text-slate-400 text-label font-medium max-w-[240px] mx-auto leading-relaxed mb-6">
+                            <p className="text-slate-500 dark:text-slate-400 text-body font-medium max-w-[260px] mx-auto leading-relaxed mb-8">
                                 {(user?.subscription_plan?.includes('PLUS')) ? t('pro:subscription.pro_active.desc_plus') : t('pro:subscription.pro_active.desc')}
                             </p>
 
@@ -497,16 +498,15 @@ export default function SubscriptionPage() {
                         <ChevronLeft size={16} />
                     </button>
                     <div className="flex flex-col px-3 pb-24 pt-(--header-total-offset,138px) max-w-lg mx-auto overflow-x-hidden">
-                        <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 bg-white/80 dark:bg-bg-app/80 backdrop-blur-md px-4">
-                            <div className="h-10" />
+                        <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 px-4">
+                            <div className="h-4" />
                         </div>
 
                         <div className="relative overflow-hidden rounded-xl bg-white dark:bg-bg-app border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
                             <div className="relative z-10 w-full p-4">
-                                {/* Background Depth Orbs */}
-                                <div className="absolute top-0 -left-20 w-64 h-64 bg-indigo-500/10 blur-[100px] pointer-events-none" />
-                                <div className="absolute bottom-0 -right-20 w-64 h-64 bg-fuchsia-500/10 blur-[100px] pointer-events-none" />
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.05)_0%,transparent_70%)] pointer-events-none" />
+                                {/* Ambient Background Glows - Mirroring Dashboard */}
+                                <div className="absolute top-0 left-1/4 w-[150%] h-[150%] bg-blue-500/5 dark:bg-blue-600/10 blur-[120px] rounded-full animate-pulse pointer-events-none" />
+                                <div className="absolute bottom-1/4 right-0 w-full h-full bg-indigo-500/5 dark:bg-indigo-600/10 blur-[100px] rounded-full animate-pulse pointer-events-none" />
 
 
 
@@ -788,6 +788,13 @@ export default function SubscriptionPage() {
                                 <div id="currency-selector-anchor" className="absolute -top-20" />
                             </div>
 
+                            <SectionHeader
+                                badge={t('pro:subscription.benefits.badge')}
+                                title={t('pro:subscription.benefits.title')}
+                                description={t('pro:subscription.benefits.desc')}
+                                className="mb-8"
+                            />
+
                             {/* ── BENEFITS SECTION ── */}
                             <SubscriptionBenefits
                                 selectedPlan={selectedPlan}
@@ -826,24 +833,31 @@ export default function SubscriptionPage() {
 
                             {/* ── SOCIAL PROOF STATS ──────────────────────────────────────── */}
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12 px-1">
-                                <div className="grid grid-cols-3 gap-1.5">
+                                <div className="grid grid-cols-3 gap-3">
                                     {[
-                                        { value: '5K+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500 dark:text-blue-400', bg: 'bg-blue-500/10' },
-                                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
-                                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500 dark:text-amber-400', bg: 'bg-amber-500/10' },
+                                        { value: '5K+', label: t('subscription.stats.partners'), icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+                                        { value: '×100', label: t('subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+                                        { value: '24/7', label: t('subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
                                     ].map((stat) => (
-                                        <div key={stat.label} className="p-2 rounded-xl bg-slate-50/50 dark:bg-slate-900/60 border border-slate-200/50 dark:border-white/10 backdrop-blur-xl flex flex-col items-center text-center gap-1 group transition-all duration-300 hover:scale-[1.03] shadow-sm">
-                                            <div className={`w-7 h-7 rounded-lg shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:scale-110 transition-transform`}>
-                                                <stat.icon size={12} strokeWidth={2.5} />
+                                        <div key={stat.label} className="p-4 rounded-[1.5rem] bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-2 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
+                                            <div className={`w-9 h-9 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:rotate-12 transition-transform`}>
+                                                <stat.icon size={16} strokeWidth={2.5} />
                                             </div>
-                                            <div className="flex flex-col items-center">
-                                                <div className={`text-caption font-bold tabular-nums tracking-tighter ${stat.color} opacity-90 leading-none`}>{stat.value}</div>
-                                                <div className="text-[7px] font-black text-slate-500 dark:text-white/40 uppercase tracking-widest leading-tight mt-0.5">{stat.label}</div>
+                                            <div className="flex flex-col items-center gap-0.5">
+                                                <div className={`text-button font-black tabular-nums tracking-tighter ${stat.color} leading-none`}>{stat.value}</div>
+                                                <div className="text-[8px] font-black text-slate-400 dark:text-white/20 uppercase tracking-widest leading-tight">{stat.label}</div>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </motion.div>
+
+                            <SectionHeader
+                                badge={t('pro:subscription.faq.badge', 'SUPPORT')}
+                                title={t('pro:subscription.faq.title')}
+                                description={t('pro:subscription.faq.desc')}
+                                className="mb-8"
+                            />
 
                             {/* ── FAQ SECTION ── */}
                             <SubscriptionFAQ

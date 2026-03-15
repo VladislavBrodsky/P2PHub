@@ -45,7 +45,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: '4',
         title: "NO LIMITS: How to Build Borderless Wealth in a Globalized Economy",
-        excerpt: "How Partner Center is bypassing geographic restrictions to provide equal access to global markets for everyone.",
+        excerpt: "How Pintopay is bypassing geographic restrictions to provide equal access to global markets for everyone.",
         category: "Freedom",
         date: "Feb 4, 2026",
         author: "Marcus Vance",
@@ -90,7 +90,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: '9',
         title: "Elite Velocity: Mastering the $1/Minute QR Revolution",
-        excerpt: "Mastering the Partner Center system to achieve maximum settlement speed and network growth.",
+        excerpt: "Mastering the Pintopay system to achieve maximum settlement speed and network growth.",
         category: "Elite Strategy",
         date: "Jan 30, 2026",
         author: "Marcus Vance",
@@ -99,7 +99,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: '10',
         title: "The Unbanked Opportunity: Bridging the Divide for 4 Billion People",
-        excerpt: "Why half the world is still unbanked and how Partner Center is building the bridge to the global financial system.",
+        excerpt: "Why half the world is still unbanked and how Pintopay is building the bridge to the global financial system.",
         category: "Global Impact",
         date: "Jan 29, 2026",
         author: "Sarah Chen",
@@ -135,7 +135,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: '14',
         title: "Crypto Meets Convenience: Apple & Google Pay Finally Evolved",
-        excerpt: "Connect your Partner Center card to your mobile wallet and spend your crypto assets as fiat anywhere in the world.",
+        excerpt: "Connect your Pintopay card to your mobile wallet and spend your crypto assets as fiat anywhere in the world.",
         category: "Payments",
         date: "Jan 25, 2026",
         author: "Alex Rivera",
@@ -153,7 +153,7 @@ export const blogPosts: BlogPost[] = [
     {
         id: '16',
         title: "The $100BN Opportunity: Why Being a Partner is the Ultimate Wealth Cheat Code",
-        excerpt: "Why being a Partner Center Partner is the ultimate ticket to the largest wealth redistribution in human history.",
+        excerpt: "Why being a Pintopay Partner is the ultimate ticket to the largest wealth redistribution in human history.",
         category: "Partnership",
         date: "Jan 23, 2026",
         author: "Sarah Chen",
@@ -179,7 +179,7 @@ export const blogPosts: BlogPost[] = [
     },
     {
         id: '19',
-        title: "Imperial Design: Building Your Sovereign Global Empire with Partner Center",
+        title: "Imperial Design: Building Your Sovereign Global Empire with Pintopay",
         excerpt: "Take control of your destiny by leveraging the ultimate bridge between traditional finance and the decentralized future.",
         category: "Vision",
         date: "Jan 20, 2026",

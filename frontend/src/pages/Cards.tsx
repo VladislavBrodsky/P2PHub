@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PartnerCard, CardVariant } from '../components/PartnerCard';
+import { PintopayCard, CardVariant } from '../components/PintopayCard';
 import { Apple, ChevronRight, CheckCircle2, Crown } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
 import { useTranslation } from 'react-i18next';
@@ -95,7 +95,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="w-full flex justify-center absolute inset-0"
                         >
-                            <PartnerCard variant={selectedTab} />
+                            <PintopayCard variant={selectedTab} />
                         </motion.div>
                     </AnimatePresence>
                 </div>
