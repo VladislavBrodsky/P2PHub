@@ -121,7 +121,15 @@ export const CommunityOrbit = memo(() => {
 
     return (
         <div className="relative flex h-[360px] sm:h-[400px] w-full items-center justify-center overflow-visible">
-            {/* #comment: Background is now unified with the rest of the page. Removed glows and patterns per user request. */}
+            {/* #comment: Ambient Background Glow - Provides the "Hub" feel without blocking interactions. */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-blue-500/5 blur-[100px] rounded-full animate-pulse" />
+            </div>
+
+            {/* Honeycomb Background Decoration (Replacing dot grid) */}
+            <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <div className="honeycomb-decor absolute inset-0 animate-soft-breath" />
+            </div>
 
             {/* Central Logic */}
             <CentralLogo />
@@ -224,7 +232,7 @@ const CentralLogo = memo(() => {
 
 const FractalProfits = memo(() => {
     const { lowPowerMode } = usePerformance();
-    const count = lowPowerMode ? 3 : 8; // Reduced from 4/12
+    const count = lowPowerMode ? 4 : 12;
 
     // #comment: Memoizing profit items ensures that animation targets (targetX, targetY) 
     // remain stable across renders, preventing the "stuck in center" glitch.
@@ -236,7 +244,7 @@ const FractalProfits = memo(() => {
                 : Math.floor(Math.random() * 55) + 5;
 
             const angle = (Math.random() * 360) * (Math.PI / 180);
-            const distance = 110 + Math.random() * 60; // Slightly tighter distance for better density
+            const distance = 120 + Math.random() * 70;
             const targetX = Math.cos(angle) * distance;
             const targetY = Math.sin(angle) * distance;
 
@@ -246,8 +254,8 @@ const FractalProfits = memo(() => {
                 amount,
                 targetX,
                 targetY,
-                duration: 6 + Math.random() * 6, // Faster transitions can feel smoother than slow ones that lag
-                delay: i * 1.2
+                duration: 8 + Math.random() * 8,
+                delay: i * 0.8
             };
         });
     }, [count]);
@@ -291,10 +299,11 @@ const FractalProfits = memo(() => {
     );
 });
 
-// #comment: OrbitingItem - Optimized to use CSS for the main rotation while keeping Framer Motion for the inner "bobbing".
+// #comment: OrbitingItem - Restoring the 'Lush' 56x56 icon size for a premium look.
 const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem & { isPlaceholder?: boolean }; index: number; total: number; isLoading?: boolean }) => {
     const [radius, setRadius] = useState(140);
 
+    // #comment: Geometry Logic - Restored original radii (110/140) for a more spacious feel.
     useEffect(() => {
         const updateRadius = () => {
             setRadius(window.innerWidth < 380 ? 110 : 140);
@@ -308,102 +317,92 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
     const angle = (index / total) * 360;
 
     return (
-        <div 
-            className="absolute z-5 animate-orbit-rotate"
+        <m.div
+            className="absolute z-5"
             style={{
-                width: radius * 2,
-                height: radius * 2,
-                top: `calc(50% - ${radius}px)`,
-                left: `calc(50% - ${radius}px)`,
-                '--orbit-duration': `${duration}s`,
+                width: 56,
+                height: 56,
                 willChange: 'transform'
-            } as React.CSSProperties}
+            }}
+            animate={{
+                x: [
+                    Math.cos((angle) * (Math.PI / 180)) * radius,
+                    Math.cos((angle + 360) * (Math.PI / 180)) * radius
+                ],
+                y: [
+                    Math.sin((angle) * (Math.PI / 180)) * radius,
+                    Math.sin((angle + 360) * (Math.PI / 180)) * radius
+                ],
+            }}
+            transition={{
+                duration,
+                repeat: Infinity,
+                ease: "linear"
+            }}
         >
-            <div
-                className="absolute"
-                style={{
-                    width: 56,
-                    height: 56,
-                    top: -28, // Center of width 56
-                    left: `calc(50% - 28px)`,
-                    transform: `rotate(${angle}deg) translateY(${radius}px) rotate(-${angle}deg)`,
-                    // Correction rotation to keep items upright while parent rotates
-                    // Wait, if I rotate the parent, children rotate with it.
-                    // To keep them upright, I need to counter-rotate.
-                    // But wait, the animate-orbit-rotate rotates the WHOLE container.
-                    // Let's use a different approach:
-                    // Only rotate the container, and counter-rotate the child.
+            <m.div
+                animate={{
+                    y: [-6, 6, -6],
+                    x: [-3, 3, -3],
+                    scale: isLoading ? [0.8, 0.9, 0.8] : [1, 1.05, 1],
                 }}
+                transition={{
+                    duration: 4 + Math.random() * 3,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.3
+                }}
+                className="h-full w-full"
             >
-                {/* Counter-rotate nested container to keep icons upright */}
-                <div 
-                    className="h-full w-full animate-orbit-rotate" 
-                    style={{ '--orbit-duration': `${duration}s`, animationDirection: 'reverse' } as React.CSSProperties}
-                >
-                    <m.div
-                        animate={{
-                            y: [-4, 4, -4], // Reduced movement range
-                            x: [-2, 2, -2],
-                            scale: isLoading ? [0.8, 0.9, 0.8] : [1, 1.03, 1], // Subtle scale
-                        }}
-                        transition={{
-                            duration: 5 + Math.random() * 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: index * 0.3
-                        }}
-                        className="h-full w-full"
-                    >
-                        {isLoading ? (
-                            <div className="h-full w-full rounded-full bg-slate-200/20 dark:bg-white/5 animate-pulse border border-white/10" />
-                        ) : item.type === 'avatar' ? (
-                            <div className="group relative h-full w-full">
-                                <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
-                                <div
-                                    className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-slate-100 dark:bg-slate-900 shadow-2xl transition-transform duration-300 group-hover:scale-110"
-                                    style={{
-                                        boxShadow: '0 8px 32px -8px rgba(0,0,0,0.5)',
-                                    }}
-                                >
-                                    <img
-                                        src={item.src}
-                                        alt="Member"
-                                        width={60}
-                                        height={60}
-                                        loading="eager"
-                                        className="h-full w-full object-cover"
-                                        onError={(e) => {
-                                            const target = e.target as HTMLImageElement;
-                                            if (!target.src.includes('unsplash.com') && !target.src.includes('pravatar.cc')) {
-                                                target.src = ALL_AVATARS[index % ALL_AVATARS.length];
-                                            }
-                                        }}
-                                    />
-                                </div>
+                {isLoading ? (
+                    <div className="h-full w-full rounded-full bg-slate-200/20 dark:bg-white/5 animate-pulse border border-white/10" />
+                ) : item.type === 'avatar' ? (
+                    <div className="group relative h-full w-full">
+                        <div className="absolute -inset-2 rounded-full bg-blue-500/20 blur-xl opacity-0 transition-opacity group-hover:opacity-100" />
+                        <div
+                            className="relative h-full w-full overflow-hidden rounded-full border-2 border-white bg-slate-100 dark:bg-slate-900 shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                            style={{
+                                boxShadow: '0 8px 32px -8px rgba(0,0,0,0.5)',
+                            }}
+                        >
+                            <img
+                                src={item.src}
+                                alt="Member"
+                                width={60}
+                                height={60}
+                                loading="eager"
+                                className="h-full w-full object-cover"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    // If even the proxy fails, fall back to demo
+                                    if (!target.src.includes('unsplash.com') && !target.src.includes('pravatar.cc')) {
+                                        target.src = ALL_AVATARS[index % ALL_AVATARS.length];
+                                    }
+                                }}
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className="group relative h-full w-full">
+                        <div
+                            className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-100"
+                            style={{ backgroundColor: item.color }}
+                        />
+                        <div
+                            className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white shadow-2xl transition-transform duration-300 group-hover:scale-110"
+                            style={{
+                                background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
+                                boxShadow: `0 10px 30px -10px ${item.color}`
+                            }}
+                        >
+                            <div className="absolute inset-0.5 rounded-full border border-white/40" />
+                            <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+                                <CryptoIcon name={item.name} />
                             </div>
-                        ) : (
-                            <div className="group relative h-full w-full">
-                                <div
-                                    className="absolute -inset-4 rounded-full blur-2xl opacity-40 transition-opacity group-hover:opacity-100"
-                                    style={{ backgroundColor: item.color }}
-                                />
-                                <div
-                                    className="relative flex h-full w-full items-center justify-center rounded-full border-2 border-white shadow-2xl transition-transform duration-300 group-hover:scale-110"
-                                    style={{
-                                        background: `linear-gradient(135deg, ${item.gradientStart || item.color}, ${item.gradientEnd || item.color})`,
-                                        boxShadow: `0 10px 30px -10px ${item.color}`
-                                    }}
-                                >
-                                    <div className="absolute inset-0.5 rounded-full border border-white/40" />
-                                    <div className="relative z-10 h-7 w-7 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
-                                        <CryptoIcon name={item.name} />
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </m.div>
-                </div>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                )}
+            </m.div>
+        </m.div>
     );
 });
