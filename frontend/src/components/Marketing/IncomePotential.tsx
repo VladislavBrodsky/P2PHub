@@ -157,9 +157,9 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </span>
                     </m.div>
 
-                    <h3 className="text-3xl font-bold tracking-tight leading-none max-w-[340px] mx-auto">
+                    <h3 className="text-4xl font-black tracking-tighter leading-[0.95] max-w-[340px] mx-auto uppercase">
                         {t('income.title')} <br />
-                        <span className="vibing-crystal-text animate-text-shimmer">{t('income.title_highlight')}</span>
+                        <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-size-[200%_auto] animate-text-shimmer drop-shadow-sm">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
                         <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
@@ -235,11 +235,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-2 vibing-emerald-animated h-11 rounded-2xl font-bold text-sm tracking-widest active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/20"
+                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-sm tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30"
                                             >
-                                                <Lock className="w-4 h-4 text-white" />
-                                                <span className="text-white uppercase">{t('income.profit.unlock_btn')}</span>
-                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
+                                                <Lock className="w-5 h-5 text-white relative z-10" />
+                                                <span className="text-white uppercase relative z-10">{t('income.profit.unlock_btn')}</span>
+                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
                                             </button>
                                         </div>
                                     </m.div>
@@ -306,11 +306,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </div>
                                             </div>
 
-                                            <div className="p-3 rounded-2xl bg-[#1A103C] border border-white/5 shadow-inner">
-                                                <div className="text-label font-bold uppercase tracking-[0.2em] text-white/60 mb-0.5">
+                                            <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1.5">
                                                     {t('income.inaction.daily_loss')}
                                                 </div>
-                                                <div className="text-2xl font-bold text-white">
+                                                <div className="text-3xl font-black text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">
                                                     ${displayLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </div>
                                             </div>
@@ -372,16 +372,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <span className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                     </div>
 
-                                    <div className="text-center mb-5">
-                                        <div className="flex flex-col items-center justify-center uppercase tracking-[0.2em] font-black italic">
-                                            <span className="text-[10px] sm:text-xs text-emerald-500 dark:text-emerald-400">
+                                    <div className="text-center mb-6">
+                                        <div className="flex flex-col items-center justify-center uppercase tracking-[0.3em] font-black">
+                                            <span className="text-[10px] sm:text-xs text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">
                                                 {t('marketing:income.math.subheading_part1', 'THE $1/MINUTE STRATEGY')}
                                             </span>
-                                            <span className="text-[10px] sm:text-xs text-slate-800 dark:text-white">
+                                            <span className="text-[10px] sm:text-xs text-slate-800 dark:text-white opacity-40">
                                                 {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
                                             </span>
                                         </div>
-                                        <h4 className="mt-2 text-xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight uppercase">
+                                        <h4 className="mt-3 text-2xl sm:text-4xl font-black text-slate-900 dark:text-white leading-[0.9] tracking-tighter uppercase drop-shadow-md">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
@@ -400,34 +400,34 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             key={key}
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={mathVisible ? { opacity: 1, x: 0 } : {}}
-                                            transition={{ duration: 0.4, delay }}
+                                            transition={{ duration: 0.5, delay }}
                                             className={clsx(
-                                                'relative group flex items-center h-10 sm:h-11 px-3 sm:px-4 rounded-full border transition-all duration-300',
+                                                'relative group flex items-center h-12 sm:h-14 px-4 sm:px-6 rounded-2xl border transition-all duration-300',
                                                 highlight
-                                                    ? 'bg-emerald-500/10 border-emerald-400/30'
-                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/5'
+                                                    ? 'bg-emerald-500/10 border-emerald-400/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
+                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10'
                                             )}
                                         >
-                                            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                                                <ChevronRight className={clsx("w-3.5 h-3.5 shrink-0 transition-transform group-hover:translate-x-0.5", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
-                                                <span className={clsx("text-label sm:text-sm font-bold truncate", highlight ? "text-emerald-500" : "text-slate-500 dark:text-white/60")}>
+                                            <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                                                <ChevronRight className={clsx("w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
+                                                <span className={clsx("text-xs sm:text-sm font-black uppercase tracking-widest truncate", highlight ? "text-emerald-500" : "text-slate-500 dark:text-white/40")}>
                                                     {period}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-2">
-                                                <span className={clsx("text-sm sm:text-base font-black tracking-tight", highlight ? "text-emerald-500" : "text-slate-900 dark:text-white")}>
+                                            <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-2">
+                                                <span className={clsx("text-lg sm:text-2xl font-black tracking-tighter", highlight ? "text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]" : "text-slate-900 dark:text-white")}>
                                                     {amount}
                                                 </span>
                                                 {highlight && (
-                                                    <div className="bg-emerald-500 text-[8px] sm:text-[9px] font-black text-white px-1.5 sm:px-2 py-0.5 rounded-md tracking-widest shadow-lg shadow-emerald-500/40 shrink-0 animate-pulse">
+                                                    <div className="bg-emerald-500 text-[9px] sm:text-[10px] font-black text-white px-2 py-1 rounded-md tracking-widest shadow-[0_4px_12px_rgba(16,185,129,0.5)] shrink-0 animate-bounce-subtle">
                                                         {t('marketing:income.math.target_badge')}
                                                     </div>
                                                 )}
                                             </div>
 
                                             {/* Premium Glass Shine */}
-                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer-slide animate-shimmer-slow pointer-events-none" />
+                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
                                         </m.div>
                                     ))}
                                 </div>

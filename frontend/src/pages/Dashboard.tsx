@@ -93,8 +93,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* #comment: Ambient Background Glow for PRO users. */}
             {user?.is_pro && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
-                    <div className="absolute bottom-1/4 right-0 w-1/3 h-1/3 bg-indigo-500/5 blur-[100px] rounded-full animate-pulse" />
+                    <div className="absolute top-0 left-1/4 w-3/4 h-[600px] bg-blue-500/10 blur-[140px] rounded-full animate-pulse-slow" />
+                    <div className="absolute bottom-1/4 right-0 w-2/3 h-2/3 bg-indigo-500/10 blur-[120px] rounded-full animate-pulse" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.08),transparent_70%)]" />
                 </div>
             )}
 
@@ -109,22 +110,24 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         {user?.is_pro ? (
                             <m.button
                                 onClick={() => setActiveTab?.('pro')}
-                                className={`inline-flex items-center justify-center rounded-full border px-4 py-2 active:scale-95 transition-all outline-none ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-[0_0_25px_rgba(255,215,0,0.4)] hover:brightness-110' : 'border-blue-400/30 bg-[#0066FF]/10 vibing-blue-animated shadow-[0_0_20px_rgba(0,102,255,0.3)] hover:bg-[#0066FF]/20'}`}
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                className={`inline-flex items-center justify-center rounded-full border px-5 py-2.5 active:scale-95 transition-all outline-none relative overflow-hidden group shadow-2xl ${isProPlus ? 'border-yellow-400/50 vibing-yellow-animated shadow-yellow-500/40' : 'border-blue-400/40 bg-blue-600/10 vibing-blue-animated shadow-blue-500/30'}`}
+                                animate={{ scale: [1, 1.03, 1] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className={`text-[10px] font-bold uppercase tracking-[0.1em] ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
+                                <p className={`text-[11px] font-black uppercase tracking-[0.2em] relative z-10 ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard:open_pro_dashboard')}
                                 </p>
                             </m.button>
                         ) : (
                             <m.button
                                 onClick={() => setActiveTab?.('subscription')}
-                                className="inline-block rounded-full border border-blue-400/30 vibing-blue-animated px-6 py-2.5 shadow-[0_0_20px_rgba(0,102,255,0.3)] cursor-pointer active:scale-95 transition-all outline-none hover:brightness-110"
-                                animate={{ scale: [1, 1.05, 1] }}
-                                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                                className="inline-flex items-center justify-center rounded-full border border-blue-400/40 vibing-blue-animated px-7 py-3 shadow-[0_0_30px_rgba(0,102,255,0.4)] cursor-pointer active:scale-95 transition-all outline-none hover:brightness-110 relative overflow-hidden group"
+                                animate={{ scale: [1, 1.03, 1] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             >
-                                <p className="text-label font-bold uppercase tracking-[0.2em] text-white">
+                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
+                                <p className="text-xs font-black uppercase tracking-[0.25em] text-white relative z-10">
                                     {t('dashboard:hero_badge')}
                                 </p>
                             </m.button>

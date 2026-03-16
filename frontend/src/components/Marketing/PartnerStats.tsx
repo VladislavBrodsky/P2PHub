@@ -159,16 +159,16 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-5 sm:p-5 sm:py-7 rounded-2xl text-center gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)]"
                 >
                     <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mb-1">
-                        <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-1 shadow-[inset_0_0_15px_rgba(59,130,246,0.1)]">
+                        <Users className="w-5 h-5 text-blue-500 drop-shadow-[0_0_10px_rgba(59,130,246,0.4)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter drop-shadow-sm">
                         <CountUp value={stats.total} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-tight opacity-70 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.global_partners')}
                     </span>
                 </m.div>
@@ -178,16 +178,16 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.05 }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-5 sm:p-5 sm:py-7 rounded-2xl text-center gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)]"
                 >
                     <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-1">
-                        <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" />
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-1 shadow-[inset_0_0_15px_rgba(16,185,129,0.1)]">
+                        <Zap className="w-5 h-5 text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter drop-shadow-sm">
                         <CountUp value={stats.volume} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-tight opacity-70 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.volume_shifted')}
                     </span>
                 </m.div>
@@ -197,16 +197,16 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-4 sm:p-4 sm:py-6 rounded-xl text-center gap-1.5 sm:gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500"
+                    className="glass-panel-premium flex flex-col items-center justify-center p-2 py-5 sm:p-5 sm:py-7 rounded-2xl text-center gap-2 relative overflow-hidden group transition-all hover:scale-[1.02] duration-500 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.15)]"
                 >
                     <div className="absolute inset-0 bg-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-1">
-                        <Globe2 className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500 drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]" />
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-1 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]">
+                        <Globe2 className="w-5 h-5 text-purple-500 drop-shadow-[0_0_10px_rgba(168,85,247,0.4)]" />
                     </div>
-                    <span className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white uppercase leading-none tracking-tighter drop-shadow-sm">
                         <CountUp value={stats.countries} />
                     </span>
-                    <span className="text-[8px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider sm:tracking-[0.2em] leading-tight opacity-80 min-h-[24px] sm:min-h-0 flex items-center">
+                    <span className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-tight opacity-70 min-h-[24px] sm:min-h-0 flex items-center">
                         {t('dashboard:stats.countries_active')}
                     </span>
                 </m.div>
@@ -236,14 +236,17 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                         opacity: [0.9, 1, 0.9]
                     }}
                     transition={{
-                        duration: 6, // 10 BPM = 1 beat per 6 seconds
+                        duration: 6,
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
-                    className="absolute top-1/2 -translate-y-1/2 right-4 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20 backdrop-blur-sm z-20"
+                    className="absolute top-1/2 -translate-y-1/2 right-4 flex items-center gap-2 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/25 backdrop-blur-md z-20 shadow-[0_0_15px_rgba(239,68,68,0.2)]"
                 >
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                    <span className="text-[8px] font-bold uppercase tracking-widest text-red-500">LIVE</span>
+                    <div className="relative flex h-2 w-2">
+                        <div className="absolute inset-0 rounded-full bg-red-500 animate-ping opacity-75" />
+                        <div className="relative rounded-full h-full w-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+                    </div>
+                    <span className="text-[9px] font-black uppercase tracking-[0.25em] text-red-500 leading-none">LIVE</span>
                 </m.div>
 
                 <div className="flex -space-x-2.5 shrink-0 relative z-10">
