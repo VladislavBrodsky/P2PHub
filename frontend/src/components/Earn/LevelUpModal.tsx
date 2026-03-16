@@ -40,7 +40,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                         style={{ overscrollBehavior: 'none' }}
                     >
                         {/* Background Accents */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-yellow-400/20 blur-[60px] rounded-full pointer-events-none" />
+                        {/* Removed background glow */}
 
                         {/* Header Icons */}
                         <div className="relative mb-8 pt-4">

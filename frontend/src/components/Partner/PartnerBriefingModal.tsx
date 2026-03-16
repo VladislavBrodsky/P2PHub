@@ -117,9 +117,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                             backfaceVisibility: 'hidden'
                         }}
                     >
-                        {/* Background Decoration Glows */}
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] pointer-events-none" />
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/10 blur-[100px] pointer-events-none" />
+                        {/* #comment: Background Decoration Glows removed for Unified Background Continuity */}
 
                         {/* Header */}
                         <div className="relative p-6 pb-4 bg-white/50 dark:bg-slate-900/50 z-10 shrink-0">

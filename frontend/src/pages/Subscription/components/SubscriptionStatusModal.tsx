@@ -40,7 +40,7 @@ export const SubscriptionStatusModal = React.memo(({
                         <div className="vibing-premium-panel p-5 w-full max-w-[280px] rounded-2xl text-center relative overflow-hidden shadow-2xl border-white/20">
                             <div className="circuit-decor opacity-30" />
                             <div className="scanning-glow absolute inset-0 opacity-20 pointer-events-none" />
-                            <div className={`absolute top-0 right-0 w-48 h-48 blur-[80px] rounded-full opacity-20 -mr-20 -mt-20 ${infoModal.color === 'emerald' ? 'bg-emerald-500' : infoModal.color === 'amber' ? 'bg-amber-500' : 'bg-blue-500'}`} />
+                            {/* Removed background glow */}
 
                             <div className="relative z-10 flex flex-col items-center">
                                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white/20 backdrop-blur-md bg-linear-to-br ${infoModal.color === 'emerald' ? 'from-emerald-400 to-emerald-600' : infoModal.color === 'amber' ? 'from-amber-400 to-amber-600' : 'from-blue-400 to-blue-600'}`}>

@@ -39,12 +39,12 @@
   --spacing-safe-left: env(safe-area-inset-left, 0px);
   --spacing-safe-right: env(safe-area-inset-right, 0px);
 
-  --header-height: 52px;
-  --bottom-nav-height: 70px;
+  --header-height: 3.25rem;
+  --bottom-nav-height: 4.375rem;
   /* Safe Areas + Telegram Header padding for bot buttons visibility */
-  --header-offset-base: 64px;
-  --header-content-clearance: 54px;
-  --header-total-offset: var(--dynamic-header-offset, 138px);
+  --header-offset-base: 4rem;
+  --header-content-clearance: 3.375rem;
+  --header-total-offset: var(--dynamic-header-offset, 8.625rem);
   --header-total-height: var(--header-total-offset);
 
 
@@ -100,14 +100,14 @@
   --color-btn-secondary-text: var(--btn-secondary-text);
   --color-btn-secondary-hover: var(--btn-secondary-hover);
 
-  /* #comment: Typography Scale - Renamed to --text-* for Tailwind v4 auto-utility mapping */
-  --text-display: 34px;
-  --text-heading: 24px;
-  --text-subheading: 20px;
-  --text-body: 16px;
-  --text-button: 16px;
-  --text-caption: 12px;
-  --text-label: 11px;
+  /* #comment: Typography Scale - Fluid & Rem-based for perfect device scaling */
+  --text-display: clamp(1.75rem, 8vw, 2.125rem); /* 28px - 34px responsive */
+  --text-heading: clamp(1.25rem, 5vw, 1.5rem);  /* 20px - 24px responsive */
+  --text-subheading: 1.25rem; /* 20px */
+  --text-body: 1rem;       /* 16px */
+  --text-button: 1rem;     /* 16px */
+  --text-caption: 0.75rem;  /* 12px */
+  --text-label: 0.6875rem; /* 11px */
 
   --font-sans: "Onest",
     "Inter",

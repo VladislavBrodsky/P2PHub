@@ -102,7 +102,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
         >
             <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                 <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-purple-500/20 pointer-events-none" />
-                <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/10 blur-[100px] rounded-full -mr-32 -mt-32 animate-pulse" />
+                {/* #comment: Background glow removed for Unified Background Continuity */}
 
                 <div className="flex items-center justify-between mb-4 sm:mb-5 relative z-10">
                     <div className="flex items-center gap-3">
@@ -398,7 +398,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                 ) : (
                     <>
                         <div className="relative inline-flex mb-2">
-                            <div className="absolute -inset-4 bg-purple-500/10 blur-2xl rounded-full" />
+                            {/* #comment: Background glow removed for Unified Background Continuity */}
                             <div className="relative w-20 h-20 bg-linear-to-br from-purple-500/10 to-purple-500/10 rounded-2xl flex items-center justify-center border border-purple-500/20 shadow-xl pulse-ring-purple">
                                 <Sparkles className="w-9 h-9 text-purple-500" />
                             </div>

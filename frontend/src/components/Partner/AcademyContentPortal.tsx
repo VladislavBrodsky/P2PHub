@@ -108,7 +108,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                 }}
             >
                 {/* Fixed Header Bar - Premium Glassmorphism with Safe Area support */}
-                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 pb-4 pt-[calc(var(--spacing-safe-top,32px)+3rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
+                <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 pb-4 pt-[calc(var(--spacing-safe-top,2rem)+2rem)] bg-white/80 dark:bg-black/40 backdrop-blur-3xl border-b border-slate-200 dark:border-white/5 shrink-0">
 
                     {/* Close Button */}
                     <button
@@ -212,17 +212,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                 <div className="relative h-56 rounded-2xl -mx-1 shrink-0 bg-slate-50 dark:bg-[#030712] border border-slate-200 dark:border-white/5 shadow-2xl overflow-hidden group/core text-slate-900 dark:text-white">
                                     <div className="absolute inset-0 rounded-2xl overflow-hidden">
                                         {/* Atmospheric Plasma Glows */}
-                                        <motion.div
-                                            className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
-                                            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                                            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                                        />
-                                        <motion.div
-                                            className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
-                                            animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
-                                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                                        />
-
+                                        {/* Removed background glows */}
                                         {/* Scanline Effect */}
                                         <div className="absolute inset-0 z-10 pointer-events-none opacity-[0.05] dark:opacity-[0.03]"
                                             style={{

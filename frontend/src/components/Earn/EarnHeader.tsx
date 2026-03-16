@@ -36,16 +36,7 @@ export const EarnHeader = memo(() => {
             {/* Card body */}
             <div className="relative rounded-[0.95rem] bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass h-full">
 
-                {/* ── Ambient glows ── */}
-                <div
-                    className="absolute -top-16 -left-16 w-64 h-64 rounded-full blur-[80px] opacity-20 pointer-events-none"
-                    style={{ background: `radial-gradient(circle, ${badgeColor}40, transparent 70%)` }}
-                />
-                <div
-                    className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full blur-[60px] opacity-10 pointer-events-none"
-                    style={{ background: `radial-gradient(circle, ${badgeColor}30, transparent 70%)` }}
-                />
-
+                {/* #comment: Ambient glows removed for Unified Background Continuity */}
                 {/* Subtle grid texture */}
                 <div
                     className="absolute inset-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none cyber-grid"

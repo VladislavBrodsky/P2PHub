@@ -387,9 +387,7 @@ export const GrowthTab = ({
                     </svg>
                 </div>
 
-                {/* Dynamic Glow Orbs */}
-                <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 dark:bg-indigo-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" />
-                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-blue-500/10 dark:bg-blue-600/20 blur-[100px] rounded-full pointer-events-none animate-pulse-slow" style={{ animationDelay: '2s' }} />
+                {/* #comment: Dynamic Glow Orbs removed for Unified Background Continuity */}
 
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 relative z-10">
                     <div className="flex items-start gap-4 sm:gap-5">
@@ -610,7 +608,7 @@ export const GrowthTab = ({
 
             {/* Lifehacks & Strategy Dossier - Compact Grid-ready */}
             <div className="pro-card-extreme p-4 sm:p-6 rounded-[20px] border border-white/10 relative overflow-hidden group bg-white/40 dark:bg-slate-950/40 shadow-xl">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/5 blur-[60px] pointer-events-none group-hover:opacity-20 transition-opacity" />
+                {/* #comment: Background glow removed for Unified Background Continuity */}
 
                 <div className="flex items-center justify-between mb-4 relative z-10">
                     <div className="flex items-center gap-2.5">
@@ -648,7 +646,7 @@ export const GrowthTab = ({
             </div>
 
             <div className="glass-panel-premium p-4 sm:p-6 rounded-[20px] border border-slate-200 dark:border-white/10 relative overflow-hidden group bg-white dark:bg-slate-950 shadow-2xl">
-                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-indigo-500/10 blur-[60px] rounded-full pointer-events-none" />
+                {/* #comment: Background glow removed for Unified Background Continuity */}
                 <div className="flex items-center justify-between gap-4 mb-4 relative z-10 font-sans">
                     <div className="flex items-center gap-3 min-w-0">
                         <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
@@ -762,7 +760,7 @@ export const GrowthTab = ({
                                 animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                                 transition={{ duration: 7, ease: "easeInOut", repeat: Infinity }}
                             />
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 blur-[50px] rounded-full -mr-16 -mt-16 pointer-events-none animate-pulse z-0" />
+                            {/* #comment: Background glow removed for Unified Background Continuity */}
                             <div className="circuit-decor opacity-20 pointer-events-none z-0" />
 
                             <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-white/5 flex items-center justify-center mx-auto mb-6 relative z-10 shadow-[0_10px_20px_rgba(16,185,129,0.15)] group-hover/locked-card:scale-105 transition-transform duration-500">

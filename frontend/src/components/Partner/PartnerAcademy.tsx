@@ -16,8 +16,7 @@ export const PartnerAcademy = () => {
                 <div className="absolute inset-0 vibing-blue-animated opacity-10" />
 
                 <div className="relative z-10 glass-panel-premium rounded-[1.8rem] border-white/20 p-4 overflow-hidden">
-                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 blur-[80px] rounded-full animate-pulse" />
-                    <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-indigo-500/20 blur-[60px] rounded-full" />
+                    {/* Removed background glows */}
 
                     <div className="relative z-20 flex flex-col items-center text-center space-y-5">
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 text-label font-bold uppercase tracking-[0.15em] text-blue-800 dark:text-white">

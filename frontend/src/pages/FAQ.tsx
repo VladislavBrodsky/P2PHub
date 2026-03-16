@@ -206,7 +206,7 @@ export default function FAQPage() {
         <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
             <div className="relative pt-[calc(var(--spacing-safe-top,0px)+40px)] pb-16 px-6">
-                <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-500/5 blur-[120px] rounded-full -z-10" />
+                {/* Removed background glow */}
 
                 <div className="flex items-center gap-3 mb-6">
                     <button

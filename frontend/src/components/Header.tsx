@@ -23,7 +23,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
         <header
             className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
             style={{
-                paddingTop: 'var(--dynamic-header-padding, 106px)',
+                paddingTop: 'var(--dynamic-header-padding, 6.625rem)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
                 paddingRight: 'var(--spacing-safe-right, 0px)'
             }}
@@ -36,8 +36,8 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         className="group flex items-center gap-1.5 sm:gap-2 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-3 sm:px-4 py-1.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
                         aria-label="Open menu"
                     >
-                        <Menu className="text-text-primary h-[18px] w-[18px] sm:h-[20px] sm:w-[20px] transition-transform group-hover:scale-110" />
-                        <span className="text-[10px] sm:text-[13px] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-text-primary">
+                        <Menu className="text-text-primary h-[1.125rem] w-[1.125rem] sm:h-[1.25rem] sm:w-[1.25rem] transition-transform group-hover:scale-110" />
+                        <span className="text-label sm:text-[0.8125rem] font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-text-primary">
                             {t('menu')}
                         </span>
                     </button>
@@ -57,7 +57,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                                 {user?.level ?? 1}
                             </span>
                             {user?.is_pro && (
-                                <Crown size={5} className="sm:size-6 text-amber-500 fill-amber-500/20" />
+                                <Crown className="size-5 sm:size-6 text-amber-500 fill-amber-500/20" />
                             )}
                         </div>
                         <div className="h-4 w-px bg-border-glass" />

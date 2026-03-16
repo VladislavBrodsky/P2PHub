@@ -287,7 +287,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     return (
         <div className="bg-[#f8fafc] dark:bg-[#0b1120] flex flex-col h-full w-full relative border border-white/50 dark:border-white/5">
             {/* Soft Ambient Background Glows */}
-            <div className="absolute top-0 left-1/4 w-1/2 h-32 bg-blue-500/10 blur-[60px] pointer-events-none" />
+            {/* Removed background glow */}
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl pointer-events-none" />
 
             {/* Premium Header */}

@@ -69,7 +69,7 @@ export const PintopayCard = ({
 
     return (
         <div
-            className="perspective-1000 aspect-[1.58/1] w-full cursor-pointer max-w-[340px] relative group"
+            className="perspective-1000 aspect-[1.58/1] w-full cursor-pointer max-w-[min(100%,340px)] relative group"
             onMouseMove={handleMouseMove}
             onTouchMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}

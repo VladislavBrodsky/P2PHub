@@ -44,9 +44,7 @@ export const StartupLoader: React.FC<StartupLoaderProps> = ({ progress, statusTe
             {/* #comment: Premium Background Mesh - Adds depth and a "premium" feel using brand-primary 
                 blurs that adapt based on the active theme. */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-50">
-                <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-br from-blue-500/20 to-transparent blur-[120px] animate-pulse" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-linear-to-tl from-blue-500/10 to-transparent blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
-            </div>
+                {/* Removed background glows */}            </div>
 
             <div className="relative flex flex-col items-center justify-start scale-90">
                 {/* Main Animated Hub */}

@@ -237,7 +237,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-white/2 p-4 mb-4 shadow-xl backdrop-blur-2xl`}
                             >
                                 <div className={`absolute top-0 left-0 w-1 h-full bg-linear-to-b ${config.color} opacity-50`} />
-                                <div className={`absolute -right-8 -top-8 w-24 h-24 bg-linear-to-br ${config.color} opacity-15 blur-[25px] rounded-full pointer-events-none`} />
+                                {/* Removed background glow */}
 
                                 <div className="relative z-10 pl-1">
                                     <h3 className="text-[16px] font-black text-white tracking-wide mb-1.5 flex items-center gap-2">

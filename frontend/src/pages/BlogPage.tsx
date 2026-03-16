@@ -274,8 +274,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                     >
                         {/* Decorative Background Blobs */}
                         <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-                            <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] bg-blue-500/5 blur-[120px] rounded-full animate-pulse" />
-                            <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] bg-indigo-500/5 blur-[120px] rounded-full animate-pulse [animation-delay:2s]" />
+                            {/* Removed glowing blobs for uniform aesthetic */}
                         </div>
 
                         <div className="px-5 pt-4 pb-2 flex items-center justify-between z-10">

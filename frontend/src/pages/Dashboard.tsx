@@ -90,12 +90,10 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             initial="hidden"
             animate="show"
         >
-            {/* #comment: Ambient Background Glow for PRO users. */}
+            {/* #comment: Background Glows removed for Unified Background Continuity. */}
             {user?.is_pro && (
                 <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <div className="absolute top-0 left-1/4 w-3/4 h-[600px] bg-blue-500/10 blur-[140px] rounded-full animate-pulse-slow" />
-                    <div className="absolute bottom-1/4 right-0 w-2/3 h-2/3 bg-indigo-500/10 blur-[120px] rounded-full animate-pulse" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.08),transparent_70%)]" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_40%,rgba(59,130,246,0.05),transparent_70%)]" />
                 </div>
             )}
 

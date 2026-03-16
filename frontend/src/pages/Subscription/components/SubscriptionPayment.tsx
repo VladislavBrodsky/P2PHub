@@ -74,7 +74,7 @@ export const SubscriptionPayment = React.memo(({
     return (
         <motion.div ref={paymentRef} className="mb-12 relative px-2">
             {/* Background Glows to match Home Style */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-blue-500/20 blur-[100px] pointer-events-none animate-pulse" />
+            {/* Removed background glow */}
 
             <div className="relative z-10 bg-white dark:bg-bg-app border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
                 {/* Inner liquid background layer */}

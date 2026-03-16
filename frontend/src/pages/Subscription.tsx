@@ -422,8 +422,7 @@ export default function SubscriptionPage() {
                         <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 bg-bg-app`} />
                         <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${(user?.subscription_plan?.includes('PLUS')) ? 'bg-linear-to-b from-bg-app via-indigo-500/10 to-bg-deep' : 'bg-linear-to-b from-bg-app via-amber-500/8 to-bg-deep'}`} />
 
-                        <div className={`fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] blur-[120px] opacity-10 dark:opacity-30 z-0 pointer-events-none ${(user?.subscription_plan?.includes('PLUS')) ? 'bg-yellow-500' : 'bg-blue-600'}`} />
-                        <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] blur-[100px] opacity-15 dark:opacity-40 z-0 pointer-events-none animate-pulse ${(user?.subscription_plan?.includes('PLUS')) ? 'bg-yellow-400' : 'bg-blue-500'}`} />
+                        {/* #comment: Fixed background glows removed for Unified Background Continuity */}
 
                         <div className="relative z-10 w-full max-w-[300px] mx-auto flex flex-col items-center">
                             <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-5 pt-1">
@@ -510,9 +509,7 @@ export default function SubscriptionPage() {
 
                         <div className="relative overflow-hidden rounded-xl bg-white dark:bg-bg-app border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
                             <div className="relative z-10 w-full p-4">
-                                {/* Ambient Background Glows - Mirroring Dashboard */}
-                                <div className="absolute top-0 left-1/4 w-[150%] h-[150%] bg-blue-500/5 dark:bg-blue-600/10 blur-[120px] rounded-full animate-pulse pointer-events-none" />
-                                <div className="absolute bottom-1/4 right-0 w-full h-full bg-indigo-500/5 dark:bg-indigo-600/10 blur-[100px] rounded-full animate-pulse pointer-events-none" />
+                                {/* #comment: Ambient Background Glows removed for Unified Background Continuity */}
 
 
 

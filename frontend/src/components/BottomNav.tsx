@@ -18,7 +18,7 @@ export default function BottomNav({ activeTab, setActiveTab, prefetchPages }: Bo
     };
 
     return (
-        <nav className="relative mx-4 flex h-(--bottom-nav-height,70px) w-full max-w-[400px] items-center justify-around rounded-xl px-2 bg-bg-glass backdrop-blur-xl border border-border-glass shadow-premium-lg overflow-hidden">
+        <nav className="relative mx-4 flex h-(--bottom-nav-height,4.375rem) w-full max-w-[min(90vw,400px)] items-center justify-around rounded-xl px-2 bg-bg-glass backdrop-blur-xl border border-border-glass shadow-premium-lg overflow-hidden">
 
             <NavButton
                 active={activeTab === 'home'}

@@ -234,7 +234,7 @@ export const ToolsTab = ({
                     }}
                     className={`pro-card-extreme bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-indigo-500/20 group relative flex flex-col shadow-xl col-span-1 sm:col-span-2 ${marketAudit ? 'cursor-pointer' : ''}`}
                 >
-                    <div className="absolute right-0 top-0 w-48 h-48 bg-indigo-500/5 blur-[80px] rounded-full pointer-events-none" />
+                    {/* #comment: Background glow removed for Unified Background Continuity */}
 
                     {/* Header Section */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 relative z-10">

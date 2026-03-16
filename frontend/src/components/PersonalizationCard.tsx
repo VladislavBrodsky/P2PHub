@@ -60,10 +60,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     return (
         <div className={`relative overflow-visible pt-4 ${className}`}>
             {/* Premium Background Glow */}
-            {/* Premium Background Glow - Disabled for compact variant to avoid glitches in menu */}
-            {variant !== 'compact' && (
-                <div className={`absolute top-1/2 left-10 -translate-y-1/2 w-48 h-32 ${isProPlus ? 'bg-blue-400/30 shadow-[0_0_100px_rgba(34,211,238,0.4)]' : isPro ? 'bg-amber-400/20 shadow-[0_0_80px_rgba(251,191,36,0.3)]' : 'bg-brand-blue/10'} blur-[60px] rounded-full -z-10 transition-all duration-1000`} />
-            )}
+            {/* Removed background glow */}
 
             {user?.is_pro && (
                 <div

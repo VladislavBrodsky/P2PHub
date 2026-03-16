@@ -35,11 +35,11 @@ export const SubscriptionPricing = React.memo(({
                     <span className="text-label font-bold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
-                <h2 className="text-[28px] sm:text-[36px] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-4 uppercase px-2 max-w-[360px] mx-auto">
+                <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-4 uppercase px-2 max-w-[min(90vw,360px)] mx-auto">
                     {t('pro:subscription.upgrade.dominate_network')}
                 </h2>
 
-                <p className="text-body text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[300px] mx-auto opacity-80">
+                <p className="text-body text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[min(80vw,300px)] mx-auto opacity-80">
                     {t('pro:subscription.upgrade.subheadline')}
                 </p>
             </div>
@@ -62,7 +62,7 @@ export const SubscriptionPricing = React.memo(({
                     <div className="flex flex-col items-center gap-1 mt-1">
                         <div className="flex items-baseline gap-1">
                             <span className={`text-label font-bold leading-none ${selectedPlan === 'PRO' ? 'text-white/40' : 'text-slate-400/50'}`}>$</span>
-                            <span className={`text-[42px] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-900 dark:text-white/20'}`}>{proPrice}</span>
+                            <span className={`text-[clamp(1.75rem,8vw,2.625rem)] font-black tracking-tighter leading-none ${selectedPlan === 'PRO' ? 'text-white' : 'text-slate-900 dark:text-white/20'}`}>{proPrice}</span>
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-widest ${selectedPlan === 'PRO' ? 'text-white/40' : 'text-slate-400/30'}`}>
                             {t('pro:subscription.pro_active.lifetime')}

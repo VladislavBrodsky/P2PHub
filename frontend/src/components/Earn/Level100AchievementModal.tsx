@@ -104,8 +104,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                         {/* iPhone 16 Pro Style Indicator */}
                         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full sm:hidden z-20" />
 
-                        {/* Animated Background Glow */}
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-600/20 blur-[80px] rounded-full pointer-events-none animate-pulse-subtle" />
+                        {/* #comment: Animated Background Glow removed for Unified Background Continuity */}
 
                         <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pb-10 sm:pb-8">
                             {/* Header */}

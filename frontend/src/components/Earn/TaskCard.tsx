@@ -77,7 +77,7 @@ export const TaskCard = memo(({ task, status, progress, userReferrals, checkinSt
             {/* Premium Mesh Background - Visible on Hover */}
             <div className="absolute inset-0 opacity-0 group-hover/card:opacity-100 transition-opacity duration-700 pointer-events-none">
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/10 via-transparent to-purple-500/10" />
-                <div className="absolute top-[-20%] left-[-20%] w-[60%] h-[60%] bg-blue-400/15 blur-[60px] rounded-full animate-pulse" />
+                {/* Removed background glow */}
             </div>
 
             {/* Header - Always Visible, Compact */}

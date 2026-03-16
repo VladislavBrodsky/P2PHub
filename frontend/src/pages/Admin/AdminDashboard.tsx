@@ -97,8 +97,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = React.memo(({
             {/* Header */}
             <div className="relative overflow-hidden w-full rounded-3xl bg-white/40 dark:bg-[#1A1D24]/60 backdrop-blur-2xl border border-white/50 dark:border-white/10 p-5 md:p-6 shadow-xl shadow-black/5 flex flex-col md:flex-row items-center justify-between gap-6">
                 {/* Background Glows */}
-                <div className="absolute top-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[64px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-                <div className="absolute bottom-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-[64px] translate-x-1/2 translate-y-1/2 pointer-events-none" />
+                {/* Removed background glows */}
 
                 {/* Left Side: Icon & Title */}
                 <div className="flex flex-col md:flex-row items-center gap-4 z-10 w-full md:w-auto">

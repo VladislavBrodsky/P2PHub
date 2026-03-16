@@ -247,7 +247,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                 <div className={`space-y-6 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-30 select-none' : ''}`}>
                     <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                         <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 blur-[80px] rounded-full -mr-32 -mt-32 animate-pulse" />
+                        {/* #comment: Background glow removed for Unified Background Continuity */}
 
                         <div className="circuit-decor opacity-10" />
 
@@ -377,11 +377,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                         className="absolute inset-0 z-20 flex flex-col items-center justify-center p-8 text-center bg-linear-to-b from-transparent via-white/40 dark:via-slate-900/40 to-white/90 dark:to-slate-950/90 backdrop-blur-[2px] rounded-2xl"
                     >
                         <div className="relative mb-6">
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-                                transition={{ duration: 4, repeat: Infinity }}
-                                className="absolute inset-x-[-20px] inset-y-[-20px] bg-purple-500/20 blur-2xl rounded-full"
-                            />
+                            {/* #comment: Background glow removed for Unified Background Continuity */}
                             <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-purple-500 shadow-2xl relative z-10 border border-purple-500/20">
                                 <Lock size={32} />
                             </div>

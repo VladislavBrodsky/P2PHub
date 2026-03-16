@@ -175,7 +175,7 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
     return (
         <div className="bg-bg-glass border border-border-glass rounded-3xl p-4 shadow-sm backdrop-blur-md relative overflow-hidden group">
             {/* Background Effects */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+            {/* Removed background glow */}
 
             {/* Header - Compact */}
             <div className="flex items-center justify-between mb-2 relative z-20">
