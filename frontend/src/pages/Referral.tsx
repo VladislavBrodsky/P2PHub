@@ -429,9 +429,9 @@ export default function ReferralPage() {
 
                                         <button
                                             onClick={handleCopyLink}
-                                            className="h-8 rounded-lg flex items-center justify-center gap-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-label active:scale-95 transition-all"
+                                            className="h-8 rounded-lg flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-sm active:scale-95 transition-all"
                                         >
-                                            <Copy className="w-3 h-3" />
+                                            <Copy className="w-4 h-4" />
                                             <span>{t('referral.modal.copy_link')}</span>
                                         </button>
                                     </div>

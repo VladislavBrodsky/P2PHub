@@ -232,7 +232,7 @@ const CentralLogo = memo(() => {
 
 const FractalProfits = memo(() => {
     const { lowPowerMode } = usePerformance();
-    const count = lowPowerMode ? 4 : 12;
+    const count = lowPowerMode ? 2 : 6;
 
     // #comment: Memoizing profit items ensures that animation targets (targetX, targetY) 
     // remain stable across renders, preventing the "stuck in center" glitch.
@@ -254,7 +254,7 @@ const FractalProfits = memo(() => {
                 amount,
                 targetX,
                 targetY,
-                duration: 8 + Math.random() * 8,
+                duration: 12 + Math.random() * 8,
                 delay: i * 0.8
             };
         });
@@ -346,6 +346,7 @@ const OrbitingItem = memo(({ item, index, total, isLoading }: { item: OrbitItem 
                     x: [-3, 3, -3],
                     scale: isLoading ? [0.8, 0.9, 0.8] : [1, 1.05, 1],
                 }}
+                style={{ willChange: 'transform' }}
                 transition={{
                     duration: 4 + Math.random() * 3,
                     repeat: Infinity,

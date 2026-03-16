@@ -40,7 +40,7 @@ const MemberAvatar = ({ delay, pro }: { delay: number; pro?: boolean }) => (
 const NeuralBackground = React.memo(() => {
     const { lowPowerMode } = usePerformance();
     // Stabilize random data to prevent jumping and expensive SVG recalculations on re-render
-    const particles = useMemo(() => lowPowerMode ? [] : [...Array(8)].map((_, i) => ({
+    const particles = useMemo(() => lowPowerMode ? [] : [...Array(4)].map((_, i) => ({
         id: i,
         x: Math.random() * 400,
         y: Math.random() * 200,
@@ -69,7 +69,7 @@ const NeuralBackground = React.memo(() => {
                             className="text-indigo-500/40"
                             animate={{ strokeDashoffset: [0, 100] }}
                             transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                            style={{ strokeDasharray: "8, 8" }}
+                            style={{ strokeDasharray: "8, 8", willChange: "stroke-dashoffset" }}
                         />
                         <m.path
                             d="M-50,400 Q200,550 450,400 T950,400"
@@ -79,7 +79,7 @@ const NeuralBackground = React.memo(() => {
                             className="text-emerald-500/40"
                             animate={{ strokeDashoffset: [100, 0] }}
                             transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                            style={{ strokeDasharray: "8, 8" }}
+                            style={{ strokeDasharray: "8, 8", willChange: "stroke-dashoffset" }}
                         />
                     </svg>
                 )}

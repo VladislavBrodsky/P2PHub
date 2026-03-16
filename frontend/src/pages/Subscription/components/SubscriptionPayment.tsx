@@ -62,12 +62,24 @@ export const SubscriptionPayment = React.memo(({
         
         if (success) {
             notification('success');
+            
+            // Show custom in-app notification
             showNotification({
-                title: t('notifications.success'),
-                message: t('notifications.text_copied'),
+                title: t('pro:notifications.success'),
+                message: t('pro:notifications.text_copied'),
                 type: 'success',
                 icon: <CheckCircle2 size={16} className="text-emerald-500" />
             });
+            
+            // Also show native system popup as requested
+            try {
+                const webApp = (window as any).Telegram?.WebApp;
+                if (webApp?.showAlert) {
+                    webApp.showAlert(t('pro:notifications.text_copied'));
+                }
+            } catch (e) {
+                // Ignore any Telegram WebApp errors
+            }
         }
     };
 
