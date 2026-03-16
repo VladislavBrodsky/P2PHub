@@ -1471,7 +1471,6 @@ async def get_finance_stats(
         
     now = datetime.now(UTC).replace(tzinfo=None)
     threshold_72h = now - timedelta(hours=72)
-    now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     
     # Query for enough data to cover BOTH 72h history and 6 Months of Monthly Stats
     # threshold_6m = start of month 5 months ago
@@ -1492,6 +1491,8 @@ async def get_finance_stats(
     # 2. Fetch Transactions (Outcome/Spending)
     tx_stmt = select(PartnerTransaction).where(
         PartnerTransaction.partner_id == partner.id,
+        # #comment: Filter out non-monitored currencies to prevent KeyError in UI aggregation
+        PartnerTransaction.currency.in_(["USDT", "TON"]),
         PartnerTransaction.created_at >= fetch_after
     ).order_by(PartnerTransaction.created_at.desc())
     transactions = (await session.exec(tx_stmt)).all()
@@ -1519,7 +1520,7 @@ async def get_finance_stats(
                 continue
 
             # We treat payments as outcome
-            amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
+            amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto is not None) else t.amount
             
             description = f"Purchase: {t.currency}"
             if t.status == "manual_review":
@@ -1559,7 +1560,8 @@ async def get_finance_stats(
         e_month_start = e.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         for m in monthly_history:
             if m["timestamp"] == e_month_start.isoformat():
-                m[e.currency]["income"] += e.amount
+                if e.currency in m:
+                    m[e.currency]["income"] += e.amount
                 break
                 
     for t in transactions:
@@ -1572,8 +1574,9 @@ async def get_finance_stats(
         t_month_start = t.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         for m in monthly_history:
             if m["timestamp"] == t_month_start.isoformat():
-                amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto) else t.amount
-                m[t.currency]["outcome"] += amt
+                if t.currency in m:
+                    amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto is not None) else t.amount
+                    m[t.currency]["outcome"] += amt
                 break
 
     # 5. Current Monthly Stats (for backward compatibility if needed, though monthly_history[0] is current)
