@@ -100,7 +100,7 @@ export const EarnHeader = memo(() => {
 
                             {/* Centre content */}
                             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <span className="text-label font-bold uppercase tracking-[0.18em] text-text-primary opacity-40 leading-none mb-0.5">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-primary opacity-30 leading-none mb-0.5">
                                     {t('lvl')}
                                 </span>
                                 <motion.span
@@ -108,7 +108,7 @@ export const EarnHeader = memo(() => {
                                     initial={{ scale: 0.6, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                                    className="text-xl sm:text-[1.5rem] font-bold text-text-primary leading-none tracking-tight"
+                                    className="text-2xl sm:text-3xl font-black text-text-primary leading-none tracking-tighter"
                                 >
                                     {level}
                                 </motion.span>
@@ -128,11 +128,10 @@ export const EarnHeader = memo(() => {
                         >
                             {/* Shine overlay */}
                             <div className="absolute inset-0 bg-linear-to-r from-white/20 via-white/5 to-transparent pointer-events-none" />
-                            <div className="relative flex items-center justify-center gap-1.5 w-full">
-                                <Trophy className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white/90 shrink-0" />
-                                <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-white/95 truncate text-center leading-none mt-px">
-                                    {t(`ranks.${rank.name}`)}
-                                </span>
+                            <div className="relative flex items-center justify-center gap-2 w-full">
+                                <div className="p-0.5 bg-white/20 rounded-md">
+                                    <Trophy className="w-3 h-3 text-white shrink-0" />
+                                </div>
                             </div>
                         </motion.div>
                     </div>
@@ -156,15 +155,14 @@ export const EarnHeader = memo(() => {
                         </div>
 
                         {/* Progress bar */}
-                        <div className="relative h-2.5 sm:h-3 w-full rounded-full overflow-hidden"
-                            style={{ background: 'var(--divider)' }}>
+                        <div className="relative h-3 sm:h-3.5 w-full rounded-full overflow-hidden bg-slate-200 dark:bg-slate-800/50 p-0.5">
                             {/* Glow under bar */}
                             <motion.div
                                 initial={{ width: 0 }}
                                 animate={{ width: `${progress.percent}%` }}
                                 transition={{ duration: 1.5, ease: 'circOut' }}
-                                className="absolute inset-y-0 left-0 rounded-full blur-[6px] opacity-50"
-                                style={{ background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}60)` }}
+                                className="absolute inset-y-0 left-0 rounded-full blur-[8px] opacity-60"
+                                style={{ background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}80)` }}
                             />
                             {/* Actual bar */}
                             <motion.div
@@ -173,8 +171,8 @@ export const EarnHeader = memo(() => {
                                 transition={{ duration: 1.5, ease: 'circOut' }}
                                 className="absolute inset-y-0 left-0 rounded-full"
                                 style={{
-                                    background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}cc, ${badgeColor}bb)`,
-                                    boxShadow: `0 0 8px ${badgeColor}80`,
+                                    background: `linear-gradient(90deg, ${badgeColor}, ${badgeColor}dd)`,
+                                    boxShadow: `0 0 15px ${badgeColor}cc`,
                                 }}
                             >
                                 {/* Liquid shimmer */}
@@ -182,7 +180,7 @@ export const EarnHeader = memo(() => {
                                     <motion.div
                                         animate={{ x: ['-100%', '200%'] }}
                                         transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
-                                        className="absolute inset-y-0 w-1/3 bg-linear-to-r from-transparent via-white/50 to-transparent"
+                                        className="absolute inset-y-0 w-1/2 bg-linear-to-r from-transparent via-white/40 to-transparent"
                                     />
                                 </div>
                             </motion.div>

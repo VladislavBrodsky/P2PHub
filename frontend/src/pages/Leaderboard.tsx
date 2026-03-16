@@ -208,11 +208,16 @@ export default function LeaderboardPage() {
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 className="flex flex-col items-center mb-3 gap-2"
             >
-                <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.6)]" />
-                    <span className="text-label font-bold uppercase tracking-[0.25em] text-emerald-500">{t('leaderboard.live_rankings')}</span>
+                <div className="flex items-center gap-2.5">
+                    <div className="relative">
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
+                        <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-40" />
+                    </div>
+                    <span className="text-label font-bold uppercase tracking-[0.3em] text-emerald-500/90 drop-shadow-[0_0_8px_rgba(16,185,129,0.2)]">
+                        {t('leaderboard.live_rankings')}
+                    </span>
                 </div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight uppercase text-center leading-none">
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase text-center leading-none bg-linear-to-b from-slate-900 to-slate-700 dark:from-white dark:to-slate-400 bg-clip-text text-transparent drop-shadow-sm">
                     {t('leaderboard.title')}
                 </h1>
 
