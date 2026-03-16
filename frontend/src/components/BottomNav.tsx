@@ -18,41 +18,41 @@ export default function BottomNav({ activeTab, setActiveTab, prefetchPages }: Bo
     };
 
     return (
-        <nav className="relative mx-4 flex h-(--bottom-nav-height,80px) w-full max-w-[440px] items-center justify-around rounded-2xl px-2 bg-bg-glass backdrop-blur-xl border border-border-glass shadow-premium-lg overflow-hidden">
+        <nav className="relative mx-4 flex h-(--bottom-nav-height,70px) w-full max-w-[400px] items-center justify-around rounded-xl px-2 bg-bg-glass backdrop-blur-xl border border-border-glass shadow-premium-lg overflow-hidden">
 
             <NavButton
                 active={activeTab === 'home'}
                 onClick={() => setActiveTab('home')}
                 onMouseEnter={() => prefetch('home')}
-                icon={<Home className="h-5 w-5" />}
+                icon={<Home className="h-[18px] w-[18px]" />}
                 label={t('navigation.home')}
             />
             <NavButton
                 active={activeTab === 'cards'}
                 onClick={() => setActiveTab('cards')}
                 onMouseEnter={() => prefetch('cards')}
-                icon={<CreditCard className="h-5 w-5" />}
+                icon={<CreditCard className="h-[18px] w-[18px]" />}
                 label={t('navigation.cards')}
             />
             <NavButton
                 active={activeTab === 'partner'}
                 onClick={() => setActiveTab('partner')}
                 onMouseEnter={() => prefetch('partner')}
-                icon={<Users className="h-5 w-5" />}
+                icon={<Users className="h-[18px] w-[18px]" />}
                 label={t('navigation.partner')}
             />
             <NavButton
                 active={activeTab === 'league'}
                 onClick={() => setActiveTab('league')}
                 onMouseEnter={() => prefetch('league')}
-                icon={<Trophy className="h-5 w-5" />}
+                icon={<Trophy className="h-[18px] w-[18px]" />}
                 label={t('navigation.league')}
             />
             <NavButton
                 active={activeTab === 'earn'}
                 onClick={() => setActiveTab('earn')}
                 onMouseEnter={() => prefetch('earn')}
-                icon={<Zap className="h-5 w-5" />}
+                icon={<Zap className="h-[18px] w-[18px]" />}
                 label={t('navigation.earn')}
             />
         </nav>
