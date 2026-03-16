@@ -15,18 +15,18 @@ export const ReferralWidget = memo(({ onInvite, onShowQR }: ReferralWidgetProps)
         <div className="mt-4 mb-6 flex items-center gap-3">
             <button
                 onClick={onInvite}
-                className="flex-1 h-16 rounded-2xl flex items-center justify-center gap-4 bg-btn-primary-bg border border-white/10 shadow-xl active:scale-[0.98] transition-all relative overflow-hidden group"
+                className="flex-1 h-16 rounded-2xl flex items-center justify-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-[0.98] transition-all relative overflow-hidden group"
             >
                 {/* Background Shimmer */}
-                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform shrink-0">
                     <Share2 className="w-5 h-5 text-white" />
                 </div>
                 
-                <div className="flex flex-col items-start text-left">
-                    <span className="text-xs font-black text-btn-primary-text uppercase tracking-widest leading-none mb-1">{t('referral.widget.invite')}</span>
-                    <span className="text-[10px] font-bold text-btn-primary-text/40 uppercase tracking-tight">{t('referral.modal.boost_desc').split(' ').slice(0, 3).join(' ')}...</span>
+                <div className="flex flex-col items-start text-left min-w-0 pr-2">
+                    <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-widest leading-none mb-1 truncate w-full">{t('referral.widget.invite')}</span>
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tight truncate w-full">{t('referral.modal.boost_desc').split(' ').slice(0, 3).join(' ')}...</span>
                 </div>
             </button>
 
