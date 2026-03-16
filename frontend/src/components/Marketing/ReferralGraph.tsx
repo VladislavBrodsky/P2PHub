@@ -61,50 +61,35 @@ const NeuralBackground = React.memo(() => {
 
                 {!lowPowerMode && (
                     <svg className="absolute inset-0 w-full h-full opacity-50">
-                        <m.path
+                        <path
                             d="M100,250 Q250,100 400,250 T700,250"
                             stroke="currentColor"
                             strokeWidth="1.5"
                             fill="none"
-                            className="text-indigo-500/40"
-                            animate={{ strokeDashoffset: [0, 100] }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                            style={{ strokeDasharray: "8, 8" }}
+                            className="text-indigo-500/40 animate-dash-shimmer"
+                            style={{ 
+                                strokeDasharray: "8, 8",
+                                '--dash-duration': '15s'
+                            } as React.CSSProperties}
                         />
-                        <m.path
+                        <path
                             d="M-50,400 Q200,550 450,400 T950,400"
                             stroke="currentColor"
                             strokeWidth="1.5"
                             fill="none"
-                            className="text-emerald-500/40"
-                            animate={{ strokeDashoffset: [100, 0] }}
-                            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                            style={{ strokeDasharray: "8, 8" }}
+                            className="text-emerald-500/40 animate-dash-shimmer"
+                            style={{ 
+                                strokeDasharray: "8, 8",
+                                '--dash-duration': '18s',
+                                animationDirection: 'reverse'
+                            } as React.CSSProperties}
                         />
                     </svg>
                 )}
             </div>
 
-            <div className="absolute inset-0 z-0">
-                {/* Atmospheric Plasma Glows */}
-                <m.div
-                    className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <m.div
-                    className="absolute bottom-0 left-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"
-                    animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
-                    transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-                />
-
-                {/* Scanline Effect */}
-                <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-                    style={{
-                        background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 4px)',
-                        backgroundSize: '100% 4px'
-                    }}
-                />
+            <div className="absolute inset-0 z-0 pointer-events-none">
+                {/* #comment: Atmospheric glows and scanlines removed for background consistency. */}
 
                 {/* Energy Particles */}
                 {particles.map((p) => (
@@ -203,8 +188,8 @@ const NeuralBackground = React.memo(() => {
                             />
                         </m.circle>
 
-                        {/* Multi-Ring Energy Orbits - Staggered & Pulsing */}
-                        <m.circle
+                        {/* Multi-Ring Energy Orbits - Using simple CSS rotations */}
+                        <circle
                             cx="200"
                             cy="100"
                             r="68"
@@ -212,18 +197,13 @@ const NeuralBackground = React.memo(() => {
                             strokeWidth="0.5"
                             fill="none"
                             strokeDasharray="4 60"
-                            animate={{
-                                rotate: 360,
-                                scale: [1, 1.02, 1]
-                            }}
-                            transition={{
-                                rotate: { duration: 6, repeat: Infinity, ease: "linear" },
-                                scale: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                            }}
-                            className="opacity-40"
-                            style={{ transformOrigin: "200px 100px" }}
+                            className="opacity-40 animate-orbit-rotate"
+                            style={{ 
+                                transformOrigin: "200px 100px",
+                                '--orbit-duration': '12s'
+                            } as React.CSSProperties}
                         />
-                        <m.circle
+                        <circle
                             cx="200"
                             cy="100"
                             r="74"
@@ -231,16 +211,12 @@ const NeuralBackground = React.memo(() => {
                             strokeWidth="1"
                             fill="none"
                             strokeDasharray="10 200"
-                            animate={{
-                                rotate: -360,
-                                opacity: [0.3, 0.7, 0.3]
-                            }}
-                            transition={{
-                                rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                                opacity: { duration: 2, repeat: Infinity, ease: "easeInOut" }
-                            }}
-                            className="opacity-60"
-                            style={{ transformOrigin: "200px 100px" }}
+                            className="opacity-60 animate-orbit-rotate"
+                            style={{ 
+                                transformOrigin: "200px 100px",
+                                '--orbit-duration': '15s',
+                                animationDirection: 'reverse'
+                            } as React.CSSProperties}
                         />
 
                         <defs>
@@ -475,14 +451,14 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
                                     animate={{
                                         scale: 1,
                                         opacity: 1,
-                                        y: [0, -10, 0],
-                                        x: [0, 6, 0]
+                                        y: [0, -6, 0], // Reduced movement
+                                        x: [0, 4, 0]
                                     }}
                                     transition={{
                                         scale: { duration: 0.5, delay: 0.2 },
                                         opacity: { duration: 0.5, delay: 0.2 },
-                                        y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                                        x: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                                        y: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+                                        x: { duration: 5, repeat: Infinity, ease: "easeInOut" }
                                     }}
                                 >
                                     {/* Orb Glow */}
@@ -557,8 +533,8 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
                                     transition={{
                                         scale: { duration: 0.5, delay: 0.4 },
                                         opacity: { duration: 0.5, delay: 0.4 },
-                                        y: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
-                                        x: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
+                                        y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 },
+                                        x: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }
                                     }}
                                 >
                                     {/* Orb Glow */}

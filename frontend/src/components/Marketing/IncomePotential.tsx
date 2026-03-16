@@ -138,9 +138,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileHover={{ scale: 1.01 }}
                 className="relative overflow-hidden rounded-2xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-5 md:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
             >
-                {/* Background Glow */}
-                <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
-                <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-600/10 blur-[120px] pointer-events-none" />
+                {/* #comment: Removed background glows for unified background continuity. */}
 
                 <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
                     <m.div
