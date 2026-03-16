@@ -76,36 +76,63 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
             </AnimatePresence>
 
             {/* QR Code Modal */}
-            {isQrOpen && (
-                <div className="fixed inset-0 z-1000 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setIsQrOpen(false)}>
-                    <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-xs space-y-4 shadow-2xl scale-100 animate-in zoom-in-95 duration-200 border border-slate-200 dark:border-white/10" onClick={e => e.stopPropagation()}>
-                        <div className="text-center space-y-1">
-                            <h3 className="text-xl font-bold text-slate-900 dark:text-white">{t('partner_dashboard.qr_modal_title')}</h3>
-                            <p className="text-sm text-slate-500 dark:text-slate-400">{t('partner_dashboard.qr_modal_desc')}</p>
-                        </div>
-
-                        <div className="aspect-square bg-white rounded-2xl p-4 flex items-center justify-center border border-slate-100 dark:border-white/5 shadow-inner">
-                            {qrImageUrl ? (
-                                <img src={qrImageUrl} alt="My QR Code" className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
-                            ) : (
-                                <div className="animate-pulse w-full h-full bg-slate-200 rounded-xl" />
-                            )}
-                        </div>
-
-                        <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
-                            <p className="text-xs font-mono text-slate-500 dark:text-slate-400 break-all">{referralLink}</p>
-                        </div>
-
-                        <Button
-                            variant="secondary"
-                            className="w-full"
+            <AnimatePresence>
+                {isQrOpen && (
+                    <div key="qr-modal-root" className="fixed inset-0 z-1001 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
                             onClick={() => setIsQrOpen(false)}
+                            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative z-10 w-full max-w-xs bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-white/10 overflow-hidden"
+                            style={{ 
+                                transform: 'translateZ(0)',
+                                backfaceVisibility: 'hidden'
+                            }}
+                            onClick={e => e.stopPropagation()}
                         >
-                            {t('close')}
-                        </Button>
+                            <div className="text-center space-y-4">
+                                <div className="space-y-1">
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">
+                                        {t('partner_dashboard.qr_modal_title')}
+                                    </h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider opacity-80">
+                                        {t('partner_dashboard.qr_modal_desc')}
+                                    </p>
+                                </div>
+
+                                <div className="aspect-square bg-white rounded-2xl p-4 flex items-center justify-center border border-slate-100 dark:border-white/5 shadow-inner">
+                                    {qrImageUrl ? (
+                                        <img src={qrImageUrl} alt="My QR Code" className="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal" />
+                                    ) : (
+                                        <div className="animate-pulse w-full h-full bg-slate-200 rounded-xl" />
+                                    )}
+                                </div>
+
+                                <div className="bg-slate-50 dark:bg-white/5 rounded-xl p-3 text-center">
+                                    <p className="text-xs font-mono text-slate-500 dark:text-slate-400 break-all opacity-70">
+                                        {referralLink}
+                                    </p>
+                                </div>
+
+                                <Button
+                                    variant="secondary"
+                                    className="w-full h-12 bg-slate-900 dark:bg-white text-white dark:text-black rounded-xl font-bold uppercase tracking-widest text-xs"
+                                    onClick={() => setIsQrOpen(false)}
+                                >
+                                    {t('close')}
+                                </Button>
+                            </div>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
         </>
     );
 });
