@@ -208,25 +208,32 @@ export default function LeaderboardPage() {
                 transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 className="flex flex-col items-center mb-3 gap-2"
             >
-                <div className="flex items-center gap-2.5">
-                    <div className="relative">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_12px_rgba(16,185,129,0.8)]" />
-                        <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400 animate-ping opacity-40" />
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 backdrop-blur-md">
+                    <div className="relative flex h-1.5 w-1.5">
+                        <div className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                        <div className="relative rounded-full h-full w-full bg-emerald-500" />
                     </div>
-                    <span className="text-label font-bold uppercase tracking-[0.3em] text-emerald-500/90 drop-shadow-[0_0_8px_rgba(16,185,129,0.2)]">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500 leading-none">
                         {t('leaderboard.live_rankings')}
                     </span>
                 </div>
-                <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter uppercase text-center leading-none bg-linear-to-b from-slate-900 to-slate-700 dark:from-white dark:to-slate-400 bg-clip-text text-transparent drop-shadow-sm">
-                    {t('leaderboard.title')}
-                </h1>
+
+                <div className="text-center space-y-1">
+                    <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight uppercase leading-none">
+                        {t('leaderboard.title').split(' ')[0]}
+                    </h1>
+                    <div className="h-1 w-12 bg-indigo-600 mx-auto rounded-full" />
+                    <h2 className="text-lg font-bold text-slate-500 dark:text-white/40 uppercase tracking-[0.3em] leading-none">
+                        {t('leaderboard.title').split(' ').slice(1).join(' ')}
+                    </h2>
+                </div>
 
                 {/* Timeframe Toggle */}
-                <div className="flex p-0.5 bg-white/60 dark:bg-slate-900/40 backdrop-blur-3xl rounded-xl mt-2 w-full max-w-[300px] border border-slate-900/5 dark:border-white/5 shadow-premium relative">
+                <div className="flex p-1 bg-slate-100 dark:bg-white/5 backdrop-blur-xl rounded-2xl mt-4 w-full max-w-[320px] border border-slate-200 dark:border-white/10 shadow-sm relative">
                     {/* Active Indicator Background */}
-                    <div className="absolute inset-0.5 flex pointer-events-none" aria-hidden="true">
+                    <div className="absolute inset-1 flex pointer-events-none" aria-hidden="true">
                         <motion.div
-                            className="absolute inset-y-0 bg-linear-to-r from-indigo-600 via-indigo-500 to-indigo-600 rounded-lg shadow-lg z-0"
+                            className="absolute inset-y-0 bg-white dark:bg-slate-800 rounded-xl shadow-md z-0 border border-slate-200 dark:border-white/5"
                             initial={false}
                             animate={{
                                 x: timeframe === 'weekly' ? '0%' : timeframe === 'monthly' ? '100%' : '200%',
@@ -235,10 +242,8 @@ export default function LeaderboardPage() {
                                 width: '33.333%',
                                 left: 0
                             }}
-                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                        >
-                            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-lg" />
-                        </motion.div>
+                            transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
+                        />
                     </div>
 
                     {(['weekly', 'monthly', 'all'] as const).map((tf) => (
@@ -249,9 +254,9 @@ export default function LeaderboardPage() {
                                 setTimeframe(tf);
                                 setShowAll(false);
                             }}
-                            className={`flex-1 py-1.5 text-label font-bold uppercase tracking-widest rounded-lg transition-colors duration-200 relative z-10 ${timeframe === tf
-                                ? 'text-white'
-                                : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500'
+                            className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 relative z-10 ${timeframe === tf
+                                    ? 'text-indigo-600 dark:text-white'
+                                    : 'text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60'
                                 }`}
                         >
                             {t(`leaderboard.timeframes.${tf}`)}

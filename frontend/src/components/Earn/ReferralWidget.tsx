@@ -12,37 +12,33 @@ export const ReferralWidget = memo(({ onInvite, onShowQR }: ReferralWidgetProps)
     const { t } = useTranslation(['social', 'common']);
 
     return (
-        <div className="mt-2 mb-4 relative w-full h-12">
+        <div className="mt-4 mb-6 flex items-center gap-3">
             <button
                 onClick={onInvite}
-                className="w-full h-14 rounded-2xl flex items-center justify-center gap-3 font-black text-white active:scale-95 transition-all relative overflow-hidden group shadow-[0_10px_30px_-10px_rgba(79,70,229,0.5)] bg-indigo-600 hover:brightness-110 will-change-transform"
+                className="flex-1 h-16 rounded-2xl flex items-center justify-center gap-4 bg-slate-900 border border-white/10 shadow-xl active:scale-[0.98] transition-all relative overflow-hidden group"
             >
-                {/* Background Liquid Effect */}
-                <div className="absolute inset-0 bg-linear-to-r from-indigo-600 via-blue-500 to-purple-600 bg-size-[200%_100%] animate-vibing-gradient opacity-90" />
-
-                <Share2 className="w-5 h-5 relative z-10 opacity-100 group-hover:rotate-12 transition-transform duration-300 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
-                <span className="relative z-10 text-sm tracking-[0.15em] uppercase font-black drop-shadow-sm">{t('referral.widget.invite')}</span>
-
-                {/* Automated Attention Shimmer */}
-                <motion.div
-                    animate={{
-                        x: ['-100%', '300%'],
-                    }}
-                    transition={{
-                        repeat: Infinity,
-                        repeatDelay: 2,
-                        duration: 1,
-                        ease: "circIn"
-                    }}
-                    className="absolute inset-0 w-1/4 h-full bg-linear-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] blur-md"
-                />
+                {/* Background Shimmer */}
+                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+                    <Share2 className="w-5 h-5 text-white" />
+                </div>
+                
+                <div className="flex flex-col items-start">
+                    <span className="text-xs font-black text-white uppercase tracking-widest leading-none mb-1">{t('referral.widget.invite')}</span>
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-tight">{t('referral.modal.boost_desc').split(' ').slice(0, 3).join(' ')}...</span>
+                </div>
             </button>
+
             <button
                 onClick={onShowQR}
-                className="absolute right-1.5 top-1.5 bottom-1.5 aspect-square flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white transition-all z-20 active:scale-90 shadow-lg backdrop-blur-xl"
+                className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white transition-all active:scale-[0.95] hover:bg-white/10 shadow-sm"
                 aria-label={t('referral.widget.qr_code_label') || 'Show QR Code'}
             >
-                <QrCode className="w-5 h-5 drop-shadow-[0_0_5px_rgba(255,255,255,0.3)]" />
+                <div className="flex flex-col items-center gap-1">
+                    <QrCode className="w-5 h-5" />
+                    <span className="text-[8px] font-black uppercase tracking-tighter opacity-50">QR</span>
+                </div>
             </button>
         </div>
     );
