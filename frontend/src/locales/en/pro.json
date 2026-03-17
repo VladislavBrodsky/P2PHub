@@ -1031,6 +1031,40 @@
       }
     ]
   },
+  "faq": {
+    "teaser_badge": "KNOWLEDGE BASE",
+    "header_pre": "YOUR",
+    "header_highlight": "QUESTIONS ANSWERED",
+    "q1": "Is PRO+ really lifetime access?",
+    "a1": "Yes. Lifetime is a one-time payment with no regular fees. After current slots are sold, all new subscriptions will switch to an annual model at a higher price. Secure your permanent status now.",
+    "q2": "How do tokens work?",
+    "a2": "Tokens power every AI action — content generation, headline rewriting, Bio optimization, trend hunting, and global audits. PRO users get 250 tokens monthly, PRO+ — 500. All tokens are updated on the 1st of each month.",
+    "q3": "Why TON or USDT?",
+    "a3": "TON is Telegram's native blockchain — instant and almost free. USDT (TRC20) is for partners who prefer stablecoins. Both methods are fully secure and activate your plan automatically.",
+    "q4": "How many Telegram accounts can I use?",
+    "a4": "One license per Telegram account. Your PRO status is tied to your unique Telegram ID for security. Each team member who wants PRO benefits must purchase their own license.",
+    "q5": "What is the Network Income Engine?",
+    "a5": "It is our multi-level passive income system. When anyone in your structure makes a card transaction — you automatically receive a commission. PRO opens 9 levels deep, PRO+ — all 20 levels, which is 20x more passive income reach.",
+    "q6": "How much faster will my team grow with PRO?",
+    "a6": "PRO partners consistently grow their networks 5-10x faster using only the Viral Studio. Add the Growth Intelligence tools and OMNI-Sync publishing — and PRO+ partners report 100x faster team scaling compared to free members.",
+    "q7": "Can I upgrade from PRO to PRO+ later?",
+    "a7": "Yes. You can upgrade at any time from the app. Your current PRO period is credited towards the PRO+ upgrade price. Upgrading sooner means more passive income while the price is still at the current level.",
+    "view_faq_center": "OPEN FULL FAQ CENTER"
+  },
+  "status": {
+    "verifying": "Verifying...",
+    "welcome_pro": "WELCOME TO ELITE",
+    "welcome_pro_plus": "WELCOME TO VIRAL ELITE",
+    "submitted": "SUBMITTED",
+    "verifying_p": "Our nodes are confirming your transaction on the blockchain.",
+    "welcome_pro_p": "Your PRO status is activated. System ready.",
+    "welcome_pro_plus_p": "Your PRO+ status is activated. Viral network unlocked.",
+    "submitted_p": "Your request is under manual moderation. Usually takes 5-15 minutes.",
+    "got_it": "GOT IT"
+  },
+  "alerts": {
+    "expired": "Payment window expired. Please try again."
+  },
   "subscription": {
     "pro_active": {
       "title": "SYSTEM ACTIVATED",
@@ -1215,8 +1249,5 @@
       "title": "KNOWLEDGE BASE",
       "desc": "Everything you need to know about PRO status."
     }
-  },
-  "alerts": {
-    "expired": "Payment window expired. Please try again."
   }
 }

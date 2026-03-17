@@ -431,7 +431,7 @@ export default function SubscriptionPage() {
                                 </div>
                             </motion.div>
 
-                            <h1 className="text-[32px] sm:text-[42px] font-black mb-2 tracking-tighter text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
+                            <h1 className="text-[clamp(1.75rem,8vw,2.5rem)] font-black mb-2 tracking-tighter text-slate-900 dark:text-white leading-tight text-center max-w-[280px]">
                                 {(user?.subscription_plan?.includes('PLUS')) ? t('pro:subscription.pro_active.title_plus') : t('pro:subscription.pro_active.title')}
                             </h1>
 
@@ -784,8 +784,8 @@ export default function SubscriptionPage() {
                                                 <stat.icon size={14} strokeWidth={2.5} />
                                             </div>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <div className={`text-[13px] font-black tabular-nums tracking-tighter ${stat.color} leading-none`}>{stat.value}</div>
-                                                <div className="text-[7.5px] font-bold text-slate-400 dark:text-white/20 uppercase tracking-widest leading-tight">{stat.label}</div>
+                                                <div className={`text-[clamp(0.75rem,3vw,0.875rem)] font-black tabular-nums tracking-tighter ${stat.color} leading-none`}>{stat.value}</div>
+                                                <div className="text-[clamp(0.45rem,1.8vw,0.55rem)] font-bold text-slate-400 dark:text-white/20 uppercase tracking-widest leading-tight">{stat.label}</div>
                                             </div>
                                         </div>
                                     ))}

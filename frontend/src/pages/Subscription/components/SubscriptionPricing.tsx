@@ -52,7 +52,7 @@ export const SubscriptionPricing = React.memo(({
                     className="inline-flex items-center justify-center gap-2 mb-3 px-3 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 rounded-full"
                 >
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-pulse" />
-                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
+                    <span className="text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
                 <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] mx-auto">
@@ -86,7 +86,7 @@ export const SubscriptionPricing = React.memo(({
                                     }`}
                             >
                                 {isPlus && (
-                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-[8px] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg
+                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-[clamp(0.45rem,1.5vw,0.55rem)] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg
                                         ${isSelected
                                             ? 'bg-black text-yellow-400 border border-yellow-400/30'
                                             : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-white/30'
@@ -96,7 +96,7 @@ export const SubscriptionPricing = React.memo(({
                                     </div>
                                 )}
 
-                                <span className={`text-[10px] font-black tracking-[0.2em] uppercase leading-none ${isPlus ? 'mt-2' : ''} ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400 dark:text-white/30'}`}>
+                                <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-black tracking-[0.2em] uppercase leading-none ${isPlus ? 'mt-2' : ''} ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400 dark:text-white/30'}`}>
                                     {isPlus 
                                         ? (isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title'))
                                         : t('pro:subscription.upgrade.pro_title')
@@ -110,7 +110,7 @@ export const SubscriptionPricing = React.memo(({
                                             {isPlus ? (isStandardPro ? upgradePrice : proPlusPrice) : proPrice}
                                         </span>
                                     </div>
-                                    <span className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/30'}`}>
+                                    <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-widest ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/30'}`}>
                                         {t('pro:subscription.pro_active.lifetime')}
                                     </span>
                                 </div>
@@ -141,8 +141,8 @@ export const SubscriptionPricing = React.memo(({
                                                     <div className="flex items-center gap-2 min-w-0">
                                                         <Clock size={14} className="animate-pulse text-black" />
                                                         <div className="flex flex-col min-w-0">
-                                                            <span className="text-[8px] font-medium text-black/60 uppercase leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                                            <span className="text-[9px] font-bold text-black uppercase leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                                            <span className="text-[clamp(0.45rem,1.5vw,0.55rem)] font-medium text-black/60 uppercase leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                                            <span className="text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold text-black uppercase leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                                                         </div>
                                                     </div>
                                                     <FomoTimer />
@@ -151,10 +151,10 @@ export const SubscriptionPricing = React.memo(({
 
                                             <div className="space-y-4">
                                                 <div className="space-y-1">
-                                                    <span className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400'}`}>
+                                                    <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-wider leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400'}`}>
                                                         {isPlus ? t('pro:subscription.plan_headline_plus') : t('pro:subscription.plan_headline')}
                                                     </span>
-                                                    <p className={`text-[10px] font-medium leading-relaxed ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-600 dark:text-white/70'}`}>
+                                                    <p className={`text-[clamp(0.55rem,2vw,0.7rem)] font-medium leading-relaxed ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-600 dark:text-white/70'}`}>
                                                         {isPlus ? t('pro:subscription.plan_desc_plus') : t('pro:subscription.plan_desc_pro')}
                                                     </p>
                                                 </div>
@@ -166,8 +166,8 @@ export const SubscriptionPricing = React.memo(({
                                                                 <benefit.icon size={12} strokeWidth={2.5} />
                                                             </div>
                                                             <div className="flex flex-col">
-                                                                <span className={`text-[9px] font-bold uppercase tracking-wider ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>{benefit.label}</span>
-                                                                <span className={`text-[9px] font-medium leading-tight ${isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>{benefit.desc.split('.')[0]}</span>
+                                                                <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold uppercase tracking-wider ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>{benefit.label}</span>
+                                                                <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-medium leading-tight ${isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>{benefit.desc.split('.')[0]}</span>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -176,7 +176,7 @@ export const SubscriptionPricing = React.memo(({
                                                 <div className={`pt-3 border-t ${isSelected ? (isPlus ? 'border-black/5' : 'border-white/10') : 'border-slate-100 dark:border-white/5'}`}>
                                                     <div className="flex items-center gap-2 mb-2">
                                                         <Check size={12} className={isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-emerald-500'} strokeWidth={3} />
-                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>
+                                                        <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>
                                                             {t('pro:subscription.benefits.full_access')}
                                                         </span>
                                                     </div>
@@ -186,7 +186,7 @@ export const SubscriptionPricing = React.memo(({
                                                                 <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${isSelected ? (isPlus ? 'bg-[#0a1000]/10 text-[#0a1000]' : 'bg-white/10 text-white') : 'bg-emerald-500/10 text-emerald-500'}`}>
                                                                     <Check size={8} strokeWidth={3} />
                                                                 </div>
-                                                                <span className={`text-[10px] font-bold uppercase tracking-tight ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/70'}`}>{b}</span>
+                                                                <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-tight ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/70'}`}>{b}</span>
                                                             </div>
                                                         ))}
                                                     </div>

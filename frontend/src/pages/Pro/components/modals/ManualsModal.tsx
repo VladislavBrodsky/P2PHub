@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BookOpen, Flame, Sparkles, ArrowRight } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
-import { renderMarkdown } from '../../../../utils/renderMarkdown';
+import { renderMarkdown } from '../../utils/renderMarkdown';
 
 
 interface ManualsModalProps {
