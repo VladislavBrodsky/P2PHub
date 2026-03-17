@@ -50,10 +50,8 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
         all_potential_hashtags = ["#PintopayPRO", "#FinancialFreedom", "#ViralGrowth"]
     
     # SEO Intelligence Calibration
-    audience_seo = audience_intel.get("performing_keywords_2026", [])
-    strategy_seo = category_strategy.get("seo_keywords", [])
-    tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
     # seo_keywords computed but only used in user_prompt; assembled there instead
+    # audience_seo, strategy_seo, tone_seo removed as they were unused
 
     resonance_context = ""
     if resonance_data and "top_resonance_segments" in resonance_data:
@@ -149,23 +147,14 @@ Your primary objective is to satisfy the audience's hidden need: **{audience_int
 """
 
 def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link, intel, story_history=None, brand_mention=True) -> str:
-    audience_intel = intel["audience"]
-    category_strategy = intel["strategy"]
-    hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-
-    # 🎯 SEO & VIRAL HASHTAG PROTOCOL (CRITICAL)
-    audience_tags = audience_intel.get("viral_hashtags", [])
-    strategy_tags = category_strategy.get("viral_hashtags", [])
-    tone_tags = ToneIntelligence.TONES.get(tone.lower(), {}).get("viral_hashtags", [])
-    # Guarantee uniqueness of potential tags
-    all_potential_hashtags = list(dict.fromkeys(audience_tags + strategy_tags + tone_tags))
+    audience_intel = intel.get("audience", {})
     
-    audience_seo = audience_intel.get("performing_keywords_2026", [])
-    strategy_seo = category_strategy.get("seo_keywords", [])
-    tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
-    seo_keywords = list(set(audience_seo + strategy_seo + tone_seo))
-
-    cta_fallback = "Присоединиться к сети" if language == "Russian" else "Join the Network"
+    # 🎯 SEO & VIRAL PROTOCOL (CRITICAL)
+    seo_keywords = list(set(
+        audience_intel.get("performing_keywords_2026", []) + 
+        intel.get("strategy", {}).get("seo_keywords", []) +
+        ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
+    ))
     
     story_context = ""
     if story_history:

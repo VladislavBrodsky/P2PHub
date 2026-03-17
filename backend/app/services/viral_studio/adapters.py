@@ -365,10 +365,7 @@ async def post_to_discord(partner: Partner, content: str, image_path: str | None
 def _prepare_telegram_channels(channel_id_str: str) -> list[str]:
     channels = []
     try:
-        if channel_id_str.strip().startswith("["):
-            channels = json.loads(channel_id_str)
-        else:
-            channels = [channel_id_str]
+        channels = json.loads(channel_id_str) if channel_id_str.strip().startswith("[") else [channel_id_str]
     except Exception:
         channels = [channel_id_str]
     return sorted(list(set([ch.strip() for ch in channels if ch and ch.strip()])))

@@ -192,10 +192,7 @@ async def main():
 
             for i, p in enumerate(partners):
                 # Pick a unique identity if pool allows
-                if i < len(available_identities):
-                    identity = available_identities[i]
-                else:
-                    identity = random.choice(NAMES_DATA)
+                identity = available_identities[i] if i < len(available_identities) else random.choice(NAMES_DATA)
 
                 # Update attributes
                 p.first_name = identity["first_name"]

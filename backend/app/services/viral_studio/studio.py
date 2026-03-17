@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import email.utils
 import json
 import logging
@@ -611,12 +612,10 @@ class ViralMarketingStudio:
                 os.makedirs(save_dir, exist_ok=True)
             except Exception as e:
                 logger.error(f"Failed to create save dir: {e}")
-        
-        # Emergency Permission Fix if blocked
-        if os.path.exists(save_dir) and not os.access(save_dir, os.W_OK):
-            try:
-                os.chmod(save_dir, 0o777)
-            except Exception: pass
+                # Emergency Permission Fix if blocked
+                if os.path.exists(save_dir) and not os.access(save_dir, os.W_OK):
+                    with contextlib.suppress(Exception):
+                        os.chmod(save_dir, 0o777)
 
         return os.path.join(save_dir, filename)
 

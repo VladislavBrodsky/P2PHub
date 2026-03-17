@@ -15,6 +15,9 @@ from fastapi.staticfiles import StaticFiles
 
 logger = logging.getLogger(__name__)
 
+# Global set to store references to running background tasks (prevents garbage collection)
+_background_tasks = set()
+
 from app.api.endpoints import admin, earnings, leaderboard, partner, payment, pro, tools
 from app.core.config import settings
 from bot import bot, dp
@@ -118,7 +121,9 @@ async def lifespan(app: FastAPI):
             logger.error(f"⚠️ Background startup task failed: {e}")
 
     # Start warmup tasks without awaiting them to keep lifespan fast
-    asyncio.create_task(run_warmup_tasks())
+    background_task = asyncio.create_task(run_warmup_tasks())
+    _background_tasks.add(background_task)
+    background_task.add_done_callback(_background_tasks.discard)
 
     # --- Bot Integration Section (Web Only) ---
     if is_web_service:

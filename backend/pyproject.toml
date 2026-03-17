@@ -206,11 +206,5 @@ ignore = [
 "migrations/env.py" = ["E402"]
 "scripts/*.py" = ["E722", "E701", "F401"]
 
-[tool.pyright]
-venvPath = "."
-venv = "venv"
-include = ["app", "bot.py", "main.py"]
-exclude = ["**/__pycache__", "venv"]
-reportMissingImports = true
-pythonVersion = "3.13"
+
 

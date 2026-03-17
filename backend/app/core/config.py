@@ -278,5 +278,6 @@ except Exception as e:
     print(f"  Backend Root Found: {find_backend_root()}", file=sys.stderr)
     # Check if we can see the vars in the raw environment
     raw_token = os.environ.get("BOT_TOKEN")
-    print(f"  Raw BOT_TOKEN in os.environ: {raw_token[:5] + '...' if raw_token else 'None'!r}", file=sys.stderr)
+    mask_diag = str(raw_token)[:5] + "..." if raw_token else "None"
+    print(f"  Raw BOT_TOKEN in os.environ: {mask_diag!r}", file=sys.stderr)
     sys.exit(1)
