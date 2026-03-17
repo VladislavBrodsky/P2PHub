@@ -71,10 +71,10 @@ async def simulate_artificial_activity():
             session.add(earning)
             
             # 3. Synchronize with Leaderboard (Redis)
-            await leaderboard_service.increment_score(partner.id, xp_gain, is_test=True)
+            await leaderboard_service.increment_score(partner.id, xp_gain)
             
             # 4. Invalidate profile cache
-            await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
             
             session.add(partner)
             
