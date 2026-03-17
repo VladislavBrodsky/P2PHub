@@ -498,16 +498,12 @@ export default function SubscriptionPage() {
                     {/* --- BACK BUTTON --- */}
                     <button
                         onClick={() => { selection(); window.history.back(); }}
-                        className="absolute left-4 top-4 z-50 w-8 h-8 rounded-full bg-slate-100/10 dark:bg-white/10 backdrop-blur-md border border-slate-200/20 dark:border-white/20 flex items-center justify-center text-slate-900/50 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/20 dark:hover:bg-white/20 transition-all active:scale-95 shadow-sm"
+                        className="absolute left-4 top-20 z-50 w-8 h-8 rounded-full bg-slate-100/10 dark:bg-white/10 backdrop-blur-md border border-slate-200/20 dark:border-white/20 flex items-center justify-center text-slate-900/50 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/20 dark:hover:bg-white/20 transition-all active:scale-95 shadow-sm"
                     >
                         <ChevronLeft size={16} />
                     </button>
-                    <div className="flex flex-col px-3 pb-24 pt-(--header-total-offset,138px) max-w-lg mx-auto overflow-x-hidden">
-                        <div className="sticky top-0 w-full flex items-center justify-center py-4 mb-2 z-50 px-4">
-                            <div className="h-4" />
-                        </div>
-
-                        <div className="relative overflow-hidden rounded-xl bg-white dark:bg-bg-app border border-slate-200/60 dark:border-white/10 shadow-premium-sm mb-5">
+                    <div className="flex flex-col px-3 pb-24 pt-4 max-w-lg mx-auto overflow-x-hidden">
+                        <div className="relative overflow-hidden rounded-xl bg-transparent dark:bg-bg-app border-none dark:border dark:border-white/10 shadow-none dark:shadow-premium-sm mb-5">
                             <div className="relative z-10 w-full p-4">
                                 {/* #comment: Ambient Background Glows removed for Unified Background Continuity */}
 
@@ -517,65 +513,6 @@ export default function SubscriptionPage() {
 
 
                                 {/* ── HERO / STATUS BOARD ─────────────────────────── */}
-                                <div className="relative px-6 pt-8 pb-10 text-center flex flex-col items-center">
-                                    {/* Elite Crown Badge */}
-                                    <div className="relative mb-6">
-                                        <motion.div
-                                            animate={{ y: [0, -4, 0] }}
-                                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                            className="w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-500 via-indigo-600 to-indigo-800 flex items-center justify-center shadow-[0_12px_32px_-8px_rgba(99,102,241,0.6)] border border-white/20 relative z-10"
-                                        >
-                                            <Crown size={32} className="text-white fill-white/10" />
-                                        </motion.div>
-                                        <div className="absolute inset-0 bg-indigo-500/30 blur-2xl animate-pulse scale-150 z-0" />
-                                    </div>
-
-
-
-
-
-                                    {/* Intensive FOMO Stats Board - Robust Responsive Layout */}
-                                    {proStats && (
-                                        <div className="w-full max-w-[320px] p-4 bg-white dark:bg-black/40 border border-slate-200/60 dark:border-white/10 rounded-xl shadow-sm relative overflow-hidden group mx-auto">
-                                            <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-rose-500/5 pointer-events-none" />
-
-                                            <div className="flex flex-row items-center justify-between gap-4 mb-3 relative z-10 px-1">
-                                                <div className="flex flex-col items-start min-w-0">
-                                                    <div className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-white/30 uppercase tracking-[0.2em] whitespace-nowrap">
-                                                        <div className="w-1 h-1 rounded-full bg-emerald-500 animate-ping shrink-0" />
-                                                        {t('pro:subscription.upgrade.live_demand')}
-                                                    </div>
-                                                    <div className="text-[10px] font-black text-slate-900 dark:text-white tracking-tighter leading-tight uppercase mt-0.5 wrap-break-word">
-                                                        {t('pro:subscription.upgrade.lifetime_slots')}
-                                                    </div>
-                                                </div>
-
-                                                <div className="flex flex-col items-end shrink-0">
-                                                    <div className="flex items-baseline gap-1">
-                                                        <span className="text-heading font-bold text-slate-900 dark:text-white tabular-nums leading-none">
-                                                            {proStats.total - proStats.sold}
-                                                        </span>
-                                                    </div>
-                                                    <div className="text-[9px] font-bold text-rose-500 uppercase tracking-widest mt-0.5 animate-pulse whitespace-nowrap">
-                                                        {t('pro:subscription.upgrade.selling_fast')}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="relative h-2.5 bg-slate-100 dark:bg-black/60 rounded-full overflow-hidden p-[1.5px] border border-slate-200/40 dark:border-white/5 mx-1 mb-3">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${(proStats.sold / proStats.total) * 100}%` }}
-                                                    transition={{ duration: 1.5, ease: "easeOut" }}
-                                                    className="h-full bg-linear-to-r from-indigo-600 via-fuchsia-600 to-orange-500 rounded-full relative shadow-[0_0_12px_rgba(79,70,229,0.3)]"
-                                                >
-                                                    <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent w-full h-full animate-shimmer-slide" />
-                                                </motion.div>
-                                            </div>
-
-                                        </div>
-                                    )}
-                                </div>
 
                                 {/* ── PLAN SELECTION BLOCK ── */}
                                 <SubscriptionPricing

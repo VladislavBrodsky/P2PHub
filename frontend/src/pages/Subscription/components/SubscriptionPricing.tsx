@@ -25,21 +25,21 @@ export const SubscriptionPricing = React.memo(({
 }: SubscriptionPricingProps) => {
     return (
         <div className="relative px-3 pb-6 pt-2">
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 px-4">
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    className="inline-flex items-center justify-center gap-2 mb-4 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full shadow-lg shadow-blue-500/10"
+                    initial={{ opacity: 0, y: -10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    className="inline-flex items-center justify-center gap-2 mb-3 px-3 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 rounded-full"
                 >
-                    <div className="w-1.5 h-1.5 rounded-full bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.8)] animate-pulse" />
-                    <span className="text-label font-bold uppercase tracking-[0.25em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
-                <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-4 uppercase px-2 max-w-[min(90vw,360px)] mx-auto">
+                <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] text-center mb-3 uppercase max-w-[320px] mx-auto">
                     {t('pro:subscription.upgrade.dominate_network')}
                 </h2>
 
-                <p className="text-body text-slate-500 dark:text-slate-400 font-medium leading-relaxed max-w-[min(80vw,300px)] mx-auto opacity-80">
+                <p className="text-caption text-slate-500 dark:text-slate-400 font-bold leading-relaxed max-w-[280px] mx-auto opacity-70">
                     {t('pro:subscription.upgrade.subheadline')}
                 </p>
             </div>
