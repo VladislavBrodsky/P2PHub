@@ -39,12 +39,12 @@ class BroadcastService:
             return broadcast
 
     async def _count_targets(self, session: AsyncSession, audience_type: AudienceFilter) -> int:
-        stmt = select(func.count(Partner.id)).where(Partner.notifications_paused == False)
+        stmt = select(func.count(Partner.id)).where(Partner.notifications_paused.is_(False))
         
         if audience_type == AudienceFilter.PRO_ONLY:
-            stmt = stmt.where(Partner.is_pro == True)
+            stmt = stmt.where(Partner.is_pro.is_(True))
         elif audience_type == AudienceFilter.FREE_ONLY:
-            stmt = stmt.where(Partner.is_pro == False)
+            stmt = stmt.where(Partner.is_pro.is_(False))
         elif audience_type == AudienceFilter.LEVEL_1:
             stmt = stmt.where(Partner.level == 1)
         elif audience_type == AudienceFilter.INACTIVE_7D:
@@ -105,14 +105,14 @@ async def run_broadcast_task(broadcast_id: int):
         
         # 2. Build Cursor Query (Much faster than OFFSET for deep pagination)
         stmt = select(Partner.id, Partner.telegram_id).where(
-            Partner.notifications_paused == False,
+            Partner.notifications_paused.is_(False),
             Partner.id > broadcast.last_partner_id
         ).order_by(Partner.id.asc()).limit(CHUNK_SIZE)
         
         if broadcast.audience_type == AudienceFilter.PRO_ONLY:
-            stmt = stmt.where(Partner.is_pro == True)
+            stmt = stmt.where(Partner.is_pro.is_(True))
         elif broadcast.audience_type == AudienceFilter.FREE_ONLY:
-            stmt = stmt.where(Partner.is_pro == False)
+            stmt = stmt.where(Partner.is_pro.is_(False))
         elif broadcast.audience_type == AudienceFilter.LEVEL_1:
             stmt = stmt.where(Partner.level == 1)
         elif broadcast.audience_type == AudienceFilter.INACTIVE_7D:

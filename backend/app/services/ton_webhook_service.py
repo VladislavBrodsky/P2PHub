@@ -74,7 +74,7 @@ class TonWebhookService:
         pending PartnerTransaction. Upgrades the user if matched.
         """
         # ── 1. Extract amount and currency ─────────────────────────────
-        amount_usdt, amount_ton, tx_hash, sender = None, None, None, None
+        amount_usdt, amount_ton, tx_hash = None, None, None
 
         tx_hash = (
             data.get("hash")

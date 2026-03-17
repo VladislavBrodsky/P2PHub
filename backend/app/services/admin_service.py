@@ -72,7 +72,7 @@ class AdminService:
                 
                 # 9. Sync & Materialize
                 # Auto-align the slots_sold counter with reality if it drifts too far
-                pro_lifetime_count = (await session.exec(select(func.count(Partner.id)).where(Partner.subscription_plan == "PRO_LIFETIME", Partner.is_test == False))).one() or 0
+                pro_lifetime_count = (await session.exec(select(func.count(Partner.id)).where(Partner.subscription_plan == "PRO_LIFETIME", Partner.is_test.is_(False)))).one() or 0
                 
                 from app.models.partner import SystemSetting
                 setting_sold = (await session.exec(select(SystemSetting).where(SystemSetting.key == "pro_slots_sold"))).first()
@@ -153,13 +153,13 @@ class AdminService:
             else:
                 # 3. Last Resort Fallback: Direct Query (Optimized)
                 try:
-                    total_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_test == False))).one() or 0
+                    total_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_test.is_(False)))).one() or 0
                     
                     rev_stmt = select(PartnerTransaction.currency, func.sum(PartnerTransaction.amount_crypto if PartnerTransaction.currency == "TON" else PartnerTransaction.amount)) \
                         .join(Partner, Partner.id == PartnerTransaction.partner_id) \
                         .where(
                             PartnerTransaction.status == "completed",
-                            Partner.is_test == False,
+                            Partner.is_test.is_(False),
                             ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
                         ) \
                         .group_by(PartnerTransaction.currency)
@@ -235,7 +235,7 @@ class AdminService:
             func.count(text("CASE WHEN partner.created_at >= :d60 AND partner.created_at < :d30 THEN 1 END")),
             func.count(text("CASE WHEN partner.created_at >= :d90 THEN 1 END")),
             func.count(text("CASE WHEN partner.created_at >= :d180 AND partner.created_at < :d90 THEN 1 END")),
-        ).select_from(Partner).where(Partner.is_test == False).params(
+        ).select_from(Partner).where(Partner.is_test.is_(False)).params(
             h24=now-timedelta(hours=24),
             h48=now-timedelta(hours=48),
             d7=now-timedelta(days=7),
@@ -262,39 +262,39 @@ class AdminService:
         }
 
     async def _calculate_general_totals(self, session, now: datetime) -> dict:
-        total_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_test == False))).one() or 0
-        total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro, Partner.is_test == False))).one() or 0
-        total_tasks = (await session.exec(select(func.count(PartnerTask.id)).join(Partner).where(Partner.is_test == False))).one() or 0
+        total_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_test.is_(False)))).one() or 0
+        total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro, Partner.is_test.is_(False)))).one() or 0
+        total_tasks = (await session.exec(select(func.count(PartnerTask.id)).join(Partner).where(Partner.is_test.is_(False)))).one() or 0
         
         active_24h = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             (Partner.last_checkin_at >= now - timedelta(hours=24)) | (Partner.created_at >= now - timedelta(hours=24))
         ))).one() or 0
 
         active_7d = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             (Partner.last_checkin_at >= now - timedelta(days=7)) | (Partner.created_at >= now - timedelta(days=7))
         ))).one() or 0
 
         active_30d = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             (Partner.last_checkin_at >= now - timedelta(days=30)) | (Partner.created_at >= now - timedelta(days=30))
         ))).one() or 0
 
         active_90d = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             (Partner.last_checkin_at >= now - timedelta(days=90)) | (Partner.created_at >= now - timedelta(days=90))
         ))).one() or 0
 
         active_180d = (await session.exec(select(func.count(Partner.id)).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             (Partner.last_checkin_at >= now - timedelta(days=180)) | (Partner.created_at >= now - timedelta(days=180))
         ))).one() or 0
 
         # #comment: Count active payment sessions (pending in last 24h)
         # This helps admins see user interest even if no manual submissions exist.
         pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).join(Partner).where(
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             PartnerTransaction.status == "pending",
             PartnerTransaction.created_at >= now - timedelta(hours=24)
         ))).one() or 0
@@ -321,20 +321,20 @@ class AdminService:
         rev_ton_crypto = (await session.exec(select(func.sum(PartnerTransaction.amount_crypto)).join(Partner, Partner.id == PartnerTransaction.partner_id).where(
             PartnerTransaction.status == "completed", 
             PartnerTransaction.currency == "TON",
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
         ))).one() or 0.0
         rev_usdt = (await session.exec(select(func.sum(PartnerTransaction.amount)).join(Partner, Partner.id == PartnerTransaction.partner_id).where(
             PartnerTransaction.status == "completed", 
             PartnerTransaction.currency == "USDT",
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
         ))).one() or 0.0
         
         # Total Revenue in USD (Sum of all transaction amount_usd)
         total_revenue = (await session.exec(select(func.sum(PartnerTransaction.amount)).join(Partner, Partner.id == PartnerTransaction.partner_id).where(
             PartnerTransaction.status == "completed",
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
         ))).one() or 0.0
         
@@ -342,7 +342,7 @@ class AdminService:
         ton_price = await payment_service.get_ton_price()
         current_ton_value = rev_ton_crypto * ton_price
         
-        comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).join(Partner, Partner.id == Earning.partner_id).where(Earning.type == "COMMISSION", Earning.level.between(1, 20), Partner.is_test == False).group_by(Earning.level))
+        comm_res = await session.exec(select(Earning.level, func.sum(Earning.amount)).join(Partner, Partner.id == Earning.partner_id).where(Earning.type == "COMMISSION", Earning.level.between(1, 20), Partner.is_test.is_(False)).group_by(Earning.level))
         comm_map = {lvl: amt for lvl, amt in comm_res.all()}
         
         breakdown, total_comm = [], 0.0
@@ -373,13 +373,13 @@ class AdminService:
         from sqlalchemy import Date, cast
         cutoff = now - timedelta(days=14)
         
-        growth_res = await session.exec(select(cast(Partner.created_at, Date).label("day"), func.count(Partner.id)).where(Partner.created_at >= cutoff, Partner.is_test == False).group_by("day"))
+        growth_res = await session.exec(select(cast(Partner.created_at, Date).label("day"), func.count(Partner.id)).where(Partner.created_at >= cutoff, Partner.is_test.is_(False)).group_by("day"))
         growth_map = {row[0]: row[1] for row in growth_res.all() if row[0]}
         
         rev_res = await session.exec(select(cast(PartnerTransaction.created_at, Date).label("day"), func.sum(PartnerTransaction.amount)).join(Partner, Partner.id == PartnerTransaction.partner_id).where(
             PartnerTransaction.status == "completed", 
             PartnerTransaction.created_at >= cutoff,
-            Partner.is_test == False,
+            Partner.is_test.is_(False),
             ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
         ).group_by("day"))
         rev_map = {row[0]: row[1] for row in rev_res.all() if row[0]}
@@ -399,7 +399,7 @@ class AdminService:
             .join(Partner, Partner.id == PartnerTransaction.partner_id)
             .where(
                 PartnerTransaction.status == "completed",
-                Partner.is_test == False,
+                Partner.is_test.is_(False),
                 ~PartnerTransaction.network.in_(["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"])
             )
             .options(selectinload(PartnerTransaction.partner)) 
@@ -428,11 +428,11 @@ class AdminService:
         Calculates viral growth indicators (K-Factor, Velocity).
         """
         # K-Factor = (Total Referrals) / (Total Partners)
-        referring_partners = (await session.exec(select(func.count(func.distinct(Partner.referrer_id))).where(Partner.is_test == False))).one() or 1
+        referring_partners = (await session.exec(select(func.count(func.distinct(Partner.referrer_id))).where(Partner.is_test.is_(False)))).one() or 1
         k_factor = round(total_partners / referring_partners, 2) if referring_partners > 0 else 0
         
         # Network Density (Phase 4): Average generation depth across entire network
-        avg_depth = (await session.exec(select(func.avg(Partner.depth)).where(Partner.is_test == False))).one() or 1.0
+        avg_depth = (await session.exec(select(func.avg(Partner.depth)).where(Partner.is_test.is_(False)))).one() or 1.0
         
         return {
             "k_factor": k_factor,
@@ -510,7 +510,7 @@ class AdminService:
                 Partner.telegram_id,
                 func.sum(Earning.amount).label("total_earnings")
             ).join(Earning, Partner.id == Earning.partner_id) \
-             .where(Earning.currency != "XP", Partner.is_test == False) \
+             .where(Earning.currency != "XP", Partner.is_test.is_(False)) \
              .group_by(Partner.username, Partner.telegram_id) \
              .order_by(text("total_earnings DESC")) \
              .limit(limit)
@@ -560,7 +560,7 @@ class AdminService:
             # We filter depth 1-20 to show the 20-level tree distribution.
             stmt = select(Partner.depth, func.count(Partner.id)).where(
                 Partner.depth.between(1, 20),
-                Partner.is_test == False
+                Partner.is_test.is_(False)
             ).group_by(Partner.depth)
             
             result = await session.exec(stmt)

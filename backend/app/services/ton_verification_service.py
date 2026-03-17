@@ -5,6 +5,7 @@ from sqlmodel import select
 
 from app.core.config import settings
 from app.core.http_client import http_client
+from app.models.partner import Partner
 
 logger = logging.getLogger(__name__)
 

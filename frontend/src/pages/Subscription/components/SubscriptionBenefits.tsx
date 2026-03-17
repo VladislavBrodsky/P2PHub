@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, Clock } from 'lucide-react';
+import { FomoTimer } from './SubscriptionTimers';
 
 interface BenefitItem {
     id: string;
@@ -60,6 +61,20 @@ export const SubscriptionBenefits = React.memo(({
                     />
 
                     <div className="relative z-10">
+                        {selectedPlan === 'PRO_PLUS' && (
+                            <div className="flex flex-row items-center justify-between gap-4 mb-4 pb-4 border-b border-black/10">
+                                <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-8 h-8 rounded-xl bg-black/10 flex items-center justify-center text-black shrink-0">
+                                        <Clock size={16} strokeWidth={3} className="animate-pulse" />
+                                    </div>
+                                    <div className="flex flex-col min-w-0">
+                                        <span className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] leading-none mb-1 truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                        <span className="text-[10px] font-black text-black uppercase tracking-widest leading-none truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                    </div>
+                                </div>
+                                <FomoTimer />
+                            </div>
+                        )}
                         <div className={`text-label font-black uppercase tracking-[0.3em] mb-2 ${selectedPlan === 'PRO' ? 'text-white/60' : 'text-[#0a1000]/50'}`}>
                             {selectedPlan === 'PRO'
                                 ? t('pro:subscription.plan_headline')

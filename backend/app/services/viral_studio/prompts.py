@@ -53,7 +53,7 @@ def build_viral_system_prompt(language, target_audience, post_type, tone, ref_li
     audience_seo = audience_intel.get("performing_keywords_2026", [])
     strategy_seo = category_strategy.get("seo_keywords", [])
     tone_seo = ToneIntelligence.TONES.get(tone.lower(), {}).get("seo_keywords", [])
-    list(set(audience_seo + strategy_seo + tone_seo))
+    # seo_keywords computed but only used in user_prompt; assembled there instead
 
     resonance_context = ""
     if resonance_data and "top_resonance_segments" in resonance_data:
@@ -152,11 +152,6 @@ def build_viral_user_prompt(target_audience, post_type, language, tone, ref_link
     audience_intel = intel["audience"]
     category_strategy = intel["strategy"]
     hook_examples = audience_intel.get("hooks", []) if audience_intel else []
-    audience_intel.get("tov", {}) if audience_intel else {}
-    audience_intel.get("visual_base", "A successful person")
-    category_strategy.get("visual_scene", "experiencing a transformation")
-    
-    "\n".join(['- ' + hook for hook in hook_examples[:2]])
 
     # 🎯 SEO & VIRAL HASHTAG PROTOCOL (CRITICAL)
     audience_tags = audience_intel.get("viral_hashtags", [])

@@ -76,7 +76,6 @@ class LeaderboardService:
                 key = keys[0]
 
             rank = await redis_service.client.zrevrank(key, str(partner_id))
-            season_xp = await redis_service.client.zscore(key, str(partner_id))
             return rank
         except Exception:
             return None

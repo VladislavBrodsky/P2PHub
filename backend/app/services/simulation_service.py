@@ -27,7 +27,7 @@ async def simulate_artificial_activity():
     
     async with async_session() as session:
         # Fetch all marked test partners
-        statement = select(Partner).where(Partner.is_test == True)
+        statement = select(Partner).where(Partner.is_test.is_(True))
         result = await session.exec(statement)
         test_partners = result.all()
         

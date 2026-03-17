@@ -434,7 +434,6 @@ class ViralMarketingStudio:
         user_prompt = prompts.build_viral_user_prompt(target_audience, post_type, language, tone_of_voice, ref_link, intel, brand_mention=brand_mention)
         
         full_text = ""
-        current_field = None
         buffer = ""
 
         try:
@@ -451,7 +450,6 @@ class ViralMarketingStudio:
                 stream=True
             )
 
-            is_inside_json = False
             title_found = False
             body_started = False
             
@@ -516,7 +514,7 @@ class ViralMarketingStudio:
                     try:
                         tags = json.loads("[" + tags_match.group(1) + "]")
                         yield {"type": "hashtags", "content": tags}
-                    except: pass
+                    except json.JSONDecodeError: pass
 
             yield {"type": "status", "content": "Capturing visuals..."}
             

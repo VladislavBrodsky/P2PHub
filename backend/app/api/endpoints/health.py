@@ -154,12 +154,10 @@ async def notifications_health_check(
         from app.services.redis_service import redis_service
         # TaskIQ with Redis ListQueueBroker usually uses this key
         # We can also check for other keys to see if workers are alive
+        import contextlib
         queue_len = 0
-        try:
-            # ListQueueBroker default list key is 'taskiq_tasks'
+        with contextlib.suppress(Exception):
             queue_len = await redis_service.client.llen("taskiq_tasks")
-        except Exception:
-            pass
 
         return {
             "status": "healthy" if stuck_count < 10 and queue_len < 50 else "congested",

@@ -210,9 +210,6 @@ async def post_to_pinterest(partner: Partner, content: str, image_path: str | No
             if not items:
                 return {"error": "No Pinterest boards found. Please create a board first."}
             
-            board_id = items[0]["id"] # Pick the first board
-            clean_content = re.sub(r'<[^>]*>', '', content)
-            
             # Pinterest Pins REQUIRE an image. 
             # If no image provided, we can't post a Pin in the traditional way.
             if not image_path:

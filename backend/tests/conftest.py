@@ -86,11 +86,9 @@ async def engine():
     await test_engine.dispose()
     
     # Remove the test database file
-    if os.path.exists("./test_db.sqlite"):
-        try:
-            os.remove("./test_db.sqlite")
-        except:
-            pass
+    import contextlib
+    with contextlib.suppress(Exception):
+        os.remove("./test_db.sqlite")
 
 
 @pytest.fixture(scope="function")

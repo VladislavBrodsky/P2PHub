@@ -502,7 +502,7 @@ export default function SubscriptionPage() {
                     >
                         <ChevronLeft size={16} />
                     </button>
-                    <div className="flex flex-col px-3 pb-24 pt-4 max-w-lg mx-auto overflow-x-hidden">
+                    <div className="flex flex-col px-3 pb-24 pt-(--header-total-offset,138px) max-w-lg mx-auto overflow-x-hidden">
                         <div className="relative overflow-hidden rounded-xl bg-transparent dark:bg-bg-app border-none dark:border dark:border-white/10 shadow-none dark:shadow-premium-sm mb-5">
                             <div className="relative z-10 w-full p-4">
                                 {/* #comment: Ambient Background Glows removed for Unified Background Continuity */}
@@ -527,8 +527,6 @@ export default function SubscriptionPage() {
                                 />
                             </div>
 
-                            {/* ── DEADLINE STICKY HEADER ── */}
-                            <StickyFomoHeader t={t} />
 
                             {/* ── PROFIT MATH SECTION ── */}
                             <div className="mb-6 px-1">

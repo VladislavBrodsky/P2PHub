@@ -345,7 +345,6 @@ async def menu_balance(message: types.Message):
     async for session in get_session():
         partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
         if partner:
-            lang = partner.language_code or "en"
             await message.answer(f"💰 *Your Balance*\n\nAvailable: `{partner.balance}` USDT\nXP Score: `{partner.xp}`", parse_mode="Markdown")
         break
 
@@ -526,8 +525,6 @@ async def handle_tx_hash(message: types.Message):
                 # Show main menu again with new status
                 bot_info = await bot.get_me()
                 referral_link = f"https://t.me/{bot_info.username}?start={partner.referral_code}"
-                share_text = get_msg(partner.language_code or "en", "share_text")
-                share_url = f"https://t.me/share/url?url={urllib.parse.quote(referral_link)}&text={urllib.parse.quote(share_text)}"
 
                 await message.answer(
                     get_msg(lang, "what_next"),

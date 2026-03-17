@@ -8,7 +8,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.security import get_current_user, get_tg_user
-from app.models.partner import Partner, SystemSetting, get_session
+from app.models.partner import Partner, SocialPost, SystemSetting, get_session
 from app.models.schemas import (
     GrowthMetrics,
     PROSetupRequest,
@@ -127,8 +127,8 @@ async def get_pro_member_avatars(
     from sqlalchemy import or_
     stmt = (
         select(Partner.photo_url, Partner.photo_file_id)
-        .where(Partner.is_pro == True)
-        .where(or_(Partner.photo_url != None, Partner.photo_file_id != None))
+        .where(Partner.is_pro.is_(True))
+        .where(or_(Partner.photo_url.isnot(None), Partner.photo_file_id.isnot(None)))
         .order_by(Partner.last_checkin_at.desc())
         .limit(limit)
     )
