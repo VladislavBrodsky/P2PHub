@@ -48,6 +48,5 @@ class AuditLog(SQLModel, table=True):
         sa_column_kwargs={"server_default": text("now()"), "nullable": False}
     )
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = {"arbitrary_types_allowed": True}
 

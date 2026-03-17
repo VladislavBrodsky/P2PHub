@@ -135,9 +135,10 @@ class PartnerResponse(PartnerBase):
     @computed_field
     @property
     def total_network_size(self) -> int:
-        if hasattr(self, "_network_size_real") and self._network_size_real is not None:
-            return self._network_size_real
-        return getattr(self, "referral_count", 0)
+        network_size = getattr(self, "_network_size_real", None)
+        if network_size is not None:
+            return int(network_size)
+        return int(getattr(self, "referral_count", 0))
 
     @computed_field
     @property
@@ -159,8 +160,7 @@ class PROSetupRequest(BaseModel):
     discord_webhook_url: str | None = Field(default=None)
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class ViralGenerateRequest(BaseModel):
     post_type: str
@@ -170,8 +170,7 @@ class ViralGenerateRequest(BaseModel):
     referral_link: str | None = None
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class ViralGenerateResponse(BaseModel):
     id: int | None = None # Explicit generation ID for tracking
@@ -184,8 +183,7 @@ class ViralGenerateResponse(BaseModel):
     error_code: str | None = None
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'
@@ -195,15 +193,13 @@ class SocialPostRequest(BaseModel):
     channel_id: str | None = None  # PRO+: override which TG channel to post to
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class TaskClaimRequest(BaseModel):
     xp_reward: float = Field(gt=0, description="XP reward must be greater than zero")
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class NetworkStats(BaseModel):
     # Dynamic Mapping: allows level_1...level_20 without hardcoding every field
@@ -240,8 +236,7 @@ class GrowthMetrics(BaseModel):
     previous_count: int
     timeframe: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class EarningSchema(BaseModel):
     amount: float
@@ -251,8 +246,7 @@ class EarningSchema(BaseModel):
     currency: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class PartnerTopResponse(BaseModel):
     id: int
@@ -277,26 +271,22 @@ class OrbitMemberResponse(BaseModel):
     xp: float
     rank: str
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class LanguageUpdate(BaseModel):
     language_code: str
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class ReferralLinkUpdate(BaseModel):
     referral_link: str
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 class NotificationsUpdate(BaseModel):
     notifications_paused: bool
     
     # #comment: Standardized for audit.
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

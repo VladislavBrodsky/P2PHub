@@ -389,7 +389,6 @@ app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 from app.api.endpoints import blog, config, health
 
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
-app.include_router(health.router, tags=["health"])
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
