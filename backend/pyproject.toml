@@ -9,9 +9,9 @@ description = "P2PHub Backend API"
 requires-python = ">=3.11"
 dependencies = [
     "aiofiles==24.1.0",
-    "aiogram==3.22.0",
+    "aiogram>=3.25.0",
     "aiohappyeyeballs==2.6.1",
-    "aiohttp==3.12.15",
+    "aiohttp>=3.13.1",
     "aiosignal==1.4.0",
     "alembic==1.18.3",
     "annotated-doc==0.0.4",
@@ -165,3 +165,11 @@ dependencies = [
 [tool.ruff]
 cache-dir = "/tmp/ruff_cache"
 exclude = [".tmp*", "node_modules", ".venv_new", "venv", ".venv"]
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+include = ["app", "bot.py", "main.py"]
+exclude = ["**/__pycache__", "venv"]
+reportMissingImports = true
+pythonVersion = "3.13"
