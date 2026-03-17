@@ -311,10 +311,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
     # Determine Model: PRO ($39) or PRO+ ($69)
     # Use plan_type if provided, else fallback to amount-based detection
-    if plan_type:
-        is_pro_plus_purchase = "PRO_PLUS" in plan_type
-    else:
-        is_pro_plus_purchase = total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
+    is_pro_plus_purchase = "PRO_PLUS" in plan_type if plan_type else total_amount >= (settings.PRO_PLUS_PRICE_USD - 0.1)
     
     comm_map = settings.COMMISSION_MAP_GROWTH_STRATEGY
     _max_recipients = 20

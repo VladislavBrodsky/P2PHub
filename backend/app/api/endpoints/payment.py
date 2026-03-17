@@ -44,10 +44,7 @@ async def create_invoice(
     Used before the user starts the payment flow.
     """
     try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
+        tg_id = str(json.loads(user_data["user"]).get("id")) if "user" in user_data else str(user_data.get("id"))
     except Exception as e:
         logger.warning(f"Invalid user data in create_invoice: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")
@@ -133,10 +130,7 @@ async def verify_ton(
     Verifies a TON transaction hash and upgrades user to PRO if valid.
     """
     try:
-        if "user" in user_data:
-            tg_id = str(json.loads(user_data["user"]).get("id"))
-        else:
-            tg_id = str(user_data.get("id"))
+        tg_id = str(json.loads(user_data["user"]).get("id")) if "user" in user_data else str(user_data.get("id"))
     except Exception as e:
         logger.warning(f"Invalid user data in verify_ton: {e}")
         raise HTTPException(status_code=400, detail="Invalid user data")

@@ -151,10 +151,11 @@ async def notifications_health_check(
         last_error = res_err.scalar()
 
         # 4. Check Redis TaskIQ Queue Depth
-        from app.services.redis_service import redis_service
         # TaskIQ with Redis ListQueueBroker usually uses this key
         # We can also check for other keys to see if workers are alive
         import contextlib
+
+        from app.services.redis_service import redis_service
         queue_len = 0
         with contextlib.suppress(Exception):
             queue_len = await redis_service.client.llen("taskiq_tasks")
