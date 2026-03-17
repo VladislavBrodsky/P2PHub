@@ -149,6 +149,7 @@ async def reconcile_network_stats(session_override: AsyncSession = None) -> dict
         async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
         async with async_session() as session:
             return await _do_reconcile(session)
+    return {"status": "error", "message": "Failed to acquire lock"}
 
 async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     logger.info("🔧 Starting High-Performance Network Reconciliation...")
@@ -196,7 +197,7 @@ async def _do_reconcile(session: AsyncSession) -> dict[str, Any]:
     duration = (datetime.now(UTC).replace(tzinfo=None) - start_time).total_seconds()
     result_data = {
         "status": "success",
-        "duration_sec": round(duration, 2),
+        "duration_sec": round(float(duration), 2),
         "total_partners": total_partners,
         "structural_fixes": len(path_updates),
         "count_fixes": len(diff_counts)
@@ -321,10 +322,11 @@ async def check_database_health() -> dict:
         
         return {
             "status": "healthy" if orphaned_count == 0 else "degraded",
-            "latency_ms": round(latency_ms, 2),
+            "latency_ms": round(float(latency_ms), 2),
             "orphaned_count": orphaned_count,
             "timestamp": datetime.now(UTC).replace(tzinfo=None).isoformat()
         }
+    return {"status": "error", "message": "Database health check failed"}
 
 async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
     """
@@ -587,13 +589,13 @@ async def nightly_reconciliation_task():
     """
     from sqlalchemy import func
     from sqlalchemy.orm import sessionmaker
+    from sqlmodel import select
+    from sqlmodel.ext.asyncio.session import AsyncSession
 
     from app.models.audit_log import ActionType
     from app.models.partner import Earning, Partner, XPTransaction, engine
     from app.services.audit_service import audit_service
     from app.services.notification_service import notification_service
-    from sqlmodel import select
-    from sqlmodel.ext.asyncio.session import AsyncSession
 
     logger.info("🔍 Nightly Reconciliation Task: Starting...")
 

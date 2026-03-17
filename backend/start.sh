@@ -37,7 +37,17 @@ echo "✅ Migration step finished."
 # Default to 2 workers for stability, especially on 1-2GB RAM servers.
 echo "🌍 Starting Server with Gunicorn..."
 WORKERS=${GUNICORN_WORKERS:-2}
-echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have $>4GB RAM)"
+echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have >4GB RAM)"
+
+# --- TASKIQ BACKGROUND STARTUP (OPTIONAL) ---
+# Enable this by setting RUN_TASKIQ_IN_BACK=true in environment.
+# This is useful for single-service deployments on Railway/Render.
+if [[ "${RUN_TASKIQ_IN_BACK}" == "true" ]]; then
+    echo "📡 Starting Taskiq Worker and Scheduler in background..."
+    taskiq worker app.worker:broker --daemon || (taskiq worker app.worker:broker &)
+    taskiq scheduler app.worker:scheduler --daemon || (taskiq scheduler app.worker:scheduler &)
+    echo "✅ Taskiq background processes initiated."
+fi
 
 exec gunicorn app.main:app \
     -w "$WORKERS" \

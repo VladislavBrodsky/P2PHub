@@ -99,6 +99,7 @@ class Settings(BaseSettings):
     REDIS_URL: str = Field(default="redis://localhost:6379/0", validation_alias="REDIS_URL")
     PORT: int = Field(default=8000, validation_alias="PORT")
     FRONTEND_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app", validation_alias="FRONTEND_URL")
+    RUN_TASKIQ_IN_BACK: bool = Field(default=False, validation_alias="RUN_TASKIQ_IN_BACK")
     
     # --- WEBHOOKS ---
     WEBHOOK_URL: str | None = Field(default=None, validation_alias="WEBHOOK_URL")

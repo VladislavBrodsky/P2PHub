@@ -42,6 +42,7 @@ class Partner(SQLModel, table=True):
     unlocked_stages: str = Field(default="[]") # Store paid/unlocked Academy stage IDs as JSON string
     academy_score: float = Field(default=0.0) # Track Academy points
     is_verified: bool = Field(default=False, index=True) # KYC Verification Status
+    is_test: bool = Field(default=False, index=True) # Marker for simulated/test activity
 
     # PRO Subscription Status
     is_pro: bool = Field(default=False, index=True)

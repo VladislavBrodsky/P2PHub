@@ -8,6 +8,7 @@ import secrets
 from datetime import UTC, datetime, timedelta
 
 import sentry_sdk
+from typing import Any, List, cast
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from sqlalchemy import func, text
 from sqlalchemy.orm import selectinload
@@ -576,11 +577,21 @@ async def get_orbit_members(
     for _i, p in enumerate(partners[:8]):
         # Construct the optimized picture_url
         picture_url = None
+        
+        # Sanitize legacy photo URLs (e.g. /images/avatars/...)
+        safe_photo_url = p.photo_url
+        if safe_photo_url and (
+            safe_photo_url.startswith("/images/avatars/") or
+            safe_photo_url.startswith("/images/") or
+            safe_photo_url.startswith("/avatars/")
+        ):
+            safe_photo_url = None
+
         if p.photo_file_id:
             # Use relative paths to let the frontend handle the base URL reliably
             picture_url = f"/api/partner/photo/{p.photo_file_id}"
-        elif p.photo_url:
-            picture_url = p.photo_url
+        elif safe_photo_url:
+            picture_url = safe_photo_url
         else:
             # Inject demo avatar if this specific partner has no photo
             picture_url = DEMO_AVATARS[p.id % len(DEMO_AVATARS)]
@@ -646,7 +657,7 @@ async def get_recent_partners(
     count_setting = await session.get(SystemSetting, count_settings_key)
 
     now = datetime.now(UTC).replace(tzinfo=None)
-    partners_list = []
+    partners_list: list[dict[str, Any]] = []
     last_hour_count = 0
 
     # Combined check for refresh (every 5m to keep UI "live")
@@ -656,7 +667,7 @@ async def get_recent_partners(
            (now - count_setting.updated_at < count_refresh_window):
             refresh_needed = False
             try:
-                partners_list = json.loads(snapshot_setting.value)
+                partners_list = cast(list[dict[str, Any]], json.loads(snapshot_setting.value))
                 last_hour_count = int(count_setting.value)
             except Exception:
                 refresh_needed = True
@@ -737,7 +748,7 @@ async def get_recent_partners(
         await session.commit()
 
     partners_data = {
-        "partners": partners_list[:limit],
+        "partners": cast(list, partners_list)[:limit],
         "last_hour_count": last_hour_count
     }
 
@@ -1487,6 +1498,7 @@ async def get_finance_stats(
         Earning.created_at >= fetch_after
     ).order_by(Earning.created_at.desc())
     earnings = (await session.exec(earnings_stmt)).all()
+    earnings: list[Earning] = list(earnings)
     
     # 2. Fetch Transactions (Outcome/Spending)
     tx_stmt = select(PartnerTransaction).where(
@@ -1496,6 +1508,7 @@ async def get_finance_stats(
         PartnerTransaction.created_at >= fetch_after
     ).order_by(PartnerTransaction.created_at.desc())
     transactions = (await session.exec(tx_stmt)).all()
+    transactions: list[PartnerTransaction] = list(transactions)
     
     # 3. Combined 72h History
     history_72h = []
@@ -1558,10 +1571,12 @@ async def get_finance_stats(
     # Populate monthly history
     for e in earnings:
         e_month_start = e.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        iso_month = e_month_start.isoformat()
         for m in monthly_history:
-            if m["timestamp"] == e_month_start.isoformat():
-                if e.currency in m:
-                    m[e.currency]["income"] += e.amount
+            if m["timestamp"] == iso_month:
+                currency_data = m.get(e.currency)
+                if isinstance(currency_data, dict):
+                    currency_data["income"] += e.amount
                 break
                 
     for t in transactions:
@@ -1572,11 +1587,13 @@ async def get_finance_stats(
             continue
 
         t_month_start = t.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        iso_month = t_month_start.isoformat()
         for m in monthly_history:
-            if m["timestamp"] == t_month_start.isoformat():
-                if t.currency in m:
+            if m["timestamp"] == iso_month:
+                currency_data = m.get(t.currency)
+                if isinstance(currency_data, dict):
                     amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto is not None) else t.amount
-                    m[t.currency]["outcome"] += amt
+                    currency_data["outcome"] += amt
                 break
 
     # 5. Current Monthly Stats (for backward compatibility if needed, though monthly_history[0] is current)

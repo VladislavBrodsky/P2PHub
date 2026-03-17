@@ -35,7 +35,7 @@ export const SubscriptionPricing = React.memo(({
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
-                <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-[1.1] text-center mb-3 uppercase max-w-[320px] mx-auto">
+                <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] mx-auto">
                     {t('pro:subscription.upgrade.dominate_network')}
                 </h2>
 
