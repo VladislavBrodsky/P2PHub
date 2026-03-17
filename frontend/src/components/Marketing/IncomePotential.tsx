@@ -144,12 +144,12 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
                     <m.div
-                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5 will-change-transform"
                         animate={{
                             boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
                             borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.3)"]
                         }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                     >
                         <TrendingUp className="w-3.5 h-3.5 text-blue-500" />
                         <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-500">
@@ -230,16 +230,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
                                             <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-2xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing">${estimatedMonthly}</span>
+                                                <span className="text-2xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased">${estimatedMonthly}</span>
                                             </div>
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-sm tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30"
+                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-sm tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30 will-change-transform"
                                             >
                                                 <Lock className="w-5 h-5 text-white relative z-10" />
                                                 <span className="text-white uppercase relative z-10">{t('income.profit.unlock_btn')}</span>
-                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
+                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
                                             </button>
                                         </div>
                                     </m.div>
