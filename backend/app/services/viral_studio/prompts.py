@@ -1,7 +1,7 @@
 import random
 from typing import Any
 
-from app.core.cmo_intelligence import (
+from app.core.cmo import (
     AudienceProfile,
     ContentCategory,
     NativeLanguageOptimization,
