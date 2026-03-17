@@ -206,7 +206,8 @@
         "desc": "Синхронизация до 5 каналов одновременно (PRO+).",
         "test": "ТЕСТ ПОДКЛЮЧЕНИЯ"
       },
-      "referral_link_prefix_error": "Ссылка должна начинаться с t.me/pintopaybot?start=",
+      "personal_link_warning": "Ссылка должна начинаться с",
+      "personal_link_placeholder": "https://t.me/pintopay_probot?start=...",
       "save_success_title": "Протокол Синхронизации Активен",
       "save_success_text": "Нейронные узлы успешно настроены.",
       "save_error_title": "Ошибка Синхронизации",
@@ -260,7 +261,7 @@
           },
           {
             "title": "Шаг 3: Дайте права на публикацию",
-            "desc": "Зайдите в App Settings > User Authentication. Выберите 'OAuth 1.0a'. Смените права с 'Read Only' на 'Read and Write'. В полях Website/Callback URL просто вставьте: https://t.me/p2phub_probot"
+            "desc": "Зайдите в App Settings > User Authentication. Выберите 'OAuth 1.0a'. Смените права с 'Read Only' на 'Read and Write'. В полях Website/Callback URL просто вставьте: https://t.me/pintopay_probot"
           },
           {
             "title": "Шаг 4: Получите 4 секретных ключа",
@@ -472,8 +473,9 @@
       "processing": "Обработка...",
       "create_another_btn": "СОЗДАТЬ ЕЩЕ ПОСТ",
       "footer": "P2PHub Global Sync • 2026"
-    },
-    "notifications": {
+    }
+  },
+  "notifications": {
       "success": "Успешно",
       "error": "Ошибка",
       "copied": "Скопировано",

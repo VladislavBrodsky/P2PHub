@@ -160,6 +160,7 @@
       "add_personal_link": "Add Referral Link",
       "personal_link_subtitle": "Embed your referral link directly in posts.",
       "personal_link_warning": "Link must start with",
+      "personal_link_placeholder": "https://t.me/pintopay_probot?start=...",
       "hashtags_refreshed": "Viral hashtags optimized",
       "link_saved": "Referral link updated successfully",
       "link_error": "Invalid link format",
@@ -216,7 +217,7 @@
         "desc": "Sync up to 5 channels simultaneously (PRO+).",
         "test": "TEST CONNECTION"
       },
-      "referral_link_prefix_error": "Link must start with t.me/pintopaybot?start=",
+      "referral_link_prefix_error": "Link must start with t.me/pintopay_probot?start=",
       "save_success_title": "Sync Protocol Active",
       "save_success_text": "Neural nodes successfully configured.",
       "save_error_title": "Sync Failed",
@@ -240,7 +241,7 @@
         "desc": "Direct broadcast to your community.",
         "placeholder": "Bot Token / Channel ID",
         "guide": "Guide",
-        "instruction": "Add @pintopay_bot as Admin to your channel/group."
+        "instruction": "Add @pintopay_probot as Admin to your channel/group."
       },
       "x_manual": {
         "title": "X Manual Configuration",
@@ -274,7 +275,7 @@
           },
           {
             "title": "Step 1: Bot Activation",
-            "desc": "Add @pintopaybot to your channel as an Administrator."
+            "desc": "Add @pintopay_probot to your channel as an Administrator."
           },
           {
             "title": "Step 2: ID Discovery",
@@ -460,8 +461,9 @@
       "processing": "Processing...",
       "create_another_btn": "CREATE ANOTHER POST",
       "footer": "Pintopay Global Sync • 2026"
-    },
-    "notifications": {
+    }
+  },
+  "notifications": {
       "success": "Success",
       "error": "Error",
       "copied": "Copied",
@@ -495,8 +497,8 @@
       "trends_failed_msg": "Could not fetch global trends.",
       "insufficient_xp_title": "INSUFFICIENT XP",
       "insufficient_xp_msg": "Keep studying to unlock advanced lessons!"
-    },
-    "tools": {
+  },
+  "tools": {
       "headline": {
         "title": "Headline Engineer",
         "desc": "Make a headline hyper-viral (1 Token)",
