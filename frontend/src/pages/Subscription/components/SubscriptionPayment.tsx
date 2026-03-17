@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, Wallet, Share2, AlertTriangle, Fingerprint, CheckCircle2, HelpCircle, CreditCard, Shield } from 'lucide-react';
+import { Loader2, Wallet, Share2, AlertTriangle, Fingerprint, CheckCircle2, HelpCircle, CreditCard, Shield, Copy, Check } from 'lucide-react';
 import { TonConnectButton } from '@tonconnect/ui-react';
 import { TONLogo, USDTLogo } from '../../../components/ui/CryptoIcons';
 import { PaymentSessionTimer } from './SubscriptionTimers';
@@ -55,11 +55,15 @@ export const SubscriptionPayment = React.memo(({
     paymentRef
 }: SubscriptionPaymentProps) => {
     const { showNotification } = useNotificationStore();
+    const [copied, setCopied] = React.useState(false);
 
     const handleCopyAddress = async () => {
         const success = await copyToClipboard(adminUsdt);
         
         if (success) {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+
             // Fire haptic on success only
             selection();
             notification('success');
@@ -86,6 +90,13 @@ export const SubscriptionPayment = React.memo(({
                     webApp.showAlert(t('pro:notifications.text_copied'));
                 }
             }
+        } else {
+            notification('error');
+            showNotification({
+                title: t('pro:notifications.error'),
+                message: t('common:error'),
+                type: 'error'
+            });
         }
     };
 
@@ -204,16 +215,18 @@ export const SubscriptionPayment = React.memo(({
                                             </div>
                                             <div
                                                 onClick={handleCopyAddress}
-                                                className="vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm"
+                                                className={`vibing-premium-panel bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 p-4 cursor-pointer group hover:border-emerald-500/50 transition-all active:scale-[0.98] shadow-sm ${copied ? 'ring-2 ring-emerald-500/50' : ''}`}
                                             >
-                                                <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.tap_to_copy')}</p>
-                                                <div className="bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border border-slate-100 dark:border-white/5">
-                                                    <code className="text-label font-mono text-slate-800 dark:text-white/80 break-all flex-1">{adminUsdt}</code>
-                                                    <div className="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md shrink-0">
-                                                        <Share2 size={14} />
+                                                <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{copied ? t('pro:notifications.copied') : t('pro:subscription.upgrade.tap_to_copy')}</p>
+                                                <div className={`bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border transition-all ${copied ? 'border-emerald-500 shadow-lg' : 'border-slate-100 dark:border-white/5'}`}>
+                                                    <code className={`text-label font-mono break-all flex-1 transition-colors ${copied ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-white/80'}`}>{adminUsdt}</code>
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-md shrink-0 transition-all ${copied ? 'bg-emerald-600 scale-110' : 'bg-emerald-500'} text-white`}>
+                                                        {copied ? <Check size={14} /> : <Copy size={14} />}
                                                     </div>
                                                 </div>
-                                                <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest text-center block w-full group-hover:animate-pulse">{t('pro:subscription.upgrade.tap_to_copy')}</span>
+                                                <span className={`text-label font-bold uppercase tracking-widest text-center block w-full group-hover:animate-pulse transition-colors ${copied ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                                                    {copied ? t('pro:notifications.copied') : t('pro:subscription.upgrade.tap_to_copy')}
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
