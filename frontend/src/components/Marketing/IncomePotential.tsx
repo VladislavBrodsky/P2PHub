@@ -157,15 +157,15 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </span>
                     </m.div>
 
-                    <h3 className="text-3xl sm:text-4xl font-black tracking-tight leading-[0.95] max-w-[340px] mx-auto uppercase text-balance">
+                    <h3 className="text-[clamp(1.5rem,6vw,2.25rem)] font-black tracking-tight leading-[0.95] max-w-[340px] mx-auto uppercase text-balance">
                         {t('income.title')} <br />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-size-[200%_auto] animate-text-shimmer drop-shadow-sm">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
-                        <p className="text-sm text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
+                        <p className="text-[clamp(0.8rem,2vw,0.875rem)] text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
                             <Trans i18nKey="income.desc">
                                 Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
-                                As a <span className="text-slate-900 dark:text-white font-bold">Pintopay Partner</span>, you are the bridge.
+                                As a <span className="text-pintopay-blue dark:text-blue-400 font-bold">Partner</span>, you are the bridge.
                                 Every global transaction becomes your dividends.
                             </Trans>
                         </p>
@@ -183,16 +183,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-white/10">
+                            <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-white/10 gap-1">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-1.5 rounded-md text-label font-bold uppercase tracking-wide transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:bg-white/5'}`}
+                                    className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
@@ -228,17 +228,17 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
                                         </div>
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
-                                            <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-3 rounded-xl border border-slate-200/50 dark:border-white/10">
-                                                <span className="text-caption font-semibold text-slate-500 dark:text-slate-400">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-2xl font-bold text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased">${estimatedMonthly}</span>
+                                            <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-4 rounded-xl border border-slate-200/50 dark:border-white/10">
+                                                <span className="text-[clamp(0.65rem,2vw,0.75rem)] font-black uppercase text-slate-500 dark:text-white/40 tracking-wider flex-1">{t('income.profit.monthly_income')}</span>
+                                                <span className="text-[clamp(1.25rem,5vw,1.75rem)] font-black text-emerald-500 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased tab-nums shrink-0 ml-2">${estimatedMonthly}</span>
                                             </div>
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-sm tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30 will-change-transform"
+                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-[clamp(0.75rem,2.5vw,0.85rem)] tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30 will-change-transform"
                                             >
-                                                <Lock className="w-5 h-5 text-white relative z-10" />
-                                                <span className="text-white uppercase relative z-10">{t('income.profit.unlock_btn')}</span>
+                                                <Lock className="w-5 h-5 text-white relative z-10 shrink-0" />
+                                                <span className="text-white uppercase relative z-10 whitespace-nowrap">{t('income.profit.unlock_btn')}</span>
                                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
                                             </button>
                                         </div>

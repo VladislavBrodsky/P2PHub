@@ -429,21 +429,31 @@ export default function SubscriptionPage() {
                     {/* --- BACK BUTTON --- */}
                     <button
                         onClick={() => { selection(); window.history.back(); }}
-                        className="absolute left-4 top-[100px] z-50 w-8 h-8 rounded-full bg-slate-100/10 dark:bg-white/10 backdrop-blur-md border border-slate-200/20 dark:border-white/20 flex items-center justify-center text-slate-900/50 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/20 dark:hover:bg-white/20 transition-all active:scale-95 shadow-sm"
+                        className="absolute left-4 top-[85px] z-50 w-8 h-8 rounded-full bg-slate-100/10 dark:bg-white/10 backdrop-blur-md border border-slate-200/20 dark:border-white/20 flex items-center justify-center text-slate-900/50 dark:text-white/70 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/20 dark:hover:bg-white/20 transition-all active:scale-95 shadow-sm"
                     >
                         <ChevronLeft size={16} />
                     </button>
-                    <div className="flex flex-col px-3 pb-24 pt-[110px] max-w-lg mx-auto overflow-x-hidden">
+                    <div className="flex flex-col px-3 pb-24 pt-[80px] max-w-lg mx-auto overflow-x-hidden">
                         <div className="relative overflow-hidden rounded-xl bg-transparent dark:bg-bg-app border-none dark:border dark:border-white/10 shadow-none dark:shadow-premium-sm mb-5">
                             <div className="relative z-10 w-full p-4">
-                                {/* #comment: Ambient Background Glows removed for Unified Background Continuity */}
+                                <div className="text-center mb-6 px-4">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="inline-flex items-center justify-center gap-2 mb-3 px-3 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 rounded-full"
+                                    >
+                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-pulse" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
+                                    </motion.div>
 
+                                    <h2 className="text-[clamp(1.5rem,7vw,2.25rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] mx-auto">
+                                        {t('pro:subscription.upgrade.dominate_network')}
+                                    </h2>
 
-
-
-
-
-                                {/* ── HERO / STATUS BOARD ─────────────────────────── */}
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed max-w-[280px] mx-auto opacity-70 uppercase tracking-wide">
+                                        {t('pro:subscription.upgrade.subheadline')}
+                                    </p>
+                                </div>
 
                                 {/* ── PLAN SELECTION BLOCK ── */}
                                 <SubscriptionPricing

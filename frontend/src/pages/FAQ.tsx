@@ -205,7 +205,7 @@ export default function FAQPage() {
     return (
         <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden">
             {/* Premium Header */}
-            <div className="relative pt-[calc(var(--spacing-safe-top,0px)+40px)] pb-16 px-6">
+            <div className="relative pt-[calc(var(--spacing-safe-top,0px)+48px)] pb-16 px-6">
                 {/* Removed background glow */}
 
                 <div className="flex items-center gap-3 mb-6">

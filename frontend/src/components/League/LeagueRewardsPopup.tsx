@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Trophy, Shield, Star, Flame, Clock } from 'lucide-react';
+import { X, Trophy, Shield, Star, Flame, Clock, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import confetti from 'canvas-confetti';
-import type { LeagueTier } from './LeagueCard';
+import { LeagueTier } from './LeagueCard';
+import { useUI } from '../../context/UIContext';
+import { LeaguePrizes } from './LeaguePrizes';
 
 interface LeagueRewardsPopupProps {
     isOpen: boolean;
@@ -17,6 +19,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     currentLeague,
 }) => {
     const { t } = useTranslation(['social']);
+    const { setFooterVisible } = useUI();
     const [timeLeft, setTimeLeft] = useState<{ days: number, hours: number } | null>(null);
 
     useEffect(() => {
@@ -58,6 +61,9 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
             calculateTimeLeft();
             const timer = setInterval(calculateTimeLeft, 1000 * 60 * 60); // Update every hour
 
+            // Hide Footer
+            setFooterVisible(false);
+
             // Prevent body scrolling - Robust version
             const originalStyle = window.getComputedStyle(document.body).overflow;
             const originalHTMLStyle = window.getComputedStyle(document.documentElement).overflow;
@@ -71,86 +77,45 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
             return () => {
                 clearInterval(interval);
                 clearInterval(timer);
+                setFooterVisible(true);
                 document.body.style.overflow = originalStyle;
                 document.documentElement.style.overflow = originalHTMLStyle;
                 document.body.style.position = '';
                 document.body.style.width = '';
             };
         }
-    }, [isOpen]);
+    }, [isOpen, setFooterVisible]);
 
     const leagueData = {
         wooden: {
             icon: Shield,
             color: 'from-amber-700 via-amber-800 to-amber-950',
             glow: 'shadow-amber-500/50',
-            title: t('league.rewards_popup.wooden.title'),
-            desc: t('league.rewards_popup.wooden.desc'),
-            prizes: t('league.rewards_popup.wooden.prizes'),
         },
         silver: {
             icon: Trophy,
             color: 'from-slate-400 via-slate-500 to-slate-700',
             glow: 'shadow-slate-400/50',
-            title: t('league.rewards_popup.silver.title'),
-            desc: t('league.rewards_popup.silver.desc'),
-            prizes: t('league.rewards_popup.silver.prizes'),
         },
         metal: {
             icon: Shield,
             color: 'from-zinc-700 via-zinc-800 to-zinc-950',
             glow: 'shadow-zinc-500/50',
-            title: t('league.rewards_popup.metal.title'),
-            desc: t('league.rewards_popup.metal.desc'),
-            prizes: t('league.rewards_popup.metal.prizes'),
         },
         gold: {
             icon: Star,
             color: 'from-amber-400 via-yellow-500 to-orange-600',
             glow: 'shadow-yellow-400/50',
-            title: t('league.rewards_popup.gold.title'),
-            desc: t('league.rewards_popup.gold.desc'),
-            prizes: t('league.rewards_popup.gold.prizes'),
         },
         platinum: {
             icon: Flame,
             color: 'from-[#6366f1] via-[#a855f7] to-[#ec4899]',
             glow: 'shadow-purple-500/50',
-            title: t('league.rewards_popup.platinum.title'),
-            desc: t('league.rewards_popup.platinum.desc'),
-            prizes: t('league.rewards_popup.platinum.prizes'),
         }
     };
 
     const config = leagueData[currentLeague];
     const Icon = config.icon;
-
-    // Formatting prizes to handle newlines from translation
-    const formatPrizes = (prizesString: string) => {
-        return prizesString.split('\n').map((prize, idx) => {
-            const separatorIndex = prize.indexOf(':');
-            const bold = separatorIndex !== -1 ? prize.substring(0, separatorIndex) : prize;
-            const rest = separatorIndex !== -1 ? prize.substring(separatorIndex + 1).trim() : '';
-
-            return (
-                <div key={idx} className="flex items-center gap-2.5 bg-white/3 rounded-[14px] p-2 border border-white/5 hover:border-white/5 transition-all relative overflow-hidden group">
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/3 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-
-                    <div className={`flex shrink-0 items-center justify-center w-7 h-7 rounded-[9px] bg-linear-to-br ${config.color} shadow-lg shadow-black/20 relative`}>
-                        <div className="absolute inset-0 bg-white/20 rounded-[9px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                        {idx === 0 ? <Trophy className="w-3.5 h-3.5 text-white drop-shadow-md" /> : <Star className="w-3.5 h-3.5 text-white drop-shadow-md" />}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                        <div className="text-[12.5px] leading-tight flex flex-wrap items-baseline gap-x-1.5">
-                            <span className="font-extrabold text-white/90 tracking-wide uppercase text-[10px] opacity-70">{bold}</span>
-                            <span className="text-white font-semibold">{rest}</span>
-                        </div>
-                    </div>
-                </div>
-            );
-        });
-    };
 
     return (
         <AnimatePresence>
@@ -174,7 +139,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                         className="relative w-full max-w-[380px] max-h-[85vh] flex flex-col overflow-hidden rounded-[32px] bg-zinc-950 border border-white/10 shadow-2xl"
                     >
                         {/* Dynamic Top Gradient Area */}
-                        <div className={`relative h-32 shrink-0 bg-linear-to-br transition-colors duration-500 ${config.color}`}>
+                        <div className={`relative h-28 shrink-0 bg-linear-to-br transition-colors duration-500 ${config.color}`}>
                             {/* Glossy Overlay */}
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.2),transparent_70%)] mix-blend-overlay" />
 
@@ -203,10 +168,10 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-md border border-white/10 whitespace-nowrap"
+                                className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 rounded-full bg-black/30 px-3 py-1.5 backdrop-blur-md border border-white/10 whitespace-nowrap"
                             >
                                 <Clock className="h-3.5 w-3.5 text-white/90" />
-                                <span className="text-xs font-bold uppercase tracking-wider text-white/90">
+                                <span className="text-[10px] font-black uppercase tracking-wider text-white/90">
                                     {timeLeft
                                         ? t('league.rewards_popup.ends_in_format', { days: timeLeft.days, hours: timeLeft.hours, defaultValue: `Ends in ${timeLeft.days}d ${timeLeft.hours}h` })
                                         : t('league.rewards_popup.ending_soon', 'Ending soon!')}
@@ -220,38 +185,27 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
+                                className="mb-4"
                             >
-                                <h2 className="text-subheading font-black tracking-tight text-white mb-0.5">
-                                    {t('league.rewards_popup.title')}
-                                </h2>
-                                <p className="text-[13px] font-medium leading-tight text-white/50 mb-3.5 italic">
-                                    {t('league.rewards_popup.subtitle')}
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Sparkles className="w-4 h-4 text-emerald-500" />
+                                    <h2 className="text-[clamp(1.1rem,4vw,1.25rem)] font-black tracking-tight text-white uppercase">
+                                        {t('league.rewards_popup.title', 'БОРЬБА ЗА НАГРАДЫ')}
+                                    </h2>
+                                </div>
+                                <p className="text-[11px] font-bold leading-tight text-white/40 uppercase tracking-widest">
+                                    {t('league.rewards_popup.subtitle', 'Reach TOP-10 for exclusive prizes')}
                                 </p>
                             </motion.div>
 
-                            {/* Tier Specific Message Box */}
+                            {/* Prize List Component */}
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className={`relative overflow-hidden rounded-[24px] border border-white/10 bg-white/2 p-4 mb-4 shadow-xl backdrop-blur-2xl`}
+                                className="relative overflow-hidden rounded-[24px] border border-white/10 bg-white/2 p-1 mb-6 shadow-xl backdrop-blur-2xl"
                             >
-                                <div className={`absolute top-0 left-0 w-1 h-full bg-linear-to-b ${config.color} opacity-50`} />
-                                {/* Removed background glow */}
-
-                                <div className="relative z-10 pl-1">
-                                    <h3 className="text-[16px] font-black text-white tracking-wide mb-1.5 flex items-center gap-2">
-                                        <div className={`w-1.5 h-1.5 rounded-full bg-linear-to-r ${config.color}`} />
-                                        {config.title}
-                                    </h3>
-                                    <p className="text-[13px] text-white/60 leading-snug mb-3.5 font-medium">
-                                        {config.desc}
-                                    </p>
-
-                                    <div className="flex flex-col gap-2">
-                                        {formatPrizes(config.prizes)}
-                                    </div>
-                                </div>
+                                <LeaguePrizes league={currentLeague} />
                             </motion.div>
 
                             {/* Action Button */}
@@ -260,10 +214,10 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                                 onClick={onClose}
-                                className={`w-full rounded-2xl bg-linear-to-r ${config.color} py-3 px-4 text-[14px] font-bold text-white shadow-lg transition-transform active:scale-[0.98] relative overflow-hidden group`}
+                                className={`w-full rounded-2xl bg-linear-to-r ${config.color} py-3.5 px-4 text-[13px] font-black uppercase tracking-widest text-white shadow-lg transition-transform active:scale-[0.98] relative overflow-hidden group`}
                             >
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                                <span className="relative z-10">{t('league.rewards_popup.close')}</span>
+                                <span className="relative z-10">{t('league.rewards_popup.close', 'ПОНЯТНО')}</span>
                             </motion.button>
                         </div>
                     </motion.div>

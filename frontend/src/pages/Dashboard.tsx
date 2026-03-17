@@ -97,8 +97,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             )}
 
-            {/* #comment: 1. Hero Section - Spacious & Centered Layout. */}
-            <m.div variants={item} className="flex flex-col items-center pt-4 sm:pt-8 w-full">
+            {/* #comment: 1. Hero Section - Spacious & Centered Layout with adjusted padding for Modal views. */}
+            <m.div variants={item} className="flex flex-col items-center pt-8 sm:pt-16 w-full">
                 <div className="relative overflow-visible mx-auto min-h-[320px] sm:min-h-[400px] flex items-center justify-center shrink-0 w-full">
                     <CommunityOrbit />
                 </div>

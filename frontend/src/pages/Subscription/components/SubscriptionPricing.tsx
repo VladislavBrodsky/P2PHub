@@ -64,7 +64,7 @@ export const SubscriptionPricing = React.memo(({
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 px-1 items-start">
+            <div className="grid grid-cols-2 gap-3 px-1 items-stretch">
                 {[
                     { id: 'PRO' as const, color: 'blue' },
                     { id: 'PRO_PLUS' as const, color: 'yellow' }
@@ -74,19 +74,19 @@ export const SubscriptionPricing = React.memo(({
                     const isExpanded = expandedPlan === plan.id;
 
                     return (
-                        <div key={plan.id} className="flex flex-col gap-2">
+                        <div key={plan.id} className="flex flex-col h-full">
                             <button
                                 onClick={() => { selection(); setSelectedPlan(plan.id); }}
-                                className={`relative rounded-2xl p-5 flex flex-col items-center gap-2 border-2 text-center group w-full
+                                className={`relative rounded-2xl p-4 flex flex-col items-center justify-between gap-2 border-2 text-center group w-full h-full transition-all duration-300
                                     ${isSelected
                                         ? isPlus
-                                            ? 'vibing-yellow-animated border-yellow-400 shadow-[0_20px_40px_-10px_rgba(234,179,8,0.4)] z-10'
-                                            : 'vibing-blue-animated border-blue-400 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)] z-10'
-                                        : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.96] hover:opacity-100 transition-all duration-300'
+                                            ? 'vibing-yellow-animated border-yellow-400 shadow-[0_15px_30px_-10px_rgba(234,179,8,0.4)] z-10'
+                                            : 'vibing-blue-animated border-blue-400 shadow-[0_15px_30px_-10px_rgba(37,99,235,0.4)] z-10'
+                                        : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.98] hover:opacity-100'
                                     }`}
                             >
                                 {isPlus && (
-                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-[clamp(0.45rem,1.5vw,0.55rem)] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg
+                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg
                                         ${isSelected
                                             ? 'bg-black text-yellow-400 border border-yellow-400/30'
                                             : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-white/30'
@@ -96,110 +96,122 @@ export const SubscriptionPricing = React.memo(({
                                     </div>
                                 )}
 
-                                <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-black tracking-[0.2em] uppercase leading-none ${isPlus ? 'mt-2' : ''} ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400 dark:text-white/30'}`}>
-                                    {isPlus 
-                                        ? (isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title'))
-                                        : t('pro:subscription.upgrade.pro_title')
-                                    }
-                                </span>
+                                <div className="flex flex-col items-center gap-1 w-full">
+                                    <span className={`text-[10px] font-black tracking-[0.2em] uppercase leading-none ${isPlus ? 'mt-2' : ''} ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400 dark:text-white/30'}`}>
+                                        {isPlus 
+                                            ? (isStandardPro ? t('pro:subscription.upgrade.pro_plus_upgrade_title') : t('pro:subscription.upgrade.pro_plus_title'))
+                                            : t('pro:subscription.upgrade.pro_title')
+                                        }
+                                    </span>
 
-                                <div className="flex flex-col items-center gap-1 mt-1">
-                                    <div className="flex items-baseline gap-1">
-                                        <span className={`text-label font-bold leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/50'}`}>$</span>
-                                        <span className={`text-[clamp(1.75rem,7vw,2.625rem)] font-black tracking-tighter leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-900 dark:text-white/20'}`}>
-                                            {isPlus ? (isStandardPro ? upgradePrice : proPlusPrice) : proPrice}
+                                    <div className="flex flex-col items-center gap-0 mt-1">
+                                        <div className="flex items-baseline gap-1">
+                                            <span className={`text-[12px] font-bold leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/50'}`}>$</span>
+                                            <span className={`text-[clamp(1.5rem,6vw,2.25rem)] font-black tracking-tighter leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-900 dark:text-white/20'}`}>
+                                                {isPlus ? (isStandardPro ? upgradePrice : proPlusPrice) : proPrice}
+                                            </span>
+                                        </div>
+                                        <span className={`text-[9px] font-bold uppercase tracking-widest ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/30'}`}>
+                                            {t('pro:subscription.pro_active.lifetime')}
                                         </span>
                                     </div>
-                                    <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-widest ${isSelected ? (isPlus ? 'text-[#0a1000]/40' : 'text-white/40') : 'text-slate-400/30'}`}>
-                                        {t('pro:subscription.pro_active.lifetime')}
-                                    </span>
                                 </div>
 
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setExpandedPlan(isExpanded ? null : plan.id); selection(); }}
-                                    className={`mt-2 p-1 rounded-full transition-all ${isSelected ? (isPlus ? 'bg-[#0a1000]/10' : 'bg-white/10') : 'bg-slate-200 dark:bg-white/5'}`}
+                                    className={`mt-2 p-1.5 rounded-full transition-all active:scale-90 ${isSelected ? (isPlus ? 'bg-[#0a1000]/10' : 'bg-white/10') : 'bg-slate-200 dark:bg-white/5'}`}
                                 >
                                     <ChevronDown size={14} className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''} ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-400'}`} />
                                 </button>
                             </button>
-
-                            <AnimatePresence>
-                                {isExpanded && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.3, ease: 'easeInOut' }}
-                                        className="overflow-hidden"
-                                    >
-                                        <div className={`p-4 mt-1 rounded-2xl border-2 transition-all duration-500 ${isSelected 
-                                            ? isPlus ? 'bg-yellow-400 border-yellow-300' : 'bg-blue-600 border-blue-400'
-                                            : 'glass-panel-premium border-slate-100 dark:border-white/5'}`}>
-                                            
-                                            {isPlus && isSelected && (
-                                                <div className="flex flex-row items-center justify-between gap-2 mb-4 pb-4 border-b border-black/10">
-                                                    <div className="flex items-center gap-2 min-w-0">
-                                                        <Clock size={14} className="animate-pulse text-black" />
-                                                        <div className="flex flex-col min-w-0">
-                                                            <span className="text-[clamp(0.45rem,1.5vw,0.55rem)] font-medium text-black/60 uppercase leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                                            <span className="text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold text-black uppercase leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
-                                                        </div>
-                                                    </div>
-                                                    <FomoTimer />
-                                                </div>
-                                            )}
-
-                                            <div className="space-y-4">
-                                                <div className="space-y-1">
-                                                    <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-wider leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400'}`}>
-                                                        {isPlus ? t('pro:subscription.plan_headline_plus') : t('pro:subscription.plan_headline')}
-                                                    </span>
-                                                    <p className={`text-[clamp(0.55rem,2vw,0.7rem)] font-medium leading-relaxed ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-600 dark:text-white/70'}`}>
-                                                        {isPlus ? t('pro:subscription.plan_desc_plus') : t('pro:subscription.plan_desc_pro')}
-                                                    </p>
-                                                </div>
-
-                                                <div className="grid grid-cols-1 gap-2">
-                                                    {(isPlus ? proPlusBenefits : proBenefits).map((benefit) => (
-                                                        <div key={benefit.id} className={`flex items-start gap-2 p-2 rounded-lg ${isSelected ? (isPlus ? 'bg-black/5' : 'bg-white/10') : 'bg-slate-100 dark:bg-white/5'}`}>
-                                                            <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${isSelected ? (isPlus ? 'bg-black/10 text-black' : 'bg-white/20 text-white') : 'bg-blue-500/10 text-blue-500'}`}>
-                                                                <benefit.icon size={12} strokeWidth={2.5} />
-                                                            </div>
-                                                            <div className="flex flex-col">
-                                                                <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold uppercase tracking-wider ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>{benefit.label}</span>
-                                                                <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-medium leading-tight ${isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>{benefit.desc.split('.')[0]}</span>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-
-                                                <div className={`pt-3 border-t ${isSelected ? (isPlus ? 'border-black/5' : 'border-white/10') : 'border-slate-100 dark:border-white/5'}`}>
-                                                    <div className="flex items-center gap-2 mb-2">
-                                                        <Check size={12} className={isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-emerald-500'} strokeWidth={3} />
-                                                        <span className={`text-[clamp(0.5rem,1.8vw,0.6rem)] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>
-                                                            {t('pro:subscription.benefits.full_access')}
-                                                        </span>
-                                                    </div>
-                                                    <div className="space-y-1.5">
-                                                        {(t(isPlus ? 'pro:subscription.upgrade.benefits_pro_plus' : 'pro:subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((b, i) => (
-                                                            <div key={i} className="flex items-center gap-2">
-                                                                <div className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${isSelected ? (isPlus ? 'bg-[#0a1000]/10 text-[#0a1000]' : 'bg-white/10 text-white') : 'bg-emerald-500/10 text-emerald-500'}`}>
-                                                                    <Check size={8} strokeWidth={3} />
-                                                                </div>
-                                                                <span className={`text-[clamp(0.55rem,2vw,0.7rem)] font-bold uppercase tracking-tight ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/70'}`}>{b}</span>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
                         </div>
                     );
                 })}
             </div>
+
+            {/* EXPANDED CONTENT - MOVED OUTSIDE GRID FOR FULL WIDTH */}
+            <AnimatePresence mode="wait">
+                {expandedPlan && (
+                    <motion.div
+                        key={expandedPlan}
+                        initial={{ height: 0, opacity: 0, y: -10 }}
+                        animate={{ height: 'auto', opacity: 1, y: 0 }}
+                        exit={{ height: 0, opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                        className="overflow-hidden mt-4"
+                    >
+                        {(() => {
+                            const isSelected = selectedPlan === expandedPlan;
+                            const isPlus = expandedPlan === 'PRO_PLUS';
+                            return (
+                                <div className={`p-5 rounded-2xl border-2 transition-all duration-500 mx-1 ${isSelected 
+                                    ? isPlus ? 'vibing-yellow-animated border-yellow-400/50' : 'vibing-blue-animated border-blue-400/50'
+                                    : 'glass-panel-premium border-slate-100 dark:border-white/5'}`}>
+                                    
+                                    {isPlus && (
+                                        <div className={`flex flex-row items-center justify-between gap-2 mb-5 pb-5 border-b ${isSelected ? 'border-black/10' : 'border-slate-100 dark:border-white/10'}`}>
+                                            <div className="flex items-center gap-3 min-w-0">
+                                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-black/10 text-black' : 'bg-yellow-500/10 text-yellow-500'}`}>
+                                                    <Clock size={16} strokeWidth={3} className="animate-pulse" />
+                                                </div>
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className={`text-[9px] font-medium uppercase tracking-widest leading-none mb-1 ${isSelected ? 'text-black/60' : 'text-slate-500'}`}>{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                                    <span className={`text-[11px] font-bold uppercase leading-none ${isSelected ? 'text-black' : 'text-slate-900 dark:text-white'}`}>{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                                </div>
+                                            </div>
+                                            <FomoTimer />
+                                        </div>
+                                    )}
+
+                                    <div className="space-y-5">
+                                        <div className="space-y-1.5 px-1">
+                                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]/50' : 'text-white/60') : 'text-slate-400'}`}>
+                                                {isPlus ? t('pro:subscription.plan_headline_plus') : t('pro:subscription.plan_headline')}
+                                            </span>
+                                            <p className={`text-[clamp(0.75rem,3.5vw,0.875rem)] font-bold leading-relaxed ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>
+                                                {isPlus ? t('pro:subscription.plan_desc_plus') : t('pro:subscription.plan_desc_pro')}
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 gap-2.5">
+                                            {(isPlus ? proPlusBenefits : proBenefits).map((benefit) => (
+                                                <div key={benefit.id} className={`flex items-start gap-3 p-3 rounded-xl transition-all ${isSelected ? (isPlus ? 'bg-black/5 hover:bg-black/10' : 'bg-white/10 hover:bg-white/15') : 'bg-slate-50 dark:bg-white/5'}`}>
+                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm ${isSelected ? (isPlus ? 'bg-black/10 text-black' : 'bg-white/20 text-white') : 'bg-blue-500/10 text-blue-500'}`}>
+                                                        <benefit.icon size={14} strokeWidth={2.5} />
+                                                    </div>
+                                                    <div className="flex flex-col gap-0.5">
+                                                        <span className={`text-[9px] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>{benefit.label}</span>
+                                                        <span className={`text-[11px] font-bold leading-snug ${isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-slate-800 dark:text-white/90'}`}>{benefit.desc.split('.')[0]}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        <div className={`pt-4 border-t ${isSelected ? (isPlus ? 'border-black/10' : 'border-white/10') : 'border-slate-100 dark:border-white/10'}`}>
+                                            <div className="flex items-center gap-2 mb-3 px-1">
+                                                <Check size={14} className={isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-emerald-500'} strokeWidth={3} />
+                                                <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>
+                                                    {t('pro:subscription.benefits.full_access')}
+                                                </span>
+                                            </div>
+                                            <div className="grid grid-cols-1 gap-2">
+                                                {(t(isPlus ? 'pro:subscription.upgrade.benefits_pro_plus' : 'pro:subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((b, i) => (
+                                                    <div key={i} className={`flex items-center gap-2.5 p-2 rounded-lg ${isSelected ? (isPlus ? 'bg-black/5' : 'bg-white/5') : 'bg-slate-50/50 dark:bg-white/2'}`}>
+                                                        <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isSelected ? (isPlus ? 'bg-[#0a1000]/10 text-[#0a1000]' : 'bg-white/10 text-white') : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                                            <Check size={10} strokeWidth={3} />
+                                                        </div>
+                                                        <span className={`text-[11px] font-bold uppercase tracking-tight leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>{b}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })()}
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 });
