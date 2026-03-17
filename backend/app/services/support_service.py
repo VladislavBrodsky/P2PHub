@@ -72,7 +72,7 @@ class SupportAgentService:
        **Link**: https://t.me/pintopayhelp (or @pintopayhelp)
 
     10. **CARD PURCHASE**: For any purchase/price/buy intent, ALWAYS provide:
-        **Link**: https://t.me/pintopaybot?start=p_card
+        **Link**: https://t.me/pintopay_probot?start=p_card
     """
     
     CATEGORIES: ClassVar[list[str]] = [
@@ -109,7 +109,7 @@ class SupportAgentService:
     FALLBACK_INSTRUCTIONS: ClassVar[dict[str, list[str]]] = {
         "General": [
              "Supervisor: For complex issues, contact Care+ Supervisor: https://t.me/pintopayhelp (or @pintopayhelp)",
-             "Purchase: Buy Cards here: https://t.me/pintopaybot?start=p_card"
+             "Purchase: Buy Cards here: https://t.me/pintopay_probot?start=p_card"
         ],
         "💳 Virtual & Physical Cards": [
             "Checklist: Select Card Type -> Pay Fee -> Instant Issuance for Virtual.",
@@ -420,7 +420,7 @@ class SupportAgentService:
         
         CRITICAL CONTACTS (ALWAYS PROVIDE IF ASKED):
         - Supervisor/Help: https://t.me/pintopayhelp (or @pintopayhelp)
-        - Buy/Purchase Cards: https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3
+        - Buy/Purchase Cards: https://t.me/pintopay_probot?start=p_6977c29c66ed9faa401342f3
         """
         
         tov_info = ""

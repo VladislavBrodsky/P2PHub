@@ -643,20 +643,21 @@ export default function SubscriptionPage() {
 
                             {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
                             <div className="mb-10 px-1 relative z-20">
-                                <AnimatePresence mode="wait">
+                                <div className="relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110">
                                     {!isSelectingCurrency ? (
                                         <motion.button
-                                            key={`buy-btn-${selectedPlan}`}
-                                            initial={{ opacity: 0, scale: 0.95 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            key="subscription-action-btn"
+                                            layout
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
                                             onClick={() => {
                                                 selection();
                                                 setIsSelectingCurrency(true);
                                             }}
-                                            className={`group relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110 ${selectedPlan === 'PRO'
+                                            className={`group absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-full transition-all ${selectedPlan === 'PRO'
                                                 ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
                                                 : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
                                                 }`}
@@ -674,10 +675,11 @@ export default function SubscriptionPage() {
                                     ) : (
                                         <motion.div
                                             key="currency-picker"
+                                            layout
                                             initial={{ opacity: 0, y: 10 }}
                                             animate={{ opacity: 1, y: 0 }}
                                             exit={{ opacity: 0, y: 10 }}
-                                            className="space-y-4"
+                                            className="w-full space-y-4"
                                         >
                                             <div className="flex items-center justify-between mb-2">
                                                 <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
@@ -722,7 +724,7 @@ export default function SubscriptionPage() {
                                             </div>
                                         </motion.div>
                                     )}
-                                </AnimatePresence>
+                                </div>
                                 <div id="currency-selector-anchor" className="absolute -top-20" />
                             </div>
 
@@ -730,11 +732,11 @@ export default function SubscriptionPage() {
                                 badge={t('pro:subscription.benefits.badge')}
                                 title={t('pro:subscription.benefits.title')}
                                 description={t('pro:subscription.benefits.desc')}
-                                className="mb-8"
+                                className="mb-0 overflow-hidden h-0 opacity-0 pointer-events-none"
                             />
 
                             {/* ── BENEFITS SECTION ── */}
-                            <SubscriptionBenefits
+                            {/* <SubscriptionBenefits
                                 selectedPlan={selectedPlan}
                                 isStandardPro={!!isStandardPro}
                                 currentBenefits={currentBenefits}
@@ -742,7 +744,7 @@ export default function SubscriptionPage() {
                                 setExpandedBenefit={setExpandedBenefit}
                                 selection={selection}
                                 t={t}
-                            />
+                            /> */}
 
                             {/* ── PAYMENT SECTION ── */}
                             <SubscriptionPayment

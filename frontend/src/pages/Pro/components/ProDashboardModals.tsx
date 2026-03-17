@@ -134,7 +134,7 @@ export const ProDashboardModals = ({
         setIsSaving(true);
         selection();
 
-        if (personalLink && !personalLink.startsWith('https://t.me/pintopaybot?start=') && !personalLink.startsWith('t.me/pintopaybot?start=')) {
+        if (personalLink && !personalLink.startsWith('https://t.me/pintopay_probot?start=') && !personalLink.startsWith('t.me/pintopay_probot?start=')) {
             showNotification({
                 title: t('pro_dashboard.notifications.error') || 'Error',
                 message: t('pro_dashboard.setup.referral_link_prefix_error'),
@@ -388,6 +388,9 @@ export const ProDashboardModals = ({
                                                     <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                         {t('pro_dashboard.setup.personal_link_desc')}
                                                     </p>
+                                                    <p className="text-label text-amber-500 font-bold">
+                                                        https://t.me/pintopay_probot?start=...
+                                                    </p>
                                                 </div>
                                             </motion.div>
                                         )}
@@ -598,7 +601,7 @@ export const ProDashboardModals = ({
                                                                     value={personalLink}
                                                                     onChange={(e) => setPersonalLink(e.target.value)}
                                                                     className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10"
-                                                                    placeholder="https://t.me/pintopaybot?start=..."
+                                                                    placeholder="https://t.me/pintopay_probot?start=..."
                                                                 />
                                                                 <p className="text-[10px] sm:text-label text-slate-400 leading-relaxed px-0.5 italic">
                                                                     {t('pro_dashboard.setup.personal_link_desc')}

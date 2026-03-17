@@ -3,7 +3,7 @@ import functools
 import logging
 from typing import Any, Type, TypeVar, Union, cast
 
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError # type: ignore
 
 logger = logging.getLogger(__name__)
 

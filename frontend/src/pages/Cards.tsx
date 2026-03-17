@@ -29,7 +29,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             notification('warning');
             return;
         }
-        window.open('https://t.me/onex ecosystem_bot?start=p_6977c29c66ed9faa401342f3', '_blank');
+        window.open('https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3', '_blank');
     };
 
     const handleUpgradeSelect = () => {

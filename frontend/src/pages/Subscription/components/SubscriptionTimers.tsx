@@ -90,8 +90,8 @@ export const StickyFomoHeader = React.memo(({ t }: { t: any }) => (
                     <Clock size={16} strokeWidth={3} className="animate-pulse" />
                 </div>
                 <div className="flex flex-col min-w-0">
-                    <span className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] leading-none mb-1 truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                    <span className="text-caption font-black text-black uppercase tracking-widest leading-none truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                    <span className="text-[8px] font-medium text-black/60 uppercase tracking-[0.2em] leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                    <span className="text-[10px] font-bold text-black uppercase tracking-widest leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                 </div>
             </div>
 

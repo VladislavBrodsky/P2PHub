@@ -4,6 +4,7 @@ from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.core.i18n import get_msg
+from app.core.config import settings
 
 
 def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str = "", lang: str = "en"):
@@ -39,7 +40,7 @@ def get_main_menu_keyboard(url: str, referral_link: str = "", referral_code: str
 
     builder.row(types.InlineKeyboardButton(
         text=get_msg(lang, "btn_super_app"),
-        url="https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3"
+        url=f"https://t.me/{settings.BOT_USERNAME}?start=p_6977c29c66ed9faa401342f3"
     ))
     return builder.as_markup()
 

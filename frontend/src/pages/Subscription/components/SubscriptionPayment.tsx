@@ -64,32 +64,17 @@ export const SubscriptionPayment = React.memo(({
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
 
-            // Fire haptic on success only
+            // Fire haptic on success
             selection();
             notification('success');
 
-            // Always show in-app notification as a fallback (even if Telegram popup works)
+            // Show refined in-app notification
             showNotification({
                 title: t('pro:notifications.success'),
                 message: t('pro:notifications.text_copied'),
                 type: 'success',
                 icon: <CheckCircle2 size={16} className="text-emerald-500" />
             });
-
-            // Show native Telegram system notification
-            // Use showPopup (Bot API 6.2+) first, fall back to showAlert
-            const webApp = (window as any).Telegram?.WebApp;
-            if (webApp) {
-                if (typeof webApp.showPopup === 'function') {
-                    webApp.showPopup({
-                        title: t('pro:notifications.success'),
-                        message: t('pro:notifications.text_copied'),
-                        buttons: [{ type: 'ok' }],
-                    });
-                } else if (typeof webApp.showAlert === 'function') {
-                    webApp.showAlert(t('pro:notifications.text_copied'));
-                }
-            }
         } else {
             notification('error');
             showNotification({

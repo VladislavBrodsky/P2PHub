@@ -157,7 +157,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </span>
                     </m.div>
 
-                    <h3 className="text-4xl font-black tracking-tighter leading-[0.95] max-w-[340px] mx-auto uppercase">
+                    <h3 className="text-3xl sm:text-4xl font-black tracking-tight leading-[0.95] max-w-[340px] mx-auto uppercase text-balance">
                         {t('income.title')} <br />
                         <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-size-[200%_auto] animate-text-shimmer drop-shadow-sm">{t('income.title_highlight')}</span>
                     </h3>
@@ -381,7 +381,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
                                             </span>
                                         </div>
-                                        <h4 className="mt-3 text-2xl sm:text-4xl font-black text-slate-900 dark:text-white leading-[0.9] tracking-tighter uppercase drop-shadow-md">
+                                        <h4 className="mt-3 text-xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight uppercase drop-shadow-md text-balance">
                                             {t('marketing:income.math.heading')}
                                         </h4>
                                     </div>
@@ -410,7 +410,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         >
                                             <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                                                 <ChevronRight className={clsx("w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
-                                                <span className={clsx("text-xs sm:text-sm font-black uppercase tracking-widest truncate", highlight ? "text-emerald-500" : "text-slate-500 dark:text-white/40")}>
+                                                <span className={clsx("text-xs sm:text-sm font-black uppercase tracking-tight flex-1", highlight ? "text-emerald-400" : "text-slate-500 dark:text-white/40")}>
                                                     {period}
                                                 </span>
                                             </div>
@@ -478,7 +478,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
                                             <div className="flex flex-col leading-none">
                                                 <span className="text-[10px] font-black text-slate-900 dark:text-white">{liveCount}</span>
-                                                <span className="text-[7px] font-black text-slate-400 dark:text-white/30 uppercase tracking-tighter truncate">{t('marketing:income.math.online_badge')}</span>
+                                                <span className="text-[7px] font-black text-slate-400 dark:text-white/30 uppercase tracking-tighter">{t('marketing:income.math.online_badge')}</span>
                                             </div>
                                         </div>
 
@@ -486,7 +486,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                                         <div className="flex items-center gap-1.5 min-w-0">
                                             <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
-                                            <span className="text-amber-500/80 font-black text-[9px] tracking-tight uppercase truncate">
+                                            <span className="text-amber-500/80 font-black text-[9px] tracking-tight uppercase">
                                                 {t('marketing:income.math.spots_left', { count: slotsLeft })}
                                             </span>
                                         </div>
@@ -523,7 +523,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                         <div className="space-y-1 min-w-0">
                             <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">1.2B</div>
-                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.global_target')}</div>
+                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-snug">{t('income.stats.global_target')}</div>
                         </div>
                     </div>
 
@@ -538,7 +538,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                         <div className="space-y-1 min-w-0">
                             <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">24/7</div>
-                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] leading-none truncate">{t('income.stats.revenue')}</div>
+                            <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-snug">{t('income.stats.revenue')}</div>
                         </div>
                     </div>
                 </div>

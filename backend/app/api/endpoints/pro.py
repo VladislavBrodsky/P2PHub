@@ -22,6 +22,7 @@ from app.services.analytics_service import (
     get_referral_tree_stats,
 )
 from app.services.viral_analytics_service import viral_analytics
+from app.core.config import settings
 from app.services.viral_studio import prompts, viral_studio
 from bot import bot
 
@@ -478,7 +479,7 @@ async def update_referral_link(
     
     # Validation: Must match "https://t.me/pintopaybot?start=" or "t.me/pintopaybot?start="
     is_valid = False
-    if link.startswith("https://t.me/pintopaybot?start=") or link.startswith("t.me/pintopaybot?start="):
+    if link.startswith(f"https://t.me/{settings.BOT_USERNAME}?start=") or link.startswith(f"t.me/{settings.BOT_USERNAME}?start="):
         is_valid = True
     
     if not is_valid:
@@ -487,7 +488,7 @@ async def update_referral_link(
         # So I will reject it if it doesn't match.
         raise HTTPException(
             status_code=400, 
-            detail="Invalid referral link. Must start with 'https://t.me/pintopaybot?start=' or 't.me/pintopaybot?start='"
+            detail=f"Invalid referral link. Must start with 'https://t.me/{settings.BOT_USERNAME}?start=' or 't.me/{settings.BOT_USERNAME}?start='"
         )
 
     partner.personal_referral_link = link
