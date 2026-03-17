@@ -682,7 +682,29 @@
         }
       ],
       "growth_promo": "PRO Members grow their network <1>x5 faster</1> using these advanced programs.",
-      "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention."
+      "methodology_desc": "Follow the proven programs to maximize your reach. Every asset and lesson is designed for today's social algorithms. We analyze trend data to ensure your content stands out and attracts attention.",
+      "studio_manual": {
+        "title": "Content Studio Manual",
+        "subtitle": "Content Creation Automation",
+        "steps": [
+          {
+            "title": "Define Strategy",
+            "desc": "Select post type (FOMO, Launch, Tutorial) to calibrate the AI persona for your current growth objective."
+          },
+          {
+            "title": "Audience Calibration",
+            "desc": "Select target market. AI will optimize tone, vocabulary, and cultural hooks for maximum resonance."
+          },
+          {
+            "title": "Creation & Refinement",
+            "desc": "Initiate generation. Use the 'Rewrite' protocol for different angles. Peak results usually require 2-3 iterations."
+          },
+          {
+            "title": "One-Click Deployment",
+            "desc": "Share content across all synced nodes simultaneously. Consistency is the primary growth algorithm."
+          }
+        ]
+      }
     },
     "articles": {
       "title": "Intelligence Dossier",
