@@ -573,8 +573,8 @@ const BlogDetail = ({
                     </button>
 
                     <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="flex flex-col items-end sm:items-center mr-1 sm:mr-2">
-                            <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 leading-none mb-0.5 whitespace-nowrap">{t('blog.navigation.reading_progress')}</div>
+                        <div className="flex flex-col items-end sm:items-center mr-1 sm:mr-2 min-w-0">
+                            <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 leading-none mb-0.5 whitespace-nowrap truncate">{t('blog.navigation.reading_progress')}</div>
                             <div className="text-[10px] font-bold text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
@@ -773,7 +773,7 @@ const BlogDetail = ({
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.previous_label')}</span>
+                            <span className="text-label font-bold text-slate-400 uppercase tracking-wider mb-1 truncate">{t('blog.navigation.previous_label')}</span>
                             <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
                         </div>
                     </button>
@@ -782,7 +782,7 @@ const BlogDetail = ({
                         className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
-                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest mb-1">{t('blog.navigation.next_intel')}</span>
+                            <span className="text-label font-bold text-slate-400 uppercase tracking-wider mb-1 truncate">{t('blog.navigation.next_intel')}</span>
                             <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
                         </div>
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">

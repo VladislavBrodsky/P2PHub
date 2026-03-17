@@ -106,11 +106,20 @@ class LeaderboardService:
             # 3. Cache the new results for next time
             new_cache_map = {}
             for p in db_partners:
+                # Sanitize legacy photo URLs (e.g. /images/avatars/...)
+                safe_photo_url = p.photo_url
+                if safe_photo_url and (
+                    safe_photo_url.startswith("/images/avatars/") or
+                    safe_photo_url.startswith("/images/") or
+                    safe_photo_url.startswith("/avatars/")
+                ):
+                    safe_photo_url = None
+
                 p_data = {
                     "id": p.id,
                     "username": p.username,
                     "first_name": p.first_name,
-                    "photo_url": p.photo_url,
+                    "photo_url": safe_photo_url,
                     "photo_file_id": p.photo_file_id,
                     "level": p.level,
                     "referral_count": p.referral_count,

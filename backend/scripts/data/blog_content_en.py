@@ -60,7 +60,7 @@ Pintopay is the engine. You are the driver. How fast do you want to go?
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(High Demand. Act Fast. Sovereignty is non-negotiable.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(High Demand. Act Fast. Sovereignty is non-negotiable.)*""",
     "2": """# Banks are Dead: Decoding the Technical Collapse of Legacy Finance
 
 The traditional banking system is currently experiencing a "silent collapse. " It isn’t happening with a loud bank run, but through **obsolescence**. The infrastructure your money lives on—SWIFT, ACH, and SEPA—was designed in an era when long-distance communication involved faxes and physical postage.
@@ -105,7 +105,7 @@ Pintopay provides the transition. We give you the efficiency of the digital age 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(The banks won't warn you. We will. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(The banks won't warn you. We will. Act today.)*""",
     "3": """# Strategic Mindset: Transitioning to the Sovereign Path
 
 Wealth is 20% mechanics and 80% psychology. The biggest hurdle to achieving financial freedom in the 21st century isn't "learning how to trade"—it's unlearning the [Custodial Mindset](internal:2) that has been programmed into us since birth.
@@ -160,7 +160,7 @@ That is the ultimate flex. That is what Pintopay provides.
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Your mindset determines your net worth. Upgrade both.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Your mindset determines your net worth. Upgrade both.)*""",
     "4": """# NO LIMITS: Navigating the Globalized Economy Without Permission
 
 Geography used to be destiny. If you were born in the wrong place, your access to capital, markets, and tools was artificially throttled by arbitrary lines on a map. But we are living in the era of the **Digital Passport**.
@@ -219,7 +219,7 @@ The question is no longer "where are you? " The question is "how much velocity d
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(The map is a lie. The network is the truth. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(The map is a lie. The network is the truth. Act fast.)*""",
     "5": """# Instant Liquidity: The Science of Spending Crypto Without Selling Out
 
 For years, the "crypto elite" had a problem: they were rich on paper, but poor in the real world. To buy a house, a car, or even a dinner, they had to "cash out"—sending tokens to an exchange, waiting for a bank wire, and paying massive capital gains taxes in the process. **Pintopay has solved the Liquidity Paradox.**
@@ -270,7 +270,7 @@ Pintopay operates on [Full Reserve Mathematics](internal:15). Your crypto is you
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Don't just hold. Live. Sovereignty is within reach.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Don't just hold. Live. Sovereignty is within reach.)*""",
     "6": """# The Elite Scale: Leadership Psychology in the Digital Economy
 
 Building a network of 10 people is a task. Building a network of 10,000 people is an **Art Form**. To reach the higher echelons of the Pintopay hierarchy (Legend status), you must stop thinking like a freelancer and start thinking like a Captain of Industry.
@@ -323,7 +323,7 @@ Wear that responsibility with pride. And keep scaling.
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Lead the revolution. The world is watching. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Lead the revolution. The world is watching. Act now.)*""",
     "7": """# The Great Banking Reform: Why the Future is Non-Custodial
 
 We are witnessing the end of an era. For 400 years, the model of banking was simple: you give your money to a third party, and they "safeguard" it while lending it out to others. This model is currently shattering under the weight of **Real-Time Settlement** and **Decentralized Finance**.
@@ -376,7 +376,7 @@ History shows that financial systems don't change because people want them to; t
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(The future is non-custodial. The future is you. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(The future is non-custodial. The future is you. Act now.)*""",
     "8": """# Web3 Essentials: Building Your Sovereign Tech Stack
 
 In 2026, financial freedom and digital privacy are inseparable. If you have a crypto wallet but still use a browser that tracks your every move, you aren't sovereign—you're just a "digital nomad" in a high-security prison.
@@ -433,7 +433,7 @@ Your digital life is a fortress. Every tool in your stack is a wall or a moat. W
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Secure your stack. Secure your future. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Secure your stack. Secure your future. Act today.)*""",
     "9": """# The Passive Income Myth: Why You Need "Dynamic Infrastructure" Instead
 
 The internet is full of "gurus" promising you passive income while you sit on a beach. They want you click on a few ads and watch the money roll in. This is a fairy tale. Real wealth isn't passive; it's **Structural**.
@@ -486,7 +486,7 @@ The wealthiest people in history didn't sell products; they owned the **Pipes**.
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Build the pipes. Own the future. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Build the pipes. Own the future. Act now.)*""",
     "10": """# Global Impact: The Ethics of Web3 Wealth
 
 There is a psychological phenomenon known as "Sudden Wealth Syndrome. " When people acquire capital faster than their character evolves, they often lose it just as fast. To reach the Legend rank in Pintopay and *stay* there, you must develop a **Global Impact Mindset**.
@@ -541,7 +541,7 @@ A "Legend" isn't someone with a lot of money. A Legend is someone whose impact i
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Build a legacy. Impact the world. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Build a legacy. Impact the world. Act today.)*""",
     "11": """# The Innovation Paradox: Why the Best Technology Often Fails (And How Pintopay Won)
 
 In the tech world, there is a graveyard full of "superior" products. Every year, brilliant engineers launch faster blockchains, more secure wallets, and more complex protocols. Most of them die within 18 months. Why? Because they forget the **User Friction Principle**.
@@ -592,7 +592,7 @@ The race is on. Are you on the right side of the bridge?
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Innovate your life. Act fast. The window is narrow.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Innovate your life. Act fast. The window is narrow.)*""",
     "12": """# The $70 Trillion Shift: Preparing for the Greatest Wealth Transfer in History
 
 Over the next two decades, more than $70 trillion will be passed down from Boomers to younger generations (Gen Z and Millennials). This is not just a change in ownership; it's a change in **Financial Values**.
@@ -645,7 +645,7 @@ It will look a lot like Pintopay.
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Position yourself for the shift. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Position yourself for the shift. Act now.)*""",
     "13": """# The Invisible Revolution: Why You'll NEVER Step Into a Bank Again
 
 The bank branch is the Blockbuster Video of finance. It's a relic of a time when "trust" meant "marble pillars" and "guys in suits. " In 2026, trust is code. Trust is encryption. Trust is mathematical certainty. We are witnessing the **Invisible Revolution**, where banking stops being a place you go and becomes something you *do* without thinking.
@@ -694,7 +694,7 @@ Become a financial ghost. Move through the economy without friction. Let the inf
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(The future is invisible. The future is automatic. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(The future is invisible. The future is automatic. Act now.)*""",
     "14": """# Crypto Meets Convenience: Apple & Google Pay Finally Evolved
 
 For years, crypto was "internet money. " You could send it, but you couldn't really *spend* it conveniently in the physical world. The process was painful: sell on an exchange, wait for a bank wire (3 days), wait for the bank to approve the transaction, and finally use your legacy card. That’s four steps and three days too many.
@@ -737,7 +737,7 @@ There is a psychological shift that happens when you pay for a meal using the pr
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Bridges are better than walls. Claim yours today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Bridges are better than walls. Claim yours today.)*""",
     "15": """# Instant Liquidity: Spending Crypto as Fiat in 3 Seconds Flat
 
 In the traditional financial system, assets are "illiquid. " If you own a house worth $1M, you still can't use it to buy a loaf of bread today. You have to sell it (which takes months), pay fees, get cash, and then spend. Even stocks take 2-3 days to "settle" before the cash hits your account. This delay is a hidden tax on your time.
@@ -784,7 +784,7 @@ The Sovereign Individual's answer is:**"Never. "** We don't "cash out" back into
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Be liquid. Be sovereign. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Be liquid. Be sovereign. Act today.)*""",
     "16": """# The $100BN Opportunity: Why Being a Partner is the Ultimate Wealth Cheat Code
 
 Let's talk scale. The global payments industry is worth **$2 Trillion**. The cross-border remittance market is **$800 Billion**. Pintopay sits precisely at the intersection of these giants. We are not playing for pennies; we are playing for a slice of the global financial infrastructure.
@@ -833,7 +833,7 @@ Your goal shouldn't be to pay next month's rent. Your goal should be to build a 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Take your slice. Build your empire. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Take your slice. Build your empire. Act fast.)*""",
     "17": """# Passive Engine: How to Earn While You Sleep (Lifetime Income Protocol)
 
 "Passive Income" is a term that has been hijacked by marketers. Most things people call passive income (like dropshipping or day trading) are actually just high-stress jobs with bad benefits. **True Passive Income** only comes from one thing: **Infrastructure Ownership.** The man who owns the toll booth on the bridge doesn't work. The cars drive through, and he gets paid. He doesn't need to shout; the bridge is the value. Pintopay is the bridge for the global crypto economy.
@@ -888,7 +888,7 @@ The Pintopay engine is the most realistic path for a modern individual to reach 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Build the engine. Secure the future. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Build the engine. Secure the future. Act today.)*""",
     "18": """# Viral Studios: The Unfair Advantage That Automates Your Content 24/7
 
 In the digital economy, marketing is war. The battle is for a finite resource: **Human Attention**. In a world full of noise, the average person doesn't stand a chance. You cannot out-hustle the social media algorithms manually. That is why we built **Pintopay Viral Studios**.
@@ -935,7 +935,7 @@ Viral Studios is the "Exoskeleton" for your marketing. It takes your human effor
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Activate your unfair advantage. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Activate your unfair advantage. Act today.)*""",
     "19": """# Imperial Design: Building Your Sovereign Global Empire with Pintopay
 
 We have discussed the mathematics of scale, the physics of networks, and the high-speed liquidity of the card. Now, we must discuss the **Purpose**. What are you actually building? Are you just trying to pay bills, or are you designing a life of total sovereignty? We call this **Imperial Design**.
@@ -986,7 +986,7 @@ Welcome to Sovereignty\. Welcome to the Empire\.
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Design your legacy. Build your empire. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Design your legacy. Build your empire. Act today.)*""",
     "20": """# The 2026 Financial Reset: How CBDCs Could Cage Your Cash
 
 As we move toward the middle of the decade, a seismic shift is occurring in the halls of central banks. Governments are preparing for the rollout of **Central Bank Digital Currencies (CBDCs)**. While they will market this as "convenience" and "efficiency, " the reality is much more sobering. This is the **Great Financial Reset**, and you need an escape hatch.
@@ -1039,7 +1039,7 @@ The reset is coming. You can either be a participant in a programmable cage, or 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Protect your freedom. Secure your escape hatch. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Protect your freedom. Secure your escape hatch. Act now.)*""",
     "21": """# Mastering the $1/Minute Blueprint: Practical Steps to 24/7 Wealth
 
 We have introduced the concept of the **$1/Minute Reality**. For many, this sounds like a marketing slogan. For the Elite Pintopay Partners, it is a mathematical destination. To reach $1 for every minute of every day ($1,440/day), you need to master the three pillars of **High-Velocity Infrastructure**.
@@ -1078,7 +1078,7 @@ If you have never earned $40,000 in a month, your "Internal Thermostat" will try
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Activate the blueprint. Master the clock. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Activate the blueprint. Master the clock. Act fast.)*""",
     "22": """# The Geometric Advantage: Why Linear Income is a Trap for the 99%
 
 Most people are taught to think linearly. If you work 1 hour, you get $20. If you want $40, you work 2 hours. This is **Linear Income**, and it is a trap. Why? Because time is finite. You are trading a non-renewable resource (Your Life) for a renewable one (Money).
@@ -1131,7 +1131,7 @@ Break the line. Stop thinking in terms of "wages. " Start thinking in terms of "
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Escape the trap. Embrace the curve. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Escape the trap. Embrace the curve. Act now.)*""",
     "23": """# Digital Landlord: Owning Network Nodes as the New Real Estate
 
 For centuries, the safest path to wealth was real estate. You buy a piece of land, someone pays you rent, and you get rich while you sleep. But in 2026, physical real estate is becoming increasingly difficult to manage—high taxes, squatter rights, and maintenance costs are eating the profits.
@@ -1180,7 +1180,7 @@ The Digital Landlord mindset requires you to stop "hustling" for one-time checks
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Claim your acres. Build your legacy. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Claim your acres. Build your legacy. Act today.)*""",
     "24": """# Escape Velocity: Breaking Away from the Gravity of Debt and Bills
 
 In physics, **Escape Velocity** is the speed an object must reach to break free from the gravitational pull of a planet. In finance, Most people spend their entire lives at sub-orbital speeds. They earn enough to pay their bills, but the gravity of debt, taxes, and inflation keeps pulling them back down.
@@ -1223,7 +1223,7 @@ Stop living from paycheck to paycheck. Stop letting the gravity of the old world
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Reach escape velocity. Break the chains. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Reach escape velocity. Break the chains. Act now.)*""",
     "25": """# The Physics of Wealth: Energy, Flow, and Infrastructure
 
 We often talk about money as "paper" or "numbers, " but the masters of the economy look at it as **Energy**. Money is simply a way to store and transport the results of human effort. To build massive wealth, you must understand the laws of **Financial Physics**.
@@ -1272,7 +1272,7 @@ You can try to fight the physics of the economy, or you can use them to your adv
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Engineer your wealth. Understand the flow. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Engineer your wealth. Understand the flow. Act fast.)*""",
     "26": """# Web3 Psychology: Building Trustless Collaboration for Global Growth
 
 In the old economy, business was based on **Contracts and Lawyers**. You had to trust that the other person would fulfill their promise, and if they didn't, you had to spend years in court. This friction limited the size and speed of businesses.
@@ -1315,7 +1315,7 @@ Stop wasting energy on "trust issues. " Use a system where trust is the default 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Collaborate without limits. Build the future. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Collaborate without limits. Build the future. Act today.)*""",
     "27": """# The Elite Protocol: How to Transition from Survival to Absolute Sovereignty
 
 Most people enter the Pintopay ecosystem with a "Survival Mindset. " They want to pay off a credit card or earn an extra $500. This is fine for the start, but if you want to reach the Legend rank, you must activate the **Elite Protocol**. This is a functional shift in how you treat your network.
@@ -1366,7 +1366,7 @@ Legend status isn't given; it is engineered. Follow the Elite Protocol. Move fro
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Upgrade your status. Follow the protocol. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Upgrade your status. Follow the protocol. Act now.)*""",
     "28": """# Sovereignty vs Security: The Tradeoff That Defines Your Future
 
 In the old economy, you were offered a deal: "Give us your control (and your data), and we will give you **Security**. " The bank "guards" your money. The government "backs" your currency. But as we have seen in recent years, this security is an illusion. When the system fails, your "safety" is the first thing that evaporates.
@@ -1407,7 +1407,7 @@ Stop trusting the marble pillars. Start trusting the code. By choosing sovereign
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Choose sovereignty. Secure the future. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Choose sovereignty. Secure the future. Act fast.)*""",
     "29": """# The AI Multiplier: Using Automation to Outperform Entire Marketing Teams
 
 In the 20th century, if you wanted to scale a business, you had to hire people. You needed a secretary, a salesman, and a marketing assistant. In the 21st century, you need **Leverage**. specifically, you need the **AI Multiplier** provided by the Pintopay Viral Studios.
@@ -1456,7 +1456,7 @@ Stop doing manual tasks that a machine can do. Focus on the vision, the strategy
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Activate the multiplier. Automate the scale. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Activate the multiplier. Automate the scale. Act today.)*""",
     "30": """# Legacy of the Sovereign Individual: Building Wealth That Lasts Generations
 
 Wealth is not just about the numbers in your wallet today. It is about the **Sovereignty of your family tomorrow**. Most wealth is destroyed within three generations because it is built on fragile, centralized systems. To build true legacy wealth, you must move your capital onto the **Sovereign Grid**.
@@ -1497,7 +1497,7 @@ The Web3 world is like the New World of the 16th century. We are the early settl
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Build your legacy. Secure your dynasty. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Build your legacy. Secure your dynasty. Act now.)*""",
     "31": """# Financial Sovereignty vs Traditional Banking: Why the Old Guard is Scared
 
 For decades, the traditional banking system has held a monopoly on your economic life. They decide if you can send money, how much it costs, and how long it takes. This is **Centralized Control**. But the world is changing. The rise of decentralised finance (DeFi) and global crypto cards like Pintopay has created a power shift that the "Old Guard" of finance is desperate to stop.
@@ -1536,7 +1536,7 @@ You can either stay a "Subject" of the traditional banking system, or become a "
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Bridges are better than walls. Join the revolution today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Bridges are better than walls. Join the revolution today.)*""",
     "32": """# The Rise of the Crypto Card: Evolution of Spending Power
 
 For the first decade of its existence, crypto was mostly a "Buy and Hold" asset. To actually use it for your daily life, you had to jump through dozens of hoops. The **Crypto Card era**, led by Pintopay, has changed this forever. We have transformed Bitcoin and Stablecoins from "Digital Gold" you keep in a vault into **High-Velocity Currency** you carry in your pocket.
@@ -1575,7 +1575,7 @@ The era of waiting for bank transfers is over. The era of carrying "dead cash" i
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Evolve your wallet. Claim your card now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Evolve your wallet. Claim your card now.)*""",
     "33": """# The Great Migration: Capital Moving to the Blockchain
 
 Look at the global macro charts. Real estate is stagnant in many regions. Bonds are failing to keep up with inflation. Traditional stock markets are increasingly volatile. Meanwhile, the volume of assets on-chain is exploding. This isn't just a bull market; it's a **Value Migration**.
@@ -1618,7 +1618,7 @@ The early settlers of the American West got the best land. The early adopters of
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Claim your stake. Join the migration. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Claim your stake. Join the migration. Act fast.)*""",
     "34": """# Code is Law: Why Smart Contracts are Fairer than Humans
 
 In the traditional business world, everything rests on "Trust" and "Contracts. " You trust that your employer will pay you. You trust that the bank correctly calculated your interest. You trust that the insurance company will follow the fine print.
@@ -1657,7 +1657,7 @@ We are building a new economy based on math, not promises. It is fairer, faster,
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Trust the math. Secure your future. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Trust the math. Secure your future. Act today.)*""",
     "35": """# NFT Ownership: It's Not About the Pictures, It's About the Rights
 
 If you still think NFTs are just "expensive JPEGs of monkeys, " you are missing the biggest shift in digital property rights in history. Forget the hype of 2021. In 2026, Non-Fungible Tokens (NFTs) have evolved into **Digital Certificates of Ownership and Access.** Soon, your passport, your university degree, and your house deed will be NFTs on a public ledger.
@@ -1702,7 +1702,7 @@ Don't get distracted by the noise. Look at the underlying technology. NFTs are t
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Own something real. Own the code. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Own something real. Own the code. Act today.)*""",
     "36": """# Web3 Social: Connections That Pay You for Your Attention
 
 In the era of Web2 (Facebook, Instagram, TikTok), you are the product. Your data is harvested, your attention is sold to advertisers, and the giants make billions while you get "likes. " Web3 reverses this dynamic. In a **Financial Social Network** like Pintopay, your connections aren't just for vanity—they are for **Prosperity**.
@@ -1745,7 +1745,7 @@ The old saying "Your Network is your Net Worth" has never been more literal than
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Make connections. Build wealth. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Make connections. Build wealth. Act now.)*""",
     "37": """# Digital Identity: Your New Global Passport
 
 In the future, they won't ask "Where are you from? " They will ask **"What's your wallet address? "** Your digital identity (DID) is becoming a more important document than your physical passport. It is a record of your reputation, your solvency, and your history—all verifiable on-chain without the need for a central government.
@@ -1788,7 +1788,7 @@ The era of bureaucratic borders is ending for those who embrace digital identity
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Secure your identity. Claim your passport. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Secure your identity. Claim your passport. Act today.)*""",
     "38": """# Transparency: The Light That Kills Corruption in Finance
 
 Why do traditional bankers and politicians fear the blockchain? The answer is simple: **Transparency**. In the old financial world, corruption thrives in the darkness of closed ledgers and hidden accounts. In the Web3 world, every cent is visible, every transaction is traceable, and lying is mathematically impossible.
@@ -1827,7 +1827,7 @@ It’s time to move your capital out of the shadows and into the light. Join the
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Choose transparency. Kill corruption. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Choose transparency. Kill corruption. Act today.)*""",
     "39": """# Green Bitcoin: The Energy of Freedom is the Energy of the Future
 
 There is a popular myth that cryptocurrency is "bad for the environment. " This narrative is often pushed by the very institutions that maintain thousands of massive office buildings, millions of ATM machines, and armored trucks circling the globe 24/7. When you actually compare the footprints, the **Crypto Economy is the most energy-efficient financial system in history.**
@@ -1862,7 +1862,7 @@ Don't be fooled by the propaganda. The old economy is the polluter; the new econ
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Go green. Go digital. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Go green. Go digital. Act today.)*""",
     "40": """# Learn to Earn: Why Education is Your Highest-Yield Asset
 
 In the industrial age, you paid for school to get a degree, which you then used to get a job. Education was a cost. In the Pintopay era, we have flipped the model. Within our **Academy and Intelligence Hub**, education is an asset that pays you.
@@ -1899,7 +1899,7 @@ Stop treating education as a chore. Treat it as a high-yield investment. Every m
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Learn. Earn. Scale. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Learn. Earn. Scale. Act now.)*""",
     "41": """# Game Over: Why Finance is Becoming the Ultimate Video Game
 
 For decades, banking has been designed to be boring. Gray buildings, complicated forms, and slow processes were used to make you feel like finance was a "serious" matter that only experts could handle. But in 2026, the walls of the bank are being replaced by the **Financial Quest**.
@@ -1942,7 +1942,7 @@ The world is being gamified. You can either be a "Non-Player Character" (NPC) wh
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Start the game. Win the money. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Start the game. Win the money. Act today.)*""",
     "42": """# Metaverse Banking: Why Your Digital Assets Need Real-World Bridges
 
 Soon, we will spend more time in virtual environments than in physical ones. Whether it's VR workrooms, 3D social spaces, or immersive gaming worlds, the **Metaverse** is becoming our primary theater of interaction. But there is a problem: your avatar's wealth is often "trapped" inside the game.
@@ -1977,7 +1977,7 @@ The divide between "Digital Money" and "Real Money" is disappearing. In 2026, th
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Bridge the worlds. Claim your liquidity. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Bridge the worlds. Claim your liquidity. Act now.)*""",
     "43": """# AI + Crypto: The Symbiosis That Will Define the Next Decade
 
 We are witnessing the merger of the two most powerful technologies in human history: **Artificial Intelligence** and **Cryptographic Finance**. AI is the "Brain" of the new economy—processing data and making decisions. Crypto is the "Blood"—the medium of exchange that allows machines to transact without human friction.
@@ -2010,7 +2010,7 @@ Pintopay is built for the AI era. Our rails are machine-friendly, and our tools 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Embrace the symbiosis. Lead the machines. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Embrace the symbiosis. Lead the machines. Act today.)*""",
     "44": """# Velocity of Wealth: Why The Fast Always Eat the Slow
 
 In the 20th century, the "Big ate the Small. " If you were a giant corporation, you could crush anyone simply by having more cash. In 2026, the rules have changed. Now, **The Fast eat the Slow**. Your ability to move assets, close deals, and respond to markets determines your net worth.
@@ -2049,7 +2049,7 @@ The digital grid doesn't sleep. Capital flows 24/7/365. Align yourself with the 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Increase your velocity. Claim your speed. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Increase your velocity. Claim your speed. Act now.)*""",
     "45": """# Earning in Your Sleep: The Buffet Principle Applied to the Digital Age
 
 Warren Buffet famously said: "If you don't find a way to make money while you sleep, you will work until you die. " Most people understand this concept, but they have no way to implement it. They don't have $10M to put into stocks, and they don't have an apartment building.
@@ -2084,7 +2084,7 @@ The goal isn't just to "earn more"; the goal is to **Earn Easier**. Move your fo
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Build your engine. Earn in your sleep. Act fast.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Build your engine. Earn in your sleep. Act fast.)*""",
     "46": """# Psychology of the 1%: Overcoming the $1,000/Day Ceiling
 
 The biggest barrier to wealth isn't the market; it's your **Internal Settings**. Most people have a "financial thermostat" set to a specific level. If they earn more than that, they subconsciously find a way to lose it or stop working. To reach the Legend rank in Pintopay, you must perform a **Psychological System Upgrade.**
@@ -2119,7 +2119,7 @@ Turn up the heat. Don't settle for "enough. " The Pintopay rails can handle infi
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Reset your mind. Claim your wealth. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Reset your mind. Claim your wealth. Act today.)*""",
     "47": """# The 2026 Gold Rush: Why This is the Last Great Opportunity Window
 
 Every few decades, a technological shift occurs that creates a massive wealth transfer. In the 90s, it was the Internet. In the 2010s, it was Mobile. In 2026, it is the **Sovereign Financial Stack**. We are at the "Tipping Point" where crypto moves from a speculative asset to a daily necessity.
@@ -2158,7 +2158,7 @@ The world won't look like this in five years. The rules will be set, the market 
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Join the rush. Plant your flag. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Join the rush. Plant your flag. Act now.)*""",
     "48": """# Autonomous Scaling: How to Build a Business That Grows Without You
 
 Can you build a business that is "anti-fragile"—one that grows faster when you step away? Most people build "Jobs" for themselves. If they stop working, the money stops. In the Pintopay ecosystem, our goal is **Autonomous Scaling** through viral loops and automated infrastructure.
@@ -2203,7 +2203,7 @@ Stop being the bottleneck of your own success. Build a system that is bigger tha
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Automate your scale. Escape the trap. Act today.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Automate your scale. Escape the trap. Act today.)*""",
     "49": """# Leading the Revolution: How to Become Your City's Sovereign Authority
 
 Global success starts with local leadership. As the world moves toward the "Sovereign Shift, " every city, every neighborhood, and every social circle needs a guide. They need someone who understands the new rails and can lead them out of the old system.
@@ -2246,7 +2246,7 @@ The world is looking for leaders who aren't afraid of the future. Position yours
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Lead the shift. Become the node. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Lead the shift. Become the node. Act now.)*""",
     "50": """# Social Capital Shield: Your Network is Your Only Protection Against the Great Reset
 
 In a world of "Great Resets, " programmable CBDCs, and centralized surveillance, your physical assets can be taken in a moment. But there is one thing that cannot be seized, inflated away, or "canceled": **Your Social Capital.** Your network is your ultimate equity.
@@ -2283,5 +2283,5 @@ It’s time to stop watching the revolution and start leading it. Welcome to the
 
 Pintopay is the solution. The door is right here.
 
-👉**[Claim Your Pintopay Card and Start Living]({cta_link})**(Activate your shield. Secure your legacy. Act now.)*""",
+👉**[Claim Your Pintopay Card and Start Living](https://t.me/pintopaybot?start=p_6977c29c66ed9faa401342f3)**(Activate your shield. Secure your legacy. Act now.)*""",
 }
