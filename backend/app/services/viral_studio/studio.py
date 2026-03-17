@@ -37,6 +37,8 @@ class ViralMarketingStudio:
         self.openai_client = None
         self.genai_client = None
         self._last_working_imagen_model = 'imagen-3.0-generate-001'
+        self._last_used_text_model = 'unknown'
+        self._last_used_image_model = 'unknown'
         self._init_clients()
         # Local short-term cache for rapid re-generations
         self._intel_cache = {}
@@ -376,11 +378,12 @@ class ViralMarketingStudio:
                         ),
                         timeout=25.0 
                     )
-                    self._last_used_text_model = model_name
-                    content = res.choices[0].message.content
-                    if "```json" in content:
-                        content = content.split("```json")[-1].split("```")[0]
-                    return json.loads(content), res.usage.total_tokens
+                    if res and res.choices:
+                        self._last_used_text_model = model_name
+                        content = res.choices[0].message.content
+                        if "```json" in content:
+                            content = content.split("```json")[-1].split("```")[0]
+                        return json.loads(content), res.usage.total_tokens
 
                 elif provider == "google" and self.genai_client:
                     # Let SDK handle naming
@@ -396,8 +399,9 @@ class ViralMarketingStudio:
                         ),
                         timeout=25.0 
                     )
-                    self._last_used_text_model = model_name
-                    content = res.text
+                    if res:
+                        self._last_used_text_model = model_name
+                        content = res.text
                     # Robust JSON extraction
                     if "```json" in content:
                         content = content.split("```json")[-1].split("```")[0]

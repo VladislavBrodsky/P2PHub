@@ -390,7 +390,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             pct = comm_map.get(comm_level, 0)
             if pct <= 0: continue
             
-            commission = round(float(total_amount * pct), 4)
+            commission = float(f"{(total_amount * pct):.4f}")
 
             recipient = None
             found_qualified_partner = False
@@ -398,10 +398,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             # Find the NEXT available partner in the chain who qualifies for this level
             while curr_lineage_idx < len(ancestors_at_dist):
-                referrer_id = ancestors_at_dist[int(curr_lineage_idx)]
+                idx = int(curr_lineage_idx)
+                referrer_id = ancestors_at_dist[idx]
 
                 referrer = ancestor_map.get(referrer_id)
-                curr_lineage_idx = int(curr_lineage_idx) + 1
+                curr_lineage_idx = idx + 1
 
                 
                 if not referrer: continue
@@ -433,7 +434,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         lang = referrer.language_code or "en"
                         
                         target_plan = "PRO+" if comm_level > 9 else "PRO"
-                        fomo_msg = get_msg(lang, "commission_fomo_missed", amount=round(commission, 2), level=comm_level, target_plan=target_plan)
+                        fmt_comm = float(f"{commission:.2f}")
+                        fomo_msg = get_msg(lang, "commission_fomo_missed", amount=fmt_comm, level=comm_level, target_plan=target_plan)
                         btn_text = get_msg(lang, "btn_upgrade")
                         deferred_notifications.append(notification_service.send_critical(
                             chat_id=str(referrer.telegram_id), text=fomo_msg,
