@@ -18,7 +18,20 @@ logger = logging.getLogger(__name__)
 # Global set to store references to running background tasks (prevents garbage collection)
 _background_tasks = set()
 
-from app.api.endpoints import admin, earnings, leaderboard, partner, payment, pro, tools
+from app.api.endpoints import (
+    admin,
+    blog,
+    config,
+    earnings,
+    health,
+    leaderboard,
+    partner,
+    payment,
+    pro,
+    support,
+    tools,
+    webhooks,
+)
 from app.core.config import settings
 from bot import bot, dp
 
@@ -288,7 +301,8 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
         token_str = str(x_telegram_bot_api_secret_token) if x_telegram_bot_api_secret_token else "null"
-        logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {token_str[:4]}...)")
+        masked_token = token_str[:4] if len(token_str) >= 4 else token_str
+        logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {masked_token}...)")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 
     try:
@@ -395,18 +409,11 @@ app.include_router(tools.router, prefix="/api/tools", tags=["tools"])
 app.include_router(payment.router, prefix="/api/payment", tags=["payment"])
 app.include_router(pro.router, prefix="/api/pro", tags=["pro"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
-from app.api.endpoints import blog, config, health
-
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
 app.include_router(health.router, tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
-from app.api.endpoints import support
-
 app.include_router(support.router, prefix="/api/support", tags=["support"])
-
-from app.api.endpoints import webhooks  # TonAPI payment webhook listener
-
 app.include_router(webhooks.router, tags=["webhooks"])
 
 # #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.

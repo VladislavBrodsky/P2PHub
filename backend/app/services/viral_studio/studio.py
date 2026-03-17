@@ -188,14 +188,25 @@ class ViralMarketingStudio:
 
 
         # Consistency fix for text fields
-        body_text = res_json.get("text") or res_json.get("body") or ""
+        body_text = ""
+        title_text = "Viral Insight"
+        hashtags_list = []
+        tokens_openai = 0
+        
+        if res_json:
+            body_text = res_json.get("text") or res_json.get("body") or ""
+            title_text = res_json.get("title", "Viral Insight").strip().replace("**", "")
+            hashtags_list = res_json.get("hashtags", [])
+        else:
+            logger.warning("⚠️ Synthesis returned empty res_json, using fallbacks.")
+
         
         # Safety fallback for ref_link placeholder
         if "{ref_link}" in body_text:
             body_text = body_text.replace("{ref_link}", ref_link)
 
         # 🛡️ DEDUPLICATION GUARD (Titles & Hashtags)
-        title_text = res_json.get("title", "").strip().replace("**", "")
+
         body_lines = body_text.strip().split("\n")
         
         # 1. Remove redundant title from body if present
@@ -261,7 +272,6 @@ class ViralMarketingStudio:
                 body_text = "\n".join(lines)
 
         # 🛡️ HASHTAG GUARDIAN FINAL (Internal Metadata Only)
-        hashtags_list = res_json.get("hashtags", [])
         if isinstance(hashtags_list, str):
             hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
         
@@ -280,7 +290,7 @@ class ViralMarketingStudio:
         duration = (datetime.now() - start_time).total_seconds()
         
         output = {
-            "title": res_json.get("title", "Viral Insight"),
+            "title": title_text,
             "text": body_text,
             "body": body_text,
             "hashtags": hashtags_list or [],
@@ -300,7 +310,7 @@ class ViralMarketingStudio:
                 # Run in background to avoid blocking return
                 _task = asyncio.create_task(viral_log.viral_logger.append_user_story_history(partner.id, ep_num, output["title"], output["body"]))
                 background_tasks.add(_task)
-                _task.add_done_callback(background_tasks.discard)
+                _task.add_done_callback(lambda t: background_tasks.discard(t))
             except Exception as e:
                 logger.warning(f"Failed to append story history: {e}")
 
@@ -672,7 +682,7 @@ class ViralMarketingStudio:
                     
                     _task = asyncio.create_task(delayed_refresh())
                     background_tasks.add(_task)
-                    _task.add_done_callback(background_tasks.discard)
+                    _task.add_done_callback(lambda t: background_tasks.discard(t))
                 except Exception: pass
 
             except Exception as e: logger.error(f"Social Tracking Fail: {e}")
@@ -698,7 +708,8 @@ class ViralMarketingStudio:
 
         if force_refresh:
             audit = await compute_audit()
-            if audit and "error" not in audit: await redis_service.set_json(cache_key, audit, expire=10800)
+            if audit and isinstance(audit, dict) and "error" not in audit: 
+                await redis_service.set_json(cache_key, audit, expire=10800)
             return audit
         return await redis_service.get_or_compute(cache_key, compute_audit, expire=10800)
 
