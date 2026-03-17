@@ -41,6 +41,11 @@
 
   --header-height: 3.25rem;
   --bottom-nav-height: 4.375rem;
+
+  /* #comment: Back Button Sync - Centralized offsets for perfect device alignment */
+  --back-button-top-offset: 48px;
+  --back-button-drawer-offset: 88px;
+
   /* Safe Areas + Telegram Header padding for bot buttons visibility */
   --header-offset-base: 4rem;
   --header-content-clearance: 3.375rem;

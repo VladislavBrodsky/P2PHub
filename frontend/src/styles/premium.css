@@ -224,12 +224,22 @@
 
 .pro-card-extreme::before {
   content: "";
-  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-[inherit] pointer-events-none;
+  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-700 rounded-[inherit] pointer-events-none;
+}
+
+.pro-card-extreme:hover::before,
+.group:hover .pro-card-extreme::before {
+  @apply opacity-100;
 }
 
 .pro-card-extreme::after {
   content: "";
-  @apply absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit] pointer-events-none;
+  @apply absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 transition-opacity duration-500 rounded-[inherit] pointer-events-none;
+}
+
+.pro-card-extreme:hover::after,
+.group:hover .pro-card-extreme::after {
+  @apply opacity-100;
 }
 
 .holographic-shine {
@@ -322,7 +332,11 @@
 
 .vibing-premium-panel::before {
   content: "";
-  @apply absolute inset-0 bg-linear-to-br from-indigo-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-indigo-500/10 dark:via-fuchsia-500/10 dark:to-indigo-500/10 opacity-30 pointer-events-none;
+  @apply absolute inset-0 bg-linear-to-br from-indigo-500/5 via-fuchsia-500/5 to-indigo-500/5 opacity-30 pointer-events-none;
+}
+
+.dark .vibing-premium-panel::before {
+  @apply from-indigo-500/10 via-fuchsia-500/10 to-indigo-500/10;
 }
 
 .holographic-card {
@@ -332,7 +346,7 @@
 
 .holographic-card::after {
   content: "";
-  @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+  @apply absolute inset-0 opacity-0 transition-opacity duration-500;
   background: linear-gradient(105deg,
       transparent 40%,
       rgba(255, 255, 255, 0.1) 45%,
@@ -341,6 +355,11 @@
       transparent 60%);
   background-size: 200% 100%;
   animation: shine 3s infinite;
+}
+
+.holographic-card:hover::after,
+.group:hover .holographic-card::after {
+  @apply opacity-100;
 }
 
 @keyframes shine {
