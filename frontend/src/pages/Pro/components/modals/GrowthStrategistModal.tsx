@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Brain, Zap, Loader2, Sparkles, Target, TrendingUp } from 'lucide-react';
-import { apiClient } from '../../../api/client';
+import { apiClient } from '../../../../api/client';
 import { useTranslation } from 'react-i18next';
-import { renderMarkdown } from '../utils/renderMarkdown';
+import { renderMarkdown } from '../../utils/renderMarkdown';
 
 interface GrowthStrategistModalProps {
     isOpen: boolean;

@@ -123,6 +123,7 @@ async def get_my_leaderboard_stats(
 
         # Get rank from Redis (0-indexed, so add 1)
         try:
+            from datetime import datetime, UTC
             is_test = partner.is_test
             rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe, is_test=is_test)
             
@@ -133,7 +134,7 @@ async def get_my_leaderboard_stats(
                 await leaderboard_service.update_score(partner.id, partner.xp, is_test=is_test)
                 rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe, is_test=is_test)
 
-            rank_val = (rank + 1) if rank is not None else -1
+            rank_val = (int(rank) + 1) if rank is not None else -1
             
             # Get specific XP for this timeframe from Redis directly
             now = datetime.now(UTC)

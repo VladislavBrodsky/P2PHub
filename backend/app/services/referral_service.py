@@ -97,7 +97,7 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
         lineage_ids.append(partner.referrer_id)
     lineage_ids = list(dict.fromkeys(lineage_ids))
     if len(lineage_ids) > 20:
-        lineage_ids = list(lineage_ids)[-20:]
+        lineage_ids = lineage_ids[-20:]
 
 
     
@@ -201,7 +201,7 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             # The children are the elements in full_lineage_names AFTER the referrer
             try:
                 ref_idx = full_lineage_ids.index(referrer.id)
-                children_names = list(full_lineage_names)[ref_idx + 1:]
+                children_names = full_lineage_names[ref_idx + 1:]
 
                 msg_chain = [get_msg(lang, "you"), *children_names]
             except (ValueError, IndexError):
@@ -393,8 +393,8 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             first_skipped_partner = None
             
             # Find the NEXT available partner in the chain who qualifies for this level
-            while curr_lineage_idx < len(list(ancestors_at_dist)):
-                referrer_id = list(ancestors_at_dist)[curr_lineage_idx]
+            while curr_lineage_idx < len(ancestors_at_dist):
+                referrer_id = ancestors_at_dist[curr_lineage_idx]
 
                 referrer = ancestor_map.get(referrer_id)
                 from typing import cast
@@ -447,13 +447,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             if recipient.id not in recipient_totals:
                 recipient_totals[recipient.id] = {"amount": 0.0, "xp": 0.0, "levels": [], "qualified": False}
             
-            rt: dict[str, Any] = recipient_totals[recipient.id]
+            rt = recipient_totals[recipient.id]
             rt["amount"] = float(rt.get("amount", 0.0)) + float(commission)
             rt["levels"].append(comm_level)
-
-            if found_qualified_partner: rt["qualified"] = True
-            rt_qualified: dict[str, Any] = rt
-            if found_qualified_partner: rt_qualified["qualified"] = True
+            if found_qualified_partner:
+                rt["qualified"] = True
 
 
             # Award commission state tracking
