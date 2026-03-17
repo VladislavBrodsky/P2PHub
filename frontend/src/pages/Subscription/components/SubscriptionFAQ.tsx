@@ -28,8 +28,8 @@ export const SubscriptionFAQ = React.memo(({
     return (
         <section className="mb-10 pt-32">
             <SectionHeader
-                badge={t('subscription.faq.teaser_badge')}
-                title={<>{t('subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('subscription.faq.header_highlight')}</span></>}
+                badge={t('pro:subscription.faq.teaser_badge')}
+                title={<>{t('pro:subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('pro:subscription.faq.header_highlight')}</span></>}
                 className="mb-8"
             />
             <div className="space-y-3">
@@ -43,7 +43,7 @@ export const SubscriptionFAQ = React.memo(({
                                 <div className={`w-10 h-10 rounded-[1rem] bg-white dark:bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm ${faq.iconColor}`}>
                                     <faq.icon size={16} />
                                 </div>
-                                <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight pr-4">{faq.q}</span>
+                                <span className="text-[clamp(0.65rem,2.2vw,0.8rem)] font-bold text-slate-900 dark:text-white uppercase tracking-tight pr-4">{faq.q}</span>
                             </div>
                             <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${expandedFaq === idx ? 'rotate-180 text-blue-500' : 'text-slate-400 dark:text-white/30'}`} />
                         </button>
@@ -55,7 +55,7 @@ export const SubscriptionFAQ = React.memo(({
                                     exit={{ height: 0, opacity: 0 }}
                                     className="overflow-hidden"
                                 >
-                                    <p className="px-5 pb-5 pt-3 text-label text-slate-600 dark:text-white/60 leading-relaxed font-medium border-t border-slate-200/50 dark:border-white/10">{faq.a}</p>
+                                    <p className="px-5 pb-5 pt-3 text-[clamp(0.6rem,2vw,0.75rem)] text-slate-600 dark:text-white/60 leading-relaxed font-medium border-t border-slate-200/50 dark:border-white/10">{faq.a}</p>
                                 </motion.div>
                             )}
                         </AnimatePresence>

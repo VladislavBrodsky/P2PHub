@@ -99,10 +99,10 @@ export const SubscriptionPayment = React.memo(({
                         <div className="text-center">
                             <div className="flex flex-col items-center gap-0.5 mb-5">
                                 <div className="flex items-baseline gap-1">
-                                    <span className="text-4xl font-bold text-slate-900 dark:text-white tracking-tighter drop-shadow-sm">
+                                    <span className="text-[clamp(1.75rem,10vw,2.5rem)] font-bold text-slate-900 dark:text-white tracking-tighter drop-shadow-sm">
                                         ${planPrice}
                                     </span>
-                                    <span className="text-label font-bold text-slate-400 dark:text-white/30 uppercase font-mono">
+                                    <span className="text-[clamp(0.6rem,2vw,0.75rem)] font-bold text-slate-400 dark:text-white/30 uppercase font-mono">
                                         / {selectedPlan === 'PRO_PLUS' ? t('pro:subscription.upgrade.lifetime_label') : t('pro:subscription.upgrade.monthly_label')}
                                     </span>
                                 </div>
@@ -142,7 +142,7 @@ export const SubscriptionPayment = React.memo(({
                                 <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
                                     {isLoading && (paymentMethod === 'STRIPE' || !paymentMethod) ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
                                 </div>
-                                <span className="text-[9px] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('pro:subscription.upgrade.stripe_card')}</span>
+                                <span className="text-[clamp(0.5rem,1.8vw,0.6rem)] font-bold text-slate-500 dark:text-white/30 group-hover:text-slate-900 dark:group-hover:text-white tracking-widest uppercase transition-colors">{t('pro:subscription.upgrade.stripe_card')}</span>
                             </button>
                         </div>
                         <div className="flex items-center justify-center gap-2 opacity-50 dark:opacity-30">
@@ -204,7 +204,7 @@ export const SubscriptionPayment = React.memo(({
                                             >
                                                 <p className="text-label font-bold text-slate-400 dark:text-white/30 mb-2 uppercase tracking-[0.2em]">{copied ? t('pro:notifications.copied') : t('pro:subscription.upgrade.tap_to_copy')}</p>
                                                 <div className={`bg-white dark:bg-black/40 p-3 rounded-xl mb-2 flex items-center gap-3 border transition-all ${copied ? 'border-emerald-500 shadow-lg' : 'border-slate-100 dark:border-white/5'}`}>
-                                                    <code className={`text-label font-mono break-all flex-1 transition-colors ${copied ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-white/80'}`}>{adminUsdt}</code>
+                                                    <code className={`text-[clamp(0.6rem,2vw,0.75rem)] font-mono break-all flex-1 transition-colors ${copied ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-800 dark:text-white/80'}`}>{adminUsdt}</code>
                                                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shadow-md shrink-0 transition-all ${copied ? 'bg-emerald-600 scale-110' : 'bg-emerald-500'} text-white`}>
                                                         {copied ? <Check size={14} /> : <Copy size={14} />}
                                                     </div>

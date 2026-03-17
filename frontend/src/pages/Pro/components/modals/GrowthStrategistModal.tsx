@@ -1,3 +1,4 @@
+```typescript
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Brain, Zap, Loader2, Sparkles, Target, TrendingUp } from 'lucide-react';
