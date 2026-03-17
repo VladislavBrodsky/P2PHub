@@ -1,9 +1,12 @@
 import asyncio
+
 from sqlalchemy import func
-from sqlmodel import select
-from app.models.partner import engine, Partner, XPTransaction, Earning
-from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.partner import Earning, Partner, XPTransaction, engine
+
 
 async def audit_xp_commissions():
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

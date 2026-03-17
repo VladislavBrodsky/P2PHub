@@ -1,6 +1,8 @@
 import logging
-import sentry_sdk
 from datetime import UTC, datetime, timedelta
+
+import sentry_sdk
+
 from app.core.config import settings
 from app.core.http_client import http_client
 

@@ -14,8 +14,8 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
-from app.models.transaction import PartnerTransaction
 from app.models.partner import Partner
+from app.models.transaction import PartnerTransaction
 
 logger = logging.getLogger(__name__)
 

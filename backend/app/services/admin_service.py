@@ -699,8 +699,9 @@ class AdminService:
         Retrieves the raw 'Palantir' event feed (the master activity log of the platform).
         Fetches the latest critical system activities (XP updates, commissions, upgrades, payments).
         """
-        from app.models.audit_log import AuditLog
         from sqlmodel import select
+
+        from app.models.audit_log import AuditLog
         
         async for session in get_session():
             stmt = (
@@ -718,11 +719,7 @@ class AdminService:
                 
                 # Dynamic Categorization for 'MISC' or unset types
                 if action_val == "MISC" and log.action:
-                    if "fallback" in log.action:
-                        action_val = "SYSTEM"
-                    elif "admin" in log.action:
-                        action_val = "SYSTEM"
-                    elif "fix" in log.action:
+                    if "fallback" in log.action or "admin" in log.action or "fix" in log.action:
                         action_val = "SYSTEM"
                     elif "reconciliation" in log.action or "integrity" in log.action:
                         action_val = "RECONCILIATION"

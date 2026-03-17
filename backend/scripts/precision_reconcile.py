@@ -1,9 +1,12 @@
 import asyncio
 import json
-from sqlmodel import select, func
-from app.models.partner import Partner, XPTransaction, Earning, get_session
-from app.models.transaction import PartnerTransaction
+
+from sqlmodel import func, select
+
 from app.core.config import settings
+from app.models.partner import Earning, Partner, XPTransaction, get_session
+from app.models.transaction import PartnerTransaction
+
 
 async def precision_reconcile_partner(session, partner_id: int):
     partner = await session.get(Partner, partner_id)
@@ -72,7 +75,7 @@ async def precision_reconcile_partner(session, partner_id: int):
                         print(f"    Adding Missing Balance Deduction: TX {tx.id} ({deduct})")
                         session.add(Earning(
                             partner_id=partner.id, amount=deduct, type="PAYMENT",
-                            description=f"Subscription Payment (Reconciled)",
+                            description="Subscription Payment (Reconciled)",
                             reference_id=ref_id, currency="USDT"
                         ))
                         usdt_diff -= deduct

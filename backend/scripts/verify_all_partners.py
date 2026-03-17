@@ -1,7 +1,14 @@
 import asyncio
-from sqlmodel import select, func
-from app.models.partner import Partner, XPTransaction, Earning, get_session
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from sqlmodel import func, select
+
 from app.core.config import settings
+from app.models.partner import Earning, Partner, XPTransaction, get_session
+
 
 async def verify_reconciliation():
     async for session in get_session():
@@ -30,10 +37,10 @@ async def verify_reconciliation():
             if xp_diff > 0.01 or usdt_diff > 0.01:
                 print(f"❌ DISCREPANCY: Partner {partner.telegram_id}")
                 if xp_diff > 0.01:
-                    print(f"   XP: Actual={partner.xp}, Ledger={expected_xp}, Diff={partner.xp - expected_xp}")
+                    print(f"   XP: Actual={partner.xp}, Ledger={expected_xp}, Diff={float(partner.xp) - float(expected_xp)}")
                 if usdt_diff > 0.01:
-                    print(f"   USDT: Actual={partner.balance}, Ledger={expected_usdt}, Diff={partner.balance - expected_usdt}")
-                discrepancies += 1
+                    print(f"   USDT: Actual={partner.balance}, Ledger={expected_usdt}, Diff={float(partner.balance) - float(expected_usdt)}")
+                discrepancies = discrepancies + 1
         
         if discrepancies == 0:
             print("✅ ALL PARTNERS ARE RECONCILED AND HEALTHY.")

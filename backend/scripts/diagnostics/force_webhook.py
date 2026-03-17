@@ -1,7 +1,7 @@
 import asyncio
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add project root to sys.path
@@ -18,8 +18,8 @@ async def force_set_webhook():
     WEBHOOK_SECRET = "P2PHubSecret2026SecureToken"
     
     try:
-        from backend.bot import bot
         from backend.app.core.config import settings
+        from backend.bot import bot
         
         logger.info(f"Setting Webhook to: {WEBHOOK_URL}")
         

@@ -1,5 +1,6 @@
 import json
 import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -9,16 +10,19 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from app.core.security import get_current_user, get_tg_user
 from app.models.partner import Partner, SystemSetting, get_session
 from app.models.schemas import (
+    GrowthMetrics,
     PROSetupRequest,
     ReferralLinkUpdate,
     SocialPostRequest,
     ViralGenerateRequest,
     ViralGenerateResponse,
-    GrowthMetrics,
+)
+from app.services.analytics_service import (
+    get_network_growth_metrics,
+    get_referral_tree_stats,
 )
 from app.services.viral_analytics_service import viral_analytics
-from app.services.viral_studio import viral_studio, prompts
-from app.services.analytics_service import get_referral_tree_stats, get_network_growth_metrics
+from app.services.viral_studio import prompts, viral_studio
 from bot import bot
 
 logger = logging.getLogger(__name__)
@@ -547,7 +551,7 @@ async def generate_content(
         await session.commit()
         raise HTTPException(
             status_code=500,
-            detail=f"[STUDIO_CRASH] The synthesis engine encountered a critical internal error: {str(e)}"
+            detail=f"[STUDIO_CRASH] The synthesis engine encountered a critical internal error: {e!s}"
         )
     
     if result.get("status") != "success":

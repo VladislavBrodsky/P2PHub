@@ -8,12 +8,12 @@ from sqlmodel import SQLModel
 from app.models import (
     AuditLog,
     BlogPostEngagement,
+    Broadcast,
     KnowledgeBaseItem,
     NotificationRetry,
     Partner,
     PartnerBlogLike,
     PartnerTransaction,
-    Broadcast,
 )
 
 # this is the Alembic Config object, which provides

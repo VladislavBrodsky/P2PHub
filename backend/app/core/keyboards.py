@@ -1,4 +1,5 @@
 import urllib.parse
+
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 

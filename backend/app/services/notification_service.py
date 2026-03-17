@@ -310,6 +310,7 @@ class NotificationService:
                     try:
                         from sqlalchemy.orm import sessionmaker
                         from sqlmodel.ext.asyncio.session import AsyncSession
+
                         from app.models.partner import engine
                         from app.services.audit_service import audit_service
                         

@@ -589,8 +589,8 @@ class PaymentService:
             # This fires the first time ANY of their direct referrals upgrades to PRO.
             if partner.referrer_id:
                 try:
-                    from sqlmodel import select as sql_select
                     from sqlalchemy.orm import selectinload
+                    from sqlmodel import select as sql_select
                     referrer_stmt = sql_select(Partner).where(Partner.id == partner.referrer_id).options(
                         selectinload(Partner.completed_task_records)
                     )

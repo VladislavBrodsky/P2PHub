@@ -221,7 +221,7 @@ class Settings(BaseSettings):
 
     @model_validator(mode='before')
     @classmethod
-    def empty_str_to_none(cls, data: Dict) -> Dict:
+    def empty_str_to_none(cls, data: dict) -> dict:
         """
         Convert empty strings or whitespace strings to None.
         This allows Pydantic to fall back to the defined 'default' values

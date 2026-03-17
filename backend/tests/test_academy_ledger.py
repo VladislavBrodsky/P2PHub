@@ -1,7 +1,9 @@
 import pytest
 from sqlmodel import select
-from app.models.partner import XPTransaction, Partner
+
 from app.core.config import settings
+from app.models.partner import Partner, XPTransaction
+
 
 @pytest.mark.asyncio
 async def test_academy_unlock_logging(session, create_test_partner):

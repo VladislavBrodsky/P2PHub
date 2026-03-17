@@ -1,11 +1,13 @@
-import pytest
-from unittest.mock import AsyncMock, patch
 from datetime import UTC, datetime
+from unittest.mock import AsyncMock, patch
+
 import pytest
 from sqlmodel import select
+
+from app.core.config import settings
 from app.models.partner import Partner
 from app.services.payment_service import payment_service
-from app.core.config import settings
+
 
 @pytest.mark.asyncio
 async def test_balance_upgrade_pro_retry(session, create_test_partner):

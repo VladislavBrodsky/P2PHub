@@ -2,8 +2,8 @@ import asyncio
 import json
 import os
 import sys
-from pathlib import Path
 from collections import Counter
+from pathlib import Path
 
 # Add backend to path
 current_dir = Path(__file__).parent

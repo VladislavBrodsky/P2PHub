@@ -10,8 +10,8 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from app.models.partner import get_session
-from app.services.ton_webhook_service import ton_webhook_service
 from app.services.stripe_service import stripe_service
+from app.services.ton_webhook_service import ton_webhook_service
 
 logger = logging.getLogger(__name__)
 

@@ -1,11 +1,13 @@
-import pytest
-from sqlmodel import select
-from sqlmodel.ext.asyncio.session import AsyncSession
-from fastapi.testclient import TestClient
 import json
 
-from app.models.partner import Partner
+import pytest
+from fastapi.testclient import TestClient
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.api.endpoints.pro import MODULE_DETAILS
+from app.models.partner import Partner
+
 
 @pytest.mark.asyncio
 async def test_academy_completion_persistence(session: AsyncSession, create_referral_chain):

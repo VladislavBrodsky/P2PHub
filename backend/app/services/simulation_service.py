@@ -1,11 +1,13 @@
-import random
 import logging
+import random
+
 from sqlmodel import select
+
 from app.core.broker import broker
-from app.models.partner import Partner, XPTransaction, Earning
+from app.models.partner import Earning, Partner, XPTransaction
 from app.services.leaderboard_service import leaderboard_service
-from app.utils.ranking import get_level
 from app.services.redis_service import redis_service
+from app.utils.ranking import get_level
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +20,7 @@ async def simulate_artificial_activity():
     """
     from sqlalchemy.orm import sessionmaker
     from sqlmodel.ext.asyncio.session import AsyncSession
+
     from app.models.partner import engine
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

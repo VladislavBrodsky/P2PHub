@@ -1,7 +1,7 @@
 import asyncio
 import logging
-import sys
 import os
+import sys
 
 # Set up logging to stderr for immediate visibility
 logging.basicConfig(level=logging.INFO, stream=sys.stderr)
@@ -12,8 +12,8 @@ sys.path.append(os.getcwd() + "/backend")
 
 async def check_webhook():
     try:
-        from backend.bot import bot
         from backend.app.core.config import settings
+        from backend.bot import bot
         
         logger.info("Checking Webhook Info...")
         webhook_info = await bot.get_webhook_info()

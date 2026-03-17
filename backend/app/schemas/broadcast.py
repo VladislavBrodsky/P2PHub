@@ -1,7 +1,10 @@
-from pydantic import BaseModel
-from app.models.broadcast import AudienceFilter, BroadcastStatus
 from datetime import datetime
 from typing import Optional
+
+from pydantic import BaseModel
+
+from app.models.broadcast import AudienceFilter, BroadcastStatus
+
 
 class BroadcastCreate(BaseModel):
     message_text: str

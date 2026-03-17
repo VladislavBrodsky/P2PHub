@@ -1,11 +1,14 @@
 import asyncio
 import sys
-from datetime import datetime, UTC
-from sqlmodel import select
-from app.models.partner import Partner, XPTransaction, Earning, get_session
-from app.models.transaction import PartnerTransaction
-from app.core.config import settings
+from datetime import UTC, datetime
+
 from sqlalchemy.orm import selectinload
+from sqlmodel import select
+
+from app.core.config import settings
+from app.models.partner import Earning, Partner, XPTransaction, get_session
+from app.models.transaction import PartnerTransaction
+
 
 async def reconcile_partner(session, partner_id: int):
     partner = await session.get(Partner, partner_id)
@@ -51,7 +54,7 @@ async def reconcile_partner(session, partner_id: int):
             session.add(Earning(
                 partner_id=partner.id,
                 amount=-float(tx.amount),
-                description=f"Subscription Payment: BALANCE (Backfill)",
+                description="Subscription Payment: BALANCE (Backfill)",
                 type="PAYMENT",
                 currency="USDT",
                 reference_id=ref_id,
@@ -77,7 +80,7 @@ async def reconcile_partner(session, partner_id: int):
                 partner_id=partner.id,
                 amount=float(xp_amount),
                 type="UPGRADE_BONUS",
-                description=f"Upgrade Reward (Backfill)",
+                description="Upgrade Reward (Backfill)",
                 reference_id=f"upg_bonus_backfill_{partner.id}",
                 created_at=partner.pro_started_at or partner.created_at
             ))

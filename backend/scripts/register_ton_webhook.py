@@ -9,9 +9,10 @@ Usage:
     python -m scripts.register_ton_webhook
 """
 import asyncio
-import httpx
 import os
 import sys
+
+import httpx
 
 # Bootstrap settings from .env
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

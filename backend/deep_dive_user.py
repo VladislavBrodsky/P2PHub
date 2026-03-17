@@ -1,9 +1,12 @@
 import asyncio
-from sqlmodel import select
-from app.models.partner import engine, Partner, XPTransaction
-from app.models.audit_log import AuditLog
-from sqlmodel.ext.asyncio.session import AsyncSession
+
 from sqlalchemy.orm import sessionmaker
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.models.audit_log import AuditLog
+from app.models.partner import Partner, XPTransaction, engine
+
 
 async def deep_dive_user():
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

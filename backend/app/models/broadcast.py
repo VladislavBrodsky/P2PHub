@@ -2,7 +2,8 @@ from datetime import UTC, datetime
 from enum import Enum
 from typing import Optional
 
-from sqlalchemy import Column, Enum as SaEnum
+from sqlalchemy import Column
+from sqlalchemy import Enum as SaEnum
 from sqlmodel import Field, SQLModel
 
 
@@ -24,7 +25,7 @@ class AudienceFilter(str, Enum):
 class Broadcast(SQLModel, table=True):
     __tablename__ = "broadcast"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     admin_id: str = Field(index=True)
     message_text: str
     audience_type: AudienceFilter = Field(
@@ -38,7 +39,7 @@ class Broadcast(SQLModel, table=True):
     total_targets: int = Field(default=0)
     sent_count: int = Field(default=0)
     failed_count: int = Field(default=0)
-    last_partner_id: Optional[int] = Field(default=0, description="Resume cursor for chunked broadacsts")
+    last_partner_id: int | None = Field(default=0, description="Resume cursor for chunked broadacsts")
     
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(UTC).replace(tzinfo=None))

@@ -2,9 +2,11 @@ import asyncio
 import sys
 
 from sqlmodel import select
+
 from app.models.partner import Partner, async_session_maker
 from app.services.partner_service import sync_single_photo_background
 from bot import bot
+
 
 async def main():
     username = "PAO_Web3"

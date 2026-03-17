@@ -6,11 +6,13 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from dotenv import load_dotenv
+
 load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 
-from app.core.config import settings
 from google import genai
 from google.genai import types
+
+from app.core.config import settings
 
 # ANSI color codes
 GREEN = '\033[92m'
@@ -94,9 +96,9 @@ async def main():
 
     os.makedirs(os.path.dirname(en_temp_path), exist_ok=True)
 
-    with open(en_path, "r", encoding="utf-8") as f:
+    with open(en_path, encoding="utf-8") as f:
         en_data = json.load(f)
-    with open(ru_path, "r", encoding="utf-8") as f:
+    with open(ru_path, encoding="utf-8") as f:
         ru_data = json.load(f)
 
     # Start from where we left off or specified
@@ -134,7 +136,7 @@ async def main():
             en_data["academy_content"][f"stage_{i}_lesson_viral_rule"] = en_res.get("lesson_viral_rule", "")
             cprint("  - EN ✅", "green")
         else:
-            cprint(f"  - EN ❌ (failed, skipping)", "red")
+            cprint("  - EN ❌ (failed, skipping)", "red")
 
         await asyncio.sleep(1)  # Rate limit buffer between EN and RU
 
@@ -149,7 +151,7 @@ async def main():
             ru_data["academy_content"][f"stage_{i}_lesson_viral_rule"] = ru_res.get("lesson_viral_rule", "")
             cprint("  - RU ✅", "green")
         else:
-            cprint(f"  - RU ❌ (failed, skipping)", "red")
+            cprint("  - RU ❌ (failed, skipping)", "red")
 
         # Save after every stage to avoid data loss
         with open(en_temp_path, "w", encoding="utf-8") as f:

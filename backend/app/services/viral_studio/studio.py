@@ -179,7 +179,7 @@ class ViralMarketingStudio:
             return {"error": "Synthesis timed out due to elite model latency. Try a different strategy.", "status": "failed"}
         except Exception as e:
             logger.error(f"🔥 UNHANDLED GENERATION ERROR: {e}")
-            return {"error": f"Synthesis Error: {str(e)}", "status": "failed"}
+            return {"error": f"Synthesis Error: {e!s}", "status": "failed"}
 
         # ----------------------------------------------------------------------------------
         # Post-Processing
@@ -598,7 +598,7 @@ class ViralMarketingStudio:
             
             logger.warning(f"⚠️ Imagen {model} returned no images.")
         except Exception as e:
-            logger.error(f"❌ Imagen {model} Synthesis Error: {type(e).__name__}: {str(e)}")
+            logger.error(f"❌ Imagen {model} Synthesis Error: {type(e).__name__}: {e!s}")
             
         return False, None
 

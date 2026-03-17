@@ -1,17 +1,17 @@
 import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
-from typing import List, Any
+from typing import Any, List
 
 from sqlalchemy import func
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from app.models.partner import Partner, get_session, engine
-from app.models.broadcast import Broadcast, BroadcastStatus, AudienceFilter
-from app.services.notification_service import notification_service
 from app.core.broker import broker
 from app.core.retry import async_retry
+from app.models.broadcast import AudienceFilter, Broadcast, BroadcastStatus
+from app.models.partner import Partner, engine, get_session
+from app.services.notification_service import notification_service
 
 logger = logging.getLogger(__name__)
 
@@ -54,13 +54,13 @@ class BroadcastService:
         result = await session.execute(stmt)
         return result.scalar() or 0
 
-    async def get_active_broadcasts(self) -> List[Broadcast]:
+    async def get_active_broadcasts(self) -> list[Broadcast]:
         async for session in get_session():
             stmt = select(Broadcast).where(Broadcast.status.in_([BroadcastStatus.SENDING, BroadcastStatus.PENDING])).order_by(Broadcast.created_at.desc())
             result = await session.execute(stmt)
             return result.scalars().all()
 
-    async def get_broadcast_history(self, limit: int = 50) -> List[Broadcast]:
+    async def get_broadcast_history(self, limit: int = 50) -> list[Broadcast]:
         async for session in get_session():
             stmt = select(Broadcast).order_by(Broadcast.created_at.desc()).limit(limit)
             result = await session.execute(stmt)
@@ -87,7 +87,7 @@ async def run_broadcast_task(broadcast_id: int):
     Recursive re-queuing ensures we don't hog a worker for hours.
     """
     from sqlalchemy.orm import sessionmaker
-    from app.models.partner import engine
+
     from app.services.audit_service import audit_service
     
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)

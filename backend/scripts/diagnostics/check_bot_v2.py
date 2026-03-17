@@ -1,7 +1,7 @@
 import asyncio
 import logging
-import sys
 import os
+import sys
 from pathlib import Path
 
 # Add project root to sys.path
@@ -29,8 +29,8 @@ async def check_webhook():
     logger = logging.getLogger(__name__)
 
     try:
-        from backend.bot import bot
         from backend.app.core.config import Settings
+        from backend.bot import bot
         
         # Instantiate settings again after loading .env
         settings = Settings()

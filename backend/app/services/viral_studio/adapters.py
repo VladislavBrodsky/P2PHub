@@ -135,6 +135,7 @@ async def post_to_telegram(partner: Partner, content: str, image_path: str | Non
 
 import httpx
 
+
 async def post_to_linkedin(partner: Partner, content: str, image_path: str | None) -> dict[str, Any]:
     if not partner.linkedin_access_token:
         return {"error": "LinkedIn API not configured. Please add your Access Token in API Settings."}
@@ -307,7 +308,7 @@ async def post_to_facebook(partner: Partner, content: str, image_path: str | Non
                         resp = await client.post(url, data=data, files=files)
                 else:
                     # Fallback to feed if image missing
-                    resp = await client.post(f"https://graph.facebook.com/v19.0/me/feed", data={
+                    resp = await client.post("https://graph.facebook.com/v19.0/me/feed", data={
                         "message": content,
                         "access_token": partner.facebook_access_token
                     })

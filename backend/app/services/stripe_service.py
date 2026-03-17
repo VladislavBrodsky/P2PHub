@@ -1,6 +1,7 @@
 import logging
-import stripe
 from typing import Any, Optional
+
+import stripe
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -21,7 +22,7 @@ class StripeService:
         success_url: str,
         cancel_url: str,
         is_upgrade: bool = False
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Creates a Stripe Checkout Session for PRO or PRO+ upgrade.
         Returns the session URL for redirection.

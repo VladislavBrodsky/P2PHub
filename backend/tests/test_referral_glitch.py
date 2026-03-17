@@ -1,7 +1,10 @@
-import pytest
 from unittest.mock import AsyncMock, patch
+
+import pytest
 from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.services.referral_service import process_referral_logic
+
 
 @pytest.mark.asyncio
 async def test_referral_path_no_duplicates(session: AsyncSession, create_referral_chain):

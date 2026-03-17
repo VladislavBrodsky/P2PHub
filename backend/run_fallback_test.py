@@ -1,10 +1,13 @@
 import asyncio
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.services.viral_studio.studio import viral_studio
 import logging
+
+from app.services.viral_studio.studio import viral_studio
+
 logging.basicConfig(level=logging.INFO)
 
 async def test():

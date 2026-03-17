@@ -1,5 +1,6 @@
-import urllib.request
 import os
+import urllib.request
+
 from PIL import Image
 
 icons = {

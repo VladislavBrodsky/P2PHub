@@ -390,6 +390,7 @@ class AuditService:
 
 from app.core.broker import broker
 
+
 @broker.task(
     task_name="process_audit_buffer_task",
     schedule=[{"cron": "*/1 * * * *"}] # Fallback cron, though we also trigger on demand
@@ -399,10 +400,12 @@ async def process_audit_buffer_task():
     High-performance background flusher.
     Drains the entire Redis audit buffer in chunks of 1000.
     """
+    import json
+
     from sqlalchemy.orm import sessionmaker
+
     from app.models.partner import engine
     from app.services.redis_service import redis_service
-    import json
     
     BATCH_SIZE = 1000
     TOTAL_FLUSHED = 0

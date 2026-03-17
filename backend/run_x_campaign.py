@@ -2,14 +2,17 @@ import asyncio
 import logging
 import random
 from datetime import datetime
-from sqlmodel.ext.asyncio.session import AsyncSession
+
 from sqlalchemy.orm import sessionmaker
+from sqlmodel.ext.asyncio.session import AsyncSession
+
 from app.models.partner import engine
 
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+from dotenv import load_dotenv
+
 from app.models.partner import Partner
 from app.services.viral_studio.studio import viral_studio
-from dotenv import load_dotenv
 
 load_dotenv(".env.backend")
 
@@ -67,7 +70,7 @@ async def run_campaign():
                 logger.info(f"Image Path: {image_path}")
 
                 # Post to X
-                logger.info(f"Posting to X (Twitter)...")
+                logger.info("Posting to X (Twitter)...")
                 post_res = await viral_studio.post_to_social(
                     partner=partner,
                     platform="x",

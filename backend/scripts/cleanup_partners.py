@@ -57,8 +57,13 @@ async def main():
                 await session.flush()
                 
                 # Delete child records
-                from app.models.partner import (Earning, PartnerTask, SocialPost,
-                                               ViralGeneration, XPTransaction)
+                from app.models.partner import (
+                    Earning,
+                    PartnerTask,
+                    SocialPost,
+                    ViralGeneration,
+                    XPTransaction,
+                )
                 from app.models.transaction import PartnerTransaction
                 
                 await session.execute(delete(PartnerTransaction).where(PartnerTransaction.partner_id == user.id))

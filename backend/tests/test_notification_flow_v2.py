@@ -173,7 +173,10 @@ class TestNotificationStructuredSuite:
         from aiogram.exceptions import TelegramBadRequest
         with patch("bot.bot.send_message", side_effect=TelegramBadRequest(method=MagicMock(), message="can't parse entities")):
             with patch("app.services.rate_limit_service.rate_limit_service.is_allowed", return_value=True):
-                from app.services.notification_service import NotificationPayload, send_telegram_task
+                from app.services.notification_service import (
+                    NotificationPayload,
+                    send_telegram_task,
+                )
                 payload = NotificationPayload(chat_id=chat_id, text=text, priority="medium")
                 
                 # Create the retry record manually since we are skipping enqueue_notification and calling worker task directly

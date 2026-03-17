@@ -8,9 +8,9 @@ import urllib.parse
 import sentry_sdk
 from aiogram import Bot, Dispatcher, F, types
 from aiogram.filters import Command, CommandStart
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.core.config import settings
 from app.core.i18n import get_msg
@@ -53,7 +53,11 @@ class OnboardingStates(StatesGroup):
 async def cmd_start(message: types.Message, state: FSMContext):
     logging.info(f"📥 Received /start command from user {message.from_user.id}")
 
-    from app.core.keyboards import get_main_menu_keyboard, get_onboarding_keyboard, get_main_active_menu_keyboard
+    from app.core.keyboards import (
+        get_main_active_menu_keyboard,
+        get_main_menu_keyboard,
+        get_onboarding_keyboard,
+    )
     from app.services.partner_service import create_partner, get_partner_by_telegram_id
 
     # Extract referral code

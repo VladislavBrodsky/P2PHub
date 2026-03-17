@@ -1,10 +1,11 @@
 import asyncio
+
+from dotenv import load_dotenv
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
-from app.models.partner import engine
-from app.models.partner import Partner
+
+from app.models.partner import Partner, engine
 from app.services.viral_studio.studio import viral_studio
-from dotenv import load_dotenv
 
 load_dotenv(".env.backend")
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
