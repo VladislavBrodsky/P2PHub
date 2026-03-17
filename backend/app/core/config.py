@@ -25,8 +25,11 @@ def find_backend_root() -> Path:
     current = Path(__file__).resolve().parent
     # Maximum 5 levels up to prevent escaping to system root
     for _ in range(5):
-        if (current / "requirements.txt").exists() or (current / "app").exists():
-            return current
+        try:
+            if (current / "requirements.txt").exists() or (current / "app").exists():
+                return current
+        except PermissionError:
+            pass
         if current.parent == current: # Reached system root
             break
         current = current.parent

@@ -88,7 +88,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
     };
 
     return createPortal(
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
             {isOpen && (
                 <div key="drawer-portal-root" className="fixed inset-0 z-9998 overflow-hidden pointer-events-none">
                     {/* Backdrop */}
@@ -97,9 +97,9 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0, pointerEvents: 'none' }}
-                        transition={{ duration: 0.15 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer pointer-events-auto"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-[4px] cursor-pointer pointer-events-auto"
                     />
 
                     {/* Drawer Content Wrapper */}
@@ -114,20 +114,20 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                             exit={{ x: '-100%', pointerEvents: 'none' }}
                             onAnimationStart={() => setIsAnimating(true)}
                             onAnimationComplete={() => setIsAnimating(false)}
-                            transition={{ type: 'spring', stiffness: 400, damping: 40, mass: 0.8 }}
+                            transition={{ type: 'spring', damping: 30, stiffness: 300, mass: 1 }}
                             className="pointer-events-auto relative flex h-full w-[85%] max-w-[320px] flex-col gap-0 overflow-hidden bg-bg-app border-r border-border-glass shadow-2xl ml-0 mr-auto overscroll-none"
                             style={{
                                 marginLeft: 'max(0px, calc(50% - 32rem / 2))',
                                 left: 0,
                                 overscrollBehavior: 'none',
-                                willChange: isAnimating ? 'transform' : 'auto',
+                                willChange: 'transform',
                                 transform: 'translateZ(0)',
                                 backfaceVisibility: 'hidden',
                                 WebkitBackfaceVisibility: 'hidden'
                             }}
                         >
-                            <div className="mesh-gradient-dark absolute inset-0 opacity-20 pointer-events-none" />
-                            <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                            {/* Drawer background - simplified for Android stability */}
+                            <div className="absolute inset-0 bg-linear-to-b from-blue-500/5 to-purple-500/5 pointer-events-none z-0" />
 
                             {/* Drawer Navigation Bar */}
                             <div className="pt-[80px] px-4 pb-1.5 flex items-center justify-between z-20">

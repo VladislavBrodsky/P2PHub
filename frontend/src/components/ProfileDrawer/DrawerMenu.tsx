@@ -127,7 +127,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                                     <span className="text-xs font-bold text-text-primary flex-1">{item.q}</span>
                                     <motion.div
                                         animate={{ rotate: expandedNestedItem === `faq-${i}` ? 90 : 0 }}
-                                        transition={{ duration: 0.2 }}
+                                        transition={{ duration: 0.1 }}
                                     >
                                         <ChevronRight className="h-3.5 w-3.5 text-blue-500 shrink-0" />
                                     </motion.div>
@@ -192,20 +192,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                     <div
                         key={item.id}
                         className={`rounded-2xl overflow-hidden shadow-sm group relative transition-all duration-300 ${isProItem
-                            ? 'bg-linear-to-r from-amber-500 via-yellow-500 to-orange-600 border-none animate-[vibing-gradient_10s_infinite_linear] bg-size-[300%_300%]'
+                            ? 'bg-linear-to-r from-amber-500 via-yellow-500 to-orange-600 border-none'
                             : 'bg-card-bg backdrop-blur-sm border border-card-border'
                             }`}
                     >
-                        {isProItem && (
-                            <>
-                                <div className="absolute inset-0 opacity-40">
-                                    <div className="absolute -inset-full animate-[liquid_20s_infinite_linear] bg-linear-to-r from-transparent via-white/40 to-transparent rotate-12" />
-                                </div>
-                                <div className="absolute inset-0 opacity-30">
-                                    <div className="absolute -inset-full animate-[liquid_15s_infinite_linear_reverse] bg-linear-to-tr from-transparent via-amber-200/40 to-transparent -rotate-12" />
-                                </div>
-                            </>
-                        )}
 
                         <button
                             onClick={() => {

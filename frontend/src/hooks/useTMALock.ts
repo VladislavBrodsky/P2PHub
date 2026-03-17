@@ -18,14 +18,16 @@ export function useTMALock(isLocked: boolean) {
         const scrollY = window.scrollY;
 
         // 2. Fix the body in place (background stops scrolling)
-        //    but crucially we do NOT set overflow:hidden on body —
-        //    that would kill scroll in all descendants on iOS.
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = '0';
-        document.body.style.right = '0';
-        document.body.style.width = '100%';
-        document.body.style.overscrollBehavior = 'none';
+        // We use a small timeout to allow the transition animation to start
+        // smoothly before the body's layout is recalculated.
+        const lockTimeout = setTimeout(() => {
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+            document.body.style.overscrollBehavior = 'none';
+        }, 300); // Wait for drawer to be mostly visible
 
         // 3. Disable Telegram vertical swipes (Dual-Layer locking)
         const disableSwipes = async () => {
@@ -58,6 +60,7 @@ export function useTMALock(isLocked: boolean) {
         disableSwipes();
 
         return () => {
+            clearTimeout(lockTimeout);
             // Unfix body and restore scroll position
             document.body.style.position = '';
             document.body.style.top = '';
