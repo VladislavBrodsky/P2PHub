@@ -37,10 +37,10 @@ async def check_sql():
                 print("⚠️  alembic_version table not found")
                 
             # 4. Critical Tables
-            tables_to_check = ['partner', 'transaction', 'notification_retry']
+            tables_to_check = ['partner', 'partnertransaction', 'notificationretry', 'xptransaction', 'earning']
             for table in tables_to_check:
                 try:
-                    res = await conn.execute(text(f"SELECT count(*) FROM {table}"))
+                    res = await conn.execute(text(f'SELECT count(*) FROM "{table}"'))
                     count = res.scalar()
                     print(f"✅ Table '{table}': {count} records")
                 except Exception as e:

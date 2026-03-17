@@ -8,11 +8,13 @@ import { renderMarkdown } from '../../utils/renderMarkdown';
 interface ArticleReaderModalProps {
     selectedArticle: any;
     setSelectedArticle: (article: any) => void;
+    selection: () => void;
 }
 
 export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
     selectedArticle,
-    setSelectedArticle
+    setSelectedArticle,
+    selection
 }) => {
     const { t } = useTranslation('pro');
 
@@ -55,7 +57,7 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                                 </div>
                             </div>
                             <button
-                                onClick={() => setSelectedArticle(null)}
+                                onClick={() => { selection(); setSelectedArticle(null); }}
                                 className="w-full h-14 vibing-blue-animated rounded-2xl font-bold text-white text-label uppercase tracking-widest active:scale-95 transition-all shadow-lg"
                             >
                                 {t('pro_dashboard.academy.understand_btn')}

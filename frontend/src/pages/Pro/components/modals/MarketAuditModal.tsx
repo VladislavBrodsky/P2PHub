@@ -10,6 +10,7 @@ interface MarketAuditModalProps {
     isAuditing: boolean;
     handleRefreshAudit: () => void;
     selection: () => void;
+    setActiveTab: (tab: any) => void;
 }
 
 export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
@@ -18,7 +19,8 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
     marketAudit,
     isAuditing,
     handleRefreshAudit,
-    selection
+    selection,
+    setActiveTab
 }) => {
     const { t } = useTranslation('pro');
 
