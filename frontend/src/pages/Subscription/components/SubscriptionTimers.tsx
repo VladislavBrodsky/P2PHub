@@ -24,10 +24,10 @@ export const FomoTimer = React.memo(() => {
         <div className="flex items-center gap-1.5 shrink-0">
             {[deadLine.h, deadLine.m, deadLine.s].map((val, i) => (
                 <React.Fragment key={i}>
-                    <div className="bg-black/90 text-yellow-400 rounded-lg px-2 py-1 text-label font-black min-w-[32px] text-center shadow-lg border border-yellow-400/20 tabular-nums">
+                    <div className="bg-black/90 text-yellow-400 rounded-lg px-2 py-1 text-[clamp(0.6rem,2vw,0.75rem)] font-black min-w-[32px] text-center shadow-lg border border-yellow-400/20 tabular-nums">
                         {val.toString().padStart(2, '0')}
                     </div>
-                    {i < 2 && <span className="text-label font-black text-black/40 animate-pulse">:</span>}
+                    {i < 2 && <span className="text-[clamp(0.6rem,2vw,0.75rem)] font-black text-black/40 animate-pulse">:</span>}
                 </React.Fragment>
             ))}
         </div>
@@ -90,8 +90,8 @@ export const StickyFomoHeader = React.memo(({ t }: { t: any }) => (
                     <Clock size={16} strokeWidth={3} className="animate-pulse" />
                 </div>
                 <div className="flex flex-col min-w-0">
-                    <span className="text-[8px] font-medium text-black/60 uppercase tracking-[0.2em] leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                    <span className="text-[10px] font-bold text-black uppercase tracking-widest leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                    <span className="text-[clamp(0.45rem,1.5vw,0.55rem)] font-medium text-black/60 uppercase tracking-[0.2em] leading-none mb-1">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                    <span className="text-[clamp(0.55rem,2vw,0.7rem)] font-bold text-black uppercase tracking-widest leading-none">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                 </div>
             </div>
 

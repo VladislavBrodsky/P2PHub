@@ -29,6 +29,8 @@ import { ROUTES } from '../utils/routes';
 import { useNavigation } from '../hooks/useNavigation';
 import { SectionHeader } from '../components/ui/SectionHeader';
 import { shareToTelegram, shareUniversal } from '../utils/shareUtils';
+import { ShareModal } from './Referral/components/ShareModal';
+import { QRCodeModal } from './Referral/components/QRCodeModal';
 // #comment: Root-relative path /images/ used for public assets.
 
 export default function ReferralPage() {

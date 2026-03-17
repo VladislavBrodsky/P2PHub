@@ -2,7 +2,7 @@ import asyncio
 import logging
 
 import sentry_sdk
-from typing import Any
+from typing import Any, Dict, List, cast
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -95,9 +95,10 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
     lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     if partner.referrer_id and partner.referrer_id not in lineage_ids:
         lineage_ids.append(partner.referrer_id)
-    lineage_ids = list(dict.fromkeys(lineage_ids))
-    if len(lineage_ids) > 20:
-        lineage_ids = lineage_ids[-20:]
+    lineage_ids_list: List[int] = list(dict.fromkeys(lineage_ids))
+    if len(lineage_ids_list) > 20:
+        lineage_ids_list = lineage_ids_list[-20:]
+    lineage_ids = lineage_ids_list
 
 
     
@@ -118,8 +119,8 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
     path_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     # full_lineage_names: names corresponding to full_lineage_ids
     # Use dict.fromkeys to preserve order while removing potential duplicates (Bug: direct referrer often already in path)
-    full_lineage_ids = list(dict.fromkeys([*path_ids, partner.referrer_id])) if partner.referrer_id else path_ids
-    full_lineage_names = [format_partner_name(ancestor_map[aid]) for aid in full_lineage_ids if aid in ancestor_map]
+    full_lineage_ids: List[int] = list(dict.fromkeys([*path_ids, partner.referrer_id])) if partner.referrer_id else path_ids
+    full_lineage_names: List[str] = [format_partner_name(ancestor_map[aid]) for aid in full_lineage_ids if aid in ancestor_map]
     
     for level in range(1, 21):
         if not current_referrer_id: break
@@ -166,25 +167,23 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
                 description=f"Referral Partner Joined (L{level})", reference_id=str(partner.id)
             ))
 
-            from app.models.partner import Earning
             earnings.append(Earning(
                 partner_id=referrer.id,
-                amount=xp_gain,
+                amount=float(xp_gain),
                 description=f"Referral Reward: {new_partner_name} (L{level})",
                 type="REFERRAL_XP",
                 currency="XP",
                 reference_id=f"ref_xp_{partner.id}_{referrer.id}"
             ))
 
-            audit_logs.append({
+            audit_logs.append(cast(Dict[str, Any], {
                 "partner_id": referrer.id,
                 "action_type": ActionType.XP_AWARD,
-                "description": f"XP Awarded: +{round(float(xp_gain), 2)} (L{level})",
+                "description": f"XP Awarded: +{float(xp_gain):.2f} (L{level})",
                 "entity_type": "partner", "entity_id": str(referrer.id), "action": "xp_award",
 
                 "details": {"new_user_id": partner.id, "xp_amount": xp_gain, "level": level, "xp_before": xp_before, "xp_after": xp_after}
-            })
-
+            }))
             audit_logs.append({
                 "partner_id": referrer.id,
                 "action_type": ActionType.REFERRAL,
@@ -200,15 +199,15 @@ async def _process_referral_awards(session: AsyncSession, partner: Partner, ance
             # Example for L3 parent: You (L3) <- L2_parent <- L1_parent <- New_Partner
             # The children are the elements in full_lineage_names AFTER the referrer
             try:
-                ref_idx = full_lineage_ids.index(referrer.id)
-                children_names = full_lineage_names[ref_idx + 1:]
+                ref_idx = int(full_lineage_ids.index(referrer.id))
+                slice_start = ref_idx + 1
+                children_names = full_lineage_names[slice_start:]
 
                 msg_chain = [get_msg(lang, "you"), *children_names]
             except (ValueError, IndexError):
-
                 msg_chain = [get_msg(lang, "you")]
 
-            msg_task = _prepare_referral_notification(referrer, level, xp_gain, new_partner_name, msg_chain, salt=str(partner.id))
+            msg_task = _prepare_referral_notification(referrer, level, float(xp_gain), new_partner_name, msg_chain, salt=str(partner.id))
             deferred_tasks.append(msg_task)
 
         except Exception as e:
@@ -277,7 +276,12 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
 def _prepare_referral_notification(referrer: Partner, level: int, xp: float, name: str, chain: list, salt: str = ""):
     chain_text = " → ".join([*chain, name])
     lang = referrer.language_code or "en"
-    clean_xp = int(xp) if xp.is_integer() else round(xp, 2)
+    xp_val = float(xp)
+    if hasattr(xp_val, "is_integer") and xp_val.is_integer():
+        clean_xp = int(xp_val)
+    else:
+        # Use string formatting to avoid round() overload issues in this environment
+        clean_xp = float(f"{xp_val:.2f}")
     buttons = [[
         {"text": get_msg(lang, "btn_view_network"), "web_app": {"url": f"{settings.FRONTEND_URL}?start_param=network"}},
         {"text": get_msg(lang, "btn_open_app"), "web_app": {"url": settings.FRONTEND_URL}}
@@ -350,9 +354,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     res_admin = await session.exec(stmt_admin)
     company_account = res_admin.first()
 
-    ancestors_at_dist = list(reversed(lineage_ids))
-    balance_cache: dict[int, float] = {}
-    xp_cache: dict[int, float] = {}
+    ancestors_at_dist: List[int] = list(reversed(lineage_ids))
+    balance_cache: Dict[int, float] = {}
+    xp_cache: Dict[int, float] = {}
     all_recipients_for_cache = list(ancestor_map.values())
     if company_account:
         all_recipients_for_cache.append(company_account)
@@ -377,7 +381,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     buyer_name = format_partner_name(partner)
     
     # Recipient Tracking for Aggregated Notifications/Audits
-    recipient_totals: dict[int, dict[str, Any]] = {} # {recipient_id: {"amount": float, "xp": float, "levels": list[int], "qualified": bool}}
+    recipient_totals: Dict[int, Dict[str, Any]] = {} # {recipient_id: {"amount": float, "xp": float, "levels": list[int], "qualified": bool}}
 
 
     async with redis_service.client.pipeline(transaction=False) as redis_pipe:
@@ -394,11 +398,10 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             # Find the NEXT available partner in the chain who qualifies for this level
             while curr_lineage_idx < len(ancestors_at_dist):
-                referrer_id = ancestors_at_dist[curr_lineage_idx]
+                referrer_id = ancestors_at_dist[int(curr_lineage_idx)]
 
                 referrer = ancestor_map.get(referrer_id)
-                from typing import cast
-                curr_lineage_idx = cast(int, curr_lineage_idx) + 1
+                curr_lineage_idx = int(curr_lineage_idx) + 1
 
                 
                 if not referrer: continue
@@ -447,9 +450,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             if recipient.id not in recipient_totals:
                 recipient_totals[recipient.id] = {"amount": 0.0, "xp": 0.0, "levels": [], "qualified": False}
             
-            rt = recipient_totals[recipient.id]
+            rt = cast(Dict[str, Any], recipient_totals[recipient.id])
             rt["amount"] = float(rt.get("amount", 0.0)) + float(commission)
-            rt["levels"].append(comm_level)
+            cast(List, rt["levels"]).append(comm_level)
             if found_qualified_partner:
                 rt["qualified"] = True
 
@@ -460,9 +463,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             
             # --- XP COMMISSION FOR ACTIVE REFERRAL ---
             # #comment Phase 3: Aggregating XP gain to update only once per unique recipient.
-            xp_gain = _calculate_referral_xp(comm_level, recipient)
-            xp_cache[recipient.id] = round(float(xp_cache.get(recipient.id, 0.0) + xp_gain), 4)
-            rt["xp"] = float(rt.get("xp", 0.0)) + xp_gain
+            xp_gain_val = float(_calculate_referral_xp(comm_level, recipient))
+            xp_cache[recipient.id] = round(float(xp_cache.get(recipient.id, 0.0) + xp_gain_val), 4)
+            rt["xp"] = float(rt.get("xp", 0.0)) + xp_gain_val
             
         # --- Aggregated Side Effects Post-Loop ---
         for r_id, rt in recipient_totals.items():
@@ -481,7 +484,6 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
             xp_before = xp_after - rt["xp"]
             balance_after = balance_cache.get(r_id, 0.0)
             balance_before = balance_after - rt["amount"]
-            from app.services.audit_service import audit_service
 
             plan_name = "PRO+" if is_pro_plus_purchase else "PRO"
             is_admin = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS
@@ -516,10 +518,9 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                 reference_id=f"upg_xp_earning_agg_{ref_prefix}_{r_id}"
             ))
 
-            from app.models.partner import XPTransaction
             session.add(XPTransaction(
                 partner_id=r_id, 
-                amount=round(rt["xp"], 2),
+                amount=round(float(rt["xp"]), 2),
                 type="ACTIVE_REFERRAL",
                 description=f"Active Referral XP (L{rt['levels'][0]}{'-L'+str(rt['levels'][-1]) if len(rt['levels']) > 1 else ''})",
                 reference_id=f"upg_xp_agg_{ref_prefix}_{r_id}"

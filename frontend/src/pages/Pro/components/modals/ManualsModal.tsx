@@ -112,7 +112,7 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                     <div className="p-5 bg-linear-to-br from-pink-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-pink-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                         <div className="flex items-center gap-2">
                                             <Flame size={14} className="text-pink-500" />
-                                            <h4 className="text-label font-bold text-pink-600 dark:text-pink-500 uppercase tracking-widest">Viral Headline Fixer</h4>
+                                            <h4 className="text-label font-bold text-pink-600 dark:text-pink-500 uppercase tracking-widest">{t('pro_dashboard.tools.headline.title')}</h4>
                                         </div>
                                         <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
                                         <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
@@ -122,7 +122,7 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                     <div className="p-5 bg-linear-to-br from-amber-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-amber-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                         <div className="flex items-center gap-2">
                                             <Sparkles size={14} className="text-amber-500" />
-                                            <h4 className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">Viral Bio Generator</h4>
+                                            <h4 className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">{t('pro_dashboard.tools.bio.title')}</h4>
                                         </div>
                                         <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
                                         <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">

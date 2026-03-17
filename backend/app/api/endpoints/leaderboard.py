@@ -134,7 +134,9 @@ async def get_my_leaderboard_stats(
                 await leaderboard_service.update_score(partner.id, partner.xp, is_test=is_test)
                 rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe, is_test=is_test)
 
-            rank_val = (int(rank) + 1) if rank is not None else -1
+            rank_val = -1
+            if rank is not None:
+                rank_val = int(rank) + 1
             
             # Get specific XP for this timeframe from Redis directly
             now = datetime.now(UTC)
@@ -147,11 +149,11 @@ async def get_my_leaderboard_stats(
                 
             season_xp = await redis_service.client.zscore(key, str(partner.id))
             
-            # Fallback to DB XP for global timeframe if Redis entry was just created/missing
-            if season_xp is None and timeframe == "all":
-                display_xp = partner.xp
-            else:
-                display_xp = float(season_xp) if season_xp is not None else 0.0
+            display_xp = 0.0
+            if season_xp is not None:
+                display_xp = float(season_xp)
+            elif timeframe == "all":
+                display_xp = float(partner.xp)
                 
         except Exception as e:
             logger.error(f"Rank/XP Read Failed for {timeframe}: {e}")
