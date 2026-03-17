@@ -26,11 +26,11 @@ export const KeyComparison = ({
             <div className="flex items-center justify-between mb-3 px-3">
                 <div className="flex items-center gap-2">
                     <div className="w-1 h-3 bg-blue-600 rounded-full" />
-                    <h3 className="text-label sm:text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
+                    <h3 className="text-[clamp(0.65rem,2.2vw,0.75rem)] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-white/50">
                         {t('pro:subscription.comparison.title')}
                     </h3>
                 </div>
-                <div className="text-label font-bold text-blue-500/80 uppercase tracking-widest animate-pulse">
+                <div className="text-[clamp(0.6rem,2vw,0.7rem)] font-bold text-blue-500/80 uppercase tracking-widest animate-pulse">
                     {t('pro:subscription.comparison.tap_to_explore')}
                 </div>
             </div>
@@ -50,14 +50,14 @@ export const KeyComparison = ({
                                 <div className={`w-7 h-7 rounded-lg ${item.bg} ${item.color} flex items-center justify-center shrink-0 transition-transform duration-500 group-hover:rotate-12 mt-1`}>
                                     <item.icon size={12} strokeWidth={2.5} />
                                 </div>
-                                <span className="text-[8px] font-bold text-slate-500 dark:text-white/60 uppercase tracking-tight w-full px-0.5 leading-tight">
+                                <span className="text-[clamp(0.45rem,1.8vw,0.55rem)] font-bold text-slate-500 dark:text-white/60 uppercase tracking-tight w-full px-0.5 leading-tight">
                                     {item.label}
                                 </span>
 
                                 <div className="flex items-center justify-center gap-1 mt-0.5 w-full">
-                                    <span className="text-[10px] font-bold text-slate-400 dark:text-white/30 transition-all duration-500">{inactiveValue}</span>
+                                    <span className="text-[clamp(0.55rem,2vw,0.7rem)] font-bold text-slate-400 dark:text-white/30 transition-all duration-500">{inactiveValue}</span>
                                     <div className="w-px h-2.5 bg-slate-200 dark:bg-white/10 rounded-full shrink-0" />
-                                    <span className={`text-caption font-bold tracking-tighter transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]' : 'vibing-yellow-text drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]'}`}>
+                                    <span className={`text-[clamp(0.65rem,2.5vw,0.85rem)] font-bold tracking-tighter transition-all duration-500 ${selectedPlan === 'PRO_PLUS' ? 'vibing-purple-text drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]' : 'vibing-yellow-text drop-shadow-[0_0_8px_rgba(234,179,8,0.3)]'}`}>
                                         {activeValue}
                                     </span>
                                 </div>

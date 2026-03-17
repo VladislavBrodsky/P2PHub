@@ -328,201 +328,27 @@ export default function ReferralPage() {
             {confettiActive && <Confetti />}
 
             <AnimatePresence>
-                {showShareModal && (
-                    <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center sm:p-4 px-0 py-0">
-                        <m.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setShowShareModal(false)}
-                            className="absolute inset-0 bg-black/60 backdrop-blur-xl"
-                        />
-                        <m.div
-                            initial={{ y: "100%", opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            exit={{ y: "100%", opacity: 0 }}
-                            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="w-full sm:max-w-sm bg-white dark:bg-slate-900 rounded-t-2xl sm:rounded-2xl relative shadow-2xl overflow-hidden flex flex-col max-h-[90vh] pb-[calc(var(--spacing-safe-bottom,20px)+16px)]"
-                        >
-                            {/* Header / Close */}
-                            <div className="absolute top-4 right-4 z-50">
-                                <button
-                                    onClick={() => setShowShareModal(false)}
-                                    className="w-8 h-8 bg-black/10 dark:bg-white/10 backdrop-blur-md rounded-full text-slate-900 dark:text-white flex items-center justify-center hover:scale-105 transition-transform"
-                                >
-                                    <X className="w-4 h-4" />
-                                </button>
-                            </div>
-
-                            {/* Scrollable Content */}
-                            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto overscroll-none" style={{ overscrollBehavior: 'none' }}>
-                                {/* Visual Header */}
-                                <div className="relative h-40 sm:h-44 shrink-0 overflow-hidden">
-                                    {/* Gradient fallback background - always behind */}
-                                    <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
-                                    {/* Promo image on top of gradient */}
-                                    <img
-                                        src="/images/v3_referral_promo.jpg"
-                                        alt={t('referral.modal.invite_image_alt')}
-                                        className="absolute inset-0 w-full h-full object-cover"
-                                        onError={(e) => {
-                                            console.error("Failed to load referral promo image:", e);
-                                            // Hide broken image, gradient background shows through
-                                            (e.target as HTMLImageElement).style.display = 'none';
-                                        }}
-                                    />
-                                    {/* Fade overlay */}
-                                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-white dark:to-slate-900 z-10" />
-                                    <div className="absolute bottom-3 left-5 z-20 right-5">
-                                        <div className="flex items-center gap-1.5 mb-1.5">
-                                            <span className="px-2 py-0.5 rounded-md bg-blue-500/20 backdrop-blur-md border border-blue-500/30 text-label font-bold text-blue-400 uppercase tracking-widest">
-                                                {t('referral.modal.limited_tier')}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-xl font-bold text-white tracking-tighter leading-none drop-shadow-sm">
-                                            {t('referral.modal.recruit_title')}
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <div className="px-6 pb-6 space-y-5">
-                                    {/* Viral Hook Card */}
-                                    <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-white/5 relative overflow-hidden group">
-                                        <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <div className="relative z-10">
-                                            <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-2">
-                                                {VIRAL_HOOK}
-                                            </h4>
-                                            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                                                {VIRAL_SUBTITLE}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Quick Actions Grid */}
-                                    <div className="grid grid-cols-1 gap-2.5">
-                                        <button
-                                            onClick={handleShareTelegram}
-                                            className="w-full h-11 rounded-xl flex items-center justify-center gap-3 bg-linear-to-r from-[#2AABEE] to-[#229ED9] text-white font-bold text-base shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all relative overflow-hidden group"
-                                        >
-                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <Send className="w-4 h-4 -rotate-45 mb-0.5" />
-                                            <span className="text-sm">{t('referral.modal.share_telegram')}</span>
-                                        </button>
-
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {window.Telegram?.WebApp && (
-                                                <button
-                                                    onClick={handleShareViralCard}
-                                                    className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-bold text-caption border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
-                                                >
-                                                    <Sparkles className="w-3.5 h-3.5" />
-                                                    <span>{t('referral.modal.viral_btn')}</span>
-                                                </button>
-                                            )}
-                                            <button
-                                                onClick={handleNativeShare}
-                                                className={`h-10 rounded-xl flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-800/80 backdrop-blur-md text-slate-700 dark:text-slate-300 font-bold text-caption border border-slate-200/50 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm ${!window.Telegram?.WebApp ? 'col-span-2' : ''}`}
-                                            >
-                                                <ExternalLink className="w-3.5 h-3.5" />
-                                                <span>{t('referral.modal.share_more')}</span>
-                                            </button>
-                                        </div>
-
-                                        <button
-                                            onClick={handleCopyLink}
-                                            className="h-8 rounded-lg flex items-center justify-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-semibold text-sm active:scale-95 transition-all"
-                                        >
-                                            <Copy className="w-4 h-4" />
-                                            <span>{t('referral.modal.copy_link')}</span>
-                                        </button>
-                                    </div>
-
-                                    {/* Footer Info */}
-                                    <div className="text-center pb-2">
-                                        <p className="text-label text-slate-400 font-medium">
-                                            <Trans t={t} i18nKey="referral.modal.boost_desc" ns="social">
-                                                Each referral boosts your Viral Network and moves you closer to the <span className="text-slate-900 dark:text-white font-bold">$1 per minute strategy</span>
-                                            </Trans>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </m.div>
-                    </div>
-                )}
+            <ShareModal
+                isOpen={showShareModal}
+                onClose={() => setShowShareModal(false)}
+                t={t}
+                viralHook={VIRAL_HOOK}
+                viralSubtitle={VIRAL_SUBTITLE}
+                handleShareTelegram={handleShareTelegram}
+                handleShareViralCard={handleShareViralCard}
+                handleNativeShare={handleNativeShare}
+                handleCopyLink={handleCopyLink}
+            />
             </AnimatePresence>
 
             {/* QR Code Modal */}
-            <AnimatePresence>
-                {showQR && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4">
-                        <m.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            className="w-full max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl p-5 relative shadow-2xl"
-                        >
-                            <button
-                                onClick={() => setShowQR(false)}
-                                className="absolute top-4 right-4 p-2 bg-slate-50 dark:bg-slate-950 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-
-                            <div className="text-center space-y-6">
-                                <div className="space-y-2 pt-2">
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">
-                                        <Trans t={t} i18nKey="referral.qr.title">
-                                            Claim Your <br />
-                                            <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>
-                                        </Trans>
-                                    </h3>
-                                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                                        <Trans t={t} i18nKey="referral.qr.desc">
-                                            Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner <br />
-                                            Build your empire now
-                                        </Trans>
-                                    </p>
-                                </div>
-
-                                <div className="mx-auto w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(59,130,246,0.1)] border border-slate-100 relative overflow-hidden group">
-                                    <div className="absolute inset-0 bg-linear-to-b from-blue-500/0 via-blue-500/10 to-blue-500/0 w-full h-8 blur-md animate-scan pointer-events-none" />
-                                    <img
-                                        src={`${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10`}
-                                        alt="Your Referral QR Code"
-                                        className="w-full h-full object-contain relative z-10"
-                                    />
-                                    <div className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 border-blue-600 rounded-tl-xl" />
-                                    <div className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 border-blue-600 rounded-tr-xl" />
-                                    <div className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 border-blue-600 rounded-bl-xl" />
-                                    <div className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 border-blue-600 rounded-br-xl" />
-                                </div>
-
-                                <div className="flex gap-3">
-                                    <button
-                                        className="flex-1 py-3 bg-slate-900/5 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl font-bold text-sm text-slate-900 dark:text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
-                                        onClick={handleCopyLink}
-                                    >
-                                        <Copy className="w-4 h-4" /> {t('referral.qr.copy')}
-                                    </button>
-                                    <button
-                                        className="flex-1 py-3 bg-blue-600 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
-                                        onClick={() => {
-                                            const link = document.createElement('a');
-                                            link.href = `${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=20`;
-                                            link.download = 'PartnerCenter_Invite.png';
-                                            link.click();
-                                        }}
-                                    >
-                                        <Download className="w-4 h-4" /> {t('referral.qr.save')}
-                                    </button>
-                                </div>
-                            </div>
-                        </m.div>
-                    </div>
-                )}
-            </AnimatePresence>
+            <QRCodeModal
+                isOpen={showQR}
+                onClose={() => setShowQR(false)}
+                t={t}
+                referralLink={referralLink}
+                handleCopyLink={handleCopyLink}
+            />
 
             {/* Level Up Overlay */}
             {/* Level Up Overlay */}
