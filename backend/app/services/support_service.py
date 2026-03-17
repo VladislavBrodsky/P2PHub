@@ -198,7 +198,8 @@ class SupportAgentService:
                 logger.error(f"❌ SupportService: GS Auth Failed: {e}")
         return None
 
-    async def _get_cached_kb(self) -> dict[str, str]:
+    async def _get_cached_kb(self) -> dict[str, Any] | None:
+
         """
         Retrieves KB with dual-layer caching (Memory -> Redis -> Google Sheets).
         Optimized for high-concurrency 10M+ user environments.
@@ -226,7 +227,8 @@ class SupportAgentService:
                 sheet_id = os.getenv("SUPPORT_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
                 if sheet_id:
                     logger.info("🔄 Refreshing Knowledge Base Cache from Google Sheets...")
-                    spreadsheet = await asyncio.to_thread(gs_client.open_by_key, sheet_id)
+                    spreadsheet = await asyncio.to_thread(getattr(gs_client, "open_by_key"), sheet_id)
+
                     
                     # TOV
                     tov_info = ""
@@ -284,9 +286,10 @@ class SupportAgentService:
                     if word not in index:
                         index[word] = []
                     index[word].append(i)
-        self._kb_index = index
-        self._kb_memory_cache = kb_data
-        self._kb_last_refresh = datetime.now(UTC)
+        SupportAgentService._kb_index = index
+        SupportAgentService._kb_memory_cache = kb_data
+        SupportAgentService._kb_last_refresh = datetime.now(UTC)
+
 
 
     async def get_session(self, user_id: str) -> dict[str, Any]:
@@ -547,7 +550,8 @@ class SupportAgentService:
                 history_gid = os.getenv("HISTORY_GID")
                 
                 if sheet_id and history_gid:
-                    spreadsheet = await asyncio.to_thread(gs_client.open_by_key, sheet_id)
+                    spreadsheet = await asyncio.to_thread(getattr(gs_client, "open_by_key"), sheet_id)
+
                     sheet = await asyncio.to_thread(spreadsheet.get_worksheet_by_id, int(history_gid))
                     
                     if sheet:
@@ -631,7 +635,8 @@ class SupportAgentService:
                 return
 
             now = datetime.now(UTC)
-            closed_count = 0
+            closed_count: int = 0
+
             
             for key in keys:
                 try:
@@ -650,11 +655,16 @@ class SupportAgentService:
                         user_id = session.get("user_id")
                         if user_id:
                             await self.close_session(user_id)
-                            closed_count += 1
+                            from typing import cast
+                            closed_count = cast(int, closed_count) + 1
+
+
                 except Exception as e:
                     logger.error(f"Error processing key {key} during cleanup: {e}")
             
-            if closed_count > 0:
+            from typing import cast
+            if cast(int, closed_count) > 0:
+
                 logger.info(f"✅ Cleanup complete. Closed {closed_count} stale sessions.")
         except Exception as e:
             logger.error(f"❌ Failed to run stale session cleanup: {e}")

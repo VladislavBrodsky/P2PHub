@@ -24,6 +24,7 @@ async def get_global_leaderboard(
     request: Request,
     limit: int = 20,
     timeframe: str = "all",
+    user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     """
@@ -32,8 +33,23 @@ async def get_global_leaderboard(
     """
     from app.services.redis_service import redis_service
 
+    # Determine if we should serve test leaderboard
+    is_test = False
+    if user_data:
+        try:
+            tg_user = get_tg_user(user_data)
+            tg_id = str(tg_user.get("id"))
+            statement = select(Partner).where(Partner.telegram_id == tg_id)
+            result = await session.exec(statement)
+            partner = result.first()
+            if partner:
+                is_test = partner.is_test
+        except Exception:
+            pass
+
     # #comment Versioned cache key (v5) to separate Seasons
-    cache_key = f"leaderboard:{timeframe}_hydrated_v5:{limit}"
+    cache_prefix = "test:" if is_test else ""
+    cache_key = f"leaderboard:{cache_prefix}{timeframe}_hydrated_v5:{limit}"
     try:
         cached = await redis_service.get_json(cache_key)
         if cached:
@@ -44,14 +60,14 @@ async def get_global_leaderboard(
     # 1. Get IDs from Redis
     top_data = None
     try:
-        top_data = await leaderboard_service.get_top_partners(limit, timeframe=timeframe)
+        top_data = await leaderboard_service.get_top_partners(limit, timeframe=timeframe, is_test=is_test)
     except Exception as e:
-        logger.error(f"Redis Leaderboard Read Failed for {timeframe}: {e}")
+        logger.error(f"Redis Leaderboard Read Failed for {timeframe} (is_test={is_test}): {e}")
 
     if not top_data:
         # Fallback to DB (only for "all" timeframe, others are Redis-only for speed)
         if timeframe == "all":
-            statement = select(Partner).order_by(Partner.xp.desc()).limit(limit)
+            statement = select(Partner).where(Partner.is_test == is_test).order_by(Partner.xp.desc()).limit(limit)
             result = await session.exec(statement)
             partners = result.all()
             data = [LeaderboardPartner(**p.model_dump()).model_dump() for p in partners]
@@ -107,25 +123,26 @@ async def get_my_leaderboard_stats(
 
         # Get rank from Redis (0-indexed, so add 1)
         try:
-            rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe)
+            is_test = partner.is_test
+            rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe, is_test=is_test)
             
             # #comment Phase 2 Scaling: Self-Healing. 
             # If user is missing from Redis (e.g. not in top 1000 warmup), 
             # we lazily re-inject them to ensure their rank is always visible.
             if rank is None and timeframe == "all":
-                await leaderboard_service.update_score(partner.id, partner.xp)
-                rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe)
+                await leaderboard_service.update_score(partner.id, partner.xp, is_test=is_test)
+                rank = await leaderboard_service.get_partner_rank(partner.id, timeframe=timeframe, is_test=is_test)
 
             rank_val = (rank + 1) if rank is not None else -1
             
             # Get specific XP for this timeframe from Redis directly
             now = datetime.now(UTC)
             if timeframe == "weekly":
-                key = f"leaderboard:weekly:{now.year}-{now.isocalendar()[1]}"
+                key = f"leaderboard:{'test:' if is_test else ''}weekly:{now.year}-{now.isocalendar()[1]}"
             elif timeframe == "monthly":
-                key = f"leaderboard:monthly:{now.year}-{now.month}"
+                key = f"leaderboard:{'test:' if is_test else ''}monthly:{now.year}-{now.month}"
             else:
-                key = leaderboard_service.LEADERBOARD_KEY
+                key = leaderboard_service.TEST_LEADERBOARD_KEY if is_test else leaderboard_service.LEADERBOARD_KEY
                 
             season_xp = await redis_service.client.zscore(key, str(partner.id))
             

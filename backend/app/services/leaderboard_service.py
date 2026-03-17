@@ -11,13 +11,15 @@ from datetime import UTC, datetime
 
 
 class LeaderboardService:
+    LEADERBOARD_KEY = "leaderboard:global"
+    TEST_LEADERBOARD_KEY = "leaderboard:test:global"
+
     def _get_active_keys(self, is_test: bool = False) -> list[str]:
         """Returns the list of active leaderboard keys (Global, Monthly, Weekly)."""
         now = datetime.now(UTC)
         prefix = "leaderboard:test:" if is_test else "leaderboard:"
         
-        # Note: Global key remains 'leaderboard:global' for production compatibility
-        global_key = f"{prefix}global"
+        global_key = self.TEST_LEADERBOARD_KEY if is_test else self.LEADERBOARD_KEY
         weekly_key = f"{prefix}weekly:{now.year}-{now.isocalendar()[1]}"
         monthly_key = f"{prefix}monthly:{now.year}-{now.month}"
         return [global_key, monthly_key, weekly_key]

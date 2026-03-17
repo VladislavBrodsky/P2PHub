@@ -57,6 +57,7 @@ async def simulate_artificial_activity():
             # 2. Random USDT gain (10 to 65)
             usdt_gain = round(random.uniform(10, 65), 2)
             partner.balance += usdt_gain
+            partner.total_earned_usdt += usdt_gain
             
             # Record Earning for history
             earning = Earning(

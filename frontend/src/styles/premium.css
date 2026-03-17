@@ -170,6 +170,8 @@
   animation: vibing-gradient 4s ease-in-out infinite;
   color: #FFFFFF;
   font-weight: 700;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 .branding-liquid-gradient {
@@ -497,6 +499,8 @@
   color: #0F172A;
   /* Harmonized dark text color (slate-900 equivalent) */
   font-weight: 800;
+  will-change: background-position;
+  transform: translateZ(0);
 }
 
 .vibing-crystal-purple-animated {

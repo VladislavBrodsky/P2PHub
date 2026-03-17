@@ -52,7 +52,7 @@ export const SubscriptionPricing = React.memo(({
                     className="inline-flex items-center justify-center gap-2 mb-3 px-3 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 rounded-full"
                 >
                     <div className="w-1.5 h-1.5 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)] animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
+                    <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                 </motion.div>
 
                 <h2 className="text-display font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] mx-auto">
@@ -77,12 +77,12 @@ export const SubscriptionPricing = React.memo(({
                         <div key={plan.id} className="flex flex-col gap-2">
                             <button
                                 onClick={() => { selection(); setSelectedPlan(plan.id); }}
-                                className={`relative rounded-2xl p-5 flex flex-col items-center gap-2 transition-all duration-500 border-2 text-center group w-full
+                                className={`relative rounded-2xl p-5 flex flex-col items-center gap-2 border-2 text-center group w-full
                                     ${isSelected
                                         ? isPlus
                                             ? 'vibing-yellow-animated border-yellow-400 shadow-[0_20px_40px_-10px_rgba(234,179,8,0.4)] z-10'
                                             : 'vibing-blue-animated border-blue-400 shadow-[0_20px_40px_-10px_rgba(37,99,235,0.4)] z-10'
-                                        : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.96] hover:opacity-100'
+                                        : 'bg-white/50 dark:bg-white/5 border-slate-100 dark:border-white/5 opacity-60 scale-[0.96] hover:opacity-100 transition-all duration-300'
                                     }`}
                             >
                                 {isPlus && (

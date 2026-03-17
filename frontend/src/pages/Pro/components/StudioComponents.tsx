@@ -251,7 +251,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                                 type="text"
                                                 value={personalLink}
                                                 onChange={(e) => setPersonalLink(e.target.value)}
-                                                placeholder="https://t.me/web3adopters_bot?start=..."
+                                                placeholder="https://t.me/pintopay_probot?start=..."
                                                 className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-label font-medium text-slate-900 dark:text-white"
                                             />
                                             <button

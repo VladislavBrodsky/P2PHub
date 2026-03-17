@@ -643,87 +643,87 @@ export default function SubscriptionPage() {
 
                             {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
                             <div className="mb-10 px-1 relative z-20">
-                                <div className="relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden transition-all active:scale-[0.98] hover:brightness-110">
-                                    {!isSelectingCurrency ? (
-                                        <motion.button
-                                            key="subscription-action-btn"
-                                            layout
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => {
-                                                selection();
-                                                setIsSelectingCurrency(true);
-                                            }}
-                                            className={`group absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-full transition-all ${selectedPlan === 'PRO'
-                                                ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
-                                                : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
-                                                }`}
-                                        >
-                                            <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                            <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
-                                            <span className="relative z-10">
-                                                {isProPlus
-                                                    ? t('pro:subscription.pro_active.title_plus')
-                                                    : (selectedPlan === 'PRO'
-                                                        ? t('pro:subscription.upgrade.buy_pro_btn')
-                                                        : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn')))}
-                                            </span>
-                                        </motion.button>
-                                    ) : (
-                                        <motion.div
-                                            key="currency-picker"
-                                            layout
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 10 }}
-                                            className="w-full space-y-4"
-                                        >
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
-                                                <button
-                                                    onClick={() => setIsSelectingCurrency(false)}
-                                                    className="text-label font-bold text-blue-500 uppercase tracking-widest"
-                                                >
-                                                    {t('common:cancel', 'CANCEL')}
-                                                </button>
-                                            </div>
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <button
-                                                    disabled={isLoading}
-                                                    onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); setIsSelectingCurrency(false); }}
-                                                    className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm disabled:opacity-50"
-                                                >
-                                                    <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
-                                                        {isLoading && paymentMethod === 'TON' ? <Loader2 className="w-5 h-5 animate-spin" /> : <TONLogo className="w-5 h-5" />}
-                                                    </div>
-                                                    <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
-                                                </button>
-                                                <button
-                                                    disabled={isLoading}
-                                                    onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); setIsSelectingCurrency(false); }}
-                                                    className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm disabled:opacity-50"
-                                                >
-                                                    <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                                                        {isLoading && paymentMethod === 'CRYPTO' ? <Loader2 className="w-5 h-5 animate-spin" /> : <USDTLogo className="w-5 h-5" />}
-                                                    </div>
-                                                    <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
-                                                </button>
-                                                <button
-                                                    disabled={isLoading}
-                                                    onClick={() => { handleStripePayment(); setIsSelectingCurrency(false); }}
-                                                    className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm disabled:opacity-50"
-                                                >
-                                                    <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                                                        {isLoading && paymentMethod === 'STRIPE' ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
-                                                    </div>
-                                                    <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.stripe_card')}</span>
-                                                </button>
-                                            </div>
-                                        </motion.div>
-                                    )}
+                                <div className="relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden">
+                                    <AnimatePresence mode="wait">
+                                        {!isSelectingCurrency ? (
+                                            <motion.button
+                                                key="subscription-action-btn"
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={() => {
+                                                    selection();
+                                                    setIsSelectingCurrency(true);
+                                                }}
+                                                className={`group absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-full transition-colors ${selectedPlan === 'PRO'
+                                                    ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
+                                                    : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
+                                                    }`}
+                                            >
+                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                                <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
+                                                <span className="relative z-10">
+                                                    {isProPlus
+                                                        ? t('pro:subscription.pro_active.title_plus')
+                                                        : (selectedPlan === 'PRO'
+                                                            ? t('pro:subscription.upgrade.buy_pro_btn')
+                                                            : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn')))}
+                                                </span>
+                                            </motion.button>
+                                        ) : (
+                                            <motion.div
+                                                key="currency-picker"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 10 }}
+                                                className="w-full space-y-4"
+                                            >
+                                                <div className="flex items-center justify-between mb-2">
+                                                    <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
+                                                    <button
+                                                        onClick={() => setIsSelectingCurrency(false)}
+                                                        className="text-label font-bold text-blue-500 uppercase tracking-widest"
+                                                    >
+                                                        {t('common:cancel', 'CANCEL')}
+                                                    </button>
+                                                </div>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <button
+                                                        disabled={isLoading}
+                                                        onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                    >
+                                                        <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                                            {isLoading && paymentMethod === 'TON' ? <Loader2 className="w-5 h-5 animate-spin" /> : <TONLogo className="w-5 h-5" />}
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
+                                                    </button>
+                                                    <button
+                                                        disabled={isLoading}
+                                                        onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                    >
+                                                        <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                                            {isLoading && paymentMethod === 'CRYPTO' ? <Loader2 className="w-5 h-5 animate-spin" /> : <USDTLogo className="w-5 h-5" />}
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
+                                                    </button>
+                                                    <button
+                                                        disabled={isLoading}
+                                                        onClick={() => { handleStripePayment(); setIsSelectingCurrency(false); }}
+                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                    >
+                                                        <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                                            {isLoading && paymentMethod === 'STRIPE' ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.stripe_card')}</span>
+                                                    </button>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                                 <div id="currency-selector-anchor" className="absolute -top-20" />
                             </div>
@@ -779,13 +779,13 @@ export default function SubscriptionPage() {
                                         { value: '×100', label: t('pro:subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
                                         { value: '24/7', label: t('pro:subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
                                     ].map((stat) => (
-                                        <div key={stat.label} className="p-4 rounded-xl bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-2 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
-                                            <div className={`w-9 h-9 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:rotate-12 transition-transform`}>
-                                                <stat.icon size={16} strokeWidth={2.5} />
+                                        <div key={stat.label} className="p-3 rounded-xl bg-white/50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 backdrop-blur-xl flex flex-col items-center text-center gap-1.5 group transition-all duration-300 hover:scale-[1.05] shadow-xl">
+                                            <div className={`w-8 h-8 rounded-xl shrink-0 ${stat.bg} flex items-center justify-center ${stat.color} group-hover:rotate-12 transition-transform`}>
+                                                <stat.icon size={14} strokeWidth={2.5} />
                                             </div>
                                             <div className="flex flex-col items-center gap-0.5">
-                                                <div className={`text-button font-black tabular-nums tracking-tighter ${stat.color} leading-none`}>{stat.value}</div>
-                                                <div className="text-[8px] font-black text-slate-400 dark:text-white/20 uppercase tracking-widest leading-tight">{stat.label}</div>
+                                                <div className={`text-[13px] font-black tabular-nums tracking-tighter ${stat.color} leading-none`}>{stat.value}</div>
+                                                <div className="text-[7.5px] font-bold text-slate-400 dark:text-white/20 uppercase tracking-widest leading-tight">{stat.label}</div>
                                             </div>
                                         </div>
                                     ))}
