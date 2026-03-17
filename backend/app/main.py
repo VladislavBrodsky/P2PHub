@@ -279,7 +279,8 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
         logger.debug(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
-        logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {x_telegram_bot_api_secret_token[:4] if x_telegram_bot_api_secret_token else 'null'}...)")
+        token_str = str(x_telegram_bot_api_secret_token) if x_telegram_bot_api_secret_token else "null"
+        logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {token_str[:4]}...)")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 
     try:
@@ -389,7 +390,7 @@ app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 from app.api.endpoints import blog, config, health
 
 app.include_router(blog.router, prefix="/api/blog", tags=["blog"])
-app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(health.router, tags=["health"])
 app.include_router(config.router, prefix="/api/config", tags=["config"])
 
 from app.api.endpoints import support
@@ -424,12 +425,13 @@ os.makedirs(tmp_media_dir, exist_ok=True)
 try:
     os.makedirs(generated_media_dir, exist_ok=True)
     logger.info(f"✅ Generated media directory ready: {generated_media_dir}")
-    app.mount("/generated_media", CachedStaticFiles(directory=generated_media_dir), name="generated_media")
+    # Use explicit directory path and convert to str just in case
+    app.mount("/generated_media", CachedStaticFiles(directory=str(generated_media_dir)), name="generated_media")
 except (OSError, PermissionError) as e:
     logger.warning(f"⚠️ Cannot use {generated_media_dir} ({e}). Falling back to {tmp_media_dir} for serving.")
-    app.mount("/generated_media", CachedStaticFiles(directory=tmp_media_dir), name="generated_media")
+    app.mount("/generated_media", CachedStaticFiles(directory=str(tmp_media_dir)), name="generated_media")
 
 # Serve legacy promo images
 images_dir = os.path.join(base_dir, "app_images")
 if os.path.exists(images_dir):
-    app.mount("/images", CachedStaticFiles(directory=images_dir), name="images")
+    app.mount("/images", CachedStaticFiles(directory=str(images_dir)), name="images")

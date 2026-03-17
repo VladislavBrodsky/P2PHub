@@ -8,7 +8,13 @@ import sys
 import os
 
 # Add backend to path to import models
-sys.path.append("/Users/grandmaestro/Documents/P2PHub/backend")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+backend_path = os.path.join(current_dir, "backend")
+if os.path.exists(backend_path):
+    sys.path.append(backend_path)
+else:
+    # If run from within backend/
+    sys.path.append(current_dir)
 
 from app.models.partner import Partner
 from app.services.partner_service import create_partner

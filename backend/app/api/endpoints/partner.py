@@ -1213,7 +1213,7 @@ async def claim_task_reward(
     # 2.1 Sync to Redis Leaderboard (Incremental for Seasons)
     from app.services.leaderboard_service import leaderboard_service
     try:
-        await leaderboard_service.increment_score(partner.id, effective_xp)
+        await leaderboard_service.increment_score(partner.id, effective_xp, is_test=partner.is_test)
     except Exception as e:
         logger.error(f"Leaderboard Sync Failed: {e}", exc_info=True)
 

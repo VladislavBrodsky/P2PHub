@@ -1,6 +1,7 @@
+import asyncio
 import functools
 import logging
-from typing import Any, Type, TypeVar, Union
+from typing import Any, Type, TypeVar, Union, cast
 
 from pydantic import BaseModel, ValidationError
 
@@ -15,7 +16,8 @@ def shadow_validate(schema: type[T], data: Any, default: Any = None) -> T | Any:
     instead of raising an exception.
     """
     try:
-        return schema.model_validate(data)
+        # Use cast to satisfy linter when calling model_validate on a TypeVar
+        return cast(Any, schema).model_validate(data)
     except ValidationError as e:
         logger.error(f"Shadow Validation Failed for {schema.__name__}: {e.errors()}")
         # Here we could also send to Sentry
@@ -40,7 +42,7 @@ def shadow_mode(schema: type[T]):
             result = func(*args, **kwargs)
             return shadow_validate(schema, result)
 
-        if functools.iscoroutinefunction(func):
+        if asyncio.iscoroutinefunction(func):
             return async_wrapper
         return sync_wrapper
     return decorator

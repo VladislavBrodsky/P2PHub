@@ -22,17 +22,19 @@ def find_backend_root() -> Path:
     Robustly find the backend root directory.
     Searches upwards from this file until it finds a directory containing 'requirements.txt' or 'app/'.
     """
-    current = Path(__file__).resolve().parent
+    current_dir = os.path.dirname(os.path.abspath(__file__))
     # Maximum 5 levels up to prevent escaping to system root
     for _ in range(5):
         try:
-            if (current / "requirements.txt").exists() or (current / "app").exists():
-                return current
+            if os.path.exists(os.path.join(current_dir, "requirements.txt")) or \
+               os.path.exists(os.path.join(current_dir, "app")):
+                return Path(current_dir)
         except PermissionError:
             pass
-        if current.parent == current: # Reached system root
+        parent_dir = os.path.dirname(current_dir)
+        if parent_dir == current_dir: # Reached system root
             break
-        current = current.parent
+        current_dir = parent_dir
     return Path.cwd() # Fallback to CWD
 
 def find_and_load_env():
@@ -59,7 +61,7 @@ def find_and_load_env():
     loaded_any = False
     for search_dir in search_dirs:
         for fname in env_filenames:
-            env_path = search_dir / fname
+            env_path = search_dir.joinpath(fname)
             try:
                 if env_path.exists() and env_path.is_file():
                     # Check readability
@@ -241,15 +243,18 @@ class Settings(BaseSettings):
         if not self.BOT_TOKEN or len(self.BOT_TOKEN.strip()) < 10:
             logger.error("🛑 CRITICAL: BOT_TOKEN is empty or invalid! Telegram features will FAIL.")
         elif ":" not in self.BOT_TOKEN:
-            logger.warning(f"⚠️ WARNING: BOT_TOKEN has unusual format: {self.BOT_TOKEN[:10]}...")
+            token_str = str(self.BOT_TOKEN)
+            logger.warning(f"⚠️ WARNING: BOT_TOKEN has unusual format: {token_str[:10]}...")
             
         # 2. Check DATABASE_URL
-        if not self.DATABASE_URL or not any(x in self.DATABASE_URL for x in ["postgresql", "postgres", "sqlite"]):
-            logger.error(f"🛑 CRITICAL: DATABASE_URL is invalid or missing! Type: {type(self.DATABASE_URL)}, Value: {str(self.DATABASE_URL)[:10] if self.DATABASE_URL else 'None'}...")
+        if not self.DATABASE_URL or not any(x in str(self.DATABASE_URL) for x in ["postgresql", "postgres", "sqlite"]):
+            db_url_str = str(self.DATABASE_URL)
+            logger.error(f"🛑 CRITICAL: DATABASE_URL is invalid or missing! Type: {type(self.DATABASE_URL)}, Value: {db_url_str[:10] if self.DATABASE_URL else 'None'}...")
             
         # 3. Check REDIS_URL
-        if not self.REDIS_URL or not any(self.REDIS_URL.startswith(s) for s in ["redis://", "rediss://", "unix://"]):
-            logger.error(f"🛑 CRITICAL: REDIS_URL has invalid scheme! Value: {str(self.REDIS_URL)[:10] if self.REDIS_URL else 'None'}...")
+        if not self.REDIS_URL or not any(str(self.REDIS_URL).startswith(s) for s in ["redis://", "rediss://", "unix://"]):
+            redis_url_str = str(self.REDIS_URL)
+            logger.error(f"🛑 CRITICAL: REDIS_URL has invalid scheme! Value: {redis_url_str[:10] if self.REDIS_URL else 'None'}...")
             
         return self
 

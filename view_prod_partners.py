@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 import json
 import os
+import sys
 
 # Production DB from .env
 DATABASE_URL = "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway"
@@ -23,7 +24,9 @@ async def view_partners():
             print(f"ID: {p.id}, TG: {p.telegram_id}, Username: {p.username}, Pro: {p.is_pro}, Created: {p.created_at}")
 
 if __name__ == "__main__":
-    import sys
     # Add backend to path to import models
-    sys.path.append("/Users/grandmaestro/Documents/P2PHub/backend")
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    backend_path = os.path.join(current_dir, "backend")
+    if os.path.exists(backend_path):
+        sys.path.append(backend_path)
     asyncio.run(view_partners())

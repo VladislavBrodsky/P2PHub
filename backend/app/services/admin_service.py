@@ -662,7 +662,7 @@ class AdminService:
                 
                 # Update Leaderboard (Incremental for Seasons)
                 from app.services.leaderboard_service import leaderboard_service
-                await leaderboard_service.increment_score(partner.id, increment)
+                await leaderboard_service.increment_score(partner.id, increment, is_test=partner.is_test)
                 # Log XP transaction
                 from app.models.partner import XPTransaction
                 new_xp_tx = XPTransaction(

@@ -11,69 +11,72 @@ from datetime import UTC, datetime
 
 
 class LeaderboardService:
-    LEADERBOARD_KEY = "leaderboard:global"
-
-    def _get_active_keys(self) -> list[str]:
+    def _get_active_keys(self, is_test: bool = False) -> list[str]:
         """Returns the list of active leaderboard keys (Global, Monthly, Weekly)."""
         now = datetime.now(UTC)
-        weekly_key = f"leaderboard:weekly:{now.year}-{now.isocalendar()[1]}"
-        monthly_key = f"leaderboard:monthly:{now.year}-{now.month}"
-        return [self.LEADERBOARD_KEY, monthly_key, weekly_key]
+        prefix = "leaderboard:test:" if is_test else "leaderboard:"
+        
+        # Note: Global key remains 'leaderboard:global' for production compatibility
+        global_key = f"{prefix}global"
+        weekly_key = f"{prefix}weekly:{now.year}-{now.isocalendar()[1]}"
+        monthly_key = f"{prefix}monthly:{now.year}-{now.month}"
+        return [global_key, monthly_key, weekly_key]
 
-    async def update_score(self, partner_id: int, xp: float):
+    async def update_score(self, partner_id: int, xp: float, is_test: bool = False):
         """
-        Updates the GLOBAL total score. 
-        Note: This is usually for sync/full-set operations. 
-        For seasonal accuracy, use increment_score for rewards.
+        Updates the GLOBAL total score.
         """
         try:
-            await redis_service.client.zadd(self.LEADERBOARD_KEY, {str(partner_id): xp})
+            keys = self._get_active_keys(is_test=is_test)
+            # Find the global key (first in list)
+            global_key = keys[0]
+            await redis_service.client.zadd(global_key, {str(partner_id): xp})
         except Exception as e:
-            logger.error(f"Failed to update global score for {partner_id}: {e}")
+            logger.error(f"Failed to update global score for {partner_id} (is_test={is_test}): {e}")
 
-    async def increment_score(self, partner_id: int, amount: float):
+    async def increment_score(self, partner_id: int, amount: float, is_test: bool = False):
         """
-        Increments a partner's score in ALL active Redis leaderboards (Global + Seasons).
-        This is the preferred method for rewards.
+        Increments a partner's score in ALL active Redis leaderboards.
         """
         try:
-            keys = self._get_active_keys()
+            keys = self._get_active_keys(is_test=is_test)
             async with redis_service.client.pipeline(transaction=False) as pipe:
                 for key in keys:
                     pipe.zincrby(key, amount, str(partner_id))
                 await pipe.execute()
         except Exception as e:
-            logger.error(f"Failed to increment score for {partner_id}: {e}")
+            logger.error(f"Failed to increment score for {partner_id} (is_test={is_test}): {e}")
 
-    async def get_top_partners(self, limit: int = 50, timeframe: str = "all") -> list[tuple[bytes, float]]:
-        """Fetches the top partners for a specific timeframe (all, monthly, weekly)."""
+    async def get_top_partners(self, limit: int = 50, timeframe: str = "all", is_test: bool = False) -> list[tuple[bytes, float]]:
+        """Fetches the top partners for a specific timeframe."""
         try:
-            now = datetime.now(UTC)
+            keys = self._get_active_keys(is_test=is_test)
             if timeframe == "weekly":
-                key = f"leaderboard:weekly:{now.year}-{now.isocalendar()[1]}"
+                key = keys[2]
             elif timeframe == "monthly":
-                key = f"leaderboard:monthly:{now.year}-{now.month}"
+                key = keys[1]
             else:
-                key = self.LEADERBOARD_KEY
+                key = keys[0]
 
             # Returns list of (id, score) tuples
-            return await redis_service.zrevrange(key, 0, limit - 1, withscores=True)
+            return await redis_service.client.zrevrange(key, 0, limit - 1, withscores=True)
         except Exception as e:
-            logger.error(f"Failed to fetch top partners for {timeframe}: {e}")
+            logger.error(f"Failed to fetch top partners for {timeframe} (is_test={is_test}): {e}")
             return []
 
-    async def get_partner_rank(self, partner_id: int, timeframe: str = "all") -> int | None:
+    async def get_partner_rank(self, partner_id: int, timeframe: str = "all", is_test: bool = False) -> int | None:
         """Returns the 0-indexed rank of a partner for a timeframe."""
         try:
-            now = datetime.now(UTC)
+            keys = self._get_active_keys(is_test=is_test)
             if timeframe == "weekly":
-                key = f"leaderboard:weekly:{now.year}-{now.isocalendar()[1]}"
+                key = keys[2]
             elif timeframe == "monthly":
-                key = f"leaderboard:monthly:{now.year}-{now.month}"
+                key = keys[1]
             else:
-                key = self.LEADERBOARD_KEY
+                key = keys[0]
 
-            rank = await redis_service.zrevrank(key, str(partner_id))
+            rank = await redis_service.client.zrevrank(key, str(partner_id))
+            season_xp = await redis_service.client.zscore(key, str(partner_id))
             return rank
         except Exception:
             return None
