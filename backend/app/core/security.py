@@ -1,11 +1,15 @@
 import hashlib
 import hmac
 import json
+import logging
+import time
 from urllib.parse import parse_qsl
 
 from fastapi import Depends, Header, HTTPException
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 def validate_telegram_data(init_data: str) -> dict:
@@ -17,7 +21,6 @@ def validate_telegram_data(init_data: str) -> dict:
         vals = dict(parse_qsl(init_data))
         hash_str = vals.pop('hash', None)
         if not hash_str:
-            from bot import logger
             logger.warning("[AUTH] Hash missing in initData")
             raise HTTPException(status_code=401, detail="Hash missing")
 
@@ -28,15 +31,12 @@ def validate_telegram_data(init_data: str) -> dict:
         hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
 
         if hmac_hash != hash_str:
-            from bot import logger
             logger.warning("[AUTH] Invalid signature check failed")
             raise HTTPException(status_code=401, detail="Invalid signature")
 
         # Replay attack protection: auth_date must be within 24h
-        import time
         auth_date = int(vals.get('auth_date', 0))
         if time.time() - auth_date > 86400:
-            from bot import logger
             logger.warning(f"[AUTH] Session expired. auth_date: {auth_date}")
             raise HTTPException(status_code=401, detail="Session expired")
 
@@ -44,7 +44,6 @@ def validate_telegram_data(init_data: str) -> dict:
     except HTTPException:
         raise
     except Exception as e:
-        from bot import logger
         logger.error(f"[AUTH] Unexpected authentication error: {e}")
         raise HTTPException(status_code=401, detail="Authentication failed")
 
@@ -74,7 +73,6 @@ def get_tg_user(user_data: dict) -> dict:
             return json.loads(user_field)
         return user_field
     except Exception as e:
-        from bot import logger
         logger.error(f"Failed to parse user JSON: {e}")
         raise HTTPException(status_code=400, detail="Malformed user data")
 
