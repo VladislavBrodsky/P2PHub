@@ -82,7 +82,8 @@
       "target_badge": "TARGET",
       "online_badge": "ONLINE",
       "reveal_strategy": "REVEAL STRATEGY",
-      "max_dividends": "MAX DIVIDENDS"
+      "max_dividends": "MAX DIVIDENDS",
+      "turbo_badge": "TURBO"
     }
   },
   "income_details": {

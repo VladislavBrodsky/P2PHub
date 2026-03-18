@@ -428,7 +428,7 @@
       "viral_badge": "VIRAL DEAL",
       "pro_title": "PRO PLAN",
       "pro_plus_title": "PRO+ PLAN",
-      "pro_plus_upgrade_title": "UPGRADE TO PLUS",
+      "pro_plus_upgrade_title": "UPGRADE TO PRO+",
       "buy_pro_btn": "ACTIVATE PRO",
       "buy_pro_plus_btn": "ACTIVATE PRO+",
       "upgrade_to_pro_plus_btn": "UPGRADE TO PLUS",
@@ -436,6 +436,29 @@
       "ton_wallet": "TON WALLET",
       "usdt_trc20_address": "USDT (TRC20)",
       "stripe_card": "DEBIT/CREDIT CARD",
+      "selling_fast": "SELLING FAST",
+      "lifetime_label": "LIFETIME",
+      "monthly_label": "MONTHLY",
+      "protocol_initialized": "PROTOCOL INITIALIZED",
+      "change_method": "CHANGE METHOD",
+      "complete_payment": "COMPLETE PAYMENT",
+      "processing_stripe": "PROCESSING STRIPE...",
+      "redirecting_to_bank": "Redirecting to your bank...",
+      "verify_transaction": "VERIFY TRANSACTION",
+      "pending_review": "PENDING REVIEW",
+      "tap_to_copy": "TAP TO COPY",
+      "final_instruction": "Important: Paste the transaction hash below after sending USDT.",
+      "hash_help": "Unique transaction hash (TxHash/TxID)",
+      "help_title": "NEED HELP?",
+      "help_desc": "Contact our 24/7 support node for instant billing assistance.",
+      "extend_membership": "EXTEND MEMBERSHIP",
+      "steps": {
+        "copy_address": "COPY ADDRESS",
+        "paste_hash": "PASTE HASH"
+      },
+      "alerts": {
+        "expired": "Payment window expired. Please try again."
+      },
       "benefits_pro": [
         "9 Levels of Passive Income",
         "250 Viral Studio Tokens",
@@ -453,10 +476,14 @@
       ]
     },
     "pro_active": {
+      "title": "PRO STATUS ACTIVE",
       "lifetime": "LIFETIME ACCESS",
       "lifetime_access": "ONE-TIME PAYMENT",
       "title_plus": "PRO+ ACTIVE",
-      "pro_plus_title": "PRO+ STATUS ACTIVE"
+      "pro_plus_title": "PRO+ STATUS ACTIVE",
+      "desc": "Your PRO nodes are active. Passive income protocol is live.",
+      "desc_plus": "Your OMNI-SYNC EMPIRE is active. Maximum reach protocol engaged.",
+      "command_center": "OPEN COMMAND CENTER"
     },
     "stats": {
       "partners": "Active Partners",

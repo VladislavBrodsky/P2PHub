@@ -79,7 +79,8 @@
       "target_badge": "ЦЕЛЬ",
       "online_badge": "ОНЛАЙН",
       "reveal_strategy": "ПОСМОТРЕТЬ СТРАТЕГИЮ",
-      "max_dividends": "МАКС. ДИВИДЕНДЫ"
+      "max_dividends": "МАКС. ДИВИДЕНДЫ",
+      "turbo_badge": "ТУРБО"
     }
   },
   "income_details": {
