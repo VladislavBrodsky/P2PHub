@@ -179,10 +179,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 img.src = userData.photo_url;
                 img.loading = 'eager';
             }
-        } catch (error) {
-            console.error('[DEBUG] refreshUser: Failed:', error);
+        } catch (error: any) {
+            console.error('[API] refreshUser: Failed:', error.response?.status, error.response?.data || error.message);
             // Fallback: If backend fails, use Telegram SDK data for UI personalization
             if (tgUser) {
+                console.warn('[API] Using Guest/Fallback profile due to backend error.');
                 setUser(prev => {
                     if (prev) return prev;
                     return {

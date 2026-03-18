@@ -242,10 +242,20 @@ async def get_my_profile(
     try:
         expire_time = 3600 + random.randint(-360, 360)
         # #comment: Ensure @computed_field values are included in the serialized cache
-        data_to_cache = partner_response.model_dump(mode='json', context={"include_computed": True})
-        # Note: In some Pydantic versions, it's 'include_computed=True' argument, not context.
-        # However, to be safest, we'll just rely on the return value being properly validated on read.
-        await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=expire_time)
+        # We must use context={'include_computed': True} OR serialize it explicitly.
+        # In Pydantic v2, model_dump(mode='json') usually includes them if they are computed_fields.
+        # But we'll be explicit to be safe.
+        data_to_cache = partner_response.model_dump(mode='json')
+        
+        # Manually ensure computed fields are present if Pydantic skipped them
+        if "is_pro_plus" not in data_to_cache:
+            data_to_cache["is_pro_plus"] = partner_response.is_pro_plus
+        if "total_network_size" not in data_to_cache:
+            data_to_cache["total_network_size"] = partner_response.total_network_size
+        if "total_earned" not in data_to_cache:
+            data_to_cache["total_earned"] = partner_response.total_earned
+
+        await redis_service.set_json(cache_key, data_to_cache, expire=expire_time)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")
 
