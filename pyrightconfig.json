@@ -1,0 +1,17 @@
+{
+  "include": [
+    "backend",
+    "frontend"
+  ],
+  "venvPath": ".",
+  "venv": "venv",
+  "executionEnvironments": [
+    {
+      "root": "backend",
+      "extraPaths": [
+        "."
+      ]
+    }
+  ],
+  "typeCheckingMode": "basic"
+}
