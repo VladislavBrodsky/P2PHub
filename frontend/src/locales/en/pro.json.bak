@@ -1,0 +1,262 @@
+{
+  "title": "Upgrade to PRO",
+  "subtitle": "Maximize your passive income and unlock exclusive Viral Studio features.",
+  "plans": {
+    "pro": {
+      "title": "PRO",
+      "price": "39",
+      "period": "LIFETIME",
+      "features": [
+        "9 Generations of Commission",
+        "250 Viral Studio Tokens/Month",
+        "Full Growth Academy Access",
+        "Strategic Launch Blueprints",
+        "Community Support"
+      ]
+    },
+    "pro_plus": {
+      "title": "PRO+",
+      "price": "69",
+      "period": "LIFETIME",
+      "features": [
+        "20 Generations of Passive Income",
+        "500 Viral Studio Tokens/Month",
+        "Expert Marketing Frameworks",
+        "Omni-Sync Studio Access",
+        "Priority AI Processing",
+        "Direct Strategy Consultations"
+      ]
+    }
+  },
+  "fomo": {
+    "timer_text": "PRO price increases in:",
+    "spots_left": "Limited spots available at current rate"
+  },
+  "comparison": {
+    "title": "Why Upgrade?",
+    "row_income": "Passive Income Reach",
+    "row_tokens": "Viral Studio Tokens",
+    "row_tools": "Growth Tools",
+    "free_income": "3 Generations",
+    "free_tokens": "0",
+    "free_tools": "Basic",
+    "pro_income": "9 Generations",
+    "pro_tokens": "250",
+    "pro_tools": "Advanced",
+    "plus_income": "20 Generations",
+    "plus_tokens": "500",
+    "plus_tools": "Unlimited"
+  },
+  "pro_dashboard": {
+    "tabs": {
+      "studio": "AI Viral Studio",
+      "tools": "Elite Growth Tools",
+      "growth": "Partner Academy",
+      "analytics": "Neural Analytics"
+    },
+    "common": {
+      "sync_active": "Node Sync Active",
+      "active": "Active",
+      "loading": "Loading Intelligence...",
+      "error": "Sync Error",
+      "success": "Operation Successful",
+      "status_online": "Status: Online"
+    },
+    "tools": {
+      "headline": {
+        "title": "Viral Catalyst Hub",
+        "desc": "Synthesize high-resonance headlines using calibrated AI models."
+      },
+      "audit": {
+        "title": "Real-Time Market Audit",
+        "desc": "Scan global trends and geopolitical shifts for optimal entry.",
+        "btn": "START SCAN",
+        "modal_title": "Neural Market Audit",
+        "node_status_sync": "NODE SYNC ACTIVE",
+        "scanning": "SCANNING...",
+        "update_btn": "REFRESH INTEL",
+        "summary_title": "EXECUTIVE SUMMARY",
+        "sentiment_label": "MARKET SENTIMENT",
+        "shift_label": "TREND SHIFT",
+        "relevance": "IMPACT",
+        "relevance_massive": "MASSIVE",
+        "relevance_high": "HIGH",
+        "hot_now": "HOT NOW",
+        "analyzing": "ANALYZING...",
+        "action_required": "ACTION REQUIRED",
+        "imperative": "VIRAL IMPERATIVE",
+        "live_tracker": "LIVE VIRAL TRACKER",
+        "live_timeframe": "REAL-TIME FEED",
+        "force_sync_btn": "FORCE SYNC",
+        "error_title": "DECRYPTION FAILED"
+      }
+    },
+    "studio": {
+      "stepper": {
+        "strategy": "STRATEGY",
+        "synthesis": "SYNTHESIS",
+        "preview": "PREVIEW"
+      },
+      "hashtags_refreshed": "Viral hashtags optimized",
+      "link_saved": "Referral link updated successfully",
+      "link_error": "Invalid link format",
+      "add_personal_link": "Personal Referral Link"
+    },
+    "analytics": {
+      "decrypting": "DECRYPTING NEURAL DATA...",
+      "total_views": "TOTAL REACH",
+      "engagement": "ENGAGEMENT",
+      "viral_reach": "VIRAL SPREAD",
+      "success_rate": "CONVERSION RATE",
+      "resonance": {
+        "title": "PREDICTIVE RESONANCE",
+        "status": "ENGINE ACTIVE",
+        "gathering_data": "GATHERING DATA",
+        "confidence": "CONFIDENCE: {{percent}}%",
+        "goto_studio": "ACTIVATE STUDIO",
+        "action_btn": "EXECUTE NEXT TOP ACTION",
+        "insufficient_data": "INSUFFICIENT DATA",
+        "insufficient_data_desc": "Synthesize {{count}} more posts to calibrate resonance engine."
+      },
+      "raw_data": {
+        "title": "RAW METRIC FEED",
+        "sync_all": "SYNC ALL",
+        "syncing": "SYNCING...",
+        "source": "SOURCE",
+        "reach": "REACH",
+        "engagement": "ENGAGEMENT",
+        "last_sync": "LAST SYNC",
+        "empty": "NO VIRAL DATA DETECTED",
+        "access_restricted": "ACCESS RESTRICTED"
+      },
+      "locked_plus": {
+        "title": "ANALYTICS ENCRYPTION",
+        "desc": "Neural metrics and resonance scoring require PRO+ status.",
+        "upgrade_btn": "UNLOCK PRO+ INSIGHTS"
+      }
+    },
+    "setup": {
+      "title": "SYNC ECOSYSTEM",
+      "subtitle": "OMNI-CHANNEL INTEGRATION",
+      "tg_node": "TELEGRAM NODE",
+      "pro_node_limit_desc": "Broadcast to your primary growth channel.",
+      "channel_id": "CHANNEL @USERNAME",
+      "personal_link_desc": "Optional. Use your Bot starting link to track conversions.",
+      "referral_link_prefix_error": "Link must start with https://t.me/...",
+      "x_broadcast_title": "X (TWITTER) BROADCAST",
+      "x_broadcast_desc": "Connect your X profile for automated viral threads.",
+      "x_broadcast_plus_desc": "Connect your X profile for PRO+ automated viral loops.",
+      "api_key": "API KEY",
+      "api_secret": "API SECRET",
+      "access_token": "ACCESS TOKEN",
+      "access_token_secret": "TOKEN SECRET",
+      "teaser": {
+        "title": "Elite Sync Ecosystem",
+        "desc": "Unlock the full power of automated multi-channel growth.",
+        "feat_tg": "MULTI-TG",
+        "feat_tg_detail": "SYNC 5+ CHANNELS",
+        "feat_omni": "OMNI-SYNC",
+        "feat_omni_detail": "7+ PLATFORMS",
+        "feat_li": "LINKEDIN",
+        "feat_li_detail": "PRO NETWORK",
+        "feat_ai": "NEURAL",
+        "feat_ai_detail": "AUTO-RESONANCE",
+        "cta": "UPGRADE TO PRO+ NOW"
+      },
+      "multi_sync": {
+        "title": "OMNI-CHANNEL SYNC",
+        "desc": "Manage all your growth nodes from a single dashboard.",
+        "test": "TEST INTEGRATIONS",
+        "test_tg": "TEST TELEGRAM"
+      },
+      "deploy_btn": "DEPLOY SETTINGS",
+      "syncing_btn": "SYNCING...",
+      "save_success_title": "SETTINGS DEPLOYED",
+      "save_success_text": "Integrations updated successfully.",
+      "save_error_title": "DEPLOY FAILED",
+      "save_error_text": "Check your API credentials and try again.",
+      "tg_sync_success_msg": "Telegram nodes synchronized successfully.",
+      "tg_sync_error_msg": "Failed to synchronize Telegram nodes.",
+      "linkedin": {
+        "title": "LINKEDIN SYNC",
+        "desc": "Automate strategy broadcasting to your professional network.",
+        "oauth_label": "ACCESS TOKEN",
+        "placeholder": "Enter your LinkedIn Access Token",
+        "dev_portal_desc": "Obtained via <a href='https://www.linkedin.com/developers/' target='_blank' rel='noreferrer' class='text-indigo-400 underline'>LinkedIn Developers</a>."
+      },
+      "pinterest": {
+        "title": "PINTEREST SYNC",
+        "desc": "Visual growth hacking via automated board pinning.",
+        "placeholder": "Enter Pinterest Access Token",
+        "dev_portal_desc": "Obtained via <a href='https://developers.pinterest.com/' target='_blank' rel='noreferrer' class='text-rose-400 underline italic font-bold'>Pinterest Developers</a>."
+      },
+      "threads": {
+        "title": "THREADS SYNC",
+        "desc": "Dominate the conversation architecture on Threads.",
+        "placeholder": "Enter Threads Access Token"
+      },
+      "facebook": {
+        "title": "FACEBOOK SYNC",
+        "desc": "Automated community resonance on Facebook pages.",
+        "placeholder": "Enter Facebook Access Token"
+      },
+      "discord": {
+        "title": "DISCORD SYNC",
+        "desc": "Real-time viral distribution to Discord webhooks.",
+        "placeholder": "Enter Discord Webhook URL",
+        "dev_portal_desc": "Obtain Webhook URL via your <span class='text-[#5865F2] italic font-bold'>Discord Server Settings</span>."
+      }
+    },
+    "notifications": {
+      "success": "SUCCESS",
+      "viral_synthesized": "Viral content synthesized",
+      "error": "ERROR",
+      "gen_failed": "Generation failed",
+      "tokens_required": "TOKENS REQUIRED",
+      "tokens_required_text": "Upgrade your plan to continue synthesizing",
+      "copied": "COPIED",
+      "text_copied": "Text copied to clipboard",
+      "image_saved": "IMAGE SAVED",
+      "image_saved_text": "Saved to your device",
+      "published_text": "Successfully published to {{platform}}",
+      "publish_error": "PUBLISH ERROR",
+      "publish_failed": "Failed to publish content"
+    },
+    "academy": {
+      "protocols": {
+        "title": "TACTICAL PROTOCOLS"
+      },
+      "sync_status": "SYNCHRONIZED",
+      "deployed": "DEPLOYED",
+      "live_signal": "LIVE SIGNAL",
+      "articles": {
+        "title": "STRATEGIC DOSSIERS"
+      },
+      "dossier_label": "DOSSIER",
+      "reading_progress": "READING PROGRESS"
+    }
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": {
+      "q1": "Is this a one-time purchase?",
+      "a1": "Yes. Current PRO and PRO+ deals are for lifetime access. No subscriptions, no hidden fees. Once you upgrade, you are a PRO member forever.",
+      "q2": "How do I receive commissions?",
+      "a2": "Commissions is automatically added to your balance whenever your structure grows or someone upgrades. You can withdraw to your USDT wallet at any time.",
+      "q3": "What are Viral Studio Tokens?",
+      "a3": "Tokens power our AI Viral Studio. Every post you generate or optimize consumes tokens. PRO+ partners get double tokens and priority AI queue access.",
+      "q4": "Which plan is better for growing a team?",
+      "a4": "If you are serious about building a global network, PRO+ is the only choice. 20 levels of depth captures 20x more volume than 9 levels.",
+      "q5": "What is the Passive Income reach?",
+      "a5": "It is our multi-level passive income system. When anyone in your structure makes a card transaction — you automatically receive a commission. PRO opens 9 levels deep, PRO+ — all 20 levels, which is 20x more passive income reach.",
+      "q6": "How much faster will my team grow with PRO?",
+      "a6": "PRO partners consistently grow their networks 5-10x faster using only the Viral Studio. Add the Growth Intelligence tools and OMNI-Sync publishing — and PRO+ partners report 100x faster team scaling compared to free members.",
+      "q7": "Can I upgrade from PRO to PRO+ later?",
+      "a7": "Yes. You can upgrade at any time from the app. Your current PRO period is credited towards the PRO+ upgrade price. Upgrading sooner means more passive income while the price is still at the current level.",
+      "view_faq_center": "OPEN FULL FAQ CENTER",
+      "badge": "SUPPORT",
+      "title": "KNOWLEDGE BASE",
+      "desc": "Everything you need to know about PRO status."
+    }
+  }
+}

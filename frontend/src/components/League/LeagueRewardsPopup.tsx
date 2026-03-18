@@ -205,7 +205,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                                 transition={{ delay: 0.3 }}
                                 className="relative overflow-hidden rounded-[24px] border border-white/10 bg-white/2 p-1 mb-6 shadow-xl backdrop-blur-2xl"
                             >
-                                <LeaguePrizes league={currentLeague} />
+                                <LeaguePrizes league={currentLeague} showHeader={false} />
                             </motion.div>
 
                             {/* Action Button */}

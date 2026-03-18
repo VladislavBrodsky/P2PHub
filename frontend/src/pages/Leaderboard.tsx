@@ -17,7 +17,6 @@ import { useUser } from '../context/UserContext';
 import { LiquidCounter } from './Pro/utils/LiquidCounter';
 import { USDTLogo } from '../components/ui/USDTLogo';
 import { MonthlyWinnersPopup } from '../components/League/MonthlyWinnersPopup';
-import { LeaguePrizes } from '../components/League/LeaguePrizes';
 
 interface LeaderboardUser {
     id: number;
@@ -277,8 +276,6 @@ export default function LeaderboardPage() {
                 </div>
             )}
 
-            {/* Monthly prizes for Top 10 */}
-            <LeaguePrizes league={userLeague} />
 
             <Section
                 title={t('leaderboard.top_partners')}

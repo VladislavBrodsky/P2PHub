@@ -125,26 +125,29 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
 
 interface LeaguePrizesProps {
     league: LeagueTier;
+    showHeader?: boolean;
 }
 
-export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league }) => {
+export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league, showHeader = true }) => {
     const { t } = useTranslation(['social', 'common']);
     const prizes = LEAGUE_PRIZES[league];
 
     return (
         <div className="mt-4 mb-2">
             {/* Section header */}
-            <div className="flex items-center gap-2 mb-3">
-                <div className="h-5 w-5 flex items-center justify-center rounded-lg bg-linear-to-br from-amber-400 to-yellow-500 shadow-[0_2px_10px_rgba(251,191,36,0.4)]">
-                    <Trophy size={11} className="text-white" />
+            {showHeader && (
+                <div className="flex items-center gap-2 mb-3">
+                    <div className="h-5 w-5 flex items-center justify-center rounded-lg bg-linear-to-br from-amber-400 to-yellow-500 shadow-[0_2px_10px_rgba(251,191,36,0.4)]">
+                        <Trophy size={11} className="text-white" />
+                    </div>
+                    <h3 className="text-subheading font-bold text-slate-900 dark:text-white tracking-tight">
+                        {t('league.prizes_title', 'Monthly Prizes')}
+                    </h3>
+                    <span className="ml-auto text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                        {t('league.top_10', 'TOP 10')}
+                    </span>
                 </div>
-                <h3 className="text-subheading font-bold text-slate-900 dark:text-white tracking-tight">
-                    {t('league.prizes_title', 'Monthly Prizes')}
-                </h3>
-                <span className="ml-auto text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
-                    {t('league.top_10', 'TOP 10')}
-                </span>
-            </div>
+            )}
 
             {/* Prize rows */}
             <div className="space-y-2">
