@@ -25,6 +25,8 @@ class ViralLogger:
 
         try:
             creds_dict = json.loads(creds_json)
+            if "private_key" in creds_dict:
+                creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
             scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
             credentials = Credentials.from_service_account_info(creds_dict, scopes=scopes)
             self.gs_client = gspread.authorize(credentials)
