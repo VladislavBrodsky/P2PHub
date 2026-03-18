@@ -48,7 +48,6 @@ COPY --chown=appuser:appuser . .
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
 
 EXPOSE 8000
 COPY --chown=appuser:appuser start.sh /start.sh
@@ -56,7 +55,7 @@ RUN chmod +x /start.sh
 
 USER appuser
 
-# Note: Health checks are handled by Railway's native probe system.
-# The app binds to PORT (default 8000) and exposes /health/ping.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:${PORT:-8000}/health/ping || exit 1
 
 CMD ["/start.sh"]

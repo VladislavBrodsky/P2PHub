@@ -7,8 +7,8 @@ export PYTHONUNBUFFERED=1
 
 # Sanitize PORT (prevent crash from invalid injection like '${PORT}')
 if [[ -n "${PORT}" ]] && ! [[ "${PORT}" =~ ^[0-9]+$ ]]; then
-    echo "⚠️ Invalid PORT environment variable detected: '${PORT}'. Falling back to 8000."
-    export PORT=8000
+    echo "⚠️ Invalid PORT environment variable detected: '${PORT}'. Falling back to 8080."
+    export PORT=8080
 fi
 
 # echo "🔍 Environment Variables (sanitized):"
@@ -37,23 +37,13 @@ echo "✅ Migration step finished."
 # Default to 2 workers for stability, especially on 1-2GB RAM servers.
 echo "🌍 Starting Server with Gunicorn..."
 WORKERS=${GUNICORN_WORKERS:-2}
-echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have >4GB RAM)"
-
-# --- TASKIQ BACKGROUND STARTUP (OPTIONAL) ---
-# Enable this by setting RUN_TASKIQ_IN_BACK=true in environment.
-# This is useful for single-service deployments on Railway/Render.
-if [[ "${RUN_TASKIQ_IN_BACK}" == "true" ]]; then
-    echo "📡 Starting Taskiq Worker and Scheduler in background..."
-    taskiq worker app.worker:broker --daemon || (taskiq worker app.worker:broker &)
-    taskiq scheduler app.worker:scheduler --daemon || (taskiq scheduler app.worker:scheduler &)
-    echo "✅ Taskiq background processes initiated."
-fi
+echo "Running with $WORKERS workers (Tip: set GUNICORN_WORKERS env if you have $>4GB RAM)"
 
 exec gunicorn app.main:app \
     -w "$WORKERS" \
     -k uvicorn.workers.UvicornWorker \
-    --bind 0.0.0.0:"${PORT:-8000}" \
-    --timeout 60 \
+    --bind 0.0.0.0:"${PORT:-8080}" \
+    --timeout 120 \
     --log-level info \
     --access-logfile - \
     --error-logfile /dev/stdout
