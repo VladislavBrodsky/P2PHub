@@ -8,10 +8,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.9.1] - 2026-03-05 "Stable"
+## [1.9.2] - 2026-03-18 "CTO Audit & Hardening"
 ### Added
-- **Admin Dashboard**: Integrated real-time dynamic data for Revenue Distribution and Network Growth charts.
-- **Analytics**: Improved chart scalability with dynamic height calculation and precision tooltips.
+- **CTO-Level Audit**: Verified hierarchical referral integrity for 20-level distribution with materialized paths.
+- **Financial Integrity**: Converted non-atomic balance and XP updates to SQL-level atomic operations across services.
+- **Hardening**: Resolved critical dependency conflict between `httpx` and `google-genai` in `requirements.txt`.
+
+### Fixed
+- **Finance Logic**: Repaired logic error in `finance.py` that caused incorrect monthly income statistics processing.
+- **IDE Configuration**: Unified VS Code, Pyright, and Pyre interpreter paths using workspace-relative syntax.
+
+## [1.9.1] - 2026-03-05 "Stable"
 
 ### Changed
 - **Versioning**: Promoted v1.9.1 to Stable and unified versioning across stack.
