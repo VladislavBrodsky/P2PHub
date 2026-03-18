@@ -29,6 +29,8 @@ import { parseDeepLink, getStartParam } from './utils/deepLink';
 import { backButton } from '@telegram-apps/sdk-react';
 import { useUser } from './context/UserContext';
 import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
+import { PerformanceProvider } from './hooks/usePerformance';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { PulseBanner } from './components/ui/PulseBanner';
@@ -61,11 +63,12 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 
 
     // Signal completion when both user and config are ready
+    // #comment: Startup speed optimization. 
+    // If we have cached data, we can signal 'Ready' earlier and let background refreshes happen silently.
     useEffect(() => {
-        if (!isUserLoading && config) {
-            updateProgress(95, 'Finalizing UI...');
-            const timer = setTimeout(onReady, 50);
-            return () => clearTimeout(timer);
+        if (config && !isUserLoading) {
+            updateProgress(100, 'User Verified');
+            onReady();
         }
     }, [isUserLoading, config, onReady, updateProgress]);
 
@@ -265,9 +268,20 @@ function App() {
                             prefetchPages.cards(),
                             prefetchPages.partner(),
                             prefetchPages.league(),
-                            prefetchPages.subscription()
+                            prefetchPages.subscription(),
+                            // Also prefetch the i18n namespaces for common tabs
+                            import('./utils/i18n-maps').then(async ({ featureToNamespace }) => {
+                                const namespaces = ['cards', 'marketing', 'academy'];
+                                const { loadResources } = await import('./i18n');
+                                namespaces.forEach(async (ns) => {
+                                    if (!i18n.hasResourceBundle(i18n.language, ns)) {
+                                        const res = await loadResources(i18n.language, ns);
+                                        i18n.addResourceBundle(i18n.language, ns, res, true, true);
+                                    }
+                                });
+                            })
                         ]).catch(e => console.debug('Lazy prefetch error', e));
-                    }, 2000);
+                    }, 3000);
                 } catch (e) {
                     console.warn('Prefetch failed', e);
                 }
@@ -287,10 +301,11 @@ function App() {
     }, [isConfigLoading, updateProgress]);
 
     return (
-        <UIProvider>
-            <MotionConfig reducedMotion="user">
-                <AnimatePresence>
-                    {!isComplete && (
+        <PerformanceProvider>
+            <UIProvider>
+                <MotionConfig reducedMotion="user">
+                    <AnimatePresence>
+                        {!isComplete && (
                         <m.div
                             key="loader"
                             initial={{ opacity: 1 }}
@@ -343,6 +358,7 @@ function App() {
                 </div>
             </MotionConfig>
         </UIProvider>
+        </PerformanceProvider>
     );
 }
 
