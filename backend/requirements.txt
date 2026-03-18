@@ -59,10 +59,6 @@ ujson==5.9.0
 orjson==3.9.14
 watchfiles==0.21.0
 web-error>=0.5.3
-ccxt==4.2.34
-pycasbin==2.8.0
-paypal-checkout-serversdk==1.0.1
-braintree==4.22.0
 aiogram>=3.3.0
 openai>=1.12.0
 gspread>=6.0.0
