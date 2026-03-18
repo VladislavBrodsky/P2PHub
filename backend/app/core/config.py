@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from dotenv import load_dotenv
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # --- SETUP LOGGING ---
@@ -106,6 +106,28 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = Field(default="", validation_alias="OPENAI_API_KEY")
     GOOGLE_API_KEY: str = Field(default="", validation_alias="GOOGLE_API_KEY")
     GOOGLE_SERVICE_ACCOUNT_JSON: str = Field(default="{}", validation_alias="GOOGLE_SERVICE_ACCOUNT_JSON")
+    @field_validator("GOOGLE_SERVICE_ACCOUNT_JSON", mode="after")
+    @classmethod
+    def fix_google_private_key(cls, v: str) -> str:
+        """Fixes escaped newlines in service account JSON private keys."""
+        if not v or v == "{}":
+            return v
+        try:
+            # First try parsing to see if it's a valid JSON already
+            import json
+            data = json.loads(v)
+            if "private_key" in data and isinstance(data["private_key"], str):
+                # Only replace if it contains literal \n characters (escaped)
+                if "\\n" in data["private_key"]:
+                    data["private_key"] = data["private_key"].replace("\\n", "\n")
+                    return json.dumps(data)
+            return v
+        except Exception:
+            # If it's not valid JSON yet, just return it as is or handle it
+            return v
+
+    VIRAL_MARKETING_SPREADSHEET_ID: str = Field(default="1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k", validation_alias="VIRAL_MARKETING_SPREADSHEET_ID")
+    VIRAL_MARKETING_GID: str = Field(default="633034160", validation_alias="VIRAL_MARKETING_GID")
     TWITTER_BEARER_TOKEN: str = Field(default="", validation_alias="TWITTER_BEARER_TOKEN")
 
     # --- SENTRY ---

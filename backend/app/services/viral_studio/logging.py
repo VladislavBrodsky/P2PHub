@@ -18,8 +18,9 @@ class ViralLogger:
         self._init_google_sheets_client()
 
     def _init_google_sheets_client(self):
-        creds_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "").strip()
-        if not creds_json or not (creds_json.startswith('{') and creds_json.endswith('}')):
+        from app.core.config import settings
+        creds_json = settings.GOOGLE_SERVICE_ACCOUNT_JSON
+        if not creds_json or creds_json == "{}":
             return
 
         try:
@@ -48,12 +49,13 @@ class ViralLogger:
         image_model: str = "unknown",
         text_model: str = "unknown"
     ):
+        from app.core.config import settings
         if not self.gs_client:
             return
 
         try:
-            sheet_id = os.getenv("VIRAL_MARKETING_SPREADSHEET_ID") or "1JCxW4ANBthKy3Qeu9RBE3Ds3fFpX8993Q_6JPdmg-_k"
-            gid = os.getenv("VIRAL_MARKETING_GID") or "633034160"
+            sheet_id = settings.VIRAL_MARKETING_SPREADSHEET_ID
+            gid = settings.VIRAL_MARKETING_GID
             cache_key = f"{sheet_id}_{gid}"
             
             loop = asyncio.get_event_loop()
