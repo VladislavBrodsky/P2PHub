@@ -123,7 +123,7 @@ async def claim_task_reward(
             try:
                 completed_stages = json.loads(partner.completed_stages or "[]")
                 current_value = len(completed_stages) if isinstance(completed_stages, list) else 0
-            except:
+            except (json.JSONDecodeError, ValueError):
                 current_value = 0
             
         if current_value < requirement:
@@ -193,6 +193,6 @@ async def claim_task_reward(
     partner_response.is_admin = tg_id in settings.ADMIN_USER_IDS
     from app.services.analytics_service import get_referral_tree_stats
     tree_stats = await get_referral_tree_stats(session, partner.id)
-    partner_response._network_size_real = sum(tree_stats.values())
+    partner_response.network_size_real = sum(tree_stats.values())
     
     return partner_response
