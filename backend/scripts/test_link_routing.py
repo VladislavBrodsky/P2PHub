@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import asyncio
 import os
 import sys
@@ -5,7 +8,6 @@ import sys
 from dotenv import load_dotenv
 
 load_dotenv("backend/.env")
-sys.path.append(os.path.join(os.getcwd(), "backend"))
 
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker

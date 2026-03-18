@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import re
 
 file_path = '/Users/grandmaestro/Documents/P2PHub/frontend/src/components/Marketing/IncomePotential.tsx'

@@ -1,10 +1,12 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import asyncio
 import os
 import sys
 
 # Add the current directory to sys.path so we can import 'app'
-sys.path.append(os.getcwd())
 
 from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker

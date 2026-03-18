@@ -1,10 +1,12 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import asyncio
 import asyncpg
 import sys
 import os
 
 # Add backend to sys.path
-sys.path.append(os.path.join(os.getcwd(), 'backend'))
 from app.core.config import settings
 
 async def list_tables():

@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 _bootstrap.py — Universal Admin Script Bootstrap
 =================================================
@@ -31,16 +34,22 @@ def _load_env():
         return
 
     script_dir = Path(__file__).resolve().parent  # backend/scripts/
+    backend_root = script_dir.parent
+    project_root = backend_root.parent
+
     candidates = [
-        script_dir.parent.parent / ".env",        # P2PHub/.env
-        script_dir.parent / ".env",               # backend/.env
+        project_root / ".env",
+        backend_root / ".env",
         Path.cwd() / ".env",
-        Path.cwd() / "backend" / ".env",
     ]
+
+    # Dynamically find 'backend' if CWD is project root
+    if (Path.cwd() / "backend").is_dir():
+        candidates.append(Path.cwd() / "backend" / ".env")
 
     for p in candidates:
         try:
-            # Use open() directly — avoids macOS sandbox blocking stat()/is_file()
+            if not p.exists(): continue
             with open(p) as f:
                 content = f.read()
             if content:
@@ -50,20 +59,7 @@ def _load_env():
         except (PermissionError, FileNotFoundError, OSError):
             continue
 
-    # ── Hardcoded fallback (sandbox / CI environments) ──────────────────────
-    # These are set here so scripts always work even when .env is unreadable.
-    # They match the values in backend/.env exactly.
-    fallback = {
-        "DATABASE_URL": "postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway",
-        "BOT_TOKEN": "8245884329:AAEDkWwG8Si6HJtgkC7MTd5U_IQrAHmyTYk",
-    }
-    applied = []
-    for k, v in fallback.items():
-        if not os.environ.get(k):
-            os.environ[k] = v
-            applied.append(k)
-    if applied:
-        logger.info(f"✅ Applied hardcoded fallback for: {', '.join(applied)}")
+    logger.warning("⚠️ No .env file loaded in bootstrap. Environment variables must be set manually.")
 
 _load_env()
 

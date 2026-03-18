@@ -86,15 +86,9 @@ find_and_load_env()
 class Settings(BaseSettings):
     # --- CORE SECRETS ---
     # We use validation_alias to ensure Pydantic sees the exact environment variable name
-    BOT_TOKEN: str = Field(
-        default="8245884329:AAEDkWwG8Si6HJtgkC7MTd5U_IQrAHmyTYk", 
-        validation_alias="BOT_TOKEN"
-    )
+    BOT_TOKEN: str = Field(validation_alias="BOT_TOKEN")
     BOT_USERNAME: str = Field(default="pintopay_probot", validation_alias="BOT_USERNAME")
-    DATABASE_URL: str = Field(
-        default="postgresql+asyncpg://postgres:rqlCKNPanWJKienluVgruvHeIkqLiGFg@switchback.proxy.rlwy.net:40220/railway", 
-        validation_alias="DATABASE_URL"
-    )
+    DATABASE_URL: str = Field(validation_alias="DATABASE_URL")
     
     # --- OPTIONAL CONFIG ---
     DEBUG: bool = Field(default=False, validation_alias="DEBUG")

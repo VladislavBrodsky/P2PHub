@@ -1,10 +1,12 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import importlib
 import os
 import pkgutil
 import sys
 
 # Set PYTHONPATH to the current directory (should be run from backend/)
-sys.path.append(os.getcwd())
 
 # Mock Environment for CI/Verification
 os.environ.setdefault("BOT_TOKEN", "12345:mock_token_for_verification")

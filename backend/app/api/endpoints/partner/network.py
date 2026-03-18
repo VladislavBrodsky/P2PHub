@@ -1,7 +1,7 @@
 import logging
 import random
 from datetime import timedelta
-from typing import List, Any, cast
+from typing import List, Any, cast, Dict
 
 from fastapi import APIRouter, Depends, BackgroundTasks
 from sqlmodel import select, func
@@ -301,7 +301,7 @@ async def get_recent_partners(
     count_setting = await session.get(SystemSetting, count_settings_key)
 
     now = datetime.now(UTC).replace(tzinfo=None)
-    partners_list: list[dict[str, Any]] = []
+    partners_list: List[Dict[str, Any]] = []
     last_hour_count = 0
 
     refresh_needed = True
@@ -310,7 +310,7 @@ async def get_recent_partners(
            (now - count_setting.updated_at < count_refresh_window):
             refresh_needed = False
             try:
-                partners_list = cast(list[dict[str, Any]], json.loads(snapshot_setting.value))
+                partners_list = cast(List[Dict[str, Any]], json.loads(snapshot_setting.value))
                 last_hour_count = int(count_setting.value)
             except Exception:
                 refresh_needed = True

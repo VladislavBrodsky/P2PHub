@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import asyncio
 import os
 import sys
@@ -6,7 +9,6 @@ from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Add backend to path
-sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
 from app.models.blog import BlogPost
 from app.models.partner import async_session_maker

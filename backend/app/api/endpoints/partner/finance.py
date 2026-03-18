@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, UTC, timedelta
 
-from typing import cast
+from typing import cast, Any, Dict
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -66,7 +66,7 @@ async def get_my_xp_history(
 async def get_finance_stats(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
-):
+) -> Dict[str, Any]:
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
     

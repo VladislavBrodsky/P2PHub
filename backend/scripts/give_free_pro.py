@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 give_free_pro.py — Grant FREE PRO Lifetime (no commissions) to a list of users.
 Usage: python3 backend/scripts/give_free_pro.py

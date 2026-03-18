@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 grant_pro_plus_user.py — Grant PRO+ to a user with commission distribution.
 Usage: python3 backend/scripts/grant_pro_plus_user.py <username>

@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 #!/usr/bin/env python3
 import asyncio
 import os
@@ -8,7 +11,6 @@ from sqlalchemy.ext.asyncio import create_async_engine
 import redis.asyncio as redis
 
 # Add backend to sys.path to import app.core.config
-sys.path.append(os.path.join(os.getcwd(), 'backend'))
 from app.core.config import settings
 
 async def check_sql():

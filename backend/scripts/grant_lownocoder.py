@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import asyncio
 import os
 import sys
@@ -21,7 +24,6 @@ else:
     print(f"❌ No .env found at {root_env} or {backend_env}")
 
 # Add the backend directory to sys.path so we can import app
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # MOCK REDIS SERVICE to prevent connection errors in script
 from unittest.mock import AsyncMock, MagicMock

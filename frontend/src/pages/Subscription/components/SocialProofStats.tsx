@@ -9,8 +9,8 @@ interface SocialProofStatsProps {
 export const SocialProofStats = ({ t }: SocialProofStatsProps) => {
     const stats = [
         { value: '5K+', label: t('pro:subscription.stats.partners'), icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-        { value: '×100', label: t('pro:subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-        { value: '24/7', label: t('pro:subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+        { value: 'ELITE', label: t('pro:subscription.stats.growth'), icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+        { value: 'LIVE', label: t('pro:subscription.stats.ai_active'), icon: Bot, color: 'text-amber-500', bg: 'bg-amber-500/10' },
     ];
 
     return (

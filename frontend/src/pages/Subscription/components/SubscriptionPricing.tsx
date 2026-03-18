@@ -167,25 +167,6 @@ export const SubscriptionPricing = React.memo(({
                                                 </div>
                                             ))}
                                         </div>
-
-                                        <div className={`pt-4 border-t ${isSelected ? (isPlus ? 'border-black/10' : 'border-white/10') : 'border-slate-100 dark:border-white/10'}`}>
-                                            <div className="flex items-center gap-2 mb-3 px-1">
-                                                <Check size={14} className={isSelected ? (isPlus ? 'text-black' : 'text-white') : 'text-emerald-500'} strokeWidth={3} />
-                                                <span className={`text-[10px] font-black uppercase tracking-widest ${isSelected ? (isPlus ? 'text-black/50' : 'text-white/50') : 'text-slate-400'}`}>
-                                                    {t('pro:subscription.benefits.full_access')}
-                                                </span>
-                                            </div>
-                                            <div className="grid grid-cols-1 gap-2">
-                                                {(t(isPlus ? 'pro:subscription.upgrade.benefits_pro_plus' : 'pro:subscription.upgrade.benefits_pro', { returnObjects: true }) as string[]).map((b, i) => (
-                                                    <div key={i} className={`flex items-center gap-2.5 p-2 rounded-lg ${isSelected ? (isPlus ? 'bg-black/5' : 'bg-white/5') : 'bg-slate-50/50 dark:bg-white/2'}`}>
-                                                        <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isSelected ? (isPlus ? 'bg-[#0a1000]/10 text-[#0a1000]' : 'bg-white/10 text-white') : 'bg-emerald-500/10 text-emerald-500'}`}>
-                                                            <Check size={10} strokeWidth={3} />
-                                                        </div>
-                                                        <span className={`text-[11px] font-bold uppercase tracking-tight leading-none ${isSelected ? (isPlus ? 'text-[#0a1000]' : 'text-white') : 'text-slate-700 dark:text-white/80'}`}>{b}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             );

@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 """
 grant_pro_user.py — Grant PRO Lifetime to a user with commission distribution.
 Usage: python3 backend/scripts/grant_pro_user.py <username>

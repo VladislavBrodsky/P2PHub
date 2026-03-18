@@ -1,10 +1,12 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import asyncio
 import os
 import sys
 
 # Add backend to sys.path
-sys.path.append(os.path.join(os.getcwd(), 'backend'))
 
 from datetime import datetime
 
