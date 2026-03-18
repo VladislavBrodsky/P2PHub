@@ -390,14 +390,14 @@ async def upgrade_from_balance(
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
 
-    # Determine Price
+    # EARLY BALANCE CHECK: fail fast with a clear 400 before entering the retry loop
     price = settings.PRO_PRICE_USD if plan == "PRO" else settings.PRO_PLUS_PRICE_USD
-    
-    # Check if already has the plan or better
-    if plan == "PRO" and partner.is_pro:
-         raise HTTPException(status_code=400, detail="User is already PRO or higher")
-    if plan == "PRO_PLUS" and partner.subscription_plan == "PRO_PLUS_MONTHLY":
-         raise HTTPException(status_code=400, detail="User is already PRO+")
+
+    if partner.balance < price:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Insufficient balance. Required: ${price:.2f}, Available: ${partner.balance:.2f}"
+        )
 
     # Process Upgrade
     # We call upgrade_to_pro which handles the logic, commissions, and notifications

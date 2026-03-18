@@ -216,10 +216,11 @@ class ViralMarketingStudio:
             first_line = body_lines[0].strip().replace("**", "")
             # Check for direct match or substring match (e.g. AI adds title as 1st line)
             if first_line.lower() == title_text.lower() or (len(first_line) > 5 and first_line.lower() in title_text.lower()):
-                body_lines.pop(0)
+                body_lines_list: list[str] = body_lines
+                body_lines_list.pop(0)
                 # Pop empty lines after title
-                while body_lines and not body_lines[0].strip():
-                    body_lines.pop(0)
+                while body_lines_list and not body_lines_list[0].strip():
+                    body_lines_list.pop(0)
         
         # 2. Deep Hashtag Scrubbing
         # We strip hashtags from the END and from the BODY to ensure zero duplication
@@ -277,7 +278,8 @@ class ViralMarketingStudio:
         if isinstance(hashtags_list, str):
             hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
         
-        if len(hashtags_list) > 4: hashtags_list = hashtags_list[:4]
+        if len(hashtags_list) > 4: 
+            hashtags_list = hashtags_list[:4]
         
         # Ensure body is clean of hash lines at the very end
         final_lines = body_text.strip().split("\n")
@@ -329,7 +331,7 @@ class ViralMarketingStudio:
 
         # TaskIQ Logging
         try:
-            from .tasks import log_viral_generation_task
+            from app.services.viral_studio.tasks import log_viral_generation_task
             await log_viral_generation_task.kiq(
                 partner_id=partner.id, topic=post_type, audience=target_audience, language=language,
                 openai_prompt=user_prompt, gemini_prompt=image_prompt, duration=duration,
@@ -370,6 +372,7 @@ class ViralMarketingStudio:
                         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
                         kwargs = {"response_format": {"type": "json_object"}}
 
+                    assert self.openai_client is not None
                     res = await asyncio.wait_for(
                         self.openai_client.chat.completions.create(
                             model=model_name, 
@@ -490,8 +493,9 @@ class ViralMarketingStudio:
                         # Flush anything already in buffer after the quote
                         remaining = buffer[body_match.end():]
                         if remaining:
-                            yield {"type": "body_chunk", "content": remaining.replace('\\n', '\n').replace('\\"', '"')}
-                            full_text += remaining
+                            remaining_str = str(remaining).replace('\\n', '\n').replace('\\"', '"')
+                            yield {"type": "body_chunk", "content": remaining_str}
+                            full_text += remaining_str
                         buffer = "" # Clear buffer to start tracking clean body
                 elif body_started:
                     # We are streaming the body. Keep looking for the closing quote or buffer up.
@@ -651,7 +655,7 @@ class ViralMarketingStudio:
                 chan_name = res.get("channel_name") # For X/LinkedIn
                 if platform == "x" and res.get("tweet_id"): ids = [str(res["tweet_id"])]
                 
-                for item in ids:
+                for item in ids[:50]: # Safety limit
                     chan = None
                     cname = chan_name
                     ext_id = item
@@ -700,7 +704,7 @@ class ViralMarketingStudio:
             news = await self._fetch_rss_global_news()
             if news: 
                 try:
-                    from .tasks import log_rss_to_sheets_task
+                    from app.services.viral_studio.tasks import log_rss_to_sheets_task
                     await log_rss_to_sheets_task.kiq(news)
                 except Exception: pass
             

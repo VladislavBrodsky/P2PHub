@@ -19,6 +19,7 @@ from app.models.partner import get_session
 # #comment: Centralizing bot initialization and configurations. 
 # We use a deferred import pattern for services in handlers to avoid circular dependencies.
 # The bot instance is shared across the entire backend (API workers and background tasks).
+logger = logging.getLogger(__name__)
 bot = Bot(token=settings.BOT_TOKEN)
 dp = Dispatcher()
 
@@ -51,7 +52,7 @@ class OnboardingStates(StatesGroup):
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message, state: FSMContext):
-    logging.info(f"📥 Received /start command from user {message.from_user.id}")
+    logger.info(f"📥 Received /start command from user {message.from_user.id}")
 
     from app.core.keyboards import (
         get_main_active_menu_keyboard,
@@ -112,7 +113,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
             await state.set_state(OnboardingStates.waiting_for_onboarding)
             break
     except Exception as e:
-        logging.error(f"Error in cmd_start: {e}")
+        logger.error(f"Error in cmd_start: {e}")
         await message.answer(f"⚠️ Error: {e!s}")
 
 @dp.callback_query(F.data == "onboarding_info")
@@ -212,7 +213,7 @@ async def handle_passport_photo(message: types.Message, state: FSMContext):
                 await state.clear()
             break
     except Exception as e:
-        logging.error(f"Error in handle_passport_photo: {e}")
+        logger.error(f"Error in handle_passport_photo: {e}")
         sentry_sdk.capture_exception(e)
         await message.answer(f"⚠️ Error: {e!s}")
 
@@ -222,10 +223,8 @@ async def handle_passport_photo(message: types.Message, state: FSMContext):
 
 @dp.message(Command("my_network", "tree", "stats"))
 async def cmd_my_network(message: types.Message):
-    from app.services.partner_service import (
-        get_partner_by_telegram_id,
-        get_referral_tree_stats,
-    )
+    from app.services.analytics_service import get_referral_tree_stats
+    from app.services.partner_service import get_partner_by_telegram_id
     try:
         async for session in get_session():
             partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
@@ -253,7 +252,7 @@ async def cmd_my_network(message: types.Message):
             await message.answer("\n".join(lines), parse_mode="Markdown")
             break
     except Exception as e:
-        logging.error(f"Error in cmd_my_network: {e}")
+        logger.error(f"Error in cmd_my_network: {e}")
         sentry_sdk.capture_exception(e)
         lang = "en" # Fallback
         if message.from_user.language_code == "ru": lang = "ru"
@@ -292,7 +291,7 @@ async def inline_handler(inline_query: types.InlineQuery):
 
         caption = get_msg(lang, "viral_share_caption", referral_link=ref_link)
 
-        logging.info(f"📤 Inline query: {query_code}")
+        logger.info(f"📤 Inline query: {query_code}")
 
         # Use random ID suffix for stability during testing
         rand_id = str(1000 + secrets.randbelow(9000))
@@ -329,7 +328,7 @@ async def inline_handler(inline_query: types.InlineQuery):
         await inline_query.answer(results, is_personal=True, cache_time=0)
 
     except Exception as e:
-        logging.error(f"❌ Inline handler error: {e}")
+        logger.error(f"❌ Inline handler error: {e}")
         with contextlib.suppress(Exception):
             await inline_query.answer([], is_personal=True, cache_time=0)
 
@@ -476,7 +475,7 @@ async def handle_buy_pro(message: types.Message):
             )
             break
     except Exception as e:
-        logging.error(f"Error in handle_buy_pro: {e}")
+        logger.error(f"Error in handle_buy_pro: {e}")
         sentry_sdk.capture_exception(e)
         lang = "en" # fallback
         if message.from_user.language_code == "ru": lang = "ru"
@@ -541,7 +540,7 @@ async def handle_tx_hash(message: types.Message):
                 )
             break
     except Exception as e:
-        logging.error(f"Error in handle_tx_hash: {e}")
+        logger.error(f"Error in handle_tx_hash: {e}")
         sentry_sdk.capture_exception(e)
         await wait_msg.edit_text(get_msg(lang, "verification_error"))
 
@@ -582,7 +581,7 @@ async def handle_support_chat(message: types.Message):
                 # Clear Redis cache
                 from app.services.rate_limit_service import rate_limit_service
                 await rate_limit_service.unmark_user_blocked(int(user_id))
-                logging.info(f"🔓 Resumed notifications for partner {partner.id} via support chat")
+                logger.info(f"🔓 Resumed notifications for partner {partner.id} via support chat")
             user_metadata = {
                 "first_name": message.from_user.first_name,
                 "last_name": message.from_user.last_name,
@@ -607,7 +606,7 @@ async def handle_support_chat(message: types.Message):
                 await message.answer(response, parse_mode="Markdown")
             break
     except Exception as e:
-        logging.error(f"❌ Error in support chat handler: {e}")
+        logger.error(f"❌ Error in support chat handler: {e}")
         sentry_sdk.capture_exception(e)
         lang = "en"
         if message.from_user.language_code == "ru": lang = "ru"
@@ -661,17 +660,17 @@ async def handle_channel_post(message: types.Message):
                 session.add(post)
                 await session.commit()
                 await session.refresh(post)
-                logging.info(f"📈 Started tracking new post {message.message_id} in {channel_id} (Partner: {partner.id})")
+                logger.info(f"📈 Started tracking new post {message.message_id} in {channel_id} (Partner: {partner.id})")
             
             # Trigger immediate metric scrape
             # This ensures even a "just posted" entry has a baseline (usually 0, but good for tracking)
             await viral_analytics.refresh_post_metrics(post.id, session)
             break
     except Exception as e:
-        logging.error(f"❌ Error tracking channel post in {channel_id}: {e}")
+        logger.error(f"❌ Error tracking channel post in {channel_id}: {e}")
 
 async def main():
-    logging.info("Starting bot...")
+    logger.info("Starting bot...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":

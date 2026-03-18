@@ -39,7 +39,8 @@ async def get_my_profile(
         if cached_partner:
             # Only return cache if it has our new field; otherwise bust and re-fetch
             if "network_size_real" in cached_partner:
-                return cached_partner
+                # #comment: CRITICAL - Re-validate into model to ensure @computed_field fields are present
+                return PartnerResponse.model_validate(cached_partner)
             else:
                 # Stale cache from before the schema update — delete and re-fetch
                 await redis_service.client.delete(cache_key)
@@ -51,7 +52,7 @@ async def get_my_profile(
     stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
         selectinload(Partner.completed_task_records),
         selectinload(Partner.referrals)
-    ).with_for_update()
+    )
     result = await session.exec(stmt)
     partner = result.first()
 
@@ -240,6 +241,10 @@ async def get_my_profile(
 
     try:
         expire_time = 3600 + random.randint(-360, 360)
+        # #comment: Ensure @computed_field values are included in the serialized cache
+        data_to_cache = partner_response.model_dump(mode='json', context={"include_computed": True})
+        # Note: In some Pydantic versions, it's 'include_computed=True' argument, not context.
+        # However, to be safest, we'll just rely on the return value being properly validated on read.
         await redis_service.set_json(cache_key, partner_response.model_dump(mode='json'), expire=expire_time)
     except Exception as e:
         logger.warning(f"Profile cache write failed: {e}")

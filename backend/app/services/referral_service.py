@@ -95,14 +95,9 @@ async def _get_ancestor_map(session: AsyncSession, partner: Partner) -> dict[int
     lineage_ids = [int(x) for x in partner.path.split('.')] if partner.path else []
     if partner.referrer_id and partner.referrer_id not in lineage_ids:
         lineage_ids.append(partner.referrer_id)
-    lineage_ids_list: List[int] = list(dict.fromkeys(lineage_ids))
-    if len(lineage_ids_list) > 20:
-        lineage_ids_list = lineage_ids_list[-20:]
-    lineage_ids = lineage_ids_list
-
-
+    lineage_ids = sorted(list(set(lineage_ids)))
     
-    result = await session.exec(select(Partner).where(Partner.id.in_(list(lineage_ids))).with_for_update())
+    result = await session.exec(select(Partner).where(Partner.id.in_(lineage_ids)).with_for_update())
 
     return {p.id: p for p in result.all()}
 
@@ -336,10 +331,11 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     lineage_ids = list(dict.fromkeys(lineage_ids))
     
     # Fetch all ancestors in bulk with pessimistic locking
-    # #comment Phase 3 Reliability: with_for_update() prevents race conditions
-    # when multiple referrals in the same lineage upgrade simultaneously.
-    # This ensures level-up checks are based on the latest locked XP value.
-    statement = select(Partner).where(Partner.id.in_(lineage_ids)).with_for_update()
+    # #comment Phase 3 Reliability: with_for_update() prevents race conditions.
+    # We SORT the IDs to enforce a global locking order and prevent deadlocks
+    # between simultaneous upgrades in the same lineage.
+    sorted_lineage_ids = sorted(lineage_ids)
+    statement = select(Partner).where(Partner.id.in_(sorted_lineage_ids)).with_for_update()
     result = await session.exec(statement)
     ancestor_map = {p.id: p for p in result.all()}
 
