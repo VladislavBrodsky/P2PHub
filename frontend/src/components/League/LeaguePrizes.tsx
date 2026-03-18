@@ -18,16 +18,16 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
     wooden: [
         {
             rank: '🥇 1–3',
-            prize: 'Pintopay Virtual Card',
-            sublabel: 'Free card',
+            prize: 'league.prizes.virtual_card',
+            sublabel: 'league.prizes.free_card',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
         },
         {
             rank: '4–10',
-            prize: 'PRO Plan',
-            sublabel: '1 month free',
+            prize: 'league.prizes.pro_plan',
+            sublabel: 'league.prizes.month_free',
             color: 'from-indigo-400 to-violet-500',
             glow: 'rgba(129,140,248,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -36,16 +36,16 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
     silver: [
         {
             rank: '🥇 1–3',
-            prize: 'Virtual + Physical Card',
-            sublabel: '2 Pintopay cards',
+            prize: 'league.prizes.physical_virtual',
+            sublabel: 'league.prizes.two_cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
         },
         {
             rank: '4–10',
-            prize: 'PRO+ Plan',
-            sublabel: '1 month free',
+            prize: 'league.prizes.pro_plus_plan',
+            sublabel: 'league.prizes.month_free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -54,16 +54,16 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
     metal: [
         {
             rank: '🥇 1–3',
-            prize: 'Virtual + Physical Card',
-            sublabel: '2 Pintopay cards',
+            prize: 'league.prizes.physical_virtual',
+            sublabel: 'league.prizes.two_cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
         },
         {
             rank: '4–10',
-            prize: 'PRO+ Plan',
-            sublabel: '1 month free',
+            prize: 'league.prizes.pro_plus_plan',
+            sublabel: 'league.prizes.month_free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -72,16 +72,16 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
     gold: [
         {
             rank: '🥇 1–3',
-            prize: 'Virtual + Physical Card',
-            sublabel: '2 Pintopay cards',
+            prize: 'league.prizes.physical_virtual',
+            sublabel: 'league.prizes.two_cards',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.4)',
             icon: <CreditCard size={15} className="text-white" />,
         },
         {
             rank: '4–10',
-            prize: 'PRO+ Plan',
-            sublabel: '1 month free',
+            prize: 'league.prizes.pro_plus_plan',
+            sublabel: 'league.prizes.month_free',
             color: 'from-violet-500 to-fuchsia-500',
             glow: 'rgba(167,139,250,0.3)',
             icon: <Gift size={15} className="text-white" />,
@@ -90,32 +90,32 @@ const LEAGUE_PRIZES: Record<LeagueTier, PrizeEntry[]> = {
     platinum: [
         {
             rank: '🥇 #1',
-            prize: 'MacBook Pro',
-            sublabel: 'Apple MacBook Pro M4',
+            prize: 'league.prizes.macbook',
+            sublabel: 'league.prizes.macbook_sub',
             color: 'from-amber-400 to-yellow-500',
             glow: 'rgba(251,191,36,0.5)',
             icon: <Laptop size={15} className="text-white" />,
         },
         {
             rank: '🥈 #2',
-            prize: 'DJI Mini 5 Pro',
-            sublabel: 'Professional drone',
+            prize: 'league.prizes.dji',
+            sublabel: 'league.prizes.dji_sub',
             color: 'from-slate-300 to-slate-400',
             glow: 'rgba(148,163,184,0.4)',
             icon: <Cpu size={15} className="text-white" />,
         },
         {
             rank: '🥉 #3',
-            prize: 'iPhone 17 Pro',
-            sublabel: 'Apple iPhone 17 Pro',
+            prize: 'league.prizes.iphone',
+            sublabel: 'league.prizes.iphone_sub',
             color: 'from-orange-400 to-amber-500',
             glow: 'rgba(251,146,60,0.4)',
             icon: <Smartphone size={15} className="text-white" />,
         },
         {
             rank: '4–10',
-            prize: '$300 USDT each',
-            sublabel: 'Cash reward',
+            prize: 'league.prizes.usdt_amount_each',
+            sublabel: 'league.prizes.cash',
             color: 'from-emerald-400 to-teal-500',
             glow: 'rgba(52,211,153,0.3)',
             icon: <USDTLogo className="w-4 h-4" />,
@@ -177,7 +177,7 @@ export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league, showHeader =
                                 {t('league.rank', 'Rank')} {entry.rank}
                             </p>
                             {entry.sublabel && (
-                                <p className="text-label text-slate-400 dark:text-slate-500">{entry.sublabel}</p>
+                                <p className="text-label text-slate-400 dark:text-slate-500">{t(entry.sublabel)}</p>
                             )}
                         </div>
 
@@ -186,7 +186,7 @@ export const LeaguePrizes: React.FC<LeaguePrizesProps> = ({ league, showHeader =
                             className={`shrink-0 flex items-center gap-1 rounded-xl bg-linear-to-r ${entry.color} px-2.5 py-1.5 shadow-sm`}
                             style={{ boxShadow: `0 2px 10px -3px ${entry.glow}` }}
                         >
-                            <span className="text-label font-bold text-white whitespace-nowrap">{entry.prize}</span>
+                            <span className="text-label font-bold text-white whitespace-nowrap">{t(entry.prize)}</span>
                         </div>
                     </motion.div>
                 ))}
