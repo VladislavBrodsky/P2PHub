@@ -112,7 +112,8 @@
   --text-body: 1rem;       /* 16px */
   --text-button: 1rem;     /* 16px */
   --text-caption: 0.75rem;  /* 12px */
-  --text-label: 0.6875rem; /* 11px */
+  --text-label: 0.75rem;   /* 12px - Increased from 11px for iOS mobile zoom prevention & readability */
+  --text-input-mobile: 1rem; /* 16px - Minimum to prevent iOS auto-zoom */
 
   --font-sans: "Onest",
     "Inter",

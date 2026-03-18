@@ -44,6 +44,10 @@
   "league": {
     "competing_top10": "БОРЬБА ЗА НАГРАДЫ ТОП-10",
     "compete_next": "Сражайтесь за ТОП в следующем месяце!",
+    "prizes_title": "Награды месяца",
+    "top_10": "ТОП 10",
+    "rank": "Ранк",
+    "prizes_reset_note": "Обновление 1-го числа каждого месяца",
     "prizes_reset": "Рейтинг обновляется 1-го числа каждого месяца",
     "monthly_winners": "Победители месяца",
     "winners_subtitle": "Топ 10 партнеров получают награды каждый месяц",
@@ -93,7 +97,15 @@
       "iphone": "iPhone 17 Pro",
       "iphone_sub": "Apple iPhone 17 Pro",
       "cash": "Денежная награда",
-      "usdt_amount": "$300 USDT"
+      "usdt_amount": "$300 USDT",
+      "usdt_amount_each": "$300 USDT каждому",
+      "virtual_card": "Виртуальная Карта",
+      "free_card": "Бесплатная карта",
+      "pro_plan": "PRO План",
+      "month_free": "1 месяц бесплатно",
+      "physical_virtual": "Виртуальная + Физическая",
+      "two_cards": "2 карты Pintopay",
+      "pro_plus_plan": "PRO+ План"
     }
   },
   "leaderboard": {
@@ -261,8 +273,8 @@
     }
   },
   "referral": {
-    "title": "Рост и Уровни",
-    "subtitle": "Отслеживайте свой прогресс и развивайте сеть",
+    "title": "Центр Роста",
+    "subtitle": "",
     "members": "Участники",
     "xp_progress": "Прогресс XP",
     "total_xp": "Всего XP",

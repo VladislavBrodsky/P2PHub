@@ -100,7 +100,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
             exit={{ opacity: 0, scale: 0.98 }}
             className="space-y-6"
         >
-            <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
+            <div className="pro-card-extreme bg-white dark:bg-slate-950 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
                 <div className="absolute inset-0 bg-linear-to-br from-purple-500/10 via-transparent to-purple-500/20 pointer-events-none" />
                 {/* #comment: Background glow removed for Unified Background Continuity */}
 
@@ -252,7 +252,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                                 value={personalLink}
                                                 onChange={(e) => setPersonalLink(e.target.value)}
                                                 placeholder="https://t.me/pintopay_probot?start=..."
-                                                className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-label font-medium text-slate-900 dark:text-white"
+                                                className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-base sm:text-label font-medium text-slate-900 dark:text-white"
                                             />
                                             <button
                                                 onClick={() => handleUpdatePersonalLink(personalLink)}
@@ -346,7 +346,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
         <motion.div
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="relative overflow-hidden rounded-xl bg-white dark:bg-slate-900 shadow-3xl border border-slate-200 dark:border-white/10"
+            className="relative overflow-hidden rounded-xl bg-white dark:bg-slate-950 shadow-3xl border border-slate-200 dark:border-white/10"
         >
             <div className="circuit-decor opacity-10" />
             <div className="relative p-4 sm:p-6 text-center space-y-4">
@@ -626,7 +626,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                     </button>
                     <button
                         onClick={() => { impact('light'); setShowShareModal(true); }}
-                        className="h-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl font-bold text-label uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
+                        className="h-10 bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-xl font-bold text-label uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
                     >
                         {t('pro_dashboard.studio.share_btn')} <Share size={13} />
                     </button>
@@ -686,7 +686,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-xl overflow-y-auto"
+            className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto"
             onClick={() => setShowPublishModal(false)}
         >
             <motion.div
@@ -694,7 +694,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                 animate={{ scale: 1, y: 0, opacity: 1 }}
                 exit={{ scale: 0.95, y: 20, opacity: 0 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white dark:bg-slate-900 w-full max-w-[340px] rounded-xl p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
+                className="bg-white dark:bg-slate-950 w-full max-w-[340px] rounded-xl p-5 space-y-3 relative border border-slate-200 dark:border-white/10 shadow-3xl mx-4 my-auto"
             >
                 <button
                     onClick={() => setShowPublishModal(false)}

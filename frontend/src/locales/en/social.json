@@ -44,6 +44,10 @@
   "league": {
     "competing_top10": "COMPETING FOR TOP 10 REWARDS",
     "compete_next": "Compete for a top spot next month!",
+    "prizes_title": "Monthly Prizes",
+    "top_10": "TOP 10",
+    "rank": "Rank",
+    "prizes_reset_note": "Updates on the 1st of each month",
     "prizes_reset": "The rating is updated on the 1st of each month",
     "monthly_winners": "Monthly Winners",
     "winners_subtitle": "Top 10 partners receive monthly rewards",
@@ -93,7 +97,15 @@
       "iphone": "iPhone 17 Pro",
       "iphone_sub": "Apple iPhone 17 Pro",
       "cash": "Cash reward",
-      "usdt_amount": "$300 USDT"
+      "usdt_amount": "$300 USDT",
+      "usdt_amount_each": "$300 USDT each",
+      "virtual_card": "Virtual Card",
+      "free_card": "Free card",
+      "pro_plan": "PRO Plan",
+      "month_free": "1 month free",
+      "physical_virtual": "Virtual + Physical",
+      "two_cards": "2 Pintopay cards",
+      "pro_plus_plan": "PRO+ Plan"
     }
   },
   "leaderboard": {
@@ -261,8 +273,8 @@
     }
   },
   "referral": {
-    "title": "Growth & Levels",
-    "subtitle": "Track your progress and grow your network",
+    "title": "Growth Hub",
+    "subtitle": "",
     "members": "Partners",
     "xp_progress": "XP Progress",
     "total_xp": "Total XP",

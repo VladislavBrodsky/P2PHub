@@ -406,7 +406,8 @@ async def complete_academy_stage(
         "status": "success", 
         "academy_score": partner.academy_score, 
         "xp_reward": xp_reward,
-        "new_xp": partner.xp
+        "new_xp": partner.xp,
+        "completed_stages": completed
     }
 
 @router.post("/setup")

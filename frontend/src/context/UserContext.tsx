@@ -92,12 +92,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const completeStage = useCallback(async (id: number | string) => {
         try {
-            const response = await apiClient.post(`/api/partner/academy/stages/${id}/complete`);
-            updateUser?.(response.data);
+            // #comment: FIX - Use the correct mission completion endpoint from pro.router
+            const response = await apiClient.post(`/api/pro/academy/complete/${id}`);
+            
+            // #comment: Update local state with the rewards returned from server
+            if (response.data.status === 'success' || response.data.status === 'already_completed') {
+                updateUser({
+                    xp: response.data.new_xp,
+                    // Optimistically add to completed_stages if not there
+                    completed_stages: Array.from(new Set([...(user?.completed_stages ?? []), id]))
+                });
+            }
         } catch (error) {
             console.error('Failed to persist stage completion:', error);
+            throw error; // Re-throw so callers can handle UI feedback
         }
-    }, [updateUser]);
+    }, [updateUser, user?.completed_stages]);
 
     const refreshUser = useCallback(async (force = false) => {
         const now = Date.now();

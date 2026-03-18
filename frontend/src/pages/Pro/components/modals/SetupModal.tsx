@@ -171,7 +171,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                     >
                         {/* Header Section */}
-                        <div className="px-6 py-5 sm:px-8 sm:py-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20 scanning-glow">
+                        <div className="px-6 pt-[calc(1.25rem+env(safe-area-inset-top,0px))] pb-5 sm:px-8 sm:py-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20 scanning-glow">
                             <div className="circuit-decor" />
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 pulse-ring-indigo">
@@ -280,7 +280,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                         nch[0] = e.target.value;
                                                         setTgChannels(nch);
                                                     }}
-                                                    className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                    className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                     placeholder="@your_channel_username"
                                                 />
                                             </div>
@@ -290,7 +290,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     type="text"
                                                     value={personalLink}
                                                     onChange={(e) => setPersonalLink(e.target.value)}
-                                                    className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
+                                                    className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-sky-400 focus:ring-2 focus:ring-sky-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-white/20"
                                                     placeholder="https://t.me/pintopaybot?start=..."
                                                 />
                                                 <p className="text-label text-slate-400 leading-relaxed px-0.5">
@@ -328,7 +328,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             type={field.type || 'text'}
                                                             value={field.value}
                                                             onChange={(e) => field.setter(e.target.value)}
-                                                            className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                            className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                             placeholder={field.placeholder}
                                                         />
                                                     </div>
@@ -474,7 +474,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                                 setTgChannels(nch);
                                                                             }}
                                                                             placeholder="@channel_username"
-                                                                            className={`w-full h-11 bg-white dark:bg-black/20 border rounded-xl pl-12 pr-24 text-label font-mono outline-none transition-all dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10 ${testSt === 'active' ? 'border-emerald-500/50 ring-2 ring-emerald-500/5' : 'border-slate-200 dark:border-white/10 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5'}`}
+                                                                            className={`w-full h-11 bg-white dark:bg-black/20 border rounded-xl pl-12 pr-24 text-base sm:text-label font-mono outline-none transition-all dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10 ${testSt === 'active' ? 'border-emerald-500/50 ring-2 ring-emerald-500/5' : 'border-slate-200 dark:border-white/10 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5'}`}
                                                                         />
                                                                         <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                                                                             {val && (
@@ -507,7 +507,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                 type="text"
                                                                 value={personalLink}
                                                                 onChange={(e) => setPersonalLink(e.target.value)}
-                                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10"
+                                                                className="w-full h-11 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/5 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-200 dark:placeholder:text-white/10"
                                                                 placeholder="https://t.me/pintopay_probot?start=..."
                                                             />
                                                             <p className="text-[10px] sm:text-label text-slate-400 leading-relaxed px-0.5 italic">
@@ -541,7 +541,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                     type={field.type || 'text'}
                                                                     value={field.value}
                                                                     onChange={(e) => field.setter(e.target.value)}
-                                                                    className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                                    className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                                     placeholder={field.placeholder}
                                                                 />
                                                             </div>
