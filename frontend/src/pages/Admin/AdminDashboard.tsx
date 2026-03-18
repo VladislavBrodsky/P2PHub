@@ -118,11 +118,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = React.memo(({
                 <div className="flex items-center gap-4 z-10 w-full md:w-auto justify-center md:justify-end">
                     <div className="flex items-center gap-2.5 px-4 py-2 bg-black/5 dark:bg-black/20 rounded-2xl border border-black/5 dark:border-white/5 backdrop-blur-md">
                         <span className="relative flex h-3 w-3">
-                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${stats?.events.audit?.is_healthy ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
-                            <span className={`relative inline-flex rounded-full h-3 w-3 ${stats?.events.audit?.is_healthy ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+                            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${stats?.events?.audit?.is_healthy ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+                            <span className={`relative inline-flex rounded-full h-3 w-3 ${stats?.events?.audit?.is_healthy ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
                         </span>
                         <span className="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                            {stats?.events.audit?.is_healthy ? t('admin_portal.system_optimal') : t('admin_portal.attention_required')}
+                            {stats?.events?.audit?.is_healthy ? t('admin_portal.system_optimal') : t('admin_portal.attention_required')}
                         </span>
                     </div>
 

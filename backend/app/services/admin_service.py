@@ -96,12 +96,16 @@ class AdminService:
                     "daily_revenue": daily_revenue,
                     "recent_sales": recent_sales,
                     "performance": {
-                        "avg_manual_approval_min": round(float(avg_approval_min), 1),
+                        "avg_manual_approval_min": float(f"{float(avg_approval_min):.1f}"),
                         "pro_slots_actual": pro_lifetime_count,
                         "pro_slots_display": int(setting_sold.value) if setting_sold else current_effective_sold
                     },
                     "events": {**totals, "audit": audit_summary},
                     "kpis": {**self._calculate_kpis(totals, financials["total_revenue"]), **viral_metrics},
+                    "partners": {
+                        "avg_xp": await self._calculate_avg_xp(session),
+                        "growth_24h": growth.get("24h", {}).get("count", 0)
+                    },
                     "financials": financials,
                     "tasks": task_breakdown,
                     "top_partners": await self.get_top_partners(limit=10),
@@ -124,6 +128,7 @@ class AdminService:
                 # If no cache exists, raise an HTTP error so the frontend knows to retry later
                 from fastapi import HTTPException
                 raise HTTPException(status_code=503, detail="Analytics database is currently overloaded. Please try again in a few minutes.")
+        return {}
 
     async def get_public_kpis(self) -> dict[str, Any]:
         """
@@ -173,7 +178,7 @@ class AdminService:
                     
                     for currency, amount in rows:
                         if currency == "TON":
-                            total_revenue += (amount or 0.0) * ton_price
+                            total_revenue += float(amount or 0.0) * float(ton_price)
                         else:
                             total_revenue += (amount or 0.0)
                 except Exception as e:
@@ -186,7 +191,7 @@ class AdminService:
 
             stats = {
                 "total_partners": total_partners,
-                "volume_usdt": round(total_revenue, 1),
+                "volume_usdt": float(f"{total_revenue:.1f}"),
                 "countries": dynamic_countries,
                 "updated_at": datetime.now(UTC).isoformat()
             }
@@ -198,6 +203,7 @@ class AdminService:
                 logger.warning(f"KPI cache write failed: {e}")
 
             return stats
+        return {}
 
     async def _get_cached_stats(self, session) -> dict | None:
         import json
@@ -252,7 +258,7 @@ class AdminService:
         c24, p24, c7, p7, c30, p30, c90, p90 = counts
         
         def calc_pct(c, p):
-            return round(((c - p) / p * 100), 1) if p > 0 else 0.0
+            return float(f"{((c - p) / p * 100):.1f}") if p > 0 else 0.0
 
         return {
             "24h": {"count": c24, "previous": p24, "percent_change": calc_pct(c24, p24)},
@@ -264,7 +270,7 @@ class AdminService:
     async def _calculate_general_totals(self, session, now: datetime) -> dict:
         total_partners = (await session.exec(select(func.count(Partner.id)).where(Partner.is_test.is_(False)))).one() or 0
         total_pro = (await session.exec(select(func.count(Partner.id)).where(Partner.is_pro, Partner.is_test.is_(False)))).one() or 0
-        total_tasks = (await session.exec(select(func.count(PartnerTask.id)).join(Partner).where(Partner.is_test.is_(False)))).one() or 0
+        total_tasks = (await session.exec(select(func.count(PartnerTask.id)).join(Partner, Partner.id == PartnerTask.partner_id).where(Partner.is_test.is_(False)))).one() or 0
         
         active_24h = (await session.exec(select(func.count(Partner.id)).where(
             Partner.is_test.is_(False),
@@ -293,7 +299,7 @@ class AdminService:
 
         # #comment: Count active payment sessions (pending in last 24h)
         # This helps admins see user interest even if no manual submissions exist.
-        pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).join(Partner).where(
+        pending_payments = (await session.exec(select(func.count(PartnerTransaction.id)).join(Partner, Partner.id == PartnerTransaction.partner_id).where(
             Partner.is_test.is_(False),
             PartnerTransaction.status == "pending",
             PartnerTransaction.created_at >= now - timedelta(hours=24)
@@ -348,23 +354,23 @@ class AdminService:
         breakdown, total_comm = [], 0.0
         for lvl in range(1, 21):
             amt = comm_map.get(lvl, 0.0)
-            breakdown.append({"level": lvl, "amount": round(amt, 2)})
+            breakdown.append({"level": lvl, "amount": float(f"{amt:.2f}")})
             total_comm += amt
 
         net_profit = total_revenue - total_comm
         
         # Theoretical target sum based on config (should be 56%)
-        theoretical_payout = round(sum(settings.COMMISSION_MAP_GROWTH_STRATEGY.values()) * 100, 1)
+        theoretical_payout = float(f"{sum(settings.COMMISSION_MAP_GROWTH_STRATEGY.values()) * 100:.1f}")
 
         return {
-            "total_revenue": round(total_revenue, 2), 
-            "total_revenue_ton": round(rev_ton_crypto, 2),
-            "current_ton_value": round(current_ton_value, 2),
-            "total_revenue_usdt": round(rev_usdt, 2), 
-            "total_commissions": round(total_comm, 2),
-            "net_profit": round(net_profit, 2), 
-            "gross_margin": round((net_profit / total_revenue * 100), 1) if total_revenue > 0 else 0,
-            "actual_payout_ratio": round((total_comm / total_revenue * 100), 1) if total_revenue > 0 else 0,
+            "total_revenue": float(f"{total_revenue:.2f}"), 
+            "total_revenue_ton": float(f"{rev_ton_crypto:.2f}"),
+            "current_ton_value": float(f"{current_ton_value:.2f}"),
+            "total_revenue_usdt": float(f"{rev_usdt:.2f}"), 
+            "total_commissions": float(f"{total_comm:.2f}"),
+            "net_profit": float(f"{net_profit:.2f}"), 
+            "gross_margin": float(f"{(net_profit / total_revenue * 100):.1f}") if total_revenue > 0 else 0,
+            "actual_payout_ratio": float(f"{(total_comm / total_revenue * 100):.1f}") if total_revenue > 0 else 0,
             "theoretical_payout_ratio": theoretical_payout,
             "commissions_breakdown": breakdown
         }
@@ -429,15 +435,15 @@ class AdminService:
         """
         # K-Factor = (Total Referrals) / (Total Partners)
         referring_partners = (await session.exec(select(func.count(func.distinct(Partner.referrer_id))).where(Partner.is_test.is_(False)))).one() or 1
-        k_factor = round(total_partners / referring_partners, 2) if referring_partners > 0 else 0
+        k_factor = float(f"{total_partners / referring_partners:.2f}") if referring_partners > 0 else 0
         
         # Network Density (Phase 4): Average generation depth across entire network
         avg_depth = (await session.exec(select(func.avg(Partner.depth)).where(Partner.is_test.is_(False)))).one() or 1.0
         
         return {
             "k_factor": k_factor,
-            "avg_depth": round(float(avg_depth), 2),
-            "ref_participation": round((referring_partners / total_partners * 100), 1) if total_partners > 0 else 0
+            "avg_depth": float(f"{float(avg_depth):.2f}"),
+            "ref_participation": float(f"{(referring_partners / total_partners * 100):.1f}") if total_partners > 0 else 0
         }
 
     async def _perform_system_audit(self, session) -> dict:
@@ -473,12 +479,12 @@ class AdminService:
         
         def calc_ret(key):
             val = totals.get(key, 0)
-            return round((val / tp * 100) if tp > 0 else 0, 1)
+            return float(f"{(val / tp * 100) if tp > 0 else 0:.1f}")
 
         return {
-            "conversion_rate": round((tpro / tp * 100) if tp > 0 else 0, 2),
-            "arpu": round((total_revenue / tp) if tp > 0 else 0, 2),
-            "engagement_rate": round((totals.get("active_24h", 0) / tp * 100) if tp > 0 else 0, 1),
+            "conversion_rate": float(f"{(tpro / tp * 100) if tp > 0 else 0:.2f}"),
+            "arpu": float(f"{(total_revenue / tp) if tp > 0 else 0:.2f}"),
+            "engagement_rate": float(f"{(totals.get("active_24h":.0f}") / tp * 100) if tp > 0 else 0, 1),
             "retention_7d": calc_ret("active_7d"),
             "retention_30d": calc_ret("active_30d"),
             "retention_90d": calc_ret("active_90d"),
@@ -521,9 +527,10 @@ class AdminService:
                 top_partners.append({
                     "username": username,
                     "telegram_id": tg_id,
-                    "earnings": round(earnings or 0.0, 2)
+                    "earnings": float(f"{earnings or 0.0:.2f}")
                 })
             return top_partners
+        return []
 
     async def search_partners(self, query: str) -> list[dict[str, Any]]:
         """
@@ -549,6 +556,7 @@ class AdminService:
                 "referral_count": p.referral_count,
                 "level": p.level
             } for p in partners]
+        return []
 
     async def get_global_network_stats(self) -> dict[str, int]:
         """
@@ -568,6 +576,7 @@ class AdminService:
             for depth, count in result.all():
                 stats[str(depth)] = count
             return stats
+        return {}
 
     async def get_global_network_members(self, depth: int) -> list[dict[str, Any]]:
         """
@@ -595,6 +604,7 @@ class AdminService:
                     "is_pro": p.is_pro
                 } for p in partners
             ]
+        return []
 
     async def recalculate_all_referral_counts(self) -> dict[str, Any]:
         """
@@ -615,7 +625,7 @@ class AdminService:
             )
             result = await session.exec(stmt)
             partner = result.first()
-            if not partner: return None
+            if not partner: return {}
             
             return {
                 "id": partner.id,
@@ -643,6 +653,7 @@ class AdminService:
                     } for t in partner.transactions
                 ]
             }
+        return {}
 
     async def update_partner_admin(self, partner_id: int, updates: dict[str, Any]):
         """
@@ -739,6 +750,7 @@ class AdminService:
                     "partner_photo": partner.photo_url if partner else None
                 })
             return feed
+        return []
 
     async def clear_system_cache(self) -> dict[str, Any]:
         """Flushes key system caches."""
@@ -754,5 +766,11 @@ class AdminService:
             await redis_service.client.delete(key)
             
         return {"status": "success", "message": "Caches cleared"}
+
+    async def _calculate_avg_xp(self, session) -> float:
+        """Calculates average XP of all non-test partners."""
+        stmt = select(func.avg(Partner.xp)).where(Partner.is_test.is_(False))
+        result = await session.exec(stmt)
+        return float(f"{float(result.one() or 0.0):.2f}")
 
 admin_service = AdminService()
