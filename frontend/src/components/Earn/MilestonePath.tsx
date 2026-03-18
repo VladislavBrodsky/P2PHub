@@ -174,9 +174,9 @@ export const MilestonePath = memo(() => {
             {groupedChapters.slice(0, visibleChapters).map((chapter, idx) => (
                 <div key={chapter.title} className="relative space-y-6">
                     {/* Chapter Header - Re-engineered for Premium feel */}
-                    <div className="flex items-center gap-4 mb-4 px-1 group/header">
+                    <div className="flex flex-col items-center gap-3 mb-8 px-1 group/header text-center">
                         <div className={`
-                            relative p-3 rounded-2xl border transition-all duration-500
+                            relative p-3 rounded-2xl border transition-all duration-500 mb-1
                             ${chapter.isPartiallyComplete || chapter.isUnlocked
                                 ? 'bg-indigo-500 text-white border-indigo-400 shadow-[0_10px_20px_-5px_rgba(79,70,229,0.4)] rotate-0 group-hover/header:rotate-6'
                                 : 'bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400'}
@@ -186,11 +186,11 @@ export const MilestonePath = memo(() => {
                                 <div className="absolute -inset-1 bg-indigo-500/20 blur-md rounded-full -z-10 animate-pulse-subtle" />
                             )}
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col items-center">
                             <h4 className={`text-caption font-bold uppercase tracking-tight ${chapter.isPartiallyComplete || chapter.isUnlocked ? 'text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-600'}`}>
                                 {t('milestones.part_label', { part: idx + 1 })}: {t(chapter.title)}
                             </h4>
-                            <div className="flex items-center gap-2 mt-0.5">
+                            <div className="flex items-center gap-2 mt-0.5 justify-center">
                                 <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em]">
                                     {t('milestones.progression_phase')}
                                 </span>
@@ -201,7 +201,7 @@ export const MilestonePath = memo(() => {
                         </div>
 
                         {!chapter.isUnlocked && (
-                            <div className="ml-auto p-2 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 shadow-xs">
+                            <div className="p-2 rounded-xl bg-slate-50 dark:bg-black/20 border border-slate-100 dark:border-white/5 shadow-xs">
                                 <Lock className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" />
                             </div>
                         )}
