@@ -1,7 +1,0 @@
-frontend/src/pages/BlogPage.tsx:                                ? (isRussian ? "Оформите карту Pintopay 💳" : "Get your Pintopay Card 💳")
-frontend/src/pages/BlogPage.tsx:                                : (isRussian ? "Апгрейд до PRO Статуса 🚀" : "Upgrade to PRO Status 🚀")
-frontend/src/pages/BlogPage.tsx:                                ? (isRussian ? "Тратьте крипту везде в 180+ странах." : "Spend your crypto everywhere in 180+ countries.")
-frontend/src/pages/BlogPage.tsx:                                : (isRussian ? "Разблокируйте виральные инструменты маркетинга." : "Unlock viral marketing automation tools.")
-frontend/src/pages/BlogPage.tsx:                            ? "В мире, где границы становятся все более осязаемыми, цифровая свобода — это не просто роскошь, а необходимость. Традиционные финансовые системы застряли в прошлом веке, предлагая медленные расчеты и бесконечную бюрократию."
-frontend/src/pages/BlogPage.tsx:                            ? "Мы верим в будущее без посредников. Наша миссия — предоставить каждому партнеру инструменты для достижения истинного суверенитета. С Pintopay вы не просто пользователь, вы — часть глобальной децентрализованной инфраструктуры."
-frontend/src/pages/BlogPage.tsx:                            ? "Эволюция неизбежна. Те, кто адаптируется сегодня, будут лидировать завтра. Начните строить свою империю уже сейчас, используя лучшие финтех-решения на рынке."

@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, UTC, timedelta
 
+from typing import cast
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -109,21 +110,29 @@ async def get_finance_stats(
         temp_month = (temp_month - timedelta(days=1)).replace(day=1)
 
     for e in earnings:
-        iso_month = e.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        # Explicitly cast to Earning to help linter
+        e_typed = cast(Earning, e)
+        iso_month = e_typed.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
         for m in monthly_history:
             if m["timestamp"] == iso_month:
-                if isinstance(m.get(e.currency), dict): m[e.currency]["income"] += e.amount
+                currency_data = m.get(e_typed.currency)
+                if isinstance(currency_data, dict):
+                    currency_data["income"] += e_typed.amount
                 break
                 
     for t in transactions:
         if t.status != "completed": continue
         if t.network and t.network.upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]: continue
-        iso_month = t.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        
+        # Explicitly cast to PartnerTransaction to help linter
+        t_typed = cast(PartnerTransaction, t)
+        iso_month = t_typed.created_at.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
         for m in monthly_history:
             if m["timestamp"] == iso_month:
-                if isinstance(m.get(t.currency), dict):
-                    amt = t.amount_crypto if (t.currency == "TON" and t.amount_crypto is not None) else t.amount
-                    m[t.currency]["outcome"] += amt
+                currency_data = m.get(t_typed.currency)
+                if isinstance(currency_data, dict):
+                    amt = t_typed.amount_crypto if (t_typed.currency == "TON" and t_typed.amount_crypto is not None) else t_typed.amount
+                    currency_data["outcome"] += amt
                 break
 
     return {

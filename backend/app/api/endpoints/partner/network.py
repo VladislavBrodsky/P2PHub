@@ -381,7 +381,7 @@ async def get_recent_partners(
         await session.commit()
 
     partners_data = {
-        "partners": cast(list, partners_list)[:limit],
+        "partners": partners_list[:limit],
         "last_hour_count": last_hour_count
     }
 
