@@ -219,7 +219,12 @@ async def _fetch_base_cumulative_totals(session, path: str, base_depth: int, sta
 
 def _get_bucket_expr(interval: str) -> str:
     if "sqlite" in settings.DATABASE_URL:
-        return {'hour': "strftime('%Y-%m-%d %H:00:00', created_at)", 'day': "strftime('%Y-%m-%d 00:00:00', created_at)", 'month': "strftime('%Y-%m-01 00:00:00', created_at)"}.get(interval)
+        sqlite_map = {
+            'hour': "strftime('%Y-%m-%d %H:00:00', created_at)",
+            'day': "strftime('%Y-%m-%d 00:00:00', created_at)",
+            'month': "strftime('%Y-%m-01 00:00:00', created_at)"
+        }
+        return sqlite_map.get(interval, sqlite_map['day'])  # Fallback to 'day' to prevent None injection
     return f"date_trunc('{interval}', created_at)"
 
 def _assemble_time_series_response(start: datetime, points: int, interval: str, data_map: dict, totals: dict) -> list[dict]:

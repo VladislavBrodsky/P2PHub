@@ -92,8 +92,8 @@ async def stripe_webhook(
     try:
         success = await stripe_service.handle_webhook(raw_body, stripe_signature, session)
         if success:
-            # Commit the session upgrades
-            await session.commit()
+            # NOTE: upgrade_to_pro() inside handle_webhook already commits the session.
+            # Calling commit() here again would be a double-commit (raises error or no-ops).
             return {"status": "success"}
         else:
             return {"status": "ignored"}

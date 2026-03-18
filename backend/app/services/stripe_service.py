@@ -11,6 +11,15 @@ from app.models.transaction import PartnerTransaction
 
 logger = logging.getLogger(__name__)
 
+# Stripe SDK v5+ moved errors to stripe.* directly; v4 used stripe.error.*
+# This guard makes the code compatible with both versions.
+try:
+    _StripeError = stripe.StripeError
+    _SignatureVerificationError = stripe.SignatureVerificationError
+except AttributeError:
+    _StripeError = stripe.error.StripeError  # type: ignore[attr-defined]
+    _SignatureVerificationError = stripe.error.SignatureVerificationError  # type: ignore[attr-defined]
+
 if settings.STRIPE_API_KEY:
     stripe.api_key = settings.STRIPE_API_KEY
 
@@ -66,7 +75,7 @@ class StripeService:
                 }
             )
             return session.url
-        except stripe.error.StripeError as e:
+        except _StripeError as e:
             logger.error(f"Stripe API error: {e.user_message if hasattr(e, 'user_message') else str(e)}")
             return None
         except Exception as e:
@@ -89,7 +98,7 @@ class StripeService:
         except ValueError as e:
             logger.error(f"Invalid Stripe webhook payload: {e}")
             return False
-        except stripe.error.SignatureVerificationError as e:
+        except _SignatureVerificationError as e:
             logger.error(f"Invalid Stripe webhook signature: {e}")
             return False
 
