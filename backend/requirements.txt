@@ -21,7 +21,7 @@ ruff==0.9.9
 pyright==1.1.396
 pyopenssl==25.0.0
 cryptography==44.0.1
-typing_extensions==4.14.1
+typing-extensions==4.14.1
 uvicorn==0.40.0
 gunicorn==23.0.0
 jinja2==3.1.5
@@ -117,4 +117,4 @@ sqlparse==0.5.3
 tabulate==0.9.0
 tomli==2.2.1
 tqdm==4.67.1
-typing-extensions==4.12.2
+
