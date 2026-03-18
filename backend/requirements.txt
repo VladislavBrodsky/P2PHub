@@ -64,7 +64,6 @@ fastapi-limiter==0.1.6
 fastapi-users==14.0.1
 fastapi-users-db-sqlmodel==0.3.0
 casbin>=1.43.0
-pycasbin==1.30.0
 stripe==11.5.0
 braintree==4.16.0
 paypal-checkout-server-sdk==1.0.1
