@@ -51,8 +51,8 @@ class PartnerResponse(PartnerBase):
     completed_tasks: list[str] = []
     completed_stages: list[int | str] = []
     is_admin: bool = False
-    # #comment: Support for dynamic injection of network size from endpoint
-    _network_size_real: int | None = None
+    # Public field to hold the deep tree network size injected by the endpoint
+    network_size_real: int = 0
 
     model_config: ConfigDict = {"from_attributes": True, "extra": "allow"}
 
@@ -135,12 +135,11 @@ class PartnerResponse(PartnerBase):
     @computed_field
     @property
     def total_network_size(self) -> int:
-        # Check if the private override was set dynamically
-        network_size = getattr(self, "_network_size_real", None)
-        if network_size is not None:
-            return int(network_size)
+        # Use the deep tree network size if it was injected by the endpoint
+        if self.network_size_real > 0:
+            return self.network_size_real
         
-        # Or if it was injected via an __init__ kwargs or model_validate dict during Redis hydration
+        # Or if it was injected via extra fields during Redis hydration
         extra_fields = getattr(self, "model_extra", {}) or {}
         if "total_network_size" in extra_fields:
             return int(extra_fields["total_network_size"])
