@@ -37,7 +37,12 @@ async def get_my_profile(
     try:
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:
-            return cached_partner
+            # Only return cache if it has our new field; otherwise bust and re-fetch
+            if "network_size_real" in cached_partner:
+                return cached_partner
+            else:
+                # Stale cache from before the schema update — delete and re-fetch
+                await redis_service.client.delete(cache_key)
     except Exception as e:
         logger.warning(f"Profile cache read failed: {e}")
 
