@@ -32,21 +32,6 @@
     "timer_text": "PRO price increases in:",
     "spots_left": "Limited spots available at current rate"
   },
-  "comparison": {
-    "title": "Why Upgrade?",
-    "row_income": "Passive Income Reach",
-    "row_tokens": "Viral Studio Tokens",
-    "row_tools": "Growth Tools",
-    "free_income": "3 Generations",
-    "free_tokens": "0",
-    "free_tools": "Basic",
-    "pro_income": "9 Generations",
-    "pro_tokens": "250",
-    "pro_tools": "Advanced",
-    "plus_income": "20 Generations",
-    "plus_tokens": "500",
-    "plus_tools": "Unlimited"
-  },
   "pro_dashboard": {
     "tabs": {
       "studio": "AI Viral Studio",
@@ -124,7 +109,7 @@
         "gathering_data": "GATHERING DATA",
         "confidence": "CONFIDENCE: {{percent}}%",
         "goto_studio": "ACTIVATE STUDIO",
-        "action_btn": "EXECUTE NEXT TOP ACTION",
+        "action_btn": "ВЫПОЛНИТЬ ТОП-ДЕЙСТВИЕ",
         "insufficient_data": "INSUFFICIENT DATA",
         "insufficient_data_desc": "Synthesize {{count}} more posts to calibrate resonance engine."
       },
@@ -361,9 +346,34 @@
       "reading_progress": "READING PROGRESS"
     }
   },
-  "faq": {
-    "title": "FAQ",
-    "items": {
+  "subscription": {
+    "plan_headline": "PRO GROWTH CORE",
+    "plan_headline_plus": "OMNI-SYNC EMPIRE",
+    "plan_desc_pro": "Unlock the foundation of the Viral Studio and start earning across 9 levels of passive income.",
+    "plan_desc_plus": "The ultimate growth engine. Maximum reach, priority AI, and full ecosystem automation.",
+    "comparison": {
+      "title": "Why Upgrade?",
+      "tap_to_explore": "TAP TO EXPLORE",
+      "levels": "Levels",
+      "tokens": "Tokens",
+      "channels": "Channels",
+      "row_income": "Passive Income Reach",
+      "row_tokens": "Viral Studio Tokens",
+      "row_tools": "Growth Tools",
+      "free_income": "3 Generations",
+      "free_tokens": "0",
+      "free_tools": "Basic",
+      "pro_income": "9 Generations",
+      "pro_tokens": "250",
+      "pro_tools": "Advanced",
+      "plus_income": "20 Generations",
+      "plus_tokens": "500",
+      "plus_tools": "Unlimited"
+    },
+    "faq": {
+      "badge": "SUPPORT",
+      "title": "KNOWLEDGE BASE",
+      "desc": "Everything you need to know about PRO status.",
       "q1": "Is this a one-time purchase?",
       "a1": "Yes. Current PRO and PRO+ deals are for lifetime access. No subscriptions, no hidden fees. Once you upgrade, you are a PRO member forever.",
       "q2": "How do I receive commissions?",
@@ -378,17 +388,8 @@
       "a6": "PRO partners consistently grow their networks 5-10x faster using only the Viral Studio. Add the Growth Intelligence tools and OMNI-Sync publishing — and PRO+ partners report 100x faster team scaling compared to free members.",
       "q7": "Can I upgrade from PRO to PRO+ later?",
       "a7": "Yes. You can upgrade at any time from the app. Your current PRO period is credited towards the PRO+ upgrade price. Upgrading sooner means more passive income while the price is still at the current level.",
-      "view_faq_center": "OPEN FULL FAQ CENTER",
-      "badge": "SUPPORT",
-      "title": "KNOWLEDGE BASE",
-      "desc": "Everything you need to know about PRO status."
-    }
-  },
-  "subscription": {
-    "plan_headline": "PRO GROWTH CORE",
-    "plan_headline_plus": "OMNI-SYNC EMPIRE",
-    "plan_desc_pro": "Unlock the foundation of the Viral Studio and start earning across 9 levels of passive income.",
-    "plan_desc_plus": "The ultimate growth engine. Maximum reach, priority AI, and full ecosystem automation.",
+      "view_faq_center": "OPEN FULL FAQ CENTER"
+    },
     "benefits": {
       "badge": "ELITE BENEFITS",
       "title": "CHOOSE YOUR POWER",

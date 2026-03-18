@@ -3,6 +3,8 @@ frontend/public_corrupted/
 frontend/public_deprecated/
 frontend/dist_backup_*/
 frontend/local_npm_cache/
+frontend/.npm-cache-local/
+
 
 # Node
 frontend/node_modules/

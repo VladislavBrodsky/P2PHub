@@ -647,7 +647,7 @@ export default function SubscriptionPage() {
                                 <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
                             </motion.button>
 
-                            <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.02.20 | v1.8.15-ELITE</div>
+                            <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.03.18 | v1.8.16-ELITE</div>
                         </div>
                     </div>
 
