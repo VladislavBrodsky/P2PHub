@@ -54,7 +54,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Bump this version string whenever you want to force-clear all users' cached state.
 // This prevents stale zero-data from persisting in localStorage across deploys.
-const CACHE_KEY = 'p2p_user_cache_v2';
+const CACHE_KEY = 'p2p_user_cache_v3';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
