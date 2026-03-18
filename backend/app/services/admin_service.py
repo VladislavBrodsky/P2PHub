@@ -484,7 +484,7 @@ class AdminService:
         return {
             "conversion_rate": float(f"{(tpro / tp * 100) if tp > 0 else 0:.2f}"),
             "arpu": float(f"{(total_revenue / tp) if tp > 0 else 0:.2f}"),
-            "engagement_rate": float(f"{(totals.get("active_24h":.0f}") / tp * 100) if tp > 0 else 0, 1),
+            "engagement_rate": calc_ret("active_24h"),
             "retention_7d": calc_ret("active_7d"),
             "retention_30d": calc_ret("active_30d"),
             "retention_90d": calc_ret("active_90d"),
