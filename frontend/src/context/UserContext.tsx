@@ -52,10 +52,16 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+// Bump this version string whenever you want to force-clear all users' cached state.
+// This prevents stale zero-data from persisting in localStorage across deploys.
+const CACHE_KEY = 'p2p_user_cache_v2';
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
         try {
-            const saved = localStorage.getItem('p2p_user_cache');
+            // Clear old unversioned cache on first run
+            localStorage.removeItem('p2p_user_cache');
+            const saved = localStorage.getItem(CACHE_KEY);
             if (saved) {
                 const cachedUser = JSON.parse(saved);
                 // Eagerly preload cached profile photo for instant display
@@ -73,7 +79,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             return null;
         } catch (e) {
             console.error('[DEBUG] Corrupted User Cache:', e);
-            localStorage.removeItem('p2p_user_cache');
+            localStorage.removeItem(CACHE_KEY);
             return null;
         }
     });
@@ -83,7 +89,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const updateUser = useCallback((updates: Partial<User>) => {
         setUser(prev => {
             const next = prev ? { ...prev, ...updates } : null;
-            if (next) localStorage.setItem('p2p_user_cache', JSON.stringify(next));
+            if (next) localStorage.setItem(CACHE_KEY, JSON.stringify(next));
             return next;
         });
     }, []);
@@ -161,7 +167,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             setUser(userData);
             updateProgress(100, 'User Verified');
-            localStorage.setItem('p2p_user_cache', JSON.stringify(userData));
+            localStorage.setItem(CACHE_KEY, JSON.stringify(userData));
 
             // Eagerly preload profile photo for instant display
             if (userData.photo_file_id) {

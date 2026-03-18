@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, Field, computed_field, model_validator
+from pydantic import BaseModel, Field, computed_field, model_validator, ConfigDict
 
 
 class PartnerBase(BaseModel):
@@ -17,7 +17,7 @@ class PartnerBase(BaseModel):
     notifications_paused: bool = False
     subscription_plan: str | None = None
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class ActiveTaskResponse(BaseModel):
     task_id: str
@@ -25,7 +25,7 @@ class ActiveTaskResponse(BaseModel):
     initial_metric_value: int
     started_at: datetime
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class PartnerResponse(PartnerBase):
     balance: float
@@ -54,7 +54,7 @@ class PartnerResponse(PartnerBase):
     # #comment: Support for dynamic injection of network size from endpoint
     _network_size_real: int | None = None
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True, "extra": "allow"}
 
     @model_validator(mode="before")
     @classmethod
@@ -135,9 +135,16 @@ class PartnerResponse(PartnerBase):
     @computed_field
     @property
     def total_network_size(self) -> int:
+        # Check if the private override was set dynamically
         network_size = getattr(self, "_network_size_real", None)
         if network_size is not None:
             return int(network_size)
+        
+        # Or if it was injected via an __init__ kwargs or model_validate dict during Redis hydration
+        extra_fields = getattr(self, "model_extra", {}) or {}
+        if "total_network_size" in extra_fields:
+            return int(extra_fields["total_network_size"])
+            
         return int(getattr(self, "referral_count", 0))
 
     @computed_field
@@ -160,7 +167,7 @@ class PROSetupRequest(BaseModel):
     discord_webhook_url: str | None = Field(default=None)
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class ViralGenerateRequest(BaseModel):
     post_type: str
@@ -170,7 +177,7 @@ class ViralGenerateRequest(BaseModel):
     referral_link: str | None = None
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class ViralGenerateResponse(BaseModel):
     id: int | None = None # Explicit generation ID for tracking
@@ -183,7 +190,7 @@ class ViralGenerateResponse(BaseModel):
     error_code: str | None = None
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class SocialPostRequest(BaseModel):
     platform: str # 'x', 'telegram', 'linkedin'
@@ -193,13 +200,13 @@ class SocialPostRequest(BaseModel):
     channel_id: str | None = None  # PRO+: override which TG channel to post to
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class TaskClaimRequest(BaseModel):
     xp_reward: float = Field(gt=0, description="XP reward must be greater than zero")
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class NetworkStats(BaseModel):
     # Dynamic Mapping: allows level_1...level_20 without hardcoding every field
@@ -225,7 +232,7 @@ class NetworkStats(BaseModel):
     level_19: int = 0
     level_20: int = 0
 
-    model_config = {
+    model_config: ConfigDict = {
         "from_attributes": True,
         "extra": "allow" # Allow dynamic levels in the future
     }
@@ -236,7 +243,7 @@ class GrowthMetrics(BaseModel):
     previous_count: int
     timeframe: str
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class EarningSchema(BaseModel):
     amount: float
@@ -246,7 +253,7 @@ class EarningSchema(BaseModel):
     currency: str
     created_at: datetime
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class PartnerTopResponse(BaseModel):
     id: int
@@ -261,7 +268,7 @@ class PartnerTopResponse(BaseModel):
     rank: str
     subscription_plan: str | None = None
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class OrbitMemberResponse(BaseModel):
     id: int
@@ -271,22 +278,22 @@ class OrbitMemberResponse(BaseModel):
     xp: float
     rank: str
 
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class LanguageUpdate(BaseModel):
     language_code: str
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class ReferralLinkUpdate(BaseModel):
     referral_link: str
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}
 
 class NotificationsUpdate(BaseModel):
     notifications_paused: bool
     
     # #comment: Standardized for audit.
-    model_config = {"from_attributes": True}
+    model_config: ConfigDict = {"from_attributes": True}

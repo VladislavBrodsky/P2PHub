@@ -3,7 +3,8 @@
     "app"
   ],
   "search_path": [
-    "venv/lib/python3.13/site-packages"
+    "../venv/lib/python3.13/site-packages",
+    "."
   ],
   "exclude": [
     "**/node_modules",
