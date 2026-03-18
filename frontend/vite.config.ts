@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 
 // #comment: EMERGENCY FIX - Removal of manualChunks
@@ -12,7 +11,6 @@ import { sentryVitePlugin } from "@sentry/vite-plugin"
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
     sentryVitePlugin({
       authToken: process.env.SENTRY_API_KEY,
       org: "web3-fintech",
