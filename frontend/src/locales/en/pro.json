@@ -371,6 +371,9 @@
       "plus_tools": "Unlimited"
     },
     "faq": {
+      "teaser_badge": "SUPPORT",
+      "header_pre": "KNOWLEDGE",
+      "header_highlight": "BASE",
       "badge": "SUPPORT",
       "title": "KNOWLEDGE BASE",
       "desc": "Everything you need to know about PRO status.",

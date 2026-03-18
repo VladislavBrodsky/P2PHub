@@ -371,6 +371,9 @@
       "plus_tools": "Безлимитные"
     },
     "faq": {
+      "teaser_badge": "ПОДДЕРЖКА",
+      "header_pre": "БАЗА",
+      "header_highlight": "ЗНАНИЙ",
       "badge": "ПОДДЕРЖКА",
       "title": "БАЗА ЗНАНИЙ",
       "desc": "Все, что вам нужно знать о статусе PRO.",
