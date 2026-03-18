@@ -228,7 +228,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const filteredMembers = useMemo(() => {
         if (!searchQuery.trim()) return members;
         const q = searchQuery.toLowerCase();
-        return members.filter(m =>
+        return members.filter((m: NetworkMember) =>
             m.first_name.toLowerCase().includes(q) ||
             m.last_name?.toLowerCase().includes(q) ||
             m.username?.toLowerCase().includes(q)
@@ -240,7 +240,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
         if (!members.length) return null;
 
         const topPerformer = [...members].sort((a, b) => b.xp - a.xp)[0];
-        const avgXp = Math.round(members.reduce((acc, m) => acc + m.xp, 0) / members.length);
+        const avgXp = Math.round(members.reduce((acc: number, m: NetworkMember) => acc + m.xp, 0) / members.length);
 
         return { topPerformer, avgXp };
     }, [members]);
@@ -281,7 +281,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
         }
     };
 
-    const statsTotal = Object.values(treeStats).reduce((acc, curr) => acc + (typeof curr === 'number' ? curr : 0), 0);
+    const statsTotal = Object.values(treeStats).reduce((acc: number, curr: number | unknown) => acc + (typeof curr === 'number' ? curr : 0), 0);
     const displayTotal = Math.max(statsTotal, initialTotalCount);
 
     return (
@@ -544,7 +544,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                                 </motion.div>
                             )}
 
-                            {filteredMembers.map((member, index) => (
+                            {filteredMembers.map((member: NetworkMember, index: number) => (
                                 <NetworkMemberRow
                                     key={member.telegram_id}
                                     member={member}

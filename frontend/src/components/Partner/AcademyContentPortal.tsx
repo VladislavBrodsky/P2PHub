@@ -410,7 +410,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                                         src={
                                                             (() => {
                                                                 const lp = getSafeLaunchParams();
-                                                                if (lp.initData?.user?.photoUrl) return lp.initData.user.photoUrl;
+                                                                if ((lp.initData as any)?.user?.photoUrl) return (lp.initData as any).user.photoUrl;
                                                                 if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
                                                                 return user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop";
                                                             })()

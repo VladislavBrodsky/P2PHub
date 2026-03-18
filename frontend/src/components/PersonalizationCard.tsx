@@ -25,7 +25,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
     const tgPhotoUrl = React.useMemo(() => {
         try {
             const lp = getSafeLaunchParams();
-            return lp.initData?.user?.photoUrl || null;
+            return (lp.initData as any)?.user?.photoUrl || null;
         } catch {
             return null;
         }

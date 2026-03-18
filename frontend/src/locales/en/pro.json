@@ -283,11 +283,79 @@
       },
       "psych_strategies": {
         "title": "PSYCHOLOGICAL WARFARE",
-        "subtitle": "BLACK OPS INTELLIGENCE"
+        "subtitle": "BLACK OPS INTELLIGENCE",
+        "unlock_desc": "Unlock elite psychological triggers to dominate the market.",
+        "items": [
+          {
+            "id": "ps1",
+            "title": "The Scarcity Loop",
+            "desc": "Psychological trigger based on limited supply to force decision making.",
+            "trigger": "Low Action Rate",
+            "action": "Implement a 24h countdown on all bonus offers."
+          },
+          {
+            "id": "ps2",
+            "title": "Authority Bias",
+            "desc": "Leveraging social hiararchy and expertise to build instant trust.",
+            "trigger": "Cold Traffic",
+            "action": "Lead with verified settlement screenshots and volume data."
+          },
+          {
+            "id": "ps3",
+            "title": "Social Proof Anchor",
+            "desc": "Using the 'crowd effect' to validate the safety of the system.",
+            "trigger": "High Bounce Rate",
+            "action": "Display active partner count in the first 10 seconds of interaction."
+          }
+        ]
       },
       "articles": {
         "title": "STRATEGIC DOSSIERS",
-        "btn_read": "READ ARTICLE"
+        "btn_read": "READ DOSSIER",
+        "items": [
+          {
+            "id": "art1",
+            "category": "Wealth",
+            "readTime": "5",
+            "title": "The $1/Minute Blueprint",
+            "desc": "How the top 1% are scaling their network on total autopilot."
+          },
+          {
+            "id": "art2",
+            "category": "Tech",
+            "readTime": "3",
+            "title": "QR Revolution 2026",
+            "desc": "Why traditional banking is collapsing in the face of frictionless P2P."
+          },
+          {
+            "id": "art3",
+            "category": "Growth",
+            "readTime": "4",
+            "title": "Viral Studio Synthesis",
+            "desc": "Mastering the AI engine to generate high-resonance content 24/7."
+          }
+        ]
+      },
+      "lifehacks": {
+        "title": "GROWTH LIFEHACKS",
+        "subtitle": "CONVERSION TURBO-CHARGERS",
+        "items": [
+          {
+            "id": "lh1",
+            "title": "Identity Suite Mastery",
+            "desc": "Create a premium visual presence in under 5 minutes using AI."
+          },
+          {
+            "id": "lh2",
+            "title": "Multi-Channel Resonance",
+            "desc": "How to sync one post across 7+ networks with zero effort."
+          },
+          {
+            "id": "lh3",
+            "title": "Pattern Interrupt Copy",
+            "desc": "Stop the scroll with these 3 visual hooks that double CTR."
+          }
+        ]
       },
       "dossier_label": "DOSSIER",
       "reading_progress": "READING PROGRESS"

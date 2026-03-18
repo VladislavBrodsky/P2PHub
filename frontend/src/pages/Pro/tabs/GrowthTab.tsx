@@ -400,7 +400,16 @@ export const GrowthTab = ({
                         <div className="flex flex-col gap-1.5 pt-1">
                             <div className="flex items-center gap-2">
                                 <h3 className="text-base sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
-                                    {t('pro_dashboard.academy.protocols.title').split(' ')[0]} <span className="text-indigo-500">{t('pro_dashboard.academy.protocols.title').split(' ').slice(1).join(' ')}</span>
+                                    {(() => {
+                                        const titleParts = t('pro_dashboard.academy.protocols.title').split(' ');
+                                        const firstWord = titleParts[0];
+                                        const rest = titleParts.slice(1).join(' ');
+                                        return (
+                                            <>
+                                                {firstWord} {rest && <span className="text-indigo-500">{rest}</span>}
+                                            </>
+                                        );
+                                    })()}
                                 </h3>
                             </div>
 
@@ -635,7 +644,7 @@ export const GrowthTab = ({
                             <div className="w-7 h-7 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-500 font-bold text-xs shrink-0 border border-pink-500/10 shadow-inner group-hover/hack:scale-110 transition-transform">{i + 1}</div>
                             <div className="space-y-0.5 pr-6">
                                 <h5 className="text-label font-bold uppercase text-slate-900 dark:text-white tracking-tighter leading-tight">{hack.title}</h5>
-                                <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-1">"{hack.desc}"</p>
+                                <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-tight italic opacity-70 line-clamp-2">"{hack.desc}"</p>
                             </div>
                             <div className="absolute top-3.5 right-3.5 opacity-0 group-hover/hack:opacity-100 transition-opacity text-pink-500">
                                 <Share size={12} />

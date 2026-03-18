@@ -281,7 +281,7 @@ export default function LeaderboardPage() {
                 title={t('leaderboard.top_partners')}
             >
                 <div className="space-y-2">
-                    {visiblePartners.map((user, index) => (
+                    {visiblePartners.map((user: LeaderboardUser, index: number) => (
                         <PartnerRow
                             key={user.id}
                             user={user}

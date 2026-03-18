@@ -7,10 +7,10 @@ export const getSafeLaunchParams = () => {
         console.warn('[DEBUG] Not in Telegram environment, using empty params');
         return {
             initData: undefined,
-            initDataRaw: '',
-            themeParams: {},
+            initDataRaw: '' as string,
+            themeParams: {} as any,
             platform: 'unknown'
-        };
+        } as any;
     }
 };
 export const isTMA = () => {
