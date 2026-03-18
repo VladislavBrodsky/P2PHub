@@ -569,7 +569,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setLinkedinToken(e.target.value)}
                                                             placeholder={t('pro_dashboard.setup.linkedin.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans t={t} i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
@@ -599,7 +599,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setPinterestToken(e.target.value)}
                                                             placeholder={t('pro_dashboard.setup.pinterest.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans t={t} i18nKey="pro_dashboard.setup.pinterest.dev_portal_desc">
@@ -629,7 +629,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setThreadsToken(e.target.value)}
                                                             placeholder={t('pro_dashboard.setup.threads.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans i18nKey="pro_dashboard.setup.threads.dev_portal_desc">
@@ -659,7 +659,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setFacebookToken(e.target.value)}
                                                             placeholder={t('pro_dashboard.setup.facebook.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans i18nKey="pro_dashboard.setup.facebook.dev_portal_desc">
@@ -689,7 +689,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setDiscordToken(e.target.value)}
                                                             placeholder={t('pro_dashboard.setup.discord.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans i18nKey="pro_dashboard.setup.discord.dev_portal_desc">
