@@ -80,6 +80,7 @@ async def get_my_profile(
         )
         partner = (await session.exec(stmt_refresh)).one()
 
+    commit_needed = False
     if not is_new:
         now = datetime.now(UTC).replace(tzinfo=None)
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
@@ -99,10 +100,7 @@ async def get_my_profile(
             if has_changed:
                 partner.updated_at = now
                 session.add(partner)
-                await session.commit()
-                await session.refresh(partner)
-                await redis_service.client.delete(cache_key)
-                await redis_service.client.delete("partners:recent_v2")
+                commit_needed = True
 
     # Migrations & Self-healing
     migration_needed = False
@@ -137,8 +135,7 @@ async def get_my_profile(
 
     if migration_needed:
         session.add(partner)
-        await session.commit()
-        await session.refresh(partner)
+        commit_needed = True
 
     # Daily Check-in Logic
     now_dt = datetime.now(UTC).replace(tzinfo=None)
@@ -167,10 +164,8 @@ async def get_my_profile(
             elif partner.is_pro:
                 total_reward *= settings.PRO_XP_MULTIPLIER
                 
-            await session.execute(
-                text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
-                {"inc": total_reward, "p_id": partner.id}
-            )
+            # Atomic XP increment
+            partner.xp = Partner.xp + total_reward
             
             session.add(XPTransaction(
                 partner_id=partner.id,
@@ -187,10 +182,8 @@ async def get_my_profile(
                 currency="XP",
                 reference_id=checkin_ref
             ))
-            
-            await session.commit()
-            await session.refresh(partner)
-            await redis_service.client.delete(cache_key)
+            commit_needed = True
+
     elif not existing_checkin_today:
         partner.checkin_streak = 1
         partner.last_checkin_at = now_dt
@@ -200,10 +193,8 @@ async def get_my_profile(
         elif partner.is_pro:
             checkin_xp *= settings.PRO_XP_MULTIPLIER
             
-        await session.execute(
-            text("UPDATE partner SET xp = xp + :inc WHERE id = :p_id"),
-            {"inc": checkin_xp, "p_id": partner.id}
-        )
+        # Atomic XP increment
+        partner.xp = Partner.xp + checkin_xp
         
         session.add(XPTransaction(
             partner_id=partner.id,
@@ -220,11 +211,15 @@ async def get_my_profile(
             currency="XP",
             reference_id=checkin_ref
         ))
+        commit_needed = True
         
+    if commit_needed:
         await session.commit()
         await session.refresh(partner)
         await redis_service.client.delete(cache_key)
-        
+        if not is_new:
+             await redis_service.client.delete("partners:recent_v2")
+
     try:
         from app.services.analytics_service import pre_warm_tree_cache_task
         await pre_warm_tree_cache_task.kiq(partner.id)

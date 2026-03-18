@@ -594,10 +594,5 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
     # Finalize Transaction (NO internal commit to maintain atomicity with caller)
     if earnings_to_add:
         session.add_all(earnings_to_add)
-        try:
-            await redis_pipe.execute()
-        except Exception as e:
-            logger.warning(f"Redis pipeline execution failed: {e}")
-        
-        if deferred_notifications:
-            await asyncio.gather(*deferred_notifications, return_exceptions=True)
+    
+    return redis_pipe, deferred_notifications

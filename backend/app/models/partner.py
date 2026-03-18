@@ -185,6 +185,8 @@ class Earning(SQLModel, table=True):
     __table_args__ = (
         Index("idx_earning_partner_type_created", "partner_id", "type", "created_at"),
         Index("idx_earning_partner_created", "partner_id", "created_at"),
+        # #comment Phase 2: Optimized for currency-based financial reporting
+        Index("idx_earning_currency_lookup", "partner_id", "currency", "created_at"),
         UniqueConstraint("reference_id", name="uq_earning_reference_id"),
         {"extend_existing": True}
     )

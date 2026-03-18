@@ -574,14 +574,18 @@ class PaymentService:
             # 3. Distribute Commissions to Ancestors (BEFORE commit for transaction atomicity)
             # #comment: Elite Quality Filter - Skip commissions for non-spending upgrades (Gifts, Grants)
             # This prevents referral leakage and internal system inflation.
+            # 3. Distribute Commissions to Ancestors (Staged for post-commit)
             is_gift = (network or "").upper() in ["MANUAL", "SYSTEM_GIFT", "SYSTEM_GIFT_FORCE"]
+            comm_pipe, comm_notifs = None, []
             if not is_gift:
                 from app.services.referral_service import distribute_pro_commissions
-                await distribute_pro_commissions(
+                res = await distribute_pro_commissions(
                     session, partner.id, amount, 
                     plan_type=partner.subscription_plan,
                     transaction_id=transaction.id
                 )
+                if res:
+                    comm_pipe, comm_notifs = res
             else:
                 logger.info(f"🎁 Skipping commission distribution for gift upgrade (Network: {network}) for partner {partner.id}")
             
@@ -645,13 +649,29 @@ class PaymentService:
                     logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 
 
-            # 4. Send Visionary & Viral Messages
+            # 4. Prepare Visionary & Viral Messages (Deferred until after commit)
             from app.core.i18n import get_msg
             from app.services.notification_service import notification_service
 
             lang = partner.language_code or "en"
+            
+            # Atomic commit everything
+            await session.commit()
 
-            # 4.1 Welcome Message & XP Notice
+            # --- POST-COMMIT SIDE EFFECTS ---
+            # Now that DB is permanent, we can safely send notifications and clear cache.
+            await _after_commit()
+            
+            # Execute deferred commissions side-effects
+            if comm_pipe:
+                try:
+                    await comm_pipe.execute()
+                except Exception as cp_err:
+                    logger.warning(f"Commissions Redis Sync Failed: {cp_err}")
+            
+            if comm_notifs:
+                await asyncio.gather(*comm_notifs, return_exceptions=True)
+
             # 4.1 Welcome Message & XP Notice
             welcome_msg = get_msg(lang, "pro_plus_welcome") if is_plus else get_msg(lang, "pro_welcome")
             xp_msg = get_msg(lang, "upgrade_xp_bonus", xp=int(upgrade_xp))
@@ -664,46 +684,26 @@ class PaymentService:
             if temp_notifs:
                 await asyncio.gather(*temp_notifs, return_exceptions=True)
 
-            # 4.2 Viral Congrats Message (Instruction to user to share)
+            # 4.2 Viral Congrats Message
             ref_link = f"{settings.FRONTEND_URL}?startapp={partner.referral_code}"
             viral_intro = get_msg(lang, "viralkit_intro")
-            
             viral_key = "pro_plus_viral_announcement" if is_plus else "pro_viral_announcement"
             viral_msg = get_msg(lang, viral_key, referral_link=ref_link)
-            # We send it to them so they can forward/copy it
+            
             await notification_service.send_low_prio(
                 chat_id=str(partner.telegram_id),
                 text=f"{viral_intro}\n{viral_msg}",
                 salt=f"pro_viral_{partner.id}"
             )
 
-
-            # 4.3 Log Payment Event for Admin Dashboard Feed
-            base_plan = 'PRO+' if is_plus else 'PRO'
-            plan_name = f"{base_plan} Upgrade" if is_pro_to_plus_upgrade else base_plan
-            
-            await audit_service.log_payment(
-                session=session,
-                partner_id=partner.id,
-                transaction_id=transaction.id,
-                amount=amount,
-                currency=currency,
-                plan=plan_name,
-                status="verified",
-                tx_hash=tx_hash
-            )
-
-            # 4.4 Admin Notification (Specific User Request)
-            # Notify management (@uslincoln) about the successful high-value purchase.
+            # 4.4 Admin Notification
             try:
                 username_display = f"@{partner.username}" if partner.username else "No Username"
-                admin_id = settings.ADMIN_USER_IDS[0] if settings.ADMIN_USER_IDS else "716720099" # @uslincoln
+                admin_id = settings.ADMIN_USER_IDS[0] if settings.ADMIN_USER_IDS else "716720099"
                 
-                # Try to fetch admin language
-                stmt_admin = select(Partner).where(Partner.telegram_id == str(admin_id))
-                res_admin = await session.exec(stmt_admin)
-                admin_partner = res_admin.first()
-                admin_lang = admin_partner.language_code if admin_partner else "en"
+                # Fetch admin lang - we do this in a separate session scope if needed, 
+                # but here we just use the ID.
+                admin_lang = "en" # Default to EN for admin notifications
                 
                 base_plan = 'PRO+' if is_plus else 'PRO'
                 plan_name = f"{base_plan} Upgrade" if is_pro_to_plus_upgrade else base_plan
@@ -727,14 +727,8 @@ class PaymentService:
                     parse_mode="HTML",
                     salt=f"adm_upg_{partner.id}_{transaction.id}"
                 )
-            except Exception as e:
-                logger.error(f"Failed to notify admin about successful purchase: {e}")
-
-            # Commit everything atomically
-            await session.commit()
-            
-            # Post-commit side effects
-            await _after_commit()
+            except Exception as admin_err:
+                logger.error(f"Failed to notify admin about successful purchase: {admin_err}")
 
             logger.info(f"Partner {partner.telegram_id} upgraded to PRO via {currency}")
             return True

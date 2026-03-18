@@ -87,9 +87,50 @@ else:
         pass
 
 def verify_all_imports():
-    print("🔍 Skipped comprehensive import verification to force CI pass.")
-    print("✅ Dummy Pass")
-    return
+    """Recursively walks the app directory and ensures all modules are importable."""
+    print(f"🚀 Starting comprehensive import verification (STRICT={STRICT})")
+    
+    app_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    app_dir = os.path.join(app_path, 'app')
+    
+    if not os.path.exists(app_dir):
+        print(f"❌ Error: app directory not found at {app_dir}")
+        sys.exit(1)
+        
+    failed_imports = []
+    
+    # Manually check core entry points first
+    core_modules = ['app.main', 'bot', 'app.core.config', 'app.models.partner']
+    for mod in core_modules:
+        try:
+            importlib.import_module(mod)
+            print(f"✅ Imported {mod}")
+        except Exception as e:
+            print(f"❌ Failed to import {mod}: {e}")
+            failed_imports.append((mod, str(e)))
+
+    # Walk the app package
+    for loader, module_name, is_pkg in pkgutil.walk_packages([app_dir], 'app.'):
+        try:
+            # Skip heavy background tasks or specific modules if they cause side effects
+            if any(x in module_name for x in ['app.worker', 'taskiq']):
+                # print(f"ℹ️ Skipping side-effect module: {module_name}")
+                continue
+                
+            importlib.import_module(module_name)
+            # print(f"✅ Imported {module_name}")
+        except Exception as e:
+            print(f"❌ Failed to import {module_name}: {e}")
+            failed_imports.append((module_name, str(e)))
+
+    if failed_imports:
+        print("\nSummary of failures:")
+        for mod, err in failed_imports:
+            print(f"  - {mod}: {err}")
+        print(f"\n❌ Total failed imports: {len(failed_imports)}")
+        sys.exit(1)
+    else:
+        print("\n✨ All modules imported successfully!")
 
 if __name__ == "__main__":
     verify_all_imports()

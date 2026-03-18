@@ -26,8 +26,8 @@ async def simulate_artificial_activity():
     async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
     
     async with async_session() as session:
-        # Fetch all marked test partners
-        statement = select(Partner).where(Partner.is_test.is_(True))
+        # Fetch all marked test partners with pessimistic locking
+        statement = select(Partner).where(Partner.is_test.is_(True)).with_for_update()
         result = await session.exec(statement)
         test_partners = result.all()
         
@@ -40,7 +40,7 @@ async def simulate_artificial_activity():
         for partner in test_partners:
             # 1. Random XP gain (20 to 150)
             xp_gain = round(random.uniform(20, 150), 1)
-            partner.xp += xp_gain
+            partner.xp = Partner.xp + xp_gain  # Use atomic increment
             
             # Auto-calculate and update level
             partner.level = get_level(partner.xp)
@@ -56,8 +56,8 @@ async def simulate_artificial_activity():
             
             # 2. Random USDT gain (10 to 65)
             usdt_gain = round(random.uniform(10, 65), 2)
-            partner.balance += usdt_gain
-            partner.total_earned_usdt += usdt_gain
+            partner.balance = Partner.balance + usdt_gain
+            partner.total_earned_usdt = Partner.total_earned_usdt + usdt_gain
             
             # Record Earning for history
             earning = Earning(

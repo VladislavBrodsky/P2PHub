@@ -165,11 +165,19 @@ async def claim_task_reward(
     from app.services.audit_service import audit_service
     await audit_service.log_task_completion(session=session, partner_id=partner.id, task_id=task_id, xp_amount=effective_xp, xp_before=xp_before, xp_after=partner.xp)
 
-    from app.services.leaderboard_service import leaderboard_service
-    try: await leaderboard_service.increment_score(partner.id, effective_xp, is_test=partner.is_test)
-    except Exception as e: logger.error(f"Leaderboard Sync Failed: {e}")
-
+    session.add(partner)
+    await session.commit()
+    
+    # --- POS-COMMIT SIDE EFFECTS ---
+    # We do these after commit to ensure they only happen if the DB update succeeded.
     await redis_service.client.delete(f"partner:profile:{tg_id}")
+
+    # Synchronize leaderboard post-commit
+    from app.services.leaderboard_service import leaderboard_service
+    try: 
+        await leaderboard_service.increment_score(partner.id, effective_xp, is_test=partner.is_test)
+    except Exception as lb_err: 
+        logger.error(f"Leaderboard Sync Failed: {lb_err}")
 
     try:
         lang = partner.language_code or "en"
@@ -178,9 +186,6 @@ async def claim_task_reward(
     except Exception as e:
         logger.error(f"Failed to send task notification: {e}")
 
-    session.add(partner)
-    await session.commit()
-    
     from app.services.partner_service import get_partner_full
     partner = await get_partner_full(session, tg_id)
 

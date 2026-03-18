@@ -148,9 +148,24 @@ class TonWebhookService:
                 matched_tx = ptx
                 break
 
-        if not matched_tx:
+        if matched_tx is None:
             logger.info(f"Webhook: No pending session matched {amount} {currency}. Manual review may be required.")
             return False
+
+        # ── 3.1 Double-Check Lock to prevent race conditions ──────────
+        # Re-fetch specific TX with pessimistic lock
+        m_id = getattr(matched_tx, "id", None)
+        if m_id is None:
+            logger.error("🚨 Webhook: Matched transaction has no ID. This should not happen.")
+            return False
+            
+        locked_tx = await session.get(PartnerTransaction, int(m_id), with_for_update=True)
+        if not locked_tx or locked_tx.status != "pending":
+            curr_status = getattr(locked_tx, 'status', 'None')
+            logger.warning(f"🚨 Webhook: Matched PTX {m_id} is no longer pending (current: {curr_status}). Race condition avoided.")
+            return False
+        
+        matched_tx = locked_tx
 
         # ── 4. Fetch partner and trigger upgrade ────────────────────────
         partner = await session.get(Partner, matched_tx.partner_id)
