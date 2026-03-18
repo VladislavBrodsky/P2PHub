@@ -75,7 +75,7 @@ class StripeService:
                 }
             )
             return session.url
-        except _StripeError as e:
+        except stripe.StripeError as e:
             logger.error(f"Stripe API error: {e.user_message if hasattr(e, 'user_message') else str(e)}")
             return None
         except Exception as e:
@@ -98,7 +98,7 @@ class StripeService:
         except ValueError as e:
             logger.error(f"Invalid Stripe webhook payload: {e}")
             return False
-        except _SignatureVerificationError as e:
+        except stripe.SignatureVerificationError as e:
             logger.error(f"Invalid Stripe webhook signature: {e}")
             return False
 
