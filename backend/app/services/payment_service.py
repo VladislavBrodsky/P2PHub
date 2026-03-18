@@ -365,7 +365,7 @@ class PaymentService:
             if currency == "BALANCE":
                 if partner.balance < amount:
                     raise ValueError(f"Insufficient balance during upgrade: {partner.balance} < {amount}")
-                partner.balance -= amount
+                partner.balance = Partner.balance - amount
                 
                 # Log balance deduction as a negative Earning item in the ledger
                 from app.models.partner import Earning

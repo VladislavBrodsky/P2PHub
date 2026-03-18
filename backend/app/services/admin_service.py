@@ -667,7 +667,7 @@ class AdminService:
             
             if "xp" in updates:
                 increment = float(updates["xp"])
-                partner.xp += increment
+                partner.xp = Partner.xp + increment
                 from app.utils.ranking import get_level
                 partner.level = get_level(partner.xp)
                 

@@ -3,6 +3,7 @@ from datetime import datetime, UTC, timedelta
 
 from typing import cast, Any, Dict
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -67,7 +68,7 @@ async def get_finance_stats(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ) -> Dict[str, Any]:
-    from sqlalchemy import func
+    # t-ignore: from sqlalchemy import func
 
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
@@ -149,7 +150,8 @@ async def get_finance_stats(
         monthly_history.append({"month": temp_month.strftime("%B %Y"), "timestamp": temp_month.isoformat(), "USDT": {"income": 0.0, "outcome": 0.0}, "TON": {"income": 0.0, "outcome": 0.0}})
         temp_month = (temp_month - timedelta(days=1)).replace(day=1)
 
-        # #comment: Phase 4 Bug Fix - Resolve linter's 'str' vs 'dict' type ambiguity
+    for row in income_rows:
+        iso_month = row[0].replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
         valid_currencies = ("USDT", "TON")
         for m in monthly_history:
             if m["timestamp"] == iso_month:
@@ -158,6 +160,7 @@ async def get_finance_stats(
                     # Type checking: m[currency] is now guaranteed to be a dict
                     m[currency]["income"] = float(row[2])
                 break
+
                 
     for row in outcome_rows:
         iso_month = row[0].replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
