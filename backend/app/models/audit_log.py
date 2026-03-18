@@ -17,6 +17,7 @@ class ActionType(str, Enum):
     XP_AWARD = "XP_AWARD"           # Every XP transaction
     REFERRAL = "REFERRAL"           # Every referral signup event
     RECONCILIATION = "RECONCILIATION" # Discrepancy flags from reconciler
+    XP_SPEND = "XP_SPEND"             # Every XP spend (e.g. Academy unlock)
 
 
 class AuditLog(SQLModel, table=True):
