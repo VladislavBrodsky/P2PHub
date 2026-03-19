@@ -586,27 +586,12 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
 
             {/* Premium Footer with Stats Summary */}
             <div className="relative z-50 p-4 bg-white dark:bg-[#0b1120] border-t border-slate-200/50 dark:border-white/5 shadow-[0_-10px_30px_rgba(0,0,0,0.1)]">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <TrendingUp className="w-3 h-3 text-emerald-500" />
-                            <p className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">{t('network.explorer.global_strength')}</p>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                            <h4 className="text-xl font-bold text-slate-900 dark:text-white leading-none tabular-nums">
-                                {displayTotal.toLocaleString()}
-                            </h4>
-                            <div className="px-1.5 py-0.5 bg-emerald-500/10 rounded-md border border-emerald-500/20">
-                                <span className="text-emerald-500 text-label font-bold uppercase">{t('network.explorer.active_nodes')}</span>
-                            </div>
-                        </div>
-                    </div>
-
+                <div className="flex items-center justify-center">
                     <div className="flex items-center gap-2">
                         {targetPartner ? (
                             <button
                                 onClick={() => { selection(); setTargetPartner(null); setLevel(1); }}
-                                className="h-11 px-4 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
+                                className="h-11 px-6 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <span className="text-lg leading-none">&larr;</span>
                                 <span>{t('common:back', 'Back')}</span>
@@ -614,7 +599,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                         ) : (
                             <button
                                 onClick={() => { selection(); if (onClose) onClose(); else window.history.back(); }}
-                                className="h-11 px-4 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
+                                className="h-11 px-6 rounded-2xl bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white font-bold text-label uppercase tracking-widest border border-slate-200/50 dark:border-white/5 active:scale-95 transition-all flex items-center gap-2"
                             >
                                 <span className="text-lg leading-none">&larr;</span>
                                 <span>{t('common:back', 'Back')}</span>
@@ -622,7 +607,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                         )}
                         <button
                             onClick={() => { impact('medium'); setIsShareOpen(true); }}
-                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 h-11 rounded-2xl flex items-center gap-2 font-bold text-label uppercase tracking-wider shadow-lg dark:shadow-white/5 active:scale-95 transition-all"
+                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 h-11 rounded-2xl flex items-center gap-2 font-bold text-label uppercase tracking-wider shadow-lg dark:shadow-white/5 active:scale-95 transition-all"
                         >
                             <UserPlus className="w-4 h-4" />
                             <span>{t('network.explorer.invite_btn')}</span>
