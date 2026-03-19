@@ -17,12 +17,31 @@ export const apiClient = axios.create({
     timeout: 60000,
 });
 
+// #comment: Helper to wait for Telegram initData if available
+const waitForInitData = async (timeout = 3000): Promise<string> => {
+    const start = Date.now();
+    while (Date.now() - start < timeout) {
+        const params = getSafeLaunchParams();
+        if (params.initDataRaw) return params.initDataRaw;
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return '';
+};
+
 // Request Interceptor: Automatically inject Telegram Init Data
 apiClient.interceptors.request.use(
-    (config) => {
+    async (config) => {
         try {
+            // #comment: We attempt to wait FOR THE FIRST FEW REQUESTS 
+            // to ensure headers are present even if the SDK is slow to load.
+            let initDataRaw = '';
             const params = getSafeLaunchParams();
-            const initDataRaw = params.initDataRaw || '';
+            
+            if (!params.initDataRaw && (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/'))) {
+                initDataRaw = await waitForInitData();
+            } else {
+                initDataRaw = params.initDataRaw || '';
+            }
 
             if (initDataRaw) {
                 config.headers['X-Telegram-Init-Data'] = initDataRaw;
@@ -49,23 +68,38 @@ apiClient.interceptors.request.use(
     }
 );
 
-// Response Interceptor: Global Error Handling
+// Response Interceptor: Global Error Handling + Smart Retry for 401s
 apiClient.interceptors.response.use(
     (response) => response,
-    (error) => {
+    async (error) => {
         const status = error.response?.status;
-        const url = error.config?.url;
+        const config = error.config;
 
+        // #comment: Smart Retry Logic for 401 "Race Condition"
+        // If we get a 401 and haven't retried yet, and we are on an authenticated endpoint,
+        // we wait for initData once more and retry. This handles cases where the SDK
+        // loads slightly AFTER the first API call is initiated.
+        if (status === 401 && !config._retry && (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/'))) {
+            config._retry = true;
+            console.warn(`[API] 401 detected for ${config.url}. Attempting smart retry...`);
+            
+            // Wait up to 2 seconds for a "late" SDK initialization
+            const initData = await waitForInitData(2000);
+            if (initData) {
+                config.headers['X-Telegram-Init-Data'] = initData;
+                config.headers['Authorization'] = `Bearer ${initData}`;
+                return apiClient(config); // Retry the request with the new header
+            }
+        }
+
+        const url = config?.url;
         if (status === 401) {
-            // Only log warning if we are actually in a TMA environment
             try {
                 const params = getSafeLaunchParams();
                 if (params.initDataRaw) {
                     console.error('[API] Unauthorized. Init Data might be expired or invalid.');
                 }
-            } catch (e) {
-                // Ignore errors checking TMA state
-            }
+            } catch (e) { /* ignore */ }
         } else if (status >= 500) {
             console.error(`[API] Server Error (${status}) at ${url}:`, error.response?.data || error.message);
         } else {

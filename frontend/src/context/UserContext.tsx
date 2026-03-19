@@ -297,17 +297,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
-                // Wait for Telegram environment
+                // Wait for Telegram environment (up to 2 seconds total)
                 let attempts = 0;
+                const maxAttempts = 20;
                 const checkData = async () => {
                     try {
-                        if (window.Telegram?.WebApp?.initData) {
+                        if (window.Telegram?.WebApp?.initData || attempts >= maxAttempts) {
                             await refreshUser();
-                        } else if (attempts < 5) {
-                            attempts++;
-                            setTimeout(checkData, 50);
                         } else {
-                            await refreshUser();
+                            attempts++;
+                            setTimeout(checkData, 100);
                         }
                     } catch (e) {
                         setIsLoading(false);
