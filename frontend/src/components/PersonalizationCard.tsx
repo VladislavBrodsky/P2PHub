@@ -65,16 +65,21 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
             <div className={`
-                relative rounded-3xl bg-bg-glass backdrop-blur-xl border border-border-glass group
+                relative rounded-3xl border border-border-glass group overflow-visible
                 ${variant === 'compact' ? 'gap-4 outline-none' : 'shadow-premium-lg'}
                 ${isProPlus ? 'ring-2 ring-blue-400/20' : isPro ? 'ring-2 ring-amber-400/10' : ''}
             `}>
-                <div className={`flex items-center ${variant === 'compact' ? 'gap-3.5 p-2.5' : 'gap-5 p-3.5'} rounded-[inherit] overflow-hidden`}>
+                {/* #comment: Background layer with blur - separated to prevent clipping of children that exceed bounds (e.g. the crown) */}
+                <div className="absolute inset-0 rounded-[inherit] bg-bg-glass backdrop-blur-xl pointer-events-none z-0" />
+
+                <div className={`flex items-center ${variant === 'compact' ? 'gap-3.5 p-2.5' : 'gap-5 p-3.5'} rounded-[inherit] relative z-10 overflow-visible`}>
                     {/* PRO+ Vibing Animated Border - Disabled for compact variant to fix glitches */}
                     {isProPlus && variant !== 'compact' && (
-                        <div
-                            className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-transparent to-cyan-400/20 pointer-events-none animate-pulse-subtle"
-                        />
+                        <div className="absolute inset-0 rounded-[inherit] overflow-hidden pointer-events-none">
+                            <div
+                                className="absolute inset-0 bg-linear-to-tr from-blue-500/20 via-transparent to-cyan-400/20 animate-pulse-subtle"
+                            />
+                        </div>
                     )}
 
                     {/* Left: Avatar & Rank Badge Column */}

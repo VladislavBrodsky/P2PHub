@@ -184,7 +184,12 @@ async def get_finance_stats(
             except: return None
         if hasattr(val, 'replace'):
             # Datetime-like object
-            return val.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+            try:
+                return val.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+            except TypeError:
+                # Fallback for datetime.date which doesn't support hour/minute args
+                if hasattr(val, 'year') and hasattr(val, 'month'):
+                    return datetime(val.year, val.month, 1).isoformat()
         return None
 
     for row in income_rows:
