@@ -24,6 +24,7 @@ async def get_my_referral_tree(
     session: AsyncSession = Depends(get_session)
 ):
     if not user_data:
+        logger.warning(f"[ANALYTICS] 401 Unauthorized for /tree. Headers: {dict(request.headers)}")
         raise HTTPException(status_code=401, detail="Authentication required")
 
     tg_user = get_tg_user(user_data)
@@ -64,6 +65,7 @@ async def get_network_level_members(
     session: AsyncSession = Depends(get_session)
 ):
     if not user_data:
+        logger.warning(f"[ANALYTICS] 401 Unauthorized for /network/{level}. Target: {target_id}")
         raise HTTPException(status_code=401, detail="Authentication required")
 
     tg_user = get_tg_user(user_data)
@@ -108,6 +110,7 @@ async def get_growth_metrics(
     session: AsyncSession = Depends(get_session)
 ):
     if not user_data:
+        logger.warning(f"[ANALYTICS] 401 Unauthorized for /growth/metrics. Timeframe: {timeframe}")
         raise HTTPException(status_code=401, detail="Authentication required")
 
     tg_user = get_tg_user(user_data)
@@ -137,6 +140,7 @@ async def get_growth_chart(
     session: AsyncSession = Depends(get_session)
 ):
     if not user_data:
+        logger.warning(f"[ANALYTICS] 401 Unauthorized for /growth/chart. Timeframe: {timeframe}")
         raise HTTPException(status_code=401, detail="Authentication required")
 
     tg_user = get_tg_user(user_data)

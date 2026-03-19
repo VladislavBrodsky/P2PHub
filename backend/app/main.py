@@ -377,6 +377,14 @@ async def add_request_id_middleware(request: Request, call_next):
         import sentry_sdk
         sentry_sdk.set_tag("request_id", request_id)
     
+    # #comment: Diagnostic Header Logging for 401 Investigation
+    if request.url.path.startswith("/api/partner/"):
+        init_header = request.headers.get("X-Telegram-Init-Data")
+        if not init_header:
+            logger.warning(f"🚨 [MISSING HEADER] /api/partner call missing X-Telegram-Init-Data. Path: {request.url.path}")
+        else:
+            logger.info(f"✅ [HEADER PRESENT] Path: {request.url.path} Length: {len(init_header)}")
+
     # Add to response headers so clients can include it in bug reports
     response = await call_next(request)
     response.headers["X-Request-ID"] = request_id

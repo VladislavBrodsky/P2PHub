@@ -38,8 +38,12 @@ def validate_telegram_data(init_data: str) -> dict:
         auth_date = int(vals.get('auth_date', 0))
         delta = time.time() - auth_date
         if delta > 86400:
-            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s)")
+            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s) InitData: {init_data[:50]}...")
             raise HTTPException(status_code=401, detail="Session expired")
+
+        # #comment: Log successful signature but warn on old sessions
+        if delta > 3600:
+            logger.info(f"[AUTH] Using aged session (Age: {delta/3600:.1f}h) for user {vals.get('user', 'unknown')[:20]}...")
 
         return vals
     except HTTPException:

@@ -304,15 +304,15 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                             <h3 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
                                 {targetPartner ? `${targetPartner.first_name}'s Network` : t('network.explorer.title', 'Network')}
                             </h3>
-                            <div className="text-label font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-wider">
+                            <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 flex items-center gap-1 uppercase tracking-tight">
                                 {targetPartner ? (
                                     <>
-                                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                        <span className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
                                         {t('network.explorer.viewing_sub_network', 'Sub-Network View')}
                                     </>
                                 ) : (
                                     <>
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
                                         {isGlobalMode ? t('network.explorer.global_architecture', 'Global Architecture') : t('network.explorer.your_ecosystem', 'Your Ecosystem')}
                                     </>
                                 )}
