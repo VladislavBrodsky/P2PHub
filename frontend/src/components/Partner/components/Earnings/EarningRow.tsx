@@ -31,10 +31,10 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
                     )}
                 </div>
                 <div className='flex flex-col'>
-                    <span className="font-bold text-slate-900 dark:text-white text-[10px] leading-tight max-w-[140px] truncate">
+                    <span className="font-bold text-slate-900 dark:text-white text-xs leading-tight max-w-[140px] truncate">
                         {formatEarningDescription(item.description, t)}
                     </span>
-                    <span className="text-[9px] text-slate-500 opacity-50 font-medium">
+                    <span className="text-[10px] text-slate-500 opacity-50 font-medium">
                         {new Date(item.created_at).toLocaleDateString(i18n.language, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </span>
                 </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, ChevronRight } from 'lucide-react';
+import { BookOpen, ChevronRight, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useUser } from '../../context/UserContext';
@@ -138,6 +138,15 @@ export const PartnerDashboard = () => {
                         onReportClick={handleExplorerOpen}
                     />
 
+                    {/* 2. Invitation Method (Moved under chart) */}
+                    <AmbassadorTools
+                        referralLink={referralLink}
+                        copied={copied}
+                        selection={selection}
+                        setIsQrOpen={setIsQrOpen}
+                        copyLink={copyLink}
+                    />
+
                     {/* Partner Briefing Card */}
                     <div
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
@@ -180,12 +189,8 @@ export const PartnerDashboard = () => {
                         onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center overflow-hidden shrink-0 shadow-inner group-hover:scale-110 transition-transform">
-                                <img
-                                    src={GLOBE_ICON_B64}
-                                    alt="Network"
-                                    className="w-full h-full object-cover mix-blend-screen"
-                                />
+                            <div className="w-8 h-8 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                                <Globe className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                             </div>
                             <div>
                                 <h3 className="text-label font-bold uppercase tracking-[0.08em] text-slate-900 dark:text-white leading-tight">
@@ -203,14 +208,6 @@ export const PartnerDashboard = () => {
                 {/* 1.5 Social Proof - Top Partners */}
                 <TopPartnersList />
 
-                {/* 2. Invitation Method */}
-                <AmbassadorTools
-                    referralLink={referralLink}
-                    copied={copied}
-                    selection={selection}
-                    setIsQrOpen={setIsQrOpen}
-                    copyLink={copyLink}
-                />
 
                 {/* 3. Rewards List */}
                 <div className="space-y-4">
