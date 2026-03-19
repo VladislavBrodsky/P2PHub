@@ -276,7 +276,14 @@
           "easy": "Initiate",
           "medium": "Advanced",
           "hard": "Elite"
-        }
+        },
+        "modules": [
+          { "id": 1, "title": "@PintoPay_Probot" },
+          { "id": 2, "title": "Social Setup" },
+          { "id": 3, "title": "Viral Formula" },
+          { "id": 4, "title": "Growth Engine" },
+          { "id": 5, "title": "Psych Warfare" }
+        ]
       },
       "intel_label": "Knowledge Base",
       "growth_protocol": "Growth Protocol",

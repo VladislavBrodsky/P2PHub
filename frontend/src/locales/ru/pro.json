@@ -34,10 +34,10 @@
   },
   "pro_dashboard": {
     "tabs": {
-      "studio": "ИИ VIRAL STUDIO",
-      "tools": "ЭЛИТНЫЕ ИНСТРУМЕНТЫ",
-      "growth": "АКАДЕМИЯ ПАРТНЕРОВ",
-      "analytics": "НЕЙРОННАЯ АНАЛИТИКА"
+      "studio": "Ии viral studio",
+      "tools": "Элитные инструменты",
+      "growth": "Академия партнеров",
+      "analytics": "Нейронная аналитика"
     },
     "studio_header_title": "Вирусная Студия",
     "studio_header_highlight": "PRO",
@@ -143,47 +143,47 @@
       "title": "Omni-Sync Публикатор"
     },
     "analytics": {
-      "decrypting": "ДЕШИФРОВКА НЕЙРОННЫХ ДАННЫХ...",
-      "total_views": "ОБЩИЙ ОХВАТ",
-      "engagement": "ВОВЛЕЧЕННОСТЬ",
-      "viral_reach": "ВИРУСНОЕ РАСПРОСТРАНЕНИЕ",
-      "success_rate": "КОНВЕРСИЯ",
+      "decrypting": "Дешифровка нейронных данных...",
+      "total_views": "Общий охват",
+      "engagement": "Вовлеченность",
+      "viral_reach": "Вирусное распространение",
+      "success_rate": "Конверсия",
       "resonance": {
-        "title": "ПРОГНОЗНЫЙ РЕЗОНАНС",
-        "status": "ДВИЖОК АКТИВЕН",
-        "gathering_data": "СБОР ДАННЫХ",
+        "title": "Прогнозный резонанс",
+        "status": "Движок активен",
+        "gathering_data": "Сбор данных",
         "confidence": "УВЕРЕННОСТЬ: {{percent}}%",
         "goto_studio": "АКТИВИРОВАТЬ STUDIO",
         "action_btn": "ВЫПОЛНИТЬ ТОП-ДЕЙСТВИЕ",
-        "insufficient_data": "НЕДОСТАТОЧНО ДАННЫХ",
+        "insufficient_data": "Недостаточно данных",
         "insufficient_data_desc": "Синтезируйте еще {{count}} постов для калибровки."
       },
       "raw_data": {
-        "title": "СЫРЫЕ МЕТРИКИ",
+        "title": "Сырые метрики",
         "sync_all": "СИНХР. ВСЕ",
-        "syncing": "СИНХРОНИЗАЦИЯ...",
-        "source": "ИСТОЧНИК",
-        "reach": "ОХВАТ",
-        "engagement": "ВОВЛЕЧЕННОСТЬ",
-        "last_sync": "ПОСЛ. СИНХР.",
-        "empty": "ВИРУСНЫХ ДАННЫХ НЕТ",
-        "access_restricted": "ДОСТУП ОГРАНИЧЕН"
+        "syncing": "Синхронизация...",
+        "source": "Источник",
+        "reach": "Охват",
+        "engagement": "Вовлеченность",
+        "last_sync": "Посл. синхр.",
+        "empty": "Вирусных данных нет",
+        "access_restricted": "Доступ ограничен"
       },
       "locked_plus": {
-        "title": "ШИФРОВАНИЕ АНАЛИТИКИ",
+        "title": "Шифрование аналитики",
         "desc": "Нейронные метрики и резонанс требуют статуса PRO+.",
         "upgrade_btn": "РАЗБЛОКИРОВАТЬ PRO+ АНАЛИТИКУ"
       }
     },
     "setup": {
-      "title": "ЭКОСИСТЕМА СИНХР.",
-      "subtitle": "OMNI-КАНАЛЬНАЯ ИНТЕГРАЦИЯ",
-      "tg_node": "УЗЕЛ TELEGRAM",
+      "title": "Экосистема синхр.",
+      "subtitle": "Omni-канальная интеграция",
+      "tg_node": "Узел telegram",
       "pro_node_limit_desc": "Транслируйте на ваш основной канал.",
       "channel_id": "КАНАЛ @USERNAME",
       "personal_link_desc": "Опционально. Используйте стартовую ссылку вашего Бота.",
       "referral_link_prefix_error": "Ссылка должна начинаться с https://t.me/...",
-      "x_broadcast_title": "ТРАНСЛЯЦИЯ В X (TWITTER)",
+      "x_broadcast_title": "Трансляция в x (twitter)",
       "x_broadcast_desc": "Подключите X профиль для вирусных тредов.",
       "x_broadcast_plus_desc": "Подключите X профиль для PRO+ автоматизации.",
       "api_key": "API КЛЮЧ",
@@ -200,48 +200,48 @@
         "feat_li": "LINKEDIN",
         "feat_li_detail": "PRO СЕТЬ",
         "feat_ai": "НЕЙРО-СЕТИ",
-        "feat_ai_detail": "АВТО-РЕЗОНАНС",
+        "feat_ai_detail": "Авто-резонанс",
         "cta": "ПЕРЕЙТИ НА PRO+ СЕЙЧАС"
       },
       "multi_sync": {
-        "title": "OMNI-КАНАЛЬНАЯ СИНХР.",
+        "title": "Omni-канальная синхр.",
         "desc": "Управляйте всеми узлами роста из одной панели.",
         "test": "ТЕСТ ИНТЕГРАЦИЙ",
         "test_tg": "ТЕСТ TELEGRAM"
       },
       "deploy_btn": "РАЗВЕРНУТЬ НАСТРОЙКИ",
-      "syncing_btn": "СИНХРОНИЗАЦИЯ...",
+      "syncing_btn": "Синхронизация...",
       "save_success_title": "НАСТРОЙКИ РАЗВЕРНУТЫ",
       "save_success_text": "Интеграции успешно обновлены.",
       "save_error_title": "ОШИБКА РАЗВЕРТЫВАНИЯ",
       "save_error_text": "Проверьте API учетные данные.",
-      "tg_sync_success_msg": "Telegram узлы синхронизированы.",
+      "tg_sync_success_msg": "Telegram узлы синхронизированны.",
       "tg_sync_error_msg": "Ошибка синхронизации Telegram узлов.",
       "linkedin": {
-        "title": "СИНХР. LINKEDIN",
+        "title": "Синхр. linkedin",
         "desc": "Автоматизируйте трансляцию стратегий в проф. сеть.",
         "oauth_label": "ACCESS ТОКЕН",
         "placeholder": "Введите LinkedIn Access Токен",
         "dev_portal_desc": "Получите на <a href='https://www.linkedin.com/developers/' target='_blank' rel='noreferrer' class='text-indigo-400 underline'>LinkedIn Developers</a>."
       },
       "pinterest": {
-        "title": "СИНХР. PINTEREST",
+        "title": "Синхр. pinterest",
         "desc": "Визуальный гроухакинг через авто-пины.",
         "placeholder": "Введите Pinterest Access Токен",
         "dev_portal_desc": "Получите на <a href='https://developers.pinterest.com/' target='_blank' rel='noreferrer' class='text-rose-400 underline italic font-bold'>Pinterest Developers</a>."
       },
       "threads": {
-        "title": "СИНХР. THREADS",
+        "title": "Синхр. threads",
         "desc": "Доминируйте в архитектуре бесед на Threads.",
         "placeholder": "Введите Threads Access Токен"
       },
       "facebook": {
-        "title": "СИНХР. FACEBOOK",
+        "title": "Синхр. facebook",
         "desc": "Автоматизированный резонанс сообществ на Facebook.",
         "placeholder": "Введите Facebook Access Токен"
       },
       "discord": {
-        "title": "СИНХР. DISCORD",
+        "title": "Синхр. discord",
         "desc": "Real-time дистрибуция через Discord webhooks.",
         "placeholder": "Введите Discord Webhook URL",
         "dev_portal_desc": "Получите Webhook URL в <span class='text-[#5865F2] italic font-bold'>Настройках Сервера Discord</span>."
@@ -285,7 +285,7 @@
       "insufficient_xp_msg": "Недостаточно XP для Доступа",
       "motivate_msg": "Завершите предыдущие модули, чтобы открыть доступ к элитному интеллекту.",
       "unlock_for": "Открыть за {{cost}} XP",
-      "social_sync": "Соц Синхр.",
+      "social_sync": "Соц синхр.",
       "direct_action_label": "Прямое Действие",
       "synced": "Синхронизировано",
       "sync_status": "Синхронизировано",
@@ -293,8 +293,8 @@
       "live_signal": "Лайв Сигнал",
       "min_read": "Мин Чтения",
       "social_setup": {
-        "title": "СОЦ-СИНХРОН",
-        "subtitle": "РАЗВЕРТЫВАНИЕ",
+        "title": "Соц-синхрон",
+        "subtitle": "Развертывание",
         "platforms": [
           {
             "name": "Telegram Hub",
@@ -313,8 +313,8 @@
         ]
       },
       "psych_strategies": {
-        "title": "ПСИХОЛОГИЧЕСКАЯ ВОЙНА",
-        "subtitle": "РАЗВЕДКА BLACK OPS",
+        "title": "Психологическая война",
+        "subtitle": "Разведка black ops",
         "unlock_desc": "Разблокируйте элитные психологические триггеры для доминирования на рынке.",
         "items": [
           {
@@ -341,7 +341,7 @@
         ]
       },
       "articles": {
-        "title": "СТРАТЕГИЧЕСКИЕ ДОСЬЕ",
+        "title": "Стратегические досье",
         "btn_read": "ЧИТАТЬ ДОСЬЕ",
         "items": [
           {
@@ -368,8 +368,8 @@
         ]
       },
       "lifehacks": {
-        "title": "ЛАЙФХАКИ РОСТА",
-        "subtitle": "ТУРБО-ЗАРЯДКА КОНВЕРСИИ",
+        "title": "Лайфхаки роста",
+        "subtitle": "Турбо-зарядка конверсии",
         "items": [
           {
             "id": "lh1",
@@ -388,8 +388,8 @@
           }
         ]
       },
-      "dossier_label": "ДОСЬЕ",
-      "reading_progress": "ПРОГРЕСС ЧТЕНИЯ"
+      "dossier_label": "Досье",
+      "reading_progress": "Прогресс чтения"
     }
   },
   "subscription": {
@@ -417,14 +417,14 @@
       "plus_tools": "Безлимитные"
     },
     "faq": {
-      "teaser_badge": "ПОДДЕРЖКА",
-      "header_pre": "БАЗА",
-      "header_highlight": "ЗНАНИЙ",
+      "teaser_badge": "Поддержка",
+      "header_pre": "База",
+      "header_highlight": "Знаний",
       "badge": "ПОДДЕРЖКА",
-      "title": "БАЗА ЗНАНИЙ",
+      "title": "База знаний",
       "desc": "Все, что вам нужно знать о статусе PRO.",
       "q1": "Это разовая покупка?",
-      "a1": "Да. Текущие предложения PRO и PRO+ дают пожизненный доступ. Никаких подписок, никаких скрытых платежей. Один раз обновился — и ты PRO навсегда.",
+      "a1": "Да. Текущие предложения PRO and PRO+ дают пожизненный доступ. Никаких подписок, никаких скрытых платежей. Один раз обновился — и ты PRO навсегда.",
       "q2": "Как я получаю комиссионные?",
       "a2": "Комиссионные автоматически добавляются на твой баланс каждый раз, когда твоя структура растет или кто-то обновляет статус. Вывести на USDT кошелек можно в любое время.",
       "q3": "Что такое токены Viral Studio?",
@@ -440,39 +440,39 @@
       "view_faq_center": "ОТКРЫТЬ ПОЛНЫЙ ЦЕНТР FAQ"
     },
     "benefits": {
-      "badge": "ЭЛИТНЫЕ ПРЕИМУЩЕСТВА",
+      "badge": "Элитные преимущества",
       "title": "ВЫБЕРИТЕ СВОЮ МОЩЬ",
       "desc": "Настройте свой двигатель роста с помощью интеграций профессионального уровня.",
       "ai_studio": "AI VIRAL STUDIO",
       "ai_studio_desc_pro": "Создавайте 250 постов в месяц с базовыми модулями ИИ.",
       "ai_studio_desc_plus": "Безлимитное создание контента с продвинутой калибровкой резонанса.",
-      "network_levels": "ГЛУБИНА СЕТИ",
+      "network_levels": "Глубина сети",
       "network_levels_desc_pro": "Зарабатывайте пассивный доход на 9 полных поколениях.",
       "network_levels_desc_plus": "Максимум 20 уровней глубины для 20-кратного охвата.",
-      "tokens": "ВИРАЛЬНЫЕ ТОКЕНЫ",
+      "tokens": "Виральные токены",
       "tokens_desc_pro": "250 токенов в месяц для генерации контента.",
       "tokens_desc_plus": "500 токенов в месяц с приоритетным доступом к очереди.",
-      "cashback": "СИСТЕМА ВОЗНАГРАЖДЕНИЙ",
+      "cashback": "Система вознаграждений",
       "cashback_desc_pro": "Стандартные награды за все транзакции в экосистеме.",
       "cashback_desc_plus": "Увеличенные в 2 раза награды за действия элитных партнеров.",
-      "tools": "ИНСТРУМЕНТЫ РОСТА",
+      "tools": "Инструменты роста",
       "tools_desc_pro": "Доступ к продвинутым инструментам заголовков и аудита.",
       "tools_desc_plus": "Полный набор, включая систему прогнозной аналитики.",
-      "growth_intel": "РЫНОЧНАЯ РАЗВЕДКА",
+      "growth_intel": "Рыночная разведка",
       "growth_intel_desc": "Аудит глобальных виральных трендов в реальном времени.",
       "omni_sync": "OMNI-SYNC",
       "omni_sync_desc": "Автоматическая публикация в 7+ глобальных сетях.",
       "tg_multi_channel_desc": "Управляйте 5+ Telegram-каналами одновременно.",
-      "priority_ai": "ПРИОРИТЕТНЫЙ ИИ",
+      "priority_ai": "Приоритетный ии",
       "priority_ai_desc": "Без очереди с выделенной нейронной обработкой.",
-      "content_analytics": "НЕЙРОННЫЙ ТРЕКИНГ",
+      "content_analytics": "Нейронный трекинг",
       "content_analytics_desc": "Глубокие метрики эффективности для каждого узла.",
-      "empire_access": "ДОСТУП К ИМПЕРИИ",
+      "empire_access": "Доступ к империи",
       "empire_access_desc": "Прямая интеграция с основными API партнеров.",
       "full_access": "ВКЛЮЧЕНО В ПЛАН"
     },
     "upgrade": {
-      "badge": "ЭЛИТНЫЙ СТАТУС",
+      "badge": "Элитный статус",
       "dominate_network": "ДОМИНИРУЙТЕ В СЕТИ",
       "subheadline": "ОБНОВИТЕСЬ ДО PRO И АКТИВИРУЙТЕ ПОЛНЫЙ ДВИГАТЕЛЬ ПАССИВНОГО ДОХОДА.",
       "viral_badge": "ВИРАЛЬНАЯ СДЕЛКА",
