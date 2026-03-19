@@ -1,3 +1,8 @@
+{
   "source_directories": ["backend"],
-  "search_path": ["backend/.venv/lib/python3.13/site-packages"]
+  "search_path": ["/Users/grandmaestro/Developer/P2PHub/backend"],
+  "site_package_search_strategy": "all",
+  "site_roots": [
+    "/Users/grandmaestro/Developer/P2PHub/backend/.venv/lib/python3.13/site-packages"
+  ]
 }

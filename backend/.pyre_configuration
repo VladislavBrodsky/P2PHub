@@ -3,12 +3,14 @@
     "."
   ],
   "search_path": [
-    "venv/lib/python3.13/site-packages"
+    "/Users/grandmaestro/Developer/P2PHub/backend"
+  ],
+  "site_package_search_strategy": "all",
+  "site_roots": [
+    "/Users/grandmaestro/Developer/P2PHub/backend/.venv/lib/python3.13/site-packages"
   ],
   "exclude": [
     "**/node_modules",
-    "**/__pycache__",
-    "venv",
-    ".venv"
+    "**/__pycache__"
   ]
 }
