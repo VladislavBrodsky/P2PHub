@@ -51,7 +51,7 @@ export const StudioStepper = memo(({ step, t, lowPowerMode }: StudioStepperProps
                     </motion.div>
                     <span className={`text-label font-bold uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${step === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
                         }`}>
-                        {s === 1 ? t('pro_dashboard.studio.stepper.frame') : s === 2 ? t('pro_dashboard.studio.stepper.synthes') : t('pro_dashboard.studio.stepper.deploy')}
+                        {s === 1 ? t('pro_dashboard.studio.stepper.strategy') : s === 2 ? t('pro_dashboard.studio.stepper.synthesis') : t('pro_dashboard.studio.stepper.preview')}
                     </span>
                 </div>
             ))}

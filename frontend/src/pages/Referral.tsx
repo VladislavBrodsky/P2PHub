@@ -364,24 +364,6 @@ export default function ReferralPage() {
                 )}
             </AnimatePresence>
 
-            <div className="mb-0 pt-2 pb-1">
-                <SectionHeader
-                    title={t('referral.title')}
-                    description={t('referral.subtitle')}
-                    align="center"
-                />
-            </div>
-
-            <div className="flex justify-center mb-6">
-                <button
-                    onClick={handleShowBrief}
-                    className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
-                >
-                    <FileText className="w-3 h-3" />
-                    {t('brief.btn')}
-                </button>
-            </div>
-
             <BriefTermsModal isOpen={showBriefModal} onClose={handleCloseBrief} />
 
             {/* Content Stack - Optimized for stability and z-index safety */}
@@ -390,32 +372,42 @@ export default function ReferralPage() {
                     <EarnHeader />
                 </div>
 
+                {/* Move Terms & Guide Button Lower */}
+                <div className="flex justify-center -mt-2 mb-2">
+                    <button
+                        onClick={handleShowBrief}
+                        className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
+                    >
+                        <FileText className="w-3 h-3" />
+                        {t('brief.btn')}
+                    </button>
+                </div>
+
                 <div className="relative z-10 mt-0">
                     <ReferralWidget onInvite={() => toggleShareModal(true)} onShowQR={() => toggleQRModal(true)} />
                 </div>
+
+                <TaskGrid
+                    tasks={localizedTasks}
+                    completedTaskIds={completedTaskIds}
+                    completedStages={completedStages}
+                    verifyingTasks={verifyingTasks}
+                    claimableTasks={claimableTasks}
+                    currentLevel={currentLevel}
+                    referrals={referrals}
+                    checkinStreak={user?.checkin_streak || 0}
+                    isPro={user?.is_pro}
+                    isProPlus={user?.subscription_plan?.includes('PLUS')}
+                    // #comment: Pass active tasks to grid for status determination
+                    activeTasks={user?.active_tasks}
+                    onTaskClick={handleTaskClick}
+                    onClaim={handleClaim}
+                />
 
                 <div className="relative">
                     <MilestonePath />
                 </div>
             </div>
-
-            <TaskGrid
-                tasks={localizedTasks}
-                completedTaskIds={completedTaskIds}
-                completedStages={completedStages}
-                verifyingTasks={verifyingTasks}
-                claimableTasks={claimableTasks}
-                currentLevel={currentLevel}
-                referrals={referrals}
-                checkinStreak={user?.checkin_streak || 0}
-                isPro={user?.is_pro}
-                isProPlus={user?.subscription_plan?.includes('PLUS')}
-                // #comment: Pass active tasks to grid for status determination
-                activeTasks={user?.active_tasks}
-                onTaskClick={handleTaskClick}
-                onClaim={handleClaim}
-            />
-
             <div className="mt-8 mb-4">
                 <UpgradeButton
                     onClick={() => {
