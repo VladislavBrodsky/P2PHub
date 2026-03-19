@@ -130,6 +130,24 @@ async def lifespan(app: FastAPI):
                 await restore_names_task.kiq()
                 await migrate_blog_task.kiq()
                 logger.info("✅ Startup tasks successfully queued.")
+                
+                # #comment: One-shot stale cache flush (v1.9.2) — fixes ZeroDivisionError crash in growth_metrics
+                # previously causing all chart endpoints to return empty data for all users.
+                # Protected by versioned lock so it only runs on this specific deploy.
+                cache_bust_lock = "lock:cache_bust_v192"
+                if await redis_service.client.set(cache_bust_lock, "1", ex=86400, nx=True):
+                    logger.info("🧹 Running one-time v1.9.2 analytics cache flush...")
+                    bust_patterns = [
+                        "growth_chart:*", "growth_metrics:*",
+                        "ref_tree_stats_v2:*", "ref_tree_members_v2:*"
+                    ]
+                    total_cleared = 0
+                    for pattern in bust_patterns:
+                        keys = [k async for k in redis_service.client.scan_iter(match=pattern)]
+                        if keys:
+                            await redis_service.client.delete(*keys)
+                            total_cleared += len(keys)
+                    logger.info(f"✅ Cache bust complete: {total_cleared} stale analytics keys cleared.")
         except Exception as e:
             logger.error(f"⚠️ Background startup task failed: {e}")
 
