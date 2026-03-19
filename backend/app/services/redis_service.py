@@ -120,7 +120,8 @@ class RedisService:
         if not partner_ids:
             return {}
         
-        keys = [f"profile_cache_v3:{pid}" for pid in partner_ids]
+        # #comment: Standardized to v5 for across-stack consistency
+        keys = [f"profile_cache_v5:{pid}" for pid in partner_ids]
         raw_data = await self.client.mget(keys)
         
         parsed = {}
@@ -137,7 +138,7 @@ class RedisService:
             
         async with self.client.pipeline(transaction=False) as pipe:
             for pid, data in profiles_map.items():
-                pipe.set(f"profile_cache_v3:{pid}", json.dumps(data), ex=expire_seconds)
+                pipe.set(f"profile_cache_v5:{pid}", json.dumps(data), ex=expire_seconds)
             await pipe.execute()
 
 redis_service = RedisService()

@@ -82,10 +82,10 @@ async def get_finance_stats(
     threshold_72h = now - timedelta(hours=72)
     
     # 1. Fetch recent history (Last 72h) - Limit results to 50 for UI performance
-    # INCOME
+    # INCOME (Include XP for rewards visibility)
     stmt_income = (
         select(Earning)
-        .where(Earning.partner_id == partner.id, Earning.currency.in_(["USDT", "TON"]), Earning.created_at >= threshold_72h)
+        .where(Earning.partner_id == partner.id, Earning.currency.in_(["USDT", "TON", "XP"]), Earning.created_at >= threshold_72h)
         .order_by(Earning.created_at.desc())
         .limit(50)
     )

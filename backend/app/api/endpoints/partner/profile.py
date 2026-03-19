@@ -289,7 +289,8 @@ async def update_language(
         partner.language_code = payload.language_code
         session.add(partner)
         await session.commit()
-        await redis_service.client.delete(f"partner:profile:{tg_id}")
+        # #comment: Standardized to use versioned cache key
+        await redis_service.client.delete(f"partner:profile:{PROFILE_CACHE_VERSION}:{tg_id}")
 
     return {"status": "ok", "language_code": payload.language_code}
     
@@ -310,7 +311,8 @@ async def update_notifications(
         partner.notifications_paused = payload.notifications_paused
         session.add(partner)
         await session.commit()
-        await redis_service.client.delete(f"partner:profile:{tg_id}")
+        # #comment: Standardized to use versioned cache key
+        await redis_service.client.delete(f"partner:profile:{PROFILE_CACHE_VERSION}:{tg_id}")
         
         from app.services.rate_limit_service import rate_limit_service
         if payload.notifications_paused:
@@ -433,6 +435,7 @@ async def mark_notification_seen(
     partner.pro_notification_seen = True
     session.add(partner)
     await session.commit()
-    await redis_service.client.delete(f"partner:profile:{tg_id}")
+    # #comment: Standardized to use versioned cache key
+    await redis_service.client.delete(f"partner:profile:{PROFILE_CACHE_VERSION}:{tg_id}")
 
     return {"status": "ok"}

@@ -68,7 +68,7 @@ export const PartnerDashboard = () => {
         }
     };
 
-    const referralLink = `https://t.me/pintopay_probot?start=${user?.referral_code || 'ref_dev'}`;
+    const referralLink = `https://t.me/partner_probot?start=${user?.referral_code || 'ref_dev'}`;
     const qrImageUrl = user?.referral_code
         ? `${getApiUrl()}/api/tools/qr?url=${encodeURIComponent(referralLink)}&scale=10&dark=%23000000`
         : '';

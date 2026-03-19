@@ -28,6 +28,11 @@ apiClient.interceptors.request.use(
                 config.headers['X-Telegram-Init-Data'] = initDataRaw;
                 // Dual-send in standard Authorization header for aggressive proxy compatibility
                 config.headers['Authorization'] = `Bearer ${initDataRaw}`;
+            } else if (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/')) {
+                // #comment: Tactical Protection - If we are hitting an authenticated endpoint 
+                // but have NO initData, we should fail early with a descriptive error 
+                // to prevent 401 noise and help debug Production "Guest" mode.
+                console.warn(`[API] Attempted authenticated request to ${config.url} without initData.`);
             }
 
             // Inject Content-Language based on current app setting

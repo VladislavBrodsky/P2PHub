@@ -131,15 +131,16 @@ async def lifespan(app: FastAPI):
                 await migrate_blog_task.kiq()
                 logger.info("✅ Startup tasks successfully queued.")
                 
-                # #comment: One-shot stale cache flush (v1.9.2) — fixes ZeroDivisionError crash in growth_metrics
-                # previously causing all chart endpoints to return empty data for all users.
-                # Protected by versioned lock so it only runs on this specific deploy.
-                cache_bust_lock = "lock:cache_bust_v192"
+                # #comment: One-shot stale cache flush (v1.9.3) — fixes Access Control & Data Sync
+                # Purges all legacy v3 and v4 keys to ensure clean migration to Unified v5.
+                cache_bust_lock = "lock:cache_bust_v193"
                 if await redis_service.client.set(cache_bust_lock, "1", ex=86400, nx=True):
-                    logger.info("🧹 Running one-time v1.9.2 analytics cache flush...")
+                    logger.info("🧹 Running one-time v1.9.3 legacy cache purge...")
                     bust_patterns = [
                         "growth_chart:*", "growth_metrics:*",
-                        "ref_tree_stats_v2:*", "ref_tree_members_v2:*"
+                        "ref_tree_stats_v2:*", "ref_tree_members_v2:*",
+                        "profile_cache_v3:*", "profile_cache_v4:*",
+                        "partner:profile:v3:*", "partner:profile:v4:*"
                     ]
                     total_cleared = 0
                     for pattern in bust_patterns:
@@ -147,7 +148,7 @@ async def lifespan(app: FastAPI):
                         if keys:
                             await redis_service.client.delete(*keys)
                             total_cleared += len(keys)
-                    logger.info(f"✅ Cache bust complete: {total_cleared} stale analytics keys cleared.")
+                    logger.info(f"✅ Cache purge complete: {total_cleared} legacy keys cleared.")
         except Exception as e:
             logger.error(f"⚠️ Background startup task failed: {e}")
 
