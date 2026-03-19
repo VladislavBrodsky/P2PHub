@@ -94,14 +94,14 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
                     {stage.isPro && isLocked && (
                         <div className="bg-amber-500 px-1.5 py-0.5 rounded-lg shadow-lg flex items-center gap-1 border border-white/20">
                             <Zap className="w-2.5 h-2.5 text-white fill-white" />
-                            <span className="text-label font-bold text-white uppercase">{t('common:navigation.pro')}</span>
+                            <span className="text-label font-bold text-white">{t('common:navigation.pro')}</span>
                         </div>
                     )}
                 </div>
 
                 {/* Stage Number Floating */}
                 <div className={cn(
-                    "absolute -bottom-1 -left-1/2 translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-[0.15em] border z-30",
+                    "absolute -bottom-1 -left-1/2 translate-x-1/2 whitespace-nowrap px-1.5 py-0.5 rounded-full text-[8px] font-bold tracking-[0.15em] border z-30",
                     isCurrent ? "bg-blue-600 border-blue-400 text-white shadow-lg" :
                         "bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-white/10 text-slate-500"
                 )}>
@@ -122,7 +122,7 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
                     isLocked ? "opacity-30 grayscale blur-[0.5px] cursor-not-allowed" : "opacity-100"
                 )} style={{ transform: "translateZ(20px)" }}>
                 <h4 className={cn(
-                    "text-[10px] font-bold uppercase tracking-tight leading-tight",
+                    "text-[10px] font-bold tracking-tight leading-tight",
                     isLocked ? "text-slate-500" : "text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors",
                     "drop-shadow-sm"
                 )}>{renderInline(title)}</h4>
@@ -139,7 +139,7 @@ export const AcademyStageNode = memo(({ stage, status, onClick, index }: Academy
                         isRightSide ? "mr-auto" : "ml-auto"
                     )}>
                         <Play className="w-2 h-2 text-blue-500 fill-blue-500" />
-                        <span className="text-label font-bold text-blue-500 uppercase">{stage.duration?.replace('min', t('academy.unit_min', 'min'))}</span>
+                        <span className="text-label font-bold text-blue-500">{stage.duration?.replace('min', t('academy.unit_min', 'min'))}</span>
                     </div>
                 )}
             </div>

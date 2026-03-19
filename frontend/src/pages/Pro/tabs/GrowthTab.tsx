@@ -350,16 +350,16 @@ export const GrowthTab = ({
 
     const academyProgress = useMemo(() => {
         const moduleCount = modulesList.length || 6;
-        const uniqueCompleted = [...new Set(completedStages)].filter(id => modulesList.some((m: { id: string }) => m.id === id)).length;
+        const uniqueCompleted = [...new Set(completedStages)].filter(id => modulesList.some((m: { id: string }) => String(m.id) === String(id))).length;
         return Math.min(Math.round((uniqueCompleted / moduleCount) * 100), 100);
     }, [completedStages, modulesList]);
 
     // Initial auto-expand of the first uncompleted module
     useEffect(() => {
         if (!hasInitialAutoExpanded.current && modulesList.length > 0) {
-            const firstUncompletedId = modulesList.find((m: { id: string }) => !completedStages.includes(m.id))?.id;
+            const firstUncompletedId = modulesList.find((m: any) => !completedStages.includes(String(m.id)))?.id;
             if (firstUncompletedId) {
-                setExpandedModuleId(firstUncompletedId);
+                setExpandedModuleId(String(firstUncompletedId));
                 hasInitialAutoExpanded.current = true;
             }
         }

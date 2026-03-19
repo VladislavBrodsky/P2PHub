@@ -50,6 +50,7 @@ class PartnerResponse(PartnerBase):
     active_tasks: list[ActiveTaskResponse] = []
     completed_tasks: list[str] = []
     completed_stages: list[int | str] = []
+    unlocked_stages: list[int | str] = []
     is_admin: bool = False
     # Public field to hold the deep tree network size injected by the endpoint
     network_size_real: int = 0
@@ -87,15 +88,21 @@ class PartnerResponse(PartnerBase):
                 } for tr in obj.completed_task_records if tr.status == "STARTED"
             ]
             
-            # Parse completed stages
+            # Parse completed and unlocked stages from JSON strings
             try:
-                stages = json.loads(obj.completed_stages or "[]")
+                completed_stages = json.loads(obj.completed_stages or "[]")
             except Exception:
-                stages = []
+                completed_stages = []
+
+            try:
+                unlocked_stages = json.loads(obj.unlocked_stages or "[]")
+            except Exception:
+                unlocked_stages = []
 
             result['completed_tasks'] = all_completed
             result['active_tasks'] = active_tasks
-            result['completed_stages'] = stages
+            result['completed_stages'] = completed_stages
+            result['unlocked_stages'] = unlocked_stages
             
             # Manual mappings for computed fields if they are in model_fields
             # Pydantic v2 handles computed_fields automatically if we return a dict

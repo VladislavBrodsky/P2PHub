@@ -36,9 +36,21 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [isUnlocking, setIsUnlocking] = React.useState(false);
+    const completedStages = user?.completed_stages || [];
+    const isCompleted = completedStages.includes(stage.id) || completedStages.includes(String(stage.id));
+    const isUnlocked = stage.id <= 20 || unlockedStages.includes(stage.id) || unlockedStages.includes(String(stage.id)) || isCompleted;
 
-    const isUnlocked = stage.id <= 20 || unlockedStages.includes(stage.id) || unlockedStages.includes(String(stage.id));
+    const getXPCost = (id: number) => {
+        if (id <= 20) return 0;
+        if (id === 21) return 350;
+        if (id === 22) return 500;
+        if (id === 23) return 700;
+        // Match backend linear extrapolation: 700 + (id - 23) * 145, rounded to nearest 50
+        const raw = 700 + (id - 23) * 145;
+        return Math.round(raw / 50) * 50;
+    };
+
+    const xpCost = getXPCost(stage.id);
 
     useTMALock(true);
     const [scrolledProgress, setScrolledProgress] = React.useState(0);
@@ -129,13 +141,13 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                         className="pointer-events-auto p-2 rounded-xl bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-900 dark:text-white hover:scale-105 active:scale-90 transition-all shadow-md flex items-center gap-2 group z-50"
                     >
                         <X className="w-4 h-4" />
-                        <span className="text-label font-bold uppercase tracking-widest pr-1 hidden sm:block">{t('common:close')}</span>
+                        <span className="text-label font-bold tracking-widest pr-1 hidden sm:block">{t('common:close')}</span>
                     </button>
 
                     {/* Stage Badge - Centered specifically for better hierarchy */}
                     <div className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none">
-                        <span className="text-label font-bold text-blue-500 uppercase tracking-[0.2em] leading-none mb-1">{t('academy.academy_label')}</span>
-                        <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('academy.stage_title', { stage: stage.id })}</h3>
+                        <span className="text-label font-bold text-blue-500 tracking-[0.2em] leading-none mb-1">{t('academy.academy_label')}</span>
+                        <h3 className="text-label font-bold text-slate-900 dark:text-white tracking-tight leading-none">{t('academy.stage_title', { stage: stage.id })}</h3>
                     </div>
 
                     {/* Stats Badge */}
@@ -145,7 +157,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                         </div>
                         <div className="flex flex-col items-end">
                             <span className="text-label font-bold text-slate-900 dark:text-white leading-none">{Math.floor(user?.xp || 0)}</span>
-                            <span className="text-label font-bold text-green-500 uppercase tracking-widest">{t('common:xp')}</span>
+                            <span className="text-label font-bold text-green-500 tracking-widest">{t('common:xp')}</span>
                         </div>
                     </div>
 
@@ -183,7 +195,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                     <Lock size={40} className="text-amber-500" />
                                 </div>
                                 <div className="space-y-3">
-                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter italic">
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter italic">
                                         {t('academy.pro_stage_title', { defaultValue: 'ELITE PROTOCOL' })}
                                     </h2>
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[280px] leading-relaxed mx-auto italic">
@@ -193,7 +205,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
 
                                 <button
                                     onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
-                                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border shadow-blue-500/20"
+                                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border shadow-blue-500/20"
                                 >
                                     <Zap size={18} fill="currentColor" />
                                     {t('common:navigation.pro_upgrade', { defaultValue: 'UPGRADE TO PRO' })}
@@ -206,7 +218,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                     <Lock size={40} className="text-indigo-500" />
                                 </div>
                                 <div className="space-y-3">
-                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter italic">
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter italic">
                                         {t('pro_dashboard.locked.title', { defaultValue: 'ENCRYPTED NODE' })}
                                     </h2>
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[280px] leading-relaxed mx-auto italic">
@@ -216,29 +228,29 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
 
                                 <button
                                     onClick={async () => {
-                                        setIsUnlocking(true);
+                                        setIsSubmitting(true); // Renamed from isUnlocking
                                         try {
                                             await onUnlock(stage.id);
                                         } finally {
-                                            setIsUnlocking(false);
+                                            setIsSubmitting(false); // Renamed from isUnlocking
                                         }
                                     }}
-                                    disabled={isUnlocking}
-                                    className="w-full py-5 bg-linear-to-r from-indigo-500 via-blue-600 to-indigo-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-[1.5rem] font-bold text-sm uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-indigo-400/30"
+                                    disabled={isSubmitting} // Renamed from isUnlocking
+                                    className="w-full py-5 bg-linear-to-r from-indigo-500 via-blue-600 to-indigo-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-[1.5rem] font-bold text-sm tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-indigo-400/30"
                                 >
-                                    {isUnlocking ? (
+                                    {isSubmitting ? ( // Renamed from isUnlocking
                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                                     ) : (
                                         <>
                                             <span className="flex items-center gap-2">
-                                                {t('pro_dashboard.academy.unlock_for', { cost: stage.id === 21 ? 350 : 500, defaultValue: 'Unlock Node' })}
+                                                {t('pro_dashboard.academy.unlock_for', { cost: xpCost, defaultValue: `Unlock for ${xpCost} XP` })}
                                             </span>
                                             <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
                                             <Lock size={16} />
                                         </>
                                     )}
                                 </button>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                                <p className="text-[10px] font-black text-slate-400 tracking-widest leading-none">
                                     {t('common:xp', { defaultValue: 'Available Balance' })}: <span className="text-indigo-500">{user?.xp ? Math.floor(user.xp) : 0} XP</span>
                                 </p>
                             </div>
@@ -521,7 +533,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                                 transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                                             />
 
-                                            <span className="text-sm font-black text-slate-900 dark:text-slate-900 uppercase tracking-[0.4em] whitespace-nowrap relative z-10 drop-shadow-sm">
+                                            <span className="text-sm font-black text-slate-900 dark:text-slate-900 tracking-[0.4em] whitespace-nowrap relative z-10 drop-shadow-sm">
                                                 Viral Network Core
                                             </span>
                                         </motion.div>
@@ -530,14 +542,14 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
 
                                 <div className="flex flex-col gap-2">
                                     <div className="flex items-center gap-2">
-                                        <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 uppercase tracking-widest">
+                                        <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 tracking-widest">
                                             {t('academy.mastery', { stage: stage.id })}
                                         </div>
-                                        <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 uppercase tracking-widest">
+                                        <div className="px-3 py-1 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 tracking-widest">
                                             {category}
                                         </div>
                                         {stage.duration && (
-                                            <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 uppercase tracking-widest">
+                                            <div className="px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-label font-bold text-blue-500 tracking-widest">
                                                 {stage.duration.replace('min', t('academy.unit_min', 'min'))}
                                             </div>
                                         )}
@@ -553,7 +565,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                     <div className="p-5 rounded-xl bg-blue-50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20 space-y-3 relative overflow-hidden group">
                                         <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 blur-2xl -mr-8 -mt-8" />
                                         <div className="flex items-center justify-between relative z-10">
-                                            <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-bold text-label uppercase tracking-widest">
+                                            <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-500 font-bold text-label tracking-widest">
                                                 <Lightbulb className="w-4 h-4" />
                                                 {t(`academy_content.stage_${stage.id}_lesson_secret_title`, { defaultValue: t('academy.profit_secret') })}
                                             </div>
@@ -578,7 +590,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                         {/* AI Expert Section */}
                                         {(stage.category === 'ai' || (stage.id >= 5 && stage.id <= 10) || t(`academy_content.stage_${stage.id}_lesson_ai_expert`, { defaultValue: '' })) && (
                                             <div className="p-5 rounded-xl bg-linear-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 space-y-3">
-                                                <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-bold text-label uppercase tracking-widest">
+                                                <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-400 font-bold text-label tracking-widest">
                                                     <Wand2 className="w-4 h-4" />
                                                     {t('academy.ai_expert')}
                                                 </div>
@@ -591,7 +603,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                         {/* Viral Rule / Marketing Trick Section */}
                                         {t(`academy_content.stage_${stage.id}_lesson_viral_rule`, { defaultValue: '' }) && (
                                             <div className="p-5 rounded-xl bg-linear-to-r from-pink-500/10 to-rose-500/10 border border-pink-500/20 space-y-3">
-                                                <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-bold text-label uppercase tracking-widest">
+                                                <div className="flex items-center gap-2.5 text-pink-600 dark:text-pink-400 font-bold text-label tracking-widest">
                                                     <Zap className="w-4 h-4" />
                                                     {t('academy.viral_psychology')}
                                                 </div>
@@ -620,7 +632,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
                                                         <TrendingUp size={16} />
                                                     </div>
-                                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('academy.mission_ready_title', { defaultValue: 'MISSION PROTOCOL' })}</h3>
+                                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-widest">{t('academy.mission_ready_title', { defaultValue: 'MISSION PROTOCOL' })}</h3>
                                                 </div>
 
                                                 <div
@@ -636,13 +648,13 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                                         }`}>
                                                         {missionAccomplished && <CheckCircle2 size={14} />}
                                                     </div>
-                                                    <p className="text-caption font-bold uppercase tracking-tight leading-snug">
+                                                    <p className="text-caption font-bold tracking-tight leading-snug">
                                                         {renderInline(t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') }))}
                                                     </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <p className="text-label text-slate-500 font-bold uppercase tracking-widest text-center pt-2">
+                                        <p className="text-label text-slate-500 font-bold tracking-widest text-center pt-2">
                                             {missionAccomplished ? t('academy.mission_ready') : t('academy.mission_pending')}
                                         </p>
                                     </motion.div>
@@ -675,7 +687,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                 }
                             }}
                             disabled={!missionAccomplished || isSubmitting}
-                            className={`flex-1 py-5 rounded-2xl font-bold text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
+                            className={`flex-1 py-5 rounded-2xl font-bold text-sm tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
                                 ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
                                 : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'
                                 }`}
@@ -696,7 +708,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                 onClose();
                                 navigateTo(ROUTES.SUBSCRIPTION);
                             }}
-                            className="flex-1 py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+                            className="flex-1 py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-bold text-xs tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
                         >
                             <span>{t('academy.upgrade_now')}</span>
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

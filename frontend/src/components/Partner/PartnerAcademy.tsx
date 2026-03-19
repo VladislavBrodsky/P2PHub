@@ -19,16 +19,16 @@ export const PartnerAcademy = () => {
                     {/* Removed background glows */}
 
                     <div className="relative z-20 flex flex-col items-center text-center space-y-5">
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 text-label font-bold uppercase tracking-[0.15em] text-blue-800 dark:text-white">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900/10 dark:bg-white/10 backdrop-blur-md border border-slate-900/10 dark:border-white/10 text-label font-bold tracking-[0.15em] text-blue-800 dark:text-white">
                             <Sparkles className="w-3 h-3" />
                             {t('academy.hero_badge')}
                         </div>
 
                         <div className="space-y-1">
-                            <h2 className="text-xl font-bold leading-none tracking-tight text-slate-900 dark:text-white uppercase italic drop-shadow-sm">
+                            <h2 className="text-xl font-bold leading-none tracking-tight text-slate-900 dark:text-white italic drop-shadow-sm">
                                 {t('academy.hero_title_1')} <span className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent drop-shadow-md">{t('academy.hero_title_2')}</span>
                             </h2>
-                            <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 uppercase tracking-wide drop-shadow-sm">
+                            <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 tracking-wide drop-shadow-sm">
                                 <Trans i18nKey="academy.hero_desc">
                                     Master the step-by-step income system <span className="text-blue-800 dark:text-blue-100 font-bold">$1 per minute</span> with AI.
                                 </Trans>
@@ -38,17 +38,17 @@ export const PartnerAcademy = () => {
                         <div className="flex items-center gap-4 pt-1">
                             <div className="flex flex-col items-center">
                                 <span className="text-label font-bold text-slate-900 dark:text-white">100</span>
-                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_levels')}</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 tracking-widest">{t('academy.stat_levels')}</span>
                             </div>
                             <div className="w-px h-4 bg-slate-900/10 dark:bg-white/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-label font-bold text-blue-600 dark:text-blue-400">20+</span>
-                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_free')}</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 tracking-widest">{t('academy.stat_free')}</span>
                             </div>
                             <div className="w-px h-4 bg-slate-900/10 dark:bg-white/10" />
                             <div className="flex flex-col items-center">
                                 <span className="text-label font-bold text-orange-600 dark:text-orange-400">{t('common:navigation.pro')}</span>
-                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 uppercase tracking-widest">{t('academy.stat_elite')}</span>
+                                <span className="text-label font-bold text-slate-600 dark:text-blue-100/60 tracking-widest">{t('academy.stat_elite')}</span>
                             </div>
                         </div>
                     </div>
@@ -70,12 +70,12 @@ export const PartnerAcademy = () => {
                                 <TrendingUp className="w-4 h-4" />
                             </div>
                             <div className="flex items-baseline gap-1.5 overflow-hidden">
-                                <span className="text-[8px] font-black text-blue-500 dark:text-blue-400 uppercase tracking-widest whitespace-nowrap opacity-80">{t('academy.global_ranking')}</span>
-                                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
+                                <span className="text-[8px] font-black text-blue-500 dark:text-blue-400 tracking-widest whitespace-nowrap opacity-80">{t('academy.global_ranking')}</span>
+                                <span className="text-[10px] font-bold text-slate-900 dark:text-white leading-none tracking-tight whitespace-nowrap">{t('academy.footer_rank')}</span>
                             </div>
                         </div>
 
-                        <div className="px-2 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-500 dark:text-orange-400 text-[8px] font-black uppercase tracking-widest flex items-center gap-1 shadow-[inset_0_1px_8px_rgba(249,115,22,0.1)] mr-0.5 shrink-0">
+                        <div className="px-2 py-1 rounded-full bg-orange-500/10 border border-orange-500/30 text-orange-500 dark:text-orange-400 text-[8px] font-black tracking-widest flex items-center gap-1 shadow-[inset_0_1px_8px_rgba(249,115,22,0.1)] mr-0.5 shrink-0">
                             <div className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
                             {t('academy.footer_status')}
                         </div>

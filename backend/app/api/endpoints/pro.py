@@ -70,12 +70,24 @@ async def get_pro_status(
         except Exception:
             tg_main = partner.telegram_channel_id
 
+    # Parse stages
+    try:
+        completed_stages = json.loads(partner.completed_stages or "[]")
+    except Exception:
+        completed_stages = []
+
+    try:
+        unlocked_stages = json.loads(partner.unlocked_stages or "[]")
+    except Exception:
+        unlocked_stages = []
+
     return {
         "is_pro": partner.is_pro,
         "is_pro_plus": partner.is_pro_plus,
         "pro_tokens": partner.pro_tokens,
         "academy_score": partner.academy_score,
-        "completed_stages": partner.completed_stages,
+        "completed_stages": completed_stages,
+        "unlocked_stages": unlocked_stages,
         "has_x_setup": bool(partner.x_api_key),
         "has_telegram_setup": bool(partner.telegram_channel_id),
         "has_linkedin_setup": bool(partner.linkedin_access_token),

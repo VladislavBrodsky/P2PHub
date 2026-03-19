@@ -107,7 +107,7 @@ export const AcademyCareerStair = () => {
                         <div className="p-4 rounded-xl bg-white/5 backdrop-blur-xl border-2 border-dashed border-blue-500/30 group-hover:border-blue-500/60 group-hover:bg-blue-500/10 transition-all shadow-xl">
                             <ChevronDown className="w-6 h-6 text-blue-500 group-hover:animate-bounce" />
                         </div>
-                        <span className="text-label font-bold text-blue-500/60 group-hover:text-blue-500 uppercase tracking-[0.2em] transition-colors">{t('academy.expand_higher')}</span>
+                        <span className="text-label font-bold text-blue-500/60 group-hover:text-blue-500 tracking-[0.2em] transition-colors">{t('academy.expand_higher')}</span>
                     </motion.button>
                 )}
             </div>

@@ -105,10 +105,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             // #comment: Update local state with the rewards returned from server
             if (response.data.status === 'success' || response.data.status === 'already_completed') {
+                const newCompleted = Array.from(new Set([
+                    ...(user?.completed_stages ?? []).map(String),
+                    String(id)
+                ]));
                 updateUser({
                     xp: response.data.new_xp,
-                    // Optimistically add to completed_stages if not there
-                    completed_stages: Array.from(new Set([...(user?.completed_stages ?? []), id]))
+                    completed_stages: newCompleted
                 });
             }
         } catch (error) {
@@ -121,9 +124,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         try {
             const response = await apiClient.post(`/api/pro/academy/unlock/${id}`);
             if (response.data.status === 'success' || response.data.status === 'already_unlocked') {
+                const unlocked = response.data.unlocked_stages || [];
                 updateUser({
                     xp: response.data.new_xp,
-                    unlocked_stages: response.data.unlocked_stages || [],
+                    unlocked_stages: Array.isArray(unlocked) ? unlocked.map(String) : [],
                 });
             }
         } catch (error) {
@@ -170,10 +174,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             const res = await apiClient.get('/api/partner/me');
             const userData = res.data;
 
-            // Ensure completed_stages exists (backend might not send it yet)
-            if (!userData.completed_stages) {
-                userData.completed_stages = [];
-            }
+            // Self-healing: Ensure stages are parsed arrays of strings
+            const parseStages = (val: any) => {
+                try {
+                    const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+                    return Array.isArray(parsed) ? parsed.map(String) : [];
+                } catch (e) {
+                    return [];
+                }
+            };
+
+            userData.completed_stages = parseStages(userData.completed_stages);
+            userData.unlocked_stages = parseStages(userData.unlocked_stages);
 
             // Enrich with Telegram SDK data if backend is missing details
             if (tgUser) {

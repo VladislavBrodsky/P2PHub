@@ -68,14 +68,14 @@ export const SubscriptionBenefits = React.memo(({
                                         <Clock size={16} strokeWidth={3} className="animate-pulse" />
                                     </div>
                                     <div className="flex flex-col min-w-0">
-                                        <span className="text-[9px] font-black text-black/50 uppercase tracking-[0.2em] leading-none mb-1 truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
-                                        <span className="text-[10px] font-black text-black uppercase tracking-widest leading-none truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
+                                        <span className="text-[9px] font-black text-black/50 tracking-[0.2em] leading-none mb-1 truncate">{t('pro:subscription.pro_active.lifetime_access')}</span>
+                                        <span className="text-[10px] font-black text-black tracking-widest leading-none truncate">{t('marketing:income.math.cta_urgency', 'OFFER CLOSING')}</span>
                                     </div>
                                 </div>
                                 <FomoTimer />
                             </div>
                         )}
-                        <div className={`text-label font-black uppercase tracking-[0.3em] mb-2 ${selectedPlan === 'PRO' ? 'text-white/60' : 'text-[#0a1000]/50'}`}>
+                        <div className={`text-label font-black tracking-[0.3em] mb-2 ${selectedPlan === 'PRO' ? 'text-white/60' : 'text-[#0a1000]/50'}`}>
                             {selectedPlan === 'PRO'
                                 ? t('pro:subscription.plan_headline')
                                 : t('pro:subscription.plan_headline_plus')}
@@ -100,7 +100,7 @@ export const SubscriptionBenefits = React.memo(({
                                 <b.icon size={18} strokeWidth={2.5} />
                             </div>
                             <div className="space-y-1">
-                                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-white/30 leading-none">{b.label}</span>
+                                <span className="text-[10px] font-black tracking-wider text-slate-400 dark:text-white/30 leading-none">{b.label}</span>
                                 <p className="text-label font-bold text-slate-700 dark:text-white/80 leading-tight">
                                     {b.desc.split('.')[0]}
                                 </p>
@@ -113,7 +113,7 @@ export const SubscriptionBenefits = React.memo(({
                 <div className="bg-slate-50 dark:bg-black/40 border-2 border-slate-100 dark:border-white/5 rounded-xl p-5 space-y-3 shadow-xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Check size={14} className="text-emerald-500" strokeWidth={3} />
-                        <span className="text-label font-black uppercase tracking-widest text-slate-400 dark:text-white/30">
+                        <span className="text-label font-black tracking-widest text-slate-400 dark:text-white/30">
                             {t('pro:subscription.benefits.full_access')}
                         </span>
                     </div>
@@ -126,7 +126,7 @@ export const SubscriptionBenefits = React.memo(({
                                     <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${selectedPlan === 'PRO' ? 'bg-blue-500/10 text-blue-600' : 'bg-yellow-400/20 text-yellow-600'}`}>
                                         <Check size={10} strokeWidth={3} />
                                     </div>
-                                    <span className="text-caption font-bold text-slate-700 dark:text-white/70 uppercase tracking-tight leading-none">{b}</span>
+                                    <span className="text-caption font-bold text-slate-700 dark:text-white/70 tracking-tight leading-none">{b}</span>
                                 </div>
                             ));
                         })()}

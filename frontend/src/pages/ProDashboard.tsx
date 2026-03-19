@@ -424,7 +424,7 @@ export const ProDashboard = () => {
             } else if (activeTab === 'growth') {
                 const modulesRaw = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
                 const modulesList = Array.isArray(modulesRaw) ? modulesRaw : [];
-                const nextModule = modulesList.find((m: any) => m && m.id && !completedStages.includes(m.id));
+                const nextModule = modulesList.find((m: any) => m && m.id && !completedStages.includes(String(m.id)));
 
                 if (nextModule) {
                     const setupTitle = String(t('pro_dashboard.academy.social_setup.title') || 'Setup').toUpperCase();
@@ -640,7 +640,6 @@ export const ProDashboard = () => {
                                         selection={selection}
                                     />
                                 )}
-
                                 {activeTab === 'growth' && status && (
                                     <GrowthTab
                                         status={status}
