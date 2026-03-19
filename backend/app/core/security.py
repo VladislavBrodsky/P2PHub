@@ -31,20 +31,21 @@ def validate_telegram_data(init_data: str) -> dict:
         hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
 
         if hmac_hash != hash_str:
-            logger.warning("[AUTH] Invalid signature check failed")
+            logger.warning(f"[AUTH] Signature check failed. Expected: {hmac_hash[:6]}... Received: {hash_str[:6]}...")
             raise HTTPException(status_code=401, detail="Invalid signature")
 
         # Replay attack protection: auth_date must be within 24h
         auth_date = int(vals.get('auth_date', 0))
-        if time.time() - auth_date > 86400:
-            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date}")
+        delta = time.time() - auth_date
+        if delta > 86400:
+            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s)")
             raise HTTPException(status_code=401, detail="Session expired")
 
         return vals
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"[AUTH] Unexpected authentication error: {e}")
+        logger.error(f"[AUTH] Unexpected authentication error ({type(e).__name__}): {e}")
         raise HTTPException(status_code=401, detail="Authentication failed")
 
 async def get_current_user(x_telegram_init_data: str | None = Header(None, alias="X-Telegram-Init-Data")):

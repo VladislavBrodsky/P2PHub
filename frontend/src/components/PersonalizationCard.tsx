@@ -5,7 +5,8 @@ import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { getRank, getXPProgress, getRankGradient, getRankTextColor } from '../utils/ranking';
 import { ProPlusBadge, ProBadge } from './ui/ProPlusBadge';
-import { getSafeLaunchParams } from '../utils/tma';
+import { getSafeLaunchParams, isTMA } from '../utils/tma';
+import { getApiUrl } from '../utils/api';
 
 interface PersonalizationCardProps {
     className?: string;
@@ -33,7 +34,10 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
     const avatarSrc = React.useMemo(() => {
         if (tgPhotoUrl) return tgPhotoUrl;
-        if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+        if (user?.photo_file_id) {
+            const baseUrl = getApiUrl().replace(/\/$/, '');
+            return `${baseUrl}/api/partner/photo/${user.photo_file_id}`;
+        }
         if (user?.photo_url) return user.photo_url;
         return null;
     }, [tgPhotoUrl, user?.photo_file_id, user?.photo_url]);

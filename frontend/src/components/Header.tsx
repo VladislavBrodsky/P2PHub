@@ -18,6 +18,20 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
     const { t } = useTranslation('common');
     const { user } = useUser();
     const { lowPowerMode } = usePerformance();
+    const { setDebugOpen } = useUI();
+    const [clickCount, setClickCount] = useState(0);
+
+    const handleDebugClick = () => {
+        setClickCount(prev => {
+            if (prev + 1 >= 5) {
+                setDebugOpen(true);
+                return 0;
+            }
+            return prev + 1;
+        });
+        // Reset after 2 seconds of inactivity
+        setTimeout(() => setClickCount(0), 2000);
+    };
 
     return (
         <header
@@ -51,7 +65,10 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                         )}
                         aria-label="User stats"
                     >
-                        <div className="flex items-center gap-1.5">
+                        <div
+                            className="flex items-center gap-1.5 cursor-pointer"
+                            onClick={handleDebugClick}
+                        >
                             <span className="text-[10px] sm:text-label font-bold uppercase tracking-wider text-text-secondary dark:text-blue-400">{t('lvl')}</span>
                             <span className="text-[14px] sm:text-caption font-bold text-text-primary leading-none">
                                 {user?.level ?? 1}

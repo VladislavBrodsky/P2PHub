@@ -34,6 +34,7 @@ import { PerformanceProvider } from './hooks/usePerformance';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { PulseBanner } from './components/ui/PulseBanner';
+import { DebugOverlay } from './components/ui/DebugOverlay';
 
 const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 import { useConfig } from './context/ConfigContext';
@@ -54,7 +55,7 @@ const DashboardSkeleton = lazy(() => import('./components/Skeletons/DashboardSke
 function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnboarding: boolean }) {
     const { t } = useTranslation('common');
     const { config } = useConfig();
-    const { isSupportOpen, setSupportOpen } = useUI();
+    const { isSupportOpen, setSupportOpen, isDebugOpen, setDebugOpen } = useUI();
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     // #comment: Removed unused showOnboarding state in AppContent as it is managed in the parent App component
@@ -230,6 +231,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
                         <SupportChat isOpen={isSupportOpen} onClose={() => setSupportOpen(false)} />
                     )}
                 </Suspense>
+
+                {/* Debug Diagnostics Overlay */}
+                <DebugOverlay isOpen={isDebugOpen} onClose={() => setDebugOpen(false)} />
             </div>
         </Layout>
     );

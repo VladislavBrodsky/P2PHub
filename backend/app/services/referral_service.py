@@ -250,9 +250,11 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
         await leaderboard_service.increment_score(referrer.id, xp_gain)
 
     async def _work(p):
-        p.delete(f"partner:profile:{referrer.telegram_id}")
-        p.delete(f"profile_cache_v3:{referrer.id}")
-        p.delete(f"partner:earnings:{referrer.telegram_id}")
+        tg_id = str(referrer.telegram_id)
+        p.delete(f"partner:profile:v4:{tg_id}")
+        p.delete(f"partner:profile:{tg_id}") # Cleanup old style
+        p.delete(f"profile_cache_v3:{referrer.id}") # Cleanup very old style
+        p.delete(f"partner:earnings:{tg_id}")
         p.delete(f"ref_tree_stats_v2:{referrer.id}")
         p.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
         for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:

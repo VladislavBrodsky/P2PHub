@@ -74,6 +74,9 @@ async def simulate_artificial_activity():
             await leaderboard_service.increment_score(partner.id, xp_gain)
             
             # 4. Invalidate profile cache
+            tg_id = str(partner.telegram_id)
+            await redis_service.client.delete(f"partner:profile:v4:{tg_id}")
+            await redis_service.client.delete(f"partner:profile:{tg_id}")
             await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
             
             session.add(partner)

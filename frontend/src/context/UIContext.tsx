@@ -10,6 +10,8 @@ interface UIContextType {
     setNotificationsVisible: (visible: boolean) => void;
     isSupportOpen: boolean;
     setSupportOpen: (open: boolean) => void;
+    isDebugOpen: boolean;
+    setDebugOpen: (open: boolean) => void;
     isKeyboardOpen: boolean;
 }
 
@@ -20,6 +22,7 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isFooterVisible, setFooterVisible] = useState(true);
     const [isNotificationsVisible, setNotificationsVisible] = useState(true);
     const [isSupportOpen, setSupportOpen] = useState(false);
+    const [isDebugOpen, setDebugOpen] = useState(false);
     const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
     React.useEffect(() => {
@@ -71,8 +74,10 @@ export const UIProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setNotificationsVisible,
         isSupportOpen,
         setSupportOpen,
+        isDebugOpen,
+        setDebugOpen,
         isKeyboardOpen,
-    }), [isHeaderVisible, isFooterVisible, isNotificationsVisible, isSupportOpen, isKeyboardOpen]);
+    }), [isHeaderVisible, isFooterVisible, isNotificationsVisible, isSupportOpen, isDebugOpen, isKeyboardOpen]);
 
     return (
         <UIContext.Provider value={value}>

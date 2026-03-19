@@ -166,7 +166,10 @@ const CentralLogo = memo(() => {
 
     const logoSrc = React.useMemo(() => {
         if (tgPhotoUrl) return tgPhotoUrl;
-        if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+        if (user?.photo_file_id) {
+            const baseUrl = getApiUrl().replace(/\/$/, '');
+            return `${baseUrl}/api/partner/photo/${user.photo_file_id}`;
+        }
         return user?.photo_url || LOGO_DATA;
     }, [tgPhotoUrl, user?.photo_file_id, user?.photo_url]);
 

@@ -643,8 +643,10 @@ class PaymentService:
             # Stage Invalidate Cache (Immediate UI Feedback after commit)
             async def _after_commit():
                 try:
-                    await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
-                    await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
+                    tg_id = str(partner.telegram_id)
+                    await redis_service.client.delete(f"partner:profile:v4:{tg_id}")
+                    await redis_service.client.delete(f"partner:profile:{tg_id}") # Cleanup
+                    await redis_service.client.delete(f"profile_cache_v3:{partner.id}") # Cleanup
                 except Exception as e:
                     logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 

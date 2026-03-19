@@ -33,7 +33,7 @@ async def get_my_profile(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
-    cache_key = f"partner:profile:{tg_id}"
+    cache_key = f"partner:profile:v4:{tg_id}"
     try:
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:
@@ -42,10 +42,10 @@ async def get_my_profile(
                 # #comment: CRITICAL - Re-validate into model to ensure @computed_field fields are present
                 return PartnerResponse.model_validate(cached_partner)
             else:
-                # Stale cache from before the schema update — delete and re-fetch
+                # Stale cache — delete and re-fetch
                 await redis_service.client.delete(cache_key)
     except Exception as e:
-        logger.warning(f"Profile cache read failed: {e}")
+        logger.warning(f"Profile cache read failed for {tg_id}: {e}")
 
     from app.services.partner_service import create_partner
 

@@ -3,6 +3,7 @@ import { apiClient } from '../api/client';
 import * as Sentry from "@sentry/react";
 import { getSafeLaunchParams, isTMA } from '../utils/tma';
 import { useStartupProgress } from './StartupProgressContext';
+import { getApiUrl } from '../utils/api';
 
 interface User {
     id: number;
@@ -69,7 +70,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 // Eagerly preload cached profile photo for instant display
                 if (cachedUser?.photo_file_id) {
                     const img = new Image();
-                    img.src = `/api/partner/photo/${cachedUser.photo_file_id}`;
+                    const baseUrl = getApiUrl().replace(/\/$/, '');
+                    img.src = `${baseUrl}/api/partner/photo/${cachedUser.photo_file_id}`;
                     img.loading = 'eager';
                 } else if (cachedUser?.photo_url) {
                     const img = new Image();
@@ -201,7 +203,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             // Eagerly preload profile photo for instant display
             if (userData.photo_file_id) {
                 const img = new Image();
-                img.src = `/api/partner/photo/${userData.photo_file_id}`;
+                const baseUrl = getApiUrl().replace(/\/$/, '');
+                img.src = `${baseUrl}/api/partner/photo/${userData.photo_file_id}`;
                 img.loading = 'eager';
             } else if (userData.photo_url) {
                 const img = new Image();
