@@ -27,6 +27,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
             AND depth BETWEEN :base_depth AND :base_depth + 19
+            AND is_test = false
             GROUP BY 1
             ORDER BY level;
         """)
@@ -68,6 +69,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
             AND depth = :target_depth
+            AND is_test = false
             ORDER BY xp DESC
             LIMIT 100;
         """)
@@ -121,6 +123,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         SELECT COUNT(*) FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
         AND created_at >= :start AND created_at <= :end
+        AND is_test = false
     """)
     res_curr = await session.execute(stmt_curr, {
         "search_path": search_path,
@@ -134,6 +137,7 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
         SELECT COUNT(*) FROM partner
         WHERE (path = :search_path OR path LIKE :search_wildcard)
         AND created_at >= :start AND created_at < :end
+        AND is_test = false
     """)
     res_prev = await session.execute(stmt_prev, {
         "search_path": search_path,
@@ -192,7 +196,9 @@ async def _fetch_time_series_buckets(session, path: str, base_depth: int, interv
     query = text(f"""
         SELECT {bucket_column} as bucket, depth - :base_depth + 1 as level, COUNT(*) as count
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at >= :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 GROUP BY 1, 2 ORDER BY 1 ASC;
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 
+        AND is_test = false
+        GROUP BY 1, 2 ORDER BY 1 ASC;
     """)
     result = await session.execute(query, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
     
@@ -209,7 +215,9 @@ async def _fetch_base_cumulative_totals(session, path: str, base_depth: int, sta
     stmt = text("""
         SELECT depth - :base_depth + 1 as level, COUNT(*)
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at < :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 GROUP BY 1
+        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 
+        AND is_test = false
+        GROUP BY 1
     """)
     res = await session.execute(stmt, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
     totals = {lvl: 0 for lvl in range(1, 21)}
