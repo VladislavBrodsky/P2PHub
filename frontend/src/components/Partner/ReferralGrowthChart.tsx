@@ -6,6 +6,7 @@ import { useHaptic } from '../../hooks/useHaptic';
 import { useTranslation } from 'react-i18next';
 
 import { apiClient } from '../../api/client';
+import { useUser } from '../../context/UserContext';
 
 type Timeframe = '24H' | '7D' | '1M' | '3M' | '6M' | '1Y';
 
@@ -50,6 +51,7 @@ interface ReferralGrowthChartProps {
 export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe, setTimeframe }: ReferralGrowthChartProps) => {
     const { selection } = useHaptic();
     const { t } = useTranslation(['common', 'social']);
+    const { user } = useUser();
     const gradientId = useId();
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [chartData, setChartData] = useState<ChartDataPoint[]>([]);
@@ -77,8 +79,9 @@ export const ReferralGrowthChart = ({ onReportClick, onMetricsUpdate, timeframe,
                 console.error("Failed to fetch growth data", e);
             }
         };
-        fetchData();
-    }, [timeframe, onMetricsUpdate]);
+        // #comment: Only fetch once user/auth context is loaded to prevent 401 errors.
+        if (user) fetchData();
+    }, [timeframe, onMetricsUpdate, user]);
 
     const maxValue = useMemo(() => {
         const vals = chartData.map(d => d.total).filter(v => !isNaN(v));

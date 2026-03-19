@@ -185,6 +185,10 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
             return res.data as Record<string, number>;
         },
         staleTime: 1000 * 60 * 5,
+        // #comment: Only fire once user/auth context is loaded to prevent 401 errors.
+        enabled: !!user,
+        retry: 2,
+        retryDelay: 1000,
     });
 
     const fetchLevelData = async (lvl: number, global: boolean, tId?: number) => {
@@ -207,10 +211,17 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
         queryKey: ['network', 'level', level, isGlobalMode ? 'global' : 'partner', targetPartner ? targetPartner.id : 'me'],
         queryFn: () => fetchLevelData(level, isGlobalMode, targetPartner?.id),
         staleTime: 1000 * 60 * 5,
+        // #comment: Only fire once user/auth context is loaded to prevent 401 errors.
+        enabled: !!user,
+        retry: 2,
+        retryDelay: 1000,
     });
 
     // Prefetch logic
     useEffect(() => {
+        // #comment: Only prefetch when authenticated to avoid 401 races.
+        if (!user) return;
+
         const neighbors = [];
         if (level < 20) neighbors.push(level + 1);
         if (level > 1) neighbors.push(level - 1);
@@ -222,7 +233,7 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
                 staleTime: 1000 * 60 * 5,
             });
         });
-    }, [level, isGlobalMode, targetPartner, queryClient]);
+    }, [level, isGlobalMode, targetPartner, queryClient, user]);
 
     // Derived Data: Filtered Members
     const filteredMembers = useMemo(() => {

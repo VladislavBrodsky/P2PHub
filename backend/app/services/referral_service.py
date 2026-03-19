@@ -260,6 +260,7 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
         p.delete(f"ref_tree_members_v2:{referrer.id}:{level}")
         for tf in ["24H", "7D", "1M", "3M", "6M", "1Y"]:
             p.delete(f"growth_metrics:{referrer.id}:{tf}")
+            p.delete(f"growth_chart:{referrer.id}:{tf}")
 
     if pipe is not None:
         await _work(pipe)

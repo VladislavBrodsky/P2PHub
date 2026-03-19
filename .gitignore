@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 venv/
+.venv/
+.obsolete_*/
+backend/.venv/
+backend/.obsolete_*/
 .env*
 env.backend
 env.local
