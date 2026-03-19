@@ -62,18 +62,6 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
             {/* Premium Background Glow */}
             {/* Removed background glow */}
 
-            {user?.is_pro && (
-                <div
-                    // Adjusted positioning to be top-left of the profile picture
-                    className={`absolute ${variant === 'compact' ? 'top-[30px] left-[18px]' : 'top-[34px] left-[14px]'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.5)] ${isProPlus ? 'brightness-125' : ''} animate-float-subtle`}
-                >
-                    <Crown
-                        size={variant === 'compact' ? 24 : 30}
-                        className={`${isProPlus ? 'text-fuchsia-500 fill-fuchsia-500/10' : 'text-amber-500 fill-amber-500/10'}`}
-                        strokeWidth={2.5}
-                    />
-                </div>
-            )}
 
             {/* #comment: Separated shadow and background from overflow container to prevent shadow clipping */}
             <div className={`
@@ -92,6 +80,17 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                     {/* Left: Avatar & Rank Badge Column */}
                     <div className="flex flex-col items-center gap-2 shrink-0">
                         <div className="relative">
+                            {user?.is_pro && (
+                                <div
+                                    className={`absolute ${variant === 'compact' ? '-top-2.5 -left-1' : '-top-3.5 -left-1.5'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.3)] ${isProPlus ? 'brightness-110' : ''} animate-float-subtle`}
+                                >
+                                    <Crown
+                                        size={variant === 'compact' ? 16 : 22}
+                                        className={`${isProPlus ? 'text-purple-500 fill-purple-500/10' : 'text-yellow-400 fill-yellow-400/10'}`}
+                                        strokeWidth={2.5}
+                                    />
+                                </div>
+                            )}
 
 
                             <motion.div
