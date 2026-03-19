@@ -4,6 +4,16 @@ export const getSafeLaunchParams = () => {
     try {
         return retrieveLaunchParams();
     } catch (e) {
+        // Fallback to pure window object if SDK fails (happens during hash navigation)
+        if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp?.initData) {
+            return {
+                initDataRaw: (window as any).Telegram.WebApp.initData,
+                initData: undefined,
+                themeParams: (window as any).Telegram.WebApp.themeParams || {},
+                platform: (window as any).Telegram.WebApp.platform || 'unknown'
+            } as any;
+        }
+        
         console.warn('[DEBUG] Not in Telegram environment, using empty params');
         return {
             initData: undefined,
@@ -13,11 +23,15 @@ export const getSafeLaunchParams = () => {
         } as any;
     }
 };
+
 export const isTMA = () => {
     try {
         retrieveLaunchParams();
         return true;
     } catch (e) {
+        if (typeof window !== 'undefined' && (window as any).Telegram?.WebApp?.initData) {
+            return true;
+        }
         return false;
     }
 };
