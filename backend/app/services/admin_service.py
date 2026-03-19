@@ -702,7 +702,7 @@ class AdminService:
             session.add(partner)
             await session.commit()
             
-            await redis_service.client.delete(f"partner:profile:{partner.telegram_id}")
+            await redis_service.client.delete(f"partner:profile:v5:{partner.telegram_id}")
             return True
 
     async def get_palantir_feed(self, limit: int = 100) -> list[dict[str, Any]]:

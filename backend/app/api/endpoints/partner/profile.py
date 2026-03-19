@@ -21,6 +21,9 @@ from bot import bot, types
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# #comment: Current profile cache version to prevent stale data between updates.
+PROFILE_CACHE_VERSION = "v5"
+
 @router.get("/me", response_model=PartnerResponse)
 async def get_my_profile(
     background_tasks: BackgroundTasks,
@@ -33,7 +36,7 @@ async def get_my_profile(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
-    cache_key = f"partner:profile:v5:{tg_id}"
+    cache_key = f"partner:profile:{PROFILE_CACHE_VERSION}:{tg_id}"
     try:
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:

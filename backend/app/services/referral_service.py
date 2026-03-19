@@ -251,6 +251,7 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
 
     async def _work(p):
         tg_id = str(referrer.telegram_id)
+        p.delete(f"partner:profile:v5:{tg_id}")
         p.delete(f"partner:profile:v4:{tg_id}")
         p.delete(f"partner:profile:{tg_id}") # Cleanup old style
         p.delete(f"profile_cache_v3:{referrer.id}") # Cleanup very old style

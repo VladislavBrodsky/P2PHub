@@ -644,6 +644,7 @@ class PaymentService:
             async def _after_commit():
                 try:
                     tg_id = str(partner.telegram_id)
+                    await redis_service.client.delete(f"partner:profile:v5:{tg_id}")
                     await redis_service.client.delete(f"partner:profile:v4:{tg_id}")
                     await redis_service.client.delete(f"partner:profile:{tg_id}") # Cleanup
                     await redis_service.client.delete(f"profile_cache_v3:{partner.id}") # Cleanup
