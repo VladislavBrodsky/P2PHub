@@ -209,7 +209,7 @@ async def _fetch_time_series_buckets(session, path: str, base_depth: int, interv
         if b not in data_map: data_map[b] = {lvl: 0 for lvl in range(1, 21)}
         data_map[b][int(row[1])] = int(row[2])
     return data_map
-
+async def _fetch_base_cumulative_totals(session: AsyncSession, path: str, base_depth: int, start: datetime) -> dict:
     partner_depth = base_depth - 1
     stmt = text("""
         SELECT depth - :partner_depth as level, COUNT(*)
