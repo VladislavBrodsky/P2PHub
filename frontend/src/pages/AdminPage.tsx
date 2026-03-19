@@ -3,6 +3,7 @@ import { apiClient } from '../api/client';
 import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useSystemClock } from '../hooks/usePerformance';
+import { getSafeLaunchParams } from '../utils/tma';
 
 // Modular Components
 import { AdminDashboard } from './Admin/AdminDashboard';
@@ -60,6 +61,13 @@ export const AdminPage = () => {
     const [reconcileResult, setReconcileResult] = useState<any | null>(null);
 
     const fetchData = async (silent = false, forceRefresh = false) => {
+        const lp = getSafeLaunchParams();
+        if (!lp.initDataRaw) {
+            console.warn('[Admin] Auth data missing, skipping fetch');
+            if (!silent) setError('Authentication session not ready. Please pull down to refresh.');
+            return;
+        }
+        
         if (!silent) setIsLoading(true);
         setError(null);
         try {

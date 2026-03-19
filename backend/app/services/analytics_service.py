@@ -23,10 +23,10 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         base_depth = len(search_path.split('.'))
 
         query = text("""
-            SELECT depth - :base_depth + 1 as level, COUNT(*) as count
+            SELECT depth - :partner_depth as level, COUNT(*) as count
             FROM partner
             WHERE (path = :search_path OR path LIKE :search_wildcard)
-            AND depth BETWEEN :base_depth AND :base_depth + 19
+            AND depth > :partner_depth AND depth <= :partner_depth + 20
             AND is_test = false
             GROUP BY 1
             ORDER BY level;
@@ -35,7 +35,7 @@ async def get_referral_tree_stats(session: AsyncSession, partner_id: int) -> dic
         result = await session.execute(query, {
             "search_path": search_path,
             "search_wildcard": f"{search_path}.%",
-            "base_depth": base_depth
+            "partner_depth": partner.depth or 0
         })
 
         stats = {str(i): 0 for i in range(1, 21)}
@@ -61,8 +61,7 @@ async def get_referral_tree_members(session: AsyncSession, partner_id: int, targ
 
         search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
         base_depth = len(search_path.split('.'))
-        target_depth = base_depth + target_level - 1
-
+        target_depth = (partner.depth or 0) + target_level
         query = text("""
             SELECT telegram_id, username, first_name, last_name, xp, photo_url, created_at,
                    balance, level as partner_level, referral_code, is_pro, updated_at, id, photo_file_id
@@ -192,14 +191,15 @@ async def get_network_time_series(session: AsyncSession, partner_id: int, timefr
 
 async def _fetch_time_series_buckets(session, path: str, base_depth: int, interval: str, start: datetime) -> dict:
     bucket_column = _get_bucket_expr(interval)
+    partner_depth = base_depth - 1 # Since base_depth was split length
     query = text(f"""
-        SELECT {bucket_column} as bucket, depth - :base_depth + 1 as level, COUNT(*) as count
+        SELECT {bucket_column} as bucket, depth - :partner_depth as level, COUNT(*) as count
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at >= :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 
+        AND (depth - :partner_depth) BETWEEN 1 AND 20 
         AND is_test = false
         GROUP BY 1, 2 ORDER BY 1 ASC;
     """)
-    result = await session.execute(query, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
+    result = await session.execute(query, {"path": path, "wildcard": f"{path}.%", "start": start, "partner_depth": partner_depth})
     
     data_map = {}
     for row in result.all():
@@ -210,15 +210,15 @@ async def _fetch_time_series_buckets(session, path: str, base_depth: int, interv
         data_map[b][int(row[1])] = int(row[2])
     return data_map
 
-async def _fetch_base_cumulative_totals(session, path: str, base_depth: int, start: datetime) -> dict[int, int]:
+    partner_depth = base_depth - 1
     stmt = text("""
-        SELECT depth - :base_depth + 1 as level, COUNT(*)
+        SELECT depth - :partner_depth as level, COUNT(*)
         FROM partner WHERE (path = :path OR path LIKE :wildcard) AND created_at < :start
-        AND (depth - :base_depth + 1) BETWEEN 1 AND 20 
+        AND (depth - :partner_depth) BETWEEN 1 AND 20 
         AND is_test = false
         GROUP BY 1
     """)
-    res = await session.execute(stmt, {"path": path, "wildcard": f"{path}.%", "start": start, "base_depth": base_depth})
+    res = await session.execute(stmt, {"path": path, "wildcard": f"{path}.%", "start": start, "partner_depth": partner_depth})
     totals = {lvl: 0 for lvl in range(1, 21)}
     for row in res.all():
         totals[int(row[0])] = int(row[1])

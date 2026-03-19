@@ -164,4 +164,4 @@ dependencies = [
 
 [tool.ruff]
 cache-dir = "/tmp/ruff_cache"
-exclude = [".tmp*", "node_modules", ".venv_new", "venv", ".venv"]
+exclude = [".tmp*", "node_modules", ".venv_new", "venv", ".venv", ".venv_old"]

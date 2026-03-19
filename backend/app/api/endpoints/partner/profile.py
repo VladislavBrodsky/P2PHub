@@ -128,15 +128,18 @@ async def get_my_profile(
         partner.depth = len(partner.path.split('.'))
         migration_needed = True
 
-    # Recalculate true L1 count (excluding test users if the partner itself is real)
-    actual_direct_count = (await session.exec(
-        select(func.count(Partner.id))
-        .where(Partner.referrer_id == partner.id, Partner.is_test == False)
-    )).one()
+    # Self-healing: Ensure referral_count accurately reflects TOTAL network size (non-test)
+    # Why: The dashboard uses referral_count as a fallback for 'NETWORK SIZE'.
+    # Users expect this to be their whole tree (filtered for real users).
+    my_search_path = f"{partner.path or ''}.{partner.id}".lstrip(".")
+    actual_total_size = (await session.execute(
+        text("SELECT COUNT(*) FROM partner WHERE (path = :p OR path LIKE :pw) AND is_test = false"),
+        {"p": my_search_path, "pw": f"{my_search_path}.%"}
+    )).scalar() or 0
 
-    if partner.referral_count != actual_direct_count:
-        logger.info(f"🔄 Self-healing stats for partner {partner.id}: referral_count {partner.referral_count} -> {actual_direct_count}")
-        partner.referral_count = actual_direct_count
+    if partner.referral_count != actual_total_size:
+        logger.info(f"🔄 Self-healing stats for partner {partner.id}: referral_count {partner.referral_count} -> {actual_total_size}")
+        partner.referral_count = actual_total_size
         migration_needed = True
 
     correct_level = get_level(partner.xp)

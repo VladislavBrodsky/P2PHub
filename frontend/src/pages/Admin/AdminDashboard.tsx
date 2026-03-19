@@ -105,7 +105,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = React.memo(({
                         <ShieldCheck className="text-blue-500 drop-shadow-md" size={32} />
                     </div>
                     <div className="text-center md:text-left space-y-1">
-                        <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+                        <h1 className="text-xl md:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                             {t('admin_portal.command_center')}
                         </h1>
                         <p className="text-slate-500 dark:text-slate-400 text-sm font-medium tracking-wide">
