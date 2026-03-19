@@ -245,7 +245,7 @@ if "sqlite" not in database_url:
         "pool_size": 5,         # 5 per worker × 2 workers = 10 base connections
         "max_overflow": 5,      # Burst capacity → max 10 per worker = 20 total
         "pool_timeout": 20,     # Fail fast if no connection available (was 30)
-        "pool_recycle": 120,     # Reduced from 1800 to match Railway Proxy (60s close)
+        "pool_recycle": 50,      # Reduced from 120 to stay ahead of Railway Proxy (60s close)
         "pool_use_lifo": True,  # Reuse hot connections; reduces total connections kept warm
     })
 

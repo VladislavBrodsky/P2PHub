@@ -26,6 +26,8 @@ apiClient.interceptors.request.use(
 
             if (initDataRaw) {
                 config.headers['X-Telegram-Init-Data'] = initDataRaw;
+                // Dual-send in standard Authorization header for aggressive proxy compatibility
+                config.headers['Authorization'] = `Bearer ${initDataRaw}`;
             }
 
             // Inject Content-Language based on current app setting

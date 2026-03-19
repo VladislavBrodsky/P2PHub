@@ -34,15 +34,16 @@ def validate_telegram_data(init_data: str) -> dict:
             logger.warning(f"[AUTH] Signature check failed. Expected: {hmac_hash[:6]}... Received: {hash_str[:6]}...")
             raise HTTPException(status_code=401, detail="Invalid signature")
 
-        # Replay attack protection: auth_date must be within 24h
+        # Replay attack protection: auth_date must be within 7 days (extended from 24h)
+        # Why: Prevents 401 errors for users with long-running Telegram Mini App sessions.
         auth_date = int(vals.get('auth_date', 0))
         delta = time.time() - auth_date
-        if delta > 86400:
+        if delta > 604800:
             logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s) InitData: {init_data[:50]}...")
             raise HTTPException(status_code=401, detail="Session expired")
 
         # #comment: Log successful signature but warn on old sessions
-        if delta > 3600:
+        if delta > 86400:
             logger.info(f"[AUTH] Using aged session (Age: {delta/3600:.1f}h) for user {vals.get('user', 'unknown')[:20]}...")
 
         return vals
@@ -52,14 +53,23 @@ def validate_telegram_data(init_data: str) -> dict:
         logger.error(f"[AUTH] Unexpected authentication error ({type(e).__name__}): {e}")
         raise HTTPException(status_code=401, detail="Authentication failed")
 
-async def get_current_user(x_telegram_init_data: str | None = Header(None, alias="X-Telegram-Init-Data")):
+async def get_current_user(
+    x_telegram_init_data: str | None = Header(None, alias="X-Telegram-Init-Data"),
+    authorization: str | None = Header(None)
+):
     """
     Central authentication dependency. Verified Telegram initData.
-    Returns None if header is missing, allowing guest mode.
+    Supports both X-Telegram-Init-Data and Authorization: Bearer <data>
     """
-    if not x_telegram_init_data:
+    init_data = x_telegram_init_data
+    
+    # Fallback to Authorization header if custom header is missing
+    if not init_data and authorization and authorization.startswith("Bearer "):
+        init_data = authorization.replace("Bearer ", "", 1)
+        
+    if not init_data:
         return None
-    return validate_telegram_data(x_telegram_init_data)
+    return validate_telegram_data(init_data)
 
 def get_tg_user(user_data: dict) -> dict:
     """Helper to parse the 'user' JSON field from initData."""
