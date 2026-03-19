@@ -1,3 +1,4 @@
+# Finance intelligence API endpoint - v1.1 (Deployed 2026-03-19)
 import logging
 from datetime import datetime, UTC, timedelta
 
