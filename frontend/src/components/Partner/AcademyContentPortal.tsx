@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
-import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft, Users } from 'lucide-react';
+import { X, Zap, CheckCircle2, ArrowRight, Lock, Lightbulb, Wand2, Share2, Target, ArrowLeft, Users, TrendingUp } from 'lucide-react';
 import { AcademyStage } from '../../data/academyData';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
@@ -16,16 +16,29 @@ import { shareUniversal } from '../../utils/shareUtils';
 interface AcademyContentPortalProps {
     stage: AcademyStage;
     onClose: () => void;
-    onComplete: (id: number) => void;
+    unlockedStages: (string | number)[];
+    onComplete: (id: number) => Promise<void>;
+    onUnlock: (id: number) => Promise<void>;
     isLocked: boolean;
 }
 
-export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stage, onClose, onComplete, isLocked }) => {
+export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ 
+    stage, 
+    onClose, 
+    unlockedStages, 
+    onComplete, 
+    onUnlock, 
+    isLocked 
+}) => {
     const { t } = useTranslation(['academy', 'common']);
     const { user } = useUser();
     const { navigateTo } = useNavigation();
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const [missionAccomplished, setMissionAccomplished] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [isUnlocking, setIsUnlocking] = React.useState(false);
+
+    const isUnlocked = stage.id <= 20 || unlockedStages.includes(stage.id) || unlockedStages.includes(String(stage.id));
 
     useTMALock(true);
     const [scrolledProgress, setScrolledProgress] = React.useState(0);
@@ -167,45 +180,69 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                             /* PRO Lock View */
                             <div className="flex flex-col items-center text-center space-y-8 py-12">
                                 <div className="w-20 h-20 rounded-2xl bg-amber-500/10 border-2 border-dashed border-amber-500/30 flex items-center justify-center">
-                                    <Lock className="w-10 h-10 text-amber-500" />
+                                    <Lock size={40} className="text-amber-500" />
                                 </div>
-                                <div className="space-y-2">
-                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">
-                                        {stage.id === 20 ? t('academy.locked.stage_20_lock_title') : t('academy.stage_locked')}
+                                <div className="space-y-3">
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter italic">
+                                        {t('academy.pro_stage_title', { defaultValue: 'ELITE PROTOCOL' })}
                                     </h2>
-                                    <p className="text-caption text-slate-500 dark:text-slate-400 font-medium max-w-[280px] leading-relaxed">
-                                        {stage.id === 20 ? t('academy.locked.stage_20_lock_desc') : t('academy.lock_desc')}
+                                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[280px] leading-relaxed mx-auto italic">
+                                        {t('academy.pro_stage_desc', { defaultValue: 'This training module is reserved for PRO members. Unlock full income potential.' })}
                                     </p>
                                 </div>
 
-                                <div className="w-full p-6 rounded-2xl bg-linear-to-br from-amber-500/10 to-transparent border border-amber-500/20 space-y-5">
-                                    <div className="flex items-center gap-3">
-                                        <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
-                                        <span className="text-label font-bold text-amber-500 uppercase tracking-widest">{t('academy.pro_benefits')}</span>
-                                    </div>
-                                    <ul className="space-y-2 text-left">
-                                        {Array.isArray(t('academy.pro_items', { returnObjects: true })) && (t('academy.pro_items', { returnObjects: true }) as string[]).map((item, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-label font-bold text-slate-700 dark:text-slate-300">
-                                                <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
-                                                {item}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                <button
+                                    onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
+                                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border shadow-blue-500/20"
+                                >
+                                    <Zap size={18} fill="currentColor" />
+                                    {t('common:navigation.pro_upgrade', { defaultValue: 'UPGRADE TO PRO' })}
+                                </button>
+                            </div>
+                        ) : !isUnlocked ? (
+                            /* XP Lock View */
+                            <div className="flex flex-col items-center text-center space-y-8 py-12">
+                                <div className="w-20 h-20 rounded-2xl bg-indigo-500/10 border-2 border-dashed border-indigo-500/30 flex items-center justify-center shadow-[0_0_30px_rgba(79,70,229,0.1)]">
+                                    <Lock size={40} className="text-indigo-500" />
+                                </div>
+                                <div className="space-y-3">
+                                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter italic">
+                                        {t('pro_dashboard.locked.title', { defaultValue: 'ENCRYPTED NODE' })}
+                                    </h2>
+                                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[280px] leading-relaxed mx-auto italic">
+                                        {t('pro_dashboard.academy.insufficient_xp_msg', { defaultValue: 'This advanced mission requires cognitive synchronization.' })}
+                                    </p>
                                 </div>
 
                                 <button
-                                    onClick={() => {
-                                        onClose();
-                                        navigateTo(ROUTES.SUBSCRIPTION);
+                                    onClick={async () => {
+                                        setIsUnlocking(true);
+                                        try {
+                                            await onUnlock(stage.id);
+                                        } finally {
+                                            setIsUnlocking(false);
+                                        }
                                     }}
-                                    className="w-full py-5 rounded-2xl bg-linear-to-r from-amber-500 to-orange-500 text-white font-bold text-xs uppercase tracking-[0.2em] shadow-xl shadow-amber-500/30 active:scale-95 transition-all flex items-center justify-center gap-2 group"
+                                    disabled={isUnlocking}
+                                    className="w-full py-5 bg-linear-to-r from-indigo-500 via-blue-600 to-indigo-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-[1.5rem] font-bold text-sm uppercase tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-indigo-400/30"
                                 >
-                                    <span>{t('academy.upgrade_now')}</span>
-                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                    {isUnlocking ? (
+                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    ) : (
+                                        <>
+                                            <span className="flex items-center gap-2">
+                                                {t('pro_dashboard.academy.unlock_for', { cost: stage.id === 21 ? 350 : 500, defaultValue: 'Unlock Node' })}
+                                            </span>
+                                            <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
+                                            <Lock size={16} />
+                                        </>
+                                    )}
                                 </button>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                                    {t('common:xp', { defaultValue: 'Available Balance' })}: <span className="text-indigo-500">{user?.xp ? Math.floor(user.xp) : 0} XP</span>
+                                </p>
                             </div>
                         ) : (
-
                             /* Lesson Content View */
                             <div className="space-y-10">
                                 {/* Viral Network Core - Dynamic Hero Section */}
@@ -441,9 +478,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                             >
                                                 {/* Orb Glow */}
                                                 <div className="absolute inset-0 bg-radial from-white/20 to-transparent pointer-events-none" />
-                                                <div className="p-1 rounded-full bg-white/20 relative z-10">
-                                                    <Users className="w-3 h-3 text-white" />
-                                                </div>
+                                                <Users className="w-3 h-3 text-white" />
                                                 <span className="text-[10px] font-black text-white tracking-wider relative z-10">+$8.64</span>
                                             </motion.div>
 
@@ -578,29 +613,35 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                                         className="p-6 rounded-2xl bg-blue-50 dark:bg-white/5 border border-blue-100 dark:border-white/10 space-y-5 relative overflow-hidden group/mission"
                                     >
                                         <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 dark:via-white/5 to-transparent -translate-x-full group-hover/mission:translate-x-full transition-transform duration-1000 pointer-events-none" />
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                                                <Target className="w-4 h-4" />
-                                            </div>
-                                            <h4 className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-wider">{t('academy.your_mission')}</h4>
-                                        </div>
+                                        
+                                        <div className="space-y-6">
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
+                                                        <TrendingUp size={16} />
+                                                    </div>
+                                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('academy.mission_ready_title', { defaultValue: 'MISSION PROTOCOL' })}</h3>
+                                                </div>
 
-                                        <div
-                                            onClick={() => setMissionAccomplished(!missionAccomplished)}
-                                            className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-4 ${missionAccomplished
-                                                ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400'
-                                                : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-blue-200 dark:hover:border-white/20'
-                                                }`}
-                                        >
-                                            <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${missionAccomplished ? 'bg-blue-500 border-blue-500 rotate-0 scale-110 shadow-lg shadow-blue-500/20' : 'border-slate-300 dark:border-white/20 rotate-45 group-hover:rotate-0 group-hover:border-blue-400 dark:group-hover:border-white/40'
-                                                }`}>
-                                                {missionAccomplished ? <CheckCircle2 className="w-4 h-4 text-white" /> : <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />}
+                                                <div
+                                                    onClick={() => setMissionAccomplished(!missionAccomplished)}
+                                                    className={`p-4 rounded-xl border-2 transition-all cursor-pointer flex items-center gap-4 ${missionAccomplished
+                                                        ? 'bg-blue-500/10 border-blue-500 text-blue-600 dark:text-blue-400'
+                                                        : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:border-blue-200 dark:hover:border-white/20'
+                                                        }`}
+                                                >
+                                                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${missionAccomplished
+                                                        ? 'bg-blue-500 border-blue-500 text-white'
+                                                        : 'border-slate-300 dark:border-white/20'
+                                                        }`}>
+                                                        {missionAccomplished && <CheckCircle2 size={14} />}
+                                                    </div>
+                                                    <p className="text-caption font-bold uppercase tracking-tight leading-snug">
+                                                        {renderInline(t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') }))}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <span className="text-caption font-bold leading-tight">
-                                                {renderInline(t(`academy_content.stage_${stage.id}_lesson_mission`, { defaultValue: t('academy.apply_knowledge') }))}
-                                            </span>
                                         </div>
-
                                         <p className="text-label text-slate-500 font-bold uppercase tracking-widest text-center pt-2">
                                             {missionAccomplished ? t('academy.mission_ready') : t('academy.mission_pending')}
                                         </p>
@@ -621,11 +662,19 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({ stag
                     >
                         <ArrowLeft className="w-6 h-6" />
                     </button>
-
-                    {!isLocked ? (
+                    {isUnlocked ? (
                         <button
-                            onClick={() => missionAccomplished && onComplete(stage.id)}
-                            disabled={!missionAccomplished}
+                            onClick={async () => {
+                                if (!missionAccomplished) return;
+                                setIsSubmitting(true);
+                                try {
+                                    await onComplete(stage.id);
+                                    onClose();
+                                } finally {
+                                    setIsSubmitting(false);
+                                }
+                            }}
+                            disabled={!missionAccomplished || isSubmitting}
                             className={`flex-1 py-5 rounded-2xl font-bold text-sm uppercase tracking-[0.2em] shadow-xl transition-all flex items-center justify-center gap-4 border touch-manipulation relative overflow-hidden ${missionAccomplished
                                 ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.3)] active:scale-95 brightness-110'
                                 : 'bg-slate-100 dark:bg-white/5 text-slate-400 border-slate-200 dark:border-white/10 opacity-50 grayscale cursor-not-allowed shadow-none'

@@ -110,13 +110,15 @@ class LeaderboardService:
             # 3. Cache the new results for next time
             new_cache_map = {}
             for p in db_partners:
-                # Sanitize legacy photo URLs (e.g. /images/avatars/...)
+                # #comment: Sanitize legacy or local-only relative paths that fail in TWA/Mobile.
+                # All valid profile photos should be either Telegram file_ids or absolute URLs.
                 safe_photo_url = p.photo_url
                 if safe_photo_url and (
-                    safe_photo_url.startswith("/images/avatars/") or
                     safe_photo_url.startswith("/images/") or
                     safe_photo_url.startswith("/avatars/")
                 ):
+                    # We nullify these to force the frontend to use the colored initial fallback
+                    # instead of showing a broken image icon.
                     safe_photo_url = None
 
                 p_data = {
