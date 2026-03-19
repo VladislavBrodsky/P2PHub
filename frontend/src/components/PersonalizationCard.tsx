@@ -82,11 +82,11 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                         <div className="relative">
                             {user?.is_pro && (
                                 <div
-                                    className={`absolute ${variant === 'compact' ? '-top-2.5 -left-1' : '-top-3.5 -left-1.5'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.3)] ${isProPlus ? 'brightness-110' : ''} animate-float-subtle`}
+                                    className={`absolute ${variant === 'compact' ? '-top-4 left-1/2 -translate-x-1/2' : '-top-5 left-1/2 -translate-x-1/2'} z-50 drop-shadow-[0_4px_12px_rgba(168,85,247,0.4)] ${isProPlus ? 'brightness-110' : ''} animate-float-subtle`}
                                 >
                                     <Crown
-                                        size={variant === 'compact' ? 16 : 22}
-                                        className={`${isProPlus ? 'text-purple-500 fill-purple-500/10' : 'text-yellow-400 fill-yellow-400/10'}`}
+                                        size={variant === 'compact' ? 18 : 26}
+                                        className={`${isProPlus ? 'text-purple-500 fill-purple-500/20' : 'text-yellow-400 fill-yellow-400/20'}`}
                                         strokeWidth={2.5}
                                     />
                                 </div>
