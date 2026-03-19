@@ -3,6 +3,8 @@ import { Menu, Crown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../context/UserContext';
 import { usePerformance } from '../hooks/usePerformance';
+import { useState } from 'react';
+import { useUI } from '../context/UIContext';
 import { cn } from '../lib/utils';
 
 // #comment: Header.tsx - Fixed top navigation bar.
