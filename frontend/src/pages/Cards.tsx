@@ -211,16 +211,24 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 <>
                                     <motion.div
                                         animate={{ x: ['-150%', '150%'] }}
-                                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
+                                        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
                                     />
-                                    <Crown size={16} className="fill-current" />
-                                    <span>{t('cards.platinum.bonus_text')}</span>
+                                    <Crown size={18} className="text-amber-500 fill-amber-100 relative z-10" />
+                                    <span className="relative z-10">{t('cards.premium_only')}</span>
                                 </>
                             ) : (
-                                t('cards.virtual.title')
+                                <>
+                                    <span>{t('cards.action')}</span>
+                                    <div className="w-1 h-1 rounded-full bg-white/20" />
+                                    <span className="text-white/80">{currentCard.price}</span>
+                                </>
                             )}
                         </motion.button>
+
+                        <p className="mt-4 text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60 text-center w-full">
+                            {t('cards.instant_delivery')}
+                        </p>
                     </div>
                 </motion.div>
             </div>

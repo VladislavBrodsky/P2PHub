@@ -87,12 +87,12 @@ export const BlogDetail = ({
                         className="p-2 sm:px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group shrink-0"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
-                        <span className="hidden sm:block text-[10px] font-bold uppercase tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
+                        <span className="hidden sm:block text-[10px] font-bold tracking-[0.2em]">{t('blog.navigation.back_to_blog')}</span>
                     </button>
 
                     <div className="flex items-center gap-2 sm:gap-3">
                         <div className="flex flex-col items-end sm:items-center mr-1 sm:mr-2 min-w-0">
-                            <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 leading-none mb-0.5 whitespace-nowrap truncate">{t('blog.navigation.reading_progress')}</div>
+                            <div className="text-[9px] font-bold tracking-wider text-slate-400 leading-none mb-0.5 whitespace-nowrap truncate">{t('blog.navigation.reading_progress')}</div>
                             <div className="text-[10px] font-bold text-blue-500 leading-none">{Math.round(scrollProgress)}%</div>
                         </div>
                         <div className="flex items-center gap-1.5 p-1 px-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium">
@@ -127,13 +127,13 @@ export const BlogDetail = ({
                             <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/80 to-transparent" />
                             <div className="absolute bottom-6 left-6 flex items-center gap-2">
                                 <div className="px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                                    <p className="text-label font-bold text-white uppercase tracking-widest">{t('blog.navigation.intel_archive')}</p>
+                                    <p className="text-label font-bold text-white tracking-widest">{t('blog.navigation.intel_archive')}</p>
                                 </div>
                             </div>
                         </div>
                     )}
                     <div className="flex items-center gap-4">
-                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-label font-bold uppercase tracking-widest shadow-lg shadow-blue-600/20">
+                        <span className="px-4 py-1.5 rounded-full bg-blue-600 text-white text-label font-bold tracking-widest shadow-lg shadow-blue-600/20">
                             {t(getCategoryKey(post.category))}
                         </span>
                         <div className="flex items-center gap-2 text-label font-bold text-slate-500 dark:text-slate-400 opacity-60">
@@ -159,7 +159,7 @@ export const BlogDetail = ({
                     </div>
                     <div>
                         <p className="text-sm font-bold text-slate-900 dark:text-white leading-none mb-1">{post.author || 'Marcus Vance'}</p>
-                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('blog.navigation.senior_analyst')}</p>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-widest">{t('blog.navigation.senior_analyst')}</p>
                     </div>
                     <div className="ml-auto">
                         <div className="flex -space-x-3">
@@ -222,7 +222,7 @@ export const BlogDetail = ({
                         >
                             <Heart className={`w-4 h-4 transition-transform duration-500 ${engagement.liked ? 'fill-current scale-110' : 'group-hover:text-red-500 group-hover:scale-110'}`} />
                             <div className="flex flex-col items-start leading-none mt-0.5">
-                                <span className="text-[8px] font-bold uppercase tracking-widest opacity-60 mb-0.5">{t('blog.navigation.impact')}</span>
+                                <span className="text-[8px] font-bold tracking-widest opacity-60 mb-0.5">{t('blog.navigation.impact')}</span>
                                 <span className="font-bold text-base italic!">
                                     {isLoading ? '...' : engagement.likes.toLocaleString()}
                                 </span>
@@ -237,7 +237,7 @@ export const BlogDetail = ({
                         </button>
                     </div>
 
-                    <p className="text-label font-bold text-slate-400 uppercase tracking-[0.2em] animate-pulse">
+                    <p className="text-label font-bold text-slate-400 tracking-[0.2em] animate-pulse">
                         {t('blog.navigation.feedback_loop')}
                     </p>
                 </div>
@@ -245,7 +245,7 @@ export const BlogDetail = ({
                 {/* Related Intelligence */}
                 <div className="pt-8 space-y-6">
                     <div className="flex items-center gap-4">
-                        <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-blue-500 shrink-0">{t('blog.navigation.next_reports')}</h4>
+                        <h4 className="text-xs font-bold tracking-[0.3em] text-blue-500 shrink-0">{t('blog.navigation.next_reports')}</h4>
                         <div className="h-px flex-1 bg-linear-to-r from-blue-500/20 to-transparent" />
                     </div>
                     <div className="grid grid-cols-1 gap-5">
@@ -265,11 +265,11 @@ export const BlogDetail = ({
                                         </div>
                                     )}
                                     <div className="flex-1 min-w-0 py-1">
-                                        <p className="text-label font-bold uppercase tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
+                                        <p className="text-label font-bold tracking-widest text-blue-500 mb-1.5 flex items-center gap-1.5">
                                             <div className="w-1 h-1 rounded-full bg-blue-500" />
                                             {t(getCategoryKey(relatedPost.category))}
                                         </p>
-                                        <h5 className="text-body font-bold leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors uppercase!">
+                                        <h5 className="text-body font-bold leading-tight line-clamp-2 text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
                                             {relatedPost.title}
                                         </h5>
                                     </div>
@@ -291,7 +291,7 @@ export const BlogDetail = ({
                             <ChevronLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <span className="text-label font-bold text-slate-400 uppercase tracking-wider mb-1 truncate">{t('blog.navigation.previous_label')}</span>
+                            <span className="text-label font-bold text-slate-400 tracking-wider mb-1 truncate">{t('blog.navigation.previous_label')}</span>
                             <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.back_in_flow')}</span>
                         </div>
                     </button>
@@ -300,7 +300,7 @@ export const BlogDetail = ({
                         className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 hover:border-blue-500/30 active:scale-95 transition-all flex items-center justify-end gap-4 group text-right shadow-sm hover:shadow-xl dark:shadow-blue-500/5"
                     >
                         <div className="flex flex-col min-w-0 items-end">
-                            <span className="text-label font-bold text-slate-400 uppercase tracking-wider mb-1 truncate">{t('blog.navigation.next_intel')}</span>
+                            <span className="text-label font-bold text-slate-400 tracking-wider mb-1 truncate">{t('blog.navigation.next_intel')}</span>
                             <span className="text-xs font-bold truncate text-slate-900 dark:text-white">{t('blog.navigation.forward_label')}</span>
                         </div>
                         <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-500 shrink-0">
