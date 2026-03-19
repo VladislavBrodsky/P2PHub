@@ -205,7 +205,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
 
                                 <button
                                     onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
-                                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[1.5rem] font-bold text-sm tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border shadow-blue-500/20"
+                                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-3xl font-bold text-sm tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3 border shadow-blue-500/20"
                                 >
                                     <Zap size={18} fill="currentColor" />
                                     {t('common:navigation.pro_upgrade', { defaultValue: 'UPGRADE TO PRO' })}
@@ -236,7 +236,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                         }
                                     }}
                                     disabled={isSubmitting} // Renamed from isUnlocking
-                                    className="w-full py-5 bg-linear-to-r from-indigo-500 via-blue-600 to-indigo-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-[1.5rem] font-bold text-sm tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-indigo-400/30"
+                                    className="w-full py-5 bg-linear-to-r from-indigo-500 via-blue-600 to-indigo-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-3xl font-bold text-sm tracking-[0.2em] shadow-xl flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-indigo-400/30"
                                 >
                                     {isSubmitting ? ( // Renamed from isUnlocking
                                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

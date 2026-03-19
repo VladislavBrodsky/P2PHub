@@ -302,7 +302,7 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
         token_str = str(x_telegram_bot_api_secret_token) if x_telegram_bot_api_secret_token else "null"
         # Simplest possible masking logic to avoid str.__getitem__ errors
-        masked_token = token_str[0:4] if len(token_str) >= 4 else token_str
+        masked_token = str(token_str)[:4] if len(token_str) >= 4 else token_str
         logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {masked_token}...)")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 

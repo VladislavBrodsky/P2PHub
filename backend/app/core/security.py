@@ -31,7 +31,7 @@ def validate_telegram_data(init_data: str) -> dict:
         hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
 
         if hmac_hash != hash_str:
-            logger.warning(f"[AUTH] Signature check failed. Expected: {hmac_hash[:6]}... Received: {hash_str[:6]}...")
+            logger.warning(f"[AUTH] Signature check failed. Expected: {str(hmac_hash)[:6]}... Received: {str(hash_str)[:6]}...")
             raise HTTPException(status_code=401, detail="Invalid signature")
 
         # Replay attack protection: auth_date must be within 7 days (extended from 24h)
@@ -39,12 +39,12 @@ def validate_telegram_data(init_data: str) -> dict:
         auth_date = int(vals.get('auth_date', 0))
         delta = time.time() - auth_date
         if delta > 604800:
-            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s) InitData: {init_data[:50]}...")
+            logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s) InitData: {str(init_data)[:50]}...")
             raise HTTPException(status_code=401, detail="Session expired")
 
         # #comment: Log successful signature but warn on old sessions
         if delta > 86400:
-            logger.info(f"[AUTH] Using aged session (Age: {delta/3600:.1f}h) for user {vals.get('user', 'unknown')[:20]}...")
+            logger.info(f"[AUTH] Using aged session (Age: {delta/3600:.1f}h) for user {str(vals.get('user', 'unknown'))[:20]}...")
 
         return vals
     except HTTPException:

@@ -20,14 +20,22 @@ export const EarningsList: React.FC<EarningsListProps> = ({ isExpanded = false }
             try {
                 const limit = isExpanded ? 50 : 20;
 
-                const [xpRes, cryptoEarnRes, txRes] = await Promise.all([
+                const results = await Promise.allSettled([
                     apiClient.get(`/api/partner/earnings?limit=${limit}&currency=XP`),
                     apiClient.get(`/api/partner/earnings?limit=${limit}&exclude_xp=true`),
                     apiClient.get('/api/payment/my-transactions')
                 ]);
+                
+                const xpRes = results[0].status === 'fulfilled' ? results[0].value : null;
+                const cryptoEarnRes = results[1].status === 'fulfilled' ? results[1].value : null;
+                const txRes = results[2].status === 'fulfilled' ? results[2].value : null;
 
-                setXpEarnings(xpRes.data);
-                setCryptoData({ earnings: cryptoEarnRes.data, transactions: txRes.data });
+                if (xpRes) setXpEarnings(xpRes.data);
+                
+                setCryptoData({
+                    earnings: cryptoEarnRes?.data || [],
+                    transactions: txRes?.data || []
+                });
             } catch (error) {
                 console.error('Failed to fetch earnings data:', error);
             } finally {

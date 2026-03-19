@@ -68,7 +68,7 @@ class TonVerificationService:
                 PartnerTransaction.currency.in_(["TON", "USDT"]),
                 PartnerTransaction.created_at >= cutoff
             )
-            pending_txs = (await session.exec(stmt)).all()
+            pending_txs: list[PartnerTransaction] = list((await session.exec(stmt)).all())
             if not pending_txs:
                 return
 
@@ -83,12 +83,12 @@ class TonVerificationService:
                 if response.status_code != 200:
                     return
                 
-                blockchain_txs = response.json().get("transactions", [])
+                blockchain_txs: list[dict] = response.json().get("transactions", [])
                 
                 # 3. Correlation Loop
                 for _ptx in pending_txs:
                     for btx in blockchain_txs:
-                        _btx_hash = self._normalize_hash(btx.get("hash", ""))
+                        _btx_hash: str = self._normalize_hash(str(btx.get("hash", "")))
                         
                         # Match by Hash if user provided it
                         hash_match = _ptx.tx_hash and self._normalize_hash(_ptx.tx_hash) == _btx_hash

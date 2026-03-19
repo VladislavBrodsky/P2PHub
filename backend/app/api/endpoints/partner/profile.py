@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks, Request
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import selectinload
-from sqlalchemy import text
+from sqlalchemy import text, func
 
 from app.core.config import settings
 from app.core.security import get_current_user, get_tg_user
@@ -33,7 +33,7 @@ async def get_my_profile(
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
-    cache_key = f"partner:profile:v4:{tg_id}"
+    cache_key = f"partner:profile:v5:{tg_id}"
     try:
         cached_partner = await redis_service.get_json(cache_key)
         if cached_partner:
@@ -128,8 +128,13 @@ async def get_my_profile(
         partner.depth = len(partner.path.split('.'))
         migration_needed = True
 
-    actual_direct_count = len(partner.referrals or [])
-    if partner.referral_count < actual_direct_count:
+    # Recalculate true L1 count (excluding test users if the partner itself is real)
+    actual_direct_count = (await session.exec(
+        select(func.count(Partner.id))
+        .where(Partner.referrer_id == partner.id, Partner.is_test == False)
+    )).one()
+
+    if partner.referral_count != actual_direct_count:
         logger.info(f"🔄 Self-healing stats for partner {partner.id}: referral_count {partner.referral_count} -> {actual_direct_count}")
         partner.referral_count = actual_direct_count
         migration_needed = True

@@ -149,11 +149,10 @@ async def get_network_growth_metrics(session: AsyncSession, partner_id: int, tim
 
     if previous_count == 0:
         growth_pct = 100.0 if current_count > 0 else 0.0
-    else:
-        growth_pct = ((current_count - previous_count) / previous_count) * 100.0
+        growth_pct = float(((current_count - previous_count) / previous_count) * 100.0)
 
     return {
-        "growth_pct": round(growth_pct, 1),
+        "growth_pct": float(f"{growth_pct:.1f}"),
         "current_count": current_count,
         "previous_count": previous_count,
         "timeframe": timeframe

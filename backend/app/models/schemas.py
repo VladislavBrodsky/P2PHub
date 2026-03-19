@@ -142,15 +142,16 @@ class PartnerResponse(PartnerBase):
     @computed_field
     @property
     def total_network_size(self) -> int:
-        # Use the deep tree network size if it was injected by the endpoint
+        # Priority 1: Injected 'network_size_real' (best, already filtered in profile.py)
         if self.network_size_real > 0:
             return self.network_size_real
         
-        # Or if it was injected via extra fields during Redis hydration
+        # Priority 2: Injected via extra fields (Redis hydration)
         extra_fields = getattr(self, "model_extra", {}) or {}
         if "total_network_size" in extra_fields:
             return int(extra_fields["total_network_size"])
             
+        # Priority 3: referral_count (Self-healed in profile.py to exclude L1 test users)
         return int(getattr(self, "referral_count", 0))
 
     @computed_field

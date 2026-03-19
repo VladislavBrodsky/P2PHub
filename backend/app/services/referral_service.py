@@ -458,13 +458,13 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
 
             # Award commission state tracking
-            balance_cache[recipient.id] = round(float(balance_cache.get(recipient.id, 0.0) + commission), 4)
+            balance_cache[recipient.id] = float(f"{(float(balance_cache.get(recipient.id, 0.0)) + commission):.4f}")
 
             
             # --- XP COMMISSION FOR ACTIVE REFERRAL ---
             # #comment Phase 3: Aggregating XP gain to update only once per unique recipient.
             xp_gain_val = float(_calculate_referral_xp(comm_level, recipient))
-            xp_cache[recipient.id] = round(float(xp_cache.get(recipient.id, 0.0) + xp_gain_val), 4)
+            xp_cache[recipient.id] = float(f"{(float(xp_cache.get(recipient.id, 0.0)) + xp_gain_val):.4f}")
             rt["xp"] = float(rt.get("xp", 0.0)) + xp_gain_val
             
         # --- Aggregated Side Effects Post-Loop ---
@@ -520,7 +520,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
 
             session.add(XPTransaction(
                 partner_id=r_id, 
-                amount=round(float(rt["xp"]), 2),
+                amount=float(f"{float(rt['xp']):.2f}"),
                 type="ACTIVE_REFERRAL",
                 description=f"Active Referral XP (L{rt['levels'][0]}{'-L'+str(rt['levels'][-1]) if len(rt['levels']) > 1 else ''})",
                 reference_id=f"upg_xp_agg_{ref_prefix}_{r_id}"
@@ -576,7 +576,7 @@ async def distribute_pro_commissions(session: AsyncSession, partner_id: int, tot
                         if len(rt["levels"]) > 1:
                             msg = f"💰 *Multiple Commissions Received!*\n\nTotal: *{round(rt['amount'], 2)} USDT* from *{buyer_name}*."
                         else:
-                            msg = get_msg(lang, "commission_received", amount=round(rt["amount"], 2), level=rt["levels"][0], from_user=buyer_name)
+                            msg = get_msg(lang, "commission_received", amount=float(f"{float(rt['amount']):.2f}"), level=rt["levels"][0], from_user=buyer_name)
                     
                     # Force notification for Admin even if not 'qualified' per standard logic (Leakage monitoring)
                     is_admin_recipient = str(rcpt.telegram_id) in settings.ADMIN_USER_IDS

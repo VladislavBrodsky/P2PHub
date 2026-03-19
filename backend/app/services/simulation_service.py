@@ -39,7 +39,7 @@ async def simulate_artificial_activity():
         
         for partner in test_partners:
             # 1. Random XP gain (20 to 150)
-            xp_gain = round(random.uniform(20, 150), 1)
+            xp_gain = float(f"{random.uniform(20, 150):.1f}")
             partner.xp = Partner.xp + xp_gain  # Use atomic increment
             
             # Auto-calculate and update level
@@ -55,7 +55,7 @@ async def simulate_artificial_activity():
             session.add(xp_tx)
             
             # 2. Random USDT gain (10 to 65)
-            usdt_gain = round(random.uniform(10, 65), 2)
+            usdt_gain = float(f"{random.uniform(10, 65):.2f}")
             partner.balance = Partner.balance + usdt_gain
             partner.total_earned_usdt = Partner.total_earned_usdt + usdt_gain
             

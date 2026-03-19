@@ -82,7 +82,7 @@ class PaymentService:
 
         return {
             "transaction_id": transaction.id,
-            "amount": round(amount_crypto, 4),
+            "amount": float(f"{amount_crypto:.4f}"),
             "currency": currency,
             "network": network,
             "address": settings.ADMIN_TON_ADDRESS if currency == "TON" else settings.ADMIN_USDT_ADDRESS,
