@@ -118,19 +118,30 @@ async def get_finance_stats(
             
     history_72h.sort(key=lambda x: x["created_at"], reverse=True)
     
-    # 2. Monthly Aggregation (Last 6 months) using SQL GROUP BY
+    # 2. Monthly Aggregation (Last 6 months)
+    # Why: Shifted from Python-side loops to SQL GROUP BY for performance with 100K+ records.
+    # We use a dialect-aware approach to support both SQLite (dev) and PostgreSQL (prod).
     start_of_6m = (now.replace(day=1, hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)).replace(day=1)
     for _ in range(4): start_of_6m = (start_of_6m - timedelta(days=1)).replace(day=1)
 
-    bucket_expr = func.date_trunc('month', Earning.created_at)
+    # Detect dialect for date truncation
+    is_sqlite = "sqlite" in str(session.bind.url) if session.bind else False
+    
+    if is_sqlite:
+        # SQLite: use strftime to truncate to month
+        bucket_expr = func.strftime('%Y-%m-01 00:00:00', Earning.created_at)
+        bucket_expr_tx = func.strftime('%Y-%m-01 00:00:00', PartnerTransaction.created_at)
+    else:
+        # PostgreSQL (Production)
+        bucket_expr = func.date_trunc('month', Earning.created_at)
+        bucket_expr_tx = func.date_trunc('month', PartnerTransaction.created_at)
+
     stmt_income_stats = (
         select(bucket_expr, Earning.currency, func.sum(Earning.amount))
         .where(Earning.partner_id == partner.id, Earning.currency.in_(["USDT", "TON"]), Earning.created_at >= start_of_6m)
-        .group_by(1, 2)
+        .group_by(bucket_expr, Earning.currency)
     )
-    income_rows = (await session.execute(stmt_income_stats)).all()
     
-    bucket_expr_tx = func.date_trunc('month', PartnerTransaction.created_at)
     stmt_outcome_stats = (
         select(bucket_expr_tx, PartnerTransaction.currency, func.sum(PartnerTransaction.amount))
         .where(
@@ -139,37 +150,69 @@ async def get_finance_stats(
             PartnerTransaction.status == "completed",
             PartnerTransaction.created_at >= start_of_6m
         )
-        .group_by(1, 2)
+        .group_by(bucket_expr_tx, PartnerTransaction.currency)
     )
-    outcome_rows = (await session.execute(stmt_outcome_stats)).all()
+
+    try:
+        income_rows = (await session.execute(stmt_income_stats)).all()
+        outcome_rows = (await session.execute(stmt_outcome_stats)).all()
+    except Exception as e:
+        logger.error(f"Aggregation query failed: {e}")
+        income_rows = []
+        outcome_rows = []
 
     # Process into structured format
     monthly_history = []
     temp_month = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     for _ in range(6):
-        monthly_history.append({"month": temp_month.strftime("%B %Y"), "timestamp": temp_month.isoformat(), "USDT": {"income": 0.0, "outcome": 0.0}, "TON": {"income": 0.0, "outcome": 0.0}})
+        monthly_history.append({
+            "month": temp_month.strftime("%B %Y"), 
+            "timestamp": temp_month.isoformat(), 
+            "USDT": {"income": 0.0, "outcome": 0.0}, 
+            "TON": {"income": 0.0, "outcome": 0.0}
+        })
         temp_month = (temp_month - timedelta(days=1)).replace(day=1)
 
+    def parse_db_month(val: Any) -> str | None:
+        """Helper to normalize DB-returned month value to ISO string."""
+        if val is None: return None
+        if isinstance(val, str):
+            # SQLite returns string 'YYYY-MM-DD HH:MM:SS'
+            try:
+                dt = datetime.fromisoformat(val.replace(" ", "T"))
+                return dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+            except: return None
+        if hasattr(val, 'replace'):
+            # Datetime-like object
+            return val.replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        return None
+
     for row in income_rows:
-        iso_month = row[0].replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        iso_month = parse_db_month(row[0])
+        if not iso_month: continue
+        
         valid_currencies = ("USDT", "TON")
+        currency = str(row[1])
+        amount = float(row[2] or 0)
+        
         for m in monthly_history:
             if m["timestamp"] == iso_month:
-                currency = str(row[1])
                 if currency in valid_currencies:
-                    # Type checking: m[currency] is now guaranteed to be a dict
-                    m[currency]["income"] = float(row[2])
+                    m[currency]["income"] = amount
                 break
-
                 
     for row in outcome_rows:
-        iso_month = row[0].replace(day=1, hour=0, minute=0, second=0, microsecond=0).isoformat()
+        iso_month = parse_db_month(row[0])
+        if not iso_month: continue
+        
         valid_currencies = ("USDT", "TON")
+        currency = str(row[1])
+        amount = float(row[2] or 0)
+        
         for m in monthly_history:
             if m["timestamp"] == iso_month:
-                currency = str(row[1])
                 if currency in valid_currencies:
-                    m[currency]["outcome"] = float(row[2])
+                    m[currency]["outcome"] = amount
                 break
 
     return {

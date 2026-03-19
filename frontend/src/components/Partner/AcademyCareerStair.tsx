@@ -10,15 +10,18 @@ import { useNotificationStore } from '../../store/useNotificationStore';
 
 export const AcademyCareerStair = () => {
     const { t } = useTranslation('academy');
-    const { user, completeStage, refreshUser, updateUser } = useUser();
+    const { user, completeStage, unlockStage } = useUser();
     const { showNotification } = useNotificationStore();
     const [visibleStages, setVisibleStages] = useState(10);
     const [selectedStage, setSelectedStage] = useState<AcademyStage | null>(null);
 
-    // #comment Memoize completed stages as numbers for faster lookups in children
+    const completedStages = user?.completed_stages || [];
+    const unlockedStages = user?.unlocked_stages || [];
+
+    // Memoize completed stages as numbers for faster lookups in children
     const completedAsNumbers = useMemo(() => {
-        return (user?.completed_stages ?? []).map(Number);
-    }, [user?.completed_stages]);
+        return completedStages.map(Number);
+    }, [completedStages]);
 
     const stages = useMemo(() => {
         return ACADEMY_STAGES.slice(0, visibleStages);
@@ -28,27 +31,41 @@ export const AcademyCareerStair = () => {
         setSelectedStage(stage);
     };
 
-    const handleComplete = async (id: number) => {
+    const handleUnlock = async (id: number) => {
         try {
-            await completeStage(id);
-            setSelectedStage(null);
+            await unlockStage(id);
             showNotification({
-                title: t('academy.stage_completed'),
-                message: t('academy.stage_completed_desc', { stage: id }),
+                title: t('common:success'),
+                message: t('academy.unlock_success', { defaultValue: 'Stage unlocked successfully!' }),
                 type: 'success'
             });
-            // Optimistic unlock: add the completed stage id immediately so
-            // the next card becomes available without waiting for a server round-trip.
-            updateUser({
-                completed_stages: [
-                    ...(user?.completed_stages ?? []),
-                    id
-                ]
-            });
-            // Also refresh from server so XP/level are up to date
-            await refreshUser(true);
         } catch (error) {
+            console.error('Failed to unlock stage:', error);
+            showNotification({
+                title: t('common:error'),
+                message: t('academy.unlock_error', { defaultValue: 'Failed to unlock stage. Check your XP.' }),
+                type: 'warning'
+            });
+        }
+    };
+
+    const handleComplete = async (id: number) => {
+        try {
+            // Optimistic UI: we'll show a notification but the context handles the state
+            await completeStage(id);
+            showNotification({
+                title: t('common:success'),
+                message: t('academy.mission_synced'),
+                type: 'success'
+            });
+        } catch (error: any) {
             console.error('Failed to complete stage:', error);
+            const msg = error.response?.data?.msg || t('common:error');
+            showNotification({
+                title: t('common:error'),
+                message: msg,
+                type: 'warning'
+            });
         }
     };
 
@@ -100,7 +117,9 @@ export const AcademyCareerStair = () => {
                     <AcademyContentPortal
                         stage={selectedStage}
                         onClose={() => setSelectedStage(null)}
+                        unlockedStages={unlockedStages}
                         onComplete={handleComplete}
+                        onUnlock={handleUnlock}
                         isLocked={selectedStage.isPro && !user?.is_pro}
                     />
                 )}

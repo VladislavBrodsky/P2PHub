@@ -22,6 +22,7 @@ interface User {
     referrals: any[]; // Extended for Earn Hub
     completed_tasks: string[];
     completed_stages: (string | number)[]; // Added for Academy
+    unlocked_stages: (string | number)[]; // Added for stage-specific unlocking
     is_pro: boolean;
     is_admin: boolean;
     pro_expires_at: string | null;
@@ -48,6 +49,7 @@ interface UserContextType {
     refreshUser: (force?: boolean) => Promise<void>;
     updateUser: (updates: Partial<User>) => void;
     completeStage: (id: number | string) => Promise<void>;
+    unlockStage: (id: number | string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -100,7 +102,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         try {
             // #comment: FIX - Use the correct mission completion endpoint from pro.router
             const response = await apiClient.post(`/api/pro/academy/complete/${id}`);
-            
+
             // #comment: Update local state with the rewards returned from server
             if (response.data.status === 'success' || response.data.status === 'already_completed') {
                 updateUser({
@@ -114,6 +116,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             throw error; // Re-throw so callers can handle UI feedback
         }
     }, [updateUser, user?.completed_stages]);
+
+    const unlockStage = useCallback(async (id: number | string) => {
+        try {
+            const response = await apiClient.post(`/api/pro/academy/unlock/${id}`);
+            if (response.data.status === 'success' || response.data.status === 'already_unlocked') {
+                updateUser({
+                    xp: response.data.new_xp,
+                    unlocked_stages: response.data.unlocked_stages || [],
+                });
+            }
+        } catch (error) {
+            console.error('Failed to unlock stage:', error);
+            throw error;
+        }
+    }, [updateUser]);
 
     const refreshUser = useCallback(async (force = false) => {
         const now = Date.now();
@@ -201,6 +218,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referrals: [],
                         completed_tasks: [],
                         completed_stages: [],
+                        unlocked_stages: [],
                         is_pro: false,
                         is_admin: false,
                         pro_expires_at: null,
@@ -241,6 +259,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                         referrals: [],
                         completed_tasks: [],
                         completed_stages: ["1", "2", "3"], // Mock stages
+                        unlocked_stages: [],
                         is_pro: true,
                         is_admin: true,
                         pro_expires_at: null,
@@ -314,8 +333,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         refreshUser,
         updateUser,
-        completeStage
-    }), [user, isLoading, refreshUser, updateUser, completeStage]);
+        completeStage,
+        unlockStage
+    }), [user, isLoading, refreshUser, updateUser, completeStage, unlockStage]);
 
     return (
         <UserContext.Provider value={contextValue}>
