@@ -283,10 +283,10 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         <h1 className="text-xl sm:text-2xl font-bold tracking-tight leading-none text-slate-900 dark:text-white">{t('blog.title')}</h1>
                                         <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 shrink-0">
                                             <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                                            <span className="text-[9px] font-bold uppercase text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
+                                            <span className="text-[9px] font-bold text-blue-500 tracking-tighter">{t('blog.navigation.live')}</span>
                                         </div>
                                     </div>
-                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest opacity-60 mt-0.5">
+                                    <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 tracking-widest opacity-60 mt-0.5">
                                         {t('blog.latest_count', { count: total })}
                                     </p>
                                 </div>
@@ -303,7 +303,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="w-full h-12 pl-12 pr-5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 focus:border-blue-500/50 focus:ring-8 focus:ring-blue-500/5 outline-hidden font-bold text-sm transition-all shadow-sm hover:shadow-md dark:shadow-blue-500/5 placeholder:text-slate-400 dark:placeholder:text-slate-500/70"
                                 />
-                                <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-800 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-300/80 border border-slate-200 dark:border-white/5 pointer-events-none">
+                                <div className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-800 text-[10px] font-bold tracking-widest text-slate-400 dark:text-slate-300/80 border border-slate-200 dark:border-white/5 pointer-events-none">
                                     {t('blog.navigation.search_label')}
                                 </div>
                             </div>
@@ -338,7 +338,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                             <div className="absolute top-6 left-6 z-20">
                                                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-600/90 backdrop-blur-md border border-white/20 shadow-xl">
                                                     <Zap className="w-3 h-3 text-white fill-current" />
-                                                    <span className="text-label font-bold uppercase tracking-widest text-white">
+                                                    <span className="text-label font-bold tracking-widest text-white">
                                                         {t('blog.navigation.featured')}
                                                     </span>
                                                 </div>
@@ -349,7 +349,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                     <div className="p-8 sm:p-10 space-y-4 relative bg-linear-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-950">
                                         <div className="flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                                            <span className="text-label font-bold text-slate-400 uppercase tracking-widest opacity-60 mt-1">
+                                            <span className="text-label font-bold text-slate-400 tracking-widest opacity-60 mt-1">
                                                 {currentFeaturedPost.date} • {t('blog.navigation.intelligence_hub')}
                                             </span>
                                         </div>
@@ -372,7 +372,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
+                                                    <span className="text-label font-bold text-slate-400 tracking-widest leading-none mb-1">{t('blog.navigation.analyst')}</span>
                                                     <span className="text-xs font-bold text-slate-900 dark:text-white">{currentFeaturedPost.author || 'Marcus Vance'}</span>
                                                 </div>
                                             </div>
@@ -390,7 +390,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-label font-bold uppercase tracking-widest shadow-xl flex items-center gap-2"
+                                        className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-blue-600/90 backdrop-blur-md text-white text-label font-bold tracking-widest shadow-xl flex items-center gap-2"
                                     >
                                         <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                                         {t('blog.navigation.updating')}
@@ -408,7 +408,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                 {posts.length < total && (
                                     <div ref={sentinelRef} className="py-10 flex flex-col items-center justify-center gap-3">
                                         <div className="w-6 h-6 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
-                                        <p className="text-label font-bold uppercase tracking-widest text-slate-400 animate-pulse">
+                                        <p className="text-label font-bold tracking-widest text-slate-400 animate-pulse">
                                             {t('blog.navigation.scanning')}
                                         </p>
                                     </div>

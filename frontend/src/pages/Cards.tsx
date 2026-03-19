@@ -70,7 +70,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
         <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
             <div className="px-6 pb-4 pt-4 text-center">
-                <h2 className="text-slate-900 dark:text-white text-lg font-bold uppercase tracking-tight whitespace-nowrap">{t('cards.title')}</h2>
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold tracking-tight whitespace-nowrap">{t('cards.title')}</h2>
             </div>
 
             {/* Switcher Component */}
@@ -127,7 +127,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             >
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                    <span className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                                    <span className="text-sm font-bold text-slate-900 dark:text-white tracking-wider">
                                         {t('cards.terms')}
                                     </span>
                                 </div>
@@ -211,24 +211,16 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                 <>
                                     <motion.div
                                         animate={{ x: ['-150%', '150%'] }}
-                                        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
+                                        transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                                        className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
                                     />
-                                    <Crown size={18} className="text-amber-500 fill-amber-100 relative z-10" />
-                                    <span className="relative z-10">{t('cards.premium_only')}</span>
+                                    <Crown size={16} className="fill-current" />
+                                    <span>{t('cards.platinum.bonus_text')}</span>
                                 </>
                             ) : (
-                                <>
-                                    <span>{t('cards.action')}</span>
-                                    <div className="w-1 h-1 rounded-full bg-white/20" />
-                                    <span className="text-white/80">{currentCard.price}</span>
-                                </>
+                                t('cards.virtual.title')
                             )}
                         </motion.button>
-
-                        <p className="mt-4 text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
-                            {t('cards.instant_delivery')}
-                        </p>
                     </div>
                 </motion.div>
             </div>
