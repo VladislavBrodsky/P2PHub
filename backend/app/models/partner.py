@@ -2,6 +2,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Optional
 
 from sqlalchemy import Index, UniqueConstraint, text
+import sqlalchemy as sa
 from sqlmodel import Field, Relationship, SQLModel
 
 from app.core.config import settings
@@ -72,7 +73,14 @@ class Partner(SQLModel, table=True):
     threads_access_token: str | None = Field(default=None)
     facebook_access_token: str | None = Field(default=None)
     discord_webhook_url: str | None = Field(default=None)
-    personal_referral_link: str | None = Field(default=None)
+    personal_referral_link: str | None = Field(default=None, index=False)
+    
+    # #comment: Legacy Compatibility Columns (Managed by DB Migration 697c16e4636e)
+    # These are STORED GENERATED columns in the database.
+    # We include them here so SQLModel can select them in raw queries if needed,
+    # but we don't want SQLModel to try and 'create' them or 'update' them directly.
+    plan: str | None = Field(default=None, sa_column=sa.Column("plan", sa.Text, sa.Computed("subscription_plan", persisted=True), nullable=True))
+    is_pro_plus_db: bool | None = Field(default=None, sa_column=sa.Column("is_pro_plus", sa.Boolean, sa.Computed("subscription_plan LIKE 'PRO_PLUS%'", persisted=True), nullable=True))
 
     # Daily Check-in Tracking
     last_checkin_at: datetime | None = Field(default=None, index=True)
@@ -209,7 +217,8 @@ class SystemSetting(SQLModel, table=True):
 import sys
 
 from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
+import sqlalchemy as sa
+from sqlalchemy.orm import sessionmaker, selectinload
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 # Standardized async database URL from settings
