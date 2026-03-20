@@ -1,17 +1,11 @@
 {
+  "site_package_search_strategy": "all",
   "source_directories": [
-    "backend"
+    "backend",
+    "frontend",
+    "."
   ],
   "search_path": [
-    "backend"
-  ],
-  "site_package_search_strategy": "all",
-  "site_roots": [
-    "/Users/grandmaestro/Developer/P2PHub/.venv/lib/python3.13/site-packages"
-  ],
-  "exclude": [
-    "**/node_modules",
-    "**/__pycache__",
-    "frontend"
+    "/private/tmp/p2phub-venv/lib/python3.14/site-packages"
   ]
 }
