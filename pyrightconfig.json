@@ -13,11 +13,8 @@
   "executionEnvironments": [
     {
       "root": "backend",
-      "venvPath": ".",
-      "venv": ".venv",
-      "extraPaths": [
-        "."
-      ]
+      "venvPath": "/tmp",
+      "venv": "p2phub-venv"
     }
   ],
   "typeCheckingMode": "basic"

@@ -1,90 +1,91 @@
+
+!*.md
+!backend/alembic.ini
+!backend/app/locales/**/*.json
+!composer.json
+!frontend/public/**/*.jpeg
+!frontend/public/**/*.jpg
+!frontend/public/**/*.json
+!frontend/public/**/*.webp
+!frontend/public/locales/**/*.json
+!frontend/src/assets/**/*
+!frontend/src/assets/**/*.json
+!frontend/src/locales/**/*.json
+!frontend/tsconfig.json
+!package-lock.json
+!package.json
+# Audit Reports & Checklists
+# Cache & Temp
+# Generated Assets & AI Artifacts
+# Logs
+# Node
+# OS
+# P2PHub Junk/Debug
+# Project specific ignores
 # Python
-__pycache__/
-*.py[cod]
 *$py.class
-venv/
-.venv/
-.obsolete_*/
-backend/.venv/
-backend/.obsolete_*/
+*.db
+*.dll
+*.dylib
+*.exe
+*.jpeg
+*.jpg
+*.json
+*.log
+*.png
+*.py[cod]
+*.so
+*.txt
+*.webp
+*_report.json
+.DS_Store
 .env*
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local
+.eslintcache
+.mypy_cache/
+.next/
+.obsolete_*/
+.pytest_cache/
+.ruff_cache/
+.stylelintcache
+.turbo/
+.venv/
+.vercel/
+Thumbs.db
+__pycache__/
+app_images/generated/
+archive_logs/
+backend/.obsolete_*/
+backend/.venv/
+backend/app_images/generated/
+backend/check_prod.sh
+backend/env_prod.txt
+backend/p2p_config.env
+backend/pytest_errors.txt
+backend/ruff_errors.txt
+backend/test_notif_debug.txt
+backup/
+comms_283.txt
+coverage/
+debug_output*.txt
+debug_viral_output.txt
+deployment_error_audit_*.json
+dist/
 env.backend
 env.local
 env.production
 env_backend.env
-backend/env_prod.txt
-backend/check_prod.sh
-
-# Node
-node_modules/
-dist/
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-frontend/local_npm_cache/
-
-# OS
-.DS_Store
-Thumbs.db
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Logs
-archive_logs/
-*.db
-debug_output*.txt
-debug_viral_output.txt
-
-# Generated Assets & AI Artifacts
-app_images/generated/
-backend/app_images/generated/
-*.png
-*.jpg
-*.jpeg
-*.webp
-!frontend/public/**/*.webp
-!frontend/public/**/*.jpg
-!frontend/public/**/*.jpeg
-!frontend/src/assets/**/*
-
-# Audit Reports & Checklists
-*_report.json
-security_summary.md
-knowledge_base_checklist.md
-
-# Cache & Temp
-.ruff_cache/
-.pytest_cache/
-.mypy_cache/
-.eslintcache
-.stylelintcache
-coverage/
-.next/
-.turbo/
-.vercel/
-*.log
-frontend/dist_backup_*/
-frontend/build.log
-backend/p2p_config.env
-
-# Project specific ignores
-quarantine/
-backup/
-*.txt
-*.json
-!package.json
-!package-lock.json
-!composer.json
-!backend/alembic.ini
-!frontend/tsconfig.json
-!*.md
-!frontend/public/**/*.json
-!frontend/src/assets/**/*.json
-!backend/app/locales/**/*.json
-!frontend/src/locales/**/*.json
-!frontend/public/locales/**/*.json
 frontend/.npm-cache/
-
+frontend/build.log
+frontend/dist_backup_*/
+frontend/local_npm_cache/
+ideas/logs.*.json
+knowledge_base_checklist.md
+missing_keys.txt
+node_modules/
+quarantine/
+security_summary.md
+venv/

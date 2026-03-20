@@ -95,8 +95,10 @@ async def get_my_profile(
         if not partner.updated_at or partner.updated_at < (now - timedelta(hours=1)):
             has_changed = False
             for field in ["username", "first_name", "last_name", "language_code"]:
-                if tg_user.get(field) != getattr(partner, field):
-                    setattr(partner, field, tg_user.get(field))
+                new_val = tg_user.get(field)
+                # #comment: CRITICAL - Only update if the new value is actually provided to prevent wiping existing data.
+                if new_val is not None and new_val != getattr(partner, field):
+                    setattr(partner, field, new_val)
                     has_changed = True
 
             if not partner.photo_file_id:

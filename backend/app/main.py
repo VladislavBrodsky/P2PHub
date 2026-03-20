@@ -226,6 +226,8 @@ async def lifespan(app: FastAPI):
     else:
         logger.info("ℹ️ TaskIQ Worker detected. Skipping bot integration (handled by web service).")
 
+    from app.models.partner import engine
+
     # Explicit Database Connection Check
     # Why: Catches database connection issues early in the startup process.
     # This prevents the app from starting with a broken database connection,
@@ -234,7 +236,6 @@ async def lifespan(app: FastAPI):
         import asyncpg
         from sqlalchemy import text
 
-        from app.models.partner import engine
         logger.info("🌍 Checking Database Connection (Timeout 5s)...")
         async with asyncio.timeout(5.0):
             async with engine.begin() as conn:
@@ -307,6 +308,16 @@ async def lifespan(app: FastAPI):
                 logger.info("ℹ️ Polling extender task cancelled successfully.")
             except Exception as e:
                 logger.error(f"❌ Error cancelling polling extender task: {e}")
+    
+    # Graceful Database Shutdown
+    # Why: Ensures all pool connections are closed correctly before the process exits.
+    # This prevents "Connection reset by peer" errors on the database side during deploys.
+    try:
+        logger.info("🔌 Disposing Database Engine...")
+        await engine.dispose()
+        logger.info("✅ Database Engine disposed.")
+    except Exception as e:
+        logger.error(f"❌ Error disposing database engine: {e}")
 
 
 app = FastAPI(
