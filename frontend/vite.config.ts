@@ -23,6 +23,20 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/generated_media': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/images': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+    },
   },
   publicDir: 'public',
   build: {
