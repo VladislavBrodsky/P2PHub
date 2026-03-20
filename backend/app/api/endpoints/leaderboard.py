@@ -110,7 +110,7 @@ async def get_my_leaderboard_stats(
         return {"rank": 0, "xp": 0, "level": 1, "referrals": 0}
 
     from app.services.redis_service import redis_service
-    cache_key = f"leaderboard:me:{timeframe}:{tg_id}"
+    cache_key = f"leaderboard:me:v2:{timeframe}:{tg_id}"
 
     async def fetch_user_stats():
         # Get partner from DB

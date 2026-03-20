@@ -37,7 +37,10 @@ apiClient.interceptors.request.use(
             let initDataRaw = '';
             const params = getSafeLaunchParams();
             
-            if (!params.initDataRaw && (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/'))) {
+            const authPrefixes = ['/api/partner/', '/api/pro/', '/api/payment/', '/api/admin/', '/api/tools/'];
+            const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
+
+            if (!params.initDataRaw && isAuthRoute) {
                 initDataRaw = await waitForInitData();
             } else {
                 initDataRaw = params.initDataRaw || '';
@@ -47,11 +50,14 @@ apiClient.interceptors.request.use(
                 config.headers['X-Telegram-Init-Data'] = initDataRaw;
                 // Dual-send in standard Authorization header for aggressive proxy compatibility
                 config.headers['Authorization'] = `Bearer ${initDataRaw}`;
-            } else if (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/')) {
+            } else if (config.url?.startsWith('/api/partner/') || config.url?.startsWith('/api/pro/') || config.url?.startsWith('/api/admin/')) {
                 // #comment: Tactical Protection - If we are hitting an authenticated endpoint 
                 // but have NO initData, we should fail early with a descriptive error 
                 // to prevent 401 noise and help debug Production "Guest" mode.
-                console.warn(`[API] Attempted authenticated request to ${config.url} without initData.`);
+                console.error(`🚨 [API] BLOCKED: Request to ${config.url} missing X-Telegram-Init-Data header.`);
+                
+                // In production, we might want to throw an error here to prevent the request from even firing
+                // return Promise.reject(new Error('Authentication required (missing Telegram initData)'));
             }
 
             // Inject Content-Language based on current app setting
@@ -79,7 +85,10 @@ apiClient.interceptors.response.use(
         // If we get a 401 and haven't retried yet, and we are on an authenticated endpoint,
         // we wait for initData once more and retry. This handles cases where the SDK
         // loads slightly AFTER the first API call is initiated.
-        if (status === 401 && !config._retry && (config.url?.includes('/api/partner/') || config.url?.includes('/api/pro/'))) {
+        const authPrefixes = ['/api/partner/', '/api/pro/', '/api/payment/', '/api/admin/', '/api/tools/'];
+        const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
+
+        if (status === 401 && !config._retry && isAuthRoute) {
             config._retry = true;
             console.warn(`[API] 401 detected for ${config.url}. Attempting smart retry...`);
             

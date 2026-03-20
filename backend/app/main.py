@@ -397,12 +397,21 @@ async def add_request_id_middleware(request: Request, call_next):
         sentry_sdk.set_tag("request_id", request_id)
     
     # #comment: Diagnostic Header Logging for 401 Investigation
-    if request.url.path.startswith("/api/partner/") or request.url.path.startswith("/api/admin/"):
+    # Only warn if it's a protected route (excluding known public routes inside those prefixes)
+    protected_prefixes = ["/api/partner/", "/api/pro/", "/api/payment/", "/api/admin/", "/api/tools/", "/api/earnings/"]
+    public_endpoints = ["/api/partner/orbit-members", "/api/partner/recent", "/api/partner/top", "/api/partner/stats/public"]
+    
+    is_protected = any(request.url.path.startswith(p) for p in protected_prefixes)
+    is_public = any(request.url.path == p for p in public_endpoints)
+
+    if is_protected and not is_public:
         init_header = request.headers.get("X-Telegram-Init-Data")
         if not init_header:
             logger.warning(f"🚨 [MISSING HEADER] {request.url.path} missing X-Telegram-Init-Data")
         else:
-            logger.info(f"✅ [HEADER PRESENT] Path: {request.url.path} Length: {len(init_header)}")
+            # Low-volume success logging to confirm headers are arriving
+            if settings.DEBUG:
+                logger.info(f"✅ [HEADER PRESENT] Path: {request.url.path} Length: {len(init_header)}")
 
     # Add to response headers so clients can include it in bug reports
     response = await call_next(request)

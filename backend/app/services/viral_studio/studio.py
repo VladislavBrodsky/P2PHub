@@ -39,11 +39,14 @@ class ViralMarketingStudio:
         self._last_working_imagen_model = 'imagen-3.0-generate-001'
         self._last_used_text_model = 'unknown'
         self._last_used_image_model = 'unknown'
-        self._init_clients()
+        self._clients_initialized = False
         # Local short-term cache for rapid re-generations
         self._intel_cache = {}
 
-    def _init_clients(self):
+    def _ensure_clients(self):
+        if self._clients_initialized:
+            return
+            
         # Ensure latest env is loaded in case of dynamic injection
         from app.core.config import settings
         
@@ -62,8 +65,11 @@ class ViralMarketingStudio:
             
         if not self.openai_client and not self.genai_client:
             logger.warning("⚠️ No AI Clients initialized. Check OPENAI_API_KEY and GOOGLE_API_KEY.")
+            
+        self._clients_initialized = True
 
     def get_capabilities(self) -> dict[str, bool]:
+        self._ensure_clients()
         return {"text_generation": bool(self.openai_client), "image_generation": bool(self.genai_client)}
 
     async def _get_cached_intel(self, target_audience: str, post_type: str, language: str) -> dict[str, Any]:
@@ -113,6 +119,7 @@ class ViralMarketingStudio:
     async def generate_viral_content(self, partner: Partner, post_type: str, target_audience: str, language: str,
                                    tone_of_voice: str | None = "authoritative", referral_link: str | None = None,
                                    session: AsyncSession | None = None) -> dict[str, Any]:
+        self._ensure_clients()
         if not self.openai_client and not self.genai_client:
             return {"error": "Elite AI engine offline.", "status": "failed"}
 
@@ -425,6 +432,7 @@ class ViralMarketingStudio:
         🚀 ELITE STREAMING MODE: Yields content segments in real-time.
         Sequence: [Meta] -> [Title] -> [Body Chunks] -> [Hashtags] -> [Image URL] -> [Done]
         """
+        self._ensure_clients()
         if not self.openai_client and not self.genai_client:
             yield {"type": "error", "content": "Elite AI engine offline."}
             return

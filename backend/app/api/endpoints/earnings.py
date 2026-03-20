@@ -25,11 +25,12 @@ async def get_my_earnings(
     tg_id = str(tg_user.get("id"))
 
     # 1. Try Redis Cache first
-    cache_key = f"partner:earnings:{tg_id}"
+    cache_key = f"partner:earnings:v2:{tg_id}"
     try:
         cached_earnings = await redis_service.get_json(cache_key)
         if cached_earnings:
-            return cached_earnings
+            # #comment: Validate cached data to ensure it matches current schema
+            return [EarningSchema.model_validate(e).model_dump(mode='json') for e in cached_earnings]
     except Exception as e:
         logger.warning(f"Earnings cache read failed: {e}")
 
