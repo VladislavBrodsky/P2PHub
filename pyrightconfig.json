@@ -1,20 +1,20 @@
 {
   "include": [
     "backend",
-    "frontend"
+    "frontend",
+    "/private/tmp"
   ],
   "exclude": [
     "**/node_modules",
     "**/__pycache__",
     "venv",
-    ".venv",
-    ".venv_new"
+    ".venv"
   ],
+  "venvPath": "/private/tmp",
+  "venv": "p2phub-venv",
   "executionEnvironments": [
     {
-      "root": "backend",
-      "venvPath": "/tmp",
-      "venv": "p2phub-venv"
+      "root": "."
     }
   ],
   "typeCheckingMode": "basic"

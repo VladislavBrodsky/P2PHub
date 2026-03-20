@@ -16,16 +16,15 @@ async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit
 
 async def view_partners():
     from app.models.partner import Partner
-    from sqlalchemy import text
     async with async_session_maker() as session:
-        # Search for XP around 10795
-        stmt = select(Partner).where(Partner.xp >= 10790, Partner.xp <= 10800)
+        # Search for test users
+        stmt = select(Partner).where(Partner.is_test == True)
         result = await session.exec(stmt)
         partners = result.all()
         if not partners:
-            print("No partners found in range 10790-10800 XP.")
+            print("No test partners found.")
         for p in partners:
-            print(f"ID: {p.id}, TG: {p.telegram_id}, Username: {p.username}, XP: {p.xp}, Level: {p.level}, Pro: {p.is_pro}")
+            print(f"ID: {p.id}, TG: {p.telegram_id}, Username: {p.username}, XP: {p.xp}, Level: {p.level}, Pro: {p.is_pro}, Plan: {p.subscription_plan}")
 
 if __name__ == "__main__":
     # Add backend to path to import models

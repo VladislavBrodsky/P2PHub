@@ -55,8 +55,8 @@ def find_and_load_env():
         Path.cwd()
     ]
     
-    # Potential filenames
-    env_filenames = ["p2p_config.env", ".env.backend", ".env", "env.backend", "env.local"]
+    # Potential filenames - ONLY ONE source of truth
+    env_filenames = [".env"]
     
     loaded_any = False
     for search_dir in search_dirs:
