@@ -106,6 +106,12 @@ class PartnerResponse(PartnerBase):
             
             # Manual mappings for computed fields if they are in model_fields
             # Pydantic v2 handles computed_fields automatically if we return a dict
+            # but we must ensure injected fields like network_size_real are preserved.
+            if hasattr(obj, 'network_size_real'):
+                result['network_size_real'] = obj.network_size_real
+            elif isinstance(data, dict) and 'network_size_real' in data:
+                result['network_size_real'] = data['network_size_real']
+
             return result
         return data
 

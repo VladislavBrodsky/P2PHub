@@ -1,11 +1,14 @@
 {
-  "site_package_search_strategy": "all",
   "source_directories": [
-    "backend",
-    "frontend",
-    "."
+    "backend"
   ],
+  "exclude": [
+    ".*/private/tmp/.*",
+    ".*/node_modules/.*"
+  ],
+  "python_version": "3.13",
   "search_path": [
-    "/private/tmp/p2phub-venv/lib/python3.14/site-packages"
+    "backend/.venv/lib/python3.13/site-packages",
+    "backend"
   ]
 }
