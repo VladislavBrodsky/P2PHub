@@ -3,11 +3,18 @@
     "backend",
     "frontend"
   ],
-  "venvPath": ".",
-  "venv": "venv",
+  "exclude": [
+    "**/node_modules",
+    "**/__pycache__",
+    "venv",
+    ".venv",
+    ".venv_new"
+  ],
   "executionEnvironments": [
     {
       "root": "backend",
+      "venvPath": ".",
+      "venv": ".venv",
       "extraPaths": [
         "."
       ]

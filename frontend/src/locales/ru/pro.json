@@ -131,7 +131,26 @@
       "hashtags_refreshed": "Вирусные хэштеги оптимизированы",
       "link_saved": "Реферальная ссылка обновлена",
       "link_error": "Неверный формат ссылки",
-      "add_personal_link": "Личная Реферальная Ссылка"
+      "add_personal_link": "Личная Реферальная Ссылка",
+      "strategy_instruction": "Выберите архитектуру вашего контента",
+      "strategy_placeholder": "Выберите тип поста...",
+      "target_label": "Целевая аудитория",
+      "target_instruction": "Определите ваш целевой узел",
+      "target_placeholder": "Выберите аудиторию...",
+      "personal_link_subtitle": "Включить отслеживание через ссылку Бота",
+      "tone_instruction": "Настройка тона нейронного резонанса",
+      "tones": {
+        "provocative": "Провокационный",
+        "authoritative": "Авторитетный",
+        "empathetic": "Эмпатичный",
+        "cynical": "Циничный"
+      },
+      "tones_desc": {
+        "provocative": "Крючки с высоким уровнем вовлеченности.",
+        "authoritative": "Архитектура доверия на основе экспертности.",
+        "empathetic": "Узлы резонанса, ориентированные на сообщество.",
+        "cynical": "Реальность рынка без прикрас."
+      }
     },
     "growth_strategist": {
       "title": "ИИ Стратег Роста",

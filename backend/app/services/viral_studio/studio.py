@@ -223,11 +223,13 @@ class ViralMarketingStudio:
             first_line = body_lines[0].strip().replace("**", "")
             # Check for direct match or substring match (e.g. AI adds title as 1st line)
             if first_line.lower() == title_text.lower() or (len(first_line) > 5 and first_line.lower() in title_text.lower()):
-                body_lines_list: list[str] = body_lines
-                body_lines_list.pop(0)
-                # Pop empty lines after title
-                while body_lines_list and not body_lines_list[0].strip():
+                # Use a local list for explicit manipulation
+                body_lines_list: list[str] = list(body_lines)
+                if body_lines_list:
                     body_lines_list.pop(0)
+                    while body_lines_list and not str(body_lines_list[0]).strip():
+                        body_lines_list.pop(0)
+                body_lines = body_lines_list
         
         # 2. Deep Hashtag Scrubbing
         # We strip hashtags from the END and from the BODY to ensure zero duplication
@@ -283,9 +285,9 @@ class ViralMarketingStudio:
 
         # 🛡️ HASHTAG GUARDIAN FINAL (Internal Metadata Only)
         if isinstance(hashtags_list, str):
-            hashtags_list = [t.strip() for t in hashtags_list.replace(',', ' ').split() if t.strip()]
+            hashtags_list = [t.strip() for t in str(hashtags_list).replace(',', ' ').split() if t.strip()]
         
-        if len(hashtags_list) > 4: 
+        if isinstance(hashtags_list, list) and len(hashtags_list) > 4: 
             hashtags_list = hashtags_list[:4]
         
         # Ensure body is clean of hash lines at the very end
@@ -379,7 +381,10 @@ class ViralMarketingStudio:
                         messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}]
                         kwargs = {"response_format": {"type": "json_object"}}
 
-                    assert self.openai_client is not None
+                    if not self.openai_client:
+                        logger.error(f"OpenAI client missing for model {model_name}")
+                        continue
+
                     res = await asyncio.wait_for(
                         self.openai_client.chat.completions.create(
                             model=model_name, 
@@ -397,6 +402,10 @@ class ViralMarketingStudio:
 
                 elif provider == "google" and self.genai_client:
                     # Let SDK handle naming
+                    if not self.genai_client:
+                        logger.error(f"Google GenAI client missing for model {model_name}")
+                        continue
+                        
                     res = await asyncio.wait_for(
                         self.genai_client.aio.models.generate_content(
                             model=model_name, 
@@ -524,14 +533,16 @@ class ViralMarketingStudio:
                             # Not the end yet, yield what we have
                             # But wait for more to be sure about the escape
                             if len(buffer) > 20: 
-                                yield {"type": "body_chunk", "content": buffer[:-20].replace('\\n', '\n').replace('\\"', '"')}
-                                full_text += buffer[:-20]
+                                chunk_val = str(buffer[:-20])
+                                yield {"type": "body_chunk", "content": chunk_val.replace('\\n', '\n').replace('\\"', '"')}
+                                full_text += chunk_val
                                 buffer = buffer[-20:]
                     else:
                         # No quotes, just pure content
                         if len(buffer) > 20:
-                            yield {"type": "body_chunk", "content": buffer[:-20].replace('\\n', '\n').replace('\\"', '"')}
-                            full_text += buffer[:-20]
+                            chunk_val = str(buffer[:-20])
+                            yield {"type": "body_chunk", "content": chunk_val.replace('\\n', '\n').replace('\\"', '"')}
+                            full_text += chunk_val
                             buffer = buffer[-20:]
             
             # Final check for hashtags and concluding body if any left
@@ -663,7 +674,8 @@ class ViralMarketingStudio:
                 chan_name = res.get("channel_name") # For X/LinkedIn
                 if platform == "x" and res.get("tweet_id"): ids = [str(res["tweet_id"])]
                 
-                for item in ids[:50]: # Safety limit
+                social_item_ids: list = list(ids) if ids else []
+                for item in social_item_ids[:50]: # Safety limit
                     chan = None
                     cname = chan_name
                     ext_id = item

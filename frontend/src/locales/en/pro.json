@@ -131,7 +131,26 @@
       "hashtags_refreshed": "Viral hashtags optimized",
       "link_saved": "Referral link updated",
       "link_error": "Invalid link format",
-      "add_personal_link": "Personal Referral Link"
+      "add_personal_link": "Personal Referral Link",
+      "strategy_instruction": "Select your viral architecture",
+      "strategy_placeholder": "Select post type...",
+      "target_label": "Target Audience",
+      "target_instruction": "Define your target node",
+      "target_placeholder": "Select audience...",
+      "personal_link_subtitle": "Enable custom tracking via Bot link",
+      "tone_instruction": "Adjust neural resonance tone",
+      "tones": {
+        "provocative": "Provocative",
+        "authoritative": "Authoritative",
+        "empathetic": "Empathetic",
+        "cynical": "Cynical"
+      },
+      "tones_desc": {
+        "provocative": "High-impact scroll-stopping hooks.",
+        "authoritative": "Expert-led trust architecture.",
+        "empathetic": "Community-first resonance nodes.",
+        "cynical": "No-nonsense market reality."
+      }
     },
     "growth_strategist": {
       "title": "AI Growth Strategist",

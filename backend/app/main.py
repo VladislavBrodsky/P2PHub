@@ -142,12 +142,26 @@ async def lifespan(app: FastAPI):
                         "profile_cache_v3:*", "profile_cache_v4:*",
                         "partner:profile:v3:*", "partner:profile:v4:*"
                     ]
-                    total_cleared = 0
+                    total_cleared: int = 0
                     for pattern in bust_patterns:
                         keys = [k async for k in redis_service.client.scan_iter(match=pattern)]
-                        if keys:
+                        count: int = len(keys)
+                        if count > 0:
                             await redis_service.client.delete(*keys)
-                            total_cleared += len(keys)
+                            total_cleared = total_cleared + count
+                    
+                    # One-time Force Refresh for @uslincoln (ID 1 / 716720099)
+                    # This ensures the v5 cache is purged on startup if data is reported missing.
+                    from app.models.partner import get_session
+                    async for session in get_session():
+                        await session.execute(text("UPDATE partner SET updated_at = NOW() WHERE id = 1"))
+                        await session.commit()
+                        # Also purge their specific v5 key
+                        uslincoln_key = "partner:profile:v5:716720099"
+                        await redis_service.client.delete(uslincoln_key)
+                        logger.info(f"⚡️ @uslincoln profile forced refresh (key {uslincoln_key} purged).")
+                        break
+
                     logger.info(f"✅ Cache purge complete: {total_cleared} legacy keys cleared.")
         except Exception as e:
             logger.error(f"⚠️ Background startup task failed: {e}")
@@ -319,9 +333,14 @@ async def bot_webhook(request: Request, x_telegram_bot_api_secret_token: str = H
         logger.debug(f"📥 Received Webhook POST at {settings.WEBHOOK_PATH}")
 
     if x_telegram_bot_api_secret_token != settings.WEBHOOK_SECRET:
+        # Robust masking for logs to avoid any slicing errors or NoneType issues
         token_str = str(x_telegram_bot_api_secret_token) if x_telegram_bot_api_secret_token else "null"
-        # Simplest possible masking logic to avoid str.__getitem__ errors
-        masked_token = str(token_str)[:4] if len(token_str) >= 4 else token_str
+        if len(token_str) > 10:
+            prefix: str = token_str[:6]
+            suffix: str = token_str[-4:]
+            masked_token = f"{prefix}...{suffix}"
+        else:
+            masked_token = "***"
         logger.warning(f"⚠️ Webhook Secret Mismatch! (Token masked: {masked_token}...)")
         raise HTTPException(status_code=401, detail="Invalid secret token")
 

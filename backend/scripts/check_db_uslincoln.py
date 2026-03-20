@@ -19,10 +19,8 @@ async def check_db():
         
         if partner:
             logger.info(f"Partner found in DB: {partner.username}")
-            logger.info(f"XP: {partner.xp}")
-            logger.info(f"Plan: {partner.subscription_plan}")
-            logger.info(f"Balance: {partner.balance}")
-            logger.info(f"Referral Count: {partner.referral_count}")
+            for key, value in partner.model_dump().items():
+                logger.info(f"  {key}: {value}")
         else:
             logger.info("Partner NOT FOUND in DB!")
         break # Only check once
