@@ -20,8 +20,8 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
             transition={{ delay: idx * 0.03 }}
             className="bg-[--color-bg-glass] rounded-lg p-1 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
         >
-            <div className="flex items-center gap-1.5">
-                <div className={`w-6 h-6 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text}`}>
+            <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                <div className={`w-6 h-6 rounded-lg ${styles.bg} ${styles.border} flex items-center justify-center ${styles.text} shrink-0`}>
                     {item.currency === 'TON' ? (
                         <TONLogo className="w-3 h-3" />
                     ) : item.currency === 'USDT' || item.type === 'COMMISSION' || item.type === 'PRO_COMMISSION' ? (
@@ -40,9 +40,9 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
                 </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0 ml-2">
                 {item.status && item.status !== 'completed' && (
-                    <div className={`px-1 rounded text-[8px] font-bold uppercase tracking-tighter ${item.status === 'pending' || item.status === 'manual_review'
+                    <div className={`px-1 rounded text-[8px] font-bold uppercase tracking-tighter shrink-0 ${item.status === 'pending' || item.status === 'manual_review'
                         ? 'bg-amber-500/20 text-amber-500'
                         : 'bg-red-500/20 text-red-500'
                         }`}>
@@ -50,7 +50,7 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
                     </div>
                 )}
                 {item.level && (
-                    <div className="relative group">
+                    <div className="relative group shrink-0">
                         <div className="absolute inset-0 bg-linear-to-br from-purple-500/20 via-blue-500/20 to-purple-500/20 rounded-md blur-[2px] group-hover:blur-[3px] transition-all" />
                         <div className="relative bg-linear-to-br from-purple-500/10 via-blue-500/10 to-purple-500/10 dark:from-purple-500/20 dark:via-blue-500/20 dark:to-purple-500/20 px-1 py-0.5 rounded-md border border-purple-500/30 dark:border-purple-400/30 flex flex-col items-center min-w-[24px] shadow-sm backdrop-blur-sm">
                             <span className="text-[7px] font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 opacity-80 leading-none">{t('common:lvl')}</span>
@@ -58,7 +58,7 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
                         </div>
                     </div>
                 )}
-                <div className="flex items-center gap-0.5">
+                <div className="flex items-center gap-0.5 shrink-0">
                     <span className={`font-black ${(item.isTransaction && !item.is_grant) ? 'text-slate-400' : styles.text} text-xs tracking-tight leading-none`}>
                         {(item.isTransaction && !item.is_grant) ? '-' : '+'}{item.currency === 'XP' ? Math.floor(item.amount ?? 0) : (item.amount ?? 0).toFixed((item.amount ?? 0) < 1 ? 3 : 2)}
                     </span>
