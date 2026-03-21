@@ -15,12 +15,12 @@ export const ReferralWidget = memo(({ onInvite, onShowQR }: ReferralWidgetProps)
         <div className="mt-4 mb-6 flex items-center gap-3">
             <button
                 onClick={onInvite}
-                className="flex-1 h-16 rounded-2xl flex items-center justify-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-[0.98] transition-all relative overflow-hidden group"
+                className="flex-1 h-16 rounded-2xl flex items-center justify-start px-4 gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-[0.98] transition-all relative overflow-hidden group"
             >
                 {/* Background Shimmer */}
                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-blue-500/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                 
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform shrink-0">
+                <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform shrink-0">
                     <Share2 className="w-5 h-5 text-white" />
                 </div>
                 
