@@ -40,10 +40,11 @@ interface UserStats {
 
 // #comment Moved outside to prevent redeclaring on every render
 const getLeague = (level: number): LeagueTier => {
-    if (!level || typeof level !== 'number' || level < 3) return 'wooden';
-    if (level < 6) return 'silver';
-    if (level < 11) return 'metal';
-    if (level < 21) return 'gold';
+    // #comment: Standardized Elite Progression Logic
+    if (!level || typeof level !== 'number' || level < 5) return 'wooden';
+    if (level < 15) return 'silver';
+    if (level < 25) return 'metal';
+    if (level < 40) return 'gold';
     return 'platinum';
 };
 
@@ -74,31 +75,28 @@ const PartnerRow = memo(({ user, index, onModalOpen, t }: {
 
             <div className="flex items-center gap-3 relative z-10">
                 <div className="relative">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-bold shadow-sm ${index === 0 ? 'bg-amber-500 text-white' :
+                    <div className={`flex h-8 w-8 items-center justify-center rounded-full text-label font-black shadow-sm relative ${index === 0 ? 'bg-amber-500 text-white' :
                         index === 1 ? 'bg-slate-300 text-slate-700' :
                             index === 2 ? 'bg-orange-300 text-orange-800' :
                                 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                         }`}>
                         {index < 3 ? (
-                            index === 0 ? <Trophy size={14} /> :
-                                index === 1 ? <Shield size={14} /> :
-                                    <Star size={14} />
+                            <div className="flex flex-col items-center leading-none">
+                                <span className="text-[10px] mb-0.5">{index + 1}</span>
+                                {index === 0 ? <Trophy size={10} strokeWidth={3} /> :
+                                    index === 1 ? <Shield size={10} strokeWidth={3} /> :
+                                        <Star size={10} strokeWidth={3} />}
+                            </div>
                         ) : (
-                            <span>#{index + 1}</span>
+                            <span className="text-[10px]">#{index + 1}</span>
                         )}
                     </div>
-                    {index < 3 && (
-                        <div className="absolute -top-1 -right-1">
-                            <div className="absolute inset-0 bg-white rounded-full animate-ping opacity-20" />
-                            <Crown size={10} className={index === 0 ? 'text-amber-500' : 'text-slate-400'} />
-                        </div>
-                    )}
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                    <div className="relative">
-                        <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-transform group-hover:scale-105 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
-                            } bg-slate-200 dark:bg-slate-700 aspect-square`}>
+                    <div className="relative group/avatar">
+                        <div className={`h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 shadow-sm transition-all group-hover:scale-110 ${index < 3 ? 'border-white dark:border-white/20 ring-2 ring-amber-500/20' : 'border-slate-200 dark:border-white/10'
+                            } bg-slate-200 dark:bg-slate-700 aspect-square relative z-10`}>
                             {(user.photo_file_id || user.photo_url) ? (
                                 <LazyImage
                                     src={user.photo_file_id
@@ -115,6 +113,40 @@ const PartnerRow = memo(({ user, index, onModalOpen, t }: {
                                 </div>
                             )}
                         </div>
+
+                        {/* Status-Aware Rank Crown Above Profile Picture */}
+                        {index < 3 && (
+                            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+                                <motion.div
+                                    animate={{ 
+                                        y: [0, -2, 0],
+                                        scale: [1, 1.1, 1]
+                                    }}
+                                    transition={{ 
+                                        repeat: Infinity, 
+                                        duration: 2,
+                                        ease: "easeInOut" 
+                                    }}
+                                    className="relative"
+                                >
+                                    <Crown 
+                                        size={14} 
+                                        strokeWidth={3}
+                                        className={`drop-shadow-[0_0_8px_rgba(0,0,0,0.3)] ${
+                                            (user.subscription_plan || '').includes('PLUS') 
+                                                ? 'text-fuchsia-400 fill-fuchsia-400/20 drop-shadow-[0_0_12px_rgba(232,121,249,0.8)]' 
+                                                : (user.subscription_plan || '').includes('PRO')
+                                                    ? 'text-yellow-400 fill-yellow-400/20 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]'
+                                                    : 'text-white'
+                                        }`} 
+                                    />
+                                    <div className={`absolute inset-0 blur-sm opacity-50 ${
+                                        (user.subscription_plan || '').includes('PLUS') ? 'bg-fuchsia-500' : 'bg-yellow-500'
+                                    }`} />
+                                </motion.div>
+                            </div>
+                        )}
+
                         {(user.subscription_plan || '').includes('PRO') && (
                             <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20">
                                 <ProBadge

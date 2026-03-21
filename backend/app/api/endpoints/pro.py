@@ -400,6 +400,9 @@ async def complete_academy_stage(
     partner.academy_score += xp_reward
     partner.xp += xp_reward
     
+    from app.utils.ranking import get_level
+    partner.level = get_level(partner.xp)
+    
     from app.models.partner import XPTransaction
     # Log XP Reward in Ledger
     session.add(XPTransaction(

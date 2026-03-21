@@ -417,18 +417,18 @@ async def global_exception_handler(request: Request, exc: Exception):
 # and see all operations that happened during that request across all services.
 @app.middleware("http")
 async def add_request_id_middleware(request: Request, call_next):
-    
+    # Skip tracking/logging for OPTION requests (CORS pre-flights)
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     request_id = str(uuid.uuid4())
     request.state.request_id = request_id
     
-    # #comment: Synchronize request_id with Sentry for perfect searchability (only when active)
     if settings.SENTRY_DSN:
         import sentry_sdk
         sentry_sdk.set_tag("request_id", request_id)
     
-    # #comment: Diagnostic Header Logging for 401 Investigation
-    # Only warn if it's a protected route (excluding known public routes inside those prefixes)
-    protected_prefixes = ["/api/partner/", "/api/pro/", "/api/payment/", "/api/admin/", "/api/tools/", "/api/earnings/"]
+    protected_prefixes = ["/api/partner/", "/api/pro/", "/api/payment/", "/api/admin/", "/api/tools/", "/api/earnings/", "/api/leaderboard/me"]
     public_endpoints = ["/api/partner/orbit-members", "/api/partner/recent", "/api/partner/top", "/api/partner/stats/public"]
     
     is_protected = any(request.url.path.startswith(p) for p in protected_prefixes)
@@ -441,14 +441,13 @@ async def add_request_id_middleware(request: Request, call_next):
         has_auth = init_header or (auth_header and auth_header.startswith("Bearer "))
         
         if not has_auth:
-            logger.warning(f"🚨 [MISSING HEADER] {request.url.path} missing authentication headers")
-        else:
-            # Low-volume success logging to confirm headers are arriving
-            if settings.DEBUG:
-                source = "X-TID" if init_header else "Bearer"
-                logger.debug(f"✅ [HEADER PRESENT] Path: {request.url.path} Source: {source}")
+            # We log as warning but include method and origin for easier debugging
+            origin = request.headers.get("origin", "unknown")
+            logger.warning(f"🚨 [MISSING HEADER] {request.method} {request.url.path} (Origin: {origin})")
+        elif settings.DEBUG:
+            source = "X-TID" if init_header else "Bearer"
+            logger.debug(f"✅ [HEADER PRESENT] Path: {request.url.path} Source: {source}")
 
-    # Add to response headers so clients can include it in bug reports
     response = await call_next(request)
     response.headers["X-Request-ID"] = request_id
     

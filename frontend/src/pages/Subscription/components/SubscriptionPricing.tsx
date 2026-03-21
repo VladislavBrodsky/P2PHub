@@ -67,12 +67,12 @@ export const SubscriptionPricing = React.memo(({
                                     }`}
                             >
                                 {isPlus && (
-                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg
+                                    <div className={`absolute -top-3 left-1/2 -translate-x-1/2 flex items-center px-3 py-1 rounded-full text-[8px] font-black tracking-[0.15em] uppercase transition-all duration-500 shadow-lg whitespace-nowrap
                                         ${isSelected
                                             ? 'bg-black text-yellow-400 border border-yellow-400/30'
                                             : 'bg-slate-100 dark:bg-white/10 text-slate-400 dark:text-white/30'
                                         }`}>
-                                        <Zap size={8} className={isSelected ? 'fill-yellow-400 animate-pulse' : ''} />
+                                        <Zap size={7} className={`mr-1 ${isSelected ? 'fill-yellow-400 animate-pulse' : ''}`} />
                                         <span>{t('pro:subscription.upgrade.viral_badge')}</span>
                                     </div>
                                 )}

@@ -56,7 +56,7 @@ def find_and_load_env():
     ]
     
     # Potential filenames - ONLY ONE source of truth
-    env_filenames = [".env"]
+    env_filenames = [".env", ".env.backend", "env.backend"]
     
     loaded_any = False
     for search_dir in search_dirs:

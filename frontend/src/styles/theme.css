@@ -158,6 +158,7 @@
   --animate-scan: scan 2s linear infinite;
   --animate-pro-glow: pro-liquid-glow 15s ease infinite;
   --animate-text-shimmer: text-shimmer 4s linear infinite;
+  --animate-vibing-gradient: vibing-gradient 3s ease infinite;
 }
 
 /*
@@ -329,9 +330,14 @@
  */
 @variant dark (&:where(.dark, .dark *));
 
+.animate-vibing-gradient {
+  animation: vibing-gradient 3s ease infinite;
+}
+
 /* Base Variable Definitions (Light Mode) */
 :root,
 .light {
+  --radius: 0.5rem;
   /* Core Colors */
   --sys-surface: #F9FAFB;
   --sys-bg-app: #F9FAFB;
@@ -397,6 +403,7 @@
 
 /* Dark Mode Overrides - Subtle & High Fidelity */
 .dark {
+  --radius: 0.5rem;
   --sys-bg-deep: #030712;
   /* Deeper slate for elite feel */
   --sys-bg-app: #030712;
