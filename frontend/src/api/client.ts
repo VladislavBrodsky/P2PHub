@@ -18,11 +18,13 @@ export const apiClient = axios.create({
 });
 
 // #comment: Helper to wait for Telegram initData if available
-const waitForInitData = async (timeout = 3000): Promise<string> => {
+const waitForInitData = async (timeout = 5000): Promise<string> => {
     const start = Date.now();
     while (Date.now() - start < timeout) {
         const params = getSafeLaunchParams();
         if (params.initDataRaw) return params.initDataRaw;
+        // Immediate fallback check for window object
+        if ((window as any).Telegram?.WebApp?.initData) return (window as any).Telegram.WebApp.initData;
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     return '';
@@ -32,32 +34,23 @@ const waitForInitData = async (timeout = 3000): Promise<string> => {
 apiClient.interceptors.request.use(
     async (config) => {
         try {
-            // #comment: We attempt to wait FOR THE FIRST FEW REQUESTS 
-            // to ensure headers are present even if the SDK is slow to load.
-            let initDataRaw = '';
             const params = getSafeLaunchParams();
+            let initDataRaw = params.initDataRaw;
             
             const authPrefixes = ['/api/partner/', '/api/pro/', '/api/payment/', '/api/admin/', '/api/tools/'];
             const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
 
-            if (!params.initDataRaw && isAuthRoute) {
+            // #comment: Hardened Handshake - If an auth route is missing headers, 
+            // we block briefly to wait for the Telegram SDK to finish loading.
+            if (!initDataRaw && isAuthRoute) {
                 initDataRaw = await waitForInitData();
-            } else {
-                initDataRaw = params.initDataRaw || '';
             }
 
             if (initDataRaw) {
                 config.headers['X-Telegram-Init-Data'] = initDataRaw;
-                // Dual-send in standard Authorization header for aggressive proxy compatibility
                 config.headers['Authorization'] = `Bearer ${initDataRaw}`;
-            } else if (config.url?.startsWith('/api/partner/') || config.url?.startsWith('/api/pro/') || config.url?.startsWith('/api/admin/')) {
-                // #comment: Tactical Protection - If we are hitting an authenticated endpoint 
-                // but have NO initData, we should fail early with a descriptive error 
-                // to prevent 401 noise and help debug Production "Guest" mode.
+            } else if (isAuthRoute) {
                 console.error(`🚨 [API] BLOCKED: Request to ${config.url} missing X-Telegram-Init-Data header.`);
-                
-                // In production, we might want to throw an error here to prevent the request from even firing
-                // return Promise.reject(new Error('Authentication required (missing Telegram initData)'));
             }
 
             // Inject Content-Language based on current app setting

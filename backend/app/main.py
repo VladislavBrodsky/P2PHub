@@ -436,12 +436,17 @@ async def add_request_id_middleware(request: Request, call_next):
 
     if is_protected and not is_public:
         init_header = request.headers.get("X-Telegram-Init-Data")
-        if not init_header:
-            logger.warning(f"🚨 [MISSING HEADER] {request.url.path} missing X-Telegram-Init-Data")
+        auth_header = request.headers.get("Authorization")
+        
+        has_auth = init_header or (auth_header and auth_header.startswith("Bearer "))
+        
+        if not has_auth:
+            logger.warning(f"🚨 [MISSING HEADER] {request.url.path} missing authentication headers")
         else:
             # Low-volume success logging to confirm headers are arriving
             if settings.DEBUG:
-                logger.info(f"✅ [HEADER PRESENT] Path: {request.url.path} Length: {len(init_header)}")
+                source = "X-TID" if init_header else "Bearer"
+                logger.debug(f"✅ [HEADER PRESENT] Path: {request.url.path} Source: {source}")
 
     # Add to response headers so clients can include it in bug reports
     response = await call_next(request)
