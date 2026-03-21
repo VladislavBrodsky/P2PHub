@@ -40,14 +40,12 @@ export const QRCodeModal = ({
                             <div className="space-y-2 pt-2">
                                 <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-none tracking-tight">
                                     <Trans t={t} i18nKey="referral.qr.title">
-                                        Claim Your <br />
-                                        <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>
+                                        Claim Your <span className="text-blue-600 uppercase italic">Financial Sovereignty</span>
                                     </Trans>
                                 </h3>
                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
                                     <Trans t={t} i18nKey="referral.qr.desc">
-                                        Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner <br />
-                                        Build your empire now
+                                        Earn <span className="text-emerald-500 font-bold">$1/minute</span> for every active partner Build your empire now
                                     </Trans>
                                 </p>
                             </div>

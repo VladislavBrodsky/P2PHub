@@ -12,6 +12,7 @@ import { useTMALock } from '../../hooks/useTMALock';
 import { renderMarkdown, renderInline, sanitizeAIGeneratedText } from '../../utils/renderMarkdown';
 import { getSafeLaunchParams } from '../../utils/tma';
 import { shareUniversal } from '../../utils/shareUtils';
+import { getApiUrl } from '../../utils/api';
 
 interface AcademyContentPortalProps {
     stage: AcademyStage;
@@ -460,7 +461,10 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                                             (() => {
                                                                 const lp = getSafeLaunchParams();
                                                                 if ((lp.initData as any)?.user?.photoUrl) return (lp.initData as any).user.photoUrl;
-                                                                if (user?.photo_file_id) return `/api/partner/photo/${user.photo_file_id}`;
+                                                                if (user?.photo_file_id) {
+                                                                    const baseUrl = getApiUrl().replace(/\/$/, '');
+                                                                    return `${baseUrl}/api/partner/photo/${user.photo_file_id}`;
+                                                                }
                                                                 return user?.photo_url || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=400&h=400&fit=crop";
                                                             })()
                                                         }
