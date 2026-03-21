@@ -57,7 +57,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 // Bump this version string whenever you want to force-clear all users' cached state.
 // This prevents stale zero-data from persisting in localStorage across deploys.
-const CACHE_KEY = 'p2p_user_cache_v5';
+const CACHE_KEY = 'p2p_user_cache_v6';
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
@@ -188,6 +188,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             userData.completed_stages = parseStages(userData.completed_stages);
             userData.unlocked_stages = parseStages(userData.unlocked_stages);
+
+            // #comment: FORCE NUMERIC INTEGRITY
+            userData.xp = Number(userData.xp) || 0;
+            userData.level = Number(userData.level) || 1;
+            userData.balance = Number(userData.balance) || 0;
 
             // Enrich with Telegram SDK data if backend is missing details
             if (tgUser) {

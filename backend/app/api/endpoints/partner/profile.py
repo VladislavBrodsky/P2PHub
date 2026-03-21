@@ -251,6 +251,9 @@ async def get_my_profile(
     from app.services.analytics_service import get_referral_tree_stats
     tree_stats = await get_referral_tree_stats(session, partner.id)
     partner_response.network_size_real = sum(tree_stats.values())
+    
+    # #comment: Ensure XP is rounded to avoid floating-point precision noise in the UI
+    partner_response.xp = round(float(partner.xp), 2)
 
     try:
         expire_time = 3600 + random.randint(-360, 360)

@@ -9,8 +9,9 @@ export const EarnHeader = memo(() => {
     const { t } = useTranslation(['social', 'common']);
     const { user } = useUser();
 
-    const level = user?.level || 1;
-    const xp = user?.xp || 0;
+    const level = Number(user?.level) || 1;
+    let xp = Number(user?.xp);
+    if (isNaN(xp)) xp = 0;
     const rank = getRank(level);
     const progress = getXPProgress(level, xp);
     const partners = user?.total_network_size || 0;

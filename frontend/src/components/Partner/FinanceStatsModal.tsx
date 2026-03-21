@@ -266,8 +266,8 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                             : <USDTLogo className="w-4 h-4" />
                                                                         }
                                                                     </div>
-                                                                    <div className="flex flex-col min-w-0">
-                                                                        <div className="flex items-center gap-1.5 flex-wrap">
+                                                                    <div className="flex flex-col min-w-0 flex-1">
+                                                                        <div className="flex items-center gap-1.5">
                                                                             <span className="text-label font-bold text-slate-900 dark:text-white leading-tight truncate">
                                                                                 {formatEarningDescription(item.description, t)}
                                                                             </span>

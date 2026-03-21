@@ -4,6 +4,7 @@ import { useUser } from '../context/UserContext';
 import { useTranslation } from 'react-i18next';
 import { useSystemClock } from '../hooks/usePerformance';
 import { getSafeLaunchParams } from '../utils/tma';
+import { FeatureErrorBoundary } from '../components/FeatureErrorBoundary';
 
 // Modular Components
 import { AdminDashboard } from './Admin/AdminDashboard';
@@ -422,115 +423,117 @@ export const AdminPage = () => {
     }, [viewMode, fetchLedgerEvents]);
 
     return (
-        <AdminDashboard
-            stats={stats}
-            transactions={transactions}
-            isLoading={isLoading}
-            isRefreshing={isRefreshing}
-            error={error}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            fetchData={fetchData}
-            handleRecalculate={handleRecalculate}
-            handleClearCache={handleClearCache}
-            t={t}
-            kpiProps={{ stats }}
-            financialProps={{ stats }}
-            paymentProps={{
-                transactions,
-                selectedPayments,
-                isBatchProcessing,
-                approvingIds,
-                togglePaymentSelection: (id: number) => setSelectedPayments(prev => {
-                    const next = new Set(prev);
-                    if (next.has(id)) next.delete(id);
-                    else next.add(id);
-                    return next;
-                }),
-                toggleAllPayments: () => {
-                    if (selectedPayments.size === transactions.length) setSelectedPayments(new Set());
-                    else setSelectedPayments(new Set(transactions.map(t => t.id)));
-                },
-                handleApprove,
-                handleReject,
-                handleBatchApprove,
-                handleBatchReject
-            }}
-            networkProps={{
-                networkStats,
-                networkMembers,
-                selectedNetworkDepth,
-                fetchNetworkMembers,
-                fetchPartnerDetails
-            }}
-            searchProps={{
-                searchId: searchQuery,
-                setSearchId: setSearchQuery,
-                handleSearch,
-                isSearching,
-                searchResults,
-                fetchPartnerDetails
-            }}
-            maintenanceProps={{
-                health,
-                stats,
-                isRefreshing,
-                isEconomyAuditing,
-                isTreeAuditing,
-                economyAudit,
-                treeAudit,
-                notifStats,
-                handleRecalculate,
-                handleClearCache,
-                handleEconomyAudit,
-                handleTreeAudit,
-                handleRetryNotifications
-            }}
-            palantirProps={{
-                palantirFeed,
-                palantirPage,
-                isPalantirPolling,
-                isRefreshing,
-                notificationsHealth,
-                setPalantirPage,
-                fetchPalantirFeed,
-                setSelectedPartnerId
-            }}
-            nexusProps={{
-                broadcastForm,
-                setBroadcastForm,
-                isBroadcasting,
-                handleCreateBroadcast,
-                handleCancelBroadcast,
-                activeBroadcasts,
-                broadcasts
-            }}
-            ledgerProps={{
-                ledgerEvents,
-                isLedgerLoading,
-                ledgerFilter,
-                setLedgerFilter,
-                ledgerPartnerId,
-                setLedgerPartnerId,
-                ledgerChatId,
-                setLedgerChatId,
-                ledgerNotifHistory,
-                setLedgerNotifHistory,
-                fetchLedgerEvents,
-                fetchNotifHistoryForUser,
-                handleLiveReconcile,
-                isReconciling,
-                reconcileResult,
-                t
-            }}
-            partnerDetailProps={{
-                selectedPartnerId,
-                setSelectedPartnerId,
-                partnerDetails,
-                isDetailsLoading,
-                updatePartner,
-                t
-            }}
-        />
+        <FeatureErrorBoundary featureName="Admin Dashboard">
+            <AdminDashboard
+                stats={stats}
+                transactions={transactions}
+                isLoading={isLoading}
+                isRefreshing={isRefreshing}
+                error={error}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
+                fetchData={fetchData}
+                handleRecalculate={handleRecalculate}
+                handleClearCache={handleClearCache}
+                t={t}
+                kpiProps={{ stats }}
+                financialProps={{ stats }}
+                paymentProps={{
+                    transactions,
+                    selectedPayments,
+                    isBatchProcessing,
+                    approvingIds,
+                    togglePaymentSelection: (id: number) => setSelectedPayments(prev => {
+                        const next = new Set(prev);
+                        if (next.has(id)) next.delete(id);
+                        else next.add(id);
+                        return next;
+                    }),
+                    toggleAllPayments: () => {
+                        if (selectedPayments.size === transactions.length) setSelectedPayments(new Set());
+                        else setSelectedPayments(new Set(transactions.map(t => t.id)));
+                    },
+                    handleApprove,
+                    handleReject,
+                    handleBatchApprove,
+                    handleBatchReject
+                }}
+                networkProps={{
+                    networkStats,
+                    networkMembers,
+                    selectedNetworkDepth,
+                    fetchNetworkMembers,
+                    fetchPartnerDetails
+                }}
+                searchProps={{
+                    searchId: searchQuery,
+                    setSearchId: setSearchQuery,
+                    handleSearch,
+                    isSearching,
+                    searchResults,
+                    fetchPartnerDetails
+                }}
+                maintenanceProps={{
+                    health,
+                    stats,
+                    isRefreshing,
+                    isEconomyAuditing,
+                    isTreeAuditing,
+                    economyAudit,
+                    treeAudit,
+                    notifStats,
+                    handleRecalculate,
+                    handleClearCache,
+                    handleEconomyAudit,
+                    handleTreeAudit,
+                    handleRetryNotifications
+                }}
+                palantirProps={{
+                    palantirFeed,
+                    palantirPage,
+                    isPalantirPolling,
+                    isRefreshing,
+                    notificationsHealth,
+                    setPalantirPage,
+                    fetchPalantirFeed,
+                    setSelectedPartnerId
+                }}
+                nexusProps={{
+                    broadcastForm,
+                    setBroadcastForm,
+                    isBroadcasting,
+                    handleCreateBroadcast,
+                    handleCancelBroadcast,
+                    activeBroadcasts,
+                    broadcasts
+                }}
+                ledgerProps={{
+                    ledgerEvents,
+                    isLedgerLoading,
+                    ledgerFilter,
+                    setLedgerFilter,
+                    ledgerPartnerId,
+                    setLedgerPartnerId,
+                    ledgerChatId,
+                    setLedgerChatId,
+                    ledgerNotifHistory,
+                    setLedgerNotifHistory,
+                    fetchLedgerEvents,
+                    fetchNotifHistoryForUser,
+                    handleLiveReconcile,
+                    isReconciling,
+                    reconcileResult,
+                    t
+                }}
+                partnerDetailProps={{
+                    selectedPartnerId,
+                    setSelectedPartnerId,
+                    partnerDetails,
+                    isDetailsLoading,
+                    updatePartner,
+                    t
+                }}
+            />
+        </FeatureErrorBoundary>
     );
 };

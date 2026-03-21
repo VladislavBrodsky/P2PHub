@@ -30,8 +30,8 @@ export const EarningRow: React.FC<EarningRowProps> = React.memo(({ item, idx }) 
                         React.cloneElement(styles.icon as React.ReactElement<{ className?: string }>, { className: 'w-2.5 h-2.5' })
                     )}
                 </div>
-                <div className='flex flex-col'>
-                    <span className="font-bold text-slate-900 dark:text-white text-xs leading-tight max-w-[140px] truncate">
+                <div className='flex flex-col min-w-0 flex-1'>
+                    <span className="font-bold text-slate-900 dark:text-white text-xs leading-tight truncate">
                         {formatEarningDescription(item.description, t)}
                     </span>
                     <span className="text-[10px] text-slate-500 opacity-50 font-medium">
