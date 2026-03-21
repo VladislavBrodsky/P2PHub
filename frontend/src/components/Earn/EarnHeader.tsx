@@ -25,7 +25,7 @@ export const EarnHeader = memo(() => {
     const badgeColor = rank.badgeColor;
 
     return (
-        <section className="relative rounded-2xl p-px shadow-xl z-30">
+        <section className="relative z-30">
             {/* Outer border gradient ring */}
             <div
                 className="absolute inset-0 rounded-2xl opacity-70"
@@ -35,7 +35,7 @@ export const EarnHeader = memo(() => {
             />
 
             {/* Card body */}
-            <div className="relative rounded-[0.95rem] bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass h-full">
+            <div className="relative rounded-2xl bg-bg-glass backdrop-blur-3xl overflow-hidden border border-border-glass h-full shadow-xl">
 
                 {/* #comment: Ambient glows removed for Unified Background Continuity */}
                 {/* Subtle grid texture */}
