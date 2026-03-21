@@ -241,7 +241,7 @@ export const MilestonePath = memo(() => {
                                     </h3>
 
                                     <p className="text-label font-bold text-blue-100/70 leading-relaxed mt-4 max-w-[240px]">
-                                        <Trans i18nKey="level100.achievements_desc">
+                                        <Trans t={t} i18nKey="level100.achievements_desc">
                                             Unlock your <span className="text-white font-bold underline decoration-blue-400/50 underline-offset-2">Fanocracy Passport</span>. Claim the Physical Platinum Card & 0% Fees for life.
                                         </Trans>
                                     </p>

@@ -163,7 +163,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </h3>
                     <div className="relative">
                         <p className="text-[clamp(0.8rem,2vw,0.875rem)] text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
-                            <Trans i18nKey="income.desc">
+                            <Trans t={t} i18nKey="income.desc">
                                 Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
                                 As a <span className="text-pintopay-blue dark:text-blue-400 font-bold">Partner</span>, you are the bridge.
                                 Every global transaction becomes your dividends.
@@ -558,7 +558,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                 {t('income.waiting.title')}
                             </h4>
                             <div className="text-label leading-relaxed text-slate-600 dark:text-slate-200 font-medium">
-                                <Trans i18nKey="income.waiting.desc">
+                                <Trans t={t} i18nKey="income.waiting.desc">
                                     While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
                                     <span className="block my-3 bg-linear-to-r from-rose-500 via-fuchsia-500 to-rose-500 bg-clip-text text-transparent font-bold bg-size-[200%_auto] animate-text-shimmer dark:drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
                                         Every minute you wait is a tax on your potential
@@ -676,14 +676,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     </div>
 
                                                     <h3 className="text-xl font-bold text-white leading-tight">
-                                                        <Trans i18nKey="income_details.market_title" ns="marketing">
+                                                        <Trans t={t} i18nKey="income_details.market_title" ns="marketing">
                                                             The Largest Wealth Transfer inside the <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-indigo-400">Digital Economy</span>
                                                         </Trans>
                                                     </h3>
 
                                                     <div className="space-y-3 py-2">
                                                         <p className="text-sm text-slate-300 leading-relaxed">
-                                                            <Trans i18nKey="income_details.market_desc" ns="marketing">
+                                                            <Trans t={t} i18nKey="income_details.market_desc" ns="marketing">
                                                                 Crypto adoption is growing <span className="text-white font-bold">2x faster</span> than the Internet did in the 90s.
                                                             </Trans>
                                                         </p>
@@ -716,7 +716,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                     </div>
 
                                                     <h3 className="text-xl font-bold text-white leading-tight">
-                                                        <Trans i18nKey="income_details.revenue_title" ns="marketing">
+                                                        <Trans t={t} i18nKey="income_details.revenue_title" ns="marketing">
                                                             Unlock <span className="text-emerald-400">True Passive Income</span>
                                                         </Trans>
                                                     </h3>

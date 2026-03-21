@@ -215,7 +215,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             {/* #comment: Semantic description. */}
             <m.div variants={item} className="px-8 pt-4 pb-12">
                 <p className="text-text-secondary text-center text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
-                    <Trans i18nKey="dashboard:hero_desc">
+                    <Trans t={t} i18nKey="dashboard:hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
                     </Trans>
                 </p>

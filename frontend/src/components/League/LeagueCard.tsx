@@ -77,8 +77,9 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, tot
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-            className={`relative overflow-hidden rounded-3xl border ${config.borderColor} bg-linear-to-br ${config.color} p-5 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)]`}
+            className="group"
         >
+            <div className={`relative overflow-hidden rounded-2xl border ${config.borderColor} bg-linear-to-br ${config.color} p-5 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)]`}>
             {/* Glossy / Glass Effects */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.15),transparent)] pointer-events-none" />
             <div className="absolute inset-0 bg-linear-to-b from-white/5 to-transparent pointer-events-none" />
@@ -161,6 +162,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({ league, rank, score, tot
                 onClose={() => setIsRewardsPopupOpen(false)}
                 currentLeague={league}
             />
+            </div>
         </motion.div>
     );
 };

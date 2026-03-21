@@ -256,7 +256,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                 transition={{ delay: idx * 0.04 }}
                                                                 className="flex items-center justify-between p-3.5 bg-white dark:bg-white/3 border border-slate-200/70 dark:border-white/6 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/6 transition-colors"
                                                             >
-                                                                <div className="flex items-center gap-3">
+                                                                <div className="flex items-center gap-3 min-w-0 flex-1">
                                                                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${item.currency === 'TON'
                                                                         ? 'bg-blue-500/10 text-blue-500 ring-1 ring-blue-500/20'
                                                                         : 'bg-emerald-500/10 text-emerald-500 ring-1 ring-emerald-500/20'
@@ -267,7 +267,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                                                                         }
                                                                     </div>
                                                                     <div className="flex flex-col min-w-0 flex-1">
-                                                                        <div className="flex items-center gap-1.5">
+                                                                        <div className="flex items-center gap-1.5 min-w-0">
                                                                             <span className="text-label font-bold text-slate-900 dark:text-white leading-tight truncate">
                                                                                 {formatEarningDescription(item.description, t)}
                                                                             </span>

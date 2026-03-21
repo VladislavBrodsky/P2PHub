@@ -128,7 +128,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                                         {t('level100.apex_achievement')}
                                     </h2>
                                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-0.5">
-                                        <Trans i18nKey="level100.fanocracy_title">
+                                        <Trans t={t} i18nKey="level100.fanocracy_title">
                                             LvL 100 <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Fanocracy</span>
                                         </Trans>
                                     </h3>

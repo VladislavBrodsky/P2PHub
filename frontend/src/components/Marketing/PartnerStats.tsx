@@ -277,6 +277,7 @@ export const PartnerStats = ({ onNavigateToEarn }: PartnerStatsProps) => {
                 <div className="flex-1 min-w-0 relative z-10 pr-20">
                     <p className="text-label sm:text-caption font-semibold text-slate-600 dark:text-slate-300 leading-snug">
                         <Trans
+                            t={t}
                             i18nKey="stats.recent_join"
                             ns="dashboard"
                             values={{ count: stats.lastHourCount }}
