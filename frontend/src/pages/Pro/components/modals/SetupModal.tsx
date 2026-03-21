@@ -168,11 +168,10 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 30 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
+                        className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[90vh] relative"
                     >
                         {/* Header Section */}
-                        <div className="px-6 pt-[calc(1.25rem+env(safe-area-inset-top,0px))] pb-5 sm:px-8 sm:py-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20 scanning-glow">
-                            <div className="circuit-decor" />
+                        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 pulse-ring-indigo">
                                     <Network size={20} className="text-white" />
@@ -199,7 +198,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
 
                         {/* Sub-tab Switcher: PRO / PRO+ */}
                         {!status?.is_pro_plus && (
-                            <div className="px-5 pt-4 pb-1">
+                            <div className="px-4 sm:px-5 pt-4 pb-1">
                                 <div className="grid grid-cols-2 p-1 bg-slate-100/80 dark:bg-white/5 rounded-3xl border border-slate-200/60 dark:border-white/8 relative">
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro'); }}
@@ -229,7 +228,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         )}
 
                         {/* Scrollable Body */}
-                        <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-4">
+                        <div className="flex-1 overflow-y-auto overscroll-contain px-4 sm:px-5 py-4 space-y-4">
 
                             {/* ─── PRO TAB ─── */}
                             {setupTab === 'pro' && (
@@ -413,7 +412,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* Platform Switcher */}
                                             <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
                                                 {[
-                                                    { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg') || 'Telegram', src: socialLogos.telegram },
+                                                    { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg', 'Telegram'), src: socialLogos.telegram },
                                                     { id: 'x', label: 'X', src: socialLogos.x, invert: true },
                                                     { id: 'linkedin', label: 'LinkedIn', src: socialLogos.linkedin },
                                                     { id: 'pinterest', label: 'Pinterest', src: socialLogos.pinterest },
@@ -706,12 +705,12 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         </div>
 
                         {/* Sticky Footer */}
-                        <div className="px-5 py-4 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-white/5 backdrop-blur-sm">
+                        <div className="px-4 sm:px-5 py-4 bg-slate-50/80 dark:bg-slate-900/80 border-t border-slate-100 dark:border-white/5 backdrop-blur-sm">
                             {(setupTab === 'pro' || status?.is_pro_plus) ? (
                                 <button
                                     onClick={handleSaveSetup}
                                     disabled={isSaving}
-                                    className="w-full h-13 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
+                                    className="w-full h-12 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                 >
                                     {isSaving ? (
                                         <><Loader2 className="animate-spin" size={16} /> {t('pro_dashboard.setup.syncing_btn')}</>
