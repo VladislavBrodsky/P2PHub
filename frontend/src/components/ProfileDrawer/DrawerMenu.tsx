@@ -171,7 +171,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         }
     };
 
-    const isAdmin = user?.username === 'uslincoln' || user?.username === 'uslincon' || user?.is_admin;
+    const isAdmin = user?.is_admin || (user?.username && ['uslincoln', 'uslincon'].includes(user.username.toLowerCase()));
 
     const menuItems = useMemo(() => [
         ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('navigation.admin_panel') }] : []),

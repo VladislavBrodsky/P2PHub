@@ -154,6 +154,20 @@ class Settings(BaseSettings):
     PRO_PRICE_USD: float = 39.0
     PRO_PLUS_PRICE_USD: float = 69.0
     ADMIN_USER_IDS: list[str] = Field(default_factory=lambda: ["716720099", "537873096"], validation_alias="ADMIN_USER_IDS")
+    
+    @field_validator("ADMIN_USER_IDS", mode="before")
+    @classmethod
+    def parse_admin_ids(cls, v: Any) -> list[str]:
+        if isinstance(v, str):
+            import json
+            try:
+                parsed = json.loads(v)
+                if isinstance(parsed, list):
+                    return [str(i) for i in parsed]
+            except Exception:
+                # Fallback to comma separation
+                return [i.strip() for i in v.split(",") if i.strip()]
+        return v
 
     # --- VIRAL STUDIO (PRO Features) ---
     PRO_TOKENS_MONTHLY: int = Field(default=250, validation_alias="PRO_TOKENS_MONTHLY")
