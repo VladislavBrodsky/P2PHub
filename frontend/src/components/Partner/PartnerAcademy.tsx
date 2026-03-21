@@ -29,7 +29,7 @@ export const PartnerAcademy = () => {
                                 {t('academy.hero_title_1')} <span className="bg-linear-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent drop-shadow-md">{t('academy.hero_title_2')}</span>
                             </h2>
                             <p className="text-slate-700 dark:text-slate-300 text-label font-bold leading-relaxed max-w-[260px] mx-auto opacity-90 tracking-wide drop-shadow-sm">
-                                <Trans i18nKey="academy.hero_desc">
+                                <Trans t={t} i18nKey="academy.hero_desc">
                                     Master the step-by-step income system <span className="text-blue-800 dark:text-blue-100 font-bold">$1 per minute</span> with AI.
                                 </Trans>
                             </p>

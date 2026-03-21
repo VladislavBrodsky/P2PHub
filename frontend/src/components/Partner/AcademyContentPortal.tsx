@@ -538,7 +538,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                             />
 
                                             <span className="text-sm font-black text-slate-900 dark:text-slate-900 tracking-[0.4em] whitespace-nowrap relative z-10 drop-shadow-sm">
-                                                Viral Network Core
+                                                {t('academy.viral_network_core')}
                                             </span>
                                         </motion.div>
                                     </div>
@@ -636,7 +636,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 border border-blue-500/20">
                                                         <TrendingUp size={16} />
                                                     </div>
-                                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-widest">{t('academy.mission_ready_title', { defaultValue: 'MISSION PROTOCOL' })}</h3>
+                                                    <h3 className="text-sm font-bold text-slate-900 dark:text-white tracking-widest">{t('academy.mission_ready_title')}</h3>
                                                 </div>
 
                                                 <div
