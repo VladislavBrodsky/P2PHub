@@ -127,11 +127,11 @@ const TopPartnerRow = React.memo(({ partner, index }: TopPartnerRowProps) => {
                         ) : null}
                     </div>
                     {index < 3 && (
-                        <div className={`absolute -top-1.5 -left-1.5 p-0.5 rounded-full shadow-lg ${index === 0 ? 'bg-amber-400' :
+                        <div className={`absolute -top-1.5 left-1/2 -translate-x-1/2 p-0.5 rounded-full shadow-lg border-2 border-white dark:border-slate-800 flex items-center justify-center z-20 ${index === 0 ? 'bg-amber-400' :
                             index === 1 ? 'bg-slate-400' :
                                 'bg-orange-400'
                             }`}>
-                            <Crown className="w-3 h-3 text-white" />
+                            <Crown className="w-3.5 h-3.5 text-white fill-white/20" />
                         </div>
                     )}
                     {(partner.subscription_plan || '').includes('PRO') && (

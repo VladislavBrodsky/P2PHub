@@ -127,22 +127,17 @@ const PartnerRow = memo(({ user, index, onModalOpen, t }: {
                                         duration: 2,
                                         ease: "easeInOut" 
                                     }}
-                                    className="relative"
+                                    className={`p-1 rounded-full shadow-lg border-2 border-white dark:border-slate-800 flex items-center justify-center relative z-20 ${
+                                        index === 0 ? 'bg-amber-400 shadow-amber-500/50' :
+                                            index === 1 ? 'bg-slate-400 shadow-slate-400/50' :
+                                                'bg-orange-400 shadow-orange-500/50'
+                                    }`}
                                 >
                                     <Crown 
-                                        size={14} 
+                                        size={12} 
                                         strokeWidth={3}
-                                        className={`drop-shadow-[0_0_8px_rgba(0,0,0,0.3)] ${
-                                            (user.subscription_plan || '').includes('PLUS') 
-                                                ? 'text-fuchsia-400 fill-fuchsia-400/20 drop-shadow-[0_0_12px_rgba(232,121,249,0.8)]' 
-                                                : (user.subscription_plan || '').includes('PRO')
-                                                    ? 'text-yellow-400 fill-yellow-400/20 drop-shadow-[0_0_12px_rgba(250,204,21,0.8)]'
-                                                    : 'text-white'
-                                        }`} 
+                                        className="text-white fill-white/20"
                                     />
-                                    <div className={`absolute inset-0 blur-sm opacity-50 ${
-                                        (user.subscription_plan || '').includes('PLUS') ? 'bg-fuchsia-500' : 'bg-yellow-500'
-                                    }`} />
                                 </motion.div>
                             </div>
                         )}
