@@ -532,6 +532,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-2">
                                                         {[
+                                                            { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
+                                                            { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
                                                             { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
                                                             { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
                                                         ].map((field, i) => (
