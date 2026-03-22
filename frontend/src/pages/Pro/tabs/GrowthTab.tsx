@@ -669,9 +669,9 @@ export const GrowthTab = ({
                     {/* Multi-Sync Status Display */}
                     <div className="flex flex-col items-end shrink-0 text-right">
                         <span className={`text-label font-bold uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
-                            {status?.is_pro_plus ? t('pro_dashboard.setup.tg_sync_multi.plan_plus') : t('pro_dashboard.setup.tg_sync_multi.plan_pro')}
+                            {status?.is_pro_plus ? t('pro_dashboard.setup.multi_sync.plan_plus') : t('pro_dashboard.setup.multi_sync.plan_pro')}
                         </span>
-                        <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.tg_sync_multi.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
+                        <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.multi_sync.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
                     </div>
                 </div>
 
