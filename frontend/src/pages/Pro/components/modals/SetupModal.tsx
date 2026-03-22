@@ -325,7 +325,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     <div key={i} className="space-y-1">
                                                         <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
                                                         <input
-                                                            type={field.type || 'text'}
+                                                            type="text"
                                                             value={field.value}
                                                             onChange={(e) => field.setter(e.target.value)}
                                                             className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
@@ -540,7 +540,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <div key={i} className="space-y-1">
                                                                 <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
                                                                 <input
-                                                                    type={field.type || 'text'}
+                                                                    type="text"
                                                                     value={field.value}
                                                                     onChange={(e) => field.setter(e.target.value)}
                                                                     className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
