@@ -318,9 +318,9 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             <div className="space-y-2">
                                                 {[
                                                     { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
-                                                    { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
+                                                    { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
                                                     { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
-                                                    { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
+                                                    { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
                                                 ].map((field, i) => (
                                                     <div key={i} className="space-y-1">
                                                         <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
@@ -533,9 +533,9 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     <div className="p-4 sm:p-5 space-y-2">
                                                         {[
                                                             { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
-                                                            { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret', type: 'password' },
+                                                            { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
                                                             { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
-                                                            { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret', type: 'password' }
+                                                            { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
                                                         ].map((field, i) => (
                                                             <div key={i} className="space-y-1">
                                                                 <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
