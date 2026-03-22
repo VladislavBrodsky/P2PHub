@@ -126,6 +126,46 @@
         "partners_cards": "Cards",
         "partners_network": "Network Structure"
       },
+      "post_types_desc": {
+        "launch": "Announce new systems and create initial momentum.",
+        "fomo": "Create urgency through limited access and time decay.",
+        "authority": "Establish dominance through results and expertise.",
+        "lifestyle": "Showcase the results of automated wealth systems.",
+        "income": "Direct proof of system profitability and scale.",
+        "network": "Highlight the power of the partner ecosystem.",
+        "tutorial": "Break down complex systems into step-by-step value.",
+        "partners": "Recruit heavy-hitters into your direct network.",
+        "partners_cards": "Leverage card utilities for maximum conversion.",
+        "partners_network": "Map out the deep structure of the referral web."
+      },
+      "audiences": {
+        "traders": "Traders & Investors",
+        "nomads": "Digital Nomads",
+        "affiliates": "Affiliate Marketers",
+        "builders": "Web3 Builders",
+        "parents": "Modern Parents",
+        "hustlers": "Side Hustlers",
+        "burnouts": "Corporate Burnouts",
+        "passive_seekers": "Passive Income Seekers",
+        "growth_masters": "Growth Masters",
+        "automation_kings": "Automation Kings",
+        "empire_builders": "Empire Builders",
+        "partners": "Network Partners"
+      },
+      "audiences_desc": {
+        "traders": "Speculators looking for high-ROI systems.",
+        "nomads": "Remote workers seeking location independence.",
+        "affiliates": "Traffic drivers looking for high-converting offers.",
+        "builders": "Creators building the next generation of tech.",
+        "parents": "Parents looking for flexible income streams.",
+        "hustlers": "Grinders building multiple income streams.",
+        "burnouts": "Professionals seeking an exit from the 9-to-5.",
+        "passive_seekers": "Users looking for automated return mechanisms.",
+        "growth_masters": "Experts scaling their digital presence.",
+        "automation_kings": "Systems thinkers optimizing for scale.",
+        "empire_builders": "Visionaries building long-term wealth.",
+        "partners": "Existing nodes in the network structure."
+      },
       "processing_viral": "Synthesizing Viral Content...",
       "ai_generated_badge": "AI Generated",
       "hashtags_refreshed": "Viral hashtags optimized",
@@ -137,19 +177,27 @@
       "target_label": "Target Audience",
       "target_instruction": "Define your target node",
       "target_placeholder": "Select audience...",
+      "language_label": "Content Language",
+      "language_instruction": "Select output language",
+      "tone_label": "Tone of voice",
+      "initiate_btn": "Initiate Synthesis",
       "personal_link_subtitle": "Enable custom tracking via Bot link",
       "tone_instruction": "Adjust neural resonance tone",
       "tones": {
         "provocative": "Provocative",
         "authoritative": "Authoritative",
         "empathetic": "Empathetic",
-        "cynical": "Cynical"
+        "cynical": "Cynical",
+        "minimalist": "Minimalist",
+        "aggressive": "Aggressive"
       },
       "tones_desc": {
         "provocative": "High-impact scroll-stopping hooks.",
         "authoritative": "Expert-led trust architecture.",
         "empathetic": "Community-first resonance nodes.",
-        "cynical": "No-nonsense market reality."
+        "cynical": "No-nonsense market reality.",
+        "minimalist": "Direct, high-signal, zero fluff communication.",
+        "aggressive": "High urgency, commanding, dominance-based positioning."
       }
     },
     "growth_strategist": {
@@ -226,7 +274,10 @@
         "title": "OMNI-CHANNEL SYNC",
         "desc": "Manage all your growth nodes from a single dashboard.",
         "test": "TEST INTEGRATIONS",
-        "test_tg": "TEST TELEGRAM"
+        "test_tg": "TEST TELEGRAM",
+        "more_platforms_tg": "Telegram",
+        "more_platforms_t": "Threads",
+        "more_platforms_p": "Pinterest"
       },
       "deploy_btn": "DEPLOY SETTINGS",
       "syncing_btn": "SYNCING...",
