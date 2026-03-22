@@ -47,7 +47,8 @@ export const PremiumSelect = ({
             text: 'text-indigo-600 dark:text-indigo-400',
             bg: 'bg-indigo-500',
             border: 'border-indigo-200 dark:border-indigo-500/30',
-            active: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+            active: 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-inner',
+            hover: 'hover:bg-indigo-50/80 dark:hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-400',
             icon: 'text-indigo-500',
             shadow: 'shadow-indigo-500/10'
         },
@@ -55,7 +56,8 @@ export const PremiumSelect = ({
             text: 'text-purple-600 dark:text-purple-400',
             bg: 'bg-purple-500',
             border: 'border-purple-200 dark:border-purple-500/30',
-            active: 'bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400',
+            active: 'bg-purple-50 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]',
+            hover: 'hover:bg-purple-50/80 dark:hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400',
             icon: 'text-purple-500',
             shadow: 'shadow-purple-500/10'
         },
@@ -63,7 +65,8 @@ export const PremiumSelect = ({
             text: 'text-amber-600 dark:text-amber-400',
             bg: 'bg-amber-500',
             border: 'border-amber-200 dark:border-amber-500/30',
-            active: 'bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400',
+            active: 'bg-amber-50 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-[inset_0_0_15px_rgba(245,158,11,0.1)]',
+            hover: 'hover:bg-amber-50/80 dark:hover:bg-amber-500/15 hover:text-amber-600 dark:hover:text-amber-400',
             icon: 'text-amber-500',
             shadow: 'shadow-amber-500/10'
         },
@@ -71,7 +74,8 @@ export const PremiumSelect = ({
             text: 'text-emerald-600 dark:text-emerald-400',
             bg: 'bg-emerald-500',
             border: 'border-emerald-200 dark:border-emerald-500/30',
-            active: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+            active: 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-[inset_0_0_15px_rgba(16,185,129,0.1)]',
+            hover: 'hover:bg-emerald-50/80 dark:hover:bg-emerald-500/15 hover:text-emerald-600 dark:hover:text-emerald-400',
             icon: 'text-emerald-500',
             shadow: 'shadow-emerald-500/10'
         }
@@ -196,7 +200,7 @@ export const PremiumSelect = ({
                                             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all text-left group/item
                                                         ${isSelected
                                                     ? theme.active
-                                                    : `hover:bg-${color}-50 dark:hover:bg-${color}-500/10 text-slate-600 dark:text-slate-400 hover:${theme.text}`
+                                                    : `text-slate-600 dark:text-slate-400 ${theme.hover}`
                                                 }
                                                     `}
                                         >
@@ -205,7 +209,7 @@ export const PremiumSelect = ({
                                                     {option.label}
                                                 </span>
                                                 {option.description && (
-                                                    <span className={`text-label mt-0.5 leading-snug transition-colors ${isSelected ? `text-${color}-600/70 dark:text-${color}-400/70` : `text-slate-500 dark:text-slate-400 group-hover/item:text-${color}-600/70 dark:group-hover/item:text-${color}-400/70`}`}>
+                                                    <span className={`text-label mt-0.5 leading-snug transition-colors ${isSelected ? theme.text : `text-slate-500 dark:text-slate-400 group-hover/item:${theme.text}`} opacity-70`}>
                                                         {option.description}
                                                     </span>
                                                 )}
