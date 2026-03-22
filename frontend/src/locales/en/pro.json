@@ -183,6 +183,11 @@
       "initiate_btn": "Initiate Synthesis",
       "personal_link_subtitle": "Enable custom tracking via Bot link",
       "tone_instruction": "Adjust neural resonance tone",
+      "ready_title": "Content Blueprint Ready",
+      "ready_subtitle": "Review and Deploy",
+      "ready_p": "Your AI-generated content strategy is ready for deployment. Preview the assets below.",
+      "go_viral_btn": "Go Viral",
+      "back_btn": "Back to Synthesis",
       "tones": {
         "provocative": "Provocative",
         "authoritative": "Authoritative",
@@ -198,6 +203,17 @@
         "cynical": "No-nonsense market reality.",
         "minimalist": "Direct, high-signal, zero fluff communication.",
         "aggressive": "High urgency, commanding, dominance-based positioning."
+      },
+      "processing_eta": "ETA: {{count}}s",
+      "processing_msg": "Establishing neural connections...",
+      "omni_enabled": "OMNI-SYNC ENABLED",
+      "publish_btn": "Deploy to Network",
+      "share_btn": "Share Link",
+      "generate_new_btn": "Generate New Blueprint",
+      "share_modal": {
+        "title": "Share Blueprint",
+        "subtitle": "Distribute via network",
+        "more": "More Options"
       }
     },
     "growth_strategist": {

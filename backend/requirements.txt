@@ -32,8 +32,8 @@ Faker==40.1.2
 fastapi==0.128.0
 # #comment: REMOVED Flask/Flask-SQLAlchemy as they are unused in this FastAPI project.
 frozenlist==1.7.0
-google-ai-generativelanguage==0.6.15
-google-api-core==2.29.0
+google-ai-generativelanguage>=0.6.0
+google-api-core>=2.11.0
 google-api-python-client==2.187.0
 google-auth==2.47.0
 google-auth-httplib2==0.3.0
@@ -42,7 +42,7 @@ google-genai==1.63.0
 
 googleapis-common-protos==1.72.0
 grpcio==1.76.0
-grpcio-status==1.71.2
+grpcio-status>=1.60.0
 gspread==6.2.1
 gunicorn==23.0.0
 h11==0.16.0
