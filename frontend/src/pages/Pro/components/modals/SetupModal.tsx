@@ -168,7 +168,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         animate={{ scale: 1, opacity: 1, y: 0 }}
                         exit={{ scale: 0.9, opacity: 0, y: 30 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[90vh] relative"
+                        className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[82vh] mt-8 mb-4 relative"
                     >
                         {/* Header Section */}
                         <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
@@ -412,7 +412,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* Platform Switcher */}
                                             <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
                                                 {[
-                                                    { id: 'tg', label: t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg', 'Telegram'), src: socialLogos.telegram },
+                                                    { id: 'tg', label: t('pro_dashboard.setup.multi_sync.more_platforms_tg', 'Telegram'), src: socialLogos.telegram },
                                                     { id: 'x', label: 'X', src: socialLogos.x, invert: true },
                                                     { id: 'linkedin', label: 'LinkedIn', src: socialLogos.linkedin },
                                                     { id: 'pinterest', label: 'Pinterest', src: socialLogos.pinterest },

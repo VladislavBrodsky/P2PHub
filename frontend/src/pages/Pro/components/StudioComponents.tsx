@@ -748,10 +748,10 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                             const getLabel = () => {
                                 switch (platform) {
                                     case 'x': return 'Network X';
-                                    case 'telegram': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_tg', 'Telegram');
+                                    case 'telegram': return t('pro_dashboard.setup.multi_sync.more_platforms_tg', 'Telegram');
                                     case 'linkedin': return 'LinkedIn';
-                                    case 'threads': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_t', 'Threads');
-                                    case 'pinterest': return t('pro_dashboard.setup.tg_sync_multi.more_platforms_p', 'Pinterest');
+                                    case 'threads': return t('pro_dashboard.setup.multi_sync.more_platforms_t', 'Threads');
+                                    case 'pinterest': return t('pro_dashboard.setup.multi_sync.more_platforms_p', 'Pinterest');
                                     case 'facebook': return 'Facebook';
                                     case 'discord': return 'Discord';
                                     default: return (platform as string).toUpperCase();
