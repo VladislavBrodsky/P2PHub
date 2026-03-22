@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 # #comment: Current profile cache version to prevent stale data between updates.
-PROFILE_CACHE_VERSION = "v6"
+PROFILE_CACHE_VERSION = "v7"
 
 @router.get("/me", response_model=PartnerResponse)
 async def get_my_profile(

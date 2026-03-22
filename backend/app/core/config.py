@@ -167,6 +167,14 @@ class Settings(BaseSettings):
             except Exception:
                 # Fallback to comma separation
                 return [i.strip() for i in v.split(",") if i.strip()]
+        elif isinstance(v, list):
+            # Clean up Pydantic-settings naive comma-split artifacts from JSON arrays
+            cleaned = []
+            for item in v:
+                item_str = str(item).strip().strip("[]\"'")
+                if item_str:
+                    cleaned.append(item_str)
+            return cleaned
         return v
 
     # --- VIRAL STUDIO (PRO Features) ---
