@@ -47,8 +47,15 @@ async def ensure_photo_cached(file_id: str, force_refresh: bool = False) -> byte
                 optimized = await asyncio.to_thread(_process_image_binary, response.content)
                 await redis_service.set_bytes(cache_key_binary, optimized, expire=86400 * 7)
                 return optimized
+            else:
+                logger.warning(f"Failed to download photo {file_id}. Status: {response.status_code}")
+                await redis_service.client.delete(cache_key_url)
+                if response.status_code in [401, 403, 404]:
+                    await redis_service.set(cache_key_url, "EMPTY", expire=3600)
+                    
         except Exception as e:
             logger.error(f"❌ Failed to optimize/cache photo {file_id}: {e}")
+            await redis_service.client.delete(cache_key_url)
             
     return None
 
@@ -62,9 +69,15 @@ async def _get_photo_url(file_id: str, cache_key: str) -> str | None:
     photo_url = await redis_service.get(cache_key)
     if photo_url == "EMPTY": return None
     if not photo_url:
-        file = await bot.get_file(file_id)
-        photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
-        await redis_service.set(cache_key, photo_url, expire=7200)
+        try:
+            file = await bot.get_file(file_id)
+            photo_url = f"https://api.telegram.org/file/bot{settings.BOT_TOKEN}/{file.file_path}"
+            # Telegram file paths expire in about 1 hour. Cache for less than that (55 mins)
+            await redis_service.set(cache_key, photo_url, expire=3300)
+        except Exception as e:
+            logger.error(f"bot.get_file failed for {file_id}: {e}")
+            await redis_service.set(cache_key, "EMPTY", expire=3600)
+            return None
     return photo_url
 
 def _process_image_binary(content: bytes) -> bytes:
