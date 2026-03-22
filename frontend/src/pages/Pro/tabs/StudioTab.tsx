@@ -205,13 +205,15 @@ export const StudioTab = ({
             // Include referral link if active and valid
             let finalLink: string | undefined = undefined;
             if (usePersonalLink && personalLink) {
-                if (personalLink.startsWith('https://t.me/pintopay_probot?start=') || personalLink.startsWith('t.me/pintopay_probot?start=')) {
-                    finalLink = personalLink;
-                } else {
-                    notification({ title: t('common:error') || 'Invalid Link', text: "Link must start with 'https://t.me/pintopay_probot?start='", type: 'error' });
-                    setIsGenerating(false);
-                    return;
-                }
+                finalLink = personalLink;
+                // TEMPORARILY DISABLED: Strict link validation
+                // if (personalLink.startsWith('https://t.me/pintopay_probot?start=') || personalLink.startsWith('t.me/pintopay_probot?start=')) {
+                //     finalLink = personalLink;
+                // } else {
+                //     notification({ title: t('common:error') || 'Invalid Link', text: "Link must start with 'https://t.me/pintopay_probot?start='", type: 'error' });
+                //     setIsGenerating(false);
+                //     return;
+                // }
             }
 
             await proService.generateContentStream(

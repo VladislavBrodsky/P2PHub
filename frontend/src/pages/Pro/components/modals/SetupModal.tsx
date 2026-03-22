@@ -77,15 +77,16 @@ export const SetupModal: React.FC<SetupModalProps> = ({
         setIsSaving(true);
         selection();
 
-        if (personalLink && !personalLink.startsWith('https://t.me/pintopay_probot?start=') && !personalLink.startsWith('t.me/pintopay_probot?start=')) {
-            showNotification({
-                title: t('pro_dashboard.notifications.error') || 'Error',
-                message: t('pro_dashboard.setup.referral_link_prefix_error'),
-                type: 'warning'
-            });
-            setIsSaving(false);
-            return;
-        }
+        // TEMPORARILY DISABLED: Strict link validation
+        // if (personalLink && !personalLink.startsWith('https://t.me/pintopay_probot?start=') && !personalLink.startsWith('t.me/pintopay_probot?start=')) {
+        //     showNotification({
+        //         title: t('pro_dashboard.notifications.error') || 'Error',
+        //         message: t('pro_dashboard.setup.referral_link_prefix_error'),
+        //         type: 'warning'
+        //     });
+        //     setIsSaving(false);
+        //     return;
+        // }
 
         try {
             if (personalLink) {

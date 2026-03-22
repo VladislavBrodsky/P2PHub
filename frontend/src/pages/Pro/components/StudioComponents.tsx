@@ -251,7 +251,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                                 type="text"
                                                 value={personalLink}
                                                 onChange={(e) => setPersonalLink(e.target.value)}
-                                                placeholder="https://t.me/pintopay_probot?start=..."
+                                                placeholder="https://your-link.com"
                                                 className="w-full h-9 bg-slate-50 dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-lg pl-3 pr-20 text-base sm:text-label font-medium text-slate-900 dark:text-white"
                                             />
                                             <button
@@ -261,12 +261,15 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                                 {isUpdatingLink ? <Loader2 size={10} className="animate-spin" /> : t('common:save', 'Save')}
                                             </button>
                                         </div>
+                                        {/* TEMPORARILY DISABLED: Link warning
                                         <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
                                             <Info size={12} className="text-amber-500 shrink-0" />
                                             <p className="text-label font-medium text-slate-600 dark:text-slate-400 leading-tight">
                                                 {t('pro_dashboard.studio.personal_link_warning')} <span className="font-bold text-purple-500 break-all">https://t.me/pintopay_probot?start=...</span>
                                             </p>
                                         </div>
+                                        */}
+
                                     </motion.div>
                                 )}
                             </AnimatePresence>

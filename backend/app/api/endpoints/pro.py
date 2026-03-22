@@ -493,19 +493,16 @@ async def update_referral_link(
     
     link = payload.referral_link.strip()
     
-    # Validation: Must match "https://t.me/pintopaybot?start=" or "t.me/pintopaybot?start="
-    is_valid = False
-    if link.startswith(f"https://t.me/{settings.BOT_USERNAME}?start=") or link.startswith(f"t.me/{settings.BOT_USERNAME}?start="):
-        is_valid = True
-    
-    if not is_valid:
-        # If link is invalid, we might still store it but we'll use fallback in generation
-        # However, the user said "check the link all the time, it has to match"
-        # So I will reject it if it doesn't match.
-        raise HTTPException(
-            status_code=400, 
-            detail=f"Invalid referral link. Must start with 'https://t.me/{settings.BOT_USERNAME}?start=' or 't.me/{settings.BOT_USERNAME}?start='"
-        )
+    # TEMPORARILY DISABLED: Allow users to use any link
+    # is_valid = False
+    # if link.startswith(f"https://t.me/{settings.BOT_USERNAME}?start=") or link.startswith(f"t.me/{settings.BOT_USERNAME}?start="):
+    #     is_valid = True
+    # 
+    # if not is_valid:
+    #     raise HTTPException(
+    #         status_code=400, 
+    #         detail=f"Invalid referral link. Must start with 'https://t.me/{settings.BOT_USERNAME}?start=' or 't.me/{settings.BOT_USERNAME}?start='"
+    #     )
 
     partner.personal_referral_link = link
     session.add(partner)
