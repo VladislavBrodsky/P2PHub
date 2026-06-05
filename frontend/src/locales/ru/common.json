@@ -1,6 +1,6 @@
 {
   "dashboard": "Панель",
-  "academy": "Академия",
+  "portal_academy": "Академия",
   "wallet": "Кошелек",
   "connect_wallet": "Подключить",
   "language": "Язык",
@@ -68,7 +68,7 @@
     "league": "Лиги",
     "earn": "Рост",
     "pro": "PRO",
-    "academy": "Академия",
+    "navigation_academy": "Академия",
     "settings": "Настройки",
     "notifications": "Уведомления",
     "channel": "Канал",
@@ -145,7 +145,7 @@
       "subscription": "Подписка",
       "blog": "Блог",
       "admin": "Админ",
-      "pro_dashboard": "PRO Панель",
+
       "faq": "FAQ"
     },
     "coming_soon": {

@@ -1,6 +1,6 @@
 {
   "dashboard": "Dashboard",
-  "academy": "Influence",
+  "portal_academy": "Influence",
   "wallet": "Wallet",
   "connect_wallet": "Connect",
   "language": "Language",
@@ -68,7 +68,7 @@
     "league": "Leagues",
     "earn": "Growth",
     "pro": "PRO",
-    "academy": "Academy",
+    "navigation_academy": "Academy",
     "settings": "Settings",
     "notifications": "Notifications",
     "channel": "Channel",
@@ -154,7 +154,7 @@
       "subscription": "Subscription",
       "blog": "Blog",
       "admin": "Admin",
-      "pro_dashboard": "PRO Dashboard",
+
       "faq": "FAQ"
     }
   },

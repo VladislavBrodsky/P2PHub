@@ -65,10 +65,10 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                                     <Sparkles size={24} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('pro_dashboard.tools.bio.title')}</h3>
+                                    <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('tools.bio.title')}</h3>
                                     <div className="flex items-center gap-2">
                                         <p className="text-label font-bold text-amber-600 dark:text-amber-400 uppercase tracking-[0.2em] opacity-80">
-                                            {t('pro_dashboard.tools.bio.persona_sync')}
+                                            {t('tools.bio.persona_sync')}
                                         </p>
                                         <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
                                         <div className="flex items-center gap-1.5">
@@ -89,7 +89,7 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                         <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6">
                             <div className="space-y-3 relative group/field">
                                 <div className="flex justify-between items-center px-1">
-                                    <label className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.label', 'Your Current Bio')}</label>
+                                    <label className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('tools.bio.label', 'Your Current Bio')}</label>
                                     {bioInput && (
                                         <button onClick={() => setBioInput('')} className="text-label font-bold text-rose-500 uppercase tracking-widest hover:opacity-70 transition-opacity flex items-center gap-1">
                                             <X size={10} /> {t('common:delete')}
@@ -100,7 +100,7 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                                     value={bioInput}
                                     onChange={(e) => setBioInput(e.target.value)}
                                     className="w-full h-32 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-amber-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400/50 resize-none shadow-inner"
-                                    placeholder={t('pro_dashboard.tools.bio.placeholder')}
+                                    placeholder={t('tools.bio.placeholder')}
                                 />
                             </div>
 
@@ -113,18 +113,18 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                                     <div className="absolute top-0 right-0 p-3">
                                         <CheckCircle2 size={16} className="text-emerald-500" />
                                     </div>
-                                    <h4 className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('pro_dashboard.tools.bio.synthesized_title')}</h4>
+                                    <h4 className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('tools.bio.synthesized_title')}</h4>
                                     <p className="text-sm font-bold text-slate-900 dark:text-white leading-tight">
                                         {bioResult}
                                     </p>
                                     <button
                                         onClick={() => {
                                             navigator.clipboard.writeText(bioResult);
-                                            showNotification({ title: t('pro_dashboard.notifications.success'), message: t('pro_dashboard.notifications.bio_copied'), type: 'success' });
+                                            showNotification({ title: t('notifications.success'), message: t('notifications.bio_copied'), type: 'success' });
                                         }}
                                         className="text-label font-bold text-amber-500 uppercase tracking-widest hover:text-amber-600 transition-colors"
                                     >
-                                        {t('pro_dashboard.tools.copy_btn')}
+                                        {t('tools.copy_btn')}
                                     </button>
                                 </motion.div>
                             )}
@@ -132,7 +132,7 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                             <div className="p-4 bg-amber-50 dark:bg-amber-500/5 rounded-2xl border border-amber-100 dark:border-amber-500/10 flex items-start gap-3">
                                 <Sparkles className="w-5 h-5 text-amber-500 mt-0.5" />
                                 <p className="text-label text-amber-700 dark:text-amber-400 leading-relaxed italic">
-                                    {t('pro_dashboard.tools.bio.neural_desc')}
+                                    {t('tools.bio.neural_desc')}
                                 </p>
                             </div>
                         </div>
@@ -146,11 +146,11 @@ export const BioGeneratorModal: React.FC<BioGeneratorModalProps> = ({
                                 {isGeneratingBio ? (
                                     <>
                                         <Loader2 className="animate-spin" size={16} />
-                                        {t('pro_dashboard.tools.processing')}
+                                        {t('tools.processing')}
                                     </>
                                 ) : (
                                     <>
-                                        {t('pro_dashboard.tools.bio.btn').toUpperCase()} <Sparkles size={16} />
+                                        {t('tools.bio.btn').toUpperCase()} <Sparkles size={16} />
                                     </>
                                 )}
                             </button>

@@ -249,8 +249,8 @@ export const StudioTab = ({
                         });
                         setExternalStep(3);
                         notification({
-                            title: t('pro_dashboard.notifications.success'),
-                            text: t('pro_dashboard.notifications.viral_synthesized'),
+                            title: t('notifications.success'),
+                            text: t('notifications.viral_synthesized'),
                             type: 'success'
                         });
                     } else if (event.type === 'error') {
@@ -265,14 +265,14 @@ export const StudioTab = ({
             console.error('❌ Viral content generation failed:', error);
 
             // Extract detailed error message
-            let errorTitle = t('pro_dashboard.notifications.error');
-            let errorMessage = t('pro_dashboard.notifications.gen_failed');
+            let errorTitle = t('notifications.error');
+            let errorMessage = t('notifications.gen_failed');
 
             if (error.response?.data?.detail) {
                 errorMessage = error.response.data.detail;
             } else if (error.response?.status === 402) {
-                errorTitle = t('pro_dashboard.notifications.tokens_required');
-                errorMessage = t('pro_dashboard.notifications.tokens_required_text');
+                errorTitle = t('notifications.tokens_required');
+                errorMessage = t('notifications.tokens_required_text');
             } else if (error.message) {
                 errorMessage = `${errorMessage}: ${error.message}`;
             }
@@ -304,8 +304,8 @@ export const StudioTab = ({
             }
 
             notification({
-                title: t('pro_dashboard.notifications.success'),
-                text: t('pro_dashboard.studio.hashtags_refreshed', 'Viral hashtags optimized'),
+                title: t('notifications.success'),
+                text: t('studio.hashtags_refreshed', 'Viral hashtags optimized'),
                 type: 'success'
             });
         } catch (error) {
@@ -323,13 +323,13 @@ export const StudioTab = ({
             setStatus({ ...status, personal_referral_link: link });
             notification({
                 title: t('common:success'),
-                text: t('pro_dashboard.studio.link_saved', 'Referral link updated successfully'),
+                text: t('studio.link_saved', 'Referral link updated successfully'),
                 type: 'success'
             });
         } catch (error: any) {
             notification({
                 title: t('common:error'),
-                text: error.response?.data?.detail || t('pro_dashboard.studio.link_error', 'Invalid link format'),
+                text: error.response?.data?.detail || t('studio.link_error', 'Invalid link format'),
                 type: 'error'
             });
         } finally {
@@ -414,7 +414,7 @@ export const StudioTab = ({
         if (!text) return;
 
         navigator.clipboard.writeText(text);
-        notification({ title: t('pro_dashboard.notifications.copied'), text: t('pro_dashboard.notifications.text_copied'), type: 'success' });
+        notification({ title: t('notifications.copied'), text: t('notifications.text_copied'), type: 'success' });
     };
 
     const handleSystemShare = async () => {
@@ -466,8 +466,8 @@ export const StudioTab = ({
 
         if (result === 'copied') {
             notification({
-                title: t('pro_dashboard.notifications.copied'),
-                text: t('pro_dashboard.notifications.text_copied'),
+                title: t('notifications.copied'),
+                text: t('notifications.text_copied'),
                 type: 'success'
             });
         }
@@ -517,7 +517,7 @@ export const StudioTab = ({
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            notification({ title: t('pro_dashboard.notifications.image_saved'), text: t('pro_dashboard.notifications.image_saved_text'), type: 'success' });
+            notification({ title: t('notifications.image_saved'), text: t('notifications.image_saved_text'), type: 'success' });
             return;
         }
 
@@ -538,7 +538,7 @@ export const StudioTab = ({
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            notification({ title: t('pro_dashboard.notifications.image_saved'), text: t('pro_dashboard.notifications.image_saved_text'), type: 'success' });
+            notification({ title: t('notifications.image_saved'), text: t('notifications.image_saved_text'), type: 'success' });
         } catch (err) {
             window.open(finalUrl, '_blank');
         }
@@ -574,9 +574,9 @@ export const StudioTab = ({
             const channelOverride = platform === 'telegram' && selectedTgChannel ? selectedTgChannel : undefined;
             await proService.publishContent(platform, fullContent, generatedResult.image_url, generatedResult.id, channelOverride);
             setPublishedPlatforms(prev => [...prev, platform]);
-            notification({ title: t('pro_dashboard.notifications.success'), text: t('pro_dashboard.notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
+            notification({ title: t('notifications.success'), text: t('notifications.published_text', { platform: platform.toUpperCase() }), type: 'success' });
         } catch (error: any) {
-            notification({ title: t('pro_dashboard.notifications.publish_error'), text: error.response?.data?.detail || t('pro_dashboard.notifications.publish_failed'), type: 'error' });
+            notification({ title: t('notifications.publish_error'), text: error.response?.data?.detail || t('notifications.publish_failed'), type: 'error' });
         } finally {
             setIsPublishing(false);
         }
@@ -603,7 +603,7 @@ export const StudioTab = ({
         if (results.success.length > 0) {
             setPublishedPlatforms(prev => [...prev, ...results.success]);
             notification({
-                title: t('pro_dashboard.notifications.success'),
+                title: t('notifications.success'),
                 text: `Synced to: ${results.success.join(', ').toUpperCase()}`,
                 type: 'success'
             });
@@ -611,7 +611,7 @@ export const StudioTab = ({
 
         if (results.fail.length > 0) {
             notification({
-                title: t('pro_dashboard.notifications.publish_error'),
+                title: t('notifications.publish_error'),
                 text: `Failed: ${results.fail.join(', ').toUpperCase()}`,
                 type: 'error'
             });

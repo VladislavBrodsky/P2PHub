@@ -50,7 +50,7 @@ async def get_my_profile(
     except Exception as e:
         logger.warning(f"Profile cache read failed for {tg_id}: {e}")
 
-    from app.services.partner_service import create_partner
+    from app.services.partner_service import create_partner, get_partner_full
 
     stmt = select(Partner).where(Partner.telegram_id == tg_id).options(
         selectinload(Partner.completed_task_records),
@@ -84,10 +84,9 @@ async def get_my_profile(
             referrer_code=user_data.get("start_param"),
             photo_file_id=photo_file_id
         )
-        stmt_refresh = select(Partner).where(Partner.id == partner.id).options(
-            selectinload(Partner.completed_task_records)
-        )
-        partner = (await session.exec(stmt_refresh)).one()
+        partner = await get_partner_full(session, tg_id)
+        if not partner:
+            raise HTTPException(status_code=404, detail="Partner disappeared after creation")
 
     commit_needed = False
     if not is_new:
@@ -234,7 +233,9 @@ async def get_my_profile(
         
     if commit_needed:
         await session.commit()
-        await session.refresh(partner)
+        partner = await get_partner_full(session, tg_id)
+        if not partner:
+            raise HTTPException(status_code=404, detail="Partner disappeared after commit")
         await redis_service.client.delete(cache_key)
         if not is_new:
              await redis_service.client.delete("partners:recent_v2")

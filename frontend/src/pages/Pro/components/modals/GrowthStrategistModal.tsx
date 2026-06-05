@@ -58,10 +58,10 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
-                                            {t('pro_dashboard.growth_strategist.title')}
+                                            {t('growth_strategist.title')}
                                         </h2>
                                         <p className="text-label font-bold text-slate-500 uppercase tracking-widest leading-none">
-                                            {t('pro_dashboard.growth_strategist.version')}
+                                            {t('growth_strategist.version')}
                                         </p>
                                     </div>
                                 </div>
@@ -78,9 +78,9 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                                 <Target size={16} />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1">{t('pro_dashboard.growth_strategist.analysis_title')}</h3>
+                                                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1">{t('growth_strategist.analysis_title')}</h3>
                                                 <p className="text-caption font-medium text-slate-500 dark:text-slate-400">
-                                                    {t('pro_dashboard.growth_strategist.analysis_desc')}
+                                                    {t('growth_strategist.analysis_desc')}
                                                 </p>
                                             </div>
                                         </div>
@@ -89,9 +89,9 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                                 <TrendingUp size={16} />
                                             </div>
                                             <div>
-                                                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1">{t('pro_dashboard.growth_strategist.hacks_title')}</h3>
+                                                <h3 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-1">{t('growth_strategist.hacks_title')}</h3>
                                                 <p className="text-caption font-medium text-slate-500 dark:text-slate-400">
-                                                    {t('pro_dashboard.growth_strategist.hacks_desc')}
+                                                    {t('growth_strategist.hacks_desc')}
                                                 </p>
                                             </div>
                                         </div>
@@ -100,7 +100,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                     <div className="flex items-center gap-3 p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
                                         <Zap size={14} className="text-amber-500" />
                                         <span className="text-label font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">
-                                            {t('pro_dashboard.growth_strategist.cost', { count: 5 })}
+                                            {t('growth_strategist.cost', { count: 5 })}
                                         </span>
                                     </div>
 
@@ -108,7 +108,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                         onClick={handleGenerate}
                                         className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-label uppercase tracking-widest flex items-center justify-center gap-3 shadow-premium active:scale-95 transition-all"
                                     >
-                                        {t('pro_dashboard.growth_strategist.btn_initiate')}
+                                        {t('growth_strategist.btn_initiate')}
                                         <Sparkles size={16} className="text-blue-500" />
                                     </button>
                                 </div>
@@ -125,8 +125,8 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                         />
                                     </div>
                                     <div className="text-center">
-                                        <p className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">{t('pro_dashboard.growth_strategist.synthesizing')}</p>
-                                        <p className="text-label font-bold text-slate-500 uppercase tracking-widest mt-1">{t('pro_dashboard.growth_strategist.accessing_data')}</p>
+                                        <p className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight">{t('growth_strategist.synthesizing')}</p>
+                                        <p className="text-label font-bold text-slate-500 uppercase tracking-widest mt-1">{t('growth_strategist.accessing_data')}</p>
                                     </div>
                                 </div>
                             )}
@@ -147,7 +147,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                         onClick={onClose}
                                         className="w-full h-12 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white rounded-xl font-bold text-label uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all border border-slate-200 dark:border-white/10"
                                     >
-                                        {t('pro_dashboard.growth_strategist.btn_execute')}
+                                        {t('growth_strategist.btn_execute')}
                                         <TrendingUp size={14} />
                                     </button>
                                 </motion.div>

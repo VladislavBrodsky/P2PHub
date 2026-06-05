@@ -80,8 +80,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
         // TEMPORARILY DISABLED: Strict link validation
         // if (personalLink && !personalLink.startsWith('https://t.me/pintopay_probot?start=') && !personalLink.startsWith('t.me/pintopay_probot?start=')) {
         //     showNotification({
-        //         title: t('pro_dashboard.notifications.error') || 'Error',
-        //         message: t('pro_dashboard.setup.referral_link_prefix_error'),
+        //         title: t('notifications.error') || 'Error',
+        //         message: t('setup.referral_link_prefix_error'),
         //         type: 'warning'
         //     });
         //     setIsSaving(false);
@@ -106,16 +106,16 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                 discord_webhook_url: discordToken
             });
             showNotification({
-                title: t('pro_dashboard.setup.save_success_title'),
-                message: t('pro_dashboard.setup.save_success_text'),
+                title: t('setup.save_success_title'),
+                message: t('setup.save_success_text'),
                 type: 'success'
             });
             setShowSetup(false);
         } catch (error: any) {
             console.error(error);
             showNotification({
-                title: t('pro_dashboard.setup.save_error_title'),
-                message: error.response?.data?.message || t('pro_dashboard.setup.save_error_text'),
+                title: t('setup.save_error_title'),
+                message: error.response?.data?.message || t('setup.save_error_text'),
                 type: 'warning'
             });
         } finally {
@@ -139,14 +139,14 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                 setTgTestResults(results);
             }
             showNotification({
-                title: t('pro_dashboard.notifications.success'),
-                message: res.msg || t('pro_dashboard.setup.tg_sync_success_msg'),
+                title: t('notifications.success'),
+                message: res.msg || t('setup.tg_sync_success_msg'),
                 type: 'success'
             });
         } catch (error: any) {
             showNotification({
-                title: t('pro_dashboard.notifications.error'),
-                message: error.response?.data?.message || t('pro_dashboard.setup.tg_sync_error_msg'),
+                title: t('notifications.error'),
+                message: error.response?.data?.message || t('setup.tg_sync_error_msg'),
                 type: 'warning'
             });
         } finally {
@@ -179,12 +179,12 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                 </div>
                                 <div className="min-w-0">
                                     <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
-                                        {t('pro_dashboard.setup.title')}
+                                        {t('setup.title')}
                                     </h3>
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
                                         <span className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
-                                            {t('pro_dashboard.setup.subtitle')}
+                                            {t('setup.subtitle')}
                                         </span>
                                     </div>
                                 </div>
@@ -265,13 +265,13 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     <Send size={18} className="-ml-0.5" />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.tg_node')}</p>
-                                                    <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{t('pro_dashboard.setup.pro_node_limit_desc')}</p>
+                                                    <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.tg_node')}</p>
+                                                    <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{t('setup.pro_node_limit_desc')}</p>
                                                 </div>
                                                 {/* Manual trigger is omitted here for simplicity, or we can pass it as prop if needed */}
                                             </div>
                                             <div>
-                                                <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.channel_id')}</label>
+                                                <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.channel_id')}</label>
                                                 <input
                                                     type="text"
                                                     value={tgChannels[0] || ''}
@@ -285,7 +285,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                 />
                                             </div>
                                             <div className="pt-2 border-t border-slate-100 dark:border-white/5">
-                                                <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('studio.add_personal_link', 'Personal Referral Link')}</label>
                                                 <input
                                                     type="text"
                                                     value={personalLink}
@@ -294,7 +294,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     placeholder="https://t.me/pintopaybot?start=..."
                                                 />
                                                 <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                    {t('pro_dashboard.setup.personal_link_desc')}
+                                                    {t('setup.personal_link_desc')}
                                                 </p>
                                                 <p className="text-label text-amber-500 font-bold">
                                                     https://t.me/pintopay_probot?start=...
@@ -311,16 +311,16 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     <Network size={18} />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
-                                                    <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.x_broadcast_title')}</p>
-                                                    <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{t('pro_dashboard.setup.x_broadcast_desc')}</p>
+                                                    <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.x_broadcast_title')}</p>
+                                                    <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{t('setup.x_broadcast_desc')}</p>
                                                 </div>
                                             </div>
                                             <div className="space-y-2">
                                                 {[
-                                                    { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
-                                                    { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
-                                                    { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
-                                                    { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
+                                                    { label: t('setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
+                                                    { label: t('setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
+                                                    { label: t('setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
+                                                    { label: t('setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
                                                 ].map((field, i) => (
                                                     <div key={i} className="space-y-1">
                                                         <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
@@ -366,22 +366,22 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* Headline */}
                                             <div className="space-y-1.5">
                                                 <h4 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
-                                                    <Trans t={t} i18nKey="pro_dashboard.setup.teaser.title">
+                                                    <Trans t={t} i18nKey="setup.teaser.title">
                                                         Elite <span className="text-emerald-500">Sync</span> Ecosystem
                                                     </Trans>
                                                 </h4>
                                                 <p className="text-label font-medium text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto leading-relaxed">
-                                                    {t('pro_dashboard.setup.teaser.desc')}
+                                                    {t('setup.teaser.desc')}
                                                 </p>
                                             </div>
 
                                             {/* Feature Grid */}
                                             <div className="grid grid-cols-2 gap-2 w-full">
                                                 {[
-                                                    { icon: Send, label: t('pro_dashboard.setup.teaser.feat_tg'), detail: t('pro_dashboard.setup.teaser.feat_tg_detail') },
-                                                    { icon: Blocks, label: t('pro_dashboard.setup.teaser.feat_omni'), detail: t('pro_dashboard.setup.teaser.feat_omni_detail') },
-                                                    { icon: Network, label: t('pro_dashboard.setup.teaser.feat_li'), detail: t('pro_dashboard.setup.teaser.feat_li_detail') },
-                                                    { icon: Sparkles, label: t('pro_dashboard.setup.teaser.feat_ai'), detail: t('pro_dashboard.setup.teaser.feat_ai_detail') }
+                                                    { icon: Send, label: t('setup.teaser.feat_tg'), detail: t('setup.teaser.feat_tg_detail') },
+                                                    { icon: Blocks, label: t('setup.teaser.feat_omni'), detail: t('setup.teaser.feat_omni_detail') },
+                                                    { icon: Network, label: t('setup.teaser.feat_li'), detail: t('setup.teaser.feat_li_detail') },
+                                                    { icon: Sparkles, label: t('setup.teaser.feat_ai'), detail: t('setup.teaser.feat_ai_detail') }
                                                 ].map((feat, i) => (
                                                     <div key={i} className="p-3 bg-white/60 dark:bg-white/5 rounded-xl border border-white/80 dark:border-white/10 flex items-center gap-2">
                                                         <feat.icon size={13} className="text-emerald-500 shrink-0" />
@@ -404,7 +404,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                 className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-label font-bold uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                             >
                                                 <Zap size={14} />
-                                                {t('pro_dashboard.setup.teaser.cta')}
+                                                {t('setup.teaser.cta')}
                                             </button>
                                         </div>
                                     ) : (
@@ -413,7 +413,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* Platform Switcher */}
                                             <div className="flex overflow-x-auto gap-2 pb-2 hide-scrollbar">
                                                 {[
-                                                    { id: 'tg', label: t('pro_dashboard.setup.multi_sync.more_platforms_tg', 'Telegram'), src: socialLogos.telegram },
+                                                    { id: 'tg', label: t('setup.multi_sync.more_platforms_tg', 'Telegram'), src: socialLogos.telegram },
                                                     { id: 'x', label: 'X', src: socialLogos.x, invert: true },
                                                     { id: 'linkedin', label: 'LinkedIn', src: socialLogos.linkedin },
                                                     { id: 'pinterest', label: 'Pinterest', src: socialLogos.pinterest },
@@ -441,8 +441,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                 <img src={socialLogos.telegram} alt="Telegram" className="w-full h-full object-contain scale-110" />
                                                             </div>
                                                             <div className="min-w-0">
-                                                                <p className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.multi_sync.title')}</p>
-                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-1 leading-tight">{t('pro_dashboard.setup.multi_sync.desc')}</p>
+                                                                <p className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.multi_sync.title')}</p>
+                                                                <p className="text-label text-slate-500 dark:text-slate-400 mt-1 leading-tight">{t('setup.multi_sync.desc')}</p>
                                                             </div>
                                                         </div>
                                                         <button
@@ -451,7 +451,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             className="h-10 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white text-label font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 shrink-0 active:scale-95 transition-all disabled:opacity-50"
                                                         >
                                                             {isTesting ? <Loader2 size={12} className="animate-spin" /> : <Zap size={12} className="fill-white" />}
-                                                            {t('pro_dashboard.setup.multi_sync.test')}
+                                                            {t('setup.multi_sync.test')}
                                                         </button>
                                                     </div>
                                                     <div className="p-5 sm:p-6 space-y-6">
@@ -502,7 +502,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             })}
                                                         </div>
                                                         <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-white/5">
-                                                            <label className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-0.5">{t('pro_dashboard.studio.add_personal_link', 'Personal Referral Link')}</label>
+                                                            <label className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest px-0.5">{t('studio.add_personal_link', 'Personal Referral Link')}</label>
                                                             <input
                                                                 type="text"
                                                                 value={personalLink}
@@ -511,7 +511,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                 placeholder="https://t.me/pintopay_probot?start=..."
                                                             />
                                                             <p className="text-[10px] sm:text-label text-slate-400 leading-relaxed px-0.5 italic">
-                                                                {t('pro_dashboard.setup.personal_link_desc')}
+                                                                {t('setup.personal_link_desc')}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -526,16 +526,16 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.x_broadcast_title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.x_broadcast_plus_desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.x_broadcast_title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.x_broadcast_plus_desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-2">
                                                         {[
-                                                            { label: t('pro_dashboard.setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
-                                                            { label: t('pro_dashboard.setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
-                                                            { label: t('pro_dashboard.setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
-                                                            { label: t('pro_dashboard.setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
+                                                            { label: t('setup.api_key'), value: xApiKey, setter: setXApiKey, placeholder: 'API Key' },
+                                                            { label: t('setup.api_secret'), value: xApiSecret, setter: setXApiSecret, placeholder: 'API Secret' },
+                                                            { label: t('setup.access_token'), value: xAccToken, setter: setXAccToken, placeholder: 'Access Token' },
+                                                            { label: t('setup.access_token_secret'), value: xAccSecret, setter: setXAccSecret, placeholder: 'Token Secret' }
                                                         ].map((field, i) => (
                                                             <div key={i} className="space-y-1">
                                                                 <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{field.label}</label>
@@ -560,21 +560,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-contain p-1" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.linkedin.title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.linkedin.desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.linkedin.title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.linkedin.desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-1.5">
-                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.linkedin.oauth_label')}</label>
+                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.linkedin.oauth_label')}</label>
                                                         <textarea
                                                             value={linkedinToken}
                                                             onChange={(e) => setLinkedinToken(e.target.value)}
-                                                            placeholder={t('pro_dashboard.setup.linkedin.placeholder')}
+                                                            placeholder={t('setup.linkedin.placeholder')}
                                                             rows={3}
                                                             className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                            <Trans t={t} i18nKey="pro_dashboard.setup.linkedin.dev_portal_desc">
+                                                            <Trans t={t} i18nKey="setup.linkedin.dev_portal_desc">
                                                                 Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
                                                             </Trans>
                                                         </p>
@@ -590,21 +590,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.pinterest} alt="Pinterest" className="w-full h-full object-contain p-1" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.pinterest.title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.pinterest.desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.pinterest.title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.pinterest.desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-1.5">
-                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.pinterest.placeholder')}</label>
+                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.pinterest.placeholder')}</label>
                                                         <textarea
                                                             value={pinterestToken}
                                                             onChange={(e) => setPinterestToken(e.target.value)}
-                                                            placeholder={t('pro_dashboard.setup.pinterest.placeholder')}
+                                                            placeholder={t('setup.pinterest.placeholder')}
                                                             rows={3}
                                                             className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-rose-400 focus:ring-2 focus:ring-rose-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                            <Trans t={t} i18nKey="pro_dashboard.setup.pinterest.dev_portal_desc">
+                                                            <Trans t={t} i18nKey="setup.pinterest.dev_portal_desc">
                                                                 Obtained via <a href="https://developers.pinterest.com/" target="_blank" rel="noreferrer" className="text-rose-400 underline italic font-bold">Pinterest Developers</a>. Ensure 'pins:read,write' permissions.
                                                             </Trans>
                                                         </p>
@@ -620,21 +620,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.threads} alt="Threads" className="w-full h-full object-contain p-1.5 dark:invert" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.threads.title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.threads.desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.threads.title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.threads.desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-1.5">
-                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.threads.placeholder')}</label>
+                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.threads.placeholder')}</label>
                                                         <textarea
                                                             value={threadsToken}
                                                             onChange={(e) => setThreadsToken(e.target.value)}
-                                                            placeholder={t('pro_dashboard.setup.threads.placeholder')}
+                                                            placeholder={t('setup.threads.placeholder')}
                                                             rows={3}
                                                             className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                            <Trans i18nKey="pro_dashboard.setup.threads.dev_portal_desc">
+                                                            <Trans i18nKey="setup.threads.dev_portal_desc">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-emerald-400 underline italic font-bold">Meta for Developers</a>. Require Threads API product activation.
                                                             </Trans>
                                                         </p>
@@ -650,21 +650,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.facebook} alt="Facebook" className="w-full h-full object-contain p-1" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.facebook.title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.facebook.desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.facebook.title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.facebook.desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-1.5">
-                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.facebook.placeholder')}</label>
+                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.facebook.placeholder')}</label>
                                                         <textarea
                                                             value={facebookToken}
                                                             onChange={(e) => setFacebookToken(e.target.value)}
-                                                            placeholder={t('pro_dashboard.setup.facebook.placeholder')}
+                                                            placeholder={t('setup.facebook.placeholder')}
                                                             rows={3}
                                                             className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                            <Trans i18nKey="pro_dashboard.setup.facebook.dev_portal_desc">
+                                                            <Trans i18nKey="setup.facebook.dev_portal_desc">
                                                                 Connect via <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer" className="text-blue-400 underline italic font-bold">Meta for Developers</a>. Select App and Generate Token.
                                                             </Trans>
                                                         </p>
@@ -680,21 +680,21 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             <img src={socialLogos.discord} alt="Discord" className="w-full h-full object-contain p-1" />
                                                         </div>
                                                         <div className="flex-1 min-w-0">
-                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('pro_dashboard.setup.discord.title')}</p>
-                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('pro_dashboard.setup.discord.desc')}</p>
+                                                            <p className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{t('setup.discord.title')}</p>
+                                                            <p className="text-label text-slate-500 dark:text-slate-400 mt-0.5">{t('setup.discord.desc')}</p>
                                                         </div>
                                                     </div>
                                                     <div className="p-4 sm:p-5 space-y-1.5">
-                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('pro_dashboard.setup.discord.placeholder')}</label>
+                                                        <label className="text-label font-bold text-slate-400 uppercase tracking-widest px-0.5">{t('setup.discord.placeholder')}</label>
                                                         <textarea
                                                             value={discordToken}
                                                             onChange={(e) => setDiscordToken(e.target.value)}
-                                                            placeholder={t('pro_dashboard.setup.discord.placeholder')}
+                                                            placeholder={t('setup.discord.placeholder')}
                                                             rows={3}
                                                             className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-[#5865F2] focus:ring-2 focus:ring-[#5865F2]/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
-                                                            <Trans i18nKey="pro_dashboard.setup.discord.dev_portal_desc">
+                                                            <Trans i18nKey="setup.discord.dev_portal_desc">
                                                                 Obtain Webhook URL via your <span className="text-[#5865F2] italic font-bold">Discord Server Settings → Integrations → Webhooks</span>.
                                                             </Trans>
                                                         </p>
@@ -716,9 +716,9 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                     className="w-full h-12 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                 >
                                     {isSaving ? (
-                                        <><Loader2 className="animate-spin" size={16} /> {t('pro_dashboard.setup.syncing_btn')}</>
+                                        <><Loader2 className="animate-spin" size={16} /> {t('setup.syncing_btn')}</>
                                     ) : (
-                                        <><CheckCircle2 size={15} /> {t('pro_dashboard.setup.deploy_btn')}</>
+                                        <><CheckCircle2 size={15} /> {t('setup.deploy_btn')}</>
                                     )}
                                 </button>
                             ) : null}

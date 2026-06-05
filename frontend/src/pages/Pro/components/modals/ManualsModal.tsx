@@ -47,25 +47,25 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                 </div>
                                 <div>
                                     <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-tight">
-                                        {showManual === 'studio' ? t('pro_dashboard.academy.studio_manual.title') :
-                                            showManual === 'tools' ? t('pro_dashboard.tools.headline.title') :
-                                                showManual === 'academy' ? t('pro_dashboard.academy.protocols.title') :
-                                                    showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.title') :
-                                                        showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.title') :
-                                                            showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.title') :
-                                                                showManual === 'setup_facebook' ? t('pro_dashboard.setup.facebook_manual.title') :
-                                                                    showManual === 'setup_discord' ? t('pro_dashboard.setup.discord_manual.title') :
-                                                                        t('pro_dashboard.academy.viral_assets.title')}
+                                        {showManual === 'studio' ? t('academy.studio_manual.title') :
+                                            showManual === 'tools' ? t('tools.headline.title') :
+                                                showManual === 'academy' ? t('academy.protocols.title') :
+                                                    showManual === 'setup_x' ? t('setup.x_manual.title') :
+                                                        showManual === 'setup_tg' ? t('setup.tg_manual.title') :
+                                                            showManual === 'setup_linkedin' ? t('setup.linkedin_manual.title') :
+                                                                showManual === 'setup_facebook' ? t('setup.facebook_manual.title') :
+                                                                    showManual === 'setup_discord' ? t('setup.discord_manual.title') :
+                                                                        t('academy.viral_assets.title')}
                                     </h3>
                                     <div className="flex items-center gap-2 mt-1">
                                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
                                         <p className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
-                                            {showManual === 'setup_x' ? t('pro_dashboard.setup.x_manual.subtitle') :
-                                                showManual === 'setup_tg' ? t('pro_dashboard.setup.tg_manual.subtitle') :
-                                                    showManual === 'setup_linkedin' ? t('pro_dashboard.setup.linkedin_manual.subtitle') :
-                                                        showManual === 'setup_facebook' ? t('pro_dashboard.setup.facebook_manual.subtitle') :
-                                                            showManual === 'setup_discord' ? t('pro_dashboard.setup.discord_manual.subtitle') :
-                                                                t('pro_dashboard.academy.studio_manual.subtitle')}
+                                            {showManual === 'setup_x' ? t('setup.x_manual.subtitle') :
+                                                showManual === 'setup_tg' ? t('setup.tg_manual.subtitle') :
+                                                    showManual === 'setup_linkedin' ? t('setup.linkedin_manual.subtitle') :
+                                                        showManual === 'setup_facebook' ? t('setup.facebook_manual.subtitle') :
+                                                            showManual === 'setup_discord' ? t('setup.discord_manual.subtitle') :
+                                                                t('academy.studio_manual.subtitle')}
                                         </p>
                                     </div>
                                 </div>
@@ -81,14 +81,14 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                         <div className="flex-1 overflow-y-auto no-scrollbar p-6 sm:p-8 space-y-6 relative z-10">
                             {['studio', 'setup_x', 'setup_tg', 'setup_linkedin', 'setup_pinterest', 'setup_threads', 'setup_facebook', 'setup_discord'].includes(showManual || '') ? (
                                 (() => {
-                                    const key = showManual === 'studio' ? 'pro_dashboard.academy.studio_manual.steps' :
-                                        showManual === 'setup_x' ? 'pro_dashboard.setup.x_manual.steps' :
-                                            showManual === 'setup_tg' ? 'pro_dashboard.setup.tg_manual.steps' :
-                                                showManual === 'setup_linkedin' ? 'pro_dashboard.setup.linkedin_manual.steps' :
-                                                    showManual === 'setup_pinterest' ? 'pro_dashboard.setup.pinterest_manual.steps' :
-                                                        showManual === 'setup_threads' ? 'pro_dashboard.setup.threads_manual.steps' :
-                                                            showManual === 'setup_facebook' ? 'pro_dashboard.setup.facebook_manual.steps' :
-                                                                'pro_dashboard.setup.discord_manual.steps';
+                                    const key = showManual === 'studio' ? 'academy.studio_manual.steps' :
+                                        showManual === 'setup_x' ? 'setup.x_manual.steps' :
+                                            showManual === 'setup_tg' ? 'setup.tg_manual.steps' :
+                                                showManual === 'setup_linkedin' ? 'setup.linkedin_manual.steps' :
+                                                    showManual === 'setup_pinterest' ? 'setup.pinterest_manual.steps' :
+                                                        showManual === 'setup_threads' ? 'setup.threads_manual.steps' :
+                                                            showManual === 'setup_facebook' ? 'setup.facebook_manual.steps' :
+                                                                'setup.discord_manual.steps';
                                     const steps = t(key, { returnObjects: true });
                                     if (Array.isArray(steps)) {
                                         return steps.map((step: any, i: number) => (
@@ -112,21 +112,21 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                     <div className="p-5 bg-linear-to-br from-pink-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-pink-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                         <div className="flex items-center gap-2">
                                             <Flame size={14} className="text-pink-500" />
-                                            <h4 className="text-label font-bold text-pink-600 dark:text-pink-500 uppercase tracking-widest">{t('pro_dashboard.tools.headline.title')}</h4>
+                                            <h4 className="text-label font-bold text-pink-600 dark:text-pink-500 uppercase tracking-widest">{t('tools.headline.title')}</h4>
                                         </div>
-                                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.headline.desc')}"</p>
+                                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('tools.headline.desc')}"</p>
                                         <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
-                                            {t('pro_dashboard.tools.headline.neural_desc')}
+                                            {t('tools.headline.neural_desc')}
                                         </div>
                                     </div>
                                     <div className="p-5 bg-linear-to-br from-amber-500/5 to-transparent dark:bg-white/5 rounded-3xl border border-amber-500/10 dark:border-white/5 space-y-3 shadow-sm">
                                         <div className="flex items-center gap-2">
                                             <Sparkles size={14} className="text-amber-500" />
-                                            <h4 className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">{t('pro_dashboard.tools.bio.title')}</h4>
+                                            <h4 className="text-label font-bold text-amber-600 dark:text-amber-500 uppercase tracking-widest">{t('tools.bio.title')}</h4>
                                         </div>
-                                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('pro_dashboard.tools.bio.desc')}"</p>
+                                        <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic opacity-85">"{t('tools.bio.desc')}"</p>
                                         <div className="p-4 bg-white/50 dark:bg-black/20 rounded-2xl border border-white dark:border-white/5 text-label text-slate-500 dark:text-slate-400 leading-relaxed">
-                                            {t('pro_dashboard.tools.bio.neural_desc')}
+                                            {t('tools.bio.neural_desc')}
                                         </div>
                                     </div>
                                 </div>
@@ -137,15 +137,15 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                             <Sparkles className="text-white" size={24} />
                                         </div>
                                         <p className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
-                                            <Trans i18nKey="pro_dashboard.academy.protocols.growth_promo">
+                                            <Trans i18nKey="academy.protocols.growth_promo">
                                                 PRO Members grow their network <span className="text-indigo-600 dark:text-indigo-400">x5 faster</span> using these elite protocols.
                                             </Trans>
                                         </p>
                                     </div>
                                     <div className="space-y-4">
-                                        <h4 className="text-label font-bold text-slate-400 uppercase tracking-widest px-1">{t('pro_dashboard.academy.protocols.methodology_title')}</h4>
+                                        <h4 className="text-label font-bold text-slate-400 uppercase tracking-widest px-1">{t('academy.protocols.methodology_title')}</h4>
                                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-white/5 p-5 rounded-3xl border border-slate-100 dark:border-white/5">
-                                            {t('pro_dashboard.academy.protocols.methodology_desc')}
+                                            {t('academy.protocols.methodology_desc')}
                                         </p>
                                     </div>
                                 </div>
@@ -157,7 +157,7 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                 onClick={() => { selection(); setShowManual(null); }}
                                 className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                             >
-                                {t('pro_dashboard.academy.understand_protocol_btn')}
+                                {t('academy.understand_protocol_btn')}
                                 <ArrowRight size={16} />
                             </button>
                         </div>

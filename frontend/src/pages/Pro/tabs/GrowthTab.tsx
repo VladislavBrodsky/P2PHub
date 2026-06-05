@@ -140,7 +140,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
 
                     <div className="flex items-center gap-3 shrink-0">
                         {isCompleted ? (
-                            <span className="text-label font-bold text-emerald-500 uppercase tracking-widest italic">{t('pro_dashboard.academy.synced')}</span>
+                            <span className="text-label font-bold text-emerald-500 uppercase tracking-widest italic">{t('academy.synced')}</span>
                         ) : isLocked ? (
                             <Lock size={14} className="text-slate-400" />
                         ) : !isUnlocked ? (
@@ -176,7 +176,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                         <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">
                                             <Lock size={32} className="text-amber-500/40" />
                                             <p className="text-label font-bold uppercase tracking-widest text-center">
-                                                {t('pro_dashboard.academy.insufficient_xp_msg')}
+                                                {t('academy.insufficient_xp_msg')}
                                             </p>
                                         </div>
                                     ) : (
@@ -190,14 +190,14 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                             <div className="space-y-4">
                                                 <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-2xl">
                                                     <p className="text-caption font-medium text-slate-500 dark:text-slate-400 italic text-center">
-                                                        "{t('pro_dashboard.academy.motivate_msg')}"
+                                                        "{t('academy.motivate_msg')}"
                                                     </p>
                                                 </div>
                                                 <button
                                                     onClick={() => handleUnlock(stageIdStr)}
                                                     className="w-full h-11 sm:h-12 bg-linear-to-r from-amber-500 via-orange-500 to-amber-500 bg-size-[200%_auto] animate-vibing-gradient text-white rounded-xl font-bold text-label sm:text-caption uppercase tracking-widest shadow-lg flex items-center justify-center gap-3 active:scale-[0.98] transition-all border border-amber-400/30"
                                                 >
-                                                    <span>{t('pro_dashboard.academy.unlock_for', { cost: stage.xpCost })}</span>
+                                                    <span>{t('academy.unlock_for', { cost: stage.xpCost })}</span>
                                                     <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
                                                     <Lock size={14} />
                                                 </button>
@@ -212,7 +212,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                                     <Loader2 className="w-5 h-5 animate-spin" />
                                                 ) : (
                                                     <div className="flex items-center justify-between w-full">
-                                                        <span className="truncate whitespace-nowrap overflow-hidden mr-auto">{t('pro_dashboard.academy.mark_accomplished')}</span>
+                                                        <span className="truncate whitespace-nowrap overflow-hidden mr-auto">{t('academy.mark_accomplished')}</span>
                                                         <span className="shrink-0 opacity-80 text-[10px] sm:text-xs font-black bg-white/10 px-1.5 py-0.5 rounded-md border border-white/10">+{stage.rewardXp} XP</span>
                                                     </div>
                                                 )}
@@ -263,7 +263,7 @@ const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode, t }:
                     <Play size={8} className="text-emerald-500 fill-emerald-500/20" />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">{t('pro_dashboard.academy.direct_action_label', 'Direct Action')}</span>
+                    <span className="text-label font-bold text-emerald-500/60 uppercase tracking-widest leading-none mb-1">{t('academy.direct_action_label', 'Direct Action')}</span>
                     <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight leading-tight">
                         {item.action}
                     </span>
@@ -324,27 +324,27 @@ export const GrowthTab = ({
 
     // Memoize expensive t() array lookups so they don't re-run on every render
     const modulesList = useMemo(() => {
-        const raw = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+        const raw = t('academy.protocols.modules', { returnObjects: true });
         return Array.isArray(raw) ? raw : [];
     }, [t]);
 
     const articlesList = useMemo(() => {
-        const raw = t('pro_dashboard.academy.articles.items', { returnObjects: true });
+        const raw = t('academy.articles.items', { returnObjects: true });
         return Array.isArray(raw) ? raw : [];
     }, [t]);
 
     const hacksList = useMemo(() => {
-        const raw = t('pro_dashboard.academy.lifehacks.items', { returnObjects: true });
+        const raw = t('academy.lifehacks.items', { returnObjects: true });
         return Array.isArray(raw) ? raw : [];
     }, [t]);
 
     const stratsList = useMemo(() => {
-        const raw = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
+        const raw = t('academy.psych_strategies.items', { returnObjects: true });
         return Array.isArray(raw) ? raw as PsychStrategyItem[] : [];
     }, [t]);
 
     const platformsList = useMemo(() => {
-        const raw = t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
+        const raw = t('academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
         return Array.isArray(raw) ? raw : [];
     }, [t, status?.bot_username]);
 
@@ -401,7 +401,7 @@ export const GrowthTab = ({
                             <div className="flex items-center gap-2">
                                 <h3 className="text-base sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">
                                     {(() => {
-                                        const titleParts = t('pro_dashboard.academy.protocols.title').split(' ');
+                                        const titleParts = t('academy.protocols.title').split(' ');
                                         const firstWord = titleParts[0];
                                         const rest = titleParts.slice(1).join(' ');
                                         return (
@@ -415,16 +415,16 @@ export const GrowthTab = ({
 
                             <div className="flex flex-wrap items-center gap-2 mt-1">
                                 <span className="px-2.5 py-0.5 bg-indigo-500 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-md text-label font-bold uppercase tracking-[0.2em] shadow-sm">
-                                    {academyScore < 300 ? t('pro_dashboard.academy.protocols.difficulty_levels.easy') :
-                                        academyScore < 800 ? t('pro_dashboard.academy.protocols.difficulty_levels.medium') :
-                                            t('pro_dashboard.academy.protocols.difficulty_levels.hard')}
+                                    {academyScore < 300 ? t('academy.protocols.difficulty_levels.easy') :
+                                        academyScore < 800 ? t('academy.protocols.difficulty_levels.medium') :
+                                            t('academy.protocols.difficulty_levels.hard')}
                                 </span>
                                 <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
                                 <button
                                     onClick={() => { selection(); setShowManual('academy'); }}
                                     className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors uppercase tracking-[0.15em]"
                                 >
-                                    <Info className="w-3 h-3" /> {t('pro_dashboard.academy.intel_label')}
+                                    <Info className="w-3 h-3" /> {t('academy.intel_label')}
                                 </button>
                             </div>
                         </div>
@@ -432,7 +432,7 @@ export const GrowthTab = ({
 
                     <div className="flex flex-col items-start sm:items-end gap-0">
                         <p className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] mb-1">
-                            {t('pro_dashboard.academy.protocols.stats_label')}
+                            {t('academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
                             {!lowPowerMode && <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />}
@@ -447,9 +447,9 @@ export const GrowthTab = ({
                 <div className="space-y-3 relative z-10 w-full mt-0 bg-slate-50 dark:bg-white/2 p-2.5 sm:p-3 rounded-2xl border border-slate-100 dark:border-white/5">
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center justify-between">
-                            <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('pro_dashboard.academy.sync_status')}</span>
+                            <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('academy.sync_status')}</span>
                             <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
-                                {academyProgress}% {t('pro_dashboard.academy.deployed')}
+                                {academyProgress}% {t('academy.deployed')}
                             </span>
                         </div>
 
@@ -487,12 +487,12 @@ export const GrowthTab = ({
                 </div>
                 <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-caption font-bold text-slate-500 dark:text-slate-400 leading-snug italic truncate">
-                        "{t('pro_dashboard.academy.desc')}"
+                        "{t('academy.desc')}"
                     </p>
                 </div>
                 <div className="flex items-center gap-1.5 shrink-0 bg-white/50 dark:bg-black/20 px-2.5 py-1.5 rounded-full">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.academy.live_signal')}</span>
+                    <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('academy.live_signal')}</span>
                 </div>
             </div>
 
@@ -503,8 +503,8 @@ export const GrowthTab = ({
                         <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex flex-col">
-                        <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('pro_dashboard.academy.articles.title')}</h4>
-                        <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('pro_dashboard.academy.dossier_label')}</p>
+                        <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('academy.articles.title')}</h4>
+                        <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('academy.dossier_label')}</p>
                     </div>
                 </div>
 
@@ -521,7 +521,7 @@ export const GrowthTab = ({
                                 <div className="flex items-center justify-between mb-5">
                                     <div className="flex items-center gap-3">
                                         <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-label sm:text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
-                                        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{article.readTime} {t('pro_dashboard.academy.min_read')}</span>
+                                        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{article.readTime} {t('academy.min_read')}</span>
                                     </div>
                                     {mockProgress === 100 && (
                                         <div className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
@@ -534,7 +534,7 @@ export const GrowthTab = ({
 
                                 <div className="flex items-center justify-between mt-auto">
                                     <div className="flex items-center gap-1.5 text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
-                                        {t('pro_dashboard.academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
+                                        {t('academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
@@ -572,8 +572,8 @@ export const GrowthTab = ({
                             <ShieldCheck size={20} />
                         </div>
                         <div>
-                            <h4 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">{t('pro_dashboard.academy.growth_protocol')}</h4>
-                            <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('pro_dashboard.academy.node_capabilities')}</p>
+                            <h4 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">{t('academy.growth_protocol')}</h4>
+                            <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('academy.node_capabilities')}</p>
                         </div>
                     </div>
                 </div>
@@ -625,8 +625,8 @@ export const GrowthTab = ({
                             <Flame size={14} className="text-pink-500" />
                         </div>
                         <div>
-                            <h4 className="text-label font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('pro_dashboard.academy.lifehacks.title')}</h4>
-                            <p className="text-label font-bold text-pink-500/60 uppercase tracking-widest">{t('pro_dashboard.academy.lifehacks.subtitle')}</p>
+                            <h4 className="text-label font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1">{t('academy.lifehacks.title')}</h4>
+                            <p className="text-label font-bold text-pink-500/60 uppercase tracking-widest">{t('academy.lifehacks.subtitle')}</p>
                         </div>
                     </div>
                 </div>
@@ -662,22 +662,22 @@ export const GrowthTab = ({
                             <Globe size={16} className="text-indigo-500" />
                         </div>
                         <div className="min-w-0">
-                            <h4 className="text-label sm:text-label font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('pro_dashboard.academy.social_setup.title')}</h4>
-                            <p className="text-label font-bold text-indigo-400 uppercase tracking-widest truncate">{t('pro_dashboard.academy.social_setup.subtitle')}</p>
+                            <h4 className="text-label sm:text-label font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('academy.social_setup.title')}</h4>
+                            <p className="text-label font-bold text-indigo-400 uppercase tracking-widest truncate">{t('academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
                     {/* Multi-Sync Status Display */}
                     <div className="flex flex-col items-end shrink-0 text-right">
                         <span className={`text-label font-bold uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
-                            {status?.is_pro_plus ? t('pro_dashboard.setup.multi_sync.plan_plus') : t('pro_dashboard.setup.multi_sync.plan_pro')}
+                            {status?.is_pro_plus ? t('setup.multi_sync.plan_plus') : t('setup.multi_sync.plan_pro')}
                         </span>
-                        <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('pro_dashboard.setup.multi_sync.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
+                        <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('setup.multi_sync.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 relative z-10 mb-6">
                     {(() => {
-                        const platforms = t('pro_dashboard.academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
+                        const platforms = t('academy.social_setup.platforms', { returnObjects: true, bot_username: status?.bot_username || 'pintopay_probot' });
                         const platformsList = Array.isArray(platforms) ? platforms : [];
                         return platformsList.map((platform: any, i: number) => (
                             <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
@@ -708,7 +708,7 @@ export const GrowthTab = ({
                     className="w-full h-10 vibing-blue-animated text-white font-bold text-label uppercase tracking-widest rounded-[1rem] shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 relative overflow-hidden group/btn"
                 >
                     <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-1000" />
-                    {t('pro_dashboard.tab_setup')} <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
+                    {t('tab_setup')} <ChevronRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
                 </button>
             </div>
 
@@ -743,12 +743,12 @@ export const GrowthTab = ({
                         </div>
                         <div>
                             <h4 className="text-lg sm:text-xl font-bold uppercase tracking-tighter leading-none mb-1 flex items-center gap-2 italic">
-                                {t('pro_dashboard.academy.psych_strategies.title')}
+                                {t('academy.psych_strategies.title')}
                             </h4>
                             <div className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
                                 <p className="text-label font-bold uppercase tracking-[0.25em] text-emerald-600 dark:text-emerald-400">
-                                    {t('pro_dashboard.academy.psych_strategies.subtitle')}
+                                    {t('academy.psych_strategies.subtitle')}
                                 </p>
                             </div>
                         </div>
@@ -781,13 +781,13 @@ export const GrowthTab = ({
 
                             <div className="space-y-2 mb-6 relative z-10">
                                 <span className="text-label font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-[0.3em]">
-                                    {t('pro_dashboard.academy.node_capabilities', 'SYSTEM LOCKED')}
+                                    {t('academy.node_capabilities', 'SYSTEM LOCKED')}
                                 </span>
                                 <h4 className="text-xl font-bold uppercase text-slate-900 dark:text-white tracking-widest leading-none italic">
-                                    {t('pro_dashboard.academy.psych_strategies.title')}
+                                    {t('academy.psych_strategies.title')}
                                 </h4>
                                 <p className="text-label font-bold text-slate-500 dark:text-slate-400 max-w-[260px] mx-auto uppercase tracking-widest leading-relaxed">
-                                    {t('pro_dashboard.academy.psych_strategies.unlock_desc')}
+                                    {t('academy.psych_strategies.unlock_desc')}
                                 </p>
                             </div>
 
@@ -800,7 +800,7 @@ export const GrowthTab = ({
                                     animate={{ left: ["-100%", "200%"] }}
                                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
                                 />
-                                <span className="relative z-10 flex gap-2 items-center drop-shadow-sm">{t('pro_dashboard.academy.social_sync')} <Terminal size={14} className="animate-pulse" /></span>
+                                <span className="relative z-10 flex gap-2 items-center drop-shadow-sm">{t('academy.social_sync')} <Terminal size={14} className="animate-pulse" /></span>
                             </button>
                         </motion.div>
                     </div>
@@ -809,7 +809,7 @@ export const GrowthTab = ({
                 <div className={`p-4 sm:p-6 relative z-10 ${!isSetupComplete ? 'blur-2xl pointer-events-none' : ''}`}>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {(() => {
-                            const strats = t('pro_dashboard.academy.psych_strategies.items', { returnObjects: true });
+                            const strats = t('academy.psych_strategies.items', { returnObjects: true });
                             const stratsList = Array.isArray(strats) ? strats : [];
                             return stratsList.map((item: any, i: number) => (
                                 <PsychStrategyCard key={i} item={item} i={i} selection={selection} impact={impact} lowPowerMode={lowPowerMode} t={t} />

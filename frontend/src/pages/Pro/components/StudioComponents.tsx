@@ -51,7 +51,7 @@ export const StudioStepper = memo(({ step, t, lowPowerMode }: StudioStepperProps
                     </motion.div>
                     <span className={`text-label font-bold uppercase tracking-[0.2em] mt-1.5 transition-colors duration-500 ${step === s ? 'text-purple-600 dark:text-purple-400' : 'text-slate-400 dark:text-slate-700'
                         }`}>
-                        {s === 1 ? t('pro_dashboard.studio.stepper.strategy') : s === 2 ? t('pro_dashboard.studio.stepper.synthesis') : t('pro_dashboard.studio.stepper.preview')}
+                        {s === 1 ? t('studio.stepper.strategy') : s === 2 ? t('studio.stepper.synthesis') : t('studio.stepper.preview')}
                     </span>
                 </div>
             ))}
@@ -111,12 +111,12 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         </div>
                         <div>
                             <h4 className="text-label sm:text-caption font-bold text-slate-900 dark:text-white leading-none mb-1">
-                                {t('pro_dashboard.studio.matrix_title')}
+                                {t('studio.matrix_title')}
                             </h4>
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                 <span className="text-label font-medium text-slate-400 leading-none">
-                                    {t('pro_dashboard.studio.matrix_subtitle')}
+                                    {t('studio.matrix_subtitle')}
                                 </span>
                             </div>
                         </div>
@@ -125,16 +125,16 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
 
                 <div className="space-y-4 relative z-10">
                     <PremiumSelect
-                        label={t('pro_dashboard.studio.strategy_label')}
-                        instruction={t('pro_dashboard.studio.strategy_instruction')}
+                        label={t('studio.strategy_label')}
+                        instruction={t('studio.strategy_instruction')}
                         value={postType}
                         onChange={(val) => setPostType(val)}
                         options={defaultPostTypes.map(pt => ({
                             id: pt.id,
-                            label: t(`pro_dashboard.studio.post_types.${pt.id}`),
-                            description: t(`pro_dashboard.studio.post_types_desc.${pt.id}`)
+                            label: t(`studio.post_types.${pt.id}`),
+                            description: t(`studio.post_types_desc.${pt.id}`)
                         }))}
-                        placeholder={t('pro_dashboard.studio.strategy_placeholder')}
+                        placeholder={t('studio.strategy_placeholder')}
                         color="purple"
                         isOpen={openDropdown === 'strategy'}
                         onToggle={() => handleToggle('strategy')}
@@ -145,8 +145,8 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                     <div className="pt-1" />
 
                     <PremiumSelect
-                        label={t('pro_dashboard.studio.target_label')}
-                        instruction={t('pro_dashboard.studio.target_instruction')}
+                        label={t('studio.target_label')}
+                        instruction={t('studio.target_instruction')}
                         value={audience}
                         onChange={(val) => setAudience(val)}
                         options={defaultAudiences
@@ -158,10 +158,10 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                             })
                             .map(a => ({
                                 id: a.id,
-                                label: t(`pro_dashboard.studio.audiences.${a.id}`),
-                                description: t(`pro_dashboard.studio.audiences_desc.${a.id}`)
+                                label: t(`studio.audiences.${a.id}`),
+                                description: t(`studio.audiences_desc.${a.id}`)
                             }))}
-                        placeholder={t('pro_dashboard.studio.target_placeholder')}
+                        placeholder={t('studio.target_placeholder')}
                         color="purple"
                         isOpen={openDropdown === 'audience'}
                         onToggle={() => handleToggle('audience')}
@@ -185,14 +185,14 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                 <div>
                                     <div className="flex items-center justify-between gap-2 mb-1">
                                         <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight italic">
-                                            {t('pro_dashboard.studio.partners_strategy.title')}
+                                            {t('studio.partners_strategy.title')}
                                         </h4>
                                         <span className="px-1.5 py-0.5 bg-purple-500 rounded text-[9px] font-black text-white shrink-0 shadow-[0_2px_8px_rgba(168,85,247,0.4)]">
-                                            {t('pro_dashboard.studio.partners_strategy.mode')}
+                                            {t('studio.partners_strategy.mode')}
                                         </span>
                                     </div>
                                     <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug pr-4 italic opacity-80">
-                                        <Trans i18nKey="pro_dashboard.studio.partners_strategy.desc">
+                                        <Trans i18nKey="studio.partners_strategy.desc">
                                             Using geometric growth protocols and specialized Web App referral links for <span className="text-purple-500 font-bold">maximum geometric scaling</span>.
                                         </Trans>
                                     </p>
@@ -215,10 +215,10 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                     </div>
                                     <div>
                                         <h4 className="text-label font-bold text-slate-900 dark:text-white leading-none">
-                                            {t('pro_dashboard.studio.add_personal_link')}
+                                            {t('studio.add_personal_link')}
                                         </h4>
                                         <p className="text-[10px] font-medium text-slate-400 leading-none mt-1 uppercase tracking-wider">
-                                            {t('pro_dashboard.studio.personal_link_subtitle')}
+                                            {t('studio.personal_link_subtitle')}
                                         </p>
                                     </div>
                                 </div>
@@ -265,7 +265,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                         <div className="flex items-center gap-2 p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
                                             <Info size={12} className="text-amber-500 shrink-0" />
                                             <p className="text-label font-medium text-slate-600 dark:text-slate-400 leading-tight">
-                                                {t('pro_dashboard.studio.personal_link_warning')} <span className="font-bold text-purple-500 break-all">https://t.me/pintopay_probot?start=...</span>
+                                                {t('studio.personal_link_warning')} <span className="font-bold text-purple-500 break-all">https://t.me/pintopay_probot?start=...</span>
                                             </p>
                                         </div>
                                         */}
@@ -277,16 +277,16 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                     )}
 
                     <PremiumSelect
-                        label={t('pro_dashboard.studio.tone_label', 'Tone of Voice')}
-                        instruction={t('pro_dashboard.studio.tone_instruction')}
+                        label={t('studio.tone_label', 'Tone of Voice')}
+                        instruction={t('studio.tone_instruction')}
                         value={tone}
                         onChange={(val) => setTone(val)}
                         options={defaultTones.map(toneObj => ({
                             id: toneObj.id,
-                            label: t(`pro_dashboard.studio.tones.${toneObj.id}`),
-                            description: t(`pro_dashboard.studio.tones_desc.${toneObj.id}`)
+                            label: t(`studio.tones.${toneObj.id}`),
+                            description: t(`studio.tones_desc.${toneObj.id}`)
                         }))}
-                        placeholder={t('pro_dashboard.studio.tone_placeholder')}
+                        placeholder={t('studio.tone_placeholder')}
                         color="amber"
                         isOpen={openDropdown === 'tone'}
                         onToggle={() => handleToggle('tone')}
@@ -295,8 +295,8 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                     />
 
                     <PremiumSelect
-                        label={t('pro_dashboard.studio.language_label')}
-                        instruction={t('pro_dashboard.studio.language_instruction')}
+                        label={t('studio.language_label')}
+                        instruction={t('studio.language_instruction')}
                         value={language}
                         onChange={(val) => setLanguage(val)}
                         options={defaultLanguages.map(l => ({
@@ -320,7 +320,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         className="w-full h-11 vibing-crystal-purple-animated rounded-xl font-bold text-white text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-30 sm:hidden"
                     >
                         <Sparkles size={16} className="animate-pulse" />
-                        {t('pro_dashboard.studio.initiate_btn')}
+                        {t('studio.initiate_btn')}
                         <ChevronRight size={16} />
                     </button>
                     <p className="text-label font-bold text-slate-400 text-center mt-4 uppercase tracking-widest opacity-40">
@@ -372,7 +372,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                                 <div className="inline-flex items-center gap-2 bg-purple-500/10 py-1.5 px-4 rounded-full border border-purple-500/20">
                                     <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse" />
                                     <h3 className="text-label font-bold uppercase tracking-[0.2em] text-purple-500">
-                                        {t('pro_dashboard.studio.processing_viral')}
+                                        {t('studio.processing_viral')}
                                     </h3>
                                 </div>
                             </div>
@@ -382,7 +382,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                                         <span className="text-heading font-bold text-slate-900 dark:text-white leading-none tabular-nums">
                                             {Math.min(Math.floor(((30 - countdown) / 30) * 100), 99)}<span className="text-sm opacity-30">%</span>
                                         </span>
-                                        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.studio.processing_eta', { count: countdown })}</span>
+                                        <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('studio.processing_eta', { count: countdown })}</span>
                                     </div>
                                     <div className="h-2 w-full bg-slate-200 dark:bg-white/5 rounded-full overflow-hidden relative">
                                         <motion.div
@@ -394,7 +394,7 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                                 </div>
                             </div>
                             <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-relaxed opacity-60">
-                                {t('pro_dashboard.studio.processing_msg')}
+                                {t('studio.processing_msg')}
                             </p>
                         </div>
                     </div>
@@ -408,27 +408,27 @@ export const StudioSynthesisDisplay = memo((props: StudioSynthesisDisplayProps) 
                         </div>
                         <div className="space-y-1.5">
                             <h3 className="text-xl font-bold uppercase tracking-tight text-slate-900 dark:text-white">
-                                {t('pro_dashboard.studio.ready_title')}
+                                {t('studio.ready_title')}
                             </h3>
                             <p className="text-label font-bold uppercase tracking-[0.2em] text-purple-500">
-                                {t('pro_dashboard.studio.ready_subtitle')}
+                                {t('studio.ready_subtitle')}
                             </p>
                         </div>
                         <p className="text-label font-medium leading-relaxed text-slate-500 dark:text-slate-400 max-w-[280px] mx-auto">
-                            {t('pro_dashboard.studio.ready_p')}
+                            {t('studio.ready_p')}
                         </p>
                         <div className="flex flex-col gap-2.5 pt-4 w-full max-w-[260px] mx-auto">
                             <button
                                 onClick={handleGenerate}
                                 className="h-12 vibing-crystal-purple-animated rounded-xl font-bold text-white text-label uppercase tracking-[0.15em] active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl shadow-purple-500/20"
                             >
-                                {t('pro_dashboard.studio.go_viral_btn')} <ArrowRight size={14} />
+                                {t('studio.go_viral_btn')} <ArrowRight size={14} />
                             </button>
                             <button
                                 onClick={() => { selection(); setExternalStep(1); }}
                                 className="h-10 text-label font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                             >
-                                {t('pro_dashboard.studio.back_btn')}
+                                {t('studio.back_btn')}
                             </button>
                         </div>
                     </>
@@ -525,7 +525,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                     )}
                     <div className="absolute top-4 left-4 z-10">
                         <span className="bg-purple-500/90 backdrop-blur-md text-white text-label font-bold px-3 py-1.5 rounded-full uppercase tracking-[0.2em] border border-purple-400/30 shadow-lg">
-                            {t('pro_dashboard.studio.ai_generated_badge')}
+                            {t('studio.ai_generated_badge')}
                         </span>
                     </div>
                     <div className="absolute inset-x-0 bottom-0 z-10 opacity-100 lg:opacity-0 lg:group-hover/img:opacity-100 transition-all duration-300 bg-linear-to-t from-black/60 to-transparent p-4 translate-y-0 lg:translate-y-2 lg:group-hover/img:translate-y-0">
@@ -616,7 +616,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                             animate={{ opacity: 1, y: 0 }}
                             className="bg-emerald-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.2em] flex items-center gap-1.5 shadow-lg z-10 border border-white/20 whitespace-nowrap"
                         >
-                            <Blocks size={10} /> {t('pro_dashboard.studio.omni_enabled')}
+                            <Blocks size={10} /> {t('studio.omni_enabled')}
                         </motion.div>
                     </div>
                 )}
@@ -625,13 +625,13 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                         onClick={() => { selection(); setShowPublishModal(true); }}
                         className="h-10 vibing-crystal-purple-animated rounded-xl font-bold text-white text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-purple-500/20"
                     >
-                        {t('pro_dashboard.studio.publish_btn')} <Send size={13} className="animate-pulse" />
+                        {t('studio.publish_btn')} <Send size={13} className="animate-pulse" />
                     </button>
                     <button
                         onClick={() => { impact('light'); setShowShareModal(true); }}
                         className="h-10 bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 rounded-xl font-bold text-label uppercase tracking-widest text-slate-900 dark:text-white/80 hover:bg-slate-50 dark:hover:bg-white/5 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
                     >
-                        {t('pro_dashboard.studio.share_btn')} <Share size={13} />
+                        {t('studio.share_btn')} <Share size={13} />
                     </button>
                 </div>
 
@@ -640,7 +640,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                     className="w-full h-11 bg-slate-100 dark:bg-white/5 border border-dashed border-slate-300 dark:border-white/10 rounded-xl font-bold text-label uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 hover:text-purple-500 dark:hover:text-purple-400 hover:border-purple-500/50 transition-all flex items-center justify-center gap-2"
                 >
                     <Undo2 size={14} />
-                    {t('pro_dashboard.studio.generate_new_btn', 'Generate New Post')}
+                    {t('studio.generate_new_btn', 'Generate New Post')}
                 </button>
 
                 <p className="text-label font-bold text-slate-400 text-center mt-6 uppercase tracking-widest opacity-40">
@@ -712,17 +712,17 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                     </div>
                     <div className="space-y-0.5">
                         <h3 className="text-body font-bold uppercase tracking-tight text-slate-900 dark:text-white">
-                            {t('pro_dashboard.publish.title')}
+                            {t('publish.title')}
                         </h3>
                         <p className="text-label font-bold uppercase tracking-[0.15em] text-purple-500">
-                            {t('pro_dashboard.publish.subtitle')}
+                            {t('publish.subtitle')}
                         </p>
                     </div>
                 </div>
 
                 <div className="space-y-2.5">
                     <p className="text-label font-medium text-slate-500 dark:text-slate-400 text-center leading-relaxed px-1">
-                        {t('pro_dashboard.publish.mgmt_p')}
+                        {t('publish.mgmt_p')}
                     </p>
 
                     <div className="grid gap-2">
@@ -751,10 +751,10 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                             const getLabel = () => {
                                 switch (platform) {
                                     case 'x': return 'Network X';
-                                    case 'telegram': return t('pro_dashboard.setup.multi_sync.more_platforms_tg', 'Telegram');
+                                    case 'telegram': return t('setup.multi_sync.more_platforms_tg', 'Telegram');
                                     case 'linkedin': return 'LinkedIn';
-                                    case 'threads': return t('pro_dashboard.setup.multi_sync.more_platforms_t', 'Threads');
-                                    case 'pinterest': return t('pro_dashboard.setup.multi_sync.more_platforms_p', 'Pinterest');
+                                    case 'threads': return t('setup.multi_sync.more_platforms_t', 'Threads');
+                                    case 'pinterest': return t('setup.multi_sync.more_platforms_p', 'Pinterest');
                                     case 'facebook': return 'Facebook';
                                     case 'discord': return 'Discord';
                                     default: return (platform as string).toUpperCase();
@@ -796,7 +796,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                                                 )}
                                             </div>
                                             <span className="block text-label font-bold uppercase tracking-tighter opacity-60">
-                                                {isPublished ? t('pro_dashboard.publish.platform_success') : (isProPlus ? (isSelected ? t('pro_dashboard.publish.platform_selected') : t('pro_dashboard.publish.platform_tap_select')) : t('pro_dashboard.publish.platform_tap'))}
+                                                {isPublished ? t('publish.platform_success') : (isProPlus ? (isSelected ? t('publish.platform_selected') : t('publish.platform_tap_select')) : t('publish.platform_tap'))}
                                             </span>
                                         </div>
                                     </div>
@@ -864,7 +864,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                             className="w-full h-13 vibing-crystal-purple-animated rounded-2xl font-bold text-white text-label uppercase tracking-[0.2em] shadow-xl shadow-purple-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 group"
                         >
                             <Zap size={16} className="group-hover:scale-125 transition-transform" />
-                            {t('pro_dashboard.publish.omni_publish_btn', { count: selectedPublishPlatforms.length })}
+                            {t('publish.omni_publish_btn', { count: selectedPublishPlatforms.length })}
                         </button>
                     </motion.div>
                 )}
@@ -872,7 +872,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                 {isPublishing && (
                     <div className="flex items-center justify-center gap-2 pt-1">
                         <Loader2 className="animate-spin text-purple-500" size={16} />
-                        <span className="text-label font-bold uppercase tracking-[0.2em] text-purple-400">{t('pro_dashboard.publish.processing')}</span>
+                        <span className="text-label font-bold uppercase tracking-[0.2em] text-purple-400">{t('publish.processing')}</span>
                     </div>
                 )}
 
@@ -880,7 +880,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                     onClick={() => setShowPublishModal(false)}
                     className="w-full py-2.5 text-label font-bold uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
-                    {t('pro_dashboard.studio.back_btn')}
+                    {t('studio.back_btn')}
                 </button>
             </motion.div>
         </motion.div>
@@ -928,10 +928,10 @@ export const StudioShareModal = memo((props: StudioShareModalProps) => {
                     </div>
                     <div className="space-y-0.5">
                         <h3 className="text-body font-bold uppercase tracking-tight text-slate-900 dark:text-white">
-                            {t('pro_dashboard.studio.share_modal.title')}
+                            {t('studio.share_modal.title')}
                         </h3>
                         <p className="text-label font-bold uppercase tracking-[0.15em] text-blue-500">
-                            {t('pro_dashboard.studio.share_modal.subtitle')}
+                            {t('studio.share_modal.subtitle')}
                         </p>
                     </div>
                 </div>
@@ -968,7 +968,7 @@ export const StudioShareModal = memo((props: StudioShareModalProps) => {
                         ) : (
                             <Share size={14} className="text-purple-500 group-hover:scale-110 transition-transform" />
                         )}
-                        <span className="text-label font-bold uppercase text-purple-500">{t('pro_dashboard.studio.share_modal.more')}</span>
+                        <span className="text-label font-bold uppercase text-purple-500">{t('studio.share_modal.more')}</span>
                     </button>
                 </div>
 
@@ -976,7 +976,7 @@ export const StudioShareModal = memo((props: StudioShareModalProps) => {
                     onClick={() => setShowShareModal(false)}
                     className="w-full mt-2 py-2.5 text-label font-bold uppercase tracking-[0.25em] text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                 >
-                    {t('pro_dashboard.studio.back_btn')}
+                    {t('studio.back_btn')}
                 </button>
             </motion.div>
         </motion.div>

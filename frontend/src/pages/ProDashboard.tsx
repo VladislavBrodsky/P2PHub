@@ -126,8 +126,8 @@ export const ProDashboard = () => {
 
             setShowAuditModal(true);
             showNotification({
-                title: force ? t('pro_dashboard.notifications.audit_force_success_title') : t('pro_dashboard.notifications.audit_success_title'),
-                message: force ? t('pro_dashboard.notifications.audit_force_success_msg') : t('pro_dashboard.notifications.audit_success_msg'),
+                title: force ? t('notifications.audit_force_success_title') : t('notifications.audit_success_title'),
+                message: force ? t('notifications.audit_force_success_msg') : t('notifications.audit_success_msg'),
                 type: 'success'
             });
             hapticNotification('success');
@@ -135,7 +135,7 @@ export const ProDashboard = () => {
             console.error(error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Global intelligence node unreachable. Check your network.';
             showNotification({
-                title: t('pro_dashboard.notifications.sync_error'),
+                title: t('notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });
@@ -163,8 +163,8 @@ export const ProDashboard = () => {
 
             hapticNotification('success');
             showNotification({
-                title: t('pro_dashboard.notifications.module_complete_title'),
-                message: t('pro_dashboard.notifications.module_complete_msg'),
+                title: t('notifications.module_complete_title'),
+                message: t('notifications.module_complete_msg'),
                 type: 'success'
             });
         } catch (error: any) {
@@ -201,15 +201,15 @@ export const ProDashboard = () => {
 
             hapticNotification('success');
             showNotification({
-                title: t('pro_dashboard.notifications.unlock_success_title'),
-                message: t('pro_dashboard.notifications.unlock_success_msg', { cost: 'XP' }),
+                title: t('notifications.unlock_success_title'),
+                message: t('notifications.unlock_success_msg', { cost: 'XP' }),
                 type: 'success'
             });
         } catch (error: any) {
             console.error('Failed to unlock academy stage', error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to unlock stage. Insufficient XP?';
             showNotification({
-                title: t('pro_dashboard.notifications.insufficient_xp_title'),
+                title: t('notifications.insufficient_xp_title'),
                 message: msg,
                 type: 'warning'
             });
@@ -227,16 +227,16 @@ export const ProDashboard = () => {
             const data = await proService.fetchTrends();
             setTrends(data.trends);
             showNotification({
-                title: t('pro_dashboard.notifications.trends_synced_title'),
-                message: t('pro_dashboard.notifications.trends_synced_msg'),
+                title: t('notifications.trends_synced_title'),
+                message: t('notifications.trends_synced_msg'),
                 type: 'success'
             });
             hapticNotification('success');
         } catch (error) {
             console.error(error);
             showNotification({
-                title: t('pro_dashboard.notifications.trends_failed_title'),
-                message: t('pro_dashboard.notifications.trends_failed_msg'),
+                title: t('notifications.trends_failed_title'),
+                message: t('notifications.trends_failed_msg'),
                 type: 'warning'
             });
             hapticNotification('error');
@@ -259,7 +259,7 @@ export const ProDashboard = () => {
             console.error('Failed to fix headline', error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize headline.';
             showNotification({
-                title: t('pro_dashboard.notifications.sync_error'),
+                title: t('notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });
@@ -285,7 +285,7 @@ export const ProDashboard = () => {
             console.error('Failed to generate bio', error);
             const msg = error.response?.data?.detail || error.response?.data?.message || 'Failed to synthesize bio.';
             showNotification({
-                title: t('pro_dashboard.notifications.sync_error'),
+                title: t('notifications.sync_error'),
                 message: msg,
                 type: 'warning'
             });
@@ -380,7 +380,7 @@ export const ProDashboard = () => {
             if (activeTab === 'studio') {
                 if (studioStep === 1) {
                     mainButton.setParams({
-                        text: String(t('pro_dashboard.studio.initiate_btn')).toUpperCase(),
+                        text: String(t('studio.initiate_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: !!studioReady,
                         backgroundColor: '#6366f1',
@@ -393,7 +393,7 @@ export const ProDashboard = () => {
                     return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleStep1) : undefined;
                 } else if (studioStep === 2) {
                     mainButton.setParams({
-                        text: String(t('pro_dashboard.studio.go_viral_btn')).toUpperCase(),
+                        text: String(t('studio.go_viral_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: !isLoading,
                         backgroundColor: '#6366f1',
@@ -403,7 +403,7 @@ export const ProDashboard = () => {
                     return typeof mainButton.onClick === 'function' ? mainButton.onClick(triggerGen) : undefined;
                 } else if (studioStep === 3) {
                     mainButton.setParams({
-                        text: String(t('pro_dashboard.studio.publish_btn')).toUpperCase(),
+                        text: String(t('studio.publish_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: true,
                         backgroundColor: '#10b981',
@@ -414,7 +414,7 @@ export const ProDashboard = () => {
                 }
             } else if (activeTab === 'tools') {
                 mainButton.setParams({
-                    text: String(t('pro_dashboard.tools.audit.btn')).toUpperCase(),
+                    text: String(t('tools.audit.btn')).toUpperCase(),
                     isVisible: true,
                     isEnabled: !isAuditing,
                     backgroundColor: '#6366f1',
@@ -422,12 +422,12 @@ export const ProDashboard = () => {
                 });
                 return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleRunMarketingAudit) : undefined;
             } else if (activeTab === 'growth') {
-                const modulesRaw = t('pro_dashboard.academy.protocols.modules', { returnObjects: true });
+                const modulesRaw = t('academy.protocols.modules', { returnObjects: true });
                 const modulesList = Array.isArray(modulesRaw) ? modulesRaw : [];
                 const nextModule = modulesList.find((m: any) => m && m.id && !completedStages.includes(String(m.id)));
 
                 if (nextModule) {
-                    const setupTitle = String(t('pro_dashboard.academy.social_setup.title') || 'Setup').toUpperCase();
+                    const setupTitle = String(t('academy.social_setup.title') || 'Setup').toUpperCase();
                     const moduleTitle = String(nextModule.title || '').toUpperCase();
                     mainButton.setParams({
                         text: `${setupTitle}: ${moduleTitle}`,
@@ -497,7 +497,7 @@ export const ProDashboard = () => {
                     <div className="flex items-center gap-2 sm:gap-3 flex-1 justify-center">
                         <div className="space-y-1 flex flex-col items-center justify-center text-center">
                             <h1 className="text-[16px] sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none flex items-center justify-center gap-2 whitespace-nowrap">
-                                {t('pro_dashboard.studio_header_title')} <span className="vibing-crystal-text drop-shadow-sm">{t('pro_dashboard.studio_header_highlight')}</span>
+                                {t('studio_header_title')} <span className="vibing-crystal-text drop-shadow-sm">{t('studio_header_highlight')}</span>
                             </h1>
                             <div className="flex items-center justify-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
@@ -506,7 +506,7 @@ export const ProDashboard = () => {
                                     {status?.pro_tokens ?? 0}
                                 </span>
                                 <span className="text-label font-bold text-text-secondary uppercase tracking-widest leading-none">
-                                    {t('pro_dashboard.tokens_label')}
+                                    {t('tokens_label')}
                                 </span>
                             </div>
                         </div>
@@ -560,7 +560,7 @@ export const ProDashboard = () => {
                                 {tab === 'tools' && <Settings size={12} />}
                                 {tab === 'growth' && <Users size={12} />}
                                 {tab === 'analytics' && <BarChart3 size={12} />}
-                                <span className="text-[10px] uppercase tracking-wide leading-none">{t(`pro_dashboard.tab_${tab}`)}</span>
+                                <span className="text-[10px] uppercase tracking-wide leading-none">{t(`tab_${tab}`)}</span>
                             </span>
                         </button>
                     ))}
@@ -570,7 +570,7 @@ export const ProDashboard = () => {
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">{t('pro_dashboard.syncing_nodes')}</p>
+                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">{t('syncing_nodes')}</p>
                         </div>
                     ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
@@ -584,16 +584,16 @@ export const ProDashboard = () => {
                                     <Shield size={28} className="animate-pulse" />
                                 </div>
                                 <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
-                                    {t('pro_dashboard.locked.title')}
+                                    {t('locked.title')}
                                 </h2>
                                 <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
-                                    {t('pro_dashboard.locked.desc')}
+                                    {t('locked.desc')}
                                 </p>
                                 <button
                                     onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
                                     className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
                                 >
-                                    {t('pro_dashboard.locked.upgrade_btn')}
+                                    {t('locked.upgrade_btn')}
                                 </button>
                             </motion.div>
                         </div>

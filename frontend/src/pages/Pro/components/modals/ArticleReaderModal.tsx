@@ -40,7 +40,7 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
                                         <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-label font-bold text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
-                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('pro_dashboard.academy.read_time', { time: selectedArticle.readTime })}</span>
+                                        <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('academy.read_time', { time: selectedArticle.readTime })}</span>
                                     </div>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">{selectedArticle.title}</h3>
                                 </div>
@@ -60,7 +60,7 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                                 onClick={() => { selection(); setSelectedArticle(null); }}
                                 className="w-full h-14 vibing-blue-animated rounded-2xl font-bold text-white text-label uppercase tracking-widest active:scale-95 transition-all shadow-lg"
                             >
-                                {t('pro_dashboard.academy.understand_btn')}
+                                {t('academy.understand_btn')}
                             </button>
                         </div>
                     </motion.div>

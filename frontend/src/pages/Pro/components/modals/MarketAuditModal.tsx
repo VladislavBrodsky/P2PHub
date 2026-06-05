@@ -54,18 +54,18 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                 </div>
                                 <div className="min-w-0">
                                     <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1 truncate">
-                                        {t('pro_dashboard.tools.audit.modal_title')}
+                                        {t('tools.audit.modal_title')}
                                     </h3>
                                     <div className="flex items-center gap-2">
                                         <div className="flex items-center gap-1.5">
                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-sm" />
                                             <span className="text-label font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
-                                                {t('pro_dashboard.tools.audit.node_status_sync')}
+                                                {t('tools.audit.node_status_sync')}
                                             </span>
                                         </div>
                                         <span className="text-slate-300 dark:text-slate-700">|</span>
                                         <span className="text-label font-bold text-slate-400 uppercase tracking-widest tabular-nums">
-                                            {marketAudit.generated_at ? new Date(marketAudit.generated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t('pro_dashboard.status_online')}
+                                            {marketAudit.generated_at ? new Date(marketAudit.generated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : t('status_online')}
                                         </span>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     className="hidden sm:flex h-10 px-4 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-label font-bold uppercase tracking-widest items-center gap-2 transition-all disabled:opacity-50"
                                 >
                                     {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} className="text-indigo-500" />}
-                                    {isAuditing ? t('pro_dashboard.tools.audit.scanning') : t('pro_dashboard.tools.audit.update_btn')}
+                                    {isAuditing ? t('tools.audit.scanning') : t('tools.audit.update_btn')}
                                 </button>
                                 <button
                                     onClick={() => setShowAuditModal(false)}
@@ -96,13 +96,13 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     <div className="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center text-rose-500 mb-2">
                                         <X size={32} />
                                     </div>
-                                    <h4 className="text-lg font-bold text-slate-900 dark:text-white uppercase">{t('pro_dashboard.tools.audit.error_title')}</h4>
+                                    <h4 className="text-lg font-bold text-slate-900 dark:text-white uppercase">{t('tools.audit.error_title')}</h4>
                                     <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">{marketAudit.error}</p>
                                     <button
                                         onClick={() => handleRefreshAudit()}
                                         className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-indigo-500/20"
                                     >
-                                        {t('pro_dashboard.tools.audit.force_sync_btn')}
+                                        {t('tools.audit.force_sync_btn')}
                                     </button>
                                 </div>
                             ) : (
@@ -114,7 +114,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                             <Quote className="absolute -top-4 -right-4 text-indigo-500/10 rotate-12" size={80} />
                                             <div className="flex items-center gap-2 mb-3">
                                                 <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                                <h4 className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{t('pro_dashboard.tools.audit.summary_title')}</h4>
+                                                <h4 className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{t('tools.audit.summary_title')}</h4>
                                             </div>
                                             <p className="text-caption sm:text-sm font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
                                                 {marketAudit.cmo_summary}
@@ -123,7 +123,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
 
                                         {/* Market Sentiment Stats */}
                                         <div className="p-5 bg-emerald-500/5 dark:bg-emerald-500/5 rounded-2xl border border-emerald-500/10 flex flex-col justify-center space-y-1">
-                                            <p className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.sentiment_label')}</p>
+                                            <p className="text-label font-bold text-emerald-600/70 dark:text-emerald-500/70 uppercase tracking-widest">{t('tools.audit.sentiment_label')}</p>
                                             <div className="flex items-end gap-2">
                                                 <p className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{marketAudit.market_sentiment}</p>
                                                 <TrendingUp size={16} className="text-emerald-500 mb-0.5" />
@@ -132,7 +132,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
 
                                         {/* Global Trend Shift */}
                                         <div className="p-5 bg-amber-500/5 dark:bg-amber-500/5 rounded-2xl border border-amber-500/10 flex flex-col justify-center space-y-1">
-                                            <p className="text-label font-bold text-amber-600/70 dark:text-amber-500/70 uppercase tracking-widest">{t('pro_dashboard.tools.audit.shift_label')}</p>
+                                            <p className="text-label font-bold text-amber-600/70 dark:text-amber-500/70 uppercase tracking-widest">{t('tools.audit.shift_label')}</p>
                                             <p className="text-label font-bold text-slate-900 dark:text-slate-300 leading-tight uppercase line-clamp-2">{marketAudit.global_trend_shift}</p>
                                         </div>
                                     </div>
@@ -142,10 +142,10 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                         <div className="flex items-center justify-between px-1">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-1.5 h-4 bg-purple-500 rounded-full" />
-                                                <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.live_tracker')}</h4>
+                                                <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('tools.audit.live_tracker')}</h4>
                                             </div>
                                             <div className="px-2 py-0.5 bg-rose-500/10 rounded-md text-label font-bold text-rose-500 uppercase tracking-[0.2em] animate-pulse">
-                                                {t('pro_dashboard.tools.audit.live_timeframe')}
+                                                {t('tools.audit.live_timeframe')}
                                             </div>
                                         </div>
 
@@ -172,8 +172,8 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                                             <span className={`px-2 py-0.5 rounded-md text-label font-bold uppercase tracking-[0.2em] ${news.impact === 'Massive'
                                                                 ? 'bg-rose-500/10 text-rose-500'
                                                                 : 'bg-emerald-500/10 text-emerald-500'
-                                                                }`}>{news.relevance === 'Massive' ? t('pro_dashboard.tools.audit.relevance_massive') : t('pro_dashboard.tools.audit.relevance_high')} {t('pro_dashboard.tools.audit.relevance')}</span>
-                                                            {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-label font-bold text-amber-500 uppercase tracking-[0.2em] animate-bounce">{t('pro_dashboard.tools.audit.hot_now')}</span>}
+                                                                }`}>{news.relevance === 'Massive' ? t('tools.audit.relevance_massive') : t('tools.audit.relevance_high')} {t('tools.audit.relevance')}</span>
+                                                            {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-label font-bold text-amber-500 uppercase tracking-[0.2em] animate-bounce">{t('tools.audit.hot_now')}</span>}
                                                         </div>
 
                                                         <h5 className="text-body font-bold text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
@@ -183,13 +183,13 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                                                             <div className="p-2.5 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-100 dark:border-white/5">
                                                                 <p className="text-label font-bold text-slate-500 dark:text-slate-400 leading-snug">
-                                                                    {news.impact || news.motivation || t('pro_dashboard.tools.audit.analyzing')}
+                                                                    {news.impact || news.motivation || t('tools.audit.analyzing')}
                                                                 </p>
                                                             </div>
                                                             <div className="p-2.5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-xl border border-indigo-500/10 flex items-center gap-2">
                                                                 <Zap size={10} className="text-amber-500 shrink-0" />
                                                                 <p className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest line-clamp-1">
-                                                                    {news.fomo_trigger || t('pro_dashboard.tools.audit.action_required')}
+                                                                    {news.fomo_trigger || t('tools.audit.action_required')}
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -210,7 +210,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                             <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
                                                 <Flame size={20} className="animate-bounce" />
                                             </div>
-                                            <h4 className="text-caption font-bold text-white uppercase tracking-widest">{t('pro_dashboard.tools.audit.imperative')}</h4>
+                                            <h4 className="text-caption font-bold text-white uppercase tracking-widest">{t('tools.audit.imperative')}</h4>
                                         </div>
                                         <p className="text-caption sm:text-caption font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
                                             "{marketAudit.viral_motivation}"

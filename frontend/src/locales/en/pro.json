@@ -7,11 +7,11 @@
       "price": "39",
       "period": "LIFETIME",
       "features": [
-        "9 Generations of Commission",
-        "250 Viral Studio Tokens/Month",
-        "Full Growth Academy Access",
+        "9 levels of passive dividends",
+        "250 Viral Studio tokens/mo",
+        "Full Growth Academy access",
         "Strategic Launch Blueprints",
-        "Community Support"
+        "Priority Elite Support"
       ]
     },
     "pro_plus": {
@@ -19,471 +19,480 @@
       "price": "69",
       "period": "LIFETIME",
       "features": [
-        "20 Generations of Passive Income",
-        "500 Viral Studio Tokens/Month",
-        "Expert Marketing Frameworks",
+        "20 levels of passive dividends",
+        "500 Viral Studio tokens/mo",
+        "Expert Marketing Funnels",
         "Omni-Sync Studio Access",
         "Priority AI Processing",
-        "Direct Strategy Consultations"
+        "Direct Strategy Consulting"
       ]
     }
   },
   "fomo": {
-    "timer_text": "PRO price increases in:",
-    "spots_left": "Limited spots available at current rate"
+    "timer_text": "PRO Price increases in:",
+    "spots_left": "Limited spots remaining at current tier"
   },
-  "pro_dashboard": {
-    "tabs": {
-      "studio": "AI Viral Studio",
-      "tools": "Elite Growth Tools",
-      "growth": "Partner Academy",
-      "analytics": "Neural Analytics"
+  "tabs": {
+    "studio": "Viral AI Studio",
+    "tools": "Elite Matrix Tools",
+    "growth": "Partners Academy",
+    "analytics": "Neural Analytics"
+  },
+  "studio_header_title": "Viral Studio",
+  "studio_header_highlight": "PRO",
+  "tokens_label": "Tokens",
+  "tab_studio": "Studio",
+  "tab_tools": "Tools",
+  "tab_growth": "Academy",
+  "tab_analytics": "Analytics",
+  "tab_setup": "Setup",
+  "syncing_nodes": "Syncing Nodes...",
+  "node_active": "Node Active",
+  "common": {
+    "sync_active": "Sync Active",
+    "active": "Active",
+    "loading": "Loading Intel...",
+    "error": "Sync Error",
+    "success": "Success",
+    "status_online": "Status: Online"
+  },
+  "tools": {
+    "headline": {
+      "title": "Viral Headline Hub",
+      "info": "AI-optimized headlines for max CTR.",
+      "desc": "Synthesize headlines with high resonance using AI models.",
+      "btn": "Optimize Headline"
     },
-    "studio_header_title": "Viral Studio",
-    "studio_header_highlight": "PRO",
-    "tokens_label": "Tokens",
-    "tab_studio": "Studio",
-    "tab_tools": "Tools",
-    "tab_growth": "Academy",
-    "tab_analytics": "Analytics",
-    "tab_setup": "Setup",
-    "syncing_nodes": "Syncing Nodes...",
-    "node_active": "Node Active",
-    "common": {
-      "sync_active": "Sync Active",
-      "active": "Active",
-      "loading": "Loading Intelligence...",
-      "error": "Sync Error",
-      "success": "Success",
-      "status_online": "Status: Online"
+    "bio": {
+      "title": "Neural Bio Architect",
+      "neural_desc": "Generate high-converting social profiles.",
+      "desc": "Synthesize your digital presence for maximum trust.",
+      "btn": "Generate Bio"
     },
-    "tools": {
-      "headline": {
-        "title": "Viral Catalyst Hub",
-        "info": "AI-powered headline optimization for maximum CTR.",
-        "desc": "Synthesize high-resonance headlines using AI models.",
-        "btn": "Optimize Headline"
-      },
-      "bio": {
-        "title": "Neural Bio Architect",
-        "neural_desc": "Craft high-conversion social identities.",
-        "desc": "Synthesize your digital presence for maximum trust.",
-        "btn": "Generate Bio"
-      },
-      "trends": {
-        "title": "Global Trend Hunter",
-        "info": "Real-time analysis of global viral vectors.",
-        "scanning": "Scanning Trends...",
-        "node_id": "Node SYST-2026",
-        "desc": "Discover high-resonance topics across the digital landscape.",
-        "btn_refresh": "Refresh Trends",
-        "btn": "Hunt Trends"
-      },
-      "audit": {
-        "title": "Market Audit Node",
-        "desc": "Scan global trends for optimal entry points.",
-        "btn": "Start Scan",
-        "modal_title": "Neural Market Audit",
-        "node_status_sync": "Sync Active",
-        "status": "Active",
-        "capability": "Market Intelligence",
-        "scanning": "Scanning...",
-        "update_btn": "Update Data",
-        "summary_title": "Master Summary",
-        "sentiment_label": "Market Sentiment",
-        "shift_label": "Trend Shift",
-        "relevance": "Impact",
-        "relevance_massive": "Massive",
-        "relevance_high": "High",
-        "hot_now": "Trending Now",
-        "analyzing": "Analyzing...",
-        "action_required": "Action Required",
-        "imperative": "Viral Imperative",
-        "live_tracker": "Live Viral Tracker",
-        "live_timeframe": "Real-time Feed",
-        "force_sync_btn": "Force Sync",
-        "error_title": "Decryption Error"
-      }
+    "trends": {
+      "title": "Global Trend Hunter",
+      "info": "Analyze global viral vectors in real-time.",
+      "scanning": "Scanning Trends...",
+      "node_id": "Node SYST-2026",
+      "desc": "Discover high-resonance topics across the digital space.",
+      "btn_refresh": "Refresh Trends",
+      "btn": "Search Trends"
     },
-    "studio": {
-      "stepper": {
-        "strategy": "Strategy",
-        "synthesis": "Synthesis",
-        "preview": "Preview"
-      },
-      "matrix_title": "Neural Viral Matrix",
-      "matrix_subtitle": "Select your viral architecture",
-      "strategy_label": "Strategy Profile",
-      "post_types": {
-        "launch": "Launch",
-        "fomo": "FOMO",
-        "authority": "Authority",
-        "lifestyle": "Lifestyle",
-        "income": "Income",
-        "network": "Network",
-        "tutorial": "Tutorial",
-        "partners": "Partners",
-        "partners_cards": "Cards",
-        "partners_network": "Network Structure"
-      },
-      "post_types_desc": {
-        "launch": "Announce new systems and create initial momentum.",
-        "fomo": "Create urgency through limited access and time decay.",
-        "authority": "Establish dominance through results and expertise.",
-        "lifestyle": "Showcase the results of automated wealth systems.",
-        "income": "Direct proof of system profitability and scale.",
-        "network": "Highlight the power of the partner ecosystem.",
-        "tutorial": "Break down complex systems into step-by-step value.",
-        "partners": "Recruit heavy-hitters into your direct network.",
-        "partners_cards": "Leverage card utilities for maximum conversion.",
-        "partners_network": "Map out the deep structure of the referral web."
-      },
-      "audiences": {
-        "traders": "Traders & Investors",
-        "nomads": "Digital Nomads",
-        "affiliates": "Affiliate Marketers",
-        "builders": "Web3 Builders",
-        "parents": "Modern Parents",
-        "hustlers": "Side Hustlers",
-        "burnouts": "Corporate Burnouts",
-        "passive_seekers": "Passive Income Seekers",
-        "growth_masters": "Growth Masters",
-        "automation_kings": "Automation Kings",
-        "empire_builders": "Empire Builders",
-        "partners": "Network Partners"
-      },
-      "audiences_desc": {
-        "traders": "Speculators looking for high-ROI systems.",
-        "nomads": "Remote workers seeking location independence.",
-        "affiliates": "Traffic drivers looking for high-converting offers.",
-        "builders": "Creators building the next generation of tech.",
-        "parents": "Parents looking for flexible income streams.",
-        "hustlers": "Grinders building multiple income streams.",
-        "burnouts": "Professionals seeking an exit from the 9-to-5.",
-        "passive_seekers": "Users looking for automated return mechanisms.",
-        "growth_masters": "Experts scaling their digital presence.",
-        "automation_kings": "Systems thinkers optimizing for scale.",
-        "empire_builders": "Visionaries building long-term wealth.",
-        "partners": "Existing nodes in the network structure."
-      },
-      "processing_viral": "Synthesizing Viral Content...",
-      "ai_generated_badge": "AI Generated",
-      "hashtags_refreshed": "Viral hashtags optimized",
-      "link_saved": "Referral link updated",
-      "link_error": "Invalid link format",
-      "add_personal_link": "Personal Referral Link",
-      "strategy_instruction": "Select your viral architecture",
-      "strategy_placeholder": "Select post type...",
-      "target_label": "Target Audience",
-      "target_instruction": "Define your target node",
-      "target_placeholder": "Select audience...",
-      "language_label": "Content Language",
-      "language_instruction": "Select output language",
-      "tone_label": "Tone of voice",
-      "initiate_btn": "Initiate Synthesis",
-      "personal_link_subtitle": "Enable custom tracking via Bot link",
-      "tone_instruction": "Adjust neural resonance tone",
-      "ready_title": "Content Blueprint Ready",
-      "ready_subtitle": "Review and Deploy",
-      "ready_p": "Your AI-generated content strategy is ready for deployment. Preview the assets below.",
-      "go_viral_btn": "Go Viral",
-      "back_btn": "Back to Synthesis",
-      "tones": {
-        "provocative": "Provocative",
-        "authoritative": "Authoritative",
-        "empathetic": "Empathetic",
-        "cynical": "Cynical",
-        "minimalist": "Minimalist",
-        "aggressive": "Aggressive"
-      },
-      "tones_desc": {
-        "provocative": "High-impact scroll-stopping hooks.",
-        "authoritative": "Expert-led trust architecture.",
-        "empathetic": "Community-first resonance nodes.",
-        "cynical": "No-nonsense market reality.",
-        "minimalist": "Direct, high-signal, zero fluff communication.",
-        "aggressive": "High urgency, commanding, dominance-based positioning."
-      },
-      "processing_eta": "ETA: {{count}}s",
-      "processing_msg": "Establishing neural connections...",
-      "omni_enabled": "OMNI-SYNC ENABLED",
-      "publish_btn": "Deploy to Network",
-      "share_btn": "Share Link",
-      "generate_new_btn": "Generate New Blueprint",
-      "share_modal": {
-        "title": "Share Blueprint",
-        "subtitle": "Distribute via network",
-        "more": "More Options"
-      }
-    },
-    "growth_strategist": {
-      "title": "AI Growth Strategist",
-      "neural_desc": "Predictive modeling for network expansion.",
-      "btn": "Analyze Growth",
-      "anal_label": "Neural Analysis"
-    },
-    "publish": {
-      "title": "Omni-Sync Publisher"
-    },
-    "analytics": {
-      "decrypting": "DECRYPTING NEURAL DATA...",
-      "total_views": "TOTAL REACH",
-      "engagement": "ENGAGEMENT",
-      "viral_reach": "VIRAL SPREAD",
-      "success_rate": "CONVERSION RATE",
-      "resonance": {
-        "title": "PREDICTIVE RESONANCE",
-        "status": "ENGINE ACTIVE",
-        "gathering_data": "GATHERING DATA",
-        "confidence": "CONFIDENCE: {{percent}}%",
-        "goto_studio": "ACTIVATE STUDIO",
-        "action_btn": "ВЫПОЛНИТЬ ТОП-ДЕЙСТВИЕ",
-        "insufficient_data": "INSUFFICIENT DATA",
-        "insufficient_data_desc": "Synthesize {{count}} more posts to calibrate resonance engine."
-      },
-      "raw_data": {
-        "title": "RAW METRIC FEED",
-        "sync_all": "SYNC ALL",
-        "syncing": "SYNCING...",
-        "source": "SOURCE",
-        "reach": "REACH",
-        "engagement": "ENGAGEMENT",
-        "last_sync": "LAST SYNC",
-        "empty": "NO VIRAL DATA DETECTED",
-        "access_restricted": "ACCESS RESTRICTED"
-      },
-      "locked_plus": {
-        "title": "ANALYTICS ENCRYPTION",
-        "desc": "Neural metrics and resonance scoring require PRO+ status.",
-        "upgrade_btn": "UNLOCK PRO+ INSIGHTS"
-      }
-    },
-    "setup": {
-      "title": "SYNC ECOSYSTEM",
-      "subtitle": "OMNI-CHANNEL INTEGRATION",
-      "tg_node": "TELEGRAM NODE",
-      "pro_node_limit_desc": "Broadcast to your primary growth channel.",
-      "channel_id": "CHANNEL @USERNAME",
-      "personal_link_desc": "Optional. Use your Bot starting link to track conversions.",
-      "referral_link_prefix_error": "Link must start with https://t.me/...",
-      "x_broadcast_title": "X (TWITTER) BROADCAST",
-      "x_broadcast_desc": "Connect your X profile for automated viral threads.",
-      "x_broadcast_plus_desc": "Connect your X profile for PRO+ automated viral loops.",
-      "api_key": "API KEY",
-      "api_secret": "API SECRET",
-      "access_token": "ACCESS TOKEN",
-      "access_token_secret": "TOKEN SECRET",
-      "teaser": {
-        "title": "Elite Sync Ecosystem",
-        "desc": "Unlock the full power of automated multi-channel growth.",
-        "feat_tg": "MULTI-TG",
-        "feat_tg_detail": "SYNC 5+ CHANNELS",
-        "feat_omni": "OMNI-SYNC",
-        "feat_omni_detail": "7+ PLATFORMS",
-        "feat_li": "LINKEDIN",
-        "feat_li_detail": "PRO NETWORK",
-        "feat_ai": "NEURAL",
-        "feat_ai_detail": "AUTO-RESONANCE",
-        "cta": "UPGRADE TO PRO+ NOW"
-      },
-      "multi_sync": {
-        "title": "OMNI-CHANNEL SYNC",
-        "desc": "Manage all your growth nodes from a single dashboard.",
-        "test": "TEST INTEGRATIONS",
-        "test_tg": "TEST TELEGRAM",
-        "more_platforms_tg": "Telegram",
-        "more_platforms_t": "Threads",
-        "more_platforms_p": "Pinterest"
-      },
-      "deploy_btn": "DEPLOY SETTINGS",
-      "syncing_btn": "SYNCING...",
-      "save_success_title": "SETTINGS DEPLOYED",
-      "save_success_text": "Integrations updated successfully.",
-      "save_error_title": "DEPLOY FAILED",
-      "save_error_text": "Check your API credentials and try again.",
-      "tg_sync_success_msg": "Telegram nodes synchronized successfully.",
-      "tg_sync_error_msg": "Failed to synchronize Telegram nodes.",
-      "linkedin": {
-        "title": "LINKEDIN SYNC",
-        "desc": "Automate strategy broadcasting to your professional network.",
-        "oauth_label": "ACCESS TOKEN",
-        "placeholder": "Enter your LinkedIn Access Token",
-        "dev_portal_desc": "Obtained via <a href='https://www.linkedin.com/developers/' target='_blank' rel='noreferrer' class='text-indigo-400 underline'>LinkedIn Developers</a>."
-      },
-      "pinterest": {
-        "title": "PINTEREST SYNC",
-        "desc": "Visual growth hacking via automated board pinning.",
-        "placeholder": "Enter Pinterest Access Token",
-        "dev_portal_desc": "Obtained via <a href='https://developers.pinterest.com/' target='_blank' rel='noreferrer' class='text-rose-400 underline italic font-bold'>Pinterest Developers</a>."
-      },
-      "threads": {
-        "title": "THREADS SYNC",
-        "desc": "Dominate the conversation architecture on Threads.",
-        "placeholder": "Enter Threads Access Token"
-      },
-      "facebook": {
-        "title": "FACEBOOK SYNC",
-        "desc": "Automated community resonance on Facebook pages.",
-        "placeholder": "Enter Facebook Access Token"
-      },
-      "discord": {
-        "title": "DISCORD SYNC",
-        "desc": "Real-time viral distribution to Discord webhooks.",
-        "placeholder": "Enter Discord Webhook URL",
-        "dev_portal_desc": "Obtain Webhook URL via your <span class='text-[#5865F2] italic font-bold'>Discord Server Settings</span>."
-      }
-    },
-    "notifications": {
-      "success": "Success",
-      "viral_synthesized": "Viral content synthesized",
-      "error": "Error",
-      "gen_failed": "Generation failed",
-      "tokens_required": "Tokens Required",
-      "tokens_required_text": "Upgrade your plan to continue synthesizing",
-      "copied": "Copied",
-      "text_copied": "Text copied to clipboard",
-      "image_saved": "Image Saved",
-      "image_saved_text": "Saved to your device",
-      "published_text": "Successfully published to {{platform}}",
-      "publish_error": "Publish Error",
-      "publish_failed": "Failed to publish content"
-    },
-    "locked": {
-      "title": "Encrypted Protocol",
-      "desc": "Upgrade to PRO+ to unlock the Elite Growth Academy and AI automation tools.",
-      "upgrade_btn": "Go to Pro Center"
-    },
-    "academy": {
-      "desc": "Master the science of viral growth and build your digital empire.",
-      "protocols": {
-        "title": "Tactical Protocols",
-        "stats_label": "Academy Intelligence",
-        "difficulty_levels": {
-          "easy": "Initiate",
-          "medium": "Advanced",
-          "hard": "Elite"
-        },
-        "modules": [
-          { "id": 1, "title": "@PintoPay_Probot" },
-          { "id": 2, "title": "Social Setup" },
-          { "id": 3, "title": "Viral Formula" },
-          { "id": 4, "title": "Growth Engine" },
-          { "id": 5, "title": "Psych Warfare" }
-        ]
-      },
-      "intel_label": "Knowledge Base",
-      "growth_protocol": "Growth Protocol",
-      "node_capabilities": "Node Capabilities",
-      "mark_accomplished": "Mark as Accomplished",
-      "insufficient_xp_msg": "Insufficient XP to Access",
-      "motivate_msg": "Complete previous modules to unlock elite intelligence.",
-      "unlock_for": "Unlock for {{cost}} XP",
-      "social_sync": "Social Sync",
-      "direct_action_label": "Direct Action",
-      "synced": "Synchronized",
-      "sync_status": "Synchronized",
-      "deployed": "Deployed",
-      "live_signal": "Live Signal",
-      "min_read": "Min Read",
-      "social_setup": {
-        "title": "SOCIAL SYNC",
-        "subtitle": "DEPLOY NODES",
-        "platforms": [
-          {
-            "name": "Telegram Hub",
-            "steps": [
-              "Connect channel to @{{bot_username}}",
-              "Deploy growth node"
-            ]
-          },
-          {
-            "name": "X Strategy",
-            "steps": [
-              "Connect Profile",
-              "Automate viral threads"
-            ]
-          }
-        ]
-      },
-      "psych_strategies": {
-        "title": "PSYCHOLOGICAL WARFARE",
-        "subtitle": "BLACK OPS INTELLIGENCE",
-        "unlock_desc": "Unlock elite psychological triggers to dominate the market.",
-        "items": [
-          {
-            "id": "ps1",
-            "title": "The Scarcity Loop",
-            "desc": "Psychological trigger based on limited supply to force decision making.",
-            "trigger": "Low Action Rate",
-            "action": "Implement a 24h countdown on all bonus offers."
-          },
-          {
-            "id": "ps2",
-            "title": "Authority Bias",
-            "desc": "Leveraging social hiararchy and expertise to build instant trust.",
-            "trigger": "Cold Traffic",
-            "action": "Lead with verified settlement screenshots and volume data."
-          },
-          {
-            "id": "ps3",
-            "title": "Social Proof Anchor",
-            "desc": "Using the 'crowd effect' to validate the safety of the system.",
-            "trigger": "High Bounce Rate",
-            "action": "Display active partner count in the first 10 seconds of interaction."
-          }
-        ]
-      },
-      "articles": {
-        "title": "STRATEGIC DOSSIERS",
-        "btn_read": "READ DOSSIER",
-        "items": [
-          {
-            "id": "art1",
-            "category": "Wealth",
-            "readTime": "5",
-            "title": "The $1/Minute Blueprint",
-            "desc": "How the top 1% are scaling their network on total autopilot."
-          },
-          {
-            "id": "art2",
-            "category": "Tech",
-            "readTime": "3",
-            "title": "QR Revolution 2026",
-            "desc": "Why traditional banking is collapsing in the face of frictionless P2P."
-          },
-          {
-            "id": "art3",
-            "category": "Growth",
-            "readTime": "4",
-            "title": "Viral Studio Synthesis",
-            "desc": "Mastering the AI engine to generate high-resonance content 24/7."
-          }
-        ]
-      },
-      "lifehacks": {
-        "title": "GROWTH LIFEHACKS",
-        "subtitle": "CONVERSION TURBO-CHARGERS",
-        "items": [
-          {
-            "id": "lh1",
-            "title": "Identity Suite Mastery",
-            "desc": "Create a premium visual presence in under 5 minutes using AI."
-          },
-          {
-            "id": "lh2",
-            "title": "Multi-Channel Resonance",
-            "desc": "How to sync one post across 7+ networks with zero effort."
-          },
-          {
-            "id": "lh3",
-            "title": "Pattern Interrupt Copy",
-            "desc": "Stop the scroll with these 3 visual hooks that double CTR."
-          }
-        ]
-      },
-      "dossier_label": "DOSSIER",
-      "reading_progress": "READING PROGRESS"
+    "audit": {
+      "title": "Market Audit Node",
+      "desc": "Scan global trends for optimal entry points.",
+      "btn": "Begin Scan",
+      "modal_title": "Neural Market Audit",
+      "node_status_sync": "Sync Active",
+      "status": "Active",
+      "capability": "Market Intelligence",
+      "scanning": "Scanning...",
+      "update_btn": "Update Data",
+      "summary_title": "Key Summary",
+      "sentiment_label": "Market Sentiment",
+      "shift_label": "Trend Shift",
+      "relevance": "Impact",
+      "relevance_massive": "Massive",
+      "relevance_high": "High",
+      "hot_now": "Trending Now",
+      "analyzing": "Analyzing...",
+      "action_required": "Action Required",
+      "imperative": "Viral Imperative",
+      "live_tracker": "Live Viral Tracker",
+      "live_timeframe": "Real-time Feed",
+      "force_sync_btn": "Force Sync",
+      "error_title": "Decryption Error"
     }
+  },
+  "studio": {
+    "stepper": {
+      "strategy": "Strategy",
+      "synthesis": "Synthesis",
+      "preview": "Preview"
+    },
+    "matrix_title": "Neural Viral Matrix",
+    "matrix_subtitle": "Choose your content architecture",
+    "strategy_label": "Strategy Profile",
+    "post_types": {
+      "launch": "Launch",
+      "fomo": "FOMO",
+      "authority": "Authority",
+      "lifestyle": "Lifestyle",
+      "income": "Income",
+      "network": "Network",
+      "tutorial": "Tutorial",
+      "partners": "Partners",
+      "partners_cards": "Cards",
+      "partners_network": "Network Structure"
+    },
+    "post_types_desc": {
+      "launch": "Announce new systems and build initial momentum.",
+      "fomo": "Create urgency via limited access and time-bound hooks.",
+      "authority": "Establish dominance via results and expertise.",
+      "lifestyle": "Demonstrate the lifestyle results of wealth systems.",
+      "income": "Direct proof of profitability and system scale.",
+      "network": "Highlight the power of the partner ecosystem.",
+      "tutorial": "Break down complex systems into value-based steps.",
+      "partners": "Recruit leaders into your direct network.",
+      "partners_cards": "Leverage card benefits to drive max conversion.",
+      "partners_network": "Depict the deep-rooted referral network structure."
+    },
+    "audiences": {
+      "traders": "Traders & Investors",
+      "nomads": "Digital Nomads",
+      "affiliates": "Affiliates",
+      "builders": "Web3 Builders",
+      "parents": "Modern Parents",
+      "hustlers": "Side Hustlers",
+      "burnouts": "9-to-5 Burnouts",
+      "passive_seekers": "Passive Income Seekers",
+      "growth_masters": "Growth Masters",
+      "automation_kings": "Automation Kings",
+      "empire_builders": "Empire Builders",
+      "partners": "Network Partners"
+    },
+    "audiences_desc": {
+      "traders": "Speculators seeking high-ROI systems.",
+      "nomads": "Remote workers looking for independence.",
+      "affiliates": "Traffic drivers looking for high-converting offers.",
+      "builders": "Creators of next-gen technology.",
+      "parents": "Families looking for flexible income streams.",
+      "hustlers": "Entrepreneurs building multiple revenue nodes.",
+      "burnouts": "Professionals seeking an exit from corporate life.",
+      "passive_seekers": "Users looking for automated income paths.",
+      "growth_masters": "Experts scaling their presence.",
+      "automation_kings": "Systems analysts optimizing for scale.",
+      "empire_builders": "Visionaries building long-term wealth.",
+      "partners": "Existing nodes in the network architecture."
+    },
+    "processing_viral": "Synthesizing Viral Content...",
+    "ai_generated_badge": "AI Generated",
+    "hashtags_refreshed": "Viral hashtags optimized",
+    "link_saved": "Referral link updated",
+    "link_error": "Invalid link format",
+    "add_personal_link": "Personal Referral Link",
+    "strategy_instruction": "Choose your content architecture",
+    "strategy_placeholder": "Select post type...",
+    "target_label": "Target Audience",
+    "target_instruction": "Identify your target node",
+    "target_placeholder": "Select audience...",
+    "language_label": "Content Language",
+    "language_instruction": "Select input language",
+    "tone_label": "Tone of voice",
+    "initiate_btn": "Initiate Synthesis",
+    "personal_link_subtitle": "Enable link tracking via Bot start link",
+    "tone_instruction": "Neural resonance tone configuration",
+    "ready_title": "Content Blueprint Ready",
+    "ready_subtitle": "Verify and Launch",
+    "ready_p": "Your AI content strategy is ready to deploy. Preview assets below.",
+    "go_viral_btn": "Go Viral",
+    "back_btn": "Back to Synthesis",
+    "tones": {
+      "provocative": "Provocative",
+      "authoritative": "Authoritative",
+      "empathetic": "Empathetic",
+      "cynical": "Cynical",
+      "minimalist": "Minimalist",
+      "aggressive": "Aggressive"
+    },
+    "tones_desc": {
+      "provocative": "High-impact scroll-stopping hooks.",
+      "authoritative": "Expert-led trust architecture.",
+      "empathetic": "Community-first resonance nodes.",
+      "cynical": "No-nonsense market reality.",
+      "minimalist": "Direct, high-signal, zero fluff communication.",
+      "aggressive": "High urgency, commanding, dominance-based positioning."
+    },
+    "processing_eta": "ETA: {{count}}s",
+    "processing_msg": "Establishing neural connections...",
+    "omni_enabled": "OMNI-SYNC ENABLED",
+    "publish_btn": "Deploy to Network",
+    "share_btn": "Share Link",
+    "generate_new_btn": "Generate New Blueprint",
+    "share_modal": {
+      "title": "Share Blueprint",
+      "subtitle": "Distribute via network",
+      "more": "More Options"
+    }
+  },
+  "growth_strategist": {
+    "title": "AI Growth Strategist",
+    "neural_desc": "Predictive modeling for network expansion.",
+    "btn": "Analyze Growth",
+    "anal_label": "Neural Analysis"
+  },
+  "publish": {
+    "title": "Omni-Sync Publisher",
+    "subtitle": "Network Distribution",
+    "mgmt_p": "Select the networks you want to deploy this asset to. Pro+ unlocks infinite cross-platform syncing.",
+    "platform_success": "Deployed Successfully",
+    "platform_selected": "Ready to Deploy",
+    "platform_tap_select": "Tap to Select",
+    "platform_tap": "Tap to Authorize",
+    "omni_publish_btn": "Deploy to {{count}} Networks",
+    "processing": "PROCESSING DEPLOYMENT..."
+  },
+  "analytics": {
+    "decrypting": "DECRYPTING NEURAL DATA...",
+    "total_views": "TOTAL REACH",
+    "engagement": "ENGAGEMENT",
+    "viral_spread": "VIRAL SPREAD",
+    "success_rate": "CONVERSION RATE",
+    "resonance": {
+      "title": "PREDICTIVE RESONANCE",
+      "status": "ENGINE ACTIVE",
+      "gathering_data": "GATHERING DATA",
+      "confidence": "CONFIDENCE: {{percent}}%",
+      "goto_studio": "ACTIVATE STUDIO",
+      "action_btn": "PERFORM TOP ACTION",
+      "insufficient_data": "INSUFFICIENT DATA",
+      "insufficient_data_desc": "Synthesize {{count}} more posts to calibrate resonance engine."
+    },
+    "raw_data": {
+      "title": "RAW METRIC FEED",
+      "sync_all": "SYNC ALL",
+      "syncing": "SYNCING...",
+      "source": "SOURCE",
+      "reach": "REACH",
+      "engagement": "ENGAGEMENT",
+      "last_sync": "LAST SYNC",
+      "empty": "NO VIRAL DATA DETECTED",
+      "access_restricted": "ACCESS RESTRICTED"
+    },
+    "locked_plus": {
+      "title": "ANALYTICS ENCRYPTION",
+      "desc": "Neural metrics and resonance scoring require PRO+ status.",
+      "upgrade_btn": "UNLOCK PRO+ INSIGHTS"
+    }
+  },
+  "setup": {
+    "title": "SYNC ECOSYSTEM",
+    "subtitle": "OMNI-CHANNEL INTEGRATION",
+    "tg_node": "TELEGRAM NODE",
+    "pro_node_limit_desc": "Broadcast to your primary growth channel.",
+    "channel_id": "CHANNEL @USERNAME",
+    "personal_link_desc": "Optional. Use your Bot starting link to track conversions.",
+    "referral_link_prefix_error": "Link must start with https://t.me/...",
+    "x_broadcast_title": "X (TWITTER) BROADCAST",
+    "x_broadcast_desc": "Connect your X profile for automated viral threads.",
+    "x_broadcast_plus_desc": "Connect your X profile for PRO+ automated viral loops.",
+    "api_key": "API KEY",
+    "api_secret": "API SECRET",
+    "access_token": "ACCESS TOKEN",
+    "access_token_secret": "TOKEN SECRET",
+    "teaser": {
+      "title": "Elite Sync Ecosystem",
+      "desc": "Unlock the full power of automated multi-channel growth.",
+      "feat_tg": "MULTI-TG",
+      "feat_tg_detail": "SYNC 5+ CHANNELS",
+      "feat_omni": "OMNI-SYNC",
+      "feat_omni_detail": "7+ PLATFORMS",
+      "feat_li": "LINKEDIN",
+      "feat_li_detail": "PRO NETWORK",
+      "feat_ai": "NEURAL",
+      "feat_ai_detail": "AUTO-RESONANCE",
+      "cta": "UPGRADE TO PRO+ NOW"
+    },
+    "multi_sync": {
+      "title": "OMNI-CHANNEL SYNC",
+      "desc": "Manage all your growth nodes from a single dashboard.",
+      "test": "TEST INTEGRATIONS",
+      "test_tg": "TEST TELEGRAM",
+      "more_platforms_tg": "Telegram",
+      "more_platforms_t": "Threads",
+      "more_platforms_p": "Pinterest",
+      "plan_pro": "PRO ACCESS",
+      "plan_plus": "PRO+ SYNC",
+      "multi_node_capacity": "NODE CAPACITY: {{val}}"
+    },
+    "deploy_btn": "DEPLOY SETTINGS",
+    "syncing_btn": "SYNCING...",
+    "save_success_title": "SETTINGS DEPLOYED",
+    "save_success_text": "Integrations updated successfully.",
+    "save_error_title": "DEPLOY FAILED",
+    "save_error_text": "Check your API credentials and try again.",
+    "tg_sync_success_msg": "Telegram nodes synchronized successfully.",
+    "tg_sync_error_msg": "Failed to synchronize Telegram nodes.",
+    "linkedin": {
+      "title": "LINKEDIN SYNC",
+      "desc": "Automate strategy broadcasting to your professional network.",
+      "oauth_label": "ACCESS TOKEN",
+      "placeholder": "Enter your LinkedIn Access Token",
+      "dev_portal_desc": "Obtained via <a href='https://www.linkedin.com/developers/' target='_blank' rel='noreferrer' class='text-indigo-400 underline'>LinkedIn Developers</a>."
+    },
+    "pinterest": {
+      "title": "PINTEREST SYNC",
+      "desc": "Visual growth hacking via automated board pinning.",
+      "placeholder": "Enter Pinterest Access Token",
+      "dev_portal_desc": "Obtained via <a href='https://developers.pinterest.com/' target='_blank' rel='noreferrer' class='text-rose-400 underline italic font-bold'>Pinterest Developers</a>."
+    },
+    "threads": {
+      "title": "THREADS SYNC",
+      "desc": "Dominate the conversation architecture on Threads.",
+      "placeholder": "Enter Threads Access Token"
+    },
+    "facebook": {
+      "title": "FACEBOOK SYNC",
+      "desc": "Automated community resonance on Facebook pages.",
+      "placeholder": "Enter Facebook Access Token"
+    },
+    "discord": {
+      "title": "DISCORD SYNC",
+      "desc": "Real-time viral distribution to Discord webhooks.",
+      "placeholder": "Enter Discord Webhook URL",
+      "dev_portal_desc": "Obtain Webhook URL via your <span class='text-[#5865F2] italic font-bold'>Discord Server Settings</span>."
+    }
+  },
+  "notifications": {
+    "success": "Success",
+    "viral_synthesized": "Viral content synthesized",
+    "error": "Error",
+    "gen_failed": "Generation failed",
+    "tokens_required": "Tokens Required",
+    "tokens_required_text": "Upgrade your plan to continue synthesizing",
+    "copied": "Copied",
+    "text_copied": "Text copied to clipboard",
+    "image_saved": "Image Saved",
+    "image_saved_text": "Saved to your device",
+    "published_text": "Successfully published to {{platform}}",
+    "publish_error": "Publish Error",
+    "publish_failed": "Failed to publish content"
+  },
+  "locked": {
+    "title": "Encrypted Protocol",
+    "desc": "Upgrade to PRO+ to unlock the Elite Growth Academy and AI automation tools.",
+    "upgrade_btn": "Go to Pro Center"
+  },
+  "academy": {
+    "desc": "Master the science of viral growth and build your digital empire.",
+    "protocols": {
+      "title": "Tactical Protocols",
+      "stats_label": "Academy Intelligence",
+      "difficulty_levels": {
+        "easy": "Initiate",
+        "medium": "Advanced",
+        "hard": "Elite"
+      },
+      "modules": [
+        { "id": 1, "title": "@PintoPay_Probot" },
+        { "id": 2, "title": "Social Setup" },
+        { "id": 3, "title": "Viral Formula" },
+        { "id": 4, "title": "Growth Engine" },
+        { "id": 5, "title": "Psych Warfare" }
+      ]
+    },
+    "intel_label": "Knowledge Base",
+    "growth_protocol": "Growth Protocol",
+    "node_capabilities": "Node Capabilities",
+    "mark_accomplished": "Mark as Accomplished",
+    "insufficient_xp_msg": "Insufficient XP to Access",
+    "motivate_msg": "Complete previous modules to unlock elite intelligence.",
+    "unlock_for": "Unlock for {{cost}} XP",
+    "social_sync": "Social Sync",
+    "direct_action_label": "Direct Action",
+    "synced": "Synchronized",
+    "sync_status": "Synchronized",
+    "deployed": "Deployed",
+    "live_signal": "Live Signal",
+    "min_read": "Min Read",
+    "social_setup": {
+      "title": "SOCIAL SYNC",
+      "subtitle": "DEPLOY NODES",
+      "platforms": [
+        {
+          "name": "Telegram Hub",
+          "steps": [
+            "Connect channel to @{{bot_username}}",
+            "Deploy growth node"
+          ]
+        },
+        {
+          "name": "X Strategy",
+          "steps": [
+            "Connect Profile",
+            "Automate viral threads"
+          ]
+        }
+      ]
+    },
+    "psych_strategies": {
+      "title": "PSYCHOLOGICAL WARFARE",
+      "subtitle": "BLACK OPS INTELLIGENCE",
+      "unlock_desc": "Unlock elite psychological triggers to dominate the market.",
+      "items": [
+        {
+          "id": "ps1",
+          "title": "The Scarcity Loop",
+          "desc": "Psychological trigger based on limited supply to force decision making.",
+          "trigger": "Low Action Rate",
+          "action": "Implement a 24h countdown on all bonus offers."
+        },
+        {
+          "id": "ps2",
+          "title": "Authority Bias",
+          "desc": "Leveraging social hiararchy and expertise to build instant trust.",
+          "trigger": "Cold Traffic",
+          "action": "Lead with verified settlement screenshots and volume data."
+        },
+        {
+          "id": "ps3",
+          "title": "Social Proof Anchor",
+          "desc": "Using the 'crowd effect' to validate the safety of the system.",
+          "trigger": "High Bounce Rate",
+          "action": "Display active partner count in the first 10 seconds of interaction."
+        }
+      ]
+    },
+    "articles": {
+      "title": "STRATEGIC DOSSIERS",
+      "btn_read": "READ DOSSIER",
+      "items": [
+        {
+          "id": "art1",
+          "category": "Wealth",
+          "readTime": "5",
+          "title": "The $1/Minute Blueprint",
+          "desc": "How the top 1% are scaling their network on total autopilot."
+        },
+        {
+          "id": "art2",
+          "category": "Tech",
+          "readTime": "3",
+          "title": "QR Revolution 2026",
+          "desc": "Why traditional banking is collapsing in the face of frictionless P2P."
+        },
+        {
+          "id": "art3",
+          "category": "Growth",
+          "readTime": "4",
+          "title": "Viral Studio Synthesis",
+          "desc": "Mastering the AI engine to generate high-resonance content 24/7."
+        }
+      ]
+    },
+    "lifehacks": {
+      "title": "GROWTH LIFEHACKS",
+      "subtitle": "CONVERSION TURBO-CHARGERS",
+      "items": [
+        {
+          "id": "lh1",
+          "title": "Identity Suite Mastery",
+          "desc": "Create a premium visual presence in under 5 minutes using AI."
+        },
+        {
+          "id": "lh2",
+          "title": "Multi-Channel Resonance",
+          "desc": "How to sync one post across 7+ networks with zero effort."
+        },
+        {
+          "id": "lh3",
+          "title": "Pattern Interrupt Copy",
+          "desc": "Stop the scroll with these 3 visual hooks that double CTR."
+        }
+      ]
+    },
+    "dossier_label": "DOSSIER",
+    "reading_progress": "READING PROGRESS"
   },
   "subscription": {
     "plan_headline": "PRO GROWTH CORE",

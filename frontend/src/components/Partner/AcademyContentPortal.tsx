@@ -220,10 +220,10 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                 </div>
                                 <div className="space-y-3">
                                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tighter italic">
-                                        {t('pro_dashboard.locked.title', { defaultValue: 'ENCRYPTED NODE' })}
+                                        {t('locked.title', { defaultValue: 'ENCRYPTED NODE' })}
                                     </h2>
                                     <p className="text-sm font-medium text-slate-500 dark:text-slate-400 max-w-[280px] leading-relaxed mx-auto italic">
-                                        {t('pro_dashboard.academy.insufficient_xp_msg', { defaultValue: 'This advanced mission requires cognitive synchronization.' })}
+                                        {t('academy.insufficient_xp_msg', { defaultValue: 'This advanced mission requires cognitive synchronization.' })}
                                     </p>
                                 </div>
 
@@ -244,7 +244,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                                     ) : (
                                         <>
                                             <span className="flex items-center gap-2">
-                                                {t('pro_dashboard.academy.unlock_for', { cost: xpCost, defaultValue: `Unlock for ${xpCost} XP` })}
+                                                {t('academy.unlock_for', { cost: xpCost, defaultValue: `Unlock for ${xpCost} XP` })}
                                             </span>
                                             <div className="w-1.5 h-1.5 rounded-full bg-white/50 animate-pulse" />
                                             <Lock size={16} />

@@ -61,31 +61,31 @@ export const ToolsTab = ({
                                 <div
                                     className="group/info relative"
                                     onClick={() => useNotificationStore.getState().showNotification({
-                                        title: t('pro_dashboard.tools.headline.title'),
-                                        message: t('pro_dashboard.tools.headline.info'),
+                                        title: t('tools.headline.title'),
+                                        message: t('tools.headline.info'),
                                         type: 'info'
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
                                     <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
-                                        {t('pro_dashboard.tools.headline.info')}
+                                        {t('tools.headline.info')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
                                 </div>
                                 <div className="px-2.5 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20 shrink-0">
-                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('pro_dashboard.node_active')}</span>
+                                    <span className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">{t('node_active')}</span>
                                 </div>
                             </div>
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.headline.title')}</h3>
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('tools.headline.title')}</h3>
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
-                            {t('pro_dashboard.tools.headline.desc')}
+                            {t('tools.headline.desc')}
                         </p>
                         <button
                             onClick={() => { selection(); setShowHeadlineModal(true); }}
                             className="mt-auto w-full h-10 vibing-blue-animated text-white rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
-                            {t('pro_dashboard.tools.headline.btn')}
+                            {t('tools.headline.btn')}
                             <ChevronRight size={10} />
                         </button>
                     </motion.div>
@@ -103,31 +103,31 @@ export const ToolsTab = ({
                                 <div
                                     className="group/info relative"
                                     onClick={() => useNotificationStore.getState().showNotification({
-                                        title: t('pro_dashboard.tools.bio.title'),
-                                        message: t('pro_dashboard.tools.bio.neural_desc'),
+                                        title: t('tools.bio.title'),
+                                        message: t('tools.bio.neural_desc'),
                                         type: 'info'
                                     })}
                                 >
                                     <Info size={14} className="text-slate-400 hover:text-amber-500 transition-colors cursor-help" />
                                     <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
-                                        {t('pro_dashboard.tools.bio.neural_desc')}
+                                        {t('tools.bio.neural_desc')}
                                         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                     </div>
                                 </div>
                                 <div className="px-2.5 py-1 bg-amber-500/10 rounded-full border border-amber-500/20 shrink-0">
-                                    <span className="text-label font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">{t('pro_dashboard.node_active')}</span>
+                                    <span className="text-label font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest">{t('node_active')}</span>
                                 </div>
                             </div>
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.bio.title')}</h3>
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('tools.bio.title')}</h3>
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
-                            {t('pro_dashboard.tools.bio.desc')}
+                            {t('tools.bio.desc')}
                         </p>
                         <button
                             onClick={() => { selection(); setShowBioModal(true); }}
                             className="mt-auto w-full h-10 acid-yellow-gradient rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
-                            {t('pro_dashboard.tools.bio.btn')}
+                            {t('tools.bio.btn')}
                             <ChevronRight size={10} />
                         </button>
                     </motion.div>
@@ -144,19 +144,19 @@ export const ToolsTab = ({
                             </div>
                             <div className="flex items-center gap-2">
                                 <span className="px-2.5 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">
-                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">{t('pro_dashboard.growth_strategist.anal_label')}</span>
+                                    <span className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">{t('growth_strategist.anal_label')}</span>
                                 </span>
                             </div>
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.growth_strategist.title')}</h3>
+                        <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('growth_strategist.title')}</h3>
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
-                            {t('pro_dashboard.growth_strategist.neural_desc')}
+                            {t('growth_strategist.neural_desc')}
                         </p>
                         <button
                             onClick={() => { selection(); setShowGrowthModal?.(true); }}
                             className="mt-auto w-full h-10 vibing-emerald-animated text-white rounded-xl font-bold text-label uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-2 border border-white/20 shrink-0 relative z-20 shadow-premium-lg"
                         >
-                            {t('pro_dashboard.growth_strategist.btn')}
+                            {t('growth_strategist.btn')}
                             <ChevronRight size={10} />
                         </button>
                     </motion.div>
@@ -176,24 +176,24 @@ export const ToolsTab = ({
                             <div
                                 className="group/info relative"
                                 onClick={() => useNotificationStore.getState().showNotification({
-                                    title: t('pro_dashboard.tools.trends.title'),
-                                    message: t('pro_dashboard.tools.trends.info'),
+                                    title: t('tools.trends.title'),
+                                    message: t('tools.trends.info'),
                                     type: 'info'
                                 })}
                             >
                                 <Info size={14} className="text-slate-400 hover:text-orange-500 transition-colors cursor-help" />
                                 <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
-                                    {t('pro_dashboard.tools.trends.info')}
+                                    {t('tools.trends.info')}
                                     <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                 </div>
                             </div>
                             <div className="flex flex-col items-end shrink-0">
-                                <span className="text-label font-bold text-orange-500 uppercase tracking-widest leading-none">{t('pro_dashboard.tools.trends.scanning')}</span>
-                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">{t('pro_dashboard.tools.trends.node_id')}</span>
+                                <span className="text-label font-bold text-orange-500 uppercase tracking-widest leading-none">{t('tools.trends.scanning')}</span>
+                                <span className="text-label font-bold text-slate-400 uppercase tracking-widest opacity-40 mt-0.5">{t('tools.trends.node_id')}</span>
                             </div>
                         </div>
                     </div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('pro_dashboard.tools.trends.title')}</h3>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2 truncate">{t('tools.trends.title')}</h3>
 
                     {trends.length > 0 ? (
                         <div className="space-y-1.5 mb-5 min-h-[82px] relative z-10">
@@ -205,7 +205,7 @@ export const ToolsTab = ({
                         </div>
                     ) : (
                         <p className="text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-5 opacity-80 min-h-[32px]">
-                            {t('pro_dashboard.tools.trends.desc')}
+                            {t('tools.trends.desc')}
                         </p>
                     )}
 
@@ -216,7 +216,7 @@ export const ToolsTab = ({
                     >
                         {isFetchingTrends ? <Loader2 className="animate-spin w-3 h-3" /> : (
                             <>
-                                {trends.length > 0 ? t('pro_dashboard.tools.trends.btn_refresh') : t('pro_dashboard.tools.trends.btn')}
+                                {trends.length > 0 ? t('tools.trends.btn_refresh') : t('tools.trends.btn')}
                                 <Compass size={10} className="animate-[spin_6s_linear_infinite]" />
                             </>
                         )}
@@ -245,19 +245,19 @@ export const ToolsTab = ({
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 mb-1">
                                     <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">
-                                        {t('pro_dashboard.tools.audit.title')}
+                                        {t('tools.audit.title')}
                                     </h3>
                                     <div
                                         className="group/info relative"
                                         onClick={() => useNotificationStore.getState().showNotification({
-                                            title: t('pro_dashboard.tools.audit.title'),
-                                            message: t('pro_dashboard.tools.audit.info'),
+                                            title: t('tools.audit.title'),
+                                            message: t('tools.audit.info'),
                                             type: 'info'
                                         })}
                                     >
                                         <Info size={14} className="text-slate-400 hover:text-indigo-500 transition-colors cursor-help" />
                                         <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 px-3 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-label font-semibold rounded-xl opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-300 w-48 text-center pointer-events-none shadow-2xl z-200">
-                                            {t('pro_dashboard.tools.audit.info')}
+                                            {t('tools.audit.info')}
                                             <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-6 border-r-6 border-t-6 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-white" />
                                         </div>
                                     </div>
@@ -265,7 +265,7 @@ export const ToolsTab = ({
                                 <div className="flex items-center gap-1.5">
                                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                     <span className="text-label font-bold text-emerald-600 dark:text-emerald-500 uppercase tracking-widest">
-                                        {t('pro_dashboard.tools.audit.status')}
+                                        {t('tools.audit.status')}
                                     </span>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@ export const ToolsTab = ({
                         >
                             {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : (
                                 <>
-                                    {t('pro_dashboard.tools.audit.btn')}
+                                    {t('tools.audit.btn')}
                                     <ChevronRight size={10} />
                                 </>
                             )}
@@ -290,7 +290,7 @@ export const ToolsTab = ({
                     {/* Capability Description */}
                     <div className="p-4 bg-slate-50 dark:bg-black/30 rounded-xl border border-slate-100 dark:border-white/5 backdrop-blur-xl relative overflow-hidden shadow-inner">
                         <p className="text-label sm:text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed relative z-10">
-                            {renderMarkdown(t('pro_dashboard.tools.audit.capability'), true)}
+                            {renderMarkdown(t('tools.audit.capability'), true)}
                         </p>
                     </div>
                 </motion.div>

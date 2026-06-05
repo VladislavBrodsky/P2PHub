@@ -43,7 +43,7 @@ const ResonanceSegment = memo(({ rec, i, t, lowPowerMode }: { rec: any; i: numbe
         </div>
         <div className="text-right shrink-0 flex flex-col items-end">
             <span className="text-caption font-bold text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
-            <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('pro_dashboard.analytics.raw_data.reach').slice(0, 4)}</p>
+            <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('analytics.raw_data.reach').slice(0, 4)}</p>
         </div>
     </motion.div>
 ));
@@ -77,7 +77,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
                             </span>
                             {post.last_check && (
                                 <span className="text-label sm:text-label font-bold text-indigo-500/50 uppercase hidden sm:block">
-                                    • {t('pro_dashboard.analytics.raw_data.last_sync')} {new Date(post.last_check).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                                    • {t('analytics.raw_data.last_sync')} {new Date(post.last_check).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             )}
                         </div>
@@ -87,7 +87,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
             <td className="px-1 sm:px-3 py-2 text-center">
                 <div className="inline-flex flex-col">
                     <span className="text-label sm:text-caption font-bold text-slate-800 dark:text-white tabular-nums leading-none mb-0.5">{post.views.toLocaleString()}</span>
-                    <span className="text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.reach')}</span>
+                    <span className="text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest">{t('analytics.raw_data.reach')}</span>
                 </div>
             </td>
             <td className="px-1 sm:px-3 py-2 text-center">
@@ -198,7 +198,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
                 <BrainCircuit size={40} className="text-indigo-500 animate-pulse" />
-                <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500">{t('pro_dashboard.analytics.decrypting')}</p>
+                <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500">{t('analytics.decrypting')}</p>
             </div>
         );
     }
@@ -208,10 +208,10 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
             {/* Summary Stats Grid */}
             <div className={`grid grid-cols-2 sm:grid-cols-4 gap-3 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-50 grayscale' : ''}`}>
                 {[
-                    { label: t('pro_dashboard.analytics.total_views'), value: stats?.summary?.total_views || 0, icon: Eye, color: 'text-blue-500', trend: stats?.summary?.trends?.views },
-                    { label: t('pro_dashboard.analytics.engagement'), value: stats?.summary?.total_reactions || stats?.summary?.total_likes || 0, icon: ThumbsUp, color: 'text-emerald-500', trend: stats?.summary?.trends?.likes },
-                    { label: t('pro_dashboard.analytics.viral_reach'), value: stats?.summary?.total_shares || stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-purple-500', trend: stats?.summary?.trends?.reposts },
-                    { label: t('pro_dashboard.analytics.success_rate'), value: `${((stats?.summary?.avg_engagement || 0) * 100).toFixed(1)}%`, icon: TrendingUp, color: 'text-orange-500', trend: stats?.summary?.trends?.success }
+                    { label: t('analytics.total_views'), value: stats?.summary?.total_views || 0, icon: Eye, color: 'text-blue-500', trend: stats?.summary?.trends?.views },
+                    { label: t('analytics.engagement'), value: stats?.summary?.total_reactions || stats?.summary?.total_likes || 0, icon: ThumbsUp, color: 'text-emerald-500', trend: stats?.summary?.trends?.likes },
+                    { label: t('analytics.viral_reach'), value: stats?.summary?.total_shares || stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-purple-500', trend: stats?.summary?.trends?.reposts },
+                    { label: t('analytics.success_rate'), value: `${((stats?.summary?.avg_engagement || 0) * 100).toFixed(1)}%`, icon: TrendingUp, color: 'text-orange-500', trend: stats?.summary?.trends?.success }
                 ].map((stat, i) => (
                     <motion.div
                         key={i}
@@ -258,19 +258,19 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 </div>
                                 <div>
                                     <h3 className="text-sm sm:text-button font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">
-                                        {t('pro_dashboard.analytics.resonance.title')}
+                                        {t('analytics.resonance.title')}
                                     </h3>
                                     <div className="flex items-center gap-1.5 mt-1">
                                         <div className={`w-1.5 h-1.5 rounded-full ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]' : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'} animate-pulse`} />
                                         <span className={`text-label font-bold ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-500' : 'text-emerald-500'} uppercase tracking-widest leading-none`}>
-                                            {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.gathering_data') : t('pro_dashboard.analytics.resonance.status')}
+                                            {resonance?.resonance_engine_status === 'gathering_data' ? t('analytics.resonance.gathering_data') : t('analytics.resonance.status')}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                             <div className={`px-4 py-2 rounded-2xl border shrink-0 shadow-sm flex items-center justify-center ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-100 dark:border-amber-500/10' : 'bg-slate-50 dark:bg-indigo-500/5 border-slate-100 dark:border-indigo-500/10'}`}>
                                 <span className={`text-label font-bold uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
-                                    {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.needs_more_posts', { count: resonance?.generations_needed || 10 }) : t('pro_dashboard.analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
+                                    {resonance?.resonance_engine_status === 'gathering_data' ? t('analytics.resonance.needs_more_posts', { count: resonance?.generations_needed || 10 }) : t('analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
                                 </span>
                             </div>
                         </div>
@@ -279,9 +279,9 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                             {resonance?.resonance_engine_status === 'gathering_data' ? (
                                 <div className="flex flex-col items-center justify-center p-6 bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl text-center">
                                     <Lock size={24} className="text-slate-400 mb-3" />
-                                    <h4 className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('pro_dashboard.analytics.resonance.insufficient_data')}</h4>
+                                    <h4 className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-tight mb-2">{t('analytics.resonance.insufficient_data')}</h4>
                                     <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug max-w-[200px] mb-4">
-                                        {t('pro_dashboard.analytics.resonance.insufficient_data_desc', { count: resonance?.generations_needed || 10 })}
+                                        {t('analytics.resonance.insufficient_data_desc', { count: resonance?.generations_needed || 10 })}
                                     </p>
 
                                     <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden flex items-center shadow-inner">
@@ -316,7 +316,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 className={`w-full h-12 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
                             >
                                 <Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : 'animate-pulse'} />
-                                {resonance?.resonance_engine_status === 'gathering_data' ? t('pro_dashboard.analytics.resonance.goto_studio') : t('pro_dashboard.analytics.resonance.action_btn')}
+                                {resonance?.resonance_engine_status === 'gathering_data' ? t('analytics.resonance.goto_studio') : t('analytics.resonance.action_btn')}
                             </button>
                             <p className="text-center text-label font-bold text-slate-400 uppercase tracking-widest mt-3 opacity-60">
                                 Neural Engine 2.0
@@ -330,23 +330,23 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-500">
                                     <BarChart3 size={14} />
                                 </div>
-                                <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.title')}</h3>
+                                <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('analytics.raw_data.title')}</h3>
                             </div>
 
                             <button
                                 onClick={() => { impact('medium'); loadData(); }}
                                 className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5 hover:bg-white dark:hover:bg-white/10 hover:text-indigo-500 hover:border-indigo-500/30 transition-all active:scale-95"
                             >
-                                {isLoading ? t('pro_dashboard.analytics.raw_data.syncing') : t('pro_dashboard.analytics.raw_data.sync_all')}
+                                {isLoading ? t('analytics.raw_data.syncing') : t('analytics.raw_data.sync_all')}
                             </button>
                         </div>
                         <div className="overflow-x-auto no-scrollbar">
                             <table className="w-full text-left border-collapse">
                                 <thead>
                                     <tr className="bg-slate-50/50 dark:bg-white/5">
-                                        <th className="pl-4 sm:pl-6 pr-1 sm:pr-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.source')}</th>
-                                        <th className="px-1 sm:px-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.reach')}</th>
-                                        <th className="px-1 sm:px-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest text-center">{t('pro_dashboard.analytics.raw_data.engagement')}</th>
+                                        <th className="pl-4 sm:pl-6 pr-1 sm:pr-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest">{t('analytics.raw_data.source')}</th>
+                                        <th className="px-1 sm:px-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest text-center">{t('analytics.raw_data.reach')}</th>
+                                        <th className="px-1 sm:px-3 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest text-center">{t('analytics.raw_data.engagement')}</th>
                                         <th className="pl-1 pr-4 sm:pr-6 py-3 text-label sm:text-label font-bold text-slate-400 uppercase tracking-widest text-right"></th>
                                     </tr>
                                 </thead>
@@ -359,7 +359,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                             <td colSpan={4} className="px-6 py-12 text-center">
                                                 <div className="flex flex-col items-center gap-3">
                                                     <Target size={24} className="text-slate-200 dark:text-slate-800" />
-                                                    <p className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('pro_dashboard.analytics.raw_data.empty')}</p>
+                                                    <p className="text-label font-bold text-slate-400 uppercase tracking-widest">{t('analytics.raw_data.empty')}</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -384,10 +384,10 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                         </div>
 
                         <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter mb-2">
-                            {t('pro_dashboard.analytics.locked_plus.title')}
+                            {t('analytics.locked_plus.title')}
                         </h3>
                         <p className="text-label font-bold text-slate-500 dark:text-slate-400 max-w-[240px] mb-8 leading-relaxed uppercase tracking-wide">
-                            {t('pro_dashboard.analytics.locked_plus.desc')}
+                            {t('analytics.locked_plus.desc')}
                         </p>
 
                         <motion.button
@@ -402,12 +402,12 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                             <div className="relative z-10 flex items-center gap-2">
                                 <Sparkles size={14} className="animate-pulse" />
-                                {t('pro_dashboard.analytics.locked_plus.upgrade_btn')}
+                                {t('analytics.locked_plus.upgrade_btn')}
                             </div>
                         </motion.button>
 
                         <p className="mt-6 text-label font-bold text-slate-400 uppercase tracking-[0.3em] opacity-50">
-                            {t('pro_dashboard.analytics.raw_data.access_restricted')}
+                            {t('analytics.raw_data.access_restricted')}
                         </p>
                     </motion.div>
                 )}
