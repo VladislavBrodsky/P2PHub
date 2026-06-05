@@ -805,7 +805,7 @@ class ViralMarketingStudio:
         4. RETURN ONLY A JSON LIST OF STRINGS.
         """
         try:
-res, _ = await self._get_text_content("Hashtag Strategist", prompt, is_pro_plus=True)
+            res, _ = await self._get_text_content("Hashtag Strategist", prompt, is_pro_plus=True)
             if isinstance(res, list): return [h if h.startswith("#") else f"#{h}" for h in res[:4]]
             if isinstance(res, dict) and "hashtags" in res:
                 h_val = res["hashtags"]

@@ -866,6 +866,18 @@ async def handle_channel_post(message: types.Message):
 
 async def main():
     logger.info("Starting bot...")
+    
+    # Register bot commands so they appear in the Telegram "/" menu
+    await bot.set_my_commands([
+        types.BotCommand(command="start", description="Open P2PHub"),
+        types.BotCommand(command="my_network", description="My partner network & stats"),
+        types.BotCommand(command="notifications", description="Notification settings"),
+        types.BotCommand(command="stop", description="Pause notifications"),
+        types.BotCommand(command="resume", description="Resume notifications"),
+        types.BotCommand(command="help", description="Get help & support"),
+    ])
+    logger.info("✅ Bot commands registered")
+    
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
