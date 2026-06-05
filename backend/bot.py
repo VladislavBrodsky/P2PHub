@@ -229,6 +229,193 @@ async def handle_passport_photo(message: types.Message, state: FSMContext):
 
 
 
+# ─────────────────────────────────────────────────────────────
+# 🔔  NOTIFICATION MANAGEMENT  (/stop, /pause, /resume)
+# ─────────────────────────────────────────────────────────────
+
+@dp.message(Command("stop", "pause"))
+async def cmd_pause_notifications(message: types.Message):
+    """
+    Pause all bot notifications for a user.
+    Graceful handler for users who want to mute without blocking.
+    """
+    lang = "ru" if message.from_user.language_code == "ru" else "en"
+    try:
+        from app.services.partner_service import get_partner_by_telegram_id
+        from app.services.rate_limit_service import rate_limit_service
+        
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if not partner:
+                await message.answer(get_msg(lang, "not_registered_error"))
+                return
+            
+            lang = partner.language_code or lang
+            
+            if partner.notifications_paused:
+                pause_msg = {
+                    "en": "⏸ Notifications are already paused.\n\nSend /resume or /start to reactivate them anytime.",
+                    "ru": "⏸ Уведомления уже на паузе.\n\nОтправьте /resume или /start, чтобы включить их снова."
+                }
+                await message.answer(pause_msg.get(lang, pause_msg["en"]))
+                return
+            
+            # Pause notifications
+            partner.notifications_paused = True
+            session.add(partner)
+            await session.commit()
+            
+            # Mark in Redis cache for fast rate-limit checks
+            await rate_limit_service.mark_user_blocked(int(message.from_user.id))
+            
+            logger.info(f"⏸ Notifications paused for partner {partner.id} via /stop")
+            
+            pause_success = {
+                "en": "⏸ *Notifications Paused*\n\nYou won't receive any automatic updates from us.\n\nSend /resume or /start at any time to reactivate your node and resume receiving dividends and updates.",
+                "ru": "⏸ *Уведомления Поставлены на Паузу*\n\nВы не будете получать автоматические обновления от нас.\n\nОтправьте /resume или /start в любое время, чтобы активировать ваш узел снова."
+            }
+            await message.answer(pause_success.get(lang, pause_success["en"]), parse_mode="Markdown")
+            break
+    except Exception as e:
+        logger.error(f"Error in cmd_pause_notifications: {e}")
+        await message.answer("⚠️ An error occurred. Please try again.")
+
+
+@dp.message(Command("resume", "unmute", "activate"))
+async def cmd_resume_notifications(message: types.Message):
+    """
+    Resume notifications after they were paused or the bot was blocked/unblocked.
+    """
+    lang = "ru" if message.from_user.language_code == "ru" else "en"
+    try:
+        from app.services.partner_service import get_partner_by_telegram_id
+        from app.services.rate_limit_service import rate_limit_service
+        
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if not partner:
+                await message.answer(get_msg(lang, "not_registered_error"))
+                return
+            
+            lang = partner.language_code or lang
+            
+            # Resume notifications
+            partner.notifications_paused = False
+            session.add(partner)
+            await session.commit()
+            
+            await rate_limit_service.unmark_user_blocked(int(message.from_user.id))
+            
+            logger.info(f"▶️ Notifications resumed for partner {partner.id} via /resume")
+            
+            resume_success = {
+                "en": "▶️ *Node Reactivated*\n\nYour notification node is live again. You'll receive updates on dividends, network activity, and viral content alerts.\n\nWelcome back to the network. 🚀",
+                "ru": "▶️ *Узел Реактивирован*\n\nВаш узел уведомлений снова активен. Вы будете получать обновления о дивидендах, активности сети и вирусном контенте.\n\nДобро пожаловать обратно в сеть. 🚀"
+            }
+            await message.answer(resume_success.get(lang, resume_success["en"]), parse_mode="Markdown")
+            break
+    except Exception as e:
+        logger.error(f"Error in cmd_resume_notifications: {e}")
+        await message.answer("⚠️ An error occurred. Please try again.")
+
+
+@dp.message(Command("notifications", "notify", "settings"))
+async def cmd_notifications_status(message: types.Message):
+    """
+    Show notification status with inline toggle.
+    """
+    lang = "ru" if message.from_user.language_code == "ru" else "en"
+    try:
+        from app.services.partner_service import get_partner_by_telegram_id
+        
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(message.from_user.id))
+            if not partner:
+                await message.answer(get_msg(lang, "not_registered_error"))
+                return
+            
+            lang = partner.language_code or lang
+            is_paused = partner.notifications_paused or False
+            
+            status_icon = "⏸" if is_paused else "🟢"
+            toggle_label = {
+                "en": ("▶️ Resume Notifications" if is_paused else "⏸ Pause Notifications"),
+                "ru": ("▶️ Возобновить уведомления" if is_paused else "⏸ Поставить на паузу"),
+            }
+            toggle_data = "resume_notifications" if is_paused else "pause_notifications"
+            
+            status_msg = {
+                "en": f"{status_icon} *Notification Status*\n\nCurrent state: {'⏸ Paused' if is_paused else '🟢 Active'}\n\nYou can toggle notifications at any time.",
+                "ru": f"{status_icon} *Статус Уведомлений*\n\nТекущее состояние: {'⏸ На паузе' if is_paused else '🟢 Активны'}\n\nВы можете управлять уведомлениями в любое время."
+            }
+            
+            kb = types.InlineKeyboardMarkup(inline_keyboard=[[
+                types.InlineKeyboardButton(
+                    text=toggle_label.get(lang, toggle_label["en"]),
+                    callback_data=toggle_data
+                )
+            ]])
+            
+            await message.answer(status_msg.get(lang, status_msg["en"]), parse_mode="Markdown", reply_markup=kb)
+            break
+    except Exception as e:
+        logger.error(f"Error in cmd_notifications_status: {e}")
+        await message.answer("⚠️ An error occurred. Please try again.")
+
+
+@dp.callback_query(F.data.in_(["pause_notifications", "resume_notifications"]))
+async def callback_toggle_notifications(callback: types.CallbackQuery):
+    """Inline toggle for notification state."""
+    lang = "ru" if callback.from_user.language_code == "ru" else "en"
+    try:
+        from app.services.partner_service import get_partner_by_telegram_id
+        from app.services.rate_limit_service import rate_limit_service
+        
+        async for session in get_session():
+            partner = await get_partner_by_telegram_id(session, str(callback.from_user.id))
+            if not partner:
+                await callback.answer("Partner not found", show_alert=True)
+                return
+            
+            lang = partner.language_code or lang
+            
+            if callback.data == "pause_notifications":
+                partner.notifications_paused = True
+                await rate_limit_service.mark_user_blocked(int(callback.from_user.id))
+                toast = {"en": "⏸ Notifications paused", "ru": "⏸ Уведомления поставлены на паузу"}
+            else:
+                partner.notifications_paused = False
+                await rate_limit_service.unmark_user_blocked(int(callback.from_user.id))
+                toast = {"en": "▶️ Notifications resumed", "ru": "▶️ Уведомления возобновлены"}
+            
+            session.add(partner)
+            await session.commit()
+            
+            logger.info(f"🔔 Notification toggle: partner={partner.id}, paused={partner.notifications_paused}")
+            await callback.answer(toast.get(lang, toast["en"]), show_alert=False)
+            
+            # Update the status message
+            is_paused = partner.notifications_paused
+            status_icon = "⏸" if is_paused else "🟢"
+            toggle_label = {
+                "en": ("▶️ Resume Notifications" if is_paused else "⏸ Pause Notifications"),
+                "ru": ("▶️ Возобновить уведомления" if is_paused else "⏸ Поставить на паузу"),
+            }
+            toggle_data = "resume_notifications" if is_paused else "pause_notifications"
+            status_msg = {
+                "en": f"{status_icon} *Notification Status*\n\nCurrent state: {'⏸ Paused' if is_paused else '🟢 Active'}\n\nYou can toggle notifications at any time.",
+                "ru": f"{status_icon} *Статус Уведомлений*\n\nТекущее состояние: {'⏸ На паузе' if is_paused else '🟢 Активны'}\n\nВы можете управлять уведомлениями в любое время."
+            }
+            kb = types.InlineKeyboardMarkup(inline_keyboard=[[
+                types.InlineKeyboardButton(text=toggle_label.get(lang, toggle_label["en"]), callback_data=toggle_data)
+            ]])
+            await callback.message.edit_text(status_msg.get(lang, status_msg["en"]), parse_mode="Markdown", reply_markup=kb)
+            break
+    except Exception as e:
+        logger.error(f"Error in callback_toggle_notifications: {e}")
+        await callback.answer("Error. Please try again.", show_alert=True)
+
+
 @dp.message(Command("my_network", "tree", "stats"))
 async def cmd_my_network(message: types.Message):
     from app.services.analytics_service import get_referral_tree_stats

@@ -805,7 +805,7 @@ class ViralMarketingStudio:
         4. RETURN ONLY A JSON LIST OF STRINGS.
         """
         try:
-            res, _ = await self._get_text_content("Hashtag Strategist", prompt, is_pro_plus=True)
+res, _ = await self._get_text_content("Hashtag Strategist", prompt, is_pro_plus=True)
             if isinstance(res, list): return [h if h.startswith("#") else f"#{h}" for h in res[:4]]
             if isinstance(res, dict) and "hashtags" in res:
                 h_val = res["hashtags"]
@@ -820,12 +820,12 @@ class ViralMarketingStudio:
         post_type = (post_type or "default").lower()
         language_key = "Russian" if (language and language.lower() in ["russian", "ru"]) else "English"
         
-        # Pre-baked template database
+        # Pre-baked template database — full coverage for all 10 post types
         templates = {
             "launch": {
                 "English": {
                     "title": "SYSTEM ACTIVATE: The P2P Arbitrage Revolution is Live",
-                    "body": "The future of decentralized finance isn’t coming—it’s already here.\n\nWe have officially deployed a frictionless peer-to-peer liquidity protocol that allows anyone to generate passive income from transaction flows on complete autopilot. No middleman, no banking delays, just pure architectural freedom.\n\nBy activating a node in our ecosystem, you gain access to multi-level passive dividends. Early adopters are already locking in their lifetime positions.\n\nReady to scale your capital?\n\n**[Initiate My Protocol]({ref_link})**",
+                    "body": "The future of decentralized finance isn't coming—it's already here.\n\nWe have officially deployed a frictionless peer-to-peer liquidity protocol that allows anyone to generate passive income from transaction flows on complete autopilot. No middleman, no banking delays, just pure architectural freedom.\n\nBy activating a node in our ecosystem, you gain access to multi-level passive dividends. Early adopters are already locking in their lifetime positions.\n\nReady to scale your capital?\n\n**[Initiate My Protocol]({ref_link})**",
                     "hashtags": ["P2PHub", "DeFi", "PassiveIncome", "CryptoLaunch"]
                 },
                 "Russian": {
@@ -844,6 +844,90 @@ class ViralMarketingStudio:
                     "title": "ПРЕДУПРЕЖДЕНИЕ: Места Быстро Заполняются",
                     "body": "Время и капитал никого не ждут. Текущий пул для пожизненной активации PRO заполняется с беспрецедентной скоростью.\n\nКаждая транзакция, проходящая через наши узлы, распределяет пассивные дивиденды среди партнеров. Если ваш узел не активен, вы буквально теряете прибыль, пока другие забирают лучшие места.\n\nКак только лимит будет исчерпан, цена вырастет навсегда. Закрепите свою позицию до сброса.\n\nНе оставайтесь в стороне.\n\n**[Забрать преимущество]({ref_link})**",
                     "hashtags": ["ПассивныйДоход", "КриптоФомо", "Лимиты", "УспейПрисоединиться"]
+                }
+            },
+            "lifestyle": {
+                "English": {
+                    "title": "THE REAL FLEX: Freedom Looks Like This",
+                    "body": "12 months ago I was refreshing my bank app hoping to see a different number. Today I'm watching passive income arrive while I'm on a flight to Lisbon.\n\nThe difference? I stopped trading time for money and started building **automated income nodes** through a P2P liquidity protocol that works 24/7 without me.\n\nThe Pintopay card handles my daily spending in crypto across 180+ countries. No conversion fees, no banking middlemen. Just borderless financial freedom.\n\nThis isn't a flex. It's a blueprint. The system is open to anyone willing to make the shift.\n\n**[Start My Freedom Protocol]({ref_link})**",
+                    "hashtags": ["EliteLifestyle", "FreedomGoals", "DigitalNomad", "PassiveIncome"]
+                },
+                "Russian": {
+                    "title": "НАСТОЯЩАЯ СВОБОДА: Вот Как Это Выглядит",
+                    "body": "12 месяцев назад я обновлял банковское приложение, надеясь увидеть другую цифру. Сегодня я наблюдаю, как пассивный доход поступает, пока я лечу в Лиссабон.\n\nРазница? Я перестал обменивать время на деньги и начал строить **автоматизированные узлы дохода** через P2P протокол ликвидности, который работает 24/7 без моего участия.\n\nКарта Pintopay обрабатывает мои ежедневные расходы в крипте в 180+ странах. Без комиссий конвертации, без банковских посредников. Только безграничная финансовая свобода.\n\nЭто не хвастовство. Это blueprint. Система открыта для всех, кто готов изменить подход.\n\n**[Запустить мой протокол свободы]({ref_link})**",
+                    "hashtags": ["СтильЖизни", "ЦелиСвободы", "ЦифровойНомад", "ПассивныйДоход"]
+                }
+            },
+            "income": {
+                "English": {
+                    "title": "INCOME PROTOCOL: $1/Minute on Autopilot",
+                    "body": "What does **$1,440 per day** look like when it arrives automatically?\n\nThat's the math when our multi-level P2P network reaches velocity. Every transaction your partners make generates residual income across up to **20 levels deep**. No trading, no client work, no active hustle required.\n\nPRO members are already capturing dividends from 9 levels. PRO+ partners run all 20 levels — that's 20x the passive income surface area.\n\nThe protocol is running right now. Your node just isn't connected yet.\n\n**[Connect My Income Node]({ref_link})**",
+                    "hashtags": ["PassiveIncome", "CryptoEarnings", "ResidualIncome", "IncomeProtocol"]
+                },
+                "Russian": {
+                    "title": "ПРОТОКОЛ ДОХОДА: $1 в Минуту на Автопилоте",
+                    "body": "Как выглядит **$1,440 в день**, когда он поступает автоматически?\n\nЭто математика, когда наша многоуровневая P2P сеть набирает скорость. Каждая транзакция ваших партнеров генерирует остаточный доход через до **20 уровней глубины**. Без трейдинга, без работы с клиентами, без активной суеты.\n\nPRO участники уже получают дивиденды с 9 уровней. PRO+ партнеры охватывают все 20 уровней — это в 20 раз больше поверхности пассивного дохода.\n\nПротокол работает прямо сейчас. Ваш узел просто еще не подключен.\n\n**[Подключить мой узел дохода]({ref_link})**",
+                    "hashtags": ["ПассивныйДоход", "КриптоЗаработок", "РезидуальныйДоход", "ПротоколДохода"]
+                }
+            },
+            "network": {
+                "English": {
+                    "title": "NETWORK INTEL: Are You Building or Just Watching?",
+                    "body": "There are two types of people in this economy: those who **build networks** and those who work inside someone else's.\n\nThe Pintopay partner architecture allows you to deploy an autonomous income structure that grows geometrically. When your Level 1 partners activate Level 2 partners, the compound effect begins — and **it never stops**.\n\nOur AI Viral Studio generates the content. The Omni-Sync system distributes it across 7+ platforms. Your only job is to plug in.\n\n**14,000+ active nodes** are already scaling. The question is: which side of the network do you want to be on?\n\n**[Join the Sovereign Network]({ref_link})**",
+                    "hashtags": ["NetworkGrowth", "TeamScaling", "LeverageWealth", "GeometricIncome"]
+                },
+                "Russian": {
+                    "title": "СЕТЕВАЯ РАЗВЕДКА: Вы Строите Или Только Наблюдаете?",
+                    "body": "В этой экономике есть два типа людей: те, кто **строит сети**, и те, кто работает внутри чужих.\n\nАрхитектура партнеров Pintopay позволяет развернуть автономную структуру дохода, которая растет геометрически. Когда ваши партнеры 1-го уровня активируют партнеров 2-го уровня, начинается эффект компаундинга — и **он никогда не останавливается**.\n\nНаша ИИ Viral Studio генерирует контент. Система Omni-Sync распространяет его на 7+ платформах. Ваша единственная задача — подключиться.\n\n**14 000+ активных узлов** уже масштабируются. Вопрос в том: на какой стороне сети вы хотите быть?\n\n**[Присоединиться к суверенной сети]({ref_link})**",
+                    "hashtags": ["РостСети", "МасштабКоманды", "КредитноеБогатство", "ГеометрическийДоход"]
+                }
+            },
+            "tutorial": {
+                "English": {
+                    "title": "HOW TO: Activate Passive Income in Under 10 Minutes",
+                    "body": "Most people think passive income requires years of grind. Here's the actual system:\n\n**STEP 1:** Activate PRO status via Pintopay (one-time, lifetime access).\n**STEP 2:** Connect your Telegram channel and social accounts to the AI Studio.\n**STEP 3:** Generate your first viral post in 60 seconds with the Neural Matrix.\n**STEP 4:** Watch your partner node begin growing as referrals activate their nodes.\n\nThe entire setup takes less than 10 minutes. The system then runs 24/7 on autopilot — generating content, tracking analytics, and distributing dividends automatically.\n\nThis is the blueprint 14,000+ partners are already running.\n\n**[Run The Protocol Now]({ref_link})**",
+                    "hashtags": ["CryptoTutorial", "WealthProtocol", "PassiveIncomeGuide", "Web3Tutorial"]
+                },
+                "Russian": {
+                    "title": "КАК НАСТРОИТЬ: Пассивный Доход Менее Чем За 10 Минут",
+                    "body": "Большинство людей думают, что пассивный доход требует лет усилий. Вот реальная система:\n\n**ШАГ 1:** Активируйте статус PRO через Pintopay (единоразово, пожизненный доступ).\n**ШАГ 2:** Подключите ваш Telegram-канал и социальные аккаунты к ИИ Студии.\n**ШАГ 3:** Создайте свой первый вирусный пост за 60 секунд с помощью Neural Matrix.\n**ШАГ 4:** Наблюдайте, как ваш партнерский узел начинает расти по мере активации рефералов.\n\nВся настройка занимает менее 10 минут. После этого система работает 24/7 на автопилоте — генерируя контент, отслеживая аналитику и автоматически распределяя дивиденды.\n\nЭто план, по которому уже работают 14 000+ партнеров.\n\n**[Запустить протокол сейчас]({ref_link})**",
+                    "hashtags": ["КриптоТуториал", "ПротоколБогатства", "ГайдПассивныйДоход", "Web3Обучение"]
+                }
+            },
+            "partners_cards": {
+                "English": {
+                    "title": "THE CARD THAT PAYS YOU BACK: Crypto Spending Evolved",
+                    "body": "Banks take your money and lend it to others. The Pintopay card does the opposite.\n\nEvery swipe of the **matte charcoal Pintopay card** generates transaction flow through the P2P network. That flow distributes passive dividends back into your balance. No interest on borrowed money — just pure sovereign spending power.\n\nUse it at restaurants in Dubai, ATMs in Tokyo, online stores in New York. **180+ countries. 40+ currencies. Zero banking middlemen.**\n\nThis is what it means to hold the master key to your own liquidity.\n\n**[Order My Elite Card]({ref_link})**",
+                    "hashtags": ["CryptoCard", "FinancialSovereignty", "NoMoreBanks", "PintopayElite"]
+                },
+                "Russian": {
+                    "title": "КАРТА, КОТОРАЯ ПЛАТИТ ТЕБЕ: Эволюция Крипто-Расходов",
+                    "body": "Банки берут ваши деньги и одалживают их другим. Карта Pintopay делает обратное.\n\nКаждое использование **матовой угольной карты Pintopay** генерирует транзакционный поток через P2P сеть. Этот поток распределяет пассивные дивиденды обратно на ваш баланс. Никаких процентов за заемные деньги — только чистая суверенная покупательная способность.\n\nИспользуйте её в ресторанах Дубая, банкоматах Токио, интернет-магазинах Нью-Йорка. **180+ стран. 40+ валют. Ноль банковских посредников.**\n\nВот что значит держать мастер-ключ к собственной ликвидности.\n\n**[Заказать мою элитную карту]({ref_link})**",
+                    "hashtags": ["КриптоКарта", "ФинансовыйСуверенитет", "БезБанков", "PintopayЭлита"]
+                }
+            },
+            "partners_network": {
+                "English": {
+                    "title": "GEOMETRIC SCALE: Build an Empire That Runs Itself",
+                    "body": "The most powerful wealth systems share one trait: **they duplicate.**\n\nThe Pintopay partner architecture is built on viral duplication. When you activate PRO+ status, you open 20 levels of depth. Every partner you bring in can bring in 5 more. Those 5 bring 25. Those 25 bring 125.\n\nBy Level 5, you have a network of **3,905 nodes** — all generating transaction-based dividends that flow automatically to your balance.\n\nThe AI Viral Studio handles the marketing. The Omni-Sync system handles the distribution. Your architecture does the rest.\n\nThis is the blueprint of a sovereign wealth empire.\n\n**[Initiate My Empire Protocol]({ref_link})**",
+                    "hashtags": ["EmpireScaling", "GeometricGrowth", "LegacyNetwork", "NetworkEmpire"]
+                },
+                "Russian": {
+                    "title": "ГЕОМЕТРИЧЕСКИЙ МАСШТАБ: Построй Империю, Которая Работает Сама",
+                    "body": "Все самые мощные системы богатства имеют одну общую черту: **они дублируются.**\n\nАрхитектура партнеров Pintopay построена на вирусном дублировании. Когда вы активируете статус PRO+, вы открываете 20 уровней глубины. Каждый партнер, которого вы привели, может привести еще 5. Эти 5 приведут 25. Эти 25 приведут 125.\n\nК 5-му уровню у вас есть сеть из **3 905 узлов** — все генерируют транзакционные дивиденды, которые автоматически поступают на ваш баланс.\n\nИИ Viral Studio занимается маркетингом. Система Omni-Sync занимается распространением. Ваша архитектура делает остальное.\n\nЭто blueprint суверенной империи богатства.\n\n**[Запустить мой имперский протокол]({ref_link})**",
+                    "hashtags": ["ИмперскоеМасштабирование", "ГеометрическийРост", "НаследиеСети", "ИмперияСети"]
+                }
+            },
+            "partners": {
+                "English": {
+                    "title": "INNER CIRCLE INVITE: Join the Partner Elite",
+                    "body": "Not everyone gets to see behind the curtain. This is your personal invitation into the Pintopay partner ecosystem.\n\nBy joining through my referral link, you gain direct access to the PRO infrastructure — 9 levels of passive dividends, the AI Viral Studio, and a community of 14,000+ active builders.\n\nI've been inside this network and I can tell you: the compound effect of building a 5-level partner structure changes everything. The first 30 days are the most important.\n\nMy spot in your upline is guaranteed for 48 hours.\n\n**[Accept My Invitation]({ref_link})**",
+                    "hashtags": ["PartnerProgram", "EliteNetwork", "PassiveIncome", "ReferralSystem"]
+                },
+                "Russian": {
+                    "title": "ПРИГЛАШЕНИЕ В ЭЛИТУ: Войдите в Круг Партнеров",
+                    "body": "Не каждый получает возможность заглянуть за кулисы. Это ваше личное приглашение в партнерскую экосистему Pintopay.\n\nПрисоединившись по моей реферальной ссылке, вы получаете прямой доступ к PRO инфраструктуре — 9 уровней пассивных дивидендов, ИИ Viral Studio и сообщество из 14 000+ активных строителей.\n\nЯ внутри этой сети и могу сказать: эффект компаундинга от построения 5-уровневой партнерской структуры меняет всё. Первые 30 дней — самые важные.\n\nМоё место в вашей аплайн-структуре гарантировано на 48 часов.\n\n**[Принять моё приглашение]({ref_link})**",
+                    "hashtags": ["ПартнерскаяПрограмма", "ЭлитнаяСеть", "ПассивныйДоход", "РеферальнаяСистема"]
                 }
             },
             "authority": {
@@ -875,7 +959,7 @@ class ViralMarketingStudio:
         # Resolve category or fallback to default
         if post_type not in templates:
             if "partners" in post_type:
-                post_type = "launch"
+                post_type = "partners_network"
             else:
                 post_type = "default"
                 

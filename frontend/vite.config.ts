@@ -45,13 +45,22 @@ export default defineConfig({
     cssCodeSplit: true,
     chunkSizeWarningLimit: 1200,
     emptyOutDir: true,
+    // #comment: Performance - Enable modern target for better tree-shaking and smaller output
+    target: 'es2022',
+    // #comment: Performance - Minify with esbuild (default, fast)
+    minify: 'esbuild',
     rollupOptions: {
       output: {
+        // #comment: Performance - Stable asset naming for aggressive CDN/browser caching
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
         manualChunks(id) {
           // #comment: Strategic splitting to reduce main bundle size while keeping execution order stable.
           if (id.includes('node_modules')) {
             if (id.includes('@telegram-apps') || id.includes('@tonconnect')) return 'vendor-tma';
             if (id.includes('recharts') || id.includes('framer-motion') || id.includes('lucide-react')) return 'vendor-ui';
+            if (id.includes('i18next') || id.includes('react-i18next')) return 'vendor-i18n';
             return 'vendor'; // All other stable dependencies
           }
         }
