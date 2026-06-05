@@ -176,7 +176,7 @@ export const proService = {
         tone?: string,
         referral_link?: string
     ) => {
-        const url = `${getApiUrl().replace('http://', 'https://')}/api/pro/generate-stream`;
+        const url = `${getApiUrl()}/api/pro/generate-stream`;
         const params = getSafeLaunchParams();
         const initDataRaw = params.initDataRaw
             || (typeof window !== 'undefined' && (window as any).Telegram?.WebApp?.initData)

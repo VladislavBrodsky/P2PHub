@@ -302,7 +302,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         options={defaultLanguages.map(l => ({
                             id: l.id,
                             label: l.label,
-                            description: l.description
+                            description: t(`studio.languages_desc.${l.id.toLowerCase()}`, l.description)
                         }))}
                         placeholder="Select Language"
                         color="emerald"
@@ -507,7 +507,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                                             <Sparkles size={16} className="text-purple-400 animate-pulse" />
                                         </div>
                                         <span className="text-label font-bold uppercase tracking-widest text-white/70 bg-black/50 backdrop-blur-sm px-2 py-0.5 rounded-full">
-                                            Rendering
+                                            {t('studio.rendering', 'Rendering')}
                                         </span>
                                     </div>
                                 </motion.div>
@@ -564,7 +564,7 @@ export const StudioResultPreview = memo((props: StudioResultPreviewProps) => {
                         </h3>
                         <div className="flex items-center gap-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                            <span className="text-label font-bold text-slate-400 uppercase tracking-[0.2em]">Viral Synthesis Optimized</span>
+                            <span className="text-label font-bold text-slate-400 uppercase tracking-[0.2em]">{t('studio.synthesis_optimized', 'Viral Synthesis Optimized')}</span>
                         </div>
                     </div>
 
@@ -750,7 +750,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
 
                             const getLabel = () => {
                                 switch (platform) {
-                                    case 'x': return 'Network X';
+                                    case 'x': return t('publish.platforms.x', 'Network X');
                                     case 'telegram': return t('setup.multi_sync.more_platforms_tg', 'Telegram');
                                     case 'linkedin': return 'LinkedIn';
                                     case 'threads': return t('setup.multi_sync.more_platforms_t', 'Threads');
@@ -828,7 +828,7 @@ export const StudioPublishModal = memo((props: StudioPublishModalProps) => {
                                 <div className="mt-1 p-3 bg-sky-500/5 border border-sky-500/20 rounded-2xl space-y-2">
                                     <div className="flex items-center gap-2 px-1">
                                         <Send size={10} className="text-sky-500" />
-                                        <span className="text-label font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">Post to Channel</span>
+                                        <span className="text-label font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">{t('publish.post_to_channel', 'Post to Channel')}</span>
                                     </div>
                                     <div className="grid gap-1.5">
                                         {allChs.map((ch: string) => {

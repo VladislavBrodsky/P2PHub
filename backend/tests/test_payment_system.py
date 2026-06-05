@@ -249,30 +249,21 @@ async def test_pro_upgrade_atomicity(session, create_test_partner):
     """
     partner = await create_test_partner(telegram_id="10006")
     
-    # Mock failure during XP Awarding (after PRO status is set)
+    # Mock failure during XP Awarding (before commit)
     with patch("app.services.audit_service.audit_service.log_xp_award", new_callable=AsyncMock, side_effect=Exception("Database Connection Lost")):
-        # The first attempt will fail and rollback, but the transaction was already committed so the retry will just early exit
-        await payment_service.upgrade_to_pro(
-            session=session,
-            partner=partner,
-            amount=39.0,
-            currency="TON",
-            network="TON",
-            tx_hash="failed_tx_hash"
-        )
+        with pytest.raises(Exception, match="Database Connection Lost"):
+            await payment_service.upgrade_to_pro(
+                session=session,
+                partner=partner,
+                amount=39.0,
+                currency="TON",
+                network="TON",
+                tx_hash="failed_tx_hash"
+            )
 
     # Verify that nothing was persisted (Session should have rolled back)
-    # Note: In our implementation, upgrade_to_pro uses 'await session.commit()'
-    # If the exception happened AFTER commit (Step 3.2), the PRO status might be granted.
-    # However, our goal is to ensure that if it fails BEFORE commit, it reverts.
-    
     await session.refresh(partner)
-    # If it failed before commit (like l. 432), partner.is_pro should be False
-    # If it failed after commit (Step 4 notifications), partner.is_pro is True but XP might be missing.
-    
-    # Let's verify the specific point: 'log_xp_award' is AFTER commit in current code.
-    # This means the user IS PRO but the XP log failed.
-    assert partner.is_pro is True 
+    assert partner.is_pro is False 
 
 @pytest.mark.asyncio
 async def test_ton_verification_security(session, create_test_partner):
@@ -303,7 +294,7 @@ async def test_ton_verification_security(session, create_test_partner):
         # Verify should fail
         is_valid = await ton_verification_service.verify_transaction(
             tx_hash="valid_hash_but_wrong_amount",
-            expected_amount_ton=10.0, # We expect 10
+            expected_amount=10.0, # We expect 10
             expected_address=settings.ADMIN_TON_ADDRESS
         )
         assert is_valid is False
@@ -318,7 +309,7 @@ async def test_ton_verification_security(session, create_test_partner):
         
         is_valid = await ton_verification_service.verify_transaction(
             tx_hash="unknown_hash",
-            expected_amount_ton=10.0,
+            expected_amount=10.0,
             expected_address=settings.ADMIN_TON_ADDRESS
         )
         assert is_valid is False

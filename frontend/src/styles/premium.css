@@ -234,7 +234,7 @@
 
 .pro-card-extreme::after {
   content: "";
-  @apply absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 transition-opacity duration-500 rounded-[inherit] pointer-events-none;
+  @apply absolute inset-0 bg-white/5 dark:bg-white/5 opacity-0 transition-opacity duration-500 rounded-[inherit] pointer-events-none;
 }
 
 .pro-card-extreme:hover::after,

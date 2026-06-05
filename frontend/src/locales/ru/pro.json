@@ -213,6 +213,15 @@
       "title": "Поделиться планом",
       "subtitle": "Распространить через сеть",
       "more": "Больше вариантов"
+    },
+    "rendering": "Рендеринг",
+    "synthesis_optimized": "Виральный синтез оптимизирован",
+    "languages_desc": {
+      "english": "Глобальный и широко понятный",
+      "russian": "Для русскоязычной аудитории (CIS region)",
+      "spanish": "Идеально для LATAM и Испании",
+      "french": "Для франкоязычного рынка",
+      "german": "Для рынка DACH"
     }
   },
   "growth_strategist": {
@@ -230,7 +239,11 @@
     "platform_tap_select": "Нажмите для выбора",
     "platform_tap": "Нажмите для авторизации",
     "omni_publish_btn": "Развернуть в {{count}} сетях",
-    "processing": "ОБРАБОТКА ЗАПУСКА..."
+    "processing": "ОБРАБОТКА ЗАПУСКА...",
+    "post_to_channel": "Публикация в канал",
+    "platforms": {
+      "x": "Сеть X"
+    }
   },
   "analytics": {
     "decrypting": "РАСШИФРОВКА НЕЙРОННЫХ ДАННЫХ...",

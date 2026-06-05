@@ -22,7 +22,7 @@ async def test_generation():
         from app.core.config import settings
         # Manual check
         print(f"DEBUG Settings.OPENAI_API_KEY: {bool(settings.OPENAI_API_KEY)}")
-        viral_studio._init_clients()
+        viral_studio._ensure_clients()
 
     print(f"DEBUG: OpenAI Client: {bool(viral_studio.openai_client)}")
     print(f"DEBUG: Google Client: {bool(viral_studio.genai_client)}")

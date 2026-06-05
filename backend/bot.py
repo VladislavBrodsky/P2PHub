@@ -80,8 +80,16 @@ async def cmd_start(message: types.Message, state: FSMContext):
                 language_code=lang, 
                 referrer_code=referrer_code
             )
-            
             lang = partner.language_code or lang
+
+            # Resume notifications if they were paused
+            if partner.notifications_paused:
+                partner.notifications_paused = False
+                session.add(partner)
+                await session.commit()
+                from app.services.rate_limit_service import rate_limit_service
+                await rate_limit_service.unmark_user_blocked(int(message.from_user.id))
+                logger.info(f"🔓 Resumed notifications for partner {partner.id} via /start")
 
             # If user is verified, show main menu immediately
             if partner.is_verified:

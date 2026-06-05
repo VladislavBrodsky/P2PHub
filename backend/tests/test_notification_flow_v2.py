@@ -258,6 +258,7 @@ class TestNotificationStructuredSuite:
         mock_msg.from_user.language_code = "en"
         mock_msg.text = "/start"
         mock_msg.answer = AsyncMock()
+        mock_state = AsyncMock()
 
         async def get_test_session():
             yield session
@@ -267,7 +268,7 @@ class TestNotificationStructuredSuite:
             with patch("app.services.partner_service.create_partner", return_value=(partner, False)):
                 with patch("app.services.rate_limit_service.rate_limit_service.unmark_user_blocked", new_callable=AsyncMock) as mock_unmark:
                     with patch("bot.get_session", new=get_test_session):
-                        await cmd_start(mock_msg)
+                        await cmd_start(mock_msg, mock_state)
                         
                         # Verify DB updated
                         await session.refresh(partner)

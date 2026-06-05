@@ -102,6 +102,19 @@ export const StudioTab = ({
         setOpenDropdown(prev => prev === key ? null : key);
     };
 
+    // Synchronize language selection with UI language dynamically
+    useEffect(() => {
+        const langMap: Record<string, string> = {
+            'ru': 'Russian',
+            'en': 'English',
+            'es': 'Spanish',
+            'fr': 'French',
+            'de': 'German'
+        };
+        const currentLang = langMap[i18n.language.split('-')[0]] || 'English';
+        setLanguage(currentLang);
+    }, [i18n.language]);
+
     useEffect(() => {
         setExternalReady(!!postType && !!audience);
 

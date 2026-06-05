@@ -213,6 +213,15 @@
       "title": "Share Blueprint",
       "subtitle": "Distribute via network",
       "more": "More Options"
+    },
+    "rendering": "Rendering",
+    "synthesis_optimized": "Viral Synthesis Optimized",
+    "languages_desc": {
+      "english": "Global and widely understood",
+      "russian": "For Russian-speaking audience (CIS region)",
+      "spanish": "Ideal for LATAM and Spain",
+      "french": "For the French-speaking market",
+      "german": "For the DACH market"
     }
   },
   "growth_strategist": {
@@ -230,7 +239,11 @@
     "platform_tap_select": "Tap to Select",
     "platform_tap": "Tap to Authorize",
     "omni_publish_btn": "Deploy to {{count}} Networks",
-    "processing": "PROCESSING DEPLOYMENT..."
+    "processing": "PROCESSING DEPLOYMENT...",
+    "post_to_channel": "Post to Channel",
+    "platforms": {
+      "x": "Network X"
+    }
   },
   "analytics": {
     "decrypting": "DECRYPTING NEURAL DATA...",
