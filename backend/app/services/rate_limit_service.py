@@ -21,8 +21,8 @@ class RateLimitService:
 
     async def get_redis(self):
         if not self._redis:
-            from redis.asyncio import from_url
-            self._redis = await from_url(settings.REDIS_URL, decode_responses=True)
+            from app.services.redis_service import redis_service
+            self._redis = redis_service.client
         return self._redis
 
     async def is_allowed(self, chat_id: int | str, priority: str = "medium") -> bool:

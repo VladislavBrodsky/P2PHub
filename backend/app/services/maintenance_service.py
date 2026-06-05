@@ -327,7 +327,6 @@ async def check_database_health() -> dict:
             "timestamp": datetime.now(UTC).replace(tzinfo=None).isoformat()
         }
     return {"status": "error", "message": "Database health check failed"}
-
 async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
     """
     Validates the integrity of the materialized path and depth.
@@ -335,30 +334,47 @@ async def check_tree_integrity(session: AsyncSession) -> dict[str, Any]:
     """
     logger.info("🔍 Running Tree Integrity Audit...")
     
-    result = await session.exec(select(Partner.id, Partner.path, Partner.depth))
-    partners = result.all()
-    
+    offset = 0
+    FETCH_CHUNK = 5000
+    total_checked = 0
     anomalies = []
-    for p_id, p_path, p_depth in partners:
-        expected_depth = 0
-        if p_path:
-            # Handle possible trailing dots or empty segments if they ever occur
-            expected_depth = len([x for x in p_path.split('.') if x])
+    
+    while True:
+        result = await session.exec(
+            select(Partner.id, Partner.path, Partner.depth)
+            .order_by(Partner.id)
+            .offset(offset)
+            .limit(FETCH_CHUNK)
+        )
+        chunk = result.all()
+        if not chunk:
+            break
+            
+        for p_id, p_path, p_depth in chunk:
+            expected_depth = 0
+            if p_path:
+                expected_depth = len([x for x in p_path.split('.') if x])
+            
+            if expected_depth != p_depth:
+                anomalies.append({
+                    "id": p_id,
+                    "path": p_path,
+                    "current_depth": p_depth,
+                    "expected_depth": expected_depth
+                })
         
-        if expected_depth != p_depth:
-            anomalies.append({
-                "id": p_id,
-                "path": p_path,
-                "current_depth": p_depth,
-                "expected_depth": expected_depth
-            })
+        total_checked += len(chunk)
+        offset += FETCH_CHUNK
+        if len(chunk) < FETCH_CHUNK:
+            break
             
     return {
         "status": "healthy" if not anomalies else "anomalous",
-        "total_checked": len(partners),
+        "total_checked": total_checked,
         "anomaly_count": len(anomalies),
         "anomalies": anomalies[:100] # Limit output
     }
+
 
 @broker.task(task_name="cleanup_old_audit_logs", schedule=[{"cron": "0 3 * * *"}]) # 3 AM daily
 async def cleanup_old_audit_logs():

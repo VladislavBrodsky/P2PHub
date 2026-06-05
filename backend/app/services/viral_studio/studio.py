@@ -81,7 +81,10 @@ class ViralMarketingStudio:
         
         # 1. Local Memory Cache (0ms)
         if cache_key in self._intel_cache:
-            return self._intel_cache[cache_key]
+            # Move to end (LRU behavior)
+            val = self._intel_cache.pop(cache_key)
+            self._intel_cache[cache_key] = val
+            return val
             
         # 2. Redis Cache (RRC-1)
         try:
@@ -89,6 +92,8 @@ class ViralMarketingStudio:
             cached = await redis_service.get_json(f"viral_studio:{cache_key}")
             if cached:
                 self._intel_cache[cache_key] = cached
+                if len(self._intel_cache) > 256:
+                    self._intel_cache.pop(next(iter(self._intel_cache)), None)
                 return cached
         except Exception as e:
             logger.debug(f"Redis cache miss/error: {e}")
@@ -101,6 +106,8 @@ class ViralMarketingStudio:
         except Exception:
             pass
         self._intel_cache[cache_key] = intel
+        if len(self._intel_cache) > 256:
+            self._intel_cache.pop(next(iter(self._intel_cache)), None)
         return intel
 
     async def check_tokens_and_reset(self, partner: Partner, session: AsyncSession, min_tokens: int = 1) -> bool:
