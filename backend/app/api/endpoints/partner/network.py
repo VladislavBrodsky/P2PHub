@@ -19,6 +19,7 @@ async def get_network_activity(
     limit: int = 20,
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(limit, 50)  # Cap to prevent large table scans from user-supplied params
     """
     Returns the latest 20 XP transactions (joins, tasks, levels) for social proof.
     """
@@ -64,6 +65,7 @@ async def get_network_pulse(
     limit: int = 20,
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(limit, 50)  # Cap to prevent large table scans from user-supplied params
     """
     Returns an anonymized feed of high-value system events (upgrades, commissions, referrals)
     for the 'Pulse of the Network' UI component.

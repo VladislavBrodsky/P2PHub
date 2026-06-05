@@ -150,18 +150,6 @@ async def lifespan(app: FastAPI):
                             await redis_service.client.delete(*keys)
                             total_cleared = total_cleared + count
                     
-                    # One-time Force Refresh for @uslincoln (ID 1 / 716720099)
-                    # This ensures the v5 cache is purged on startup if data is reported missing.
-                    from app.models.partner import get_session
-                    async for session in get_session():
-                        await session.execute(text("UPDATE partner SET updated_at = NOW() WHERE id = 1"))
-                        await session.commit()
-                        # Also purge their specific v5 key
-                        uslincoln_key = "partner:profile:v5:716720099"
-                        await redis_service.client.delete(uslincoln_key)
-                        logger.info(f"⚡️ @uslincoln profile forced refresh (key {uslincoln_key} purged).")
-                        break
-
                     logger.info(f"✅ Cache purge complete: {total_cleared} legacy keys cleared.")
         except Exception as e:
             logger.error(f"⚠️ Background startup task failed: {e}")

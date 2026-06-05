@@ -27,6 +27,7 @@ async def get_global_leaderboard(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(max(limit, 1), 100)  # Clamp to [1, 100] to prevent DB/cache abuse
     """
     Fetches the top partners from Redis for high-speed delivery.
     Timeframes: all (global), monthly, weekly.

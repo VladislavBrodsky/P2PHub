@@ -24,6 +24,7 @@ async def get_my_earnings(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(max(limit, 1), 100)  # Clamp to [1, 100] to prevent large scans
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 
@@ -50,6 +51,7 @@ async def get_my_xp_history(
     user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(max(limit, 1), 200)  # Clamp to [1, 200] to prevent large scans
     tg_user = get_tg_user(user_data)
     tg_id = str(tg_user.get("id"))
 

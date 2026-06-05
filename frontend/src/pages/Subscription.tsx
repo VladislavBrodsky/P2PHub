@@ -69,6 +69,15 @@ export default function SubscriptionPage() {
     const upgradePrice = proPlusPrice - proPrice; // 30
 
     const paymentRef = React.useRef<HTMLDivElement>(null);
+    const isMounted = React.useRef(true);
+    const pollIntervalRef = React.useRef<any>(null);
+
+    useEffect(() => {
+        isMounted.current = true;
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
     const { setHeaderVisible, setFooterVisible, setNotificationsVisible } = useUI();
     const isActive = useTabActive();
 
@@ -94,7 +103,9 @@ export default function SubscriptionPage() {
         const fetchStats = async () => {
             try {
                 const res = await apiClient.get('/api/pro/stats');
-                setProStats(res.data);
+                if (isMounted.current) {
+                    setProStats(res.data);
+                }
             } catch (e) {
                 console.error("Failed to fetch pro stats", e);
             }
@@ -117,7 +128,11 @@ export default function SubscriptionPage() {
         fetchMyTransactions();
 
         // Small delay to let user state settle and prevent flashes
-        const timer = setTimeout(() => setIsReady(true), 150);
+        const timer = setTimeout(() => {
+            if (isMounted.current) {
+                setIsReady(true);
+            }
+        }, 150);
         return () => clearTimeout(timer);
     }, []);
 
@@ -130,14 +145,15 @@ export default function SubscriptionPage() {
                 await refreshUser();
 
                 // Secondary check in case the webhook was delayed
-                // Secondary check in case the webhook was delayed
                 const checkStatus = async () => {
                     try {
                         const res = await apiClient.get('/api/payment/my-transactions');
                         const hasSuccess = res.data.some((t: any) => t.status === 'success' && t.network === 'STRIPE');
 
                         if (hasSuccess) {
-                            setStatus('success');
+                            if (isMounted.current) {
+                                setStatus('success');
+                            }
                             notification('success');
                             return true;
                         }
@@ -155,16 +171,25 @@ export default function SubscriptionPage() {
                     let attempts = 0;
                     const maxAttempts = 5; // 5 * 3s = 15s max polling
 
-                    const pollInterval = setInterval(async () => {
+                    if (pollIntervalRef.current) {
+                        clearInterval(pollIntervalRef.current);
+                    }
+
+                    pollIntervalRef.current = setInterval(async () => {
                         attempts++;
                         console.log(`[STRIPE] Polling webhook status... Attempt ${attempts}/${maxAttempts}`);
 
                         const success = await checkStatus();
                         if (success || attempts >= maxAttempts) {
-                            clearInterval(pollInterval);
+                            if (pollIntervalRef.current) {
+                                clearInterval(pollIntervalRef.current);
+                                pollIntervalRef.current = null;
+                            }
                             if (!success && attempts >= maxAttempts) {
                                 console.log('[STRIPE] Polling timed out. Returning to idle state.');
-                                setStatus('idle'); // Give up and let the user try again or assume it failed
+                                if (isMounted.current) {
+                                    setStatus('idle'); // Give up and let the user try again or assume it failed
+                                }
                             } else if (success) {
                                 await refreshUser(); // Final refresh when succeed
                             }
@@ -180,6 +205,10 @@ export default function SubscriptionPage() {
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('focus', handleVisibilityChange);
+            if (pollIntervalRef.current) {
+                clearInterval(pollIntervalRef.current);
+                pollIntervalRef.current = null;
+            }
         };
     }, [paymentMethod, status, refreshUser, notification]);
 

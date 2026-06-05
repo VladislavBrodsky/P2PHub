@@ -362,6 +362,7 @@ async def search_partners(
     limit: int = 20,
     admin: dict = Depends(get_current_admin)
 ):
+    limit = min(max(limit, 1), 100)  # Clamp limit to [1, 100]
     """
     Search for partners by username or Telegram ID.
     Only accessible by admins.
@@ -392,6 +393,7 @@ async def get_palantir_feed(
     limit: int = 100,
     admin: dict = Depends(get_current_admin)
 ):
+    limit = min(max(limit, 1), 200)  # Clamp limit to [1, 200]
     """
     Returns the real-time system event feed.
     """
@@ -427,6 +429,7 @@ async def get_broadcast_history(
     limit: int = 20,
     admin: dict = Depends(get_current_admin)
 ):
+    limit = min(max(limit, 1), 100)  # Clamp limit to [1, 100]
     """
     Returns past mass message campaigns.
     """
