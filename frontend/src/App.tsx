@@ -29,7 +29,7 @@ import { parseDeepLink, getStartParam } from './utils/deepLink';
 import { backButton } from '@telegram-apps/sdk-react';
 import { useUser } from './context/UserContext';
 import { useTranslation } from 'react-i18next';
-import i18n from './i18n';
+import i18n, { loadResources } from './i18n';
 import { PerformanceProvider } from './hooks/usePerformance';
 // #comment: Removed unused apiClient, Skeleton and PageSkeleton imports to clean up the dependency list
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
@@ -273,10 +273,8 @@ function App() {
                             prefetchPages.partner(),
                             prefetchPages.league(),
                             prefetchPages.subscription(),
-                            // Also prefetch the i18n namespaces for common tabs
                             import('./utils/i18n-maps').then(async ({ featureToNamespace }) => {
                                 const namespaces = ['cards', 'marketing', 'academy'];
-                                const { loadResources } = await import('./i18n');
                                 namespaces.forEach(async (ns) => {
                                     if (!i18n.hasResourceBundle(i18n.language, ns)) {
                                         const res = await loadResources(i18n.language, ns);

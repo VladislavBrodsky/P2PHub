@@ -1,7 +1,7 @@
 import { apiClient } from '../api/client';
 import { BlogPost } from '../data/blogPosts';
 import { authorAvatars } from '../data/authorAvatars';
-import i18n from '../i18n';
+import i18next from 'i18next';
 
 const AUTHOR_MAP: Record<string, string> = {
     'Marcus Vance': 'marcus_vance',
@@ -70,7 +70,7 @@ const persistCache = () => {
 
 export const blogService = {
     getPosts: async (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): Promise<BlogListResponse> => {
-        const lang = i18n.language?.split('-')[0] || 'en';
+        const lang = i18next.language?.split('-')[0] || 'en';
         const cacheKey = `${lang}:${JSON.stringify(options)}`;
         const cached = cache.posts[cacheKey];
 
@@ -96,7 +96,7 @@ export const blogService = {
 
     // Synchronous check for UI to avoid flickers
     getPostsSync: (options: { offset?: number; limit?: number; category?: string; q?: string } = {}): BlogListResponse | null => {
-        const lang = i18n.language?.split('-')[0] || 'en';
+        const lang = i18next.language?.split('-')[0] || 'en';
         const cacheKey = `${lang}:${JSON.stringify(options)}`;
         const cached = cache.posts[cacheKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
@@ -106,7 +106,7 @@ export const blogService = {
     },
 
     getPostDetail: async (slug: string): Promise<BlogPost & BlogEngagement & { content: string }> => {
-        const lang = i18n.language?.split('-')[0] || 'en';
+        const lang = i18next.language?.split('-')[0] || 'en';
         const detailKey = `${lang}:${slug}`;
         const cached = cache.details[detailKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
@@ -127,7 +127,7 @@ export const blogService = {
     },
 
     getDetailSync: (slug: string): (BlogPost & BlogEngagement & { content: string }) | null => {
-        const lang = i18n.language?.split('-')[0] || 'en';
+        const lang = i18next.language?.split('-')[0] || 'en';
         const detailKey = `${lang}:${slug}`;
         const cached = cache.details[detailKey];
         if (cached && (Date.now() - cached.timestamp < CACHE_TTL)) {
@@ -139,7 +139,7 @@ export const blogService = {
     // Background prefetcher to make transitions feel instant
     prefetchNext: (posts: BlogPost[]) => {
         // Prefetch first 3 posts content in background
-        const lang = i18n.language?.split('-')[0] || 'en';
+        const lang = i18next.language?.split('-')[0] || 'en';
         posts.slice(0, 3).forEach(post => {
             const detailKey = `${lang}:${post.slug}`;
             if (!cache.details[detailKey]) {

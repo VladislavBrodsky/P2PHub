@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getSafeLaunchParams } from '../utils/tma';
-import i18n from '../i18n';
+import i18next from 'i18next';
 import { getApiUrl } from '../utils/api';
 
 const getBaseUrl = () => {
@@ -79,8 +79,8 @@ apiClient.interceptors.request.use(
             }
 
             // Inject Content-Language based on current app setting
-            if (i18n.language) {
-                config.headers['Accept-Language'] = i18n.language;
+            if (i18next.language) {
+                config.headers['Accept-Language'] = i18next.language;
             }
         } catch (error) {
             console.warn('[API] Failed to inject Telegram params', error);

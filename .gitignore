@@ -89,3 +89,6 @@ node_modules/
 quarantine/
 security_summary.md
 venv/
+
+# Whitelist public PNG images
+!frontend/public/**/*.png

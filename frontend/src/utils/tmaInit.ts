@@ -23,35 +23,49 @@ export async function initTMA(onComplete: (progress: number, message: string) =>
         if (miniApp.ready.isAvailable()) miniApp.ready();
         if (backButton.mount.isAvailable() && !backButton.isMounted()) backButton.mount();
 
-        // 2. Expansion & Fullscreen (Immersive Mode)
+        // 2. Expansion & Fullscreen (Immersive Mode) - Non-blocking mount to prevent slow iframe loads from hanging startup
         if (viewport.mount.isAvailable()) {
-            try {
-                if (!viewport.isMounted()) await viewport.mount();
+            (async () => {
+                try {
+                    if (!viewport.isMounted()) {
+                        await Promise.race([
+                            viewport.mount(),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('Viewport mount timeout')), 1500))
+                        ]);
+                    }
 
-                if (viewport.expand.isAvailable()) {
-                    viewport.expand();
-                    if (import.meta.env.DEV) console.log('[DEBUG] initTMA: viewport expanded');
-                }
+                    if (viewport.expand.isAvailable()) {
+                        viewport.expand();
+                        if (import.meta.env.DEV) console.log('[DEBUG] initTMA: viewport expanded');
+                    }
 
-                if ((viewport as any).requestFullscreen && (viewport as any).requestFullscreen.isAvailable?.()) {
-                    (viewport as any).requestFullscreen();
-                    if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
+                    if ((viewport as any).requestFullscreen && (viewport as any).requestFullscreen.isAvailable?.()) {
+                        (viewport as any).requestFullscreen();
+                        if (import.meta.env.DEV) console.log('[DEBUG] initTMA: Fullscreen requested via SDK');
+                    }
+                } catch (e) {
+                    console.warn('[TMA] Viewport initialization failed or timed out:', e);
                 }
-            } catch (e) {
-                console.warn('Viewport error:', e);
-            }
+            })();
         }
 
-        // 3. Swipe Locking (Single pass)
+        // 3. Swipe Locking (Single pass) - Non-blocking mount
         if (swipeBehavior.mount.isAvailable()) {
-            try {
-                if (!swipeBehavior.isMounted()) await swipeBehavior.mount();
-                if (swipeBehavior.disableVertical.isAvailable()) {
-                    swipeBehavior.disableVertical();
+            (async () => {
+                try {
+                    if (!swipeBehavior.isMounted()) {
+                        await Promise.race([
+                            swipeBehavior.mount(),
+                            new Promise((_, reject) => setTimeout(() => reject(new Error('Swipe behavior mount timeout')), 1500))
+                        ]);
+                    }
+                    if (swipeBehavior.disableVertical.isAvailable()) {
+                        swipeBehavior.disableVertical();
+                    }
+                } catch (e) {
+                    console.warn('[TMA] Swipe locking initialization failed or timed out:', e);
                 }
-            } catch (e) {
-                console.warn('Swipe error:', e);
-            }
+            })();
         }
 
         // 4. Fallback for older environments / direct JS
