@@ -43,6 +43,7 @@ export const ProDashboard = () => {
 
     // Shared State
     const [isLoading, setIsLoading] = useState(true);
+    const [statusError, setStatusError] = useState(false); // True when status fetch fails (show retry, not lock screen)
     const [showSetup, setShowSetup] = useState(false);
     const [showManual, setShowManual] = useState<string | null>(null);
 
@@ -73,7 +74,11 @@ export const ProDashboard = () => {
 
     // --- Action Handlers (Stable) ---
 
-    const loadStatus = async () => {
+    const loadStatus = async (retryCount = 0) => {
+        if (retryCount === 0) {
+            setIsLoading(true);
+            setStatusError(false);
+        }
         try {
             const data = await proService.getStatus();
             setStatus(data);
@@ -97,12 +102,24 @@ export const ProDashboard = () => {
                     setUnlockedStages([]);
                 }
             }
-        } catch (error) {
-            console.error('Failed to load PRO status', error);
-        } finally {
             setIsLoading(false);
+        } catch (error: any) {
+            console.error('Failed to load PRO status', error);
+            // Auto-retry up to 3 times with exponential backoff
+            // This handles the startup race condition where initData isn't ready yet on mobile
+            if (retryCount < 3) {
+                const delay = Math.pow(2, retryCount) * 1500; // 1.5s, 3s, 6s
+                console.warn(`[ProDashboard] Retrying loadStatus in ${delay}ms (attempt ${retryCount + 1}/3)`);
+                setTimeout(() => loadStatus(retryCount + 1), delay);
+                // Keep spinner showing during retries
+            } else {
+                // All retries exhausted - show retry button instead of lock screen
+                setStatusError(true);
+                setIsLoading(false);
+            }
         }
     };
+
 
     useEffect(() => {
         loadStatus();
@@ -567,10 +584,37 @@ export const ProDashboard = () => {
                 </div>
 
                 <div className="relative min-h-[40vh] mt-3">
+                    {/* Status Loading / Error / Lock / Content */}
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
                             <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
                             <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">{t('syncing_nodes')}</p>
+                        </div>
+                    ) : statusError ? (
+                        // Connection error — show retry, NOT a lock screen
+                        <div className="flex flex-col items-center justify-center py-10 px-6 text-center">
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl max-w-xs w-full relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-amber-500 via-orange-500 to-red-500" />
+                                <div className="w-14 h-14 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-500 mx-auto mb-5 shadow-xl shadow-amber-500/20">
+                                    <Shield size={28} className="animate-pulse" />
+                                </div>
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
+                                    {t('common:error', 'CONNECTION ERROR')}
+                                </h2>
+                                <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
+                                    {t('common:retry_desc', 'Failed to connect to the server. Please check your connection and try again.')}
+                                </p>
+                                <button
+                                    onClick={() => { setIsLoading(true); setStatusError(false); loadStatus(); }}
+                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                >
+                                    {t('common:retry', 'RETRY CONNECTION')}
+                                </button>
+                            </motion.div>
                         </div>
                     ) : (!status || !status.is_pro) ? (
                         <div className="flex flex-col items-center justify-center py-10 px-6 text-center">

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { apiClient } from '../api/client';
+import { apiClient, refreshInitData } from '../api/client';
 import * as Sentry from "@sentry/react";
 import { getSafeLaunchParams, isTMA } from '../utils/tma';
 import { useStartupProgress } from './StartupProgressContext';
@@ -51,6 +51,7 @@ interface UserContextType {
     updateUser: (updates: Partial<User>) => void;
     completeStage: (id: number | string) => Promise<void>;
     unlockStage: (id: number | string) => Promise<void>;
+    isSessionExpired: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -88,7 +89,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     });
     const [isLoading, setIsLoading] = useState(!user);
+    const [isSessionExpired, setIsSessionExpired] = useState(false);
     const lastRefresh = React.useRef(0);
+
+    useEffect(() => {
+        const handleSessionExpired = () => {
+            console.warn('⚠️ [UserContext] Session expired event received. Clearing cache...');
+            setIsSessionExpired(true);
+            localStorage.removeItem(CACHE_KEY);
+            setUser(null);
+        };
+        window.addEventListener('tma-session-expired', handleSessionExpired);
+        return () => window.removeEventListener('tma-session-expired', handleSessionExpired);
+    }, []);
 
     const updateUser = useCallback((updates: Partial<User>) => {
         setUser(prev => {
@@ -218,8 +231,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
         } catch (error: any) {
             console.error('[API] refreshUser: Failed:', error.response?.status, error.response?.data || error.message);
-            // Fallback: If backend fails, use Telegram SDK data for UI personalization
-            if (tgUser) {
+            if (error.response?.status === 401) {
+                // #comment: FIX — Do NOT immediately trigger SessionExpired on a 401.
+                // On slow mobile devices Telegram injects initData late, causing a startup
+                // race where the first /api/partner/me call fires before initData is ready.
+                // The API client already retries with fresh initData once.
+                // Only mark as expired if we truly have no initData source at all.
+                const hasInitData = !!(getSafeLaunchParams()?.initDataRaw || (window as any).Telegram?.WebApp?.initData);
+                if (!hasInitData) {
+                    console.error('[UserContext] No initData available — genuine session expiry.');
+                    setIsSessionExpired(true);
+                    localStorage.removeItem(CACHE_KEY);
+                    setUser(null);
+                } else {
+                    console.warn('[UserContext] 401 but initData present — keeping existing user, will retry on next focus.');
+                    // Keep existing user from cache so the UI doesn’t go blank
+                }
+            } else if (tgUser) {
                 console.warn('[API] Using Guest/Fallback profile due to backend error.');
                 setUser(prev => {
                     if (prev) return prev;
@@ -327,6 +355,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         init();
 
         const handleFocus = () => {
+            // Refresh the initData cache on app focus (user switches back to Telegram)
+            refreshInitData();
             refreshUser();
         };
 
@@ -353,8 +383,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         refreshUser,
         updateUser,
         completeStage,
-        unlockStage
-    }), [user, isLoading, refreshUser, updateUser, completeStage, unlockStage]);
+        unlockStage,
+        isSessionExpired
+    }), [user, isLoading, refreshUser, updateUser, completeStage, unlockStage, isSessionExpired]);
 
     return (
         <UserContext.Provider value={contextValue}>

@@ -18,25 +18,51 @@ export const apiClient = axios.create({
 });
 
 // Global promise to track initialization (Singleton pattern)
+// NOTE: We intentionally do NOT cache empty-string resolutions.
+// If Telegram is slow to inject initData on mobile, we must retry on next request.
 let initPromise: Promise<string> | null = null;
+let cachedInitData: string = '';
 
-const waitForInitData = async (timeoutMs = 5000): Promise<string> => {
+// Direct fast path: always try to read synchronously first
+const getInitDataSync = (): string => {
+    if (cachedInitData) return cachedInitData;
+    try {
+        const params = getSafeLaunchParams();
+        const data = params.initDataRaw || (window as any).Telegram?.WebApp?.initData || '';
+        if (data) {
+            cachedInitData = data;
+        }
+        return data;
+    } catch {
+        return (window as any).Telegram?.WebApp?.initData || '';
+    }
+};
+
+const waitForInitData = async (timeoutMs = 8000): Promise<string> => {
+    // Fast synchronous path — avoids creating a Promise if data is already available
+    const syncData = getInitDataSync();
+    if (syncData) return syncData;
+
+    // If a pending promise exists, return it (don't create duplicates)
     if (initPromise) return initPromise;
 
     initPromise = new Promise((resolve) => {
         const start = Date.now();
         const check = () => {
-            const params = getSafeLaunchParams();
-            const data = params.initDataRaw || (window as any).Telegram?.WebApp?.initData || '';
+            const data = getInitDataSync();
             
             if (data) {
                 resolve(data);
+                initPromise = null; // Reset so future calls can retry if needed
                 return true;
             }
             
             if (Date.now() - start > timeoutMs) {
-                console.warn(`⏳ [API] Initialization timeout after ${timeoutMs}ms`);
+                console.warn(`⏳ [API] Initialization timeout after ${timeoutMs}ms. Will retry on next request.`);
                 resolve('');
+                // CRITICAL: Reset singleton so the NEXT request tries again
+                // instead of permanently serving '' to all subsequent calls.
+                initPromise = null;
                 return true;
             }
             return false;
@@ -50,6 +76,12 @@ const waitForInitData = async (timeoutMs = 5000): Promise<string> => {
     });
 
     return initPromise;
+};
+
+// Allow external code to refresh the cached initData (e.g. on app focus)
+export const refreshInitData = () => {
+    cachedInitData = '';
+    initPromise = null;
 };
 
 // Request Interceptor: Automatically inject Telegram Init Data
@@ -101,24 +133,36 @@ apiClient.interceptors.response.use(
         const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
 
         // #comment: Smart Retry Logic for 401 "Race Condition"
+        // On mobile Telegram can be slow to inject initData; always retry once with fresh data.
         if (status === 401 && !config._retry && isAuthRoute) {
             config._retry = true;
             console.warn(`🔄 [API] 401 Unauthorized for ${config.url}. Clearing cache and re-syncing...`);
             
-            // Invalidate current promise and try fresh
+            // Force-invalidate cache so waitForInitData re-reads from Telegram
+            cachedInitData = '';
             initPromise = null;
-            const freshData = await waitForInitData(2000);
+            const freshData = await waitForInitData(4000);
             
             if (freshData) {
                 config.headers['X-Telegram-Init-Data'] = freshData;
                 config.headers['Authorization'] = `Bearer ${freshData}`;
-                return apiClient(config); // Recursive retry
+                return apiClient(config); // Recursive retry with fresh auth
             }
         }
 
         const url = config?.url;
         if (status === 401) {
-            console.error(`[API] Permanent 401 at ${url}. Possible session expiry.`);
+            // Only fire session-expired if we genuinely have no initData at all
+            // (prevents false lock-outs when Telegram is just slow on mobile)
+            const currentData = getInitDataSync();
+            if (!currentData) {
+                console.error(`[API] Permanent 401 at ${url}. No initData available — genuine session expiry.`);
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('tma-session-expired', { detail: { url } }));
+                }
+            } else {
+                console.warn(`[API] 401 at ${url} but initData IS present — likely a backend issue, not session expiry.`);
+            }
         } else if (status >= 500) {
             console.error(`[API] Server Error (${status}) at ${url}:`, error.response?.data || error.message);
         }
