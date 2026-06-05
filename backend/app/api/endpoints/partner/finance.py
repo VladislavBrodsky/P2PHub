@@ -85,7 +85,13 @@ async def get_finance_stats(
     # INCOME (Include XP for rewards visibility)
     stmt_income = (
         select(Earning)
-        .where(Earning.partner_id == partner.id, Earning.currency.in_(["USDT", "TON", "XP"]), Earning.created_at >= threshold_72h)
+        .where(
+            Earning.partner_id == partner.id,
+            Earning.currency.in_(["USDT", "TON", "XP"]),
+            Earning.type != "PAYMENT",
+            Earning.amount > 0,
+            Earning.created_at >= threshold_72h
+        )
         .order_by(Earning.created_at.desc())
         .limit(50)
     )
@@ -139,7 +145,13 @@ async def get_finance_stats(
 
     stmt_income_stats = (
         select(bucket_expr, Earning.currency, func.sum(Earning.amount))
-        .where(Earning.partner_id == partner.id, Earning.currency.in_(["USDT", "TON"]), Earning.created_at >= start_of_6m)
+        .where(
+            Earning.partner_id == partner.id,
+            Earning.currency.in_(["USDT", "TON"]),
+            Earning.type != "PAYMENT",
+            Earning.amount > 0,
+            Earning.created_at >= start_of_6m
+        )
         .group_by(bucket_expr, Earning.currency)
     )
     

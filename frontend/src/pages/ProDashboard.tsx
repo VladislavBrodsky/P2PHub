@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Zap, Settings, Cpu, Users, Shield, BarChart3
@@ -41,6 +41,12 @@ export const ProDashboard = () => {
     const [status, setStatus] = useState<PROStatus | null>(null);
     const [activeTab, setActiveTab] = useState<Tab>('studio');
 
+    const isMounted = useRef(true);
+    useEffect(() => {
+        isMounted.current = true;
+        return () => { isMounted.current = false; };
+    }, []);
+
     // Shared State
     const [isLoading, setIsLoading] = useState(true);
     const [statusError, setStatusError] = useState(false); // True when status fetch fails (show retry, not lock screen)
@@ -81,6 +87,7 @@ export const ProDashboard = () => {
         }
         try {
             const data = await proService.getStatus();
+            if (!isMounted.current) return;
             setStatus(data);
             if (data?.setup) {
                 // apiData removed
@@ -105,12 +112,15 @@ export const ProDashboard = () => {
             setIsLoading(false);
         } catch (error: any) {
             console.error('Failed to load PRO status', error);
+            if (!isMounted.current) return;
             // Auto-retry up to 3 times with exponential backoff
             // This handles the startup race condition where initData isn't ready yet on mobile
             if (retryCount < 3) {
                 const delay = Math.pow(2, retryCount) * 1500; // 1.5s, 3s, 6s
                 console.warn(`[ProDashboard] Retrying loadStatus in ${delay}ms (attempt ${retryCount + 1}/3)`);
-                setTimeout(() => loadStatus(retryCount + 1), delay);
+                setTimeout(() => {
+                    if (isMounted.current) loadStatus(retryCount + 1);
+                }, delay);
                 // Keep spinner showing during retries
             } else {
                 // All retries exhausted - show retry button instead of lock screen

@@ -201,7 +201,6 @@ class NotificationService:
             # or delay the task processing.
             if await rate_limit_service.is_circuit_breaker_tripped():
                 logger.warning(f"🔌 Circuit Breaker Active. Delaying enqueue for {chat_id}")
-                await asyncio.sleep(5) # Add backpressure
                 
             # 0. Check if user blocked the bot (Redis-cached check)
             if priority != "high" and await rate_limit_service.is_blocked(str(chat_id)):

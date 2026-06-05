@@ -43,6 +43,17 @@ async def get_current_partner(
     
     if not partner:
         raise HTTPException(status_code=404, detail="Partner not found")
+
+    # Check for monthly subscription expiration dynamically
+    if partner.is_pro and partner.pro_expires_at and partner.subscription_plan != "PRO_LIFETIME":
+        from datetime import datetime, UTC
+        if partner.pro_expires_at < datetime.now(UTC).replace(tzinfo=None):
+            partner.is_pro = False
+            partner.subscription_plan = None
+            session.add(partner)
+            await session.commit()
+            await session.refresh(partner)
+            
     return partner
 
 @router.get("/status")
@@ -113,6 +124,7 @@ async def get_pro_status(
 
 @router.get("/stats")
 async def get_pro_stats(
+    user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
     stmt_sold = select(SystemSetting).where(SystemSetting.key == "pro_slots_sold")
@@ -131,8 +143,10 @@ async def get_pro_stats(
 @router.get("/members/avatars")
 async def get_pro_member_avatars(
     limit: int = 10,
+    user_data: dict = Depends(get_current_user),
     session: AsyncSession = Depends(get_session)
 ):
+    limit = min(limit, 50)
     """
     Returns a small list of recent PRO / PRO+ member avatars for social proof UI.
     Cached naturally on frontend, fast query on backend.

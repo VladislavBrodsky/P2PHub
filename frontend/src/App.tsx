@@ -35,6 +35,7 @@ import { PerformanceProvider } from './hooks/usePerformance';
 import { NotificationOverlay } from './components/ui/NotificationOverlay';
 import { PulseBanner } from './components/ui/PulseBanner';
 import { DebugOverlay } from './components/ui/DebugOverlay';
+import { SessionExpiredOverlay } from './components/ui/SessionExpiredOverlay';
 
 const OnboardingStory = lazy(() => import('./components/Onboarding/OnboardingStory').then(m => ({ default: m.OnboardingStory })));
 import { useConfig } from './context/ConfigContext';
@@ -242,6 +243,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
 function App() {
     const { isLoading: isConfigLoading } = useConfig();
     const { progress, status, isComplete, complete, updateProgress } = useStartupProgress();
+    const { isSessionExpired } = useUser();
 
     // Initialize from localStorage to avoid effect flash
     const [showOnboarding, setShowOnboarding] = useState(() => {
@@ -322,6 +324,7 @@ function App() {
 
                 <div className={!isComplete ? 'hidden' : 'block h-full relative'}>
                     <NotificationOverlay />
+                    <SessionExpiredOverlay isOpen={isSessionExpired} />
 
                     <LazyMotion features={domMax}>
                         <m.div className="h-full">

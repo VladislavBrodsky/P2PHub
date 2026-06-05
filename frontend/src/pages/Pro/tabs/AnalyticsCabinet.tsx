@@ -1,4 +1,4 @@
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3, TrendingUp, Eye, ThumbsUp, Share2, BrainCircuit, Target, Sparkles, Zap, Send, X, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -157,6 +157,12 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
     const [isLoading, setIsLoading] = useState(true);
     const [refreshingPost, setRefreshingPost] = useState<number | null>(null);
 
+    const isMounted = useRef(true);
+    useEffect(() => {
+        isMounted.current = true;
+        return () => { isMounted.current = false; };
+    }, []);
+
     const isProPlus = (user?.subscription_plan || "").includes('PLUS');
 
     const loadData = async (quiet = false) => {
@@ -166,12 +172,13 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                 proService.getAnalyticsCabinet(),
                 proService.getPredictiveResonance()
             ]);
+            if (!isMounted.current) return;
             setStats(statsData);
             setResonance(resonanceData);
         } catch (error) {
             console.error('Failed to load analytics', error);
         } finally {
-            if (!quiet) setIsLoading(false);
+            if (isMounted.current && !quiet) setIsLoading(false);
         }
     };
 
@@ -185,12 +192,15 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
         impact('medium');
         try {
             const updatedStats = await proService.refreshPostMetrics(postId);
+            if (!isMounted.current) return;
             setStats(updatedStats);
         } catch (error) {
             console.error('Refresh failed', error);
         } finally {
-            setRefreshingPost(null);
-            impact('light');
+            if (isMounted.current) {
+                setRefreshingPost(null);
+                impact('light');
+            }
         }
     };
 

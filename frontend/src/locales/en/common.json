@@ -377,6 +377,12 @@
       "results": "Search Results ({{count}})",
       "balance": "Balance",
       "no_partners": "No partners found matching \"{{query}}\""
+    },
+    "session_expired": {
+      "title": "PROTOCOL EXPIRED",
+      "desc": "Your secure Telegram session has expired (sessions are valid for 30 days). Please reload or close and reopen the app from chat to refresh your credentials.",
+      "reload_btn": "RELOAD SESSION",
+      "close_btn": "CLOSE APP"
     }
   }
 }

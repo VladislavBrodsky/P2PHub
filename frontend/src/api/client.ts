@@ -151,17 +151,10 @@ apiClient.interceptors.response.use(
         }
 
         const url = config?.url;
-        if (status === 401) {
-            // Only fire session-expired if we genuinely have no initData at all
-            // (prevents false lock-outs when Telegram is just slow on mobile)
-            const currentData = getInitDataSync();
-            if (!currentData) {
-                console.error(`[API] Permanent 401 at ${url}. No initData available — genuine session expiry.`);
-                if (typeof window !== 'undefined') {
-                    window.dispatchEvent(new CustomEvent('tma-session-expired', { detail: { url } }));
-                }
-            } else {
-                console.warn(`[API] 401 at ${url} but initData IS present — likely a backend issue, not session expiry.`);
+        if (status === 401 && isAuthRoute) {
+            console.error(`[API] Permanent 401 at ${url}. Dispatching session expiry.`);
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('tma-session-expired', { detail: { url } }));
             }
         } else if (status >= 500) {
             console.error(`[API] Server Error (${status}) at ${url}:`, error.response?.data || error.message);

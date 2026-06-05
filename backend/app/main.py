@@ -430,9 +430,10 @@ async def add_request_id_middleware(request: Request, call_next):
     
     protected_prefixes = ["/api/partner/", "/api/pro/", "/api/payment/", "/api/admin/", "/api/tools/", "/api/earnings/", "/api/leaderboard/me"]
     public_endpoints = ["/api/partner/orbit-members", "/api/partner/recent", "/api/partner/top", "/api/partner/stats/public"]
+    public_prefixes = ["/api/partner/photo/"]
     
     is_protected = any(request.url.path.startswith(p) for p in protected_prefixes)
-    is_public = any(request.url.path == p for p in public_endpoints)
+    is_public = any(request.url.path == p for p in public_endpoints) or any(request.url.path.startswith(p) for p in public_prefixes)
 
     if is_protected and not is_public:
         init_header = request.headers.get("X-Telegram-Init-Data")
