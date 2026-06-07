@@ -94,7 +94,7 @@ class Settings(BaseSettings):
     DEBUG: bool = Field(default=False, validation_alias="DEBUG")
     REDIS_URL: str = Field(default="redis://localhost:6379/0", validation_alias="REDIS_URL")
     PORT: int = Field(default=8000, validation_alias="PORT")
-    FRONTEND_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app", validation_alias="FRONTEND_URL")
+    FRONTEND_URL: str = Field(default="https://pintopay.life", validation_alias="FRONTEND_URL")
     RUN_TASKIQ_IN_BACK: bool = Field(default=False, validation_alias="RUN_TASKIQ_IN_BACK")
     
     # --- WEBHOOKS ---
@@ -140,7 +140,7 @@ class Settings(BaseSettings):
     ADMIN_USDT_ADDRESS: str = "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM"
     TON_API_KEY: str | None = Field(default=None, validation_alias="TON_API_KEY")
     TON_WEBHOOK_SECRET: str | None = Field(default=None, validation_alias="TON_WEBHOOK_SECRET")
-    TON_MANIFEST_URL: str = Field(default="https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
+    TON_MANIFEST_URL: str = Field(default="https://pintopay.life/tonconnect-manifest.json", validation_alias="TON_MANIFEST_URL")
 
     # --- STRIPE PAYMENTS ---
     STRIPE_API_KEY: str | None = Field(default=None, validation_alias="STRIPE_API_KEY")
