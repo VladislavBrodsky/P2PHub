@@ -166,7 +166,9 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     }, [activeTab, navigateTo]);
 
     const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isDesktopGuest = !isTMA() && !user && !isMobileDevice;
+    // #comment: Guard behind isUserLoading — if the user is already stored in localStorage cache
+    // and the context is still hydrating, we must NOT redirect to Login prematurely.
+    const isDesktopGuest = !isUserLoading && !isTMA() && !user && !isMobileDevice;
 
     if (isDesktopGuest) {
         return (
@@ -175,6 +177,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
             </Suspense>
         );
     }
+
 
     return (
         <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>
@@ -254,13 +257,17 @@ function App() {
     const { isSessionExpired } = useUser();
 
     // Initialize from localStorage to avoid effect flash
+    // #comment: Desktop (non-TMA) users bypass onboarding entirely — Login is their entry point.
+    // Only mobile TMA users need the onboarding story flow.
     const [showOnboarding, setShowOnboarding] = useState(() => {
         try {
+            if (!isTMA()) return false; // Desktop users → skip onboarding, go to Login
             return !localStorage.getItem('p2p_onboarded');
         } catch {
             return false;
         }
     });
+
 
     // #comment: Parallel Initialization Strategy
     // Trigger prefetching immediately to load JS chunks while config/user APIs are pending.

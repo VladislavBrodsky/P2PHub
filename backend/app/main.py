@@ -426,7 +426,9 @@ async def add_request_id_middleware(request: Request, call_next):
         "/api/pro/stats",
         "/api/pro/members/avatars"
     ]
-    public_prefixes = ["/api/partner/photo/"]
+    # /api/auth/ is intentionally public — it IS the authentication gateway
+    public_prefixes = ["/api/partner/photo/", "/api/auth/"]
+
     
     is_protected = any(request.url.path.startswith(p) for p in protected_prefixes)
     is_public = any(request.url.path == p for p in public_endpoints) or any(request.url.path.startswith(p) for p in public_prefixes)

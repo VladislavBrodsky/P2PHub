@@ -94,7 +94,8 @@ export const Login = () => {
         (window as any).onTelegramAuth = handleWidgetAuth;
 
         const container = widgetRef.current;
-        if (container && container.children.length === 0) {
+        if (container) {
+            container.innerHTML = ''; // Clear stale scripts/iframes
             const script = document.createElement('script');
             script.src = 'https://telegram.org/js/telegram-widget.js?22';
             script.async = true;
@@ -216,21 +217,21 @@ export const Login = () => {
                 animate="animate"
             >
                 <div className="rounded-[28px] border border-card-border bg-card-bg/70 backdrop-blur-2xl shadow-[0_40px_100px_rgba(0,0,0,0.22)] overflow-hidden">
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
 
                         {/* ═══════════════════════════════════════════════
-                            LEFT PANEL — Brand + Auth Method Selector
+                            LEFT PANEL — Brand + Features Showcase
                         ═══════════════════════════════════════════════ */}
-                        <div className="flex flex-col p-8 md:p-12 gap-8 border-b lg:border-b-0 lg:border-r border-card-border relative overflow-hidden">
+                        <div className="lg:col-span-7 flex flex-col p-8 md:p-12 justify-between gap-8 border-b lg:border-b-0 lg:border-r border-card-border relative overflow-hidden bg-slate-900/5 dark:bg-slate-950/20">
                             {/* Subtle inner glow in left panel */}
                             <div
-                                className="absolute top-0 left-0 w-64 h-64 pointer-events-none"
+                                className="absolute top-0 left-0 w-80 h-80 pointer-events-none"
                                 style={{ background: 'radial-gradient(circle at 0% 0%, rgba(37,99,235,0.08), transparent 70%)' }}
                             />
 
                             {/* Brand header */}
-                            <div className="space-y-5 relative z-10">
-                                <div className="flex items-center gap-3.5">
+                            <div className="space-y-6 relative z-10">
+                                <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 vibing-blue-animated shrink-0">
                                         <Logo />
                                     </div>
@@ -238,7 +239,7 @@ export const Login = () => {
                                         <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-text-secondary leading-none mb-0.5">
                                             Partner Center
                                         </p>
-                                        <h1 className="text-[22px] font-black tracking-tight text-text-primary leading-none">
+                                        <h1 className="text-2xl font-black tracking-tight text-text-primary leading-none">
                                             <span className="text-brand-blue">Pinto</span>pay
                                         </h1>
                                     </div>
@@ -247,287 +248,19 @@ export const Login = () => {
                                 {/* Live badge */}
                                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/6 backdrop-blur-sm">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34D399] animate-pulse" />
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-400 dark:text-blue-300">
+                                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-500 dark:text-blue-300">
                                         Secure Entry · Desktop
                                     </span>
                                 </div>
 
-                                <p className="text-sm text-text-secondary leading-relaxed max-w-xs">
+                                <p className="text-sm text-text-secondary leading-relaxed max-w-md">
                                     {t('login_description', 'Access your full Pintopay partner dashboard. Connect via Telegram to sync your stats, referrals, and earnings.')}
                                 </p>
                             </div>
 
-                            {/* Step pills */}
-                            <div className="flex gap-2 flex-wrap relative z-10">
-                                {STEPS.map((s) => (
-                                    <button
-                                        key={s.id}
-                                        onClick={() => { setStep(s.id); setError(null); }}
-                                        className={`flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${
-                                            step === s.id
-                                                ? 'vibing-blue-animated text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
-                                                : 'text-text-secondary border border-card-border bg-card-bg/60 hover:border-brand-blue/30 hover:text-brand-blue'
-                                        }`}
-                                    >
-                                        <span>{s.icon}</span>
-                                        {s.label}
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* ── Step content ── */}
-                            <div className="flex-1 relative z-10">
-                                <AnimatePresence mode="wait">
-
-                                    {/* WIDGET */}
-                                    {step === 'widget' && (
-                                        <m.div key="widget" {...fadeSlide} className="space-y-5">
-                                            {/* Widget container or error state */}
-                                            <div
-                                                ref={widgetRef}
-                                                id="telegram-widget-container"
-                                                className="min-h-[50px] flex items-center"
-                                            />
-
-                                            {widgetFailed && (
-                                                <m.div
-                                                    initial={{ opacity: 0, y: 6 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    className="rounded-2xl border border-amber-400/20 bg-amber-400/6 p-4 space-y-2"
-                                                >
-                                                    <div className="flex items-center gap-2 text-amber-500 dark:text-amber-400">
-                                                        <AlertCircle className="w-4 h-4 shrink-0" />
-                                                        <p className="text-xs font-bold">Widget unavailable on this domain</p>
-                                                    </div>
-                                                    <p className="text-[11px] text-text-secondary leading-relaxed pl-6">
-                                                        Telegram's Login Widget requires the serving domain to be whitelisted in BotFather via <code className="text-brand-blue font-mono">/setdomain</code>. This is expected on preview/Railway URLs.
-                                                    </p>
-                                                    <button
-                                                        onClick={() => setStep('qr')}
-                                                        className="ml-6 mt-1 flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline"
-                                                    >
-                                                        Use QR Code instead <ArrowRight className="w-3 h-3" />
-                                                    </button>
-                                                </m.div>
-                                            )}
-
-                                            {!widgetFailed && (
-                                                <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/50 p-3">
-                                                    💡 <em>If the widget shows "Bot domain invalid", switch to <strong>Scan QR Code</strong> above.</em>
-                                                </p>
-                                            )}
-
-                                            {error && (
-                                                <div className="flex items-center gap-2 rounded-2xl border border-error/20 bg-[var(--sys-error-bg)] px-3 py-2.5">
-                                                    <AlertCircle className="w-4 h-4 text-[var(--sys-error-text)] shrink-0" />
-                                                    <p className="text-[11px] font-bold text-[var(--sys-error-text)]">{error}</p>
-                                                </div>
-                                            )}
-
-                                            {success && (
-                                                <m.div
-                                                    initial={{ scale: 0.9, opacity: 0 }}
-                                                    animate={{ scale: 1, opacity: 1 }}
-                                                    className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5"
-                                                >
-                                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                                    <p className="text-[11px] font-bold text-emerald-400">Authenticated! Loading your dashboard…</p>
-                                                </m.div>
-                                            )}
-                                        </m.div>
-                                    )}
-
-                                    {/* QR */}
-                                    {step === 'qr' && (
-                                        <m.div key="qr" {...fadeSlide} className="space-y-5">
-                                            <div className="space-y-2">
-                                                <h2 className="text-base font-bold text-text-primary">Scan & Connect</h2>
-                                                <p className="text-xs text-text-secondary leading-relaxed">
-                                                    Scan the QR code to open the Pintopay bot on your phone. Then tap <strong className="text-text-primary">Profile → Connect Desktop</strong> to get your session link.
-                                                </p>
-                                            </div>
-
-                                            {/* Steps */}
-                                            <div className="space-y-2">
-                                                {[
-                                                    'Open your phone camera and scan',
-                                                    'Start the Pintopay bot in Telegram',
-                                                    'Go to Profile → Connect Desktop',
-                                                    'Paste the link in the "Access Link" tab',
-                                                ].map((text, i) => (
-                                                    <div key={i} className="flex items-center gap-3">
-                                                        <div className="w-5 h-5 rounded-full vibing-blue-animated flex items-center justify-center text-[10px] font-black text-white shrink-0">
-                                                            {i + 1}
-                                                        </div>
-                                                        <span className="text-[11px] text-text-secondary">{text}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            <button
-                                                onClick={() => setStep('token')}
-                                                className="flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline"
-                                            >
-                                                I have my link <ArrowRight className="w-3 h-3" />
-                                            </button>
-                                        </m.div>
-                                    )}
-
-                                    {/* TOKEN */}
-                                    {step === 'token' && (
-                                        <m.div key="token" {...fadeSlide} className="space-y-4">
-                                            <div className="space-y-1">
-                                                <h2 className="text-base font-bold text-text-primary">Paste Access Link</h2>
-                                                <p className="text-xs text-text-secondary leading-relaxed">
-                                                    Copy the <strong className="text-text-primary">Connect Desktop</strong> link from the Pintopay bot and paste it below.
-                                                </p>
-                                            </div>
-
-                                            <form onSubmit={handleTokenSubmit} className="space-y-3">
-                                                <div className="relative group">
-                                                    <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none group-focus-within:text-brand-blue transition-colors" />
-                                                    <input
-                                                        type="text"
-                                                        value={tokenInput}
-                                                        onChange={(e) => setTokenInput(e.target.value)}
-                                                        placeholder="Paste your access link here…"
-                                                        className="w-full pl-10 pr-4 py-3.5 rounded-2xl border border-input-border bg-input-bg text-text-primary placeholder:text-input-placeholder focus:border-brand-blue/60 focus:outline-none focus:ring-2 focus:ring-brand-blue/12 transition-all text-sm font-medium"
-                                                        style={{ fontSize: '1rem' }}
-                                                    />
-                                                </div>
-
-                                                {error && (
-                                                    <div className="flex items-center gap-2 rounded-2xl border border-error/20 bg-[var(--sys-error-bg)] px-3 py-2.5">
-                                                        <AlertCircle className="w-4 h-4 text-[var(--sys-error-text)] shrink-0" />
-                                                        <p className="text-[11px] font-bold text-[var(--sys-error-text)]">{error}</p>
-                                                    </div>
-                                                )}
-
-                                                {success && (
-                                                    <m.div
-                                                        initial={{ scale: 0.9, opacity: 0 }}
-                                                        animate={{ scale: 1, opacity: 1 }}
-                                                        className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5"
-                                                    >
-                                                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                                                        <p className="text-[11px] font-bold text-emerald-400">Synced! Loading dashboard…</p>
-                                                    </m.div>
-                                                )}
-
-                                                <button
-                                                    type="submit"
-                                                    disabled={isSubmitting || !tokenInput.trim()}
-                                                    id="login-sync-btn"
-                                                    className="w-full py-3.5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 vibing-blue-animated shadow-lg shadow-blue-500/25"
-                                                >
-                                                    {isSubmitting ? (
-                                                        <>
-                                                            <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                                                            Verifying…
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <Scan className="w-4 h-4" />
-                                                            Sync Desktop Session
-                                                        </>
-                                                    )}
-                                                </button>
-                                            </form>
-                                        </m.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-
-                            {/* Footer trust line */}
-                            <div className="flex items-center gap-2 pt-4 border-t border-card-border relative z-10">
-                                <Shield className="h-3.5 w-3.5 text-brand-blue shrink-0" />
-                                <span className="text-[10px] text-text-secondary font-medium">
-                                    End-to-end secured via Telegram cryptographic auth
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* ═══════════════════════════════════════════════
-                            RIGHT PANEL — QR Code + Feature Showcase
-                        ═══════════════════════════════════════════════ */}
-                        <div className="hidden lg:flex flex-col p-10 gap-8 relative overflow-hidden">
-                            {/* Panel inner glow */}
-                            <div
-                                className="absolute inset-0 pointer-events-none"
-                                style={{ background: 'radial-gradient(ellipse at 85% 15%, rgba(37,99,235,0.07) 0%, transparent 60%)' }}
-                            />
-
-                            {/* QR Section — premium framed */}
-                            <div className="relative z-10 flex flex-col items-center gap-6">
-                                <div className="space-y-1 text-center">
-                                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-brand-blue">
-                                        Instant Connect
-                                    </p>
-                                    <h2 className="text-xl font-black text-text-primary tracking-tight">
-                                        Scan to open on phone
-                                    </h2>
-                                </div>
-
-                                {/* QR frame */}
-                                <div className="relative">
-                                    {/* Outer glow ring */}
-                                    <div className="absolute -inset-3 rounded-[28px] bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-blue-600/20 blur-lg" />
-
-                                    {/* Glass frame */}
-                                    <div className="relative rounded-[22px] p-3.5 bg-white dark:bg-slate-950 border border-blue-200/30 dark:border-white/10 shadow-[0_20px_60px_rgba(37,99,235,0.2)]">
-                                        {/* Corner brackets */}
-                                        {[
-                                            'top-2 left-2 border-t-2 border-l-2 rounded-tl-lg',
-                                            'top-2 right-2 border-t-2 border-r-2 rounded-tr-lg',
-                                            'bottom-2 left-2 border-b-2 border-l-2 rounded-bl-lg',
-                                            'bottom-2 right-2 border-b-2 border-r-2 rounded-br-lg',
-                                        ].map((cls, i) => (
-                                            <div
-                                                key={i}
-                                                className={`absolute w-5 h-5 border-brand-blue/70 ${cls}`}
-                                            />
-                                        ))}
-
-                                        <img
-                                            src={qrCodeUrl}
-                                            alt="Scan to open Pintopay bot"
-                                            className="w-48 h-48 object-contain rounded-xl"
-                                            loading="lazy"
-                                        />
-
-                                        {/* Scan line animation */}
-                                        <div
-                                            className="absolute left-3.5 right-3.5 h-0.5 rounded-full"
-                                            style={{
-                                                background: 'linear-gradient(90deg, transparent, #3B82F6, transparent)',
-                                                animation: 'scan 2.5s ease-in-out infinite',
-                                                top: '14px',
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Open in Telegram CTA — prominent */}
-                                <a
-                                    href={BOT_DEEP_LINK}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    id="open-telegram-btn"
-                                    className="group flex items-center gap-2.5 px-6 py-3 rounded-2xl vibing-blue-animated text-white text-sm font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-95 transition-all"
-                                >
-                                    <TelegramIcon size={18} />
-                                    Open in Telegram
-                                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                                </a>
-
-                                <p className="text-[10px] text-text-secondary text-center opacity-60 max-w-[200px] leading-relaxed">
-                                    Opens Pintopay bot directly with your partner referral code
-                                </p>
-                            </div>
-
-                            {/* Feature list */}
-                            <div className="relative z-10 space-y-2.5 flex-1">
-                                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-text-secondary mb-3">
+                            {/* Feature list - clean glassmorphic cards */}
+                            <div className="relative z-10 space-y-3 flex-1 flex flex-col justify-center my-6">
+                                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-text-secondary mb-1">
                                     What you'll access
                                 </p>
                                 {[
@@ -539,11 +272,11 @@ export const Login = () => {
                                 ].map((feat) => (
                                     <m.div
                                         key={feat.title}
-                                        whileHover={{ x: 3 }}
+                                        whileHover={{ x: 6, backgroundColor: 'var(--sys-bg-surface)' }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                        className="flex items-center gap-3 p-3 rounded-2xl border border-card-border bg-card-bg/40 hover:border-brand-blue/25 hover:bg-card-bg/80 transition-all cursor-default"
+                                        className="flex items-center gap-3.5 p-3 rounded-2xl border border-card-border bg-card-bg/40 hover:border-brand-blue/30 hover:shadow-premium-sm transition-all cursor-default"
                                     >
-                                        <span className="text-lg shrink-0">{feat.icon}</span>
+                                        <span className="text-xl shrink-0">{feat.icon}</span>
                                         <div className="min-w-0">
                                             <p className="text-xs font-bold text-text-primary leading-none mb-0.5">{feat.title}</p>
                                             <p className="text-[10px] text-text-secondary leading-tight">{feat.desc}</p>
@@ -559,7 +292,7 @@ export const Login = () => {
                                     {['🧑‍💼', '👩‍💻', '🧑', '👨‍💼'].map((e, i) => (
                                         <div
                                             key={i}
-                                            className="w-7 h-7 rounded-full border-2 border-card-bg bg-card-bg flex items-center justify-center text-sm"
+                                            className="w-7 h-7 rounded-full border-2 border-card-bg bg-card-bg flex items-center justify-center text-sm shadow-sm"
                                         >
                                             {e}
                                         </div>
@@ -569,10 +302,272 @@ export const Login = () => {
                                     <p className="text-xs font-bold text-text-primary leading-none">10,000+ partners</p>
                                     <p className="text-[10px] text-text-secondary">active on Pintopay network</p>
                                 </div>
-                                <div className="ml-auto flex items-center gap-1 text-emerald-400">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                    <span className="text-[10px] font-bold uppercase tracking-wider">Live</span>
+                                <div className="ml-auto flex items-center gap-1.5 text-emerald-500 bg-emerald-500/6 border border-emerald-500/10 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34D399]" />
+                                    <span className="text-[9px] font-black uppercase tracking-wider">Live</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* ═══════════════════════════════════════════════
+                            RIGHT PANEL — Interactive Auth Gate
+                        ═══════════════════════════════════════════════ */}
+                        <div className="lg:col-span-5 flex flex-col p-8 md:p-12 justify-between gap-8 relative overflow-hidden bg-card-bg/25">
+                            {/* Panel inner glow */}
+                            <div
+                                className="absolute inset-0 pointer-events-none"
+                                style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.04) 0%, transparent 70%)' }}
+                            />
+
+                            {/* Title header */}
+                            <div className="space-y-1.5 relative z-10 text-center lg:text-left">
+                                <h2 className="text-xl font-black text-text-primary tracking-tight">
+                                    Partner Authorization
+                                </h2>
+                                <p className="text-xs text-text-secondary leading-relaxed">
+                                    Securely link your desktop session via Telegram to continue
+                                </p>
+                            </div>
+
+                            {/* Step pills */}
+                            <div className="flex p-1 rounded-2xl bg-slate-200/50 dark:bg-slate-900/60 border border-card-border relative z-10 w-full">
+                                {STEPS.map((s) => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => { setStep(s.id); setError(null); }}
+                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                                            step === s.id
+                                                ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20 scale-[1.01]'
+                                                : 'text-text-secondary hover:text-text-primary'
+                                        }`}
+                                    >
+                                        <span>{s.icon}</span>
+                                        {s.label}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Dynamic Step Content */}
+                            <div className="flex-1 flex flex-col justify-center relative z-10 min-h-[300px] w-full">
+                                <AnimatePresence mode="wait">
+
+                                    {/* WIDGET */}
+                                    {step === 'widget' && (
+                                        <m.div key="widget" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
+                                            <div className="text-center space-y-1.5 max-w-xs">
+                                                <p className="text-xs font-bold text-text-primary">Instant Widget Login</p>
+                                                <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                    Click the Telegram button below to authorize instantly using your Telegram account.
+                                                </p>
+                                            </div>
+
+                                            {/* Widget container */}
+                                            <div
+                                                ref={widgetRef}
+                                                id="telegram-widget-container"
+                                                className="min-h-[50px] flex items-center justify-center"
+                                            />
+
+                                            {widgetFailed ? (
+                                                <m.div
+                                                    initial={{ opacity: 0, y: 6 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="rounded-2xl border border-amber-400/20 bg-amber-400/6 p-4 space-y-2 w-full text-left"
+                                                >
+                                                    <div className="flex items-center gap-2 text-amber-500 dark:text-amber-400">
+                                                        <AlertCircle className="w-4 h-4 shrink-0" />
+                                                        <p className="text-xs font-bold">Widget unavailable on this domain</p>
+                                                    </div>
+                                                    <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                        Telegram's Login Widget requires the serving domain to be registered in BotFather via <code className="text-brand-blue font-mono font-bold">/setdomain</code>. This is normal on preview/localhost URLs.
+                                                    </p>
+                                                    <button
+                                                        onClick={() => setStep('qr')}
+                                                        className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline cursor-pointer"
+                                                    >
+                                                        Use QR Code instead <ArrowRight className="w-3 h-3" />
+                                                    </button>
+                                                </m.div>
+                                            ) : (
+                                                <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs">
+                                                    💡 <em>If the widget displays "Bot domain invalid", please switch to <strong>Scan QR Code</strong> above.</em>
+                                                </p>
+                                            )}
+
+                                            {error && (
+                                                <div className="flex items-center gap-2 rounded-2xl border border-error/20 bg-[var(--sys-error-bg)] px-3 py-2.5 w-full">
+                                                    <AlertCircle className="w-4 h-4 text-[var(--sys-error-text)] shrink-0" />
+                                                    <p className="text-[11px] font-bold text-[var(--sys-error-text)]">{error}</p>
+                                                </div>
+                                            )}
+
+                                            {success && (
+                                                <m.div
+                                                    initial={{ scale: 0.9, opacity: 0 }}
+                                                    animate={{ scale: 1, opacity: 1 }}
+                                                    className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5 w-full"
+                                                >
+                                                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                                    <p className="text-[11px] font-bold text-emerald-400">Authenticated! Loading your dashboard…</p>
+                                                </m.div>
+                                            )}
+                                        </m.div>
+                                    )}
+
+                                    {/* QR */}
+                                    {step === 'qr' && (
+                                        <m.div key="qr" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
+                                            <div className="text-center space-y-1.5 max-w-xs">
+                                                <p className="text-xs font-bold text-text-primary">Scan QR Code</p>
+                                                <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                    Scan to open Pintopay bot in Telegram on your phone. Go to Profile → Connect Desktop to sync.
+                                                </p>
+                                            </div>
+
+                                            {/* QR Frame */}
+                                            <div className="relative">
+                                                <div className="absolute -inset-3 rounded-[28px] bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-blue-600/20 blur-lg" />
+                                                <div className="relative rounded-[22px] p-3.5 bg-white dark:bg-slate-950 border border-blue-200/30 dark:border-white/10 shadow-[0_20px_60px_rgba(37,99,235,0.2)]">
+                                                    {/* Corner brackets */}
+                                                    {[
+                                                        'top-2 left-2 border-t-2 border-l-2 rounded-tl-lg',
+                                                        'top-2 right-2 border-t-2 border-r-2 rounded-tr-lg',
+                                                        'bottom-2 left-2 border-b-2 border-l-2 rounded-bl-lg',
+                                                        'bottom-2 right-2 border-b-2 border-r-2 rounded-br-lg',
+                                                    ].map((cls, i) => (
+                                                        <div
+                                                            key={i}
+                                                            className={`absolute w-5 h-5 border-brand-blue/70 ${cls}`}
+                                                        />
+                                                    ))}
+                                                    <div className="relative rounded-xl overflow-hidden">
+                                                        <img
+                                                            src={qrCodeUrl}
+                                                            alt="Scan to open Pintopay bot"
+                                                            className="w-44 h-44 object-contain"
+                                                            loading="lazy"
+                                                        />
+                                                        <div
+                                                            className="absolute left-0 right-0 h-0.5 rounded-full pointer-events-none"
+                                                            style={{
+                                                                background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.9), transparent)',
+                                                                animation: 'scan 2.5s ease-in-out infinite',
+                                                                top: 0,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <a
+                                                href={BOT_DEEP_LINK}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                id="open-telegram-btn"
+                                                className="group flex items-center gap-2 px-5 py-3 rounded-2xl vibing-blue-animated text-white text-xs font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer"
+                                            >
+                                                <TelegramIcon size={16} />
+                                                Open in Telegram
+                                                <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                                            </a>
+
+                                            <button
+                                                onClick={() => setStep('token')}
+                                                className="flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline cursor-pointer"
+                                            >
+                                                I have my link <ArrowRight className="w-3 h-3" />
+                                            </button>
+                                        </m.div>
+                                    )}
+
+                                    {/* TOKEN */}
+                                    {step === 'token' && (
+                                        <m.div key="token" {...fadeSlide} className="space-y-5 w-full">
+                                            <div className="text-center lg:text-left space-y-1">
+                                                <h3 className="text-sm font-bold text-text-primary">Paste Access Link</h3>
+                                                <p className="text-xs text-text-secondary leading-relaxed">
+                                                    Copy the <strong className="text-text-primary">Connect Desktop</strong> link from the Pintopay bot on your phone and paste it below.
+                                                </p>
+                                            </div>
+
+                                            <form onSubmit={handleTokenSubmit} className="space-y-4">
+                                                <div className="relative group">
+                                                    <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none group-focus-within:text-brand-blue transition-colors" />
+                                                    <input
+                                                        type="text"
+                                                        value={tokenInput}
+                                                        onChange={(e) => setTokenInput(e.target.value)}
+                                                        placeholder="Paste your access link here…"
+                                                        className="w-full pl-10 pr-4 py-3 rounded-2xl border border-input-border bg-input-bg text-text-primary placeholder:text-input-placeholder focus:border-brand-blue/60 focus:outline-none focus:ring-2 focus:ring-brand-blue/12 transition-all text-xs font-medium"
+                                                        style={{ fontSize: '1rem' }}
+                                                    />
+                                                </div>
+
+                                                {error && (
+                                                    <div className="flex items-center gap-2 rounded-2xl border border-error/20 bg-[var(--sys-error-bg)] px-3 py-2.5 w-full">
+                                                        <AlertCircle className="w-4 h-4 text-[var(--sys-error-text)] shrink-0" />
+                                                        <p className="text-[11px] font-bold text-[var(--sys-error-text)]">{error}</p>
+                                                    </div>
+                                                )}
+
+                                                {success && (
+                                                    <m.div
+                                                        initial={{ scale: 0.9, opacity: 0 }}
+                                                        animate={{ scale: 1, opacity: 1 }}
+                                                        className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5 w-full"
+                                                    >
+                                                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                                                        <p className="text-[11px] font-bold text-emerald-400">Synced! Loading dashboard…</p>
+                                                    </m.div>
+                                                )}
+
+                                                <button
+                                                    type="submit"
+                                                    disabled={isSubmitting || !tokenInput.trim()}
+                                                    id="login-sync-btn"
+                                                    className="w-full py-3 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 vibing-blue-animated shadow-lg shadow-blue-500/25 cursor-pointer"
+                                                >
+                                                    {isSubmitting ? (
+                                                        <>
+                                                            <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                                                            Verifying…
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Scan className="w-4 h-4" />
+                                                            Sync Desktop Session
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </form>
+
+                                            <div className="space-y-2.5 pt-2">
+                                                <p className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Instructions:</p>
+                                                {[
+                                                    'Start the Pintopay bot in Telegram on your phone',
+                                                    'Tap "Profile" and select "Connect Desktop"',
+                                                    'Tap the access link to copy it to clipboard',
+                                                    'Paste it in the field above to sync instantly',
+                                                ].map((text, i) => (
+                                                    <div key={i} className="flex items-start gap-2.5">
+                                                        <div className="w-4 h-4 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[9px] font-black text-brand-blue shrink-0 mt-0.5">
+                                                            {i + 1}
+                                                        </div>
+                                                        <span className="text-[11px] text-text-secondary leading-snug">{text}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </m.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+
+                            {/* Footer trust line */}
+                            <div className="flex items-center justify-center gap-2 pt-4 border-t border-card-border relative z-10">
+                                <Shield className="h-3.5 w-3.5 text-brand-blue shrink-0 animate-pulse" />
+                                <span className="text-[10px] text-text-secondary font-semibold uppercase tracking-wider">
+                                    End-to-end secured via Telegram cryptographic auth
+                                </span>
                             </div>
                         </div>
 

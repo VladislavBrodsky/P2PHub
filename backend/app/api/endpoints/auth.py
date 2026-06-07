@@ -17,7 +17,7 @@ from app.services.redis_service import redis_service
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/auth", tags=["auth"])
+router = APIRouter(tags=["auth"])
 
 class TelegramWidgetAuthPayload(BaseModel):
     id: int
