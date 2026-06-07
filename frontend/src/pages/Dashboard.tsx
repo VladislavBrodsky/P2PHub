@@ -131,7 +131,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                             </m.button>
                         )}
 
-                        {user?.is_admin && user?.username !== 'uslincoln' && (
+                        {user?.is_admin && (
                             <m.button
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
