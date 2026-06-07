@@ -951,3 +951,23 @@
   @apply absolute inset-0 blur-[12px] opacity-20 rounded-full z-[-1];
   background: currentColor;
 }
+
+/* === PREMIUM DESKTOP GRID LAYOUT === */
+@media (min-width: 640px) {
+  .premium-desktop-layout {
+    background-color: #030712 !important; /* Base app bg */
+    background-image:
+      /* Fine 24px grid lines */
+      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      /* Major 120px grid lines for depth */
+      linear-gradient(rgba(255, 255, 255, 0.025) 2px, transparent 2px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 2px, transparent 2px),
+      /* Elegant Ambient Glow Spotlights */
+      radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 30% 70%, rgba(147, 51, 234, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 75% 60%, rgba(20, 184, 166, 0.06) 0%, transparent 40%) !important;
+    background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px, 100% 100%, 100% 100%, 100% 100% !important;
+    background-attachment: fixed !important;
+  }
+}
