@@ -14,6 +14,8 @@
   "close": "Close",
   "copied": "Copied",
   "copied_to_clipboard": "Copied to clipboard",
+  "desktop_link_instructions": "To use P2PHub on your computer, copy this access link and open it in a desktop browser. It will securely sync your statistics and active session.",
+  "copy_link": "Copy Access Link",
   "show_more": "Show more",
   "show_less": "Show less",
   "top_50": "TOP 50",
@@ -79,7 +81,8 @@
     "faq": "FAQ",
     "legal": "Legal",
     "admin_panel": "Admin Panel",
-    "pro_panel": "PRO Panel"
+    "pro_panel": "PRO Panel",
+    "connect_desktop": "Connect Desktop"
   },
   "cta": {
     "upgrade_pro": "UPGRADE TO PRO",

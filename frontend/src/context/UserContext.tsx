@@ -299,6 +299,37 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const init = async () => {
             try {
+                // Parse tgWebAppData from URL query params or hash (desktop auth linking)
+                let urlInitData = '';
+                try {
+                    const searchParams = new URLSearchParams(window.location.search);
+                    urlInitData = searchParams.get('tgWebAppData') || '';
+                    
+                    if (!urlInitData && window.location.hash) {
+                        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                        urlInitData = hashParams.get('tgWebAppData') || '';
+                    }
+                    
+                    if (urlInitData) {
+                        let decodedData = urlInitData;
+                        try {
+                            if (urlInitData.includes('%')) {
+                                decodedData = decodeURIComponent(urlInitData);
+                            }
+                        } catch (e) {
+                            console.error('[UserContext] decodeURIComponent error:', e);
+                        }
+                        localStorage.setItem('p2p_saved_init_data', decodedData);
+                        console.log('[UserContext] Found and stored tgWebAppData from URL.');
+                        
+                        // Clean the URL bar so the token isn't visible in history
+                        const cleanUrl = window.location.origin + window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    }
+                } catch (urlErr) {
+                    console.error('[UserContext] Failed parsing URL token:', urlErr);
+                }
+
                 // Fast path for local development
                 if (import.meta.env.DEV && !window.Telegram?.WebApp?.initData) {
                     const devUser = {

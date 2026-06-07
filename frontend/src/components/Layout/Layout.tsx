@@ -50,9 +50,9 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-start bg-transparent sm:premium-desktop-layout selection:bg-blue-500/10 overflow-hidden">
+        <div className="fixed inset-0 flex flex-col items-center justify-start bg-transparent premium-desktop-layout selection:bg-blue-500/10 overflow-hidden">
             {/* Main Content Hub - Precisely centered Max-W container */}
-            <div className="relative flex flex-col h-full w-full max-w-lg bg-transparent sm:bg-[var(--sys-bg-app)] sm:shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden">
+            <div className="relative flex flex-col h-full w-full max-w-lg bg-transparent overflow-hidden">
                 {/* Staging Ribbon */}
                 {isStaging && (
                     <div className="fixed top-0 left-0 z-200 w-full bg-yellow-400 text-center text-xs font-bold text-slate-900 shadow-sm py-1">

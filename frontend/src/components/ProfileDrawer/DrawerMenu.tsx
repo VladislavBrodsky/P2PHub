@@ -10,7 +10,10 @@ import {
     MessageCircle,
     Newspaper,
     Zap,
-    Shield
+    Shield,
+    Monitor,
+    Copy,
+    Check
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { blogService } from '../../services/blogService';
@@ -20,6 +23,7 @@ import { useUI } from '../../context/UIContext';
 import { ROUTES } from '../../utils/routes';
 import { useNavigation } from '../../hooks/useNavigation';
 import { DrawerSettings } from './DrawerSettings';
+import { getSafeLaunchParams, isTMA } from '../../utils/tma';
 
 // Items that navigate away to a specific app tab on click
 const NAV_TABS: Record<string, string> = {
@@ -41,6 +45,40 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
     const [expandedNestedItem, setExpandedNestedItem] = React.useState<string | null>(null);
+    const [isCopied, setIsCopied] = React.useState(false);
+
+    const handleCopyDesktopLink = async () => {
+        const lp = getSafeLaunchParams();
+        if (!lp?.initDataRaw) {
+            alert('Error: Session launch data not found.');
+            return;
+        }
+        const encodedData = encodeURIComponent(lp.initDataRaw);
+        const link = `${window.location.origin}/#tgWebAppData=${encodedData}`;
+        
+        try {
+            await navigator.clipboard.writeText(link);
+            setIsCopied(true);
+            selection();
+            setTimeout(() => setIsCopied(false), 3000);
+        } catch (err) {
+            console.error('Clipboard write failed, trying fallback:', err);
+            const textarea = document.createElement('textarea');
+            textarea.value = link;
+            textarea.style.position = 'fixed';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                setIsCopied(true);
+                selection();
+                setTimeout(() => setIsCopied(false), 3000);
+            } catch (fallbackErr) {
+                alert('Please manually copy this link: ' + link);
+            }
+            document.body.removeChild(textarea);
+        }
+    };
 
     const toggleSection = (id: string, isNested: boolean = false) => {
         selection();
@@ -53,6 +91,30 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
 
     const renderSectionContent = (id: string) => {
         switch (id) {
+            case 'desktop':
+                return (
+                    <div className="pt-2 space-y-2">
+                        <p className="text-xs text-text-secondary leading-relaxed">
+                            {t('desktop_link_instructions')}
+                        </p>
+                        <button
+                            onClick={handleCopyDesktopLink}
+                            className="w-full py-3 rounded-xl bg-btn-primary-bg text-btn-primary-text hover:bg-btn-primary-hover text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 active:scale-95 transition-all shadow-md"
+                        >
+                            {isCopied ? (
+                                <>
+                                    <Check className="h-4 w-4 text-emerald-400 animate-pulse" />
+                                    {t('copied')}
+                                </>
+                            ) : (
+                                <>
+                                    <Copy className="h-4 w-4" />
+                                    {t('copy_link')}
+                                </>
+                            )}
+                        </button>
+                    </div>
+                );
             case 'settings':
                 return (
                     <div className="pt-2">
@@ -176,6 +238,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const menuItems = useMemo(() => [
         ...(isAdmin ? [{ id: 'admin', icon: <Shield />, label: t('navigation.admin_panel') }] : []),
         ...(user?.is_pro ? [{ id: 'pro', icon: <Zap />, label: t('navigation.pro_panel') }] : []),
+        ...(isTMA() ? [{ id: 'desktop', icon: <Monitor />, label: t('navigation.connect_desktop', 'Connect Desktop') }] : []),
         { id: 'settings', icon: <Settings />, label: t('navigation.settings') },
         { id: 'blog', icon: <Newspaper />, label: t('navigation.blog') },
         { id: 'community', icon: <Users />, label: t('navigation.community') },

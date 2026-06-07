@@ -14,6 +14,19 @@ export const getSafeLaunchParams = () => {
             } as any;
         }
         
+        // Fallback to localStorage saved initData (for desktop session syncing)
+        if (typeof window !== 'undefined') {
+            const savedData = localStorage.getItem('p2p_saved_init_data');
+            if (savedData) {
+                return {
+                    initDataRaw: savedData,
+                    initData: undefined,
+                    themeParams: {},
+                    platform: 'desktop'
+                } as any;
+            }
+        }
+
         console.warn('[DEBUG] Not in Telegram environment, using empty params');
         return {
             initData: undefined,
