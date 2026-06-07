@@ -47,7 +47,7 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 setError(err);
                 // Fallback to defaults to prevent app crash
                 setConfig({
-                    ton_manifest_url: "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json",
+                    ton_manifest_url: "https://pintopay.life/tonconnect-manifest.json",
                     payment_mode: "ton_api",
                     admin_ton_address: "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN",
                     admin_usdt_address: "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM",

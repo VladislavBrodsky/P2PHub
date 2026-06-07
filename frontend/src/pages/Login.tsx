@@ -100,15 +100,19 @@ export const Login = () => {
             script.setAttribute('data-request-access', 'write');
             script.setAttribute('data-radius', '12');
 
-            // Detect widget load failure
+            // Detect widget load failure (Telegram's widget creates an iframe on success)
             script.onload = () => {
                 setTimeout(() => {
                     if (!mounted) return;
                     const iframes = container.querySelectorAll('iframe');
                     if (iframes.length === 0) {
+                        // Widget failed to render — likely BotFather domain not set
                         setWidgetFailed(true);
                     }
-                }, 2500);
+                }, 3000);
+            };
+            script.onerror = () => {
+                if (mounted) setWidgetFailed(true);
             };
             container.appendChild(script);
         }
@@ -177,7 +181,7 @@ export const Login = () => {
                     className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.12] dark:opacity-[0.16] blur-[120px]"
                     style={{ background: 'radial-gradient(circle, #2563EB, transparent 70%)' }}
                 />
-                {/* Purple accent — bottom-right */}
+                {/* Blue accent — bottom-right */}
                 <motion.div
                     animate={{
                         scale: [1, 1.08, 1],
@@ -186,7 +190,7 @@ export const Login = () => {
                     }}
                     transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
                     className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.08] dark:opacity-[0.12] blur-[100px]"
-                    style={{ background: 'radial-gradient(circle, #7C3AED, transparent 70%)' }}
+                    style={{ background: 'radial-gradient(circle, #0EA5E9, transparent 70%)' }}
                 />
                 {/* Subtle centre radial */}
                 <div
@@ -403,7 +407,7 @@ export const Login = () => {
                                                 <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2.5 w-full text-left">
                                                     <div className="flex items-center gap-2 text-amber-500">
                                                         <AlertCircle className="w-4 h-4 shrink-0 animate-pulse" />
-                                                        <p className="text-xs font-black uppercase tracking-wider">Local/Preview Environment</p>
+                                                        <p className="text-xs font-black uppercase tracking-wider">Local / Preview Environment</p>
                                                     </div>
                                                     <p className="text-[11px] text-text-secondary leading-relaxed font-semibold">
                                                         Telegram's Login Widget only works on the registered production domain (<span className="text-blue-500">pintopay.life</span>). It will show "Bot domain invalid" on localhost or preview URLs.
@@ -412,8 +416,33 @@ export const Login = () => {
                                                         onClick={() => setStep('qr')}
                                                         className="flex items-center gap-1.5 text-xs font-bold text-blue-500 hover:text-blue-400 cursor-pointer"
                                                     >
-                                                        Use Scan QR Code instead <ArrowRight className="w-3.5 h-3.5" />
+                                                        Scan QR Code instead <ArrowRight className="w-3.5 h-3.5" />
                                                     </button>
+                                                </div>
+                                            ) : widgetFailed ? (
+                                                /* Widget failed to load — BotFather domain not configured */
+                                                <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-3 w-full text-left">
+                                                    <div className="flex items-center gap-2 text-amber-500">
+                                                        <AlertCircle className="w-4 h-4 shrink-0" />
+                                                        <p className="text-xs font-black uppercase tracking-wider">Widget Unavailable</p>
+                                                    </div>
+                                                    <p className="text-[11px] text-text-secondary leading-relaxed font-semibold">
+                                                        The Telegram Login Widget could not load. This usually means the login domain hasn't been configured in BotFather yet.
+                                                    </p>
+                                                    <div className="flex gap-2 pt-1">
+                                                        <button
+                                                            onClick={() => { setStep('qr'); setWidgetFailed(false); }}
+                                                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[11px] font-black bg-blue-500/10 text-blue-500 border border-blue-500/20 hover:bg-blue-500/20 transition-all cursor-pointer"
+                                                        >
+                                                            <TelegramIcon size={12} /> Scan QR Code
+                                                        </button>
+                                                        <button
+                                                            onClick={() => { setStep('token'); setWidgetFailed(false); }}
+                                                            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[11px] font-black bg-card-bg/40 text-text-secondary border border-card-border hover:text-text-primary hover:border-blue-500/30 transition-all cursor-pointer"
+                                                        >
+                                                            <Key className="w-3 h-3" /> Use Access Link
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             ) : (
                                                 <>
@@ -421,10 +450,10 @@ export const Login = () => {
                                                     <div
                                                         ref={widgetRef}
                                                         id="telegram-widget-container"
-                                                        className="min-h-[50px] flex items-center justify-center relative z-20"
+                                                        className="min-h-[54px] flex items-center justify-center relative z-20"
                                                     />
                                                     <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs font-medium">
-                                                        💡 <em>If the widget displays "Bot domain invalid", please switch to <strong>Scan QR Code</strong> above.</em>
+                                                        💡 <em>If the button shows "Bot domain invalid", please switch to <strong>QR Code</strong> above.</em>
                                                     </p>
                                                 </>
                                             )}
