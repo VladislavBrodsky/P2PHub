@@ -95,9 +95,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const handleSessionExpired = () => {
             console.warn('⚠️ [UserContext] Session expired event received. Clearing cache...');
-            setIsSessionExpired(true);
             localStorage.removeItem(CACHE_KEY);
+            localStorage.removeItem('p2p_saved_init_data');
             setUser(null);
+            
+            const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isTMA() || isMobileDevice) {
+                setIsSessionExpired(true);
+            } else {
+                setIsSessionExpired(false);
+            }
         };
         window.addEventListener('tma-session-expired', handleSessionExpired);
         return () => window.removeEventListener('tma-session-expired', handleSessionExpired);
@@ -250,9 +257,16 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 const hasInitData = !!(getSafeLaunchParams()?.initDataRaw || (window as any).Telegram?.WebApp?.initData);
                 if (!hasInitData) {
                     console.error('[UserContext] No initData available — genuine session expiry.');
-                    setIsSessionExpired(true);
                     localStorage.removeItem(CACHE_KEY);
+                    localStorage.removeItem('p2p_saved_init_data');
                     setUser(null);
+                    
+                    const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    if (isTMA() || isMobileDevice) {
+                        setIsSessionExpired(true);
+                    } else {
+                        setIsSessionExpired(false);
+                    }
                 } else {
                     console.warn('[UserContext] 401 but initData present — keeping existing user, will retry on next focus.');
                     // Keep existing user from cache so the UI doesn’t go blank
