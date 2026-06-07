@@ -16,6 +16,7 @@ const AdminPage = lazy(prefetchPages.admin);
 const ProPage = lazy(prefetchPages.pro);
 const FAQPage = lazy(prefetchPages.faq);
 const StripeReturnPage = lazy(() => import('./pages/StripeReturnPage').then(m => ({ default: m.StripeReturnPage })));
+const Login = lazy(() => import('./pages/Login').then(m => ({ default: m.Login })));
 
 // #comment: Strategic Lazy Loading for non-critical features.
 // SupportChat is a heavy component (icons + framer-motion animations).
@@ -60,7 +61,7 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
     const [activeTab, setActiveTab] = useState('home');
     const [visitedTabs, setVisitedTabs] = useState<Set<string>>(new Set(['home']));
     // #comment: Removed unused showOnboarding state in AppContent as it is managed in the parent App component
-    const { isLoading: isUserLoading } = useUser();
+    const { user, isLoading: isUserLoading } = useUser();
     const { updateProgress } = useStartupProgress();
 
 
@@ -164,9 +165,16 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         };
     }, [activeTab, navigateTo]);
 
-    // We no longer return null here to ensure the TMA SDK initialization and other effects
-    // always run correctly. Instead, the UI is controlled by visibility.
-    // if (showOnboarding) return null;
+    const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isDesktopGuest = !isTMA() && !user && !isMobileDevice;
+
+    if (isDesktopGuest) {
+        return (
+            <Suspense fallback={null}>
+                <Login />
+            </Suspense>
+        );
+    }
 
     return (
         <Layout activeTab={activeTab} setActiveTab={navigateTo} prefetchPages={prefetchPages}>

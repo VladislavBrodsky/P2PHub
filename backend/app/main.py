@@ -31,6 +31,7 @@ from app.api.endpoints import (
     support,
     tools,
     webhooks,
+    auth,
 )
 from app.core.config import settings
 from bot import bot, dp
@@ -482,6 +483,7 @@ app.include_router(config.router, prefix="/api/config", tags=["config"])
 
 app.include_router(support.router, prefix="/api/support", tags=["support"])
 app.include_router(webhooks.router, tags=["webhooks"])
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 
 # #comment: Custom StaticFiles handler to inject aggressive Cache-Control headers.
 # This ensures that images are cached by the browser/CDN for 1 year,

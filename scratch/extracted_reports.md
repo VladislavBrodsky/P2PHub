@@ -1,0 +1,33 @@
+# Subagent Audit Reports Extraction
+
+
+# Backend Performance Auditor (b17d247e-f501-4b5f-a68b-0d05ed45ace9)
+
+## Last Planner Response
+
+Now I have enough information to compile a comprehensive audit report. Let me write it up.
+
+
+# Backend API Auditor (63ac20b9-4a66-44ea-a374-e0f1c1028f08)
+
+## Sent Message
+
+"# P2PHub Backend API Audit Report\n\nDeep audit complete. Here is the full findings report, covering all 5 categories requested.\n\n---\n\n## 🔐 1. SECURITY ISSUES\n\n---\n\n### BUG-001 — Unauthenticated `/pro/stats` endpoint\n- **File:** `app/api/endpoints/pro.py`, lines 114–129\n- **Severity:** MEDIUM\n- **Description:** `GET /pro/stats` has NO auth dependency. Anyone (no Telegram token needed) can poll it, enumerate membership counts, and scrape internal business metrics (how many slots are sold). This also exposes internal `SystemSetting` data.\n- **Proposed Fix:** Add `user_data: dict = Depends(get_current_user)` parameter (at minimum) to gate the route, or make it admin-only.\n\n```python\n# Before\nasync def get_pro_stats(session: AsyncSession = Depends(get_session)):\n\n# After\nasync def get_pro_stats(\n    user_data: dict = Depends(get_current_user),\n    session: AsyncSession = Depends(get_session)\n):\n    if not user_data:\n        raise HTTPException(status_code=401, detail=\"Authentication required\")\n```\n\n---\n\n### BUG-002 — Unauthenticated `/pro/members/avatars` leaks PII (photo URLs)\n- **File:** `app/api/endpoints/pro.py`, lines 131–168\n- **Severity:** HIGH\n- **Description:** `GET /pro/members/avatars` requires no authentication at all. It returns `photo_url` and `photo_file_id` for all PRO members. Photo URLs may be personal Telegram-hosted CDN links tied to a user's identity. This is a PII data leak — unauthenticated callers can harvest real users' profile photo URLs. The `limit` parameter also has no upper bound, so `?limit=99999` will run a full-table scan.\n- **Proposed Fix:**\n  1. Add auth dependency.\n  2. Cap `limit` server-side: `limit: int = Query(default=10, le=50)`.\n\n```python\nfrom fastapi import Query\n@router.get(\"/members/avatars\")\nasync def get_pro_member_avatars(\n    limit: int = Query(default=10, le=50),\n    user_data: dict = Depends(get_current_user),\n    session: AsyncSession = Depends(get_session)\n):\n    if not user_data:\n        raise HTTPEx
+<truncated 24812 bytes>
+
+
+# Frontend Logic Auditor (905d3719-7aed-4ded-9acc-8aed4d17dd18)
+
+## Sent Message
+
+"# P2PHub Frontend Deep Audit — Complete Report\n\nI have now read all relevant files in the `pages/` directory and all Pro sub-tabs. Here is the full, consolidated audit covering all five focus areas.\n\n---\n\n## 1. Race Conditions & State Bugs\n\n### A. `ProDashboard.tsx` — `loadStatus()` uses bare `setTimeout` inside an async function (CRITICAL)\n\n**File:** `/Users/grandmaestro/Developer/P2PHub/frontend/src/pages/ProDashboard.tsx`, lines 77–121\n\n```ts\nconst loadStatus = async (retryCount = 0) => {\n    ...\n    } catch (error: any) {\n        if (retryCount < 3) {\n            const delay = Math.pow(2, retryCount) * 1500;\n            setTimeout(() => loadStatus(retryCount + 1), delay); // ← NOT inside useEffect, no cleanup ref\n        }\n    }\n};\nuseEffect(() => { loadStatus(); }, []);\n```\n\n**Bugs:**\n- `loadStatus` is a plain `async` function declared inside the component. When the component **unmounts** (user navigates away) while a retry is pending, the `setTimeout` still fires and calls `setStatus`, `setIsLoading`, etc. This is a classic **setState-after-unmount** memory leak / warning pattern.\n- There is **no `isMounted` ref** or `AbortController` to cancel in-flight retries.\n- **Fix:** Add `const isMounted = useRef(true); return () => { isMounted.current = false; }` in the `useEffect`, then guard every `setState` call with `if (isMounted.current)`.\n\n### B. `AnalyticsCabinet.tsx` — `loadData()` has no unmount guard (HIGH)\n\n**File:** `/Users/grandmaestro/Developer/P2PHub/frontend/src/pages/Pro/tabs/AnalyticsCabinet.tsx`, lines 162–180\n\n```ts\nconst loadData = async (quiet = false) => {\n    ...\n    const [statsData, resonanceData] = await Promise.all([...]);\n    setStats(statsData);      // ← called after await, no unmount guard\n    setResonance(resonanceData);\n    ...\n};\nuseEffect(() => { loadData(); }, []);\n```\n\n**Bugs:**\n- If the user navigates away before the `Promise.all` resolves, all four `setState` calls fire on an unmounted component.\n- The `handleRefre
+<truncated 12197 bytes>
+
+
+# Database & Performance Auditor (ea1c3fe8-a4f3-4d78-9484-a6abc9800cf4)
+
+## Sent Message
+
+"\n# P2PHub Database Audit — Complete Findings\n\nI've read all model files, the 5 most recent migration files, the `pro.py` endpoint, and related services. Here is the full audit report with file:line references, severity ratings, and proposed fixes.\n\n---\n\n## 🔴 CRITICAL — Subscription Expiry Bug (`pro_expires_at` NOT checked on request)\n\n**File:** `backend/app/api/endpoints/pro.py`, line 40–46 (`get_current_partner`)  \n**Also:** Every endpoint that does `if not partner.is_pro: raise 403`\n\n**Problem:** The `is_pro` field is a plain boolean persisted in the DB. The `SubscriptionService` (in `subscription_service.py`) runs a cron job (`0 * * * *`) to flip `is_pro = False` when `pro_expires_at < now`. BUT there is a race window and, more critically, **no guard in `get_current_partner()`** — the dependency used by all 15+ protected pro endpoints. If the cron job fails, is late, or Redis is down (invalidation fails at line 103–105), a user whose `PRO_MONTHLY` subscription expired months ago still passes every `if not partner.is_pro` check.\n\n**Evidence:**\n- `subscription_service.py:87` — only the cron job sets `is_pro = False`\n- `subscription_service.py:103–105` — Redis cache invalidation is best-effort (`except: logger.warning`) so stale `is_pro=True` can linger in cache\n- `pro.py:50` — `get_current_partner` is used for all guarded endpoints, no expiry check inside it\n- `partner.py:50` — `pro_expires_at: datetime | None` is nullable with no enforcement at the ORM layer\n\n**Impact:** Any `PRO_MONTHLY` user whose subscription lapsed but whose cron run failed (network blip, Railway restart, OOM) continues to access PRO features indefinitely.\n\n**Proposed Fix:**\n```python\n# pro.py — add to get_current_partner()\nasync def get_current_partner(...) -> Partner:\n    ...\n    # If monthly sub has lapsed, auto-revoke\n    if (partner.is_pro \n        and partner.pro_expires_at is not None \n        and partner.subscription_plan != \"PRO_LIFETIME\"\n        and partner.pro_expires_at 
+<truncated 12298 bytes>
+

@@ -11,6 +11,7 @@ interface PublicConfig {
     admin_usdt_address: string;
     is_debug: boolean;
     sentry_dsn?: string;
+    bot_username?: string;
 }
 
 interface ConfigContextType {
@@ -50,7 +51,8 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     payment_mode: "ton_api",
                     admin_ton_address: "UQD_n02bdxQxFztKTXpWBaFDxo713qIuETyefIeK7wiUB0DN",
                     admin_usdt_address: "TFp4oZV3fUkMgxiZV9d5SkJTHrA7NYoHCM",
-                    is_debug: false
+                    is_debug: false,
+                    bot_username: "pintopay_probot"
                 });
                 updateProgress(40, 'Using Offline Config');
                 setIsLoading(false);
