@@ -26,8 +26,8 @@ const TelegramIcon = ({ size = 20 }: { size?: number }) => (
 type Step = 'widget' | 'qr' | 'token';
 
 const STEPS: { id: Step; label: string }[] = [
-    { id: 'widget', label: 'Telegram Login' },
-    { id: 'qr',     label: 'Scan QR Code' },
+    { id: 'widget', label: 'Telegram' },
+    { id: 'qr',     label: 'QR Code' },
     { id: 'token',  label: 'Access Link' },
 ];
 
@@ -358,7 +358,7 @@ export const Login = () => {
                                     <button
                                         key={s.id}
                                         onClick={() => { setStep(s.id); setError(null); }}
-                                        className="relative flex-1 py-3 rounded-xl text-[10px] font-extrabold uppercase tracking-widest transition-all cursor-pointer z-10 text-center focus:outline-none"
+                                        className="relative flex-1 py-2.5 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all cursor-pointer z-10 text-center focus:outline-none"
                                     >
                                         {step === s.id && (
                                             <motion.div
@@ -367,7 +367,7 @@ export const Login = () => {
                                                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                                             />
                                         )}
-                                        <span className="relative z-10 flex items-center justify-center gap-1.5">
+                                        <span className="relative z-10 flex items-center justify-center gap-1.5 whitespace-nowrap">
                                             {s.id === 'widget' && (
                                                 <TelegramIcon size={12} />
                                             )}
