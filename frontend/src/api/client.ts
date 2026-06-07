@@ -84,12 +84,39 @@ export const refreshInitData = () => {
     initPromise = null;
 };
 
+const isAuthRouteCheck = (url: string | undefined): boolean => {
+    if (!url) return false;
+    const authPrefixes = [
+        '/api/partner/',
+        '/api/pro/',
+        '/api/payment/',
+        '/api/admin/',
+        '/api/tools/',
+        '/api/earnings/',
+        '/api/support/',
+        '/api/leaderboard/me'
+    ];
+    const publicEndpoints = [
+        '/api/partner/orbit-members',
+        '/api/partner/recent',
+        '/api/partner/top',
+        '/api/partner/stats/public'
+    ];
+    const publicPrefixes = [
+        '/api/partner/photo/'
+    ];
+
+    const isPublic = publicEndpoints.some(endpoint => url === endpoint || url.endsWith(endpoint)) ||
+                     publicPrefixes.some(prefix => url.includes(prefix));
+
+    return authPrefixes.some(prefix => url.includes(prefix)) && !isPublic;
+};
+
 // Request Interceptor: Automatically inject Telegram Init Data
 apiClient.interceptors.request.use(
     async (config) => {
         try {
-            const authPrefixes = ['/api/partner/', '/api/pro/', '/api/payment/', '/api/admin/', '/api/tools/', '/api/leaderboard/'];
-            const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
+            const isAuthRoute = isAuthRouteCheck(config.url);
 
             let initDataRaw = '';
 
@@ -129,8 +156,7 @@ apiClient.interceptors.response.use(
         const status = error.response?.status;
         const config = error.config;
 
-        const authPrefixes = ['/api/partner/', '/api/pro/', '/api/payment/', '/api/admin/', '/api/tools/', '/api/leaderboard/'];
-        const isAuthRoute = authPrefixes.some(prefix => config.url?.includes(prefix));
+        const isAuthRoute = isAuthRouteCheck(config?.url);
 
         // #comment: Smart Retry Logic for 401 "Race Condition"
         // On mobile Telegram can be slow to inject initData; always retry once with fresh data.

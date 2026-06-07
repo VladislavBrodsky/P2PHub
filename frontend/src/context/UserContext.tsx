@@ -158,10 +158,20 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         lastRefresh.current = now;
 
         updateProgress(60, 'Fetching Profile...');
+
+        const lp = getSafeLaunchParams();
+        const hasInitData = !!(lp?.initDataRaw || (window as any).Telegram?.WebApp?.initData);
+
+        if (!hasInitData) {
+            console.warn('[UserContext] No Telegram initData available — skipping profile fetch (Guest Mode).');
+            setUser(null);
+            setIsLoading(false);
+            updateProgress(100, 'Guest Mode');
+            return;
+        }
+
         let tgUser: any = null;
         try {
-            // Use Safe SDK helper to get initData without crashing in browser
-            const lp = getSafeLaunchParams();
             tgUser = lp.initData?.user;
 
             // #comment: OPTIMISTIC UI FIX
