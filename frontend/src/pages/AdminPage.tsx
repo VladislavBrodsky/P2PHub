@@ -11,7 +11,7 @@ import { AdminDashboard } from './Admin/AdminDashboard';
 import { DashboardStats, Transaction } from './Admin/types';
 
 export const AdminPage = () => {
-    useUser();
+    const { user, isLoading: isUserLoading } = useUser();
     const { t } = useTranslation('common');
     const [stats, setStats] = useState<DashboardStats | null>(null);
     const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -66,6 +66,8 @@ export const AdminPage = () => {
         if (!lp.initDataRaw) {
             console.warn('[Admin] Auth data missing, skipping fetch');
             if (!silent) setError('Authentication session not ready. Please pull down to refresh.');
+            setIsLoading(false);
+            setIsRefreshing(false);
             return;
         }
         
@@ -384,8 +386,10 @@ export const AdminPage = () => {
     };
 
     useEffect(() => {
-        fetchData(false, true); // Force refresh on initial mount
-    }, []);
+        if (!isUserLoading) {
+            fetchData(false, true); // Force refresh once user context is verified
+        }
+    }, [isUserLoading]);
 
     const tick = useSystemClock();
 

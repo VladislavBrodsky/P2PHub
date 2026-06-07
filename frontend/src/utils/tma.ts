@@ -21,14 +21,14 @@ try {
 }
 
 const getCachedLaunchParams = (): any => {
-    if (cachedLaunchParams) return cachedLaunchParams;
+    if (cachedLaunchParams && cachedLaunchParams.initDataRaw) return cachedLaunchParams;
     
     if (typeof window !== 'undefined') {
         try {
             const data = sessionStorage.getItem('p2p_tma_launch_params');
             if (data) {
                 const lp = JSON.parse(data);
-                if (lp && (lp.initDataRaw || lp.initData)) {
+                if (lp && lp.initDataRaw) {
                     cachedLaunchParams = lp;
                     return lp;
                 }
@@ -43,12 +43,12 @@ const getCachedLaunchParams = (): any => {
 export const getSafeLaunchParams = () => {
     // 1. Try our cache (memory or sessionStorage) first, since it is stable across navigation
     const cached = getCachedLaunchParams();
-    if (cached) return cached;
+    if (cached && cached.initDataRaw) return cached;
 
     // 2. Try SDK retrieveLaunchParams() from current URL
     try {
         const lp = retrieveLaunchParams();
-        if (lp && (lp.initDataRaw || lp.initData)) {
+        if (lp && lp.initDataRaw) {
             cachedLaunchParams = lp;
             if (typeof window !== 'undefined') {
                 try {
