@@ -14,17 +14,6 @@ import { useTranslation } from 'react-i18next';
 // Deep-link opens the bot AND passes the partner referral start param
 const BOT_DEEP_LINK = 'https://t.me/pintopay_probot?start=P2P-425DA3DB';
 
-// ─── Inline SVG: Pintopay "P" Logomark ───────────────────────────────────────
-const Logo = () => (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="32" height="32" rx="10" fill="white" fillOpacity="0.12" />
-        <path
-            d="M8 23V9h6.8c1.6 0 2.88.4 3.84 1.2.96.8 1.44 1.92 1.44 3.36 0 1.44-.48 2.56-1.44 3.36-.96.8-2.24 1.2-3.84 1.2H11v4.88H8zm3-7.44h3.68c.72 0 1.28-.18 1.68-.54.4-.36.6-.86.6-1.5 0-.64-.2-1.14-.6-1.5-.4-.36-.96-.54-1.68-.54H11v4.08zM21 23V9h3v14h-3z"
-            fill="white"
-        />
-    </svg>
-);
-
 // ─── Inline SVG: Telegram Bird ───────────────────────────────────────────────
 const TelegramIcon = ({ size = 20 }: { size?: number }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -35,10 +24,10 @@ const TelegramIcon = ({ size = 20 }: { size?: number }) => (
 // ─── Step type ───────────────────────────────────────────────────────────────
 type Step = 'widget' | 'qr' | 'token';
 
-const STEPS: { id: Step; label: string; icon: string }[] = [
-    { id: 'widget', label: 'Telegram Login', icon: '⚡' },
-    { id: 'qr',     label: 'Scan QR Code',  icon: '📱' },
-    { id: 'token',  label: 'Access Link',    icon: '🔑' },
+const STEPS: { id: Step; label: string }[] = [
+    { id: 'widget', label: 'Telegram Login' },
+    { id: 'qr',     label: 'Scan QR Code' },
+    { id: 'token',  label: 'Access Link' },
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -61,6 +50,11 @@ export const Login = () => {
     const isDark = theme === 'dark' ||
         (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
+    // Dynamic environment check to prevent "Bot domain invalid" iframe error on localhost or preview/staging domains
+    const isLocalhost = typeof window !== 'undefined' && 
+        !(window.location.hostname === 'pintopay.life' || 
+          window.location.hostname.endsWith('.pintopay.life'));
+
     // QR that encodes the exact deep-link with start param
     const qrBgColor = isDark ? '030712' : 'FFFFFF';
     const qrFgColor = isDark ? '3B82F6' : '1D4ED8';
@@ -68,7 +62,7 @@ export const Login = () => {
 
     // ── Telegram Widget ───────────────────────────────────────────────────────
     useEffect(() => {
-        if (step !== 'widget') return;
+        if (step !== 'widget' || isLocalhost) return;
         let mounted = true;
 
         const handleWidgetAuth = async (user: any) => {
@@ -105,7 +99,7 @@ export const Login = () => {
             script.setAttribute('data-request-access', 'write');
             script.setAttribute('data-radius', '12');
 
-            // Detect "Bot domain invalid" by watching for iframe error text
+            // Detect widget load failure
             script.onload = () => {
                 setTimeout(() => {
                     if (!mounted) return;
@@ -122,7 +116,7 @@ export const Login = () => {
             mounted = false;
             delete (window as any).onTelegramAuth;
         };
-    }, [step, botUsername, refreshUser]);
+    }, [step, botUsername, refreshUser, isLocalhost]);
 
     // ── Token submit ─────────────────────────────────────────────────────────
     const handleTokenSubmit = async (e: React.FormEvent) => {
@@ -253,9 +247,9 @@ export const Login = () => {
                                 <div className="flex items-center gap-4">
                                     <motion.div 
                                         whileHover={{ rotate: 10, scale: 1.05 }}
-                                        className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 vibing-blue-animated shrink-0"
+                                        className="w-12 h-12 flex items-center justify-center shrink-0"
                                     >
-                                        <Logo />
+                                        <img src="/logo.svg" alt="Pintopay Logo" className="w-12 h-12 object-contain" />
                                     </motion.div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary leading-none mb-1">
@@ -312,14 +306,19 @@ export const Login = () => {
 
                             {/* Social proof footer */}
                             <div className="relative z-10 flex items-center gap-3.5 pt-4 border-t border-card-border">
-                                <div className="flex -space-x-2">
-                                    {['🧑‍💼', '👩‍💻', '🧑', '👨‍💼'].map((e, i) => (
-                                        <div
+                                <div className="flex -space-x-2.5">
+                                    {[
+                                        "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=128&h=128&fit=crop",
+                                        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop",
+                                        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=128&h=128&fit=crop",
+                                        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop"
+                                    ].map((url, i) => (
+                                        <img
                                             key={i}
-                                            className="w-7.5 h-7.5 rounded-full border-2 border-[#0a0f1d] bg-slate-900 flex items-center justify-center text-sm shadow-md"
-                                        >
-                                            {e}
-                                        </div>
+                                            src={url}
+                                            alt={`Partner ${i}`}
+                                            className="w-7.5 h-7.5 rounded-full border-2 border-[#0a0f1d] object-cover shadow-md"
+                                        />
                                     ))}
                                 </div>
                                 <div>
@@ -370,7 +369,15 @@ export const Login = () => {
                                             />
                                         )}
                                         <span className="relative z-10 flex items-center justify-center gap-1.5">
-                                            <span className="text-xs">{s.icon}</span>
+                                            {s.id === 'widget' && (
+                                                <TelegramIcon size={12} />
+                                            )}
+                                            {s.id === 'qr' && (
+                                                <Scan className="w-3.5 h-3.5" />
+                                            )}
+                                            {s.id === 'token' && (
+                                                <Key className="w-3.5 h-3.5" />
+                                            )}
                                             <span className={step === s.id ? 'text-white' : 'text-text-secondary hover:text-text-primary transition-colors'}>
                                                 {s.label}
                                             </span>
@@ -393,37 +400,34 @@ export const Login = () => {
                                                 </p>
                                             </div>
 
-                                            {/* Widget container */}
-                                            <div
-                                                ref={widgetRef}
-                                                id="telegram-widget-container"
-                                                className="min-h-[50px] flex items-center justify-center relative z-20"
-                                            />
-
-                                            {widgetFailed ? (
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: 6 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    className="rounded-2xl border border-amber-400/20 bg-amber-400/6 p-4 space-y-2 w-full text-left"
-                                                >
-                                                    <div className="flex items-center gap-2 text-amber-500 dark:text-amber-400">
-                                                        <AlertCircle className="w-4 h-4 shrink-0" />
-                                                        <p className="text-xs font-bold">Widget unavailable on this domain</p>
+                                            {isLocalhost ? (
+                                                <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 space-y-2.5 w-full text-left">
+                                                    <div className="flex items-center gap-2 text-amber-500">
+                                                        <AlertCircle className="w-4 h-4 shrink-0 animate-pulse" />
+                                                        <p className="text-xs font-black uppercase tracking-wider">Local/Preview Environment</p>
                                                     </div>
-                                                    <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
-                                                        Telegram's Login Widget requires the serving domain to be registered in BotFather via <code className="text-brand-blue font-mono font-bold">/setdomain</code>. This is normal on preview/localhost URLs.
+                                                    <p className="text-[11px] text-text-secondary leading-relaxed font-semibold">
+                                                        Telegram's Login Widget only works on the registered production domain (<span className="text-blue-500">pintopay.life</span>). It will show "Bot domain invalid" on localhost or preview URLs.
                                                     </p>
                                                     <button
                                                         onClick={() => setStep('qr')}
-                                                        className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline cursor-pointer"
+                                                        className="flex items-center gap-1.5 text-xs font-bold text-blue-500 hover:text-blue-400 cursor-pointer"
                                                     >
-                                                        Use QR Code instead <ArrowRight className="w-3 h-3" />
+                                                        Use Scan QR Code instead <ArrowRight className="w-3.5 h-3.5" />
                                                     </button>
-                                                </motion.div>
+                                                </div>
                                             ) : (
-                                                <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs font-medium">
-                                                    💡 <em>If the widget displays "Bot domain invalid", please switch to <strong>Scan QR Code</strong> above.</em>
-                                                </p>
+                                                <>
+                                                    {/* Widget container */}
+                                                    <div
+                                                        ref={widgetRef}
+                                                        id="telegram-widget-container"
+                                                        className="min-h-[50px] flex items-center justify-center relative z-20"
+                                                    />
+                                                    <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs font-medium">
+                                                        💡 <em>If the widget displays "Bot domain invalid", please switch to <strong>Scan QR Code</strong> above.</em>
+                                                    </p>
+                                                </>
                                             )}
 
                                             {error && (
@@ -509,7 +513,7 @@ export const Login = () => {
                                                 onClick={() => setStep('token')}
                                                 className="flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:underline cursor-pointer"
                                             >
-                                                I have my link <ArrowRight className="w-3 h-3" />
+                                                I have my link <ArrowRight className="w-3.5 h-3.5" />
                                             </button>
                                         </motion.div>
                                     )}
