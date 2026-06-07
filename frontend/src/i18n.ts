@@ -55,27 +55,51 @@ i18n
         }
     });
 
-// #comment: Parallel Resource Injection - Pre-populates i18next to avoid "key-as-value" flicker during hydration
-const initializeI18n = async (lang?: string) => {
+const criticalNamespaces = ['common', 'dashboard'];
+const deferredNamespaces = ['marketing', 'academy', 'pro', 'social', 'cards', 'admin', 'other'];
+
+// Track which namespaces are loaded (by cache key "lang:ns")
+const loadedNamespaces = new Set<string>();
+
+const loadNamespaces = async (nsList: string[], lang?: string) => {
     const currentLang = lang || i18n.language || initLang;
     const baseLang = currentLang.split('-')[0];
 
-    // Load all namespaces for the current language in parallel
     await Promise.all(
-        namespaces.map(async (ns) => {
+        nsList.map(async (ns) => {
+            const cacheKey = `${currentLang}:${ns}`;
+            if (loadedNamespaces.has(cacheKey)) return;
+
             const res = await loadResources(currentLang, ns);
             i18n.addResourceBundle(currentLang, ns, res, true, true);
             // Also seed the base language to handle fallback correctly if we are on a dialect
             if (baseLang !== currentLang) {
                 i18n.addResourceBundle(baseLang, ns, res, true, true);
             }
+            loadedNamespaces.add(cacheKey);
         })
     );
 };
 
+// #comment: Parallel Resource Injection - Pre-populates i18next to avoid "key-as-value" flicker during hydration
+const initializeI18n = async (lang?: string) => {
+    const currentLang = lang || i18n.language || initLang;
+    
+    // 1. Eagerly load critical namespaces to unblock initial render
+    await loadNamespaces(criticalNamespaces, currentLang);
+
+    // 2. Load deferred namespaces asynchronously in the background
+    loadNamespaces(deferredNamespaces, currentLang).catch(err => {
+        console.warn('Failed to load deferred i18n namespaces in background:', err);
+    });
+};
+
 // Listen for language changes and load resources dynamically
 i18n.on('languageChanged', (lang) => {
-    initializeI18n(lang).catch(console.error);
+    // Re-load all namespaces that have been loaded so far for the new language
+    const loadedNs = Array.from(loadedNamespaces).map(key => key.split(':')[1]);
+    const namespacesToLoad = Array.from(new Set([...criticalNamespaces, ...loadedNs]));
+    loadNamespaces(namespacesToLoad, lang).catch(console.error);
 });
 
 // Start initialization immediately

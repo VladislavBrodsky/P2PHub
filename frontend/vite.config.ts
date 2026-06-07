@@ -1,7 +1,9 @@
-import { defineConfig } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwind from '@tailwindcss/vite'
 import { sentryVitePlugin } from "@sentry/vite-plugin"
+import viteCompression from 'vite-plugin-compression'
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 
 // #comment: EMERGENCY FIX - Removal of manualChunks
 // Reverting to Vite's default bundling strategy to resolve module execution order issues.
@@ -13,6 +15,22 @@ export default defineConfig({
   plugins: [
     react(),
     tailwind(),
+    splitVendorChunkPlugin(),
+    viteCompression({
+      algorithm: 'gzip',
+      ext: '.gz',
+    }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+    }),
+    ViteImageOptimizer({
+      png: { quality: 80 },
+      jpeg: { quality: 80 },
+      jpg: { quality: 80 },
+      webp: { lossy: true, quality: 80 },
+      avif: { lossy: true, quality: 75 },
+    }),
     sentryVitePlugin({
       authToken: process.env.SENTRY_API_KEY,
       org: "web3-fintech",
