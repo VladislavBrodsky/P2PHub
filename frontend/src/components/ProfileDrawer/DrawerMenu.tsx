@@ -13,7 +13,8 @@ import {
     Shield,
     Monitor,
     Copy,
-    Check
+    Check,
+    LogOut
 } from 'lucide-react';
 import { apiClient } from '../../api/client';
 import { blogService } from '../../services/blogService';
@@ -41,7 +42,7 @@ interface DrawerMenuProps {
 export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
     const { t, i18n } = useTranslation('common');
     const { navigateTo } = useNavigation();
-    const { user } = useUser();
+    const { user, logout } = useUser();
     const { setSupportOpen } = useUI();
     const [expandedItem, setExpandedItem] = React.useState<string | null>(null);
     const [expandedNestedItem, setExpandedNestedItem] = React.useState<string | null>(null);
@@ -244,6 +245,7 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
         { id: 'community', icon: <Users />, label: t('navigation.community') },
         { id: 'faq', icon: <HelpCircle />, label: t('navigation.faq') },
         { id: 'support', icon: <Headphones />, label: t('navigation.support') },
+        ...(!isTMA() ? [{ id: 'logout', icon: <LogOut className="text-red-500/70" />, label: t('navigation.logout', 'Log Out') }] : []),
     ], [isAdmin, user?.is_pro, t]);
 
     return (
@@ -263,7 +265,10 @@ export function DrawerMenu({ onClose, selection }: DrawerMenuProps) {
                         <button
                             onClick={() => {
                                 selection();
-                                if (NAV_TABS[item.id]) {
+                                if (item.id === 'logout') {
+                                    onClose();
+                                    logout();
+                                } else if (NAV_TABS[item.id]) {
                                     onClose();
                                     navigateTo(NAV_TABS[item.id]);
                                 } else {

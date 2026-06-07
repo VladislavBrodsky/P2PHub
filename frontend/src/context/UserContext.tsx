@@ -52,6 +52,7 @@ interface UserContextType {
     completeStage: (id: number | string) => Promise<void>;
     unlockStage: (id: number | string) => Promise<void>;
     isSessionExpired: boolean;
+    logout: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -116,6 +117,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             if (next) localStorage.setItem(CACHE_KEY, JSON.stringify(next));
             return next;
         });
+    }, []);
+
+    const logout = useCallback(() => {
+        localStorage.removeItem(CACHE_KEY);
+        localStorage.removeItem('p2p_saved_init_data');
+        setUser(null);
+        window.dispatchEvent(new CustomEvent('tma-session-expired'));
     }, []);
 
     const { updateProgress } = useStartupProgress();
@@ -439,8 +447,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         updateUser,
         completeStage,
         unlockStage,
-        isSessionExpired
-    }), [user, isLoading, refreshUser, updateUser, completeStage, unlockStage, isSessionExpired]);
+        isSessionExpired,
+        logout
+    }), [user, isLoading, refreshUser, updateUser, completeStage, unlockStage, isSessionExpired, logout]);
 
     return (
         <UserContext.Provider value={contextValue}>
