@@ -120,3 +120,40 @@ async def test_telegram_widget_auth_endpoint(session: AsyncSession):
     res_again = await telegram_widget_auth(payload=payload, session=session)
     assert res_again["status"] == "success"
     assert res_again["is_new"] is False
+
+@pytest.mark.asyncio
+async def test_desktop_auth_full_integration_loop(session: AsyncSession):
+    import json
+    from app.core.security import validate_telegram_data
+    
+    auth_date = int(time.time())
+    payload_dict = {
+        "id": 77777777,
+        "first_name": "Desktop",
+        "last_name": "User",
+        "username": "desktopuser",
+        "photo_url": "http://photo.com/img.jpg",
+        "auth_date": auth_date,
+    }
+    widget_hash = compute_test_widget_hash(payload_dict, settings.BOT_TOKEN)
+    payload = TelegramWidgetAuthPayload(**payload_dict, hash=widget_hash)
+    
+    # 1. Authorize via widget endpoint
+    res = await telegram_widget_auth(payload=payload, session=session)
+    assert res["status"] == "success"
+    assert "initDataRaw" in res
+    
+    init_data_raw = res["initDataRaw"]
+    
+    # 2. Verify the returned initDataRaw using the security middleware validation
+    validated_vals = validate_telegram_data(init_data_raw)
+    assert validated_vals is not None
+    assert "user" in validated_vals
+    
+    # 3. Parse user and verify matches
+    user_info = json.loads(validated_vals["user"])
+    assert user_info["id"] == 77777777
+    assert user_info["username"] == "desktopuser"
+    assert user_info["first_name"] == "Desktop"
+    assert user_info["last_name"] == "User"
+    assert user_info["photo_url"] == "http://photo.com/img.jpg"
