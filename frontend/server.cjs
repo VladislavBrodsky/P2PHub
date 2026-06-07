@@ -30,6 +30,14 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+    // 1. Redirect www.pintopay.life to pintopay.life (Apex domain required for Telegram Login Widget)
+    const host = req.headers.host || '';
+    if (host === 'www.pintopay.life') {
+        res.writeHead(301, { 'Location': `https://pintopay.life${req.url}` });
+        res.end();
+        return;
+    }
+
     // #comment: Added health check endpoint for Railway/Load Balancer.
     // This allows Railway to verify that the frontend container is alive and 
     // serving traffic before routing domain requests to it.
@@ -41,7 +49,10 @@ const server = http.createServer((req, res) => {
 
     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
 
-    let filePath = path.join(DIST_DIR, req.url === '/' ? 'index.html' : req.url);
+    // Extract pathname to ignore any query string cache-busters (e.g. ?v=2)
+    const pathname = req.url.split('?')[0];
+
+    let filePath = path.join(DIST_DIR, pathname === '/' ? 'index.html' : pathname);
     let originalFilePath = filePath;
 
     // Basic SPA routing: if file doesn't exist, serve index.html
@@ -77,9 +88,9 @@ const server = http.createServer((req, res) => {
     // 1. Assets (hashed): Immutable forever (1 year)
     // 2. Images/Fonts: Long cache (24h)
     // 3. HTML/JSON: No cache to ensure instant updates on deployment
-    if (req.url.startsWith('/assets/')) {
+    if (pathname.startsWith('/assets/')) {
         headers['Cache-Control'] = 'public, max-age=31536000, immutable';
-    } else if (/\.(png|jpg|jpeg|gif|webp|svg|woff|woff2)$/.test(req.url)) {
+    } else if (/\.(png|jpg|jpeg|gif|webp|svg|woff|woff2)$/.test(pathname)) {
         headers['Cache-Control'] = 'public, max-age=86400';
     } else {
         headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';

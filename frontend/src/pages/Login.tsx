@@ -63,7 +63,7 @@ export const Login = () => {
 
     // ── Telegram Widget ───────────────────────────────────────────────────────
     useEffect(() => {
-        if (step !== 'widget' || isLocalhost) return;
+        if (step !== 'widget' || isLocalhost || !config) return;
         let mounted = true;
 
         const handleWidgetAuth = async (user: any) => {
@@ -117,7 +117,7 @@ export const Login = () => {
             mounted = false;
             delete (window as any).onTelegramAuth;
         };
-    }, [step, botUsername, refreshUser, isLocalhost]);
+    }, [step, botUsername, refreshUser, isLocalhost, config]);
 
     // ── Token submit ─────────────────────────────────────────────────────────
     const handleTokenSubmit = async (e: React.FormEvent) => {
