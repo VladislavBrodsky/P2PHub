@@ -34,11 +34,12 @@ def validate_telegram_data(init_data: str) -> dict:
             logger.warning(f"[AUTH] Signature check failed. Expected: {str(hmac_hash)[:6]}... Received: {str(hash_str)[:6]}...")
             raise HTTPException(status_code=401, detail="Invalid signature")
 
-        # Replay attack protection: auth_date must be within 30 days (extended from 7 days)
-        # Why: Prevents 401 errors for users with long-running Telegram Mini App sessions.
+        # Replay attack protection: auth_date must be within 365 days (extended from 30 days)
+        # Why: Prevents 401 errors for users on Telegram Desktop where launch parameters/initData
+        # are cached aggressively and indefinitely, causing old sessions to trigger lockouts.
         auth_date = int(vals.get('auth_date', 0))
         delta = time.time() - auth_date
-        if delta > 2592000: # 30 days
+        if delta > 31536000: # 365 days
             logger.warning(f"[AUTH] Session expired. auth_date: {auth_date} (Delta: {delta:.1f}s) InitData: {str(init_data)[:50]}...")
             raise HTTPException(status_code=401, detail="Session expired")
 
