@@ -438,9 +438,20 @@ async def add_request_id_middleware(request: Request, call_next):
         has_auth = init_header or (auth_header and auth_header.startswith("Bearer "))
         
         if not has_auth:
-            # We log as warning but include method and origin for easier debugging
             origin = request.headers.get("origin", "unknown")
-            logger.warning(f"🚨 [MISSING HEADER] {request.method} {request.url.path} (Origin: {origin})")
+            client_ip = request.client.host if request.client else "unknown"
+            # Railway internal network is 100.64.0.0/10 (Carrier-grade NAT)
+            # Requests from this range without auth are internal scripts/cron jobs — log as WARNING
+            is_railway_internal = client_ip.startswith("100.64.") or client_ip.startswith("100.6") or client_ip.startswith("100.7")
+            if is_railway_internal and origin == "unknown":
+                logger.warning(
+                    f"🔧 [INTERNAL SCRIPT] {request.method} {request.url.path} "
+                    f"from Railway-internal IP {client_ip} — likely a cron/test script with wrong URL or missing auth."
+                )
+            else:
+                # Normal unauthenticated requests (pre-login, prefetch, etc.) — demoted to debug.
+                # FastAPI's own get_current_user() dependency will return the correct 401.
+                logger.debug(f"[NO-AUTH] {request.method} {request.url.path} (Origin: {origin}, IP: {client_ip})")
         elif settings.DEBUG:
             source = "X-TID" if init_header else "Bearer"
             logger.debug(f"✅ [HEADER PRESENT] Path: {request.url.path} Source: {source}")

@@ -10,7 +10,7 @@ import json
 
 # Production API endpoint
 BASE_URL = "https://p2phub-production.up.railway.app"
-ENDPOINT = f"{BASE_URL}/api/pro/viral/generate"
+ENDPOINT = f"{BASE_URL}/api/pro/generate"  # Correct endpoint (was erroneously /viral/generate)
 
 # Test scenarios
 scenarios = [

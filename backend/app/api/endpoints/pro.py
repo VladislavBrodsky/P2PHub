@@ -524,6 +524,19 @@ async def update_referral_link(
     
     return {"status": "success", "personal_referral_link": link}
 
+# NOTE: /viral/generate is a permanent backward-compat alias.
+# Old test scripts and any stale clients used this incorrect path; the canonical URL is /generate.
+# Keeping this alias prevents 404 errors from those callers.
+@router.post("/viral/generate", response_model=ViralGenerateResponse, include_in_schema=False)
+async def generate_content_alias(
+    payload: ViralGenerateRequest,
+    partner: Partner = Depends(get_current_partner),
+    session: AsyncSession = Depends(get_session)
+):
+    """Backward-compat alias → delegates to /generate."""
+    logger.info("⚠️ /viral/generate alias hit — caller should update to /generate")
+    return await generate_content(payload, partner, session)
+
 @router.post("/generate", response_model=ViralGenerateResponse)
 async def generate_content(
     payload: ViralGenerateRequest,

@@ -2,6 +2,7 @@ import React from 'react';
 import { Gift } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '../../../../api/client';
+import { useUser } from '../../../../context/UserContext';
 import { EarningRow } from './EarningRow';
 
 interface EarningsListProps {
@@ -14,8 +15,17 @@ export const EarningsList: React.FC<EarningsListProps> = ({ isExpanded = false }
     const [loading, setLoading] = React.useState(true);
     const [activeTab, setActiveTab] = React.useState<'XP' | 'CRYPTO'>('XP');
     const { t } = useTranslation(['social', 'common']);
+    const { user } = useUser();
 
     React.useEffect(() => {
+        // Guard: do not fire API calls if there is no authenticated user.
+        // This prevents unauthenticated requests from desktop guests, which flood
+        // the backend logs with spurious MISSING HEADER warnings.
+        if (!user) {
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
                 const limit = isExpanded ? 50 : 20;
@@ -43,7 +53,8 @@ export const EarningsList: React.FC<EarningsListProps> = ({ isExpanded = false }
             }
         };
         fetchData();
-    }, [isExpanded]);
+    }, [isExpanded, user]);
+
 
     const cryptoItems = React.useMemo(() => {
         return [
