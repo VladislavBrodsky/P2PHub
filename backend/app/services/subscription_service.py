@@ -100,7 +100,7 @@ class SubscriptionService:
                 )
 
                 try:
-                    await redis_service.client.delete(f"partner:profile:v5:{partner.telegram_id}")
+                    await redis_service.delete_partner_profile(partner.telegram_id, partner.id)
                 except Exception as e:
                     logger.warning(f"Failed to invalidate cache for expired user {partner.telegram_id}: {e}")
 

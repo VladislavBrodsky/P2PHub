@@ -270,6 +270,7 @@ async def lifespan(app: FastAPI):
     # #comment: v1.9.0 "Refinement & Hardening" Release
     # Stabilized core systems, hardened academy exploits, and unified versioning across stack.
     logger.info("✅ Lifespan setup complete. App is live (v1.9.3).")
+    logger.info(f"🔑 Loaded ADMIN_USER_IDS: {settings.ADMIN_USER_IDS}")
     yield
     logger.info("🛑 Shutting down Lifespan...")
 

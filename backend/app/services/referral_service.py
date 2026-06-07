@@ -251,9 +251,7 @@ async def _stage_redis_invalidation(referrer: Partner, level: int, xp_gain: floa
 
     async def _work(p):
         tg_id = str(referrer.telegram_id)
-        p.delete(f"partner:profile:v5:{tg_id}")
-        p.delete(f"partner:profile:v4:{tg_id}")
-        p.delete(f"partner:profile:{tg_id}") # Cleanup old style
+        await redis_service.delete_partner_profile(tg_id, referrer.id, pipe=p)
         p.delete(f"profile_cache_v3:{referrer.id}") # Cleanup very old style
         p.delete(f"partner:earnings:{tg_id}")
         p.delete(f"ref_tree_stats_v2:{referrer.id}")

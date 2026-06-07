@@ -644,12 +644,7 @@ class PaymentService:
             async def _after_commit():
                 try:
                     tg_id = str(partner.telegram_id)
-                    # #comment: Unified to v5 across stack
-                    await redis_service.client.delete(f"partner:profile:v5:{tg_id}")
-                    # Cleanup legacy keys
-                    await redis_service.client.delete(f"profile_cache_v5:{partner.id}")
-                    await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
-                    await redis_service.client.delete(f"partner:profile:{tg_id}")
+                    await redis_service.delete_partner_profile(tg_id, partner.id)
                 except Exception as e:
                     logger.warning(f"Cache invalidation failed for {partner.telegram_id}: {e}")
 

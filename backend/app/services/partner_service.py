@@ -399,7 +399,7 @@ async def sync_single_photo_background(telegram_id: str):
         if partner and await sync_single_photo(bot, session, partner):
             await session.commit()
             # Invalidate profile cache
-            await redis_service.client.delete(f"partner:profile:v5:{telegram_id}")
+            await redis_service.delete_partner_profile(telegram_id, partner.id)
 
 async def migrate_paths(session: AsyncSession):
     """

@@ -70,6 +70,32 @@ class RedisService:
         """Removes a single key from Redis."""
         await self.client.delete(key)
 
+    async def delete_partner_profile(self, tg_id: str | int, partner_id: str | int | None = None, pipe=None):
+        """Deletes all cached versions of a partner's profile for cache consistency."""
+        tg_id_str = str(tg_id)
+        pid_str = str(partner_id) if partner_id is not None else None
+        
+        if pipe is not None:
+            pipe.delete(f"partner:profile:v7:{tg_id_str}")
+            pipe.delete(f"partner:profile:v6:{tg_id_str}")
+            pipe.delete(f"partner:profile:v5:{tg_id_str}")
+            pipe.delete(f"partner:profile:v4:{tg_id_str}")
+            pipe.delete(f"partner:profile:{tg_id_str}")
+            pipe.delete(f"profile_cache_v5:{tg_id_str}")
+            if pid_str:
+                pipe.delete(f"profile_cache_v5:{pid_str}")
+                pipe.delete(f"profile_cache_v3:{pid_str}")
+        else:
+            await self.client.delete(f"partner:profile:v7:{tg_id_str}")
+            await self.client.delete(f"partner:profile:v6:{tg_id_str}")
+            await self.client.delete(f"partner:profile:v5:{tg_id_str}")
+            await self.client.delete(f"partner:profile:v4:{tg_id_str}")
+            await self.client.delete(f"partner:profile:{tg_id_str}")
+            await self.client.delete(f"profile_cache_v5:{tg_id_str}")
+            if pid_str:
+                await self.client.delete(f"profile_cache_v5:{pid_str}")
+                await self.client.delete(f"profile_cache_v3:{pid_str}")
+
     async def delete_pattern(self, pattern: str):
         """Removes all keys matching a specific pattern (e.g. 'users:*') using SCAN."""
         count = 0

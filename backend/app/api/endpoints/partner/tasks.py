@@ -70,7 +70,7 @@ async def start_task(
     )
     session.add(new_task)
     await session.commit()
-    await redis_service.client.delete(f"partner:profile:{tg_id}")
+    await redis_service.delete_partner_profile(tg_id, partner.id)
 
     return ActiveTaskResponse(
         task_id=new_task.task_id,
@@ -170,7 +170,7 @@ async def claim_task_reward(
     
     # --- POS-COMMIT SIDE EFFECTS ---
     # We do these after commit to ensure they only happen if the DB update succeeded.
-    await redis_service.client.delete(f"partner:profile:{tg_id}")
+    await redis_service.delete_partner_profile(tg_id, partner.id)
 
     # Synchronize leaderboard post-commit
     from app.services.leaderboard_service import leaderboard_service
