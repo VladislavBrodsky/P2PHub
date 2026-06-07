@@ -75,9 +75,7 @@ async def simulate_artificial_activity():
             
             # 4. Invalidate profile cache
             tg_id = str(partner.telegram_id)
-            await redis_service.client.delete(f"partner:profile:v4:{tg_id}")
-            await redis_service.client.delete(f"partner:profile:{tg_id}")
-            await redis_service.client.delete(f"profile_cache_v3:{partner.id}")
+            await redis_service.delete_partner_profile(tg_id, partner.id)
             
             session.add(partner)
             

@@ -249,7 +249,7 @@ export const Login = () => {
                                         whileHover={{ rotate: 10, scale: 1.05 }}
                                         className="w-12 h-12 flex items-center justify-center shrink-0"
                                     >
-                                        <img src="/logo.svg?v=2" alt="Pintopay Logo" className="w-12 h-12 object-contain" />
+                                        <img src="/logo.png?v=2" alt="Pintopay Logo" className="w-12 h-12 object-contain" />
                                     </motion.div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary leading-none mb-1">

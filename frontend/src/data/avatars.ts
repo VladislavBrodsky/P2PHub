@@ -3,7 +3,7 @@
  * Uses static paths to keep the main bundle light.
  */
 
-export const LOGO_DATA = "/logo.svg?v=2";
+export const LOGO_DATA = "/logo.png?v=2";
 
 export const AVATAR_DATA: Record<string, string> = {
     "avatar_1": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=128&h=128&fit=crop",
