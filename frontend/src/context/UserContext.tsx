@@ -191,15 +191,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
             // #comment: OPTIMISTIC UI FIX
             // We apply the SDK data IMMEDIATELY if we don't have a user yet.
+            // IMPORTANT: We must NEVER replace an existing fully-loaded cached user with a
+            // bare SDK skeleton (which only has first_name/last_name/photo_url).
+            // That would cause the 0.5s "empty profile" flash the user sees.
             if (tgUser) {
                 setUser(prev => {
-                    if (prev && prev.telegram_id === String(tgUser.id)) return prev;
+                    // If we already have a real user object, keep it — never downgrade to a skeleton.
+                    // Use String() on both sides to handle cases where telegram_id is stored
+                    // as a number in JSON.parse'd localStorage (int vs string type mismatch).
+                    if (prev && String(prev.telegram_id) === String(tgUser.id)) return prev;
+                    // Only build a skeleton if there is truly no existing user at all.
+                    if (prev) return prev;
                     return {
-                        ...(prev || {} as any),
                         first_name: tgUser.firstName,
                         last_name: tgUser.lastName || null,
                         photo_url: tgUser.photoUrl || null,
-                    };
+                    } as any;
                 });
 
                 // Eagerly preload profile photo from SDK data

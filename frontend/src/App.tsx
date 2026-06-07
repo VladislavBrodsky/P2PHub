@@ -165,12 +165,11 @@ function AppContent({ onReady, showOnboarding }: { onReady: () => void; showOnbo
         };
     }, [activeTab, navigateTo]);
 
-    const isMobileDevice = /iPhone|iPad|iPod|Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    // #comment: Guard behind isUserLoading — if the user is already stored in localStorage cache
-    // and the context is still hydrating, we must NOT redirect to Login prematurely.
-    const isDesktopGuest = !isUserLoading && !isTMA() && !user && !isMobileDevice;
+    // #comment: If we are not in Telegram (isTMA is false), hydration is complete, and we have no
+    // authenticated user, we must redirect the user to the Login page (on both desktop and mobile browsers).
+    const isGuest = !isUserLoading && !isTMA() && !user;
 
-    if (isDesktopGuest) {
+    if (isGuest) {
         return (
             <Suspense fallback={null}>
                 <Login />
