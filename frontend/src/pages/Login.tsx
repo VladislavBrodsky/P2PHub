@@ -113,22 +113,26 @@ export const Login = () => {
                         {/* Title */}
                         <div className="space-y-2">
                             <h1 className="text-3xl font-black tracking-tight text-white uppercase flex items-center gap-2">
-                                <span className="text-blue-500 font-extrabold">onex</span> portal
+                                <span className="text-blue-500 font-extrabold">Pintopay</span> Partner
                             </h1>
                             <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-400">
-                                B2B Partner Portal
+                                Partner Center Portal
                             </p>
                         </div>
 
                         {/* Description */}
                         <p className="text-sm text-text-secondary leading-relaxed font-medium">
-                            {t('login_description', 'Premium solutions for financial logistics and foreign economic activity. Log in using the official secured Telegram Widget.')}
+                            {t('login_description', 'Secure dashboard for Pintopay partners. Log in using the official secured Telegram Widget.')}
                         </p>
                     </div>
 
                     {/* Telegram Widget Area */}
                     <div className="my-8 space-y-4">
                         <div id="telegram-widget-container" className="min-h-[40px] flex items-center justify-start" />
+                        
+                        <p className="text-[10px] text-slate-400 leading-normal opacity-80 max-w-xs">
+                            💡 <i>If the widget shows "Bot domain invalid" (common on development/preview URLs), please use the <b>Link Device via QR</b> feature on the right.</i>
+                        </p>
                         
                         {/* Remember me checkbox */}
                         <label className="flex items-center gap-3 cursor-pointer text-xs text-text-secondary select-none font-medium">
