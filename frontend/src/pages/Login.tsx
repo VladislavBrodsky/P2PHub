@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { m, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useConfig } from '../context/ConfigContext';
 import { useUser } from '../context/UserContext';
 import { useTheme } from '../context/ThemeContext';
@@ -105,8 +105,7 @@ export const Login = () => {
             script.setAttribute('data-request-access', 'write');
             script.setAttribute('data-radius', '12');
 
-            // Detect "Bot domain invalid" by watching for the iframe error text
-            // The widget injects an iframe; if domain isn't whitelisted it shows this text
+            // Detect "Bot domain invalid" by watching for iframe error text
             script.onload = () => {
                 setTimeout(() => {
                     if (!mounted) return;
@@ -163,23 +162,35 @@ export const Login = () => {
     };
 
     const cardVariants = {
-        initial: { opacity: 0, y: 30, scale: 0.97 },
-        animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.34, 1.1, 0.64, 1] } },
+        initial: { opacity: 0, y: 40, scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.34, 1.56, 0.64, 1] } },
     };
 
     return (
-        <div className="min-h-screen w-full flex items-center justify-center p-4 relative overflow-hidden bg-bg-app">
+        <div className="min-h-screen w-full flex items-center justify-center p-4 md:p-6 relative overflow-hidden bg-bg-app">
 
-            {/* ── Ambient background ── */}
+            {/* ── Ambient background with breathing spotlights ── */}
             <div className="absolute inset-0 pointer-events-none" aria-hidden>
                 {/* Primary blue glow — top-left */}
-                <div
-                    className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.18] dark:opacity-[0.22] blur-[120px]"
+                <motion.div
+                    animate={{
+                        scale: [1, 1.12, 1],
+                        x: [0, 15, 0],
+                        y: [0, -15, 0]
+                    }}
+                    transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+                    className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.2] dark:opacity-[0.26] blur-[120px]"
                     style={{ background: 'radial-gradient(circle, #2563EB, transparent 70%)' }}
                 />
                 {/* Purple accent — bottom-right */}
-                <div
-                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.12] dark:opacity-[0.18] blur-[100px]"
+                <motion.div
+                    animate={{
+                        scale: [1, 1.08, 1],
+                        x: [0, -15, 0],
+                        y: [0, 20, 0]
+                    }}
+                    transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.14] dark:opacity-[0.22] blur-[100px]"
                     style={{ background: 'radial-gradient(circle, #7C3AED, transparent 70%)' }}
                 />
                 {/* Subtle centre radial */}
@@ -189,7 +200,7 @@ export const Login = () => {
                 />
                 {/* Floating grid texture */}
                 <div
-                    className="absolute inset-0 opacity-[0.025] dark:opacity-[0.04]"
+                    className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
                     style={{
                         backgroundImage: 'linear-gradient(rgba(59,130,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.5) 1px, transparent 1px)',
                         backgroundSize: '48px 48px',
@@ -200,7 +211,7 @@ export const Login = () => {
             {/* ── Theme toggle ── */}
             <button
                 onClick={() => setTheme(isDark ? 'light' : 'dark')}
-                className="fixed top-5 right-5 z-50 w-10 h-10 rounded-full border border-card-border bg-card-bg/80 backdrop-blur-xl flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue/40 transition-all shadow-premium"
+                className="fixed top-5 right-5 z-50 w-10 h-10 rounded-full border border-card-border bg-card-bg/85 backdrop-blur-xl flex items-center justify-center text-text-secondary hover:text-brand-blue hover:border-brand-blue/40 transition-all shadow-premium"
                 aria-label="Toggle theme"
             >
                 {isDark
@@ -209,102 +220,115 @@ export const Login = () => {
                 }
             </button>
 
-            {/* ── Main card ── */}
-            <m.div
+            {/* ── Main container ── */}
+            <motion.div
                 className="relative z-10 w-full max-w-5xl"
                 variants={cardVariants}
                 initial="initial"
                 animate="animate"
             >
-                <div className="rounded-[28px] border border-card-border bg-card-bg/70 backdrop-blur-2xl shadow-[0_40px_100px_rgba(0,0,0,0.22)] overflow-hidden">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[640px]">
+                {/* Glassmorphic Panel Wrapper */}
+                <div className="rounded-[32px] border border-card-border/80 bg-card-bg/60 dark:bg-[#080d1e]/85 backdrop-blur-3xl shadow-[0_50px_120px_rgba(0,0,0,0.35)] overflow-hidden relative">
+                    {/* Decorative premium border overlay */}
+                    <div className="absolute inset-0 border border-white/5 pointer-events-none rounded-[32px] z-20" />
+                    
+                    <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[660px]">
 
                         {/* ═══════════════════════════════════════════════
                             LEFT PANEL — Brand + Features Showcase
                         ═══════════════════════════════════════════════ */}
-                        <div className="lg:col-span-7 flex flex-col p-8 md:p-12 justify-between gap-8 border-b lg:border-b-0 lg:border-r border-card-border relative overflow-hidden bg-slate-900/5 dark:bg-slate-950/20">
-                            {/* Subtle inner glow in left panel */}
+                        <div className="lg:col-span-7 flex flex-col p-8 md:p-12 justify-between gap-8 border-b lg:border-b-0 lg:border-r border-card-border relative overflow-hidden bg-linear-to-br from-slate-900/20 via-slate-900/5 to-transparent dark:from-slate-950/45 dark:via-slate-950/20 dark:to-transparent">
+                            {/* Honeycomb & Circuit Decors for rich tech texture */}
+                            <div className="honeycomb-decor absolute inset-0 opacity-15 dark:opacity-20 pointer-events-none" />
+                            <div className="circuit-decor absolute inset-0 opacity-15 dark:opacity-25 pointer-events-none" />
+                            
+                            {/* Spotlight glow in top left */}
                             <div
-                                className="absolute top-0 left-0 w-80 h-80 pointer-events-none"
-                                style={{ background: 'radial-gradient(circle at 0% 0%, rgba(37,99,235,0.08), transparent 70%)' }}
+                                className="absolute -top-20 -left-20 w-80 h-80 pointer-events-none"
+                                style={{ background: 'radial-gradient(circle at 0% 0%, rgba(37,99,235,0.12), transparent 70%)' }}
                             />
 
                             {/* Brand header */}
                             <div className="space-y-6 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 vibing-blue-animated shrink-0">
+                                    <motion.div 
+                                        whileHover={{ rotate: 10, scale: 1.05 }}
+                                        className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 vibing-blue-animated shrink-0"
+                                    >
                                         <Logo />
-                                    </div>
+                                    </motion.div>
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-text-secondary leading-none mb-0.5">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary leading-none mb-1">
                                             Partner Center
                                         </p>
-                                        <h1 className="text-2xl font-black tracking-tight text-text-primary leading-none">
-                                            <span className="text-brand-blue">Pinto</span>pay
+                                        <h1 className="text-3xl font-black tracking-tight leading-none flex items-center gap-1">
+                                            <span className="vibing-crystal-text">PintoPay</span>
                                         </h1>
                                     </div>
                                 </div>
 
                                 {/* Live badge */}
-                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/6 backdrop-blur-sm">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34D399] animate-pulse" />
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-500 dark:text-blue-300">
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/8 backdrop-blur-sm shadow-inner">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34D399] animate-pulse" />
+                                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-blue-500 dark:text-blue-300">
                                         Secure Entry · Desktop
                                     </span>
                                 </div>
 
-                                <p className="text-sm text-text-secondary leading-relaxed max-w-md">
+                                <p className="text-sm text-text-secondary leading-relaxed max-w-md font-medium">
                                     {t('login_description', 'Access your full Pintopay partner dashboard. Connect via Telegram to sync your stats, referrals, and earnings.')}
                                 </p>
                             </div>
 
-                            {/* Feature list - clean glassmorphic cards */}
+                            {/* Feature list - tech cards with gradient glow on hover */}
                             <div className="relative z-10 space-y-3 flex-1 flex flex-col justify-center my-6">
-                                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-text-secondary mb-1">
+                                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-text-secondary mb-1">
                                     What you'll access
                                 </p>
                                 {[
-                                    { icon: '📊', title: 'Live Dashboard',     desc: 'Volume, XP & commissions in real time' },
-                                    { icon: '🏆', title: 'Leaderboards',       desc: 'Your rank among top P2P partners' },
-                                    { icon: '💳', title: 'Card Management',    desc: 'Manage Pintopay cards from desktop' },
-                                    { icon: '🤝', title: 'Referral Tree',      desc: 'Full network depth & earnings view' },
-                                    { icon: '🚀', title: 'Viral Studio',       desc: 'AI content generation for growth' },
+                                    { icon: '📊', title: 'Live Dashboard',     desc: 'Volume, XP & commissions in real time', color: 'from-blue-500/10 to-indigo-500/5 border-blue-500/15' },
+                                    { icon: '🏆', title: 'Leaderboards',       desc: 'Your rank among top P2P partners', color: 'from-yellow-500/10 to-amber-500/5 border-yellow-500/15' },
+                                    { icon: '💳', title: 'Card Management',    desc: 'Manage Pintopay cards from desktop', color: 'from-emerald-500/10 to-teal-500/5 border-emerald-500/15' },
+                                    { icon: '🤝', title: 'Referral Tree',      desc: 'Full network depth & earnings view', color: 'from-purple-500/10 to-fuchsia-500/5 border-purple-500/15' },
+                                    { icon: '🚀', title: 'Viral Studio',       desc: 'AI content generation for growth', color: 'from-pink-500/10 to-rose-500/5 border-pink-500/15' },
                                 ].map((feat) => (
-                                    <m.div
+                                    <motion.div
                                         key={feat.title}
-                                        whileHover={{ x: 6, backgroundColor: 'var(--sys-bg-surface)' }}
+                                        whileHover={{ x: 6, scale: 1.01, backgroundColor: 'rgba(59, 130, 246, 0.03)' }}
                                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                                        className="flex items-center gap-3.5 p-3 rounded-2xl border border-card-border bg-card-bg/40 hover:border-brand-blue/30 hover:shadow-premium-sm transition-all cursor-default"
+                                        className={`flex items-center gap-4 p-3.5 rounded-2xl border bg-linear-to-r ${feat.color} hover:border-blue-500/35 hover:shadow-premium-sm transition-all cursor-default relative overflow-hidden group`}
                                     >
-                                        <span className="text-xl shrink-0">{feat.icon}</span>
-                                        <div className="min-w-0">
-                                            <p className="text-xs font-bold text-text-primary leading-none mb-0.5">{feat.title}</p>
-                                            <p className="text-[10px] text-text-secondary leading-tight">{feat.desc}</p>
+                                        <div className="w-9 h-9 rounded-xl bg-slate-950/10 dark:bg-white/5 border border-white/10 flex items-center justify-center text-lg shadow-inner shrink-0 group-hover:scale-110 transition-transform">
+                                            {feat.icon}
                                         </div>
-                                        <div className="ml-auto w-1.5 h-1.5 rounded-full bg-emerald-400/60 shrink-0" />
-                                    </m.div>
+                                        <div className="min-w-0">
+                                            <p className="text-xs font-black text-text-primary leading-none mb-1 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">{feat.title}</p>
+                                            <p className="text-[10px] text-text-secondary leading-tight font-medium">{feat.desc}</p>
+                                        </div>
+                                        <div className="ml-auto w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34D399] shrink-0" />
+                                    </motion.div>
                                 ))}
                             </div>
 
                             {/* Social proof footer */}
-                            <div className="relative z-10 flex items-center gap-3 pt-4 border-t border-card-border">
+                            <div className="relative z-10 flex items-center gap-3.5 pt-4 border-t border-card-border">
                                 <div className="flex -space-x-2">
                                     {['🧑‍💼', '👩‍💻', '🧑', '👨‍💼'].map((e, i) => (
                                         <div
                                             key={i}
-                                            className="w-7 h-7 rounded-full border-2 border-card-bg bg-card-bg flex items-center justify-center text-sm shadow-sm"
+                                            className="w-7.5 h-7.5 rounded-full border-2 border-[#0a0f1d] bg-slate-900 flex items-center justify-center text-sm shadow-md"
                                         >
                                             {e}
                                         </div>
                                     ))}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-text-primary leading-none">10,000+ partners</p>
-                                    <p className="text-[10px] text-text-secondary">active on Pintopay network</p>
+                                    <p className="text-xs font-black text-text-primary leading-none mb-0.5">10,000+ partners</p>
+                                    <p className="text-[10px] text-text-secondary font-medium">active on Pintopay network</p>
                                 </div>
-                                <div className="ml-auto flex items-center gap-1.5 text-emerald-500 bg-emerald-500/6 border border-emerald-500/10 px-2.5 py-1 rounded-full backdrop-blur-sm">
+                                <div className="ml-auto flex items-center gap-1.5 text-emerald-500 bg-emerald-500/8 border border-emerald-500/10 px-3 py-1 rounded-full backdrop-blur-sm shadow-sm">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34D399]" />
-                                    <span className="text-[9px] font-black uppercase tracking-wider">Live</span>
+                                    <span className="text-[9px] font-black uppercase tracking-[0.15em]">Live</span>
                                 </div>
                             </div>
                         </div>
@@ -312,37 +336,45 @@ export const Login = () => {
                         {/* ═══════════════════════════════════════════════
                             RIGHT PANEL — Interactive Auth Gate
                         ═══════════════════════════════════════════════ */}
-                        <div className="lg:col-span-5 flex flex-col p-8 md:p-12 justify-between gap-8 relative overflow-hidden bg-card-bg/25">
-                            {/* Panel inner glow */}
+                        <div className="lg:col-span-5 flex flex-col p-8 md:p-12 justify-between gap-8 relative overflow-hidden bg-card-bg/15 dark:bg-[#040815]/40">
+                            {/* Tech overlays */}
+                            <div className="honeycomb-decor absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none" />
                             <div
                                 className="absolute inset-0 pointer-events-none"
-                                style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.04) 0%, transparent 70%)' }}
+                                style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.06) 0%, transparent 70%)' }}
                             />
 
                             {/* Title header */}
-                            <div className="space-y-1.5 relative z-10 text-center lg:text-left">
+                            <div className="space-y-2 relative z-10 text-center lg:text-left">
                                 <h2 className="text-xl font-black text-text-primary tracking-tight">
                                     Partner Authorization
                                 </h2>
-                                <p className="text-xs text-text-secondary leading-relaxed">
+                                <p className="text-xs text-text-secondary leading-relaxed font-medium">
                                     Securely link your desktop session via Telegram to continue
                                 </p>
                             </div>
 
-                            {/* Step pills */}
-                            <div className="flex p-1 rounded-2xl bg-slate-200/50 dark:bg-slate-900/60 border border-card-border relative z-10 w-full">
+                            {/* Segmented control with sliding Framer Motion indicator */}
+                            <div className="flex p-1.5 rounded-2xl bg-slate-900/30 dark:bg-black/40 border border-white/5 backdrop-blur-md relative z-10 w-full shadow-inner">
                                 {STEPS.map((s) => (
                                     <button
                                         key={s.id}
                                         onClick={() => { setStep(s.id); setError(null); }}
-                                        className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                                            step === s.id
-                                                ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20 scale-[1.01]'
-                                                : 'text-text-secondary hover:text-text-primary'
-                                        }`}
+                                        className="relative flex-1 py-3 rounded-xl text-[10px] font-extrabold uppercase tracking-widest transition-all cursor-pointer z-10 text-center focus:outline-none"
                                     >
-                                        <span>{s.icon}</span>
-                                        {s.label}
+                                        {step === s.id && (
+                                            <motion.div
+                                                layoutId="activeTabPill"
+                                                className="absolute inset-0 rounded-xl vibing-blue-animated shadow-lg shadow-blue-500/25 z-[-1]"
+                                                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                            />
+                                        )}
+                                        <span className="relative z-10 flex items-center justify-center gap-1.5">
+                                            <span className="text-xs">{s.icon}</span>
+                                            <span className={step === s.id ? 'text-white' : 'text-text-secondary hover:text-text-primary transition-colors'}>
+                                                {s.label}
+                                            </span>
+                                        </span>
                                     </button>
                                 ))}
                             </div>
@@ -353,10 +385,10 @@ export const Login = () => {
 
                                     {/* WIDGET */}
                                     {step === 'widget' && (
-                                        <m.div key="widget" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
+                                        <motion.div key="widget" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
                                             <div className="text-center space-y-1.5 max-w-xs">
-                                                <p className="text-xs font-bold text-text-primary">Instant Widget Login</p>
-                                                <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                <p className="text-xs font-black text-text-primary">Instant Widget Login</p>
+                                                <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
                                                     Click the Telegram button below to authorize instantly using your Telegram account.
                                                 </p>
                                             </div>
@@ -365,11 +397,11 @@ export const Login = () => {
                                             <div
                                                 ref={widgetRef}
                                                 id="telegram-widget-container"
-                                                className="min-h-[50px] flex items-center justify-center"
+                                                className="min-h-[50px] flex items-center justify-center relative z-20"
                                             />
 
                                             {widgetFailed ? (
-                                                <m.div
+                                                <motion.div
                                                     initial={{ opacity: 0, y: 6 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     className="rounded-2xl border border-amber-400/20 bg-amber-400/6 p-4 space-y-2 w-full text-left"
@@ -378,7 +410,7 @@ export const Login = () => {
                                                         <AlertCircle className="w-4 h-4 shrink-0" />
                                                         <p className="text-xs font-bold">Widget unavailable on this domain</p>
                                                     </div>
-                                                    <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                    <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
                                                         Telegram's Login Widget requires the serving domain to be registered in BotFather via <code className="text-brand-blue font-mono font-bold">/setdomain</code>. This is normal on preview/localhost URLs.
                                                     </p>
                                                     <button
@@ -387,9 +419,9 @@ export const Login = () => {
                                                     >
                                                         Use QR Code instead <ArrowRight className="w-3 h-3" />
                                                     </button>
-                                                </m.div>
+                                                </motion.div>
                                             ) : (
-                                                <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs">
+                                                <p className="text-[11px] text-text-secondary leading-relaxed opacity-75 rounded-2xl border border-card-border bg-card-bg/40 p-3 text-center max-w-xs font-medium">
                                                     💡 <em>If the widget displays "Bot domain invalid", please switch to <strong>Scan QR Code</strong> above.</em>
                                                 </p>
                                             )}
@@ -402,45 +434,45 @@ export const Login = () => {
                                             )}
 
                                             {success && (
-                                                <m.div
+                                                <motion.div
                                                     initial={{ scale: 0.9, opacity: 0 }}
                                                     animate={{ scale: 1, opacity: 1 }}
                                                     className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5 w-full"
                                                 >
                                                     <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                                                     <p className="text-[11px] font-bold text-emerald-400">Authenticated! Loading your dashboard…</p>
-                                                </m.div>
+                                                </motion.div>
                                             )}
-                                        </m.div>
+                                        </motion.div>
                                     )}
 
                                     {/* QR */}
                                     {step === 'qr' && (
-                                        <m.div key="qr" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
+                                        <motion.div key="qr" {...fadeSlide} className="space-y-6 w-full flex flex-col items-center">
                                             <div className="text-center space-y-1.5 max-w-xs">
-                                                <p className="text-xs font-bold text-text-primary">Scan QR Code</p>
-                                                <p className="text-[11px] text-text-secondary leading-relaxed">
+                                                <p className="text-xs font-black text-text-primary">Scan QR Code</p>
+                                                <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
                                                     Scan to open Pintopay bot in Telegram on your phone. Go to Profile → Connect Desktop to sync.
                                                 </p>
                                             </div>
 
-                                            {/* QR Frame */}
+                                            {/* Advanced Premium QR Frame with scanner laser */}
                                             <div className="relative">
-                                                <div className="absolute -inset-3 rounded-[28px] bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-blue-600/20 blur-lg" />
-                                                <div className="relative rounded-[22px] p-3.5 bg-white dark:bg-slate-950 border border-blue-200/30 dark:border-white/10 shadow-[0_20px_60px_rgba(37,99,235,0.2)]">
+                                                <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-br from-blue-500/25 via-indigo-500/10 to-purple-500/20 blur-xl opacity-80" />
+                                                <div className="relative rounded-[26px] p-4 bg-white dark:bg-[#030712] border border-blue-500/20 dark:border-white/10 shadow-[0_25px_60px_rgba(37,99,235,0.25)] flex items-center justify-center">
                                                     {/* Corner brackets */}
                                                     {[
-                                                        'top-2 left-2 border-t-2 border-l-2 rounded-tl-lg',
-                                                        'top-2 right-2 border-t-2 border-r-2 rounded-tr-lg',
-                                                        'bottom-2 left-2 border-b-2 border-l-2 rounded-bl-lg',
-                                                        'bottom-2 right-2 border-b-2 border-r-2 rounded-br-lg',
+                                                        'top-2.5 left-2.5 border-t-2 border-l-2 rounded-tl-lg',
+                                                        'top-2.5 right-2.5 border-t-2 border-r-2 rounded-tr-lg',
+                                                        'bottom-2.5 left-2.5 border-b-2 border-l-2 rounded-bl-lg',
+                                                        'bottom-2.5 right-2.5 border-b-2 border-r-2 rounded-br-lg',
                                                     ].map((cls, i) => (
                                                         <div
                                                             key={i}
-                                                            className={`absolute w-5 h-5 border-brand-blue/70 ${cls}`}
+                                                            className={`absolute w-5 h-5 border-blue-500/80 ${cls}`}
                                                         />
                                                     ))}
-                                                    <div className="relative rounded-xl overflow-hidden">
+                                                    <div className="relative rounded-xl overflow-hidden bg-white dark:bg-[#030712]">
                                                         <img
                                                             src={qrCodeUrl}
                                                             alt="Scan to open Pintopay bot"
@@ -451,6 +483,7 @@ export const Login = () => {
                                                             className="absolute left-0 right-0 h-0.5 rounded-full pointer-events-none"
                                                             style={{
                                                                 background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.9), transparent)',
+                                                                boxShadow: '0 0 12px #3b82f6, 0 0 4px #fff',
                                                                 animation: 'scan 2.5s ease-in-out infinite',
                                                                 top: 0,
                                                             }}
@@ -464,8 +497,9 @@ export const Login = () => {
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 id="open-telegram-btn"
-                                                className="group flex items-center gap-2 px-5 py-3 rounded-2xl vibing-blue-animated text-white text-xs font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer"
+                                                className="group flex items-center gap-2.5 px-6 py-3.5 rounded-2xl vibing-blue-animated text-white text-xs font-black tracking-widest shadow-lg shadow-blue-500/35 hover:shadow-blue-500/50 hover:brightness-110 active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                                             >
+                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
                                                 <TelegramIcon size={16} />
                                                 Open in Telegram
                                                 <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -477,15 +511,15 @@ export const Login = () => {
                                             >
                                                 I have my link <ArrowRight className="w-3 h-3" />
                                             </button>
-                                        </m.div>
+                                        </motion.div>
                                     )}
 
                                     {/* TOKEN */}
                                     {step === 'token' && (
-                                        <m.div key="token" {...fadeSlide} className="space-y-5 w-full">
+                                        <motion.div key="token" {...fadeSlide} className="space-y-5 w-full">
                                             <div className="text-center lg:text-left space-y-1">
-                                                <h3 className="text-sm font-bold text-text-primary">Paste Access Link</h3>
-                                                <p className="text-xs text-text-secondary leading-relaxed">
+                                                <h3 className="text-sm font-black text-text-primary">Paste Access Link</h3>
+                                                <p className="text-xs text-text-secondary leading-relaxed font-medium">
                                                     Copy the <strong className="text-text-primary">Connect Desktop</strong> link from the Pintopay bot on your phone and paste it below.
                                                 </p>
                                             </div>
@@ -498,7 +532,7 @@ export const Login = () => {
                                                         value={tokenInput}
                                                         onChange={(e) => setTokenInput(e.target.value)}
                                                         placeholder="Paste your access link here…"
-                                                        className="w-full pl-10 pr-4 py-3 rounded-2xl border border-input-border bg-input-bg text-text-primary placeholder:text-input-placeholder focus:border-brand-blue/60 focus:outline-none focus:ring-2 focus:ring-brand-blue/12 transition-all text-xs font-medium"
+                                                        className="w-full pl-10 pr-4 py-3 rounded-2xl border border-input-border/85 bg-input-bg/75 dark:bg-black/40 text-text-primary placeholder:text-input-placeholder focus:border-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-500/10 transition-all text-xs font-semibold shadow-inner"
                                                         style={{ fontSize: '1rem' }}
                                                     />
                                                 </div>
@@ -511,21 +545,21 @@ export const Login = () => {
                                                 )}
 
                                                 {success && (
-                                                    <m.div
+                                                    <motion.div
                                                         initial={{ scale: 0.9, opacity: 0 }}
                                                         animate={{ scale: 1, opacity: 1 }}
                                                         className="flex items-center gap-2 rounded-2xl border border-emerald-400/20 bg-emerald-400/8 px-3 py-2.5 w-full"
                                                     >
                                                         <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                                                         <p className="text-[11px] font-bold text-emerald-400">Synced! Loading dashboard…</p>
-                                                    </m.div>
+                                                    </motion.div>
                                                 )}
 
                                                 <button
                                                     type="submit"
                                                     disabled={isSubmitting || !tokenInput.trim()}
                                                     id="login-sync-btn"
-                                                    className="w-full py-3 rounded-2xl font-bold text-xs uppercase tracking-wider transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 vibing-blue-animated shadow-lg shadow-blue-500/25 cursor-pointer"
+                                                    className="w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2.5 vibing-blue-animated shadow-lg shadow-blue-500/25 hover:shadow-[0_0_25px_rgba(0,102,255,0.45)] hover:brightness-110 cursor-pointer"
                                                 >
                                                     {isSubmitting ? (
                                                         <>
@@ -542,7 +576,7 @@ export const Login = () => {
                                             </form>
 
                                             <div className="space-y-2.5 pt-2">
-                                                <p className="text-[10px] font-bold uppercase tracking-wider text-text-secondary">Instructions:</p>
+                                                <p className="text-[10px] font-black uppercase tracking-wider text-text-secondary">Instructions:</p>
                                                 {[
                                                     'Start the Pintopay bot in Telegram on your phone',
                                                     'Tap "Profile" and select "Connect Desktop"',
@@ -550,14 +584,14 @@ export const Login = () => {
                                                     'Paste it in the field above to sync instantly',
                                                 ].map((text, i) => (
                                                     <div key={i} className="flex items-start gap-2.5">
-                                                        <div className="w-4 h-4 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[9px] font-black text-brand-blue shrink-0 mt-0.5">
+                                                        <div className="w-4 h-4 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-[9px] font-black text-brand-blue shrink-0 mt-0.5 shadow-sm">
                                                             {i + 1}
                                                         </div>
-                                                        <span className="text-[11px] text-text-secondary leading-snug">{text}</span>
+                                                        <span className="text-[11px] text-text-secondary leading-snug font-medium">{text}</span>
                                                     </div>
                                                 ))}
                                             </div>
-                                        </m.div>
+                                        </motion.div>
                                     )}
                                 </AnimatePresence>
                             </div>
@@ -565,7 +599,7 @@ export const Login = () => {
                             {/* Footer trust line */}
                             <div className="flex items-center justify-center gap-2 pt-4 border-t border-card-border relative z-10">
                                 <Shield className="h-3.5 w-3.5 text-brand-blue shrink-0 animate-pulse" />
-                                <span className="text-[10px] text-text-secondary font-semibold uppercase tracking-wider">
+                                <span className="text-[10px] text-text-secondary font-black uppercase tracking-widest">
                                     End-to-end secured via Telegram cryptographic auth
                                 </span>
                             </div>
@@ -575,10 +609,10 @@ export const Login = () => {
                 </div>
 
                 {/* Watermark */}
-                <p className="text-center text-[10px] text-text-secondary opacity-30 mt-5 font-medium tracking-[0.3em] uppercase">
+                <p className="text-center text-[10px] text-text-secondary opacity-35 mt-6 font-bold tracking-[0.3em] uppercase">
                     Pintopay Partner Center · v1.9.3
                 </p>
-            </m.div>
+            </motion.div>
         </div>
     );
 };
