@@ -417,7 +417,14 @@ async def add_request_id_middleware(request: Request, call_next):
         sentry_sdk.set_tag("request_id", request_id)
     
     protected_prefixes = ["/api/partner/", "/api/pro/", "/api/payment/", "/api/admin/", "/api/tools/", "/api/earnings/", "/api/leaderboard/me"]
-    public_endpoints = ["/api/partner/orbit-members", "/api/partner/recent", "/api/partner/top", "/api/partner/stats/public"]
+    public_endpoints = [
+        "/api/partner/orbit-members",
+        "/api/partner/recent",
+        "/api/partner/top",
+        "/api/partner/stats/public",
+        "/api/pro/stats",
+        "/api/pro/members/avatars"
+    ]
     public_prefixes = ["/api/partner/photo/"]
     
     is_protected = any(request.url.path.startswith(p) for p in protected_prefixes)

@@ -100,7 +100,9 @@ const isAuthRouteCheck = (url: string | undefined): boolean => {
         '/api/partner/orbit-members',
         '/api/partner/recent',
         '/api/partner/top',
-        '/api/partner/stats/public'
+        '/api/partner/stats/public',
+        '/api/pro/stats',
+        '/api/pro/members/avatars'
     ];
     const publicPrefixes = [
         '/api/partner/photo/'
