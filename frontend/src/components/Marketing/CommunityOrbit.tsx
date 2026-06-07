@@ -224,7 +224,7 @@ const CentralLogo = memo(() => {
                         className="relative z-20 w-20 h-20 object-contain drop-shadow-2xl"
                         onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = '/images/logo.png';
+                            target.src = LOGO_DATA;
                         }}
                     />
                 )}
