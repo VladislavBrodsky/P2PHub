@@ -174,7 +174,7 @@ export const Login = () => {
                         y: [0, -15, 0]
                     }}
                     transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.2] dark:opacity-[0.26] blur-[120px]"
+                    className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.12] dark:opacity-[0.16] blur-[120px]"
                     style={{ background: 'radial-gradient(circle, #2563EB, transparent 70%)' }}
                 />
                 {/* Purple accent — bottom-right */}
@@ -185,17 +185,17 @@ export const Login = () => {
                         y: [0, 20, 0]
                     }}
                     transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.14] dark:opacity-[0.22] blur-[100px]"
+                    className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full opacity-[0.08] dark:opacity-[0.12] blur-[100px]"
                     style={{ background: 'radial-gradient(circle, #7C3AED, transparent 70%)' }}
                 />
                 {/* Subtle centre radial */}
                 <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full opacity-[0.04] blur-[140px]"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full opacity-[0.02] blur-[140px]"
                     style={{ background: 'radial-gradient(circle, #3B82F6, transparent 70%)' }}
                 />
                 {/* Floating grid texture */}
                 <div
-                    className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
+                    className="absolute inset-0 opacity-[0.015] dark:opacity-[0.025]"
                     style={{
                         backgroundImage: 'linear-gradient(rgba(59,130,246,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.5) 1px, transparent 1px)',
                         backgroundSize: '48px 48px',
@@ -233,9 +233,8 @@ export const Login = () => {
                             LEFT PANEL — Brand + Features Showcase
                         ═══════════════════════════════════════════════ */}
                         <div className="lg:col-span-7 flex flex-col p-8 md:p-12 justify-between gap-8 border-b lg:border-b-0 lg:border-r border-card-border relative overflow-hidden bg-linear-to-br from-slate-900/20 via-slate-900/5 to-transparent dark:from-slate-950/45 dark:via-slate-950/20 dark:to-transparent">
-                            {/* Honeycomb & Circuit Decors for rich tech texture */}
-                            <div className="honeycomb-decor absolute inset-0 opacity-15 dark:opacity-20 pointer-events-none" />
-                            <div className="circuit-decor absolute inset-0 opacity-15 dark:opacity-25 pointer-events-none" />
+                            {/* Honeycomb Decor for rich premium texture */}
+                            <div className="honeycomb-decor absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none" />
                             
                             {/* Spotlight glow in top left */}
                             <div
@@ -250,7 +249,7 @@ export const Login = () => {
                                         whileHover={{ rotate: 10, scale: 1.05 }}
                                         className="w-12 h-12 flex items-center justify-center shrink-0"
                                     >
-                                        <img src="/logo.svg" alt="Pintopay Logo" className="w-12 h-12 object-contain" />
+                                        <img src="/logo.svg?v=2" alt="Pintopay Logo" className="w-12 h-12 object-contain" />
                                     </motion.div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary leading-none mb-1">
@@ -338,7 +337,6 @@ export const Login = () => {
                         ═══════════════════════════════════════════════ */}
                         <div className="lg:col-span-5 flex flex-col p-8 md:p-12 justify-between gap-8 relative overflow-hidden bg-card-bg/15 dark:bg-[#040815]/40">
                             {/* Tech overlays */}
-                            <div className="honeycomb-decor absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none" />
                             <div
                                 className="absolute inset-0 pointer-events-none"
                                 style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.06) 0%, transparent 70%)' }}
