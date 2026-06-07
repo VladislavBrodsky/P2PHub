@@ -207,9 +207,13 @@ export const proService = {
         const decoder = new TextDecoder();
         let partialData = '';
 
-        while (true) {
+        let doneReading = false;
+        while (!doneReading) {
             const { value, done } = await reader.read();
-            if (done) break;
+            if (done) {
+                doneReading = true;
+                break;
+            }
 
             partialData += decoder.decode(value, { stream: true });
             const lines = partialData.split('\n\n');

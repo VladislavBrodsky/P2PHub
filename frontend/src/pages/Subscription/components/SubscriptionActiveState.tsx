@@ -68,7 +68,7 @@ export const SubscriptionActiveState = ({
                                     <p className="text-caption font-bold text-slate-900 dark:text-white tracking-tight whitespace-nowrap">
                                         {(!user?.pro_expires_at || user?.subscription_plan === 'PRO_LIFETIME')
                                             ? t('pro:subscription.pro_active.lifetime_access')
-                                            : new Date(user?.pro_expires_at!).toLocaleDateString()}
+                                            : new Date(user.pro_expires_at).toLocaleDateString()}
                                     </p>
                                 </div>
                             </div>

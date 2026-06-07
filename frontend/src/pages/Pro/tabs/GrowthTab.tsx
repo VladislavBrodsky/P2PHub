@@ -24,7 +24,6 @@ interface AcademyStageItemProps {
     toggleExpand: () => void;
     handleUnlock: (id: string) => void;
     handleComplete: (id: string) => void;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     t: TFunction<readonly ['pro', 'academy'], undefined>;
     lowPowerMode: boolean;
     renderMarkdown: (content: string) => React.ReactNode;
