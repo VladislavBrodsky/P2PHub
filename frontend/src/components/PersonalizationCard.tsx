@@ -171,8 +171,8 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 const displayName = fullName.length > 20 ? firstName : fullName;
 
                                 return (
-                                    <h2 className={`${variant === 'compact' ? 'text-sm' : 'text-lg'} font-bold tracking-tight text-text-primary whitespace-nowrap`}>
-                                        {t('hi')}, {displayName}!
+                                    <h2 className={`${variant === 'compact' ? 'text-[13px] sm:text-sm' : 'text-lg'} font-bold tracking-tight text-text-primary whitespace-nowrap`}>
+                                        {t('hi')}, {displayName.split('|')[0].trim()}!
                                     </h2>
                                 );
                             })()}
@@ -180,18 +180,18 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
 
                         {/* XP Progress Bar - Horizontal Fit */}
                         <div className="w-full space-y-1">
-                            <div className="flex justify-between items-baseline px-0.5 gap-2">
+                            <div className="flex flex-wrap justify-between items-baseline px-0.5 gap-x-2 gap-y-0.5">
                                 <div
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
-                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)} tracking-tight uppercase shrink-0`}>{t('total')}:</span>
-                                    <span className={`text-label font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
+                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)} tracking-tight uppercase shrink-0`}>{t('total')}:</span>
+                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
                                 </div>
-                                <span className="text-label font-bold text-text-primary whitespace-nowrap flex items-baseline gap-1">
+                                <span className="text-[10px] font-bold text-text-primary whitespace-nowrap flex items-baseline gap-0.5 shrink-0">
                                     <span>{formatXP(xpProgress.current)}</span>
                                     <span className="text-text-secondary font-medium">/</span>
                                     <span>{formatXP(xpProgress.total)}</span>
-                                    <span className="text-label text-text-secondary uppercase ml-0.5 shrink-0">{t('next_lvl')}</span>
+                                    <span className="text-[9px] text-text-secondary uppercase ml-0.5 shrink-0">{t('next_lvl')}</span>
                                 </span>
                             </div>
                             <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

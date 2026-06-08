@@ -165,28 +165,28 @@ function SidebarNav({
 
             {/* Profile Button at Bottom */}
             <div className="relative mt-auto pt-4 border-t border-white/5 flex flex-col">
-                {/* User Level & XP Pill Badge (Always visible on expanded desktop sidebar) */}
-                <div className="hidden xl:flex items-center justify-between gap-2 rounded-2xl border border-border-glass bg-slate-950/40 px-3.5 py-2 shadow-inner mb-3">
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-400">{t('lvl')}</span>
-                        <span className="text-sm font-black text-text-primary leading-none">{user?.level ?? 1}</span>
+                {/* User Level & XP Badge (Always visible on expanded desktop sidebar) */}
+                <div className="hidden xl:flex items-center justify-between gap-2 rounded-xl border border-white/5 bg-white/5 px-3 py-1.5 shadow-sm mb-3">
+                    <div className="flex items-center gap-1">
+                        <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">{t('lvl')}</span>
+                        <span className="text-xs font-bold text-text-primary">{user?.level ?? 1}</span>
                         {user?.is_pro && (
-                            <Crown className="size-4 text-amber-500 fill-amber-500/20" />
+                            <Crown className="size-3 text-amber-500 fill-amber-500/20" />
                         )}
                     </div>
-                    <div className="h-4 w-px bg-border-glass" />
-                    <div className="flex items-center gap-1.5">
-                        <span className="text-sm font-black text-text-primary leading-none">
+                    <div className="h-3 w-px bg-white/10" />
+                    <div className="flex items-center gap-1">
+                        <span className="text-xs font-bold text-text-primary">
                             {Math.floor(user?.xp ?? 0).toLocaleString()}
                         </span>
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">{t('xp')}</span>
+                        <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400">{t('xp')}</span>
                     </div>
                 </div>
 
                 <button
                     ref={profileRef}
                     onClick={() => setIsDropdownOpen(prev => !prev)}
-                    className="flex items-center gap-3 w-full p-2 rounded-xl text-left hover:bg-white/5 transition-all duration-200 cursor-pointer"
+                    className="flex items-center gap-3 w-full p-2 rounded-xl text-left hover:bg-white/5 transition-all duration-200 cursor-pointer outline-none focus:outline-none"
                 >
                     {/* Avatar Container */}
                     <div className="relative shrink-0 mx-auto xl:mx-0">
@@ -214,10 +214,10 @@ function SidebarNav({
                     {/* User details (Visible only in expanded mode) */}
                     <div className="hidden xl:flex flex-col min-w-0 flex-1">
                         <span className="text-xs font-bold text-text-primary truncate">
-                            {user?.first_name || 'Partner'}
+                            {user?.first_name ? user.first_name.split('|')[0].trim() : 'Partner'}
                         </span>
-                        <span className={`text-[10px] font-semibold tracking-wide uppercase ${getRankTextColor(user?.level || 1)}`}>
-                            LVL {user?.level || 1}
+                        <span className="text-[10px] font-semibold tracking-wide uppercase text-slate-400">
+                            {isProPlus ? 'PRO+' : isPro ? 'PRO' : 'Partner'}
                         </span>
                     </div>
 
@@ -230,11 +230,11 @@ function SidebarNav({
                     {isDropdownOpen && (
                         <motion.div
                             ref={dropdownRef}
-                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                            initial={{ opacity: 0, scale: 0.95, x: -10 }}
+                            animate={{ opacity: 1, scale: 1, x: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, x: -10 }}
                             transition={{ duration: 0.15 }}
-                            className="absolute bottom-14 left-0 xl:left-52 w-80 rounded-3xl border border-border-glass bg-bg-glass backdrop-blur-xl shadow-premium-lg p-5 flex flex-col gap-4 text-text-primary z-120"
+                            className="absolute bottom-0 left-[76px] xl:left-[232px] w-80 rounded-3xl border border-white/10 dark:border-white/10 bg-[#070b19]/95 dark:bg-[#070b19]/95 backdrop-blur-2xl shadow-premium-xl shadow-blue-500/5 p-5 flex flex-col gap-4 text-text-primary z-120 focus:outline-none"
                             style={{ pointerEvents: 'auto' }}
                         >
                             {/* User Profile Card (Imported from Mobile Menu) */}
