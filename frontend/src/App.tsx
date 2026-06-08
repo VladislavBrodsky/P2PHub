@@ -311,6 +311,18 @@ function App() {
         }
     }, [showOnboarding]);
 
+    // Hard startup timeout: if the app hasn't completed loading within 6 seconds,
+    // force complete() so users are never stuck on the loader forever.
+    useEffect(() => {
+        const hardTimeout = setTimeout(() => {
+            if (!isComplete) {
+                console.warn('[Startup] Hard timeout triggered — forcing app ready after 6s.');
+                complete();
+            }
+        }, 6000);
+        return () => clearTimeout(hardTimeout);
+    }, [isComplete, complete]);
+
     // Update progress when config loads
     useEffect(() => {
         if (!isConfigLoading) {

@@ -400,16 +400,26 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                     return;
                 }
 
-                // Wait for Telegram environment (up to 2 seconds total)
+                // If we already have a cached user loaded from localStorage,
+                // don't block on Telegram initData polling — show the app immediately
+                // from cache and refresh silently in the background.
+                const cachedExists = !!localStorage.getItem('p2p_user_cache_v6');
+                if (cachedExists && (window.Telegram?.WebApp?.initData || getSafeLaunchParams()?.initDataRaw)) {
+                    // initData already available — refresh immediately, no polling needed
+                    refreshUser();
+                    return;
+                }
+
+                // Wait for Telegram environment (up to 300ms total instead of 2000ms)
                 let attempts = 0;
-                const maxAttempts = 20;
+                const maxAttempts = 6;
                 const checkData = async () => {
                     try {
                         if (window.Telegram?.WebApp?.initData || attempts >= maxAttempts) {
                             await refreshUser();
                         } else {
                             attempts++;
-                            setTimeout(checkData, 100);
+                            setTimeout(checkData, 50);
                         }
                     } catch (e) {
                         setIsLoading(false);

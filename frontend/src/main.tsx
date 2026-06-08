@@ -58,9 +58,9 @@ const startApp = async () => {
             throw new Error('Root element #root not found in document');
         }
 
-        console.log('[DEBUG] main.tsx: Awaiting i18n initialization');
-        await initializeI18n().catch(e => console.error('i18n init error', e));
-
+        // i18n self-initializes at module load (i18n.ts:106) — do NOT await here.
+        // Blocking on i18n before mounting React delays the loader appearing by 1-3s.
+        // Critical namespaces are loaded asynchronously in the background.
         console.log('[DEBUG] main.tsx: Root element found, mounting React tree');
 
         ReactDOM.createRoot(rootElement).render(
@@ -107,7 +107,7 @@ startApp();
 
 export function AppContextProviders({ children }: { children: React.ReactNode }) {
     const { config } = useConfig();
-    const manifestUrl = config?.ton_manifest_url || "https://p2phub-frontend-production.up.railway.app/tonconnect-manifest.json";
+    const manifestUrl = config?.ton_manifest_url || "https://pintopay.life/tonconnect-manifest.json";
 
     React.useEffect(() => {
         const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN || config?.sentry_dsn;

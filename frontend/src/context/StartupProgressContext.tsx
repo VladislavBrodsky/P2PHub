@@ -27,8 +27,8 @@ export const StartupProgressProvider: React.FC<{ children: React.ReactNode }> = 
     const complete = useCallback(() => {
         setProgress(100);
         setStatus('Ready!');
-        // Keep the loader for a short moment so the user sees the 100% completion
-        setTimeout(() => setIsComplete(true), 800);
+        // Brief moment so user sees 100% tick, then immediately reveal the app
+        setTimeout(() => setIsComplete(true), 300);
     }, []);
 
     const contextValue = React.useMemo(() => ({
