@@ -32,4 +32,4 @@ This project follows [Semantic Versioning (SemVer)](https://semver.org/) and use
 -   **Patch (v1.1.1)**: Bug fixes (e.g., Fix typo, color adjustment).
 
 ## Current Version
-**v1.9.1** (Mar 5, 2026) - "Stable"
+**v2.0.1** (Jun 8, 2026) - "Stable"

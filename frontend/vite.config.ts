@@ -10,8 +10,18 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 // The custom chunking was causing "undefined is not an object (evaluating 'yo.useState')" in production.
 // Definitively removing all manualChunks and optimization plugins to restore a monolithic-like stable bundle.
 
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+
+const pkg = JSON.parse(
+  readFileSync(fileURLToPath(new URL('./package.json', import.meta.url)), 'utf-8')
+)
+
 // #comment: CACHE BUST - Forced re-evaluation to resolve stale asset references like promo_fixed.jpg
 export default defineConfig({
+  define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(pkg.version),
+  },
   plugins: [
     react(),
     tailwind(),

@@ -16,7 +16,7 @@ interface PremiumSelectProps {
     onChange: (value: string) => void;
     options: Option[];
     placeholder: string;
-    color?: 'indigo' | 'purple' | 'amber' | 'emerald';
+    color?: 'indigo' | 'purple' | 'amber' | 'emerald' | 'blue' | 'cyan';
     isOpen: boolean;
     onToggle: () => void;
     onClose?: () => void;
@@ -60,6 +60,24 @@ export const PremiumSelect = ({
             hover: 'hover:bg-purple-50/80 dark:hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400',
             icon: 'text-purple-500',
             shadow: 'shadow-purple-500/10'
+        },
+        blue: {
+            text: 'text-blue-600 dark:text-blue-400',
+            bg: 'bg-blue-500',
+            border: 'border-blue-200 dark:border-blue-500/30',
+            active: 'bg-blue-50 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-[inset_0_0_15px_rgba(59,130,246,0.1)]',
+            hover: 'hover:bg-blue-50/80 dark:hover:bg-blue-500/15 hover:text-blue-600 dark:hover:text-blue-400',
+            icon: 'text-blue-500',
+            shadow: 'shadow-blue-500/10'
+        },
+        cyan: {
+            text: 'text-cyan-600 dark:text-cyan-400',
+            bg: 'bg-cyan-500',
+            border: 'border-cyan-200 dark:border-cyan-500/30',
+            active: 'bg-cyan-50 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 shadow-[inset_0_0_15px_rgba(6,182,212,0.1)]',
+            hover: 'hover:bg-cyan-50/80 dark:hover:bg-cyan-500/15 hover:text-cyan-600 dark:hover:text-cyan-400',
+            icon: 'text-cyan-500',
+            shadow: 'shadow-cyan-500/10'
         },
         amber: {
             text: 'text-amber-600 dark:text-amber-400',

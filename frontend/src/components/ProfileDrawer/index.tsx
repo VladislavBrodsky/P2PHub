@@ -218,7 +218,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
 
                                 <div className="mt-4 mb-3">
                                     <p className="text-center text-label font-bold uppercase tracking-[0.3em] text-text-secondary opacity-50">
-                                        P2PHub v{import.meta.env.VITE_APP_VERSION ?? '1.9.1'} (Stable)
+                                        P2PHub v{import.meta.env.VITE_APP_VERSION ?? '2.0.1'} (Stable)
                                     </p>
                                 </div>
                             </div>

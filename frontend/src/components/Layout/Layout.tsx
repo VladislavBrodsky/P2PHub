@@ -1,10 +1,20 @@
-import { useState, useEffect, lazy, Suspense, useCallback } from 'react';
+import { useState, useEffect, lazy, Suspense, useCallback, useRef } from 'react';
 import { Header } from '../Header';
 const ProfileDrawer = lazy(() => import('../ProfileDrawer')); // Lazy load
 import BottomNav from '../BottomNav';
 import { useUI } from '../../context/UIContext';
-import { Home, CreditCard, Users, Zap, Trophy } from 'lucide-react';
+import {
+    Home, CreditCard, Users, Zap, Trophy,
+    Settings, LogOut, Wallet, HelpCircle, Headphones,
+    Newspaper, Shield, ChevronUp, User, Check, Copy, Crown
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useUser } from '../../context/UserContext';
+import { useTheme } from '../../context/ThemeContext';
+import { useTonConnectUI, useTonAddress, useTonWallet } from '@tonconnect/ui-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { apiClient } from '../../api/client';
+import { getXPProgress, getRankGradient } from '../../utils/ranking';
 
 // #comment: Layout.tsx - Central structural wrapper for the application.
 // Mobile (< lg): Phone-column layout with bottom tab bar (Telegram Mini App style).

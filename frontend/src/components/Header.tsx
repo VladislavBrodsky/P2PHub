@@ -37,7 +37,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none"
+            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none lg:pl-[72px] xl:pl-56"
             style={{
                 paddingTop: 'var(--dynamic-header-padding, 6.625rem)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',
@@ -49,7 +49,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
                 <div className="w-full flex items-center justify-between gap-2 sm:gap-3 mx-auto relative">
                     <button
                         onClick={onOpenMenu}
-                        className="group flex items-center gap-1.5 sm:gap-2 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-3 sm:px-4 py-1.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
+                        className="group flex lg:hidden items-center gap-1.5 sm:gap-2 rounded-full border border-border-glass bg-white dark:bg-bg-glass/90 px-3 sm:px-4 py-1.5 shadow-premium backdrop-blur-md transition-all active:scale-95 shrink-0 hover:border-blue-500/30"
                         aria-label="Open menu"
                     >
                         <Menu className="text-text-primary h-[1.125rem] w-[1.125rem] sm:h-[1.25rem] sm:w-[1.25rem] transition-transform group-hover:scale-110" />

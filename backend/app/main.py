@@ -269,7 +269,7 @@ async def lifespan(app: FastAPI):
 
     # #comment: v1.9.0 "Refinement & Hardening" Release
     # Stabilized core systems, hardened academy exploits, and unified versioning across stack.
-    logger.info("✅ Lifespan setup complete. App is live (v1.9.3).")
+    logger.info("✅ Lifespan setup complete. App is live (v2.0.1).")
     logger.info(f"🔑 Loaded ADMIN_USER_IDS: {settings.ADMIN_USER_IDS}")
     yield
     logger.info("🛑 Shutting down Lifespan...")
@@ -312,7 +312,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="P2PHub API",
-    version="1.9.3",
+    version="2.0.1",
     description="P2PHub Core API - Refinement & Hardening Release",
     lifespan=lifespan
 )

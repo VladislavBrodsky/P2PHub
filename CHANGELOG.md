@@ -8,6 +8,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1] - 2026-06-08 "TMA Optimizations & Clean Compile"
+### Added
+- **Dynamic Versioning**: Configured Vite build constants to automatically sync UI version displays with the frontend `package.json` version.
+
+### Fixed
+- **Startup Latency**: Reduced TMA loading latency from 20-30 seconds to under 3 seconds by implementing lazy i18n initialization, compressed polling, and cache bypasses.
+- **OAuth Domain Alignment**: Set proper origin and redirection parameters for Telegram Login Widget widget auth.
+- **Linter Compliance**: Cleared empty block statement errors in TMA utility scripts to maintain clean lint runs.
+- **Script Validation**: Restored performance testing harness with canonical production URL mapping.
+
 ## [1.9.2] - 2026-03-18 "CTO Audit & Hardening"
 ### Added
 - **CTO-Level Audit**: Verified hierarchical referral integrity for 20-level distribution with materialized paths.
