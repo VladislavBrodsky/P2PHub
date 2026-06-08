@@ -136,7 +136,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-8 border-2 border-slate-200 dark:border-white/20 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-4xl xl:max-w-5xl lg:mx-auto"
+                className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 border-2 border-slate-200 dark:border-white/20 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-2xl xl:max-w-3xl lg:mx-auto"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
@@ -521,7 +521,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     )}
                 </AnimatePresence>
 
-                <div className="grid grid-cols-2 gap-4 relative z-0 lg:max-w-3xl lg:mx-auto w-full">
+                <div className="grid grid-cols-2 gap-4 relative z-0 w-full">
                     <div className="glass-panel-premium p-5 rounded-2xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
@@ -553,7 +553,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-1 lg:max-w-3xl lg:mx-auto w-full p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                <div className="relative z-10 mx-1 w-full p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
                     {/* Liquid Background Layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
                     <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />
