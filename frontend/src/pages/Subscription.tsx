@@ -462,10 +462,11 @@ export default function SubscriptionPage() {
                     >
                         <ChevronLeft size={16} />
                     </button>
-                    <div className="flex flex-col px-3 pb-24 pt-[80px] max-w-lg mx-auto overflow-x-hidden">
+                    <div className="flex flex-col px-3 pb-24 pt-[80px] max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto overflow-x-hidden w-full">
                         <div className="relative overflow-hidden rounded-xl bg-transparent dark:bg-bg-app border-none dark:border dark:border-white/10 shadow-none dark:shadow-premium-sm mb-5">
-                            <div className="relative z-10 w-full p-4">
-                                <div className="text-center mb-6 px-4">
+                            {/* --- HEADER (Badge, Title, Subheading) --- */}
+                            <div className="relative z-10 w-full p-4 text-center mb-2">
+                                <div className="px-4">
                                     <motion.div
                                         initial={{ opacity: 0, y: -10 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -475,208 +476,202 @@ export default function SubscriptionPage() {
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">{t('pro:subscription.upgrade.badge')}</span>
                                     </motion.div>
 
-                                    <h2 className="text-[clamp(1.5rem,7vw,2.25rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] mx-auto">
+                                    <h2 className="text-[clamp(1.5rem,7vw,2.25rem)] font-black tracking-tighter text-slate-900 dark:text-white leading-tight text-center mb-3 uppercase max-w-[320px] lg:max-w-md mx-auto">
                                         {t('pro:subscription.upgrade.dominate_network')}
                                     </h2>
 
-                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed max-w-[280px] mx-auto opacity-70 uppercase tracking-wide">
+                                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-bold leading-relaxed max-w-[280px] lg:max-w-sm mx-auto opacity-70 uppercase tracking-wide">
                                         {t('pro:subscription.upgrade.subheadline')}
                                     </p>
                                 </div>
-
-                                {/* ── PLAN SELECTION BLOCK ── */}
-                                <SubscriptionPricing
-                                    selectedPlan={selectedPlan}
-                                    setSelectedPlan={setSelectedPlan}
-                                    isStandardPro={isStandardPro ?? false}
-                                    proPrice={39}
-                                    upgradePrice={upgradePrice}
-                                    proPlusPrice={proPlusPrice}
-                                    selection={selection}
-                                    t={t}
-                                />
                             </div>
 
+                            {/* --- TWO COLUMN DESKTOP GRID / SINGLE COLUMN MOBILE --- */}
+                            <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-start relative z-10 w-full p-0 lg:p-4">
+                                {/* Left Column: Pricing, Comparison, Primary CTA / Currency Selector */}
+                                <div className="space-y-6">
+                                    {/* ── PLAN SELECTION BLOCK ── */}
+                                    <SubscriptionPricing
+                                        selectedPlan={selectedPlan}
+                                        setSelectedPlan={setSelectedPlan}
+                                        isStandardPro={isStandardPro ?? false}
+                                        proPrice={39}
+                                        upgradePrice={upgradePrice}
+                                        proPlusPrice={proPlusPrice}
+                                        selection={selection}
+                                        t={t}
+                                    />
 
-                            <ProfitMath t={t} />
+                                    {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
+                                    <KeyComparison
+                                        selectedPlan={selectedPlan}
+                                        t={t}
+                                        selection={selection}
+                                        setInfoModal={setInfoModal}
+                                    />
 
-                            {/* ── KEY COMPARISON GRID ───────────────────────────────────── */}
-                            <KeyComparison
-                                selectedPlan={selectedPlan}
-                                t={t}
-                                selection={selection}
-                                setInfoModal={setInfoModal}
-                            />
-
-                            {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
-                            <div className="mb-10 px-1 relative z-20">
-                                <div className="relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden">
-                                    <AnimatePresence mode="wait">
-                                        {!isSelectingCurrency ? (
-                                            <motion.button
-                                                key="subscription-action-btn"
-                                                initial={{ opacity: 0, scale: 0.95 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                exit={{ opacity: 0, scale: 0.95 }}
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => {
-                                                    selection();
-                                                    setIsSelectingCurrency(true);
-                                                }}
-                                                className={`group absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-full transition-colors ${selectedPlan === 'PRO'
-                                                    ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
-                                                    : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
-                                                    }`}
-                                            >
-                                                <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                                <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
-                                                <span className="relative z-10">
-                                                    {isProPlus
-                                                        ? t('pro:subscription.pro_active.title_plus')
-                                                        : (selectedPlan === 'PRO'
-                                                            ? t('pro:subscription.upgrade.buy_pro_btn')
-                                                            : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn')))}
-                                                </span>
-                                            </motion.button>
-                                        ) : (
-                                            <motion.div
-                                                key="currency-picker"
-                                                initial={{ opacity: 0, y: 10 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                exit={{ opacity: 0, y: 10 }}
-                                                className="w-full space-y-4"
-                                            >
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
-                                                    <button
-                                                        onClick={() => setIsSelectingCurrency(false)}
-                                                        className="text-label font-bold text-blue-500 uppercase tracking-widest"
+                                    {/* ── PRIMARY CTA & CURRENCY PICKER ─────────────────────────── */}
+                                    <div className="mb-10 px-1 relative z-20">
+                                        <div className="relative w-full flex items-center justify-center gap-2 h-10 px-6 rounded-full font-bold text-label tracking-[0.15em] uppercase overflow-hidden">
+                                            <AnimatePresence mode="wait">
+                                                {!isSelectingCurrency ? (
+                                                    <motion.button
+                                                        key="subscription-action-btn"
+                                                        initial={{ opacity: 0, scale: 0.95 }}
+                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        exit={{ opacity: 0, scale: 0.95 }}
+                                                        whileHover={{ scale: 1.02 }}
+                                                        whileTap={{ scale: 0.98 }}
+                                                        onClick={() => {
+                                                            selection();
+                                                            setIsSelectingCurrency(true);
+                                                        }}
+                                                        className={`group absolute inset-0 w-full h-full flex items-center justify-center gap-2 rounded-full transition-colors ${selectedPlan === 'PRO'
+                                                            ? 'vibing-blue-animated text-white shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)]'
+                                                            : 'vibing-yellow-animated text-[#0a1000] shadow-[0_12px_25px_-5px_rgba(255,215,0,0.25)]'
+                                                            }`}
                                                     >
-                                                        {t('common:cancel', 'CANCEL')}
-                                                    </button>
-                                                </div>
-                                                <div className="grid grid-cols-3 gap-2">
-                                                    <button
-                                                        disabled={isLoading}
-                                                        onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); setIsSelectingCurrency(false); }}
-                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                        <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                                        <Lock size={12} className="group-hover:scale-110 transition-transform relative z-10" />
+                                                        <span className="relative z-10">
+                                                            {isProPlus
+                                                                ? t('pro:subscription.pro_active.title_plus')
+                                                                : (selectedPlan === 'PRO'
+                                                                    ? t('pro:subscription.upgrade.buy_pro_btn')
+                                                                    : (isStandardPro ? t('pro:subscription.upgrade.upgrade_to_pro_plus_btn') : t('pro:subscription.upgrade.buy_pro_plus_btn')))}
+                                                        </span>
+                                                    </motion.button>
+                                                ) : (
+                                                    <motion.div
+                                                        key="currency-picker"
+                                                        initial={{ opacity: 0, y: 10 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        exit={{ opacity: 0, y: 10 }}
+                                                        className="w-full space-y-4"
                                                     >
-                                                        <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
-                                                            {isLoading && paymentMethod === 'TON' ? <Loader2 className="w-5 h-5 animate-spin" /> : <TONLogo className="w-5 h-5" />}
+                                                        <div className="flex items-center justify-between mb-2">
+                                                            <span className="text-label font-bold text-slate-400 dark:text-white/40 uppercase tracking-[0.2em]">{t('pro:subscription.upgrade.select_currency')}</span>
+                                                            <button
+                                                                onClick={() => setIsSelectingCurrency(false)}
+                                                                className="text-label font-bold text-blue-500 uppercase tracking-widest"
+                                                            >
+                                                                {t('common:cancel', 'CANCEL')}
+                                                            </button>
                                                         </div>
-                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
-                                                    </button>
-                                                    <button
-                                                        disabled={isLoading}
-                                                        onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); setIsSelectingCurrency(false); }}
-                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm disabled:opacity-50"
-                                                    >
-                                                        <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                                                            {isLoading && paymentMethod === 'CRYPTO' ? <Loader2 className="w-5 h-5 animate-spin" /> : <USDTLogo className="w-5 h-5" />}
+                                                        <div className="grid grid-cols-3 gap-2">
+                                                            <button
+                                                                disabled={isLoading}
+                                                                onClick={() => { selection(); setPaymentMethod('TON'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                                                className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-blue-500/50 hover:bg-blue-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                            >
+                                                                <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                                                    {isLoading && paymentMethod === 'TON' ? <Loader2 className="w-5 h-5 animate-spin" /> : <TONLogo className="w-5 h-5" />}
+                                                                </div>
+                                                                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.ton_wallet')}</span>
+                                                            </button>
+                                                            <button
+                                                                disabled={isLoading}
+                                                                onClick={() => { selection(); setPaymentMethod('CRYPTO'); scrollToPayment(); setIsSelectingCurrency(false); }}
+                                                                className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-emerald-500/50 hover:bg-emerald-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                            >
+                                                                <div className="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                                                    {isLoading && paymentMethod === 'CRYPTO' ? <Loader2 className="w-5 h-5 animate-spin" /> : <USDTLogo className="w-5 h-5" />}
+                                                                </div>
+                                                                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
+                                                            </button>
+                                                            <button
+                                                                disabled={isLoading}
+                                                                onClick={() => { handleStripePayment(); setIsSelectingCurrency(false); }}
+                                                                className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm disabled:opacity-50"
+                                                            >
+                                                                <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                                                    {isLoading && paymentMethod === 'STRIPE' ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
+                                                                </div>
+                                                                <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.stripe_card')}</span>
+                                                            </button>
                                                         </div>
-                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.usdt_trc20_address')}</span>
-                                                    </button>
-                                                    <button
-                                                        disabled={isLoading}
-                                                        onClick={() => { handleStripePayment(); setIsSelectingCurrency(false); }}
-                                                        className="group h-20 bg-white dark:bg-white/5 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all hover:border-indigo-500/50 hover:bg-indigo-500/5 active:scale-95 shadow-sm disabled:opacity-50"
-                                                    >
-                                                        <div className="w-9 h-9 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
-                                                            {isLoading && paymentMethod === 'STRIPE' ? <Loader2 size={18} className="animate-spin" /> : <CreditCard size={18} />}
-                                                        </div>
-                                                        <span className="text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{t('pro:subscription.upgrade.stripe_card')}</span>
-                                                    </button>
-                                                </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                        <div id="currency-selector-anchor" className="absolute -top-20" />
+                                    </div>
                                 </div>
-                                <div id="currency-selector-anchor" className="absolute -top-20" />
+
+                                {/* Right Column: Math calculator, Payment section, Stats, FAQ & Restore button */}
+                                <div className="space-y-6 lg:mt-0 mt-8">
+                                    <ProfitMath t={t} />
+
+                                    {/* ── PAYMENT SECTION ── */}
+                                    <SubscriptionPayment
+                                        paymentRef={paymentRef}
+                                        selectedPlan={selectedPlan}
+                                        planPrice={planPrice}
+                                        isStandardPro={isStandardPro}
+                                        paymentMethod={paymentMethod}
+                                        setPaymentMethod={setPaymentMethod}
+                                        isLoading={isLoading}
+                                        sessionData={sessionData}
+                                        setSessionData={setSessionData}
+                                        manualHash={manualHash}
+                                        setManualHash={setManualHash}
+                                        status={status}
+                                        setStatus={setStatus}
+                                        handleTonPayment={handleTonPayment}
+                                        handleManualSubmit={handleManualSubmit}
+                                        handleStripePayment={handleStripePayment}
+                                        scrollToPayment={scrollToPayment}
+                                        selection={selection}
+                                        notification={notification}
+                                        t={t}
+                                        adminUsdt={adminUsdt}
+                                    />
+
+                                    <SocialProofStats t={t} />
+
+                                    <div className="space-y-4">
+                                        <SectionHeader
+                                            badge={t('pro:subscription.faq.badge', 'SUPPORT')}
+                                            title={t('pro:subscription.faq.title')}
+                                            description={t('pro:subscription.faq.desc')}
+                                            className="mb-4 text-center"
+                                        />
+
+                                        {/* ── FAQ SECTION ── */}
+                                        <SubscriptionFAQ
+                                            expandedFaq={expandedFaq}
+                                            setExpandedFaq={setExpandedFaq}
+                                            faqs={faqs}
+                                            selection={selection}
+                                            t={t}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col items-center justify-center pt-4">
+                                        <motion.button
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ delay: 0.5 }}
+                                            onClick={async () => {
+                                                selection();
+                                                const prevStatus = isPro;
+                                                await refreshUser();
+                                                if (user?.is_pro && !prevStatus) {
+                                                    notification('success');
+                                                } else {
+                                                    impact('rigid');
+                                                }
+                                            }}
+                                            className="flex items-center gap-2 px-4 py-2 text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors active:scale-95"
+                                        >
+                                            <RefreshCw size={14} />
+                                            <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
+                                        </motion.button>
+
+                                        <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.03.18 | v1.8.16-ELITE</div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <SectionHeader
-                                badge={t('pro:subscription.benefits.badge')}
-                                title={t('pro:subscription.benefits.title')}
-                                description={t('pro:subscription.benefits.desc')}
-                                className="mb-0 overflow-hidden h-0 opacity-0 pointer-events-none"
-                            />
-
-                            {/* ── BENEFITS SECTION ── */}
-                            {/* <SubscriptionBenefits
-                                selectedPlan={selectedPlan}
-                                isStandardPro={!!isStandardPro}
-                                currentBenefits={currentBenefits}
-                                expandedBenefit={expandedBenefit}
-                                setExpandedBenefit={setExpandedBenefit}
-                                selection={selection}
-                                t={t}
-                            /> */}
-
-                            {/* ── PAYMENT SECTION ── */}
-                            <SubscriptionPayment
-                                paymentRef={paymentRef}
-                                selectedPlan={selectedPlan}
-                                planPrice={planPrice}
-                                isStandardPro={isStandardPro}
-                                paymentMethod={paymentMethod}
-                                setPaymentMethod={setPaymentMethod}
-                                isLoading={isLoading}
-                                sessionData={sessionData}
-                                setSessionData={setSessionData}
-                                manualHash={manualHash}
-                                setManualHash={setManualHash}
-                                status={status}
-                                setStatus={setStatus}
-                                handleTonPayment={handleTonPayment}
-                                handleManualSubmit={handleManualSubmit}
-                                handleStripePayment={handleStripePayment}
-                                scrollToPayment={scrollToPayment}
-                                selection={selection}
-                                notification={notification}
-                                t={t}
-                                adminUsdt={adminUsdt}
-                            />
-
-                            <SocialProofStats t={t} />
-
-                            <SectionHeader
-                                badge={t('pro:subscription.faq.badge', 'SUPPORT')}
-                                title={t('pro:subscription.faq.title')}
-                                description={t('pro:subscription.faq.desc')}
-                                className="mb-8"
-                            />
-
-                            {/* ── FAQ SECTION ── */}
-                            <SubscriptionFAQ
-                                expandedFaq={expandedFaq}
-                                setExpandedFaq={setExpandedFaq}
-                                faqs={faqs}
-                                selection={selection}
-                                t={t}
-                            />
-
-                            <motion.button
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
-                                onClick={async () => {
-                                    impact('light');
-                                    const prevStatus = isPro;
-                                    await refreshUser();
-                                    if (user?.is_pro && !prevStatus) {
-                                        notification('success');
-                                    } else {
-                                        impact('rigid');
-                                    }
-                                }}
-                                className="mx-auto flex items-center gap-2 px-4 py-2 mt-2 mb-6 text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors active:scale-95"
-                            >
-                                <RefreshCw size={14} />
-                                <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
-                            </motion.button>
-
-                            <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.03.18 | v1.8.16-ELITE</div>
                         </div>
                     </div>
 
