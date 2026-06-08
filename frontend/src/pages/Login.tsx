@@ -490,7 +490,7 @@ export const Login = () => {
 
                                             {/* Advanced Premium QR Frame with scanner laser */}
                                             <div className="relative">
-                                                <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-br from-blue-500/25 via-indigo-500/10 to-purple-500/20 blur-xl opacity-80" />
+                                                <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-br from-blue-500/25 via-sky-500/10 to-cyan-500/20 blur-xl opacity-80" />
                                                 <div className="relative rounded-[26px] p-4 bg-white dark:bg-[#030712] border border-blue-500/20 dark:border-white/10 shadow-[0_25px_60px_rgba(37,99,235,0.25)] flex items-center justify-center">
                                                     {/* Corner brackets */}
                                                     {[
@@ -508,9 +508,19 @@ export const Login = () => {
                                                         <img
                                                             src={qrCodeUrl}
                                                             alt="Scan to open Pintopay bot"
-                                                            className="w-44 h-44 object-contain"
+                                                            className="w-56 h-56 object-contain"
                                                             loading="lazy"
                                                         />
+                                                        {/* Logo centered over QR — stays within ~20% coverage so QR remains scannable */}
+                                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                            <div className="w-11 h-11 rounded-xl bg-white dark:bg-[#030712] shadow-lg border border-blue-500/20 flex items-center justify-center p-1.5">
+                                                                <img
+                                                                    src="/logo.png?v=2"
+                                                                    alt="Pintopay"
+                                                                    className="w-full h-full object-contain"
+                                                                />
+                                                            </div>
+                                                        </div>
                                                         <div
                                                             className="absolute left-0 right-0 h-0.5 rounded-full pointer-events-none"
                                                             style={{
