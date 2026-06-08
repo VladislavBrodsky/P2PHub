@@ -58,7 +58,7 @@ export const ShareModal = ({
                         <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pointer-events-auto overscroll-none" style={{ overscrollBehavior: 'none' }}>
                             {/* Visual Header */}
                             <div className="relative h-40 sm:h-44 shrink-0 overflow-hidden">
-                                <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-purple-900" />
+                                <div className="absolute inset-0 bg-linear-to-br from-blue-900 via-slate-900 to-cyan-900" />
                                 <img
                                     src="/images/v3_referral_promo.jpg"
                                     alt={t('referral.modal.invite_image_alt')}
@@ -83,7 +83,7 @@ export const ShareModal = ({
                             <div className="px-6 pb-6 space-y-5">
                                 {/* Viral Hook Card */}
                                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-white/5 relative overflow-hidden group">
-                                    <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                                     <div className="relative z-10">
                                         <h4 className="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-2">
                                             {viralHook}
@@ -109,7 +109,7 @@ export const ShareModal = ({
                                         {(window as any).Telegram?.WebApp && (
                                             <button
                                                 onClick={handleShareViralCard}
-                                                className="h-10 rounded-xl flex items-center justify-center gap-2 bg-indigo-50 dark:bg-slate-800/80 backdrop-blur-md text-indigo-600 dark:text-indigo-400 font-bold text-caption border border-indigo-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
+                                                className="h-10 rounded-xl flex items-center justify-center gap-2 bg-blue-50 dark:bg-slate-800/80 backdrop-blur-md text-blue-600 dark:text-blue-400 font-bold text-caption border border-blue-100 dark:border-white/10 active:scale-[0.98] transition-all shadow-sm"
                                             >
                                                 <Sparkles className="w-3.5 h-3.5" />
                                                 <span>{t('referral.modal.viral_btn')}</span>
