@@ -136,7 +136,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-2xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-4xl xl:max-w-5xl lg:mx-auto"
+                className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-8 border-2 border-slate-200 dark:border-white/20 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-4xl xl:max-w-5xl lg:mx-auto"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
@@ -183,7 +183,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-white/10 gap-1">
+                            <div className="flex p-1 bg-slate-100 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-white/10 gap-1">
                                 <button
                                     onClick={() => setMode('profit')}
                                     className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
@@ -228,7 +228,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </div>
                                         </div>
                                         <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
-                                            <div className="flex justify-between items-center bg-white/10 dark:bg-white/5 p-4 rounded-xl border border-slate-200/50 dark:border-white/10">
+                                            <div className="flex justify-between items-center bg-white/10 dark:bg-black/30 p-4 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-[clamp(0.65rem,2vw,0.75rem)] font-black uppercase text-slate-500 dark:text-white/40 tracking-wider flex-1">{t('income.profit.monthly_income')}</span>
                                                 <span className="text-[clamp(1.25rem,5vw,1.75rem)] font-black text-emerald-500 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased tab-nums shrink-0 ml-2">${estimatedMonthly}</span>
                                             </div>
