@@ -81,7 +81,7 @@ export const BlogDetail = ({
             </div>
 
             <div className="sticky top-0 w-full pt-[22px] pb-1.5 px-4 bg-white/50 dark:bg-slate-950/50 backdrop-blur-2xl transition-all z-50 border-b border-slate-200/50 dark:border-white/5">
-                <div className="flex items-center justify-between w-full max-w-lg mx-auto">
+                <div className="flex items-center justify-between w-full max-w-lg lg:max-w-3xl xl:max-w-4xl mx-auto">
                     <button
                         onClick={onBack}
                         className="p-2 sm:px-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-95 transition-all text-slate-900 dark:text-white flex items-center gap-2 group shrink-0"
@@ -114,7 +114,7 @@ export const BlogDetail = ({
                 </div>
             </div>
 
-            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg mx-auto relative z-10">
+            <div className="px-5 pt-8 pb-32 space-y-8 max-w-lg lg:max-w-3xl xl:max-w-4xl mx-auto relative z-10">
                 <div className="space-y-6">
                     {post.image && (
                         <div className="relative w-full aspect-video rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-3xl group">

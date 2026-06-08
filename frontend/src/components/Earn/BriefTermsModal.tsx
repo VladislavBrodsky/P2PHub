@@ -32,7 +32,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-1001 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] pb-[calc(var(--spacing-safe-bottom)+0px)]">
+                <div className="fixed inset-0 z-1001 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+0px)] lg:pb-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

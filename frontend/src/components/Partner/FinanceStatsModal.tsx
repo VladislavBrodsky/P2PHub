@@ -49,7 +49,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div key="finance-stats-root" className="fixed inset-0 z-1001 flex items-end justify-center">
+                <div key="finance-stats-root" className="fixed inset-0 z-1001 flex items-end lg:items-center justify-center">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -65,10 +65,10 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
                         animate={{ y: 0 }}
                         exit={{ y: '100%' }}
                         transition={{ type: 'spring', damping: 32, stiffness: 300 }}
-                        className="relative z-10 w-full max-w-lg mx-auto flex flex-col px-3"
+                        className="relative z-10 w-full max-w-lg mx-auto flex flex-col px-3 lg:px-0 lg:my-8"
                         style={{
-                            paddingBottom: 'calc(env(safe-area-inset-bottom, 12px) + 12px)',
-                            maxHeight: '88vh',
+                            paddingBottom: (typeof window !== 'undefined' && window.innerWidth >= 1024) ? '0px' : 'calc(env(safe-area-inset-bottom, 12px) + 12px)',
+                            maxHeight: (typeof window !== 'undefined' && window.innerWidth >= 1024) ? '85vh' : '88vh',
                             transform: 'translateZ(0)',
                             backfaceVisibility: 'hidden'
                         }}

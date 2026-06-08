@@ -448,8 +448,8 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         transition={{ type: 'spring', damping: 30, stiffness: 250 }}
                         className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] pt-[calc(var(--spacing-safe-top,20px))] border-x border-t sm:border border-slate-200 dark:border-white/5 overscroll-none"
                         style={{
-                            height: '100dvh',
-                            maxHeight: '100dvh',
+                            height: 'var(--modal-view-height, 100dvh)',
+                            maxHeight: 'var(--modal-view-max-height, 100dvh)',
                             overscrollBehavior: 'none'
                         }}
                     >

@@ -94,7 +94,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div key="briefing-root" className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] pb-[calc(var(--spacing-safe-bottom)+20px)]">
+                <div key="briefing-root" className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+20px)] lg:pb-4">
                     {/* Backdrop with enhanced blur */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -110,7 +110,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 40 }}
                         transition={{ type: 'spring', damping: 30, stiffness: 350 }}
-                        className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-2xl border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full backdrop-blur-xl overscroll-none"
+                        className="relative w-full max-w-lg bg-white/95 dark:bg-slate-900/95 rounded-2xl border border-white/20 shadow-[0_32px_120px_-20px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col max-h-full lg:max-h-[85vh] backdrop-blur-xl overscroll-none"
                         style={{ 
                             overscrollBehavior: 'none',
                             transform: 'translateZ(0)',
@@ -242,7 +242,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
                         </div>
 
                         {/* Footer CTA */}
-                        <div className="p-6 pt-4 pb-10 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 shrink-0 relative z-20">
+                        <div className="p-6 pt-4 pb-10 lg:pb-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-white/5 shrink-0 relative z-20">
                             <Button
                                 onClick={onClose}
                                 className="w-full h-14 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-[1.25rem] font-bold text-sm shadow-2xl hover:scale-[1.01] active:scale-[0.98] transition-all relative overflow-hidden group"

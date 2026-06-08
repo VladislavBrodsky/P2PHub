@@ -54,7 +54,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
             {/* Network Explorer Overlay */}
             <AnimatePresence>
                 {isExplorerOpen && (
-                    <div className="fixed inset-0 z-1000 flex items-stretch justify-center">
+                    <div className="fixed inset-0 z-1000 flex items-stretch lg:items-center justify-center">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -67,7 +67,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                             animate={{ y: 0 }}
                             exit={{ y: '100%' }}
                             transition={{ type: 'spring', damping: 30, stiffness: 250 }}
-                            className="w-full max-w-lg mx-auto relative z-10 flex flex-col"
+                            className="w-full max-w-lg mx-auto relative z-10 flex flex-col lg:max-h-[85vh] lg:rounded-3xl lg:overflow-hidden lg:my-8"
                         >
                             <NetworkExplorer onClose={() => setIsExplorerOpen(false)} initialTotalCount={totalNetworkSize} />
                         </motion.div>

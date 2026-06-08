@@ -456,3 +456,16 @@
     radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
 }
+
+/* Responsive Modal Heights for Desktop viewports */
+:root {
+  --modal-view-height: 100dvh;
+  --modal-view-max-height: 100dvh;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --modal-view-height: 85dvh;
+    --modal-view-max-height: 85dvh;
+  }
+}

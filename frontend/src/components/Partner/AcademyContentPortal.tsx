@@ -128,8 +128,8 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                 transition={{ type: "spring", damping: 32, stiffness: 350 }}
                 className="relative w-full sm:max-w-lg bg-white dark:bg-[#030712] sm:rounded-2xl shadow-2xl border-t sm:border border-slate-200 dark:border-white/10 flex flex-col"
                 style={{
-                    height: '100dvh',
-                    maxHeight: '100dvh',
+                    height: 'var(--modal-view-height, 100dvh)',
+                    maxHeight: 'var(--modal-view-max-height, 100dvh)',
                     overscrollBehavior: 'none',
                 }}
             >

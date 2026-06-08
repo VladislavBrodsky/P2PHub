@@ -296,14 +296,14 @@ export const NetworkExplorer = ({ onClose, initialTotalCount = 0 }: NetworkExplo
     const displayTotal = Math.max(statsTotal, initialTotalCount);
 
     return (
-        <div className="bg-[#f8fafc] dark:bg-[#0b1120] flex flex-col h-full w-full relative border border-white/50 dark:border-white/5">
+        <div className="bg-[#f8fafc] dark:bg-[#0b1120] flex flex-col h-full w-full relative border border-white/50 dark:border-white/5 lg:rounded-3xl">
             {/* Soft Ambient Background Glows */}
             {/* Removed background glow */}
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl pointer-events-none" />
 
             {/* Premium Header */}
             <div className={cn(
-                "relative z-40 transition-all duration-300 px-5 pt-[138px] pb-3",
+                "relative z-40 transition-all duration-300 px-5 pt-[138px] lg:pt-6 pb-3",
                 isScrolled ? "bg-white/80 dark:bg-[#0b1120]/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-white/5" : ""
             )}>
                 <div className="flex items-center justify-between mb-4">
