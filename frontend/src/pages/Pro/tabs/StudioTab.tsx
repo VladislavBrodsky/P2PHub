@@ -652,7 +652,7 @@ export const StudioTab = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="min-h-[calc(100vh-var(--header-total-offset)-var(--bottom-nav-height))] bg-slate-50 dark:bg-slate-950 p-4 pb-12 space-y-6"
+            className="min-h-[calc(100vh-var(--header-total-offset)-var(--bottom-nav-height))] bg-transparent p-4 pb-12 space-y-6"
         >
             {/* Stepper - Premium High-Fidelity */}
             <StudioStepper step={externalStep} t={t} lowPowerMode={lowPowerMode} />
