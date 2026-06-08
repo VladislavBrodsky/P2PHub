@@ -53,7 +53,9 @@ export const getSafeLaunchParams = () => {
             if (typeof window !== 'undefined') {
                 try {
                     sessionStorage.setItem('p2p_tma_launch_params', JSON.stringify(lp));
-                } catch (se) {}
+                } catch (se) {
+                    // Ignore storage errors in restricted contexts
+                }
             }
             return lp;
         }
@@ -83,7 +85,9 @@ export const getSafeLaunchParams = () => {
                     platform: 'desktop'
                 } as any;
             }
-        } catch (le) {}
+        } catch (le) {
+            // Ignore storage/parsing errors
+        }
     }
 
     console.warn('[DEBUG] Not in Telegram environment, using empty params');

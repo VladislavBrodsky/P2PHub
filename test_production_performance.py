@@ -9,7 +9,7 @@ import time
 import json
 
 # Production API endpoint
-BASE_URL = "https://p2phub-production.up.railway.app"
+BASE_URL = "https://api.pintopay.life"
 ENDPOINT = f"{BASE_URL}/api/pro/generate"  # Correct endpoint (was erroneously /viral/generate)
 
 # Test scenarios
