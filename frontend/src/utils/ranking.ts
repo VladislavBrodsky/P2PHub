@@ -22,10 +22,10 @@ export const RANKS: Rank[] = [
     { tier: 14, name: 'President', minLevel: 40, badgeColor: '#d97706' },
     { tier: 15, name: 'Global Partner', minLevel: 44, badgeColor: '#b45309' },
     { tier: 16, name: 'World Partner', minLevel: 48, badgeColor: '#92400e' },
-    { tier: 17, name: 'Elite', minLevel: 52, badgeColor: '#8b5cf6' },
-    { tier: 18, name: 'Master', minLevel: 56, badgeColor: '#7c3aed' },
-    { tier: 19, name: 'Grandmaster', minLevel: 60, badgeColor: '#6d28d9' }, // Milestone shift
-    { tier: 20, name: 'Legend', minLevel: 64, badgeColor: '#5b21b6' },
+    { tier: 17, name: 'Elite', minLevel: 52, badgeColor: '#22d3ee' },
+    { tier: 18, name: 'Master', minLevel: 56, badgeColor: '#06b6d4' },
+    { tier: 19, name: 'Grandmaster', minLevel: 60, badgeColor: '#0891b2' }, // Milestone shift
+    { tier: 20, name: 'Legend', minLevel: 64, badgeColor: '#0e7490' },
     { tier: 21, name: 'VIP', minLevel: 68, badgeColor: '#f43f5e' }, // VIP starts near 70
     { tier: 22, name: 'VIP II', minLevel: 72, badgeColor: '#e11d48' },
     { tier: 23, name: 'VIP III', minLevel: 76, badgeColor: '#be123c' },
@@ -82,9 +82,9 @@ export function getRankGradient(level: number): string {
     if (level < 24) return 'from-blue-400 to-blue-600';         // Blue/Pioneer
     if (level < 36) return 'from-emerald-400 to-emerald-600';   // Emerald/Ambassador
     if (level < 52) return 'from-amber-400 to-amber-600';       // Gold/Director
-    if (level < 68) return 'from-purple-400 to-purple-600';     // Purple/Elite
+    if (level < 68) return 'from-cyan-400 to-blue-500';         // Cyan/Blue Elite
     if (level < 84) return 'from-rose-400 to-rose-600';         // Rose/VIP
-    if (level < 100) return 'from-blue-600 to-indigo-700';      // PRO Deep Blue
+    if (level < 100) return 'from-blue-500 to-cyan-500';        // PRO Deep Blue & Cyan
     return 'from-slate-900 via-blue-900 to-slate-900';          // Immortal Cosmic
 }
 
@@ -97,8 +97,8 @@ export function getRankTextColor(level: number): string {
     if (level < 24) return 'text-blue-600 dark:text-blue-300';
     if (level < 36) return 'text-emerald-600 dark:text-emerald-300';
     if (level < 52) return 'text-amber-600 dark:text-amber-300';
-    if (level < 68) return 'text-purple-600 dark:text-purple-300';
+    if (level < 68) return 'text-cyan-600 dark:text-cyan-300';
     if (level < 84) return 'text-rose-600 dark:text-rose-300';
-    if (level < 100) return 'text-blue-700 dark:text-blue-400';
-    return 'text-blue-900 dark:text-blue-400';
+    if (level < 100) return 'text-blue-600 dark:text-blue-400';
+    return 'text-blue-700 dark:text-blue-400';
 }

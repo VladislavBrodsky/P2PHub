@@ -84,12 +84,12 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                     ? 'bg-slate-100 dark:bg-slate-900 text-slate-400 border-slate-200 dark:border-white/10'
                     : stage.xpCost > 0 && !unlockedStages.includes(stageIdStr)
                         ? 'bg-amber-500/10 text-amber-500 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]'
-                        : 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-400 border-indigo-500/50 shadow-[0_0_15px_rgba(99,102,241,0.2)]'
+                        : 'bg-white dark:bg-slate-950 text-blue-600 dark:text-blue-400 border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
                 }`}>
                 <span className="font-bold text-xs italic">{stage.id}</span>
                 {!isCompleted && !isLocked && isUnlocked && !lowPowerMode && (
                     <motion.div
-                        className="absolute inset-0 rounded-full bg-indigo-500 -z-10"
+                        className="absolute inset-0 rounded-full bg-blue-500 -z-10"
                         animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
                         transition={{ duration: 2, repeat: Infinity }}
                     />
@@ -105,12 +105,12 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
 
             {/* Card Container */}
             <div className={`rounded-[24px] overflow-hidden transition-all duration-500 border font-sans ${isExpanded
-                ? 'bg-white dark:bg-slate-900 border-indigo-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-indigo-500/10'
+                ? 'bg-white dark:bg-slate-900 border-blue-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] ring-1 ring-blue-500/10'
                 : isCompleted
                     ? 'bg-slate-50/50 dark:bg-white/2 border-slate-100 dark:border-white/5 opacity-80'
                     : isLocked
                         ? 'bg-slate-50/30 dark:bg-white/1 border-dashed border-slate-200 dark:border-white/5 grayscale pointer-events-none'
-                        : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-indigo-500/30 shadow-sm'
+                        : 'bg-white dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-blue-500/30 shadow-sm'
                 }`}>
 
                 {/* Header */}
@@ -124,7 +124,7 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                                 <CategoryIcon size={10} />
                                 {stage.category}
                             </div>
-                            <h4 className={`text-sm sm:text-base font-bold uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-900 dark:text-white'}`}>
+                            <h4 className={`text-sm sm:text-base font-bold uppercase tracking-tight leading-tight transition-colors ${isExpanded ? 'text-blue-600 dark:text-blue-400' : 'text-slate-900 dark:text-white'}`}>
                                 {displayTitle}
                             </h4>
                         </div>
@@ -149,10 +149,10 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
-                                <span className="text-label font-bold text-indigo-500 bg-indigo-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
+                                <span className="text-label font-bold text-blue-500 bg-blue-500/10 px-2 py-1 rounded-md">+{stage.rewardXp} XP</span>
                             </div>
                         )}
-                        <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-indigo-500' : 'text-slate-300 dark:text-slate-600'}`} />
+                        <ChevronDown className={`w-5 h-5 transition-transform duration-500 ${isExpanded ? 'rotate-180 text-blue-500' : 'text-slate-300 dark:text-slate-600'}`} />
                     </div>
                 </div>
 
@@ -168,8 +168,8 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
                             <div className="px-5 pb-6 sm:px-7 sm:pb-8 pt-2 space-y-6 border-t border-slate-50 dark:border-white/5">
                                 <div className="bg-slate-50/50 dark:bg-black/20 p-5 sm:p-6 rounded-3xl border border-slate-100 dark:border-white/5 text-caption sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
                                     <div className="flex items-center gap-2 mb-4">
-                                        <CategoryIcon size={16} className="text-indigo-500" />
-                                        <span className="text-label font-bold uppercase tracking-widest text-indigo-400">{t('academy.mission_protocol', { ns: 'academy', defaultValue: 'MISSION PROTOCOL v2026.4' })}</span>
+                                        <CategoryIcon size={16} className="text-blue-500" />
+                                        <span className="text-label font-bold uppercase tracking-widest text-blue-400">{t('academy.mission_protocol', { ns: 'academy', defaultValue: 'MISSION PROTOCOL v2026.4' })}</span>
                                     </div>
                                     {!isUnlocked ? (
                                         <div className="flex flex-col items-center justify-center py-6 gap-3 opacity-60">
@@ -231,22 +231,22 @@ const AcademyStageItem = memo(({ stage, isCompleted, isLoading, isExpanded, isLo
 const PsychStrategyCard = memo(({ item, i, selection, impact, lowPowerMode, t }: { item: PsychStrategyItem; i: number; selection: () => void; impact: (style: 'light' | 'medium' | 'heavy') => void; lowPowerMode: boolean; t: TFunction<readonly ['pro', 'academy'], undefined> }) => (
     <motion.div
         whileHover={lowPowerMode ? {} : { y: -4 }}
-        className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-indigo-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
+        className="p-4 sm:p-5 rounded-[20px] border relative overflow-hidden group/card bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10 hover:border-blue-500/40 transition-all duration-500 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_15px_35px_rgba(0,0,0,0.3)] flex flex-col"
     >
         {/* Tech Gradients */}
-        {!lowPowerMode && <div className="absolute -top-10 -right-10 w-20 h-20 bg-indigo-500/5 dark:bg-indigo-500/10 blur-xl rounded-full" />}
+        {!lowPowerMode && <div className="absolute -top-10 -right-10 w-20 h-20 bg-blue-500/5 dark:bg-blue-500/10 blur-xl rounded-full" />}
 
         {/* Trigger Badge - Premium Label */}
         <div className="flex items-center justify-between mb-4">
             <div className="w-7 h-7 rounded-lg bg-slate-200/50 dark:bg-white/10 flex items-center justify-center text-slate-800 dark:text-white text-label font-bold italic border border-slate-300 dark:border-white/10">
                 {i + 1}
             </div>
-            <div className="px-2.5 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-lg border border-indigo-500/20">
-                <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.15em]">{item.trigger}</span>
+            <div className="px-2.5 py-1 bg-blue-500/10 dark:bg-blue-500/20 rounded-lg border border-blue-500/20">
+                <span className="text-label font-bold text-blue-500 dark:text-blue-400 uppercase tracking-[0.15em]">{item.trigger}</span>
             </div>
         </div>
 
-        <h5 className="text-sm font-bold uppercase tracking-tighter leading-snug mb-2 group-hover/card:text-indigo-500 transition-colors italic">
+        <h5 className="text-sm font-bold uppercase tracking-tighter leading-snug mb-2 group-hover/card:text-blue-500 transition-colors italic">
             {item.title}
         </h5>
 
@@ -390,9 +390,9 @@ export const GrowthTab = ({
 
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4 relative z-10">
                     <div className="flex items-start gap-4 sm:gap-5">
-                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[16px] bg-linear-to-br from-indigo-500 to-blue-600 p-px shadow-lg shadow-indigo-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-[16px] bg-linear-to-br from-blue-500 to-blue-600 p-px shadow-lg shadow-blue-500/20 shrink-0 group-hover:rotate-3 transition-transform duration-500">
                             <div className="w-full h-full rounded-[15px] bg-white dark:bg-slate-950 flex items-center justify-center">
-                                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-500 dark:text-indigo-400" />
+                                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-blue-500 dark:text-blue-400" />
                             </div>
                         </div>
 
@@ -405,7 +405,7 @@ export const GrowthTab = ({
                                         const rest = titleParts.slice(1).join(' ');
                                         return (
                                             <>
-                                                {firstWord} {rest && <span className="text-indigo-500">{rest}</span>}
+                                                {firstWord} {rest && <span className="text-blue-500">{rest}</span>}
                                             </>
                                         );
                                     })()}
@@ -413,7 +413,7 @@ export const GrowthTab = ({
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2 mt-1">
-                                <span className="px-2.5 py-0.5 bg-indigo-500 text-white dark:bg-indigo-500/20 dark:text-indigo-400 rounded-md text-label font-bold uppercase tracking-[0.2em] shadow-sm">
+                                <span className="px-2.5 py-0.5 bg-blue-500 text-white dark:bg-blue-500/20 dark:text-blue-400 rounded-md text-label font-bold uppercase tracking-[0.2em] shadow-sm">
                                     {academyScore < 300 ? t('academy.protocols.difficulty_levels.easy') :
                                         academyScore < 800 ? t('academy.protocols.difficulty_levels.medium') :
                                             t('academy.protocols.difficulty_levels.hard')}
@@ -421,7 +421,7 @@ export const GrowthTab = ({
                                 <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
                                 <button
                                     onClick={() => { selection(); setShowManual('academy'); }}
-                                    className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors uppercase tracking-[0.15em]"
+                                    className="flex items-center gap-1 text-label font-bold text-slate-400 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 transition-colors uppercase tracking-[0.15em]"
                                 >
                                     <Info className="w-3 h-3" /> {t('academy.intel_label')}
                                 </button>
@@ -434,8 +434,8 @@ export const GrowthTab = ({
                             {t('academy.protocols.stats_label')}
                         </p>
                         <div className="relative group/score">
-                            {!lowPowerMode && <div className="absolute inset-0 bg-indigo-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />}
-                            <div className="text-2xl sm:text-4xl font-bold text-indigo-600 dark:text-indigo-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
+                            {!lowPowerMode && <div className="absolute inset-0 bg-blue-500/20 blur-2xl opacity-0 group-hover/score:opacity-100 transition-opacity duration-700" />}
+                            <div className="text-2xl sm:text-4xl font-bold text-blue-600 dark:text-blue-400 drop-shadow-sm tabular-nums leading-none tracking-tighter flex items-baseline gap-1">
                                 <LiquidCounter value={academyScore} />
                             </div>
                         </div>
@@ -447,7 +447,7 @@ export const GrowthTab = ({
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center justify-between">
                             <span className="text-label font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em]">{t('academy.sync_status')}</span>
-                            <span className="text-label font-bold text-indigo-500 dark:text-indigo-400 uppercase tracking-widest tabular-nums italic">
+                            <span className="text-label font-bold text-blue-500 dark:text-blue-400 uppercase tracking-widest tabular-nums italic">
                                 {academyProgress}% {t('academy.deployed')}
                             </span>
                         </div>
@@ -460,7 +460,7 @@ export const GrowthTab = ({
                                     <div
                                         key={i}
                                         className={`flex-1 rounded-sm transition-all duration-700 relative overflow-hidden ${isActive
-                                            ? 'bg-linear-to-t from-indigo-500 to-blue-400 shadow-[0_0_10px_rgba(79,70,229,0.3)]'
+                                            ? 'bg-linear-to-t from-blue-500 to-blue-400 shadow-[0_0_10px_rgba(37,99,235,0.3)]'
                                             : 'bg-slate-200 dark:bg-white/5'
                                             }`}
                                     >
@@ -480,8 +480,8 @@ export const GrowthTab = ({
             </div>
 
             {/* Expert Intelligence Transmission - Sleek Ticker Style */}
-            <div className="px-4 py-3 sm:px-6 sm:py-4 bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-3 sm:gap-4 relative overflow-hidden shadow-[0_4px_15px_rgb(0,0,0,0.02)]">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-indigo-100/80 dark:bg-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0">
+            <div className="px-4 py-3 sm:px-6 sm:py-4 bg-blue-50/50 dark:bg-blue-900/10 rounded-2xl border border-blue-100 dark:border-blue-500/10 flex items-center gap-3 sm:gap-4 relative overflow-hidden shadow-[0_4px_15px_rgb(0,0,0,0.02)]">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-100/80 dark:bg-blue-500/20 flex items-center justify-center text-blue-500 shrink-0">
                     <Bot className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -498,12 +498,12 @@ export const GrowthTab = ({
             {/* Viral Content Hub - Modules Component */}
             <div className="space-y-5 sm:space-y-6">
                 <div className="flex flex-row items-center gap-3 px-1">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-50 dark:bg-blue-500/10 rounded-lg flex items-center justify-center text-indigo-600 dark:text-blue-500 border border-indigo-100 dark:border-blue-500/20 shadow-sm shrink-0">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-50 dark:bg-blue-500/10 rounded-lg flex items-center justify-center text-blue-600 dark:text-blue-500 border border-blue-100 dark:border-blue-500/20 shadow-sm shrink-0">
                         <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
                     <div className="flex flex-col">
                         <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none">{t('academy.articles.title')}</h4>
-                        <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400 uppercase tracking-widest mt-0.5">{t('academy.dossier_label')}</p>
+                        <p className="text-label font-bold text-blue-500/60 dark:text-blue-400 uppercase tracking-widest mt-0.5">{t('academy.dossier_label')}</p>
                     </div>
                 </div>
 
@@ -519,7 +519,7 @@ export const GrowthTab = ({
                             >
                                 <div className="flex items-center justify-between mb-5">
                                     <div className="flex items-center gap-3">
-                                        <span className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 rounded-full text-label sm:text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">{article.category}</span>
+                                        <span className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 rounded-full text-label sm:text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">{article.category}</span>
                                         <span className="text-label font-bold text-slate-400 uppercase tracking-widest">{article.readTime} {t('academy.min_read')}</span>
                                     </div>
                                     {mockProgress === 100 && (
@@ -528,16 +528,16 @@ export const GrowthTab = ({
                                         </div>
                                     )}
                                 </div>
-                                <h5 className="text-base sm:text-lg font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-tighter mb-2 leading-tight group-hover:text-indigo-500 transition-colors">{article.title}</h5>
+                                <h5 className="text-base sm:text-lg font-bold text-blue-600 dark:text-blue-400 uppercase tracking-tighter mb-2 leading-tight group-hover:text-blue-500 transition-colors">{article.title}</h5>
                                 <p className="text-label sm:text-caption font-medium text-slate-500 dark:text-slate-400 leading-relaxed italic mb-4 flex-1 line-clamp-2">"{article.desc}"</p>
 
                                 <div className="flex items-center justify-between mt-auto">
-                                    <div className="flex items-center gap-1.5 text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
+                                    <div className="flex items-center gap-1.5 text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest group-hover:gap-2.5 transition-all">
                                         {t('academy.articles.btn_read')} <ArrowRight className="w-3.5 h-3.5" />
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                            <div className="h-full bg-indigo-300 dark:bg-indigo-500/50 rounded-full" style={{ width: `${mockProgress}%` }} />
+                                            <div className="h-full bg-blue-300 dark:bg-blue-500/50 rounded-full" style={{ width: `${mockProgress}%` }} />
                                         </div>
                                         <span className="text-label font-bold text-slate-400">{mockProgress}%</span>
                                     </div>
@@ -553,7 +553,7 @@ export const GrowthTab = ({
                 {/* Timeline Line - Re-aligned for compact nodes */}
                 <div className="absolute left-[12px] sm:left-[14px] top-10 bottom-0 w-px bg-slate-200 dark:bg-white/10 z-0 overflow-hidden">
                     <motion.div
-                        className="absolute top-0 left-0 w-full bg-linear-to-b from-transparent via-indigo-500 to-transparent h-24"
+                        className="absolute top-0 left-0 w-full bg-linear-to-b from-transparent via-blue-500 to-transparent h-24"
                         animate={{
                             top: ["-10%", "110%"],
                         }}
@@ -567,12 +567,12 @@ export const GrowthTab = ({
 
                 <div className="flex items-center justify-between px-1 relative z-10">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-linear-to-br from-indigo-500/20 to-blue-600/20 rounded-xl flex items-center justify-center text-indigo-500 border border-indigo-500/30 shadow-[0_0_20px_rgba(79,70,229,0.15)] group-hover:scale-110 transition-transform">
+                        <div className="w-10 h-10 bg-linear-to-br from-blue-500/20 to-blue-600/20 rounded-xl flex items-center justify-center text-blue-500 border border-blue-500/30 shadow-[0_0_20px_rgba(37,99,235,0.15)] group-hover:scale-110 transition-transform">
                             <ShieldCheck size={20} />
                         </div>
                         <div>
                             <h4 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter leading-none italic">{t('academy.growth_protocol')}</h4>
-                            <p className="text-label font-bold text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.2em] mt-1">{t('academy.node_capabilities')}</p>
+                            <p className="text-label font-bold text-blue-500/60 dark:text-blue-400/60 uppercase tracking-[0.2em] mt-1">{t('academy.node_capabilities')}</p>
                         </div>
                     </div>
                 </div>
@@ -657,17 +657,17 @@ export const GrowthTab = ({
                 {/* #comment: Background glow removed for Unified Background Continuity */}
                 <div className="flex items-center justify-between gap-4 mb-4 relative z-10 font-sans">
                     <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-8 h-8 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
-                            <Globe size={16} className="text-indigo-500" />
+                        <div className="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20 shadow-lg group-hover:rotate-6 transition-transform shrink-0">
+                            <Globe size={16} className="text-blue-500" />
                         </div>
                         <div className="min-w-0">
                             <h4 className="text-label sm:text-label font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-none mb-1 truncate">{t('academy.social_setup.title')}</h4>
-                            <p className="text-label font-bold text-indigo-400 uppercase tracking-widest truncate">{t('academy.social_setup.subtitle')}</p>
+                            <p className="text-label font-bold text-blue-400 uppercase tracking-widest truncate">{t('academy.social_setup.subtitle')}</p>
                         </div>
                     </div>
                     {/* Multi-Sync Status Display */}
                     <div className="flex flex-col items-end shrink-0 text-right">
-                        <span className={`text-label font-bold uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-500/10 text-slate-400'}`}>
+                        <span className={`text-label font-bold uppercase tracking-widest px-2.5 py-1 rounded-full whitespace-nowrap ${status?.is_pro_plus ? 'bg-blue-500/10 text-blue-500' : 'bg-slate-500/10 text-slate-400'}`}>
                             {status?.is_pro_plus ? t('setup.multi_sync.plan_plus') : t('setup.multi_sync.plan_pro')}
                         </span>
                         <p className="text-label font-bold text-slate-400 uppercase tracking-widest mt-1.5 whitespace-nowrap">{t('setup.multi_sync.multi_node_capacity', { val: status?.is_pro_plus ? '5/5' : '1/1' })}</p>
@@ -681,18 +681,18 @@ export const GrowthTab = ({
                         return platformsList.map((platform: any, i: number) => (
                             <div key={i} className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-100 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors group/platform">
                                 <div className="flex items-center gap-2.5 mb-2">
-                                    <div className="w-7 h-7 bg-indigo-500/10 rounded-lg flex items-center justify-center border border-indigo-500/20 group-hover/platform:scale-110 transition-transform p-1.5">
+                                    <div className="w-7 h-7 bg-blue-500/10 rounded-lg flex items-center justify-center border border-blue-500/20 group-hover/platform:scale-110 transition-transform p-1.5">
                                         {platform.name && platform.name.toLowerCase().includes('telegram') && <img src={socialLogos.telegram} className="w-full h-full object-contain" alt="Telegram" />}
                                         {platform.name && (platform.name.toLowerCase().includes(' x') || platform.name === 'X') && <img src={socialLogos.x} className="w-full h-full object-contain dark:invert" alt="X" />}
                                         {platform.name && platform.name.toLowerCase().includes('linkedin') && <img src={socialLogos.linkedin} className="w-full h-full object-contain" alt="LinkedIn" />}
-                                        {!['telegram', ' x', 'linkedin'].some(s => platform.name?.toLowerCase().includes(s)) && <Globe size={12} className="text-indigo-500" />}
+                                        {!['telegram', ' x', 'linkedin'].some(s => platform.name?.toLowerCase().includes(s)) && <Globe size={12} className="text-blue-500" />}
                                     </div>
                                     <span className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tighter">{platform.name}</span>
                                 </div>
                                 <div className="grid grid-cols-1 gap-1 opacity-60">
                                     {Array.isArray(platform.steps) && platform.steps.slice(0, 2).map((step: string, j: number) => (
                                         <div key={j} className="flex items-center gap-2">
-                                            <div className="w-1 h-1 rounded-full bg-indigo-500/30" />
+                                            <div className="w-1 h-1 rounded-full bg-blue-500/30" />
                                             <span className="text-label font-medium text-slate-500 dark:text-slate-400 truncate tracking-tight">{step}</span>
                                         </div>
                                     ))}

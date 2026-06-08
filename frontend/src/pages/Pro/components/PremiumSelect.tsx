@@ -16,7 +16,7 @@ interface PremiumSelectProps {
     onChange: (value: string) => void;
     options: Option[];
     placeholder: string;
-    color?: 'indigo' | 'purple' | 'amber' | 'emerald' | 'blue' | 'cyan';
+    color?: 'amber' | 'emerald' | 'blue' | 'cyan';
     isOpen: boolean;
     onToggle: () => void;
     onClose?: () => void;
@@ -30,7 +30,7 @@ export const PremiumSelect = ({
     onChange,
     options,
     placeholder,
-    color = 'indigo',
+    color = 'blue',
     isOpen,
     onToggle,
     onClose,
@@ -43,24 +43,6 @@ export const PremiumSelect = ({
     const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
     const config = {
-        indigo: {
-            text: 'text-indigo-600 dark:text-indigo-400',
-            bg: 'bg-indigo-500',
-            border: 'border-indigo-200 dark:border-indigo-500/30',
-            active: 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-inner',
-            hover: 'hover:bg-indigo-50/80 dark:hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-400',
-            icon: 'text-indigo-500',
-            shadow: 'shadow-indigo-500/10'
-        },
-        purple: {
-            text: 'text-purple-600 dark:text-purple-400',
-            bg: 'bg-purple-500',
-            border: 'border-purple-200 dark:border-purple-500/30',
-            active: 'bg-purple-50 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 shadow-[inset_0_0_15px_rgba(168,85,247,0.1)]',
-            hover: 'hover:bg-purple-50/80 dark:hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400',
-            icon: 'text-purple-500',
-            shadow: 'shadow-purple-500/10'
-        },
         blue: {
             text: 'text-blue-600 dark:text-blue-400',
             bg: 'bg-blue-500',

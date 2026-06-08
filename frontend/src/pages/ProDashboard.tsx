@@ -410,7 +410,7 @@ export const ProDashboard = () => {
                         text: String(t('studio.initiate_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: !!studioReady,
-                        backgroundColor: '#6366f1',
+                        backgroundColor: '#3b82f6',
                         textColor: '#ffffff'
                     });
                     const handleStep1 = () => {
@@ -423,7 +423,7 @@ export const ProDashboard = () => {
                         text: String(t('studio.go_viral_btn')).toUpperCase(),
                         isVisible: true,
                         isEnabled: !isLoading,
-                        backgroundColor: '#6366f1',
+                        backgroundColor: '#3b82f6',
                         textColor: '#ffffff'
                     });
                     const triggerGen = () => window.dispatchEvent(new CustomEvent('trigger-studio-gen'));
@@ -444,7 +444,7 @@ export const ProDashboard = () => {
                     text: String(t('tools.audit.btn')).toUpperCase(),
                     isVisible: true,
                     isEnabled: !isAuditing,
-                    backgroundColor: '#6366f1',
+                    backgroundColor: '#3b82f6',
                     textColor: '#ffffff'
                 });
                 return typeof mainButton.onClick === 'function' ? mainButton.onClick(handleRunMarketingAudit) : undefined;
@@ -460,7 +460,7 @@ export const ProDashboard = () => {
                         text: `${setupTitle}: ${moduleTitle}`,
                         isVisible: true,
                         isEnabled: !isCompletingStage,
-                        backgroundColor: '#4f46e5',
+                        backgroundColor: '#2563eb',
                         textColor: '#ffffff'
                     });
                     const handleComplete = () => handleCompleteAcademyStage(nextModule.id);
@@ -513,7 +513,7 @@ export const ProDashboard = () => {
     return (
         <div
             id="pro-dashboard-container"
-            className="w-full text-text-primary font-sans selection:bg-indigo-500/30 overflow-x-hidden pt-0 pb-6"
+            className="w-full text-text-primary font-sans selection:bg-blue-500/20 overflow-x-hidden pt-0 pb-6"
         >
             <div className="relative z-10 max-w-5xl mx-auto px-4 pt-2 pb-12 min-h-[70vh]">
                 {/* Header Section - Mobile Optimized */}
@@ -528,7 +528,7 @@ export const ProDashboard = () => {
                             </h1>
                             <div className="flex items-center justify-center gap-1.5 px-0.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
-                                <Zap size={10} className="text-indigo-500 animate-pulse" />
+                                <Zap size={10} className="text-blue-500 animate-pulse" />
                                 <span className="text-label font-bold text-text-primary tabular-nums leading-none tracking-tight">
                                     {status?.pro_tokens ?? 0}
                                 </span>
@@ -538,12 +538,12 @@ export const ProDashboard = () => {
                             </div>
                         </div>
                     </div>
-
+ 
                     <button
                         onClick={() => { selection(); setShowSetup(true); }}
                         className="w-7 h-7 sm:w-9 sm:h-9 bg-white/40 dark:bg-white/5 backdrop-blur-2xl hover:bg-white dark:hover:bg-white/10 rounded-lg border border-white/40 dark:border-white/10 transition-all group active:scale-90 flex items-center justify-center shadow-premium-sm shrink-0"
                     >
-                        <Settings size={13} className="text-slate-500 dark:text-slate-400 group-hover:text-indigo-500 group-hover:rotate-45 transition-all duration-500 w-3 h-3 sm:w-4 sm:h-4" />
+                        <Settings size={13} className="text-slate-500 dark:text-slate-400 group-hover:text-blue-500 group-hover:rotate-45 transition-all duration-500 w-3 h-3 sm:w-4 sm:h-4" />
                     </button>
                 </div>
 
@@ -553,12 +553,12 @@ export const ProDashboard = () => {
                     <div className="absolute inset-0.5 flex pointer-events-none" aria-hidden="true">
                         <motion.div
                             className={`absolute inset-y-0 bg-linear-to-r rounded-2xl shadow-lg z-0 ${activeTab === 'studio'
-                                ? 'from-blue-600 via-indigo-500 to-blue-600 shadow-indigo-500/10'
+                                ? 'from-blue-600 via-blue-400 to-blue-600 shadow-blue-500/10'
                                 : activeTab === 'tools'
                                     ? 'from-amber-500 via-orange-500 to-amber-500 shadow-orange-500/10'
                                     : activeTab === 'growth'
                                         ? 'from-emerald-500 via-teal-500 to-emerald-500 shadow-emerald-500/10'
-                                        : 'from-purple-600 via-fuchsia-500 to-purple-600 shadow-purple-500/10'
+                                        : 'from-blue-600 via-cyan-500 to-blue-600 shadow-blue-500/10'
                                 }`}
                             initial={false}
                             animate={{
@@ -573,14 +573,14 @@ export const ProDashboard = () => {
                             <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px] rounded-2xl" />
                         </motion.div>
                     </div>
-
+ 
                     {(['studio', 'tools', 'growth', 'analytics'] as const).map((tab) => (
                         <button
                             key={tab}
                             onClick={() => { selection(); setActiveTab(tab); impact('light'); }}
                             className={`flex-1 py-1.5 rounded-2xl transition-colors duration-500 relative z-10 ${activeTab === tab
                                 ? 'text-white font-bold'
-                                : 'text-slate-500 dark:text-slate-400 hover:text-indigo-500 font-bold'}`}
+                                : 'text-slate-500 dark:text-slate-400 hover:text-blue-500 font-bold'}`}
                         >
                             <span className="relative z-10 flex flex-col items-center justify-center gap-0.5">
                                 {tab === 'studio' && <Cpu size={12} />}
@@ -597,8 +597,8 @@ export const ProDashboard = () => {
                     {/* Status Loading / Error / Lock / Content */}
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                            <div className="w-12 h-12 border-4 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin" />
-                            <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500 animate-pulse">{t('syncing_nodes')}</p>
+                            <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+                            <p className="text-label font-bold uppercase tracking-[0.2em] text-blue-500 animate-pulse">{t('syncing_nodes')}</p>
                         </div>
                     ) : statusError ? (
                         // Connection error — show retry, NOT a lock screen
@@ -620,7 +620,7 @@ export const ProDashboard = () => {
                                 </p>
                                 <button
                                     onClick={() => { setIsLoading(true); setStatusError(false); loadStatus(); }}
-                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                    className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-500/20"
                                 >
                                     {t('common:retry', 'RETRY CONNECTION')}
                                 </button>
@@ -633,8 +633,8 @@ export const ProDashboard = () => {
                                 animate={{ scale: 1, opacity: 1 }}
                                 className="bg-white dark:bg-slate-900/50 backdrop-blur-3xl p-6 rounded-3xl border border-slate-200 dark:border-white/10 shadow-2xl max-w-xs w-full relative overflow-hidden"
                             >
-                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500" />
-                                <div className="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-500 mx-auto mb-5 shadow-xl shadow-indigo-500/20">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-cyan-400 to-blue-600" />
+                                <div className="w-14 h-14 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mx-auto mb-5 shadow-xl shadow-blue-500/20">
                                     <Shield size={28} className="animate-pulse" />
                                 </div>
                                 <h2 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tighter mb-3 leading-tight">
@@ -645,7 +645,7 @@ export const ProDashboard = () => {
                                 </p>
                                 <button
                                     onClick={() => navigateTo(ROUTES.SUBSCRIPTION)}
-                                    className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-indigo-500/20"
+                                    className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-blue-500/20"
                                 >
                                     {t('locked.upgrade_btn')}
                                 </button>
