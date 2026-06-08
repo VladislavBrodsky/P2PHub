@@ -36,13 +36,13 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                         className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                     >
                         {/* Decorative elements */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-50" />
-                        <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 blur-3xl rounded-full" />
-                        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/10 blur-3xl rounded-full" />
+                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-blue-500 to-pink-500 opacity-50" />
+                        <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/10 blur-3xl rounded-full" />
+                        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-blue-500/10 blur-3xl rounded-full" />
 
                         <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center relative z-10">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-500 dark:bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-500/20">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-500 dark:bg-blue-600 flex items-center justify-center shadow-xl shadow-blue-500/20">
                                     <BookOpen size={24} className="text-white" />
                                 </div>
                                 <div>
@@ -58,8 +58,8 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                                                         t('academy.viral_assets.title')}
                                     </h3>
                                     <div className="flex items-center gap-2 mt-1">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                                        <p className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                                        <p className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] opacity-80">
                                             {showManual === 'setup_x' ? t('setup.x_manual.subtitle') :
                                                 showManual === 'setup_tg' ? t('setup.tg_manual.subtitle') :
                                                     showManual === 'setup_linkedin' ? t('setup.linkedin_manual.subtitle') :
@@ -94,7 +94,7 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                         return steps.map((step: any, i: number) => (
                                             <div key={i} className="flex gap-5 items-start relative group">
                                                 {i < steps.length - 1 && <div className="absolute left-5 top-10 bottom-0 w-px bg-slate-100 dark:bg-white/10" />}
-                                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-label font-bold text-indigo-500 dark:text-indigo-400 shrink-0 shadow-sm group-hover:border-indigo-500/30 transition-colors z-10">
+                                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-label font-bold text-blue-500 dark:text-blue-400 shrink-0 shadow-sm group-hover:border-blue-500/30 transition-colors z-10">
                                                     {(i + 1).toString().padStart(2, '0')}
                                                 </div>
                                                 <div className="space-y-1.5 pt-1">
@@ -132,13 +132,13 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                                 </div>
                             ) : (
                                 <div className="space-y-6">
-                                    <div className="p-6 bg-indigo-50 dark:bg-indigo-500/5 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-center gap-5">
-                                        <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-500/20">
+                                    <div className="p-6 bg-blue-50 dark:bg-blue-500/5 rounded-2xl border border-blue-100 dark:border-blue-500/10 flex items-center gap-5">
+                                        <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20">
                                             <Sparkles className="text-white" size={24} />
                                         </div>
                                         <p className="text-caption font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-snug">
                                             <Trans i18nKey="academy.protocols.growth_promo">
-                                                PRO Members grow their network <span className="text-indigo-600 dark:text-indigo-400">x5 faster</span> using these elite protocols.
+                                                PRO Members grow their network <span className="text-blue-600 dark:text-blue-400">x5 faster</span> using these elite protocols.
                                             </Trans>
                                         </p>
                                     </div>
@@ -155,7 +155,7 @@ export const ManualsModal: React.FC<ManualsModalProps> = ({
                         <div className="p-6 sm:p-8 bg-slate-50 dark:bg-black/40 border-t border-slate-100 dark:border-white/5 relative z-10">
                             <button
                                 onClick={() => { selection(); setShowManual(null); }}
-                                className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
+                                className="w-full h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 active:scale-95 transition-all flex items-center justify-center gap-3"
                             >
                                 {t('academy.understand_protocol_btn')}
                                 <ArrowRight size={16} />

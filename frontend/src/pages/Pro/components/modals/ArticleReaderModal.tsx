@@ -39,7 +39,7 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                             <div className="flex justify-between items-start">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-2">
-                                        <span className="px-2 py-0.5 bg-indigo-500/10 rounded-full text-label font-bold text-indigo-500 uppercase tracking-widest">{selectedArticle.category}</span>
+                                        <span className="px-2 py-0.5 bg-blue-500/10 rounded-full text-label font-bold text-blue-500 uppercase tracking-widest">{selectedArticle.category}</span>
                                         <span className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">{t('academy.read_time', { time: selectedArticle.readTime })}</span>
                                     </div>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight">{selectedArticle.title}</h3>

@@ -37,7 +37,7 @@ export const Header = ({ onOpenMenu }: HeaderProps) => {
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 z-120 w-full flex justify-center transition-all duration-300 pointer-events-none lg:pl-[72px] xl:pl-56"
+            className="fixed top-0 left-0 right-0 z-120 w-full flex lg:hidden justify-center transition-all duration-300 pointer-events-none"
             style={{
                 paddingTop: 'var(--dynamic-header-padding, 6.625rem)',
                 paddingLeft: 'var(--spacing-safe-left, 0px)',

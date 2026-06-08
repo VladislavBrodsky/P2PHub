@@ -32,9 +32,9 @@ const ResonanceSegment = memo(({ rec, i, t, lowPowerMode }: { rec: any; i: numbe
         initial={lowPowerMode ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: lowPowerMode ? 0 : 0.3 + i * 0.1 }}
-        className="flex items-center gap-4 p-4 rounded-3xl bg-slate-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-indigo-500/20 group/item shadow-inner hover:shadow-xl hover:shadow-indigo-500/5"
+        className="flex items-center gap-4 p-4 rounded-3xl bg-slate-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-blue-500/20 group/item shadow-inner hover:shadow-xl hover:shadow-blue-500/5"
     >
-        <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-indigo-500 group-hover/item:scale-110 transition-transform shrink-0 border border-slate-100 dark:border-white/5">
+        <div className="w-10 h-10 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-premium-sm text-blue-500 group-hover/item:scale-110 transition-transform shrink-0 border border-slate-100 dark:border-white/5">
             {rec.type === 'scaling' ? <Target size={18} /> : <Sparkles size={18} />}
         </div>
         <div className="flex-1 min-w-0">
@@ -42,7 +42,7 @@ const ResonanceSegment = memo(({ rec, i, t, lowPowerMode }: { rec: any; i: numbe
             <p className="text-label font-medium text-slate-500 dark:text-slate-400 leading-snug line-clamp-1">{rec.reason}</p>
         </div>
         <div className="text-right shrink-0 flex flex-col items-end">
-            <span className="text-caption font-bold text-indigo-600 dark:text-indigo-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
+            <span className="text-caption font-bold text-blue-600 dark:text-blue-400 tabular-nums">{(rec.resonance_score * 100).toFixed(0)}%</span>
             <p className="text-label font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">{t('analytics.raw_data.reach').slice(0, 4)}</p>
         </div>
     </motion.div>
@@ -76,7 +76,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
                                 {post.platform} • {new Date(post.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                             </span>
                             {post.last_check && (
-                                <span className="text-label sm:text-label font-bold text-indigo-500/50 uppercase hidden sm:block">
+                                <span className="text-label sm:text-label font-bold text-blue-500/50 uppercase hidden sm:block">
                                     • {t('analytics.raw_data.last_sync')} {new Date(post.last_check).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             )}
@@ -98,8 +98,8 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
                             <span className="text-label sm:text-label font-bold text-emerald-500 tabular-nums">{post.reactions !== undefined ? post.reactions : post.likes}</span>
                         </div>
                         <div className="flex items-center gap-0.5">
-                            <Share2 size={8} className="text-purple-500 shrink-0" />
-                            <span className="text-label sm:text-label font-bold text-purple-500 tabular-nums">{post.shares !== undefined ? post.shares : post.reposts}</span>
+                            <Share2 size={8} className="text-blue-500 shrink-0" />
+                            <span className="text-label sm:text-label font-bold text-blue-500 tabular-nums">{post.shares !== undefined ? post.shares : post.reposts}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-1.5 sm:gap-2">
@@ -122,7 +122,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
                     <button
                         onClick={() => handleRefreshPost(post.id)}
                         disabled={refreshingPost === post.id}
-                        className={`w-6 h-6 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-indigo-500 hover:border-indigo-500/30 transition-all flex items-center justify-center shrink-0 ${refreshingPost === post.id ? 'animate-spin text-indigo-500' : ''}`}
+                        className={`w-6 h-6 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-blue-500 hover:border-blue-500/30 transition-all flex items-center justify-center shrink-0 ${refreshingPost === post.id ? 'animate-spin text-blue-500' : ''}`}
                     >
                         <Zap size={10} className="sm:w-3 sm:h-3" />
                     </button>
@@ -132,7 +132,7 @@ const PostRow = memo(({ post, t, handleRefreshPost, refreshingPost, impact }: { 
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => impact('light')}
-                            className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-white dark:bg-indigo-500/10 border border-slate-200 dark:border-indigo-500/30 text-slate-400 hover:text-indigo-500 hover:shadow-lg transition-all shrink-0"
+                            className="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-white dark:bg-blue-500/10 border border-slate-200 dark:border-blue-500/30 text-slate-400 hover:text-blue-500 hover:shadow-lg transition-all shrink-0"
                         >
                             <Eye size={10} className="sm:w-[14px] sm:h-[14px]" />
                         </a>
@@ -207,8 +207,8 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <BrainCircuit size={40} className="text-indigo-500 animate-pulse" />
-                <p className="text-label font-bold uppercase tracking-[0.2em] text-indigo-500">{t('analytics.decrypting')}</p>
+                <BrainCircuit size={40} className="text-blue-500 animate-pulse" />
+                <p className="text-label font-bold uppercase tracking-[0.2em] text-blue-500">{t('analytics.decrypting')}</p>
             </div>
         );
     }
@@ -220,7 +220,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                 {[
                     { label: t('analytics.total_views'), value: stats?.summary?.total_views || 0, icon: Eye, color: 'text-blue-500', trend: stats?.summary?.trends?.views },
                     { label: t('analytics.engagement'), value: stats?.summary?.total_reactions || stats?.summary?.total_likes || 0, icon: ThumbsUp, color: 'text-emerald-500', trend: stats?.summary?.trends?.likes },
-                    { label: t('analytics.viral_reach'), value: stats?.summary?.total_shares || stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-purple-500', trend: stats?.summary?.trends?.reposts },
+                    { label: t('analytics.viral_reach'), value: stats?.summary?.total_shares || stats?.summary?.total_reposts || 0, icon: Share2, color: 'text-blue-500', trend: stats?.summary?.trends?.reposts },
                     { label: t('analytics.success_rate'), value: `${((stats?.summary?.avg_engagement || 0) * 100).toFixed(1)}%`, icon: TrendingUp, color: 'text-orange-500', trend: stats?.summary?.trends?.success }
                 ].map((stat, i) => (
                     <motion.div
@@ -256,14 +256,14 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
             <div className={`relative ${!isProPlus ? 'max-h-[500px] overflow-hidden rounded-2xl' : ''}`}>
                 <div className={`space-y-6 transition-all duration-700 ${!isProPlus ? 'blur-md pointer-events-none opacity-30 select-none' : ''}`}>
                     <div className="pro-card-extreme bg-white dark:bg-slate-900 rounded-xl sm:rounded-2xl p-6 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden group noise-overlay">
-                        <div className="absolute inset-0 bg-linear-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+                        <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-blue-500/5 pointer-events-none" />
                         {/* #comment: Background glow removed for Unified Background Continuity */}
 
                         <div className="circuit-decor opacity-10" />
 
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 relative z-10">
                             <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center text-indigo-500 shadow-xl shadow-indigo-500/10 border border-indigo-500/10 shrink-0 pulse-ring-indigo">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center text-blue-500 shadow-xl shadow-blue-500/10 border border-blue-500/10 shrink-0 pulse-ring-blue">
                                     <BrainCircuit size={24} className="animate-pulse" />
                                 </div>
                                 <div>
@@ -278,8 +278,8 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className={`px-4 py-2 rounded-2xl border shrink-0 shadow-sm flex items-center justify-center ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-100 dark:border-amber-500/10' : 'bg-slate-50 dark:bg-indigo-500/5 border-slate-100 dark:border-indigo-500/10'}`}>
-                                <span className={`text-label font-bold uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                            <div className={`px-4 py-2 rounded-2xl border shrink-0 shadow-sm flex items-center justify-center ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-100 dark:border-amber-500/10' : 'bg-slate-50 dark:bg-blue-500/5 border-slate-100 dark:border-blue-500/10'}`}>
+                                <span className={`text-label font-bold uppercase tracking-tighter whitespace-nowrap ${resonance?.resonance_engine_status === 'gathering_data' ? 'text-amber-600 dark:text-amber-400' : 'text-blue-600 dark:text-blue-400'}`}>
                                     {resonance?.resonance_engine_status === 'gathering_data' ? t('analytics.resonance.needs_more_posts', { count: resonance?.generations_needed || 10 }) : t('analytics.resonance.confidence', { percent: resonance?.confidence || 94 })}
                                 </span>
                             </div>
@@ -296,7 +296,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
 
                                     <div className="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden flex items-center shadow-inner">
                                         <motion.div
-                                            className="bg-indigo-500 h-full rounded-full"
+                                            className="bg-blue-500 h-full rounded-full"
                                             initial={{ width: 0 }}
                                             animate={{ width: `${(Math.max(0, 10 - (resonance?.generations_needed || 10)) / 10) * 100}%` }}
                                             transition={{ duration: 1, ease: 'easeOut' }}
@@ -323,7 +323,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                         window.dispatchEvent(new CustomEvent('nav-pro-tab', { detail }));
                                     }
                                 }}
-                                className={`w-full h-12 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-indigo-500/20'}`}
+                                className={`w-full h-12 text-white rounded-xl font-bold text-label uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${resonance?.resonance_engine_status === 'gathering_data' ? 'bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-slate-300 shadow-xl' : 'vibing-blue-animated shadow-xl shadow-blue-500/20'}`}
                             >
                                 <Zap size={14} className={resonance?.resonance_engine_status === 'gathering_data' ? '' : 'animate-pulse'} />
                                 {resonance?.resonance_engine_status === 'gathering_data' ? t('analytics.resonance.goto_studio') : t('analytics.resonance.action_btn')}
@@ -337,7 +337,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                     <div className="bg-white/40 dark:bg-white/5 backdrop-blur-3xl rounded-2xl border border-white/40 dark:border-white/10 shadow-premium overflow-hidden">
                         <div className="px-6 py-4 border-b border-slate-200 dark:border-white/10 flex items-center justify-between bg-white/50 dark:bg-white/2">
                             <div className="flex items-center gap-2">
-                                <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-500">
+                                <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500">
                                     <BarChart3 size={14} />
                                 </div>
                                 <h3 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('analytics.raw_data.title')}</h3>
@@ -345,7 +345,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
 
                             <button
                                 onClick={() => { impact('medium'); loadData(); }}
-                                className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5 hover:bg-white dark:hover:bg-white/10 hover:text-indigo-500 hover:border-indigo-500/30 transition-all active:scale-95"
+                                className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest flex items-center gap-1.5 hover:bg-white dark:hover:bg-white/10 hover:text-blue-500 hover:border-blue-500/30 transition-all active:scale-95"
                             >
                                 {isLoading ? t('analytics.raw_data.syncing') : t('analytics.raw_data.sync_all')}
                             </button>
@@ -388,7 +388,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                     >
                         <div className="relative mb-6">
                             {/* #comment: Background glow removed for Unified Background Continuity */}
-                            <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-purple-500 shadow-2xl relative z-10 border border-purple-500/20">
+                            <div className="w-16 h-16 rounded-2xl bg-white dark:bg-slate-800 flex items-center justify-center text-blue-500 shadow-2xl relative z-10 border border-blue-500/20">
                                 <Lock size={32} />
                             </div>
                         </div>
@@ -407,7 +407,7 @@ export const AnalyticsCabinet = ({ impact }: AnalyticsCabinetProps) => {
                                 impact('heavy');
                                 navigateTo(ROUTES.SUBSCRIPTION);
                             }}
-                            className="group relative px-8 py-3.5 rounded-2xl bg-linear-to-r from-purple-600 via-fuchsia-500 to-purple-600 bg-size-[200%_auto] animate-gradient-xy text-white text-label font-bold uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(168,85,247,0.4)] border border-white/20 overflow-hidden"
+                            className="group relative px-8 py-3.5 rounded-2xl bg-linear-to-r from-blue-600 via-cyan-500 to-blue-600 bg-size-[200%_auto] animate-gradient-xy text-white text-label font-bold uppercase tracking-[0.2em] shadow-[0_0_40px_rgba(59,130,246,0.4)] border border-white/20 overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
                             <div className="relative z-10 flex items-center gap-2">

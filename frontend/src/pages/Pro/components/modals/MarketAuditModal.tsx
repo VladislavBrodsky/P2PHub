@@ -43,13 +43,13 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                     >
                         {/* Animated Top Border */}
                         <div className="absolute top-0 left-0 w-full h-1.5 overflow-hidden">
-                            <div className="absolute inset-0 bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-500 animate-gradient-x" />
+                            <div className="absolute inset-0 bg-linear-to-r from-blue-500 via-blue-500 to-blue-500 animate-gradient-x" />
                         </div>
 
                         {/* Header Section */}
-                        <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-b from-indigo-500/5 to-transparent sticky top-0 z-20">
+                        <div className="px-6 py-5 sm:px-8 sm:py-6 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-b from-blue-500/5 to-transparent sticky top-0 z-20">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
                                     <TrendingUp size={24} className="text-white" />
                                 </div>
                                 <div className="min-w-0">
@@ -76,7 +76,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     disabled={isAuditing}
                                     className="hidden sm:flex h-10 px-4 rounded-xl bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 text-label font-bold uppercase tracking-widest items-center gap-2 transition-all disabled:opacity-50"
                                 >
-                                    {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} className="text-indigo-500" />}
+                                    {isAuditing ? <Loader2 className="animate-spin w-3 h-3" /> : <Zap size={14} className="text-blue-500" />}
                                     {isAuditing ? t('tools.audit.scanning') : t('tools.audit.update_btn')}
                                 </button>
                                 <button
@@ -100,7 +100,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs">{marketAudit.error}</p>
                                     <button
                                         onClick={() => handleRefreshAudit()}
-                                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-indigo-500/20"
+                                        className="px-6 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-widest shadow-xl shadow-blue-500/20"
                                     >
                                         {t('tools.audit.force_sync_btn')}
                                     </button>
@@ -110,11 +110,11 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     {/* Premium Bento Grid Sections */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         {/* Executive Summary Card */}
-                                        <div className="col-span-1 sm:col-span-2 p-6 bg-linear-to-br from-indigo-500/10 to-purple-500/5 dark:bg-white/2 rounded-2xl border border-indigo-500/10 dark:border-white/5 relative overflow-hidden group shadow-sm">
-                                            <Quote className="absolute -top-4 -right-4 text-indigo-500/10 rotate-12" size={80} />
+                                        <div className="col-span-1 sm:col-span-2 p-6 bg-linear-to-br from-blue-500/10 to-blue-500/5 dark:bg-white/2 rounded-2xl border border-blue-500/10 dark:border-white/5 relative overflow-hidden group shadow-sm">
+                                            <Quote className="absolute -top-4 -right-4 text-blue-500/10 rotate-12" size={80} />
                                             <div className="flex items-center gap-2 mb-3">
-                                                <div className="w-1.5 h-4 bg-indigo-500 rounded-full" />
-                                                <h4 className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{t('tools.audit.summary_title')}</h4>
+                                                <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
+                                                <h4 className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">{t('tools.audit.summary_title')}</h4>
                                             </div>
                                             <p className="text-caption sm:text-sm font-medium text-slate-800 dark:text-slate-300 leading-relaxed italic relative z-10">
                                                 {marketAudit.cmo_summary}
@@ -141,7 +141,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     <div className="space-y-4 pt-4">
                                         <div className="flex items-center justify-between px-1">
                                             <div className="flex items-center gap-2">
-                                                <div className="w-1.5 h-4 bg-purple-500 rounded-full" />
+                                                <div className="w-1.5 h-4 bg-blue-500 rounded-full" />
                                                 <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-widest">{t('tools.audit.live_tracker')}</h4>
                                             </div>
                                             <div className="px-2 py-0.5 bg-rose-500/10 rounded-md text-label font-bold text-rose-500 uppercase tracking-[0.2em] animate-pulse">
@@ -157,18 +157,18 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                                     whileInView={{ opacity: 1, y: 0 }}
                                                     viewport={{ once: true, margin: "-20px" }}
                                                     className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 group shadow-sm flex flex-col sm:flex-row gap-4 relative overflow-hidden ${idx === 0
-                                                        ? 'bg-linear-to-br from-indigo-500/5 via-white to-white dark:from-indigo-500/10 dark:via-slate-900 dark:to-slate-900 border-indigo-500/20'
-                                                        : 'bg-white dark:bg-white/2 border-slate-100 dark:border-white/5 hover:border-indigo-500/20'
+                                                        ? 'bg-linear-to-br from-blue-500/5 via-white to-white dark:from-blue-500/10 dark:via-slate-900 dark:to-slate-900 border-blue-500/20'
+                                                        : 'bg-white dark:bg-white/2 border-slate-100 dark:border-white/5 hover:border-blue-500/20'
                                                         }`}
                                                 >
                                                     {/* Number Badge */}
-                                                    <div className="hidden sm:flex w-10 h-10 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-white/5 items-center justify-center text-xs font-bold text-indigo-500 shrink-0 group-hover:scale-110 transition-transform">
+                                                    <div className="hidden sm:flex w-10 h-10 rounded-xl bg-slate-50 dark:bg-black/40 border border-slate-100 dark:border-white/5 items-center justify-center text-xs font-bold text-blue-500 shrink-0 group-hover:scale-110 transition-transform">
                                                         {(idx + 1).toString().padStart(2, '0')}
                                                     </div>
 
                                                     <div className="flex-1 space-y-2.5">
                                                         <div className="flex flex-wrap items-center gap-2">
-                                                            <span className="px-2 py-0.5 bg-indigo-500/10 rounded-md text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]">{news.source}</span>
+                                                            <span className="px-2 py-0.5 bg-blue-500/10 rounded-md text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em]">{news.source}</span>
                                                             <span className={`px-2 py-0.5 rounded-md text-label font-bold uppercase tracking-[0.2em] ${news.impact === 'Massive'
                                                                 ? 'bg-rose-500/10 text-rose-500'
                                                                 : 'bg-emerald-500/10 text-emerald-500'
@@ -176,7 +176,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                                             {idx === 0 && <span className="px-2 py-0.5 bg-amber-500/10 rounded-md text-label font-bold text-amber-500 uppercase tracking-[0.2em] animate-bounce">{t('tools.audit.hot_now')}</span>}
                                                         </div>
 
-                                                        <h5 className="text-body font-bold text-slate-900 dark:text-white leading-tight uppercase group-hover:text-indigo-500 transition-colors">
+                                                        <h5 className="text-body font-bold text-slate-900 dark:text-white leading-tight uppercase group-hover:text-blue-500 transition-colors">
                                                             {news.title}
                                                         </h5>
 
@@ -186,9 +186,9 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                                                     {news.impact || news.motivation || t('tools.audit.analyzing')}
                                                                 </p>
                                                             </div>
-                                                            <div className="p-2.5 bg-indigo-500/5 dark:bg-indigo-500/5 rounded-xl border border-indigo-500/10 flex items-center gap-2">
+                                                            <div className="p-2.5 bg-blue-500/5 dark:bg-blue-500/5 rounded-xl border border-blue-500/10 flex items-center gap-2">
                                                                 <Zap size={10} className="text-amber-500 shrink-0" />
-                                                                <p className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest line-clamp-1">
+                                                                <p className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest line-clamp-1">
                                                                     {news.fomo_trigger || t('tools.audit.action_required')}
                                                                 </p>
                                                             </div>
@@ -204,7 +204,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                     </div>
 
                                     {/* Viral Motivation Summary */}
-                                    <div className="p-6 bg-linear-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-2xl border border-white/20 space-y-4 relative overflow-hidden group shadow-xl">
+                                    <div className="p-6 bg-linear-to-r from-blue-600 via-blue-600 to-blue-600 rounded-2xl border border-white/20 space-y-4 relative overflow-hidden group shadow-xl">
                                         <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl" />
                                         <div className="flex items-center gap-3 relative z-10">
                                             <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center text-white">
@@ -212,7 +212,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                                             </div>
                                             <h4 className="text-caption font-bold text-white uppercase tracking-widest">{t('tools.audit.imperative')}</h4>
                                         </div>
-                                        <p className="text-caption sm:text-caption font-bold text-indigo-50 leading-relaxed italic relative z-10 px-1">
+                                        <p className="text-caption sm:text-caption font-bold text-blue-50 leading-relaxed italic relative z-10 px-1">
                                             "{marketAudit.viral_motivation}"
                                         </p>
                                     </div>

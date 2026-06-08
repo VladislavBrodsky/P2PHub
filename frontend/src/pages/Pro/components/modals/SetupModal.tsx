@@ -172,9 +172,9 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                         className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[82vh] mt-8 mb-4 relative"
                     >
                         {/* Header Section */}
-                        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent relative z-20">
+                        <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-blue-500/5 to-transparent relative z-20">
                             <div className="flex items-center gap-3 relative z-10">
-                                <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-xl shadow-indigo-600/30 pulse-ring-indigo">
+                                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-xl shadow-blue-600/30 pulse-ring-blue">
                                     <Network size={20} className="text-white" />
                                 </div>
                                 <div className="min-w-0">
@@ -183,7 +183,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                     </h3>
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-                                        <span className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest truncate">
+                                        <span className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest truncate">
                                             {t('setup.subtitle')}
                                         </span>
                                     </div>
@@ -204,10 +204,10 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                     <button
                                         onClick={() => { selection(); setSetupTab('pro'); }}
                                         className={`relative py-2.5 rounded-2xl text-label font-bold uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-1.5 ${setupTab === 'pro'
-                                            ? 'bg-white dark:bg-white/15 text-indigo-600 dark:text-white shadow-lg shadow-indigo-500/10'
+                                            ? 'bg-white dark:bg-white/15 text-blue-600 dark:text-white shadow-lg shadow-blue-500/10'
                                             : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                                     >
-                                        <Zap size={11} className={setupTab === 'pro' ? 'text-indigo-500' : 'opacity-40'} />
+                                        <Zap size={11} className={setupTab === 'pro' ? 'text-blue-500' : 'opacity-40'} />
                                         PRO
                                     </button>
                                     <button
@@ -243,7 +243,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                     <div className="flex gap-1.5 p-1 bg-slate-50 dark:bg-white/5 rounded-2xl border border-slate-200/70 dark:border-white/8">
                                         {[
                                             { id: 'tg', label: 'Telegram', color: 'sky' },
-                                            { id: 'x', label: 'X (Twitter)', color: 'indigo' },
+                                            { id: 'x', label: 'X (Twitter)', color: 'blue' },
                                         ].map(({ id, label, color }) => (
                                             <button
                                                 key={id}
@@ -306,8 +306,8 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                     {/* X (PRO) */}
                                     {activeProPlatform === 'x' && (
                                         <motion.div key="pro-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 sm:p-5 rounded-xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 space-y-4 shadow-xs">
-                                            <div className="flex items-center gap-3 bg-indigo-500/5 -mx-4 -mt-4 p-4 border-b border-indigo-500/15">
-                                                <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-md shadow-indigo-600/20 shrink-0">
+                                            <div className="flex items-center gap-3 bg-blue-500/5 -mx-4 -mt-4 p-4 border-b border-blue-500/15">
+                                                <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-600/20 shrink-0">
                                                     <Network size={18} />
                                                 </div>
                                                 <div className="flex-1 min-w-0">
@@ -328,7 +328,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             type="text"
                                                             value={field.value}
                                                             onChange={(e) => field.setter(e.target.value)}
-                                                            className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                            className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                             placeholder={field.placeholder}
                                                         />
                                                     </div>
@@ -348,7 +348,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                 >
                                     {!status?.is_pro_plus ? (
                                         /* ── Upgrade Preview Card ── */
-                                        <div className="relative overflow-hidden p-5 bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-indigo-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center text-center gap-4">
+                                        <div className="relative overflow-hidden p-5 bg-linear-to-br from-emerald-500/10 via-teal-500/5 to-blue-500/10 rounded-2xl border border-emerald-500/20 flex flex-col items-center text-center gap-4">
                                             {/* Icon */}
                                             <motion.div
                                                 animate={{ scale: [1, 1.04, 1] }}
@@ -401,7 +401,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                     navigateTo(ROUTES.SUBSCRIPTION);
                                                     setShowSetup(false);
                                                 }}
-                                                className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-indigo-600 text-white rounded-2xl text-label font-bold uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                                                className="w-full py-3.5 bg-linear-to-r from-emerald-500 via-teal-500 to-blue-600 text-white rounded-2xl text-label font-bold uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
                                             >
                                                 <Zap size={14} />
                                                 {t('setup.teaser.cta')}
@@ -521,7 +521,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* X (Twitter) PRO+ */}
                                             {activePlusPlatform === 'x' && (
                                                 <motion.div key="plus-x" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
-                                                    <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
+                                                    <div className="flex items-center gap-3 p-4 sm:p-5 bg-blue-500/5 border-b border-blue-500/15">
                                                         <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                             <img src={socialLogos.x} alt="X" className="w-full h-full object-contain p-1 dark:invert" />
                                                         </div>
@@ -543,7 +543,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                                     type="text"
                                                                     value={field.value}
                                                                     onChange={(e) => field.setter(e.target.value)}
-                                                                    className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
+                                                                    className="w-full h-10 bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl px-4 text-base sm:text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none transition-all text-slate-900 dark:text-white placeholder:text-slate-300"
                                                                     placeholder={field.placeholder}
                                                                 />
                                                             </div>
@@ -555,7 +555,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                             {/* LinkedIn */}
                                             {activePlusPlatform === 'linkedin' && (
                                                 <motion.div key="plus-li" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl sm:rounded-2xl border border-slate-200/60 dark:border-white/10 bg-slate-50 dark:bg-black/20 overflow-hidden shadow-xs flex flex-col">
-                                                    <div className="flex items-center gap-3 p-4 sm:p-5 bg-indigo-500/5 border-b border-indigo-500/15">
+                                                    <div className="flex items-center gap-3 p-4 sm:p-5 bg-blue-500/5 border-b border-blue-500/15">
                                                         <div className="w-10 h-10 rounded-full bg-[#0A66C2] flex items-center justify-center text-white shadow-md shrink-0 overflow-hidden">
                                                             <img src={socialLogos.linkedin} alt="LinkedIn" className="w-full h-full object-contain p-1" />
                                                         </div>
@@ -571,11 +571,11 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                                             onChange={(e) => setLinkedinToken(e.target.value)}
                                                             placeholder={t('setup.linkedin.placeholder')}
                                                             rows={3}
-                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 outline-none dark:text-white resize-none"
+                                                            className="w-full bg-white dark:bg-black/20 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-base sm:text-label font-mono focus:border-blue-400 focus:ring-2 focus:ring-blue-400/10 outline-none dark:text-white resize-none"
                                                         />
                                                         <p className="text-label text-slate-400 leading-relaxed px-0.5">
                                                             <Trans t={t} i18nKey="setup.linkedin.dev_portal_desc">
-                                                                Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-indigo-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
+                                                                Obtained via <a href="https://www.linkedin.com/developers/" target="_blank" rel="noreferrer" className="text-blue-400 underline">LinkedIn Developers</a>. Request 'Share on LinkedIn' scope.
                                                             </Trans>
                                                         </p>
                                                     </div>
@@ -713,7 +713,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                                 <button
                                     onClick={handleSaveSetup}
                                     disabled={isSaving}
-                                    className="w-full h-12 bg-linear-to-r from-indigo-600 to-indigo-800 hover:from-indigo-500 hover:to-indigo-700 text-white rounded-xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-indigo-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
+                                    className="w-full h-12 bg-linear-to-r from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700 text-white rounded-xl font-bold text-label uppercase tracking-[0.2em] shadow-xl shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2.5 disabled:opacity-60"
                                 >
                                     {isSaving ? (
                                         <><Loader2 className="animate-spin" size={16} /> {t('setup.syncing_btn')}</>

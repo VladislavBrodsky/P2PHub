@@ -163,7 +163,25 @@ function SidebarNav({
             </div>
 
             {/* Profile Button at Bottom */}
-            <div className="relative mt-auto pt-4 border-t border-white/5">
+            <div className="relative mt-auto pt-4 border-t border-white/5 flex flex-col">
+                {/* User Level & XP Pill Badge (Always visible on expanded desktop sidebar) */}
+                <div className="hidden xl:flex items-center justify-between gap-2 rounded-2xl border border-border-glass bg-slate-950/40 px-3.5 py-2 shadow-inner mb-3">
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-400">{t('lvl')}</span>
+                        <span className="text-sm font-black text-text-primary leading-none">{user?.level ?? 1}</span>
+                        {user?.is_pro && (
+                            <Crown className="size-4 text-amber-500 fill-amber-500/20" />
+                        )}
+                    </div>
+                    <div className="h-4 w-px bg-border-glass" />
+                    <div className="flex items-center gap-1.5">
+                        <span className="text-sm font-black text-text-primary leading-none">
+                            {Math.floor(user?.xp ?? 0).toLocaleString()}
+                        </span>
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">{t('xp')}</span>
+                    </div>
+                </div>
+
                 <button
                     ref={profileRef}
                     onClick={() => setIsDropdownOpen(prev => !prev)}
@@ -510,7 +528,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                     className="flex-1 overflow-x-hidden relative z-10 overflow-y-auto scroll-smooth [-webkit-overflow-scrolling:touch] no-scrollbar pb-[calc(var(--bottom-nav-height,4.375rem)+var(--spacing-safe-bottom,1.5rem)+1.25rem)] lg:pb-8"
                     style={{
                         overscrollBehaviorY: 'none',
-                        paddingTop: !isHeaderVisible ? '0px' : 'var(--dynamic-header-offset, var(--header-total-offset, 8.625rem))'
+                        paddingTop: !isHeaderVisible ? '0px' : 'var(--main-content-pt, var(--dynamic-header-offset, var(--header-total-offset, 8.625rem)))'
                     }}
                 >
                     <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg lg:max-w-none lg:px-8 xl:px-12 px-4'}`}>

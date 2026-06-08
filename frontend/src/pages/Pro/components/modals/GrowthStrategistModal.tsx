@@ -48,7 +48,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                         exit={{ scale: 0.9, opacity: 0, y: 20 }}
                         className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10"
                     >
-                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-purple-500 to-pink-500" />
+                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-blue-500 to-pink-500" />
 
                         <div className="p-6 sm:p-8">
                             <div className="flex items-center justify-between mb-8">
@@ -74,7 +74,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                                 <div className="space-y-6">
                                     <div className="p-5 bg-slate-50 dark:bg-black/20 rounded-2xl border border-slate-100 dark:border-white/5">
                                         <div className="flex items-start gap-4 mb-4">
-                                            <div className="mt-1 w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-500 shrink-0">
+                                            <div className="mt-1 w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
                                                 <Target size={16} />
                                             </div>
                                             <div>

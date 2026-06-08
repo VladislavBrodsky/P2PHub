@@ -224,7 +224,7 @@
 
 .pro-card-extreme::before {
   content: "";
-  @apply absolute inset-0 bg-linear-to-br from-indigo-500/10 via-transparent to-purple-500/10 opacity-0 transition-opacity duration-700 rounded-[inherit] pointer-events-none;
+  @apply absolute inset-0 bg-linear-to-br from-blue-500/10 via-transparent to-cyan-500/10 opacity-0 transition-opacity duration-700 rounded-[inherit] pointer-events-none;
 }
 
 .pro-card-extreme:hover::before,
@@ -294,7 +294,7 @@
 }
 
 .text-pro-gradient {
-  @apply bg-clip-text text-transparent bg-linear-to-r from-indigo-400 via-white to-purple-400 font-bold;
+  @apply bg-clip-text text-transparent bg-linear-to-r from-blue-400 via-white to-cyan-400 font-bold;
 }
 
 .premium-border-glow {
@@ -303,7 +303,7 @@
 
 .premium-border-glow::after {
   content: "";
-  @apply absolute -inset-px rounded-[inherit] bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-20 blur-[2px] z-[-1];
+  @apply absolute -inset-px rounded-[inherit] bg-linear-to-r from-blue-500 via-cyan-400 to-blue-600 opacity-20 blur-[2px] z-[-1];
 }
 
 .shadow-premium {
@@ -373,11 +373,11 @@
 }
 
 .vibing-text-glow {
-  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(168, 85, 247, 0.3);
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 .premium-stat-card {
-  @apply bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md rounded-2xl p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-indigo-500/30;
+  @apply bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 backdrop-blur-md rounded-2xl p-4 transition-all duration-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-blue-500/30;
 }
 
 /* === SCANNING & CIRCUIT EFFECTS === */
@@ -412,8 +412,8 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #6366f1, transparent);
-  box-shadow: 0 0 15px #6366f1, 0 0 5px #fff;
+  background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+  box-shadow: 0 0 15px #3b82f6, 0 0 5px #fff;
   animation: scan-line 3s linear infinite;
   z-index: 10;
   pointer-events: none;
@@ -428,9 +428,9 @@
   pointer-events: none;
   opacity: 0.05;
   background-image:
-    radial-gradient(circle at 10px 10px, #6366f1 1px, transparent 0),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.1) 1px, transparent 0),
-    linear-gradient(0deg, rgba(99, 102, 241, 0.1) 1px, transparent 0);
+    radial-gradient(circle at 10px 10px, #3b82f6 1px, transparent 0),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 0),
+    linear-gradient(0deg, rgba(59, 130, 246, 0.1) 1px, transparent 0);
   background-size: 20px 20px;
 }
 
@@ -464,20 +464,20 @@
   }
 }
 
-.pulse-ring-indigo,
-.pulse-ring-purple,
+.pulse-ring-blue,
+.pulse-ring-cyan,
 .pulse-ring-blue,
 .pulse-ring-emerald,
 .pulse-ring-amber {
   position: relative;
 }
 
-.pulse-ring-indigo::before {
-  border-color: #6366f1;
+.pulse-ring-blue::before {
+  border-color: #3b82f6;
 }
 
-.pulse-ring-purple::before {
-  border-color: #a855f7;
+.pulse-ring-cyan::before {
+  border-color: #06b6d4;
 }
 
 .pulse-ring-blue::before {
@@ -492,8 +492,8 @@
   border-color: #f59e0b;
 }
 
-.pulse-ring-indigo::before,
-.pulse-ring-purple::before,
+.pulse-ring-blue::before,
+.pulse-ring-cyan::before,
 .pulse-ring-blue::before,
 .pulse-ring-emerald::before,
 .pulse-ring-amber::before {
@@ -523,7 +523,7 @@
 }
 
 .vibing-crystal-purple-animated {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 25%, #d946ef 50%, #a855f7 75%, #4f46e5 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 25%, #0ea5e9 50%, #06b6d4 75%, #2563eb 100%);
   background-size: 300% 300%;
   animation: vibing-gradient 4s ease-in-out infinite;
   color: #FFFFFF;
@@ -548,14 +548,14 @@
 }
 
 .vibing-purple-text {
-  background: linear-gradient(135deg, #6366f1 0%, #a855f7 30%, #d946ef 50%, #a855f7 70%, #6366f1 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 30%, #0ea5e9 50%, #06b6d4 70%, #3b82f6 100%);
   background-size: 200% auto;
   animation: liquid 4s ease-in-out infinite;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 900;
-  text-shadow: 0 2px 10px rgba(168, 85, 247, 0.2);
+  text-shadow: 0 2px 10px rgba(6, 182, 212, 0.2);
 }
 
 @keyframes vibing-gradient {
@@ -684,8 +684,8 @@
 }
 
 .btn-upgrade-plus-glass {
-  @apply bg-fuchsia-500/10 text-fuchsia-500 hover:bg-fuchsia-500/20 hover:text-fuchsia-400 border-fuchsia-500/30;
-  text-shadow: 0 0 12px rgba(217, 70, 239, 0.3);
+  @apply bg-cyan-500/10 text-cyan-500 hover:bg-cyan-500/20 hover:text-cyan-400 border-cyan-500/30;
+  text-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
 }
 
 .btn-upgrade-glass::after {
@@ -878,8 +878,8 @@
 .low-power-mode .holographic-shine::after,
 .low-power-mode .holographic-card::after,
 .low-power-mode .scanning-glow::after,
-.low-power-mode .pulse-ring-indigo::before,
-.low-power-mode .pulse-ring-purple::before,
+.low-power-mode .pulse-ring-blue::before,
+.low-power-mode .pulse-ring-cyan::before,
 .low-power-mode .pulse-ring-blue::before,
 .low-power-mode .pulse-ring-emerald::before,
 .low-power-mode .pulse-ring-amber::before,
@@ -969,5 +969,12 @@
       radial-gradient(circle at 75% 60%, rgba(20, 184, 166, 0.06) 0%, transparent 40%) !important;
     background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px, 100% 100%, 100% 100%, 100% 100% !important;
     background-attachment: fixed !important;
+  }
+}
+
+/* Responsive main content padding-top offset for desktop layout */
+@media (min-width: 1024px) {
+  #main-scroll-root {
+    --main-content-pt: 2rem !important;
   }
 }

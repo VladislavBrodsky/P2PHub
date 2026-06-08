@@ -57,22 +57,22 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                     >
-                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-50" />
+                        <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-blue-500 to-pink-500 opacity-50" />
 
-                        <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-indigo-500/5 to-transparent">
+                        <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-white/5 flex justify-between items-center bg-linear-to-r from-blue-500/5 to-transparent">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                                <div className="w-12 h-12 rounded-2xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
                                     <Zap size={24} className="text-white" />
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-tight leading-none mb-1">{t('tools.headline.title')}</h3>
                                     <div className="flex items-center gap-2">
-                                        <p className="text-label font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] opacity-80">
+                                        <p className="text-label font-bold text-blue-600 dark:text-blue-400 uppercase tracking-[0.2em] opacity-80">
                                             {t('tools.headline.curiosity_loop')}
                                         </p>
                                         <div className="hidden sm:block w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
                                         <div className="flex items-center gap-1.5">
-                                            <Zap size={10} className="text-indigo-500 animate-pulse" />
+                                            <Zap size={10} className="text-blue-500 animate-pulse" />
                                             <span className="text-label font-bold text-slate-400 uppercase tracking-widest tabular-nums">{proTokens}</span>
                                         </div>
                                     </div>
@@ -99,7 +99,7 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                                 <textarea
                                     value={headlineInput}
                                     onChange={(e) => setHeadlineInput(e.target.value)}
-                                    className="w-full h-32 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-indigo-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400/50 resize-none shadow-inner"
+                                    className="w-full h-32 bg-slate-50 dark:bg-black/40 border border-slate-200 dark:border-white/10 rounded-2xl p-4 text-xs font-medium focus:border-blue-500 outline-hidden transition-all text-slate-900 dark:text-white placeholder:text-slate-400/50 resize-none shadow-inner"
                                     placeholder={t('tools.headline.placeholder')}
                                 />
                             </div>
@@ -122,16 +122,16 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                                             navigator.clipboard.writeText(headlineResult);
                                             showNotification({ title: t('notifications.success'), message: t('notifications.headline_copied'), type: 'success' });
                                         }}
-                                        className="text-label font-bold text-indigo-500 uppercase tracking-widest hover:text-indigo-600 transition-colors"
+                                        className="text-label font-bold text-blue-500 uppercase tracking-widest hover:text-blue-600 transition-colors"
                                     >
                                         {t('tools.copy_btn')}
                                     </button>
                                 </motion.div>
                             )}
 
-                            <div className="p-4 bg-indigo-50 dark:bg-indigo-500/5 rounded-2xl border border-indigo-100 dark:border-indigo-500/10 flex items-start gap-3">
-                                <Sparkles className="w-5 h-5 text-indigo-500 mt-0.5" />
-                                <p className="text-label text-indigo-700 dark:text-indigo-400 leading-relaxed italic">
+                            <div className="p-4 bg-blue-50 dark:bg-blue-500/5 rounded-2xl border border-blue-100 dark:border-blue-500/10 flex items-start gap-3">
+                                <Sparkles className="w-5 h-5 text-blue-500 mt-0.5" />
+                                <p className="text-label text-blue-700 dark:text-blue-400 leading-relaxed italic">
                                     {t('tools.headline.neural_desc')}
                                 </p>
                             </div>
@@ -141,7 +141,7 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                             <button
                                 onClick={onFixHeadline}
                                 disabled={isFixingHeadline || !headlineInput}
-                                className="w-full h-13 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.15em] shadow-xl shadow-indigo-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
+                                className="w-full h-13 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-label uppercase tracking-[0.15em] shadow-xl shadow-blue-500/20 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-70 disabled:grayscale"
                             >
                                 {isFixingHeadline ? (
                                     <>

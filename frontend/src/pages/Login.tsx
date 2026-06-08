@@ -284,10 +284,10 @@ export const Login = () => {
                                     What you'll access
                                 </p>
                                 {[
-                                    { icon: <BarChart3 className="w-4 h-4 text-blue-500 dark:text-blue-400" />, title: 'Live Dashboard',     desc: 'Volume, XP & commissions in real time', color: 'from-blue-500/10 to-indigo-500/5 border-blue-500/15' },
+                                    { icon: <BarChart3 className="w-4 h-4 text-blue-500 dark:text-blue-400" />, title: 'Live Dashboard',     desc: 'Volume, XP & commissions in real time', color: 'from-blue-500/10 to-blue-500/5 border-blue-500/15' },
                                     { icon: <Trophy className="w-4 h-4 text-yellow-500 dark:text-yellow-400" />, title: 'Leaderboards',       desc: 'Your rank among top P2P partners', color: 'from-yellow-500/10 to-amber-500/5 border-yellow-500/15' },
                                     { icon: <CreditCard className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />, title: 'Card Management',    desc: 'Manage Pintopay cards from desktop', color: 'from-emerald-500/10 to-teal-500/5 border-emerald-500/15' },
-                                    { icon: <Network className="w-4 h-4 text-purple-500 dark:text-purple-400" />, title: 'Referral Tree',      desc: 'Full network depth & earnings view', color: 'from-purple-500/10 to-fuchsia-500/5 border-purple-500/15' },
+                                    { icon: <Network className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />, title: 'Referral Tree',      desc: 'Full network depth & earnings view', color: 'from-cyan-500/10 to-blue-500/5 border-cyan-500/15' },
                                     { icon: <Sparkles className="w-4 h-4 text-pink-500 dark:text-pink-400" />, title: 'Viral Studio',       desc: 'AI content generation for growth', color: 'from-pink-500/10 to-rose-500/5 border-pink-500/15' },
                                 ].map((feat) => (
                                     <motion.div
