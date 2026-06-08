@@ -6,7 +6,7 @@ import { useUI } from '../../context/UIContext';
 import {
     Home, CreditCard, Users, Zap, Trophy,
     Settings, LogOut, Wallet, HelpCircle, Headphones,
-    Newspaper, Shield, ChevronUp, User, Check, Copy, Crown, Sun, Moon, Bell, BellOff
+    Newspaper, Shield, ChevronUp, ChevronRight, User, Check, Copy, Crown, Sun, Moon, Bell, BellOff
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from '../../context/UserContext';
@@ -19,6 +19,7 @@ import { useNavigation } from '../../hooks/useNavigation';
 import { ROUTES } from '../../utils/routes';
 import { getSafeLaunchParams, isTMA } from '../../utils/tma';
 import { getApiUrl } from '../../utils/api';
+import { PersonalizationCard } from '../PersonalizationCard';
 
 // #comment: Layout.tsx - Central structural wrapper for the application.
 // Mobile (< lg): Phone-column layout with bottom tab bar (Telegram Mini App style).
@@ -236,67 +237,8 @@ function SidebarNav({
                             className="absolute bottom-14 left-0 xl:left-52 w-80 rounded-3xl border border-border-glass bg-bg-glass backdrop-blur-xl shadow-premium-lg p-5 flex flex-col gap-4 text-text-primary z-120"
                             style={{ pointerEvents: 'auto' }}
                         >
-                            {/* User Header */}
-                            <div className="flex items-center gap-3 pb-3 border-b border-white/5">
-                                <div className={`
-                                    w-12 h-12 rounded-xl overflow-hidden border relative bg-bg-app flex items-center justify-center shrink-0
-                                    ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/20' : isPro ? 'border-amber-400/60 ring-1 ring-amber-500/10' : 'border-border-glass'}
-                                `}>
-                                    {avatarSrc ? (
-                                        <img src={avatarSrc} alt="Avatar" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <User className="w-6 h-6 text-slate-400" />
-                                    )}
-                                </div>
-                                <div className="flex flex-col min-w-0">
-                                    <span className="text-sm font-black text-text-primary truncate">
-                                        {user?.first_name} {user?.last_name}
-                                    </span>
-                                    <span className="text-[10px] font-bold text-text-secondary">
-                                        {isProPlus ? 'PRO+ Subscriber' : isPro ? 'PRO Subscriber' : 'Standard Partner'}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* User Level & XP Pill Badge */}
-                            <div className="flex items-center justify-between gap-2 rounded-2xl border border-border-glass bg-slate-950/40 px-3.5 py-2 shadow-inner">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-400">{t('lvl')}</span>
-                                    <span className="text-sm font-black text-text-primary leading-none">{user?.level ?? 1}</span>
-                                    {user?.is_pro && (
-                                        <Crown className="size-4 text-amber-500 fill-amber-500/20" />
-                                    )}
-                                </div>
-                                <div className="h-4 w-px bg-border-glass" />
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-sm font-black text-text-primary leading-none">
-                                        {Math.floor(user?.xp ?? 0).toLocaleString()}
-                                    </span>
-                                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">{t('xp')}</span>
-                                </div>
-                            </div>
-
-                            {/* XP Progress Bar */}
-                            {(() => {
-                                const stats = user || { level: 1, xp: 0 };
-                                const xpProgress = getXPProgress(stats.level || 1, stats.xp || 0);
-                                return (
-                                    <div className="w-full space-y-1 bg-slate-950/20 p-2.5 rounded-2xl border border-white/5">
-                                        <div className="flex justify-between items-baseline px-0.5 text-[9px] font-bold text-text-secondary uppercase tracking-wider">
-                                            <span>{xpProgress.current.toLocaleString()} / {xpProgress.total.toLocaleString()} XP</span>
-                                            <span>{Math.round(xpProgress.percent)}%</span>
-                                        </div>
-                                        <div className="h-2 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 relative">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: `${xpProgress.percent}%` }}
-                                                transition={{ duration: 1, ease: 'circOut' }}
-                                                className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(stats.level || 1)}`}
-                                            />
-                                        </div>
-                                    </div>
-                                );
-                            })()}
+                            {/* User Profile Card (Imported from Mobile Menu) */}
+                            <PersonalizationCard variant="compact" className="!pt-0" />
 
                             {/* TON Connect Wallet */}
                             <div className="w-full">
@@ -398,63 +340,96 @@ function SidebarNav({
                             </div>
 
                             {/* Action Menu List */}
-                            <div className="flex flex-col gap-1 border-t border-white/5 pt-3">
+                            <div className="flex flex-col gap-1.5 border-t border-white/5 pt-3">
                                 {/* Admin Portal */}
                                 {(user?.is_admin || (user?.username && ['uslincoln', 'uslincon'].includes(user.username.toLowerCase()))) && (
                                     <button
                                         onClick={() => { navigateTo(ROUTES.ADMIN); setIsDropdownOpen(false); }}
-                                        className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-blue-500/5 hover:text-blue-400 text-slate-300 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                                        className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
                                     >
-                                        <Shield className="w-4 h-4" />
-                                        {t('navigation.admin_panel')}
+                                        <div className="flex items-center gap-2.5">
+                                            <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
+                                                <Shield className="w-3.5 h-3.5" />
+                                            </div>
+                                            <span>{t('navigation.admin_panel')}</span>
+                                        </div>
+                                        <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
                                     </button>
                                 )}
 
-                                {/* PRO Panel */}
+                                {/* PRO Panel (Mobile Gradient style) */}
                                 {user?.is_pro && (
                                     <button
                                         onClick={() => { navigateTo(ROUTES.PRO); setIsDropdownOpen(false); }}
-                                        className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-amber-500/5 hover:text-amber-400 text-slate-300 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                                        className="group relative flex items-center justify-between p-2 rounded-xl bg-linear-to-r from-amber-500 via-yellow-500 to-orange-600 border-none text-black font-extrabold text-[11px] uppercase tracking-wider transition-all duration-200 hover:brightness-105 active:scale-98 shadow-md shadow-amber-500/20 cursor-pointer animate-pulse-glow"
                                     >
-                                        <Zap className="w-4 h-4 text-amber-500" />
-                                        {t('navigation.pro_panel')}
+                                        <div className="flex items-center gap-2.5">
+                                            <div className="p-1 rounded-lg bg-black/10 dark:bg-black/20 border border-black/10 dark:border-black/30 text-black group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">
+                                                <Zap className="w-3.5 h-3.5 animate-pulse fill-black/20" />
+                                            </div>
+                                            <span>{t('navigation.pro_panel')}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)] animate-pulse" />
+                                            <ChevronRight className="w-3.5 h-3.5 text-black/70" />
+                                        </div>
                                     </button>
                                 )}
 
                                 {/* Blog */}
                                 <button
                                     onClick={() => { navigateTo(ROUTES.BLOG); setIsDropdownOpen(false); }}
-                                    className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-white/5 text-slate-300 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
                                 >
-                                    <Newspaper className="w-4 h-4" />
-                                    {t('navigation.blog')}
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
+                                            <Newspaper className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span>{t('navigation.blog')}</span>
+                                    </div>
+                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
 
                                 {/* FAQ */}
                                 <button
                                     onClick={() => { navigateTo(ROUTES.FAQ); setIsDropdownOpen(false); }}
-                                    className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-white/5 text-slate-300 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
                                 >
-                                    <HelpCircle className="w-4 h-4" />
-                                    {t('navigation.faq')}
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
+                                            <HelpCircle className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span>{t('navigation.faq')}</span>
+                                    </div>
+                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
 
                                 {/* Support */}
                                 <button
                                     onClick={() => { setSupportOpen(true); setIsDropdownOpen(false); }}
-                                    className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-white/5 text-slate-300 font-bold text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
                                 >
-                                    <Headphones className="w-4 h-4" />
-                                    {t('navigation.support')}
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
+                                            <Headphones className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span>{t('navigation.support')}</span>
+                                    </div>
+                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
 
                                 {/* Log Out */}
                                 <button
                                     onClick={() => { logout(); setIsDropdownOpen(false); }}
-                                    className="flex items-center gap-2.5 p-2 rounded-xl text-left hover:bg-red-500/5 text-red-400 font-bold text-xs uppercase tracking-wider transition-colors mt-2 cursor-pointer"
+                                    className="flex items-center justify-between p-2 rounded-xl border border-red-500/10 bg-red-500/5 hover:bg-red-500/10 text-red-400 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group mt-1"
                                 >
-                                    <LogOut className="w-4 h-4" />
-                                    {t('navigation.logout')}
+                                    <div className="flex items-center gap-2.5">
+                                        <div className="p-1 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400">
+                                            <LogOut className="w-3.5 h-3.5" />
+                                        </div>
+                                        <span>{t('navigation.logout', 'Log Out')}</span>
+                                    </div>
+                                    <ChevronRight className="w-3.5 h-3.5 text-red-400/70 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
                             </div>
                         </motion.div>
