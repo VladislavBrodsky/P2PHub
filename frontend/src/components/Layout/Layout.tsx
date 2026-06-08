@@ -80,6 +80,9 @@ function SidebarNav({
         { id: 'partner', icon: Users,      label: t('navigation.partner') },
         { id: 'league',  icon: Trophy,     label: t('navigation.league') },
         { id: 'earn',    icon: Zap,        label: t('navigation.earn') },
+        { id: 'blog',    icon: Newspaper,  label: t('navigation.blog') },
+        { id: 'faq',     icon: HelpCircle, label: t('navigation.faq') },
+        { id: 'support', icon: Headphones, label: t('navigation.support') },
     ];
 
     const plan = (user?.subscription_plan || '').toLowerCase();
@@ -146,19 +149,29 @@ function SidebarNav({
                 {navItems.map(({ id, icon: Icon, label }) => {
                     const isActive = activeTab === id;
                     return (
-                        <button
-                            key={id}
-                            onClick={() => setActiveTab(id)}
-                            onMouseEnter={() => prefetch(id)}
-                            className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
-                                ${isActive
-                                    ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
-                                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                                }`}
-                        >
-                            <Icon className="w-[18px] h-[18px] shrink-0" />
-                            <span className="hidden xl:block text-[11px] font-extrabold uppercase tracking-widest whitespace-nowrap">{label}</span>
-                        </button>
+                        <div key={id} className="w-full">
+                            {id === 'blog' && (
+                                <div className="my-2 border-t border-white/5 w-full" />
+                            )}
+                            <button
+                                onClick={() => {
+                                    if (id === 'support') {
+                                        setSupportOpen(true);
+                                    } else {
+                                        setActiveTab(id);
+                                    }
+                                }}
+                                onMouseEnter={() => prefetch(id)}
+                                className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
+                                    ${isActive
+                                        ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
+                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                    }`}
+                            >
+                                <Icon className="w-[18px] h-[18px] shrink-0" />
+                                <span className="hidden xl:block text-[11px] font-extrabold uppercase tracking-widest whitespace-nowrap">{label}</span>
+                            </button>
+                        </div>
                     );
                 })}
             </div>
