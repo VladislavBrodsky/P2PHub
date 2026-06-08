@@ -12,7 +12,7 @@ export const ReferralWidget = memo(({ onInvite, onShowQR }: ReferralWidgetProps)
     const { t } = useTranslation(['social', 'common']);
 
     return (
-        <div className="mt-4 mb-6 flex items-center gap-3">
+        <div className="flex items-center gap-3 w-full lg:m-0 mt-4 mb-6">
             <button
                 onClick={onInvite}
                 className="flex-1 h-16 rounded-2xl flex items-center justify-start px-4 gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-premium active:scale-[0.98] transition-all relative overflow-hidden group"

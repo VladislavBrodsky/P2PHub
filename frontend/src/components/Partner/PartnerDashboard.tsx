@@ -112,33 +112,26 @@ export const PartnerDashboard = () => {
 
     return (
         <>
-            <div className="flex flex-col gap-5 w-full animate-in fade-in slide-in-from-bottom-2 duration-500">
-                {/* 0. Personalization Section */}
-                <div onClick={() => setIsBriefingOpen(true)} className="cursor-pointer relative z-10 shrink-0">
-                    <PersonalizationCard variant="compact" />
-                </div>
+            <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 w-full animate-in fade-in slide-in-from-bottom-2 duration-500 items-start">
+                {/* Column 1: Control & Info Panel */}
+                <div className="flex flex-col gap-5 w-full">
+                    {/* 0. Personalization Section */}
+                    <div onClick={() => setIsBriefingOpen(true)} className="cursor-pointer relative z-10 shrink-0 w-full">
+                        <PersonalizationCard variant="compact" />
+                    </div>
 
-                {/* Quick Stats Row */}
-                <DashboardStats
-                    user={user}
-                    totalNetworkSize={totalNetworkSize}
-                    growthPct={growthPct}
-                    selection={selection}
-                    setIsFinanceOpen={setIsFinanceOpen}
-                    handleExplorerOpen={handleExplorerOpen}
-                    handleUpgradeFromBalance={handleUpgradeFromBalance}
-                />
-
-                {/* 1. Network Visualization (Inline Preview) */}
-                <div className="space-y-4">
-                    <ReferralGrowthChart
-                        timeframe={timeframe}
-                        setTimeframe={setTimeframe}
-                        onMetricsUpdate={handleMetricsUpdate}
-                        onReportClick={handleExplorerOpen}
+                    {/* Quick Stats Row */}
+                    <DashboardStats
+                        user={user}
+                        totalNetworkSize={totalNetworkSize}
+                        growthPct={growthPct}
+                        selection={selection}
+                        setIsFinanceOpen={setIsFinanceOpen}
+                        handleExplorerOpen={handleExplorerOpen}
+                        handleUpgradeFromBalance={handleUpgradeFromBalance}
                     />
 
-                    {/* 2. Invitation Method (Moved under chart) */}
+                    {/* 2. Invitation Method */}
                     <AmbassadorTools
                         referralLink={referralLink}
                         copied={copied}
@@ -150,7 +143,7 @@ export const PartnerDashboard = () => {
                     {/* Partner Briefing Card */}
                     <div
                         onClick={() => { selection(); setIsBriefingOpen(true); }}
-                        className="group relative overflow-hidden rounded-[1.25rem] bg-bg-glass border border-border-glass p-2 px-3 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98]"
+                        className="group relative overflow-hidden rounded-[1.25rem] bg-bg-glass border border-border-glass p-2 px-3 shadow-sm backdrop-blur-xl cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98] w-full"
                     >
                         <div className="absolute inset-x-0 bottom-0 h-0.5 bg-linear-to-r from-transparent via-blue-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -185,7 +178,7 @@ export const PartnerDashboard = () => {
 
                     {/* Explore Network Entry */}
                     <div
-                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2 px-3 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98] group"
+                        className="bg-bg-glass border border-border-glass rounded-[1.25rem] p-2 px-3 shadow-sm flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-all active:scale-[0.98] group w-full"
                         onClick={handleExplorerOpen}
                     >
                         <div className="flex items-center gap-2.5">
@@ -203,46 +196,60 @@ export const PartnerDashboard = () => {
                         </div>
                         <ChevronRight className="w-4 h-4 text-slate-400 mr-1" />
                     </div>
+
+                    {/* 4. Integrated Action Button */}
+                    <div className="pt-2 w-full">
+                        <Button
+                            variant="primary"
+                            className="w-full h-15 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-bold text-sm shadow-premium flex flex-col items-center justify-center gap-0.5 active:scale-[0.98] transition-all relative overflow-hidden group"
+                            onClick={() => {
+                                notification('success');
+                                setIsBriefingOpen(true);
+                            }}
+                        >
+                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 dark:via-blue-400/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 transition-opacity duration-500" />
+
+                            <div className="flex items-center gap-3 relative z-10 pt-1">
+                                <span className="tracking-widest">{t('partner_dashboard.expand_btn')}</span>
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
+                            </div>
+                            <span className="text-label font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">{t('partner_dashboard.expand_sub')}</span>
+                        </Button>
+                    </div>
                 </div>
 
-                {/* 1.5 Social Proof - Top Partners */}
-                <TopPartnersList />
-
-
-                {/* 3. Rewards List */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
-                        <button
-                            onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
-                            className="text-slate-500 hover:text-white text-label font-bold uppercase tracking-widest transition-colors"
-                        >
-                            {isEarningsExpanded ? t('common:show_less') : t('common:view_all')}
-                        </button>
+                {/* Column 2: Data & Chart Panel */}
+                <div className="flex flex-col gap-5 w-full">
+                    {/* 1. Network Visualization */}
+                    <div className="w-full">
+                        <ReferralGrowthChart
+                            timeframe={timeframe}
+                            setTimeframe={setTimeframe}
+                            onMetricsUpdate={handleMetricsUpdate}
+                            onReportClick={handleExplorerOpen}
+                        />
                     </div>
 
-                    <EarningsList isExpanded={isEarningsExpanded} />
-                </div>
+                    {/* 1.5 Social Proof - Top Partners */}
+                    <div className="w-full">
+                        <TopPartnersList />
+                    </div>
 
-                {/* 4. Integrated Action Button */}
-                <div className="pt-2">
-                    <Button
-                        variant="primary"
-                        className="w-full h-15 bg-slate-900 dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-blue-50 rounded-2xl font-bold text-sm shadow-premium flex flex-col items-center justify-center gap-0.5 active:scale-[0.98] transition-all relative overflow-hidden group"
-                        onClick={() => {
-                            notification('success');
-                            setIsBriefingOpen(true);
-                        }}
-                    >
-                        <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 dark:via-blue-400/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 bg-linear-to-r from-blue-500/5 via-purple-500/5 to-blue-500/5 transition-opacity duration-500" />
-
-                        <div className="flex items-center gap-3 relative z-10 pt-1">
-                            <span className="tracking-widest">{t('partner_dashboard.expand_btn')}</span>
-                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 relative z-10 animate-pulse" />
+                    {/* 3. Rewards List */}
+                    <div className="space-y-4 w-full">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{t('partner_dashboard.recent_earnings')}</h2>
+                            <button
+                                onClick={() => setIsEarningsExpanded(!isEarningsExpanded)}
+                                className="text-slate-500 hover:text-white text-label font-bold uppercase tracking-widest transition-colors"
+                            >
+                                {isEarningsExpanded ? t('common:show_less') : t('common:view_all')}
+                            </button>
                         </div>
-                        <span className="text-label font-bold opacity-50 tracking-tight relative z-10 pb-1 italic">{t('partner_dashboard.expand_sub')}</span>
-                    </Button>
+
+                        <EarningsList isExpanded={isEarningsExpanded} />
+                    </div>
                 </div>
             </div>
 

@@ -59,7 +59,7 @@ export const BlogCarousel = () => {
                 </button>
             </div>
 
-            <div className="flex gap-4 overflow-x-auto overflow-y-hidden px-4 pb-2 no-scrollbar snap-x snap-mandatory">
+            <div className="flex lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-x-visible lg:px-0 lg:pb-0 gap-4 overflow-x-auto overflow-y-hidden px-4 pb-2 no-scrollbar snap-x snap-mandatory">
                 {posts.map((post, index) => (
                     <m.div
                         key={post.id}
@@ -68,7 +68,7 @@ export const BlogCarousel = () => {
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1, type: "spring", bounce: 0.2 }}
                         onClick={() => navigateToBlog(post.id)}
-                        className="min-w-[300px] max-w-[300px] group flex flex-col gap-4 p-7 rounded-3xl border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
+                        className="min-w-[300px] max-w-[300px] lg:min-w-0 lg:max-w-none group flex flex-col gap-4 p-7 rounded-3xl border border-slate-200 dark:border-white/10 glass-panel-premium snap-start active:scale-95 transition-all cursor-pointer relative overflow-hidden"
                     >
                         {(post.image) ? (
                             <>

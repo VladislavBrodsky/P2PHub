@@ -286,10 +286,10 @@ function SidebarNav({
                                 ) : (
                                     <button
                                         onClick={() => tonConnectUI.openModal()}
-                                        className="w-full flex items-center justify-center gap-2 rounded-2xl py-2 px-3 bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-md shadow-blue-500/10"
+                                        className="w-full flex items-center justify-center gap-2 rounded-2xl py-3 px-3 bg-blue-500 hover:bg-blue-600 text-white font-black text-sm uppercase tracking-[0.2em] transition-all duration-200 active:scale-95 shadow-md shadow-blue-500/30"
                                     >
-                                        <Wallet className="h-3.5 w-3.5" />
-                                        {t('connect_wallet')}
+                                        <Wallet className="h-4 w-4 shrink-0" />
+                                        <span>CONNECT</span>
                                     </button>
                                 )}
                             </div>

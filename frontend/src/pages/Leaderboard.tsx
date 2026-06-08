@@ -226,7 +226,7 @@ export default function LeaderboardPage() {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32"
+            className="flex flex-col min-h-[85vh] px-4 pt-4 pb-32 lg:max-w-3xl xl:max-w-4xl lg:mx-auto w-full"
         >
             <motion.div
                 initial={{ opacity: 0, y: -12 }}

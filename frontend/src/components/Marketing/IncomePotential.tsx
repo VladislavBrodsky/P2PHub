@@ -130,13 +130,13 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const displayLoss = dailyLoss > 0 ? dailyLoss : 0;
 
     return (
-        <section className="px-0 py-2 min-h-[1100px]">
+        <section className="px-0 py-2 min-h-[1100px] lg:min-h-0">
             <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-2xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-4 md:p-6 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)]"
+                className="relative overflow-hidden rounded-2xl bg-white dark:bg-bg-app text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-8 border border-slate-200 dark:border-white/10 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-4xl xl:max-w-5xl lg:mx-auto"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />

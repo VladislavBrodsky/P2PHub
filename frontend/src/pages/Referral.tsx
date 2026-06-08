@@ -324,7 +324,7 @@ export default function ReferralPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-8 relative">
+        <div className="flex flex-col min-h-[90vh] px-4 pt-4 pb-8 relative lg:max-w-4xl xl:max-w-5xl lg:mx-auto w-full">
             {confettiActive && <Confetti />}
 
             <AnimatePresence>
@@ -367,24 +367,26 @@ export default function ReferralPage() {
             <BriefTermsModal isOpen={showBriefModal} onClose={handleCloseBrief} />
 
             {/* Content Stack - Optimized for stability and z-index safety */}
-            <div className="flex flex-col gap-3 relative w-full">
-                <div className="relative min-h-[160px]">
-                    <EarnHeader />
-                </div>
+            <div className="flex flex-col gap-3 lg:gap-6 relative w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-stretch">
+                    <div className="relative min-h-[160px] h-full flex flex-col justify-between">
+                        <EarnHeader />
+                    </div>
 
-                {/* Move Terms & Guide Button Lower */}
-                <div className="flex justify-center -mt-2 mb-2">
-                    <button
-                        onClick={handleShowBrief}
-                        className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
-                    >
-                        <FileText className="w-3 h-3" />
-                        {t('brief.btn')}
-                    </button>
-                </div>
-
-                <div className="relative z-10 mt-0">
-                    <ReferralWidget onInvite={() => toggleShareModal(true)} onShowQR={() => toggleQRModal(true)} />
+                    <div className="relative z-10 flex flex-col justify-center gap-4">
+                        <ReferralWidget onInvite={() => toggleShareModal(true)} onShowQR={() => toggleQRModal(true)} />
+                        
+                        {/* Terms & Guide Button inside the right column on desktop to balance layout */}
+                        <div className="flex justify-center">
+                            <button
+                                onClick={handleShowBrief}
+                                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-bg-surface border border-card-border text-label font-bold text-brand-blue hover:brightness-110 transition-all active:scale-95 shadow-sm"
+                            >
+                                <FileText className="w-3 h-3" />
+                                {t('brief.btn')}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <TaskGrid

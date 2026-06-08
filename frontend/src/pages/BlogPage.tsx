@@ -244,7 +244,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex flex-col min-h-screen pb-32"
+            className="flex flex-col min-h-screen pb-32 lg:max-w-4xl xl:max-w-5xl lg:mx-auto w-full"
         >
             <AnimatePresence mode="popLayout">
                 {isLoading && posts.length === 0 ? (
@@ -384,7 +384,7 @@ export default function BlogPage({ setActiveTab, currentTab }: BlogPageProps) {
                                 </motion.div>
                             )}
 
-                            <div className="grid gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
                                 {isRefreshing && posts.length > 0 && (
                                     <motion.div
                                         initial={{ opacity: 0, y: -10 }}

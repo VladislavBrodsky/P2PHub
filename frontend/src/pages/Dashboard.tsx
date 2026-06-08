@@ -97,14 +97,14 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             )}
 
-            {/* #comment: 1. Hero Section - Spacious & Centered Layout with adjusted padding for Modal views. */}
-            <m.div variants={item} className="flex flex-col items-center pt-8 sm:pt-16 w-full">
-                <div className="relative overflow-visible mx-auto min-h-[320px] sm:min-h-[400px] flex items-center justify-center shrink-0 w-full">
+            {/* #comment: 1. Hero Section - Refactored for Premium Side-by-Side Desktop Layout */}
+            <m.div variants={item} className="flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between lg:max-w-4xl lg:mx-auto xl:max-w-5xl w-full pt-8 sm:pt-16 gap-8 lg:gap-12">
+                <div className="relative overflow-visible mx-auto lg:mx-0 min-h-[320px] sm:min-h-[400px] flex items-center justify-center shrink-0 w-full lg:w-1/2">
                     <CommunityOrbit />
                 </div>
 
-                <div className="text-center px-6 flex flex-col items-center mt-8 relative z-20">
-                    <div className="flex items-center gap-3 mb-10">
+                <div className="text-center lg:text-left px-6 lg:px-0 flex flex-col items-center lg:items-start mt-8 lg:mt-0 relative z-20 w-full lg:w-1/2">
+                    <div className="flex items-center gap-3 mb-10 lg:mb-8">
                         {user?.is_pro ? (
                             <m.button
                                 onClick={() => setActiveTab?.('pro')}
@@ -144,12 +144,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-3 sm:gap-5 mt-2">
-                        <h1 className="text-[36px] sm:text-[46px] font-black tracking-tighter text-text-primary leading-[1.05] text-center max-w-[360px] sm:max-w-[420px] mx-auto drop-shadow-sm">
+                    <div className="flex flex-col gap-3 sm:gap-5 mt-2 w-full">
+                        <h1 className="text-[36px] sm:text-[46px] lg:text-[42px] xl:text-[46px] font-black tracking-tighter text-text-primary leading-[1.05] text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none mx-auto lg:mx-0 drop-shadow-sm">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-[36px] sm:text-[46px] font-black tracking-tighter leading-tight text-center max-w-[360px] sm:max-w-[420px] vibing-crystal-text mx-auto drop-shadow-md"
+                            className="text-[36px] sm:text-[46px] lg:text-[42px] xl:text-[46px] font-black tracking-tighter leading-tight text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none vibing-crystal-text mx-auto lg:mx-0 drop-shadow-md"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -162,6 +162,15 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         >
                             {heroTitle2}
                         </m.div>
+                    </div>
+
+                    {/* Desktop-only description */}
+                    <div className="hidden lg:block mt-8 w-full">
+                        <p className="text-text-secondary text-left text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
+                            <Trans t={t} i18nKey="dashboard:hero_desc">
+                                Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
+                            </Trans>
+                        </p>
                     </div>
                 </div>
             </m.div>
@@ -213,7 +222,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: Semantic description. */}
-            <m.div variants={item} className="px-8 pt-4 pb-12">
+            <m.div variants={item} className="px-8 pt-4 pb-12 lg:hidden">
                 <p className="text-text-secondary text-center text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
                     <Trans t={t} i18nKey="dashboard:hero_desc">
                         Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.

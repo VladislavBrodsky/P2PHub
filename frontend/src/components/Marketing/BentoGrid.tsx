@@ -113,18 +113,18 @@ export const BentoGrid = () => {
 
     return (
         <section className="px-0 py-4 flex flex-col relative z-50 min-h-[440px]">
-            {/* Carousel Container */}
-            <div className="relative w-full h-[410px]">
+            {/* Carousel / Grid Container */}
+            <div className="relative w-full h-[410px] lg:h-auto">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex justify-start items-start gap-4 overflow-x-auto px-6 h-full scroll-smooth no-scrollbar"
+                    className="flex lg:grid lg:grid-cols-5 lg:gap-4 lg:px-0 lg:overflow-x-visible lg:h-auto justify-start items-start gap-4 overflow-x-auto px-6 h-full scroll-smooth no-scrollbar"
                     style={{ alignItems: 'flex-start' }}
                 >
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
-                            className="relative shrink-0 w-[280px] sm:w-[320px] h-[360px] snap-center cursor-pointer"
+                            className="relative shrink-0 w-[280px] sm:w-[320px] lg:w-auto lg:shrink lg:flex-1 h-[360px] snap-center cursor-pointer"
                             style={{ perspective: '1000px' }}
                             onClick={() => toggleFlip(index)}
                         >
@@ -224,7 +224,7 @@ export const BentoGrid = () => {
             </div>
 
             {/* Dashboard Indicators - Absolutely positioned for zero-gap */}
-            <div className="absolute left-0 right-0 -bottom-4 flex items-center justify-center z-20 pointer-events-none">
+            <div className="absolute left-0 right-0 -bottom-4 flex lg:hidden items-center justify-center z-20 pointer-events-none">
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/40 dark:bg-black/40 border border-white/10 backdrop-blur-md shadow-sm">
                     {shiftSteps.map((_, i) => (
                         <m.div

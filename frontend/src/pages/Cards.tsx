@@ -83,9 +83,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             />
 
             {/* Card Display Area */}
-            <div className="flex-1 px-6 pb-60 flex flex-col items-center">
+            <div className="flex-1 px-6 pb-60 flex flex-col lg:grid lg:grid-cols-2 lg:gap-12 lg:max-w-4xl lg:mx-auto lg:items-start lg:pb-12 w-full">
                 {/* 3D Card Visual */}
-                <div className="mb-14 w-full max-w-[340px] flex justify-center relative min-h-[220px]">
+                <div className="mb-14 lg:mb-0 w-full max-w-[340px] lg:max-w-none flex justify-center relative min-h-[220px] lg:min-h-[260px] lg:h-[260px]">
                     <AnimatePresence initial={true} mode="wait">
                         <motion.div
                             key={selectedTab}
@@ -106,18 +106,18 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1, duration: 0.3 }}
-                    className="w-full max-w-sm space-y-10 text-center"
+                    className="w-full max-w-sm lg:max-w-none space-y-10 text-center lg:text-left"
                 >
                     <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight">
+                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight text-center lg:text-left">
                             {currentCard.title}
                         </h3>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4 leading-relaxed">
+                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4 lg:px-0 leading-relaxed text-center lg:text-left">
                             {currentCard.description}
                         </p>
 
                         {/* Terms Accordion - RELOCATED & ENHANCED */}
-                        <div className="w-full mt-4 px-4">
+                        <div className="w-full mt-4 px-4 lg:px-0">
                             <button
                                 onClick={() => {
                                     setIsTermsOpen(!isTermsOpen);
