@@ -183,7 +183,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-1 bg-slate-100 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-white/10 gap-1">
+                            <div className="flex p-1 bg-slate-100 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-white/10 gap-1 lg:max-w-md lg:mx-auto w-full">
                                 <button
                                     onClick={() => setMode('profit')}
                                     className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
@@ -205,29 +205,31 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="flex flex-col gap-6"
+                                        className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 gap-6"
                                     >
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Calculator className="w-4 h-4 text-blue-500" />
-                                            <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
-                                        </div>
-                                        <div className="flex flex-col gap-3">
-                                            <div className="flex justify-between items-end">
-                                                <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
-                                                <span className="text-xl font-bold text-blue-500">{activePartners}</span>
+                                        <div className="lg:col-span-7 flex flex-col gap-6">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Calculator className="w-4 h-4 text-blue-500" />
+                                                <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
                                             </div>
-                                            <div className="relative h-6 flex items-center">
-                                                <input
-                                                    type="range"
-                                                    min="5"
-                                                    max="960"
-                                                    value={activePartners}
-                                                    onChange={(e) => setActivePartners(parseInt(e.target.value))}
-                                                    className="range-input-premium"
-                                                />
+                                            <div className="flex flex-col gap-3">
+                                                <div className="flex justify-between items-end">
+                                                    <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
+                                                    <span className="text-xl font-bold text-blue-500">{activePartners}</span>
+                                                </div>
+                                                <div className="relative h-6 flex items-center">
+                                                    <input
+                                                        type="range"
+                                                        min="5"
+                                                        max="960"
+                                                        value={activePartners}
+                                                        onChange={(e) => setActivePartners(parseInt(e.target.value))}
+                                                        className="range-input-premium"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col gap-6 bg-white/5 dark:bg-black/5 -mx-4 px-4 rounded-xl">
+                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-8 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
                                             <div className="flex justify-between items-center bg-white/10 dark:bg-black/30 p-4 rounded-xl border border-slate-200/50 dark:border-white/10">
                                                 <span className="text-[clamp(0.65rem,2vw,0.75rem)] font-black uppercase text-slate-500 dark:text-white/40 tracking-wider flex-1">{t('income.profit.monthly_income')}</span>
                                                 <span className="text-[clamp(1.25rem,5vw,1.75rem)] font-black text-emerald-500 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased tab-nums shrink-0 ml-2">${estimatedMonthly}</span>
@@ -249,52 +251,54 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, y: -10 }}
-                                        className="flex flex-col gap-6"
+                                        className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 gap-6"
                                     >
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Clock className="w-4 h-4 text-rose-500" />
-                                            <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
-                                        </div>
+                                        <div className="lg:col-span-7 flex flex-col gap-6">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Clock className="w-4 h-4 text-rose-500" />
+                                                <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
+                                            </div>
 
-                                        <div className="space-y-4">
-                                            <div className="space-y-2">
-                                                <label className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
-                                                <div className="relative">
-                                                    <select
-                                                        value={selectedLevel.id}
-                                                        onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
-                                                        className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
-                                                    >
-                                                        {JOB_LEVELS.map((level) => (
-                                                            <option key={level.id} value={level.id}>
-                                                                {level.label} (${level.rate}/hr)
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                        <ArrowRight className="w-3 h-3 rotate-90 opacity-50" />
+                                            <div className="space-y-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
+                                                    <div className="relative">
+                                                        <select
+                                                            value={selectedLevel.id}
+                                                            onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
+                                                            className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
+                                                        >
+                                                            {JOB_LEVELS.map((level) => (
+                                                                <option key={level.id} value={level.id}>
+                                                                    {level.label} (${level.rate}/hr)
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <ArrowRight className="w-3 h-3 rotate-90 opacity-50" />
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="space-y-2">
-                                                <div className="flex justify-between items-end">
-                                                    <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
-                                                    <span className="text-label font-bold text-rose-500">{hoursWorked} Hours</span>
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between items-end">
+                                                        <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
+                                                        <span className="text-label font-bold text-rose-500">{hoursWorked} Hours</span>
+                                                    </div>
+                                                    <input
+                                                        type="range"
+                                                        min="1"
+                                                        max="16"
+                                                        value={hoursWorked}
+                                                        onChange={(e) => setHoursWorked(parseInt(e.target.value))}
+                                                        className="range-input-premium"
+                                                    />
                                                 </div>
-                                                <input
-                                                    type="range"
-                                                    min="1"
-                                                    max="16"
-                                                    value={hoursWorked}
-                                                    onChange={(e) => setHoursWorked(parseInt(e.target.value))}
-                                                    className="range-input-premium"
-                                                />
                                             </div>
                                         </div>
 
-                                        <div className="pt-6 text-center space-y-4">
-                                            <div className="space-y-1">
+                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-8 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
+                                            <div className="space-y-1 text-center">
                                                 <div className="text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
                                                     {t('income.inaction.value_per_min')}
                                                 </div>
@@ -306,7 +310,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 </div>
                                             </div>
 
-                                            <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+                                            <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] text-center">
                                                 <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1.5">
                                                     {t('income.inaction.daily_loss')}
                                                 </div>
@@ -361,108 +365,35 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             }}
                             className="overflow-hidden"
                         >
-                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-3 space-y-1 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
-                                {/* LIVE Indicator & Header */}
-                                <div className="flex flex-col items-center pt-2">
-                                    <div className="flex items-center gap-2 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/15 transition-colors">
-                                        <div className="relative flex h-2 w-2">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                            <div ref={mathRef} className="relative z-10 overflow-hidden rounded-2xl border border-slate-200 dark:border-emerald-500/20 bg-white dark:bg-linear-to-br dark:from-slate-900/90 dark:via-[#0a1a0f]/90 dark:to-slate-900/90 p-4 md:p-6 lg:p-8 space-y-6 lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-8 shadow-premium dark:shadow-[0_15px_40px_-10px_rgba(16,185,129,0.15)] mb-4">
+                                {/* Left column: LIVE indicator, headers, and social proof */}
+                                <div className="lg:col-span-5 flex flex-col justify-between h-full gap-6 lg:gap-0 py-2">
+                                    <div className="flex flex-col items-center lg:items-start">
+                                        <div className="flex items-center gap-2 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-full px-3 py-1 border border-emerald-500/10 mb-4 group hover:bg-emerald-500/15 transition-colors w-fit">
+                                            <div className="relative flex h-2 w-2">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                                            </div>
+                                            <span className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
                                         </div>
-                                        <span className="text-[10px] font-black text-emerald-500 dark:text-emerald-400 tracking-[0.2em]">{t('marketing:blog.navigation.live')}</span>
-                                    </div>
 
-                                    <div className="text-center mb-6">
-                                        <div className="flex flex-col items-center justify-center uppercase tracking-[0.3em] font-black">
-                                            <span className="text-[10px] sm:text-xs text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">
-                                                {t('marketing:income.math.subheading_part1', 'THE $1/MINUTE STRATEGY')}
-                                            </span>
-                                            <span className="text-[10px] sm:text-xs text-slate-800 dark:text-white opacity-40">
-                                                {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
-                                            </span>
-                                        </div>
-                                        <h4 className="mt-3 text-xl sm:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight uppercase drop-shadow-md text-balance">
-                                            {t('marketing:income.math.heading')}
-                                        </h4>
-                                    </div>
-                                </div>
-
-                                {/* THE COMPACT MATH LIST */}
-                                <div className="space-y-1.5 px-3 mb-4">
-                                    {([
-                                        { key: 'per_min', amount: '$1', period: t('marketing:income.math.per_min'), highlight: false, delay: 0 },
-                                        { key: 'per_hour', amount: '$60', period: t('marketing:income.math.per_hour'), highlight: false, delay: 0.1 },
-                                        { key: 'per_day', amount: '$1,440', period: t('marketing:income.math.per_day'), highlight: false, delay: 0.2 },
-                                        { key: 'per_month', amount: '$43,200', period: t('marketing:income.math.per_month'), highlight: true, delay: 0.3 },
-                                        { key: 'per_year', amount: '$518,400', period: t('marketing:income.math.per_year'), highlight: false, delay: 0.4 },
-                                    ] as const).map(({ key, amount, period, highlight, delay }) => (
-                                        <m.div
-                                            key={key}
-                                            initial={{ opacity: 0, x: -20 }}
-                                            animate={mathVisible ? { opacity: 1, x: 0 } : {}}
-                                            transition={{ duration: 0.5, delay }}
-                                            className={clsx(
-                                                'relative group flex items-center h-12 sm:h-14 px-4 sm:px-6 rounded-2xl border transition-all duration-300',
-                                                highlight
-                                                    ? 'bg-emerald-500/10 border-emerald-400/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
-                                                    : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10'
-                                            )}
-                                        >
-                                            <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                                                <ChevronRight className={clsx("w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
-                                                <span className={clsx("text-xs sm:text-sm font-black uppercase tracking-tight flex-1", highlight ? "text-emerald-400" : "text-slate-500 dark:text-white/40")}>
-                                                    {period}
+                                        <div className="text-center lg:text-left mb-2">
+                                            <div className="flex flex-col items-center lg:items-start justify-center uppercase tracking-[0.3em] font-black">
+                                                <span className="text-[10px] sm:text-xs text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">
+                                                    {t('marketing:income.math.subheading_part1', 'THE $1/MINUTE STRATEGY')}
+                                                </span>
+                                                <span className="text-[10px] sm:text-xs text-slate-800 dark:text-white opacity-40">
+                                                    {t('marketing:income.math.subheading_part2', 'PROVEN & TRANSPARENT')}
                                                 </span>
                                             </div>
-
-                                            <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-2">
-                                                <span className={clsx("text-lg sm:text-2xl font-black tracking-tighter", highlight ? "text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]" : "text-slate-900 dark:text-white")}>
-                                                    {amount}
-                                                </span>
-                                                {highlight && (
-                                                    <div className="bg-emerald-500 text-[9px] sm:text-[10px] font-black text-white px-2 py-1 rounded-md tracking-widest shadow-[0_4px_12px_rgba(16,185,129,0.5)] shrink-0 animate-bounce-subtle">
-                                                        {t('marketing:income.math.target_badge')}
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Premium Glass Shine */}
-                                            <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
-                                        </m.div>
-                                    ))}
-                                </div>
-
-                                {/* Formula */}
-                                <div className="flex flex-col items-center gap-3 px-4 mb-4">
-                                    <m.div
-                                        initial={{ opacity: 0 }}
-                                        animate={mathVisible ? { opacity: 1 } : {}}
-                                        transition={{ delay: 0.6 }}
-                                        className="text-[10px] text-slate-300 dark:text-white/20 font-mono tracking-widest uppercase"
-                                    >
-                                        {t('marketing:income.math.formula_note')}
-                                    </m.div>
-
-                                    {/* Red FOMO Alert */}
-                                    <m.div
-                                        initial={{ opacity: 0, scale: 0.95 }}
-                                        animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
-                                        transition={{ delay: 0.7 }}
-                                        className="w-full bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex items-center gap-3 group"
-                                    >
-                                        <div className="relative flex h-2 w-2 shrink-0">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600 shadow-[0_0_8px_rgba(225,29,72,0.4)]" />
+                                            <h4 className="mt-3 text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 dark:text-white leading-tight tracking-tight uppercase drop-shadow-md text-balance">
+                                                {t('marketing:income.math.heading')}
+                                            </h4>
                                         </div>
-                                        <p className="text-[10px] sm:text-xs font-black text-rose-400 uppercase leading-snug tracking-wide group-hover:text-rose-300 transition-colors">
-                                            {t('marketing:income.math.fomo_line')}
-                                        </p>
-                                    </m.div>
-                                </div>
+                                    </div>
 
-                                {/* Social Proof & CTA */}
-                                <div className="px-4 pb-6 space-y-4">
-                                    <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-full py-2.5 px-4 flex items-center gap-3 overflow-hidden">
+                                    {/* Social Proof */}
+                                    <div className="bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 rounded-2xl py-3 px-4 flex items-center gap-3 overflow-hidden justify-between lg:justify-start">
                                         <div className="flex items-center gap-2 shrink-0">
                                             <div className="flex -space-x-2.5 shrink-0">
                                                 {[
@@ -491,27 +422,106 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                             </span>
                                         </div>
                                     </div>
-
-                                    <m.button
-                                        whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={() => {
-                                            localStorage.setItem('auto_purchase_pro', 'true');
-                                            setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
-                                            onNavigateToPartner?.();
-                                        }}
-                                        className="w-full bg-linear-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-[200%_auto] hover:bg-pos-right text-white font-black h-11 rounded-full text-xs tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/30 transition-all duration-500 uppercase group"
-                                    >
-                                        {t('marketing:income.math.cta_urgency')}
-                                    </m.button>
                                 </div>
 
+                                {/* Right column: Math breakdown list, formula note, FOMO alert, and CTA button */}
+                                <div className="lg:col-span-7 flex flex-col gap-4 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
+                                    {/* THE COMPACT MATH LIST */}
+                                    <div className="space-y-1.5 px-1">
+                                        {([
+                                            { key: 'per_min', amount: '$1', period: t('marketing:income.math.per_min'), highlight: false, delay: 0 },
+                                            { key: 'per_hour', amount: '$60', period: t('marketing:income.math.per_hour'), highlight: false, delay: 0.1 },
+                                            { key: 'per_day', amount: '$1,440', period: t('marketing:income.math.per_day'), highlight: false, delay: 0.2 },
+                                            { key: 'per_month', amount: '$43,200', period: t('marketing:income.math.per_month'), highlight: true, delay: 0.3 },
+                                            { key: 'per_year', amount: '$518,400', period: t('marketing:income.math.per_year'), highlight: false, delay: 0.4 },
+                                        ] as const).map(({ key, amount, period, highlight, delay }) => (
+                                            <m.div
+                                                key={key}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={mathVisible ? { opacity: 1, x: 0 } : {}}
+                                                transition={{ duration: 0.5, delay }}
+                                                className={clsx(
+                                                    'relative group flex items-center h-12 sm:h-14 px-4 sm:px-6 rounded-2xl border transition-all duration-300',
+                                                    highlight
+                                                        ? 'bg-emerald-500/10 border-emerald-400/40 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
+                                                        : 'bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10'
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                                                    <ChevronRight className={clsx("w-4 h-4 shrink-0 transition-transform group-hover:translate-x-1", highlight ? "text-emerald-400" : "text-slate-300 dark:text-white/20")} />
+                                                    <span className={clsx("text-xs sm:text-sm font-black uppercase tracking-tight flex-1", highlight ? "text-emerald-400" : "text-slate-500 dark:text-white/40")}>
+                                                        {period}
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex items-center gap-3 sm:gap-4 shrink-0 ml-2">
+                                                    <span className={clsx("text-lg sm:text-2xl font-black tracking-tighter", highlight ? "text-emerald-500 drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]" : "text-slate-900 dark:text-white")}>
+                                                        {amount}
+                                                    </span>
+                                                    {highlight && (
+                                                        <div className="bg-emerald-500 text-[9px] sm:text-[10px] font-black text-white px-2 py-1 rounded-md tracking-widest shadow-[0_4px_12px_rgba(16,185,129,0.5)] shrink-0 animate-bounce-subtle">
+                                                            {t('marketing:income.math.target_badge')}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Premium Glass Shine */}
+                                                <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer-slide pointer-events-none" />
+                                            </m.div>
+                                        ))}
+                                    </div>
+
+                                    {/* Formula & FOMO */}
+                                    <div className="flex flex-col items-center gap-3 px-1">
+                                        <m.div
+                                            initial={{ opacity: 0 }}
+                                            animate={mathVisible ? { opacity: 1 } : {}}
+                                            transition={{ delay: 0.6 }}
+                                            className="text-[10px] text-slate-300 dark:text-white/20 font-mono tracking-widest uppercase"
+                                        >
+                                            {t('marketing:income.math.formula_note')}
+                                        </m.div>
+
+                                        {/* Red FOMO Alert */}
+                                        <m.div
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={mathVisible ? { opacity: 1, scale: 1 } : {}}
+                                            transition={{ delay: 0.7 }}
+                                            className="w-full bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex items-center gap-3 group"
+                                        >
+                                            <div className="relative flex h-2 w-2 shrink-0">
+                                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+                                                <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600 shadow-[0_0_8px_rgba(225,29,72,0.4)]" />
+                                            </div>
+                                            <p className="text-[10px] sm:text-xs font-black text-rose-400 uppercase leading-snug tracking-wide group-hover:text-rose-300 transition-colors">
+                                                {t('marketing:income.math.fomo_line')}
+                                            </p>
+                                        </m.div>
+                                    </div>
+
+                                    {/* Urgency CTA */}
+                                    <div className="px-1">
+                                        <m.button
+                                            whileHover={{ scale: 1.02, filter: 'brightness(1.1)' }}
+                                            whileTap={{ scale: 0.98 }}
+                                            onClick={() => {
+                                                localStorage.setItem('auto_purchase_pro', 'true');
+                                                setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
+                                                onNavigateToPartner?.();
+                                            }}
+                                            className="w-full bg-linear-to-r from-orange-500 via-orange-600 to-orange-500 bg-size-[200%_auto] hover:bg-pos-right text-white font-black h-11 rounded-full text-xs tracking-[0.2em] flex items-center justify-center gap-2 shadow-2xl shadow-orange-500/30 transition-all duration-500 uppercase group"
+                                        >
+                                            {t('marketing:income.math.cta_urgency')}
+                                        </m.button>
+                                </div>
                             </div>
+                        </div>
+
                         </m.div>
                     )}
                 </AnimatePresence>
 
-                <div className="grid grid-cols-2 gap-4 relative z-0">
+                <div className="grid grid-cols-2 gap-4 relative z-0 lg:max-w-3xl lg:mx-auto w-full">
                     <div className="glass-panel-premium p-5 rounded-2xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
@@ -543,7 +553,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-1 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                <div className="relative z-10 mx-1 lg:max-w-3xl lg:mx-auto w-full p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
                     {/* Liquid Background Layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
                     <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />
@@ -574,14 +584,14 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 {
                     !isStrategyUnlocked ? (
-                        <div className="pt-4 relative z-10">
+                        <div className="pt-4 relative z-10 flex flex-col items-center">
                             <button
                                 onClick={() => {
                                     localStorage.setItem('auto_purchase_pro', 'true');
                                     setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                     onNavigateToPartner?.();
                                 }}
-                                className="group relative w-full flex items-center justify-center gap-2 vibing-emerald-animated h-11 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
+                                className="group relative w-full lg:max-w-md flex items-center justify-center gap-2 vibing-emerald-animated h-11 px-8 rounded-full font-bold text-sm active:scale-[0.98] transition-all overflow-hidden shadow-[0_15px_30px_-5px_rgba(16,185,129,0.3)] hover:brightness-110"
                             >
                                 <span className="relative z-10 flex items-center gap-2 uppercase tracking-widest">
                                     {t('income.math.cta_urgency')}
@@ -596,11 +606,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                         </div>
                     ) : (
                         /* Post-Unlock Content: "Lead the Market" Button Redesign */
-                        <div className="pt-4 relative z-10 text-center">
+                        <div className="pt-4 relative z-10 text-center flex flex-col items-center">
                             <m.button
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                className="group relative w-full flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
+                                className="group relative w-full lg:max-w-md flex items-center justify-center gap-2 emerald-liquid-gradient h-11 px-8 rounded-full font-bold text-label tracking-widest shadow-xl shadow-emerald-500/20 active:scale-[0.98] transition-all overflow-hidden animate-liquid"
                             >
                                 {t('income.cta.lead')}
                                 <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:animate-shimmer-slide" />
