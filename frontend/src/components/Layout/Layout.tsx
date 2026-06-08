@@ -162,7 +162,7 @@ function SidebarNav({
                                     }
                                 }}
                                 onMouseEnter={() => prefetch(id)}
-                                className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
+                                className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
                                     ${isActive
                                         ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
                                         : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -199,7 +199,7 @@ function SidebarNav({
                 <button
                     ref={profileRef}
                     onClick={() => setIsDropdownOpen(prev => !prev)}
-                    className="flex items-center gap-3 w-full p-2 rounded-xl text-left hover:bg-white/5 transition-all duration-200 cursor-pointer outline-none focus:outline-none"
+                    className="flex items-center xl:justify-start justify-center gap-3 w-full xl:p-2 p-0 h-12 rounded-xl text-left hover:bg-white/5 transition-all duration-200 cursor-pointer outline-none focus:outline-none"
                 >
                     {/* Avatar Container */}
                     <div className="relative shrink-0 mx-auto xl:mx-0">
@@ -389,47 +389,6 @@ function SidebarNav({
                                     </button>
                                 )}
 
-                                {/* Blog */}
-                                <button
-                                    onClick={() => { navigateTo(ROUTES.BLOG); setIsDropdownOpen(false); }}
-                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
-                                >
-                                    <div className="flex items-center gap-2.5">
-                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
-                                            <Newspaper className="w-3.5 h-3.5" />
-                                        </div>
-                                        <span>{t('navigation.blog')}</span>
-                                    </div>
-                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
-                                </button>
-
-                                {/* FAQ */}
-                                <button
-                                    onClick={() => { navigateTo(ROUTES.FAQ); setIsDropdownOpen(false); }}
-                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
-                                >
-                                    <div className="flex items-center gap-2.5">
-                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
-                                            <HelpCircle className="w-3.5 h-3.5" />
-                                        </div>
-                                        <span>{t('navigation.faq')}</span>
-                                    </div>
-                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
-                                </button>
-
-                                {/* Support */}
-                                <button
-                                    onClick={() => { setSupportOpen(true); setIsDropdownOpen(false); }}
-                                    className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
-                                >
-                                    <div className="flex items-center gap-2.5">
-                                        <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
-                                            <Headphones className="w-3.5 h-3.5" />
-                                        </div>
-                                        <span>{t('navigation.support')}</span>
-                                    </div>
-                                    <ChevronRight className="w-3.5 h-3.5 text-slate-500 group-hover:translate-x-0.5 transition-transform" />
-                                </button>
 
                                 {/* Log Out */}
                                 <button
