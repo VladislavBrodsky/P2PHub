@@ -144,7 +144,7 @@ function SidebarNav({
     };
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-bg-app/90 dark:bg-slate-950/90 backdrop-blur-2xl pt-24 pb-6 px-3">
+        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-bg-app/80 dark:bg-slate-950/60 backdrop-blur-3xl pt-8 pb-6 px-3">
             {/* Logo mark at top */}
             <button
                 onClick={handleRedirectToCalculator}
@@ -176,13 +176,13 @@ function SidebarNav({
             </div>
 
             {/* Nav Menu Items */}
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5">
                 {navItems.map(({ id, icon: Icon, label }) => {
                     const isActive = activeTab === id;
                     return (
                         <div key={id} className="w-full">
                             {id === 'blog' && (
-                                <div className="my-2 border-t border-white/5 w-full" />
+                                <div className="my-3 h-px bg-linear-to-r from-transparent via-divider to-transparent w-full opacity-60" />
                             )}
                             <button
                                 onClick={() => {
@@ -193,14 +193,14 @@ function SidebarNav({
                                     }
                                 }}
                                 onMouseEnter={() => prefetch(id)}
-                                className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
+                                className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer w-full
                                     ${isActive
                                         ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
                                         : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
                                     }`}
                             >
-                                <Icon className="w-[18px] h-[18px] shrink-0" />
-                                <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap">{label}</span>
+                                <Icon className="w-[18px] h-[18px] shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
+                                <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap group-hover:translate-x-0.5 transition-transform duration-300">{label}</span>
                             </button>
                         </div>
                     );
@@ -263,8 +263,8 @@ function SidebarNav({
                             className="absolute bottom-0 left-[76px] xl:left-[232px] w-80 rounded-3xl border border-divider bg-bg-app/95 dark:bg-slate-900/95 backdrop-blur-2xl shadow-premium-xl shadow-blue-500/5 p-5 flex flex-col gap-4 text-text-primary z-120 focus:outline-none"
                             style={{ pointerEvents: 'auto' }}
                         >
-                            {/* User Profile Card (Imported from Mobile Menu) */}
-                            <PersonalizationCard variant="compact" className="!pt-0" />
+                            {/* User Profile Card (Imported from Mobile Menu - Hidden when sidebar is expanded xl) */}
+                            <PersonalizationCard variant="compact" className="!pt-0 xl:hidden" />
 
                             {/* TON Connect Wallet */}
                             <div className="w-full">

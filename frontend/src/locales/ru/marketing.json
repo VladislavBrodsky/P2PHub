@@ -46,6 +46,7 @@
     },
     "stats": {
       "global_target": "Глобальная цель",
+      "global_target_val": "1.2 млрд",
       "scaling": "Масштабирование в 2 раза быстрее TradFi",
       "revenue": "Поток выручки",
       "dividends": "Постоянные дивиденды"

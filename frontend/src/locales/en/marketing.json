@@ -46,6 +46,7 @@
     },
     "stats": {
       "global_target": "Global Target",
+      "global_target_val": "1.2B",
       "scaling": "Scaling 2x faster than TradFi",
       "revenue": "Revenue Stream",
       "dividends": "Continuous Dividends"
