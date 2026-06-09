@@ -111,6 +111,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const estimatedMonthlyRaw = useMemo(() => activePartners * 45, [activePartners]);
     const estimatedMonthly = useMemo(() => estimatedMonthlyRaw.toLocaleString(), [estimatedMonthlyRaw]);
 
+    // Percentage of active partners slider: min=5, max=960
+    const activePartnersPct = useMemo(() => {
+        return ((activePartners - 5) / (960 - 5)) * 100;
+    }, [activePartners]);
+
     // Trigger math section once plan is unlocked
     useEffect(() => {
         if (isStrategyUnlocked && !showMathSection) {
@@ -129,6 +134,11 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     const dailyLoss = p2pDailyPotential - currentDailyIncome;
     const displayLoss = dailyLoss > 0 ? dailyLoss : 0;
 
+    // Percentage of inaction hours worked slider: min=1, max=16
+    const inactionPct = useMemo(() => {
+        return ((hoursWorked - 1) / (16 - 1)) * 100;
+    }, [hoursWorked]);
+
     return (
         <section className="px-0 py-2 min-h-[1100px] lg:min-h-0">
             <m.div
@@ -136,7 +146,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 whileHover={{ scale: 1.01 }}
-                className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#1e293b] text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 border-2 border-slate-200 dark:border-white/20 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.2)] lg:max-w-2xl xl:max-w-3xl lg:mx-auto"
+                className="relative overflow-hidden rounded-2xl text-slate-900 dark:text-white p-4 md:p-6 lg:p-8 flex flex-col gap-6 lg:gap-8 shadow-premium dark:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.25)] lg:max-w-2xl xl:max-w-3xl lg:mx-auto vibing-premium-panel"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
@@ -159,7 +169,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                     <h3 className="text-[clamp(1.5rem,6vw,2.25rem)] font-black tracking-tight leading-[0.95] max-w-[340px] mx-auto uppercase text-balance">
                         {t('income.title')} <br />
-                        <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 bg-size-[200%_auto] animate-text-shimmer drop-shadow-sm">{t('income.title_highlight')}</span>
+                        <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 via-indigo-500 to-blue-600 dark:from-blue-400 dark:via-cyan-300 dark:to-indigo-400 bg-size-[200%_auto] animate-text-shimmer drop-shadow-[0_2px_15px_rgba(59,130,246,0.3)]">{t('income.title_highlight')}</span>
                     </h3>
                     <div className="relative">
                         <p className="text-[clamp(0.8rem,2vw,0.875rem)] text-slate-600 dark:text-white font-medium leading-relaxed max-w-[360px] mx-auto">
@@ -183,16 +193,24 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                     {!isStrategyUnlocked ? (
                         <>
                             {/* Mode Toggle */}
-                            <div className="flex p-1 bg-slate-100 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-white/10 gap-1 lg:max-w-md lg:mx-auto w-full">
+                            <div className="flex p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-xl border border-slate-200 dark:border-white/10 gap-1 lg:max-w-md lg:mx-auto w-full shadow-inner relative overflow-hidden">
                                 <button
                                     onClick={() => setMode('profit')}
-                                    className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'profit' ? 'bg-emerald-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
+                                    className={`flex-1 py-2 px-3 rounded-lg text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                                        mode === 'profit'
+                                            ? 'bg-linear-to-r from-emerald-500 to-teal-500 text-white font-black shadow-[0_4px_15px_rgba(16,185,129,0.25)] border border-emerald-400/20 scale-[1.01]'
+                                            : 'text-slate-500 dark:text-white/40 hover:bg-slate-500/5 font-bold'
+                                    }`}
                                 >
                                     {t('income.modes.profit')}
                                 </button>
                                 <button
                                     onClick={() => setMode('inaction')}
-                                    className={`flex-1 py-2 px-1 rounded-lg text-[clamp(0.6rem,2vw,0.7rem)] font-black uppercase tracking-widest transition-all ${mode === 'inaction' ? 'bg-rose-500 text-white shadow-lg' : 'text-slate-500 dark:text-white/40 hover:bg-white/5'}`}
+                                    className={`flex-1 py-2 px-3 rounded-lg text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                                        mode === 'inaction'
+                                            ? 'bg-linear-to-r from-rose-500 to-pink-500 text-white font-black shadow-[0_4px_15px_rgba(244,63,94,0.25)] border border-rose-400/20 scale-[1.01]'
+                                            : 'text-slate-500 dark:text-white/40 hover:bg-slate-500/5 font-bold'
+                                    }`}
                                 >
                                     {t('income.modes.inaction')}
                                 </button>
@@ -208,14 +226,16 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 gap-6"
                                     >
                                         <div className="lg:col-span-7 flex flex-col gap-6">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Calculator className="w-4 h-4 text-blue-500" />
-                                                <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.profit.projector')}</span>
+                                            <div className="flex items-center gap-2 mb-2 bg-blue-500/5 border border-blue-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
+                                                <Calculator className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
+                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('income.profit.projector')}</span>
                                             </div>
-                                            <div className="flex flex-col gap-3">
-                                                <div className="flex justify-between items-end">
-                                                    <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.profit.active_partners')}</span>
-                                                    <span className="text-xl font-bold text-blue-500">{activePartners}</span>
+                                            <div className="flex flex-col gap-4">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.profit.active_partners')}</span>
+                                                    <span className="bg-blue-500/10 border border-blue-500/20 text-blue-500 px-3.5 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(59,130,246,0.1)]">
+                                                        {activePartners}
+                                                    </span>
                                                 </div>
                                                 <div className="relative h-6 flex items-center">
                                                     <input
@@ -225,19 +245,20 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         value={activePartners}
                                                         onChange={(e) => setActivePartners(parseInt(e.target.value))}
                                                         className="range-input-premium"
+                                                        style={{ '--range-pct': `${activePartnersPct}%` } as React.CSSProperties}
                                                     />
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-8 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
-                                            <div className="flex justify-between items-center bg-white/10 dark:bg-black/30 p-4 rounded-xl border border-slate-200/50 dark:border-white/10">
-                                                <span className="text-[clamp(0.65rem,2vw,0.75rem)] font-black uppercase text-slate-500 dark:text-white/40 tracking-wider flex-1">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-[clamp(1.25rem,5vw,1.75rem)] font-black text-emerald-500 tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-vibing antialiased tab-nums shrink-0 ml-2">${estimatedMonthly}</span>
+                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
+                                            <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-950/45 dark:bg-black/60 border border-emerald-500/15 shadow-[inset_0_2px_25px_rgba(16,185,129,0.05),0_15px_35px_-5px_rgba(16,185,129,0.1)]">
+                                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-2">{t('income.profit.monthly_income')}</span>
+                                                <span className="text-3xl sm:text-4xl font-black text-emerald-500 tracking-tight drop-shadow-[0_0_15px_rgba(16,185,129,0.35)] font-mono animate-pulse-subtle">${estimatedMonthly}</span>
                                             </div>
 
                                             <button
                                                 onClick={() => handleUnlock()}
-                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-[clamp(0.75rem,2.5vw,0.85rem)] tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30 will-change-transform"
+                                                className="w-full group relative flex items-center justify-center gap-3 vibing-emerald-animated h-14 rounded-2xl font-black text-[clamp(0.75rem,2.5vw,0.85rem)] tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-2xl shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-[1.02] hover:brightness-110 will-change-transform cursor-pointer"
                                             >
                                                 <Lock className="w-5 h-5 text-white relative z-10 shrink-0" />
                                                 <span className="text-white uppercase relative z-10 whitespace-nowrap">{t('income.profit.unlock_btn')}</span>
@@ -254,19 +275,19 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                         className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 gap-6"
                                     >
                                         <div className="lg:col-span-7 flex flex-col gap-6">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Clock className="w-4 h-4 text-rose-500" />
-                                                <span className="text-label font-bold uppercase tracking-widest opacity-60">{t('income.inaction.projector')}</span>
+                                            <div className="flex items-center gap-2 mb-2 bg-rose-500/5 border border-rose-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
+                                                <Clock className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+                                                <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">{t('income.inaction.projector')}</span>
                                             </div>
 
-                                            <div className="space-y-4">
+                                            <div className="space-y-5">
                                                 <div className="space-y-2">
-                                                    <label className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.status')}</label>
+                                                    <label className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.inaction.status')}</label>
                                                     <div className="relative">
                                                         <select
                                                             value={selectedLevel.id}
                                                             onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
-                                                            className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50"
+                                                            className="w-full appearance-none bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50 cursor-pointer"
                                                         >
                                                             {JOB_LEVELS.map((level) => (
                                                                 <option key={level.id} value={level.id}>
@@ -275,15 +296,17 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                             ))}
                                                         </select>
                                                         <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ArrowRight className="w-3 h-3 rotate-90 opacity-50" />
+                                                            <ArrowRight className="w-3.5 h-3.5 rotate-90 opacity-50 text-slate-500 dark:text-white/40" />
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div className="space-y-2">
-                                                    <div className="flex justify-between items-end">
-                                                        <span className="text-caption font-bold text-slate-500 dark:text-slate-400">{t('income.inaction.hours')}</span>
-                                                        <span className="text-label font-bold text-rose-500">{hoursWorked} Hours</span>
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.inaction.hours')}</span>
+                                                        <span className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-3 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(244,63,94,0.1)]">
+                                                            {hoursWorked} Hours
+                                                        </span>
                                                     </div>
                                                     <input
                                                         type="range"
@@ -291,30 +314,31 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                         max="16"
                                                         value={hoursWorked}
                                                         onChange={(e) => setHoursWorked(parseInt(e.target.value))}
-                                                        className="range-input-premium"
+                                                        className="range-input-premium range-rose"
+                                                        style={{ '--range-pct': `${inactionPct}%` } as React.CSSProperties}
                                                     />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-8 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
-                                            <div className="space-y-1 text-center">
-                                                <div className="text-label font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 opacity-60">
+                                        <div className="lg:col-span-5 flex flex-col gap-6 bg-white/5 dark:bg-black/5 lg:bg-transparent -mx-4 lg:-mx-0 px-4 lg:px-0 rounded-xl pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-white/10 lg:border-l lg:border-slate-200 lg:dark:border-white/10 lg:pl-8 justify-center">
+                                            <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-950/45 dark:bg-black/60 border border-slate-800/10 dark:border-white/5 shadow-inner">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-1.5">
                                                     {t('income.inaction.value_per_min')}
                                                 </div>
-                                                <div className={`text-4xl font-bold transition-colors duration-300 ${currentValPerMin >= 1
-                                                    ? 'text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]'
-                                                    : 'text-rose-500 drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]'
+                                                <div className={`text-2xl sm:text-3xl font-black transition-colors duration-300 font-mono ${currentValPerMin >= 1
+                                                    ? 'text-emerald-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.35)]'
+                                                    : 'text-rose-500 drop-shadow-[0_0_15px_rgba(244,63,94,0.35)]'
                                                     }`}>
                                                     ${currentValPerMin.toFixed(4)}
                                                 </div>
                                             </div>
 
-                                            <div className="p-4 rounded-2xl bg-slate-900 border border-white/5 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] text-center">
-                                                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-1.5">
+                                            <div className="flex flex-col items-center text-center p-5 rounded-2xl bg-slate-950/45 dark:bg-black/60 border border-rose-500/15 shadow-[inset_0_2px_25px_rgba(244,63,94,0.05),0_15px_35px_-5px_rgba(244,63,94,0.1)]">
+                                                <div className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-2">
                                                     {t('income.inaction.daily_loss')}
                                                 </div>
-                                                <div className="text-3xl font-black text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">
+                                                <div className="text-3xl sm:text-4xl font-black text-rose-500 drop-shadow-[0_0_15px_rgba(244,63,94,0.35)] font-mono animate-pulse-subtle animate-vibing">
                                                     ${displayLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </div>
                                             </div>
@@ -522,38 +546,38 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 </AnimatePresence>
 
                 <div className="grid grid-cols-2 gap-4 relative z-0 w-full">
-                    <div className="glass-panel-premium p-5 rounded-2xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
+                    <div className="glass-panel-premium p-5 rounded-[22px] flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500 relative overflow-hidden holographic-card">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center">
                                 <Users className="w-5 h-5 text-blue-500 shrink-0" />
                             </div>
-                            <button onClick={() => setActiveModal('market')} className="text-slate-400 dark:text-white/20 hover:text-blue-400 mt-1">
+                            <button onClick={() => setActiveModal('market')} className="text-slate-400 dark:text-white/20 hover:text-blue-400 mt-1 cursor-pointer">
                                 <AlertCircle className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="space-y-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">1.2B</div>
+                            <div className="text-2xl sm:text-3xl font-black tabular-nums tracking-tight drop-shadow-sm text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300">{t('marketing:income.stats.global_target', '1.2B')}</div>
                             <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-snug">{t('income.stats.global_target')}</div>
                         </div>
                     </div>
 
-                    <div className="glass-panel-premium p-5 rounded-3xl flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500">
+                    <div className="glass-panel-premium p-5 rounded-[22px] flex flex-col gap-4 group transition-all hover:scale-[1.02] duration-500 relative overflow-hidden holographic-card">
                         <div className="flex justify-between items-start">
                             <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
                                 <DollarSign className="w-5 h-5 text-emerald-500 shrink-0" />
                             </div>
-                            <button onClick={() => setActiveModal('revenue')} className="text-slate-400 dark:text-white/20 hover:text-emerald-400 mt-1">
+                            <button onClick={() => setActiveModal('revenue')} className="text-slate-400 dark:text-white/20 hover:text-emerald-400 mt-1 cursor-pointer">
                                 <AlertCircle className="w-4 h-4" />
                             </button>
                         </div>
                         <div className="space-y-1 min-w-0">
-                            <div className="text-2xl sm:text-3xl font-bold tabular-nums text-slate-900 dark:text-white tracking-tight drop-shadow-sm">24/7</div>
+                            <div className="text-2xl sm:text-3xl font-black tabular-nums tracking-tight drop-shadow-sm text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300">24/7</div>
                             <div className="text-label font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-snug">{t('income.stats.revenue')}</div>
                         </div>
                     </div>
                 </div>
 
-                <div className="relative z-10 mx-1 w-full p-5 rounded-2xl bg-white dark:bg-slate-900 border border-rose-500/20 dark:border-white/10 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
+                <div className="relative z-10 w-full p-5 rounded-[22px] bg-linear-to-br from-rose-500/5 via-transparent to-indigo-500/5 dark:from-rose-950/10 dark:via-slate-900/40 dark:to-indigo-950/10 border border-rose-500/15 dark:border-white/5 backdrop-blur-2xl mt-4 md:mt-8 overflow-hidden group shadow-sm dark:shadow-[0_20px_40px_-20px_rgba(244,63,94,0.15)]">
                     {/* Liquid Background Layer */}
                     <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
                     <div className="absolute -inset-full bg-linear-to-tr from-rose-500/5 via-fuchsia-500/5 to-indigo-500/5 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity animate-liquid" />

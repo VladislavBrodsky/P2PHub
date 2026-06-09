@@ -130,18 +130,24 @@
     width: 100%;
     background: transparent;
     cursor: pointer;
+    --track-fill-color: #3b82f6;
+    --thumb-glow-color: rgba(59, 130, 246, 0.4);
+  }
+
+  .range-input-premium.range-rose {
+    --track-fill-color: #f43f5e;
+    --thumb-glow-color: rgba(244, 63, 94, 0.4);
   }
 
   .range-input-premium::-webkit-slider-runnable-track {
     height: 6px;
-    background: #e2e8f0;
-    /* slate-200 replacement or slightly darker */
+    background: linear-gradient(to right, var(--track-fill-color) var(--range-pct, 0%), #e2e8f0 var(--range-pct, 0%));
     border-radius: 99px;
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
 
   .dark .range-input-premium::-webkit-slider-runnable-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: linear-gradient(to right, var(--track-fill-color) var(--range-pct, 0%), rgba(255, 255, 255, 0.1) var(--range-pct, 0%));
   }
 
   .range-input-premium::-webkit-slider-thumb {
@@ -149,18 +155,38 @@
     appearance: none;
     margin-top: -6px;
     /* Centers thumb on the track */
-    background-color: #3b82f6;
-    /* Use direct hex to ensure it resolves */
+    background-color: var(--track-fill-color);
     height: 18px;
     width: 18px;
     border-radius: 50%;
     border: 2px solid white;
-    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 10px var(--thumb-glow-color);
     transition: all 200ms ease;
   }
 
   .range-input-premium:active::-webkit-slider-thumb {
-    transform: scale(1.1);
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.5);
+    transform: scale(1.2);
+    box-shadow: 0 4px 15px var(--thumb-glow-color);
+  }
+
+  /* Support for Firefox */
+  .range-input-premium::-moz-range-track {
+    height: 6px;
+    background: linear-gradient(to right, var(--track-fill-color) var(--range-pct, 0%), #e2e8f0 var(--range-pct, 0%));
+    border-radius: 99px;
+  }
+
+  .dark .range-input-premium::-moz-range-track {
+    background: linear-gradient(to right, var(--track-fill-color) var(--range-pct, 0%), rgba(255, 255, 255, 0.1) var(--range-pct, 0%));
+  }
+
+  .range-input-premium::-moz-range-thumb {
+    background-color: var(--track-fill-color);
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 4px 10px var(--thumb-glow-color);
+    transition: all 200ms ease;
   }
 }
