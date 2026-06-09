@@ -421,8 +421,8 @@ export const ReferralGraph = React.memo(({ targetAmount = 43200, isFullscreen = 
         <div className={clsx(
             "relative w-full flex items-center justify-center overflow-hidden transition-all duration-700 group",
             isFullscreen
-                ? "h-full bg-slate-50 dark:bg-slate-950"
-                : "h-[460px] md:h-[520px] rounded-3xl md:rounded-2xl border bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-white/10 shadow-2xl"
+                ? "h-full bg-transparent"
+                : "h-[460px] md:h-[520px] rounded-3xl md:rounded-2xl border bg-white/30 dark:bg-slate-900/10 border-slate-200/50 dark:border-white/5 backdrop-blur-2xl shadow-2xl"
         )}>
             <NeuralBackground />
 

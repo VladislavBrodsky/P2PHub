@@ -466,7 +466,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                             <m.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="lg:col-span-7 relative w-full h-[480px] rounded-xl overflow-hidden border border-emerald-500/20 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] bg-slate-50 dark:bg-slate-950"
+                                className="lg:col-span-7 relative w-full h-[480px] rounded-xl overflow-hidden border border-emerald-500/25 dark:border-white/5 shadow-[0_30px_60px_-15px_rgba(16,185,129,0.15)] bg-white/30 dark:bg-slate-900/10 backdrop-blur-2xl"
                             >
                                 <ReferralGraph targetAmount={estimatedMonthlyRaw} isFullscreen={true} />
 
