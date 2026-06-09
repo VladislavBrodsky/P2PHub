@@ -204,4 +204,37 @@
     transform: scale(1.2);
     box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2), 0 8px 20px var(--thumb-glow-color);
   }
+
+  /* Sci-fi OLED Grid Backdrops */
+  .oled-grid-bg {
+    background-color: rgba(3, 7, 18, 0.95);
+    background-image: 
+      linear-gradient(rgba(16, 185, 129, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: center;
+  }
+  
+  .dark .oled-grid-bg {
+    background-color: rgba(0, 0, 0, 0.85);
+    background-image: 
+      linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+  }
+
+  .oled-grid-bg-rose {
+    background-color: rgba(3, 7, 18, 0.95);
+    background-image: 
+      linear-gradient(rgba(244, 63, 94, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 63, 94, 0.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: center;
+  }
+  
+  .dark .oled-grid-bg-rose {
+    background-color: rgba(0, 0, 0, 0.85);
+    background-image: 
+      linear-gradient(rgba(244, 63, 94, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(244, 63, 94, 0.03) 1px, transparent 1px);
+  }
 }

@@ -186,231 +186,243 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 {/* Main Content Layout Grid */}
                 <div className="relative z-10 w-full">
                     {!isStrategyUnlocked ? (
-                        <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 gap-6">
-                            {/* Left Column: Mode Toggle, Inputs, and Direct Readouts */}
-                            <div className="lg:col-span-7 flex flex-col gap-6">
-                                {/* Mode Toggle */}
-                                <div className="flex p-1 bg-slate-100/40 dark:bg-slate-950/40 backdrop-blur-md rounded-2xl border border-slate-200/50 dark:border-white/5 gap-1.5 w-full shadow-inner relative overflow-hidden">
-                                    <button
-                                        onClick={() => setMode('profit')}
-                                        className={`relative flex-1 py-2 px-3 rounded-xl text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
-                                            mode === 'profit'
-                                                ? 'text-white font-black z-10'
-                                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold z-10'
-                                        }`}
-                                    >
-                                        {mode === 'profit' && (
-                                            <m.div
-                                                layoutId="activeCalculatorTab"
-                                                className="absolute inset-0 bg-linear-to-r from-emerald-500 to-teal-500 rounded-xl shadow-[0_4px_15px_rgba(16,185,129,0.25)] border border-emerald-400/20"
-                                                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                            />
-                                        )}
-                                        <span className="relative z-20">{t('income.modes.profit')}</span>
-                                    </button>
-                                    <button
-                                        onClick={() => setMode('inaction')}
-                                        className={`relative flex-1 py-2 px-3 rounded-xl text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
-                                            mode === 'inaction'
-                                                ? 'text-white font-black z-10'
-                                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold z-10'
-                                        }`}
-                                    >
-                                        {mode === 'inaction' && (
-                                            <m.div
-                                                layoutId="activeCalculatorTab"
-                                                className="absolute inset-0 bg-linear-to-r from-rose-500 to-pink-500 rounded-xl shadow-[0_4px_15px_rgba(244,63,94,0.25)] border border-rose-400/20"
-                                                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                                            />
-                                        )}
-                                        <span className="relative z-20">{t('income.modes.inaction')}</span>
-                                    </button>
-                                </div>
-
-                                <AnimatePresence mode="wait">
-                                    {mode === 'profit' ? (
-                                        <m.div
-                                            key="profit"
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            className="flex flex-col gap-6"
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                            {/* Left Column: Interactive Calculator Panel */}
+                            <div className="lg:col-span-7 bg-white/30 dark:bg-slate-900/20 border border-slate-200/50 dark:border-white/5 p-6 rounded-3xl backdrop-blur-2xl flex flex-col justify-between gap-6 shadow-sm h-full">
+                                <div className="space-y-6">
+                                    {/* Mode Toggle */}
+                                    <div className="flex p-1 bg-slate-100/40 dark:bg-slate-950/40 backdrop-blur-md rounded-2xl border border-slate-200/50 dark:border-white/5 gap-1.5 w-full max-w-md mx-auto shadow-inner relative overflow-hidden">
+                                        <button
+                                            onClick={() => setMode('profit')}
+                                            className={`relative flex-1 py-2 px-3 rounded-xl text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                                                mode === 'profit'
+                                                    ? 'text-white font-black z-10'
+                                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold z-10'
+                                            }`}
                                         >
-                                            {/* Profit Projector Header */}
-                                            <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
-                                                <Calculator className="w-3.5 h-3.5 text-blue-500 animate-pulse" />
-                                                <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('income.profit.projector')}</span>
-                                            </div>
+                                            {mode === 'profit' && (
+                                                <m.div
+                                                    layoutId="activeCalculatorTab"
+                                                    className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl shadow-[0_4px_15px_rgba(16,185,129,0.25)] border border-emerald-400/20"
+                                                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                                />
+                                            )}
+                                            <span className="relative z-20">{t('income.modes.profit')}</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setMode('inaction')}
+                                            className={`relative flex-1 py-2 px-3 rounded-xl text-[clamp(0.65rem,2vw,0.725rem)] uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                                                mode === 'inaction'
+                                                    ? 'text-white font-black z-10'
+                                                    : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-bold z-10'
+                                            }`}
+                                        >
+                                            {mode === 'inaction' && (
+                                                <m.div
+                                                    layoutId="activeCalculatorTab"
+                                                    className="absolute inset-0 bg-gradient-to-r from-rose-500 to-pink-500 rounded-xl shadow-[0_4px_15px_rgba(244,63,94,0.25)] border border-rose-400/20"
+                                                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                                                />
+                                            )}
+                                            <span className="relative z-20">{t('income.modes.inaction')}</span>
+                                        </button>
+                                    </div>
 
-                                            {/* Slider Inputs */}
-                                            <div className="flex flex-col gap-4">
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.profit.active_partners')}</span>
-                                                    <span className="bg-blue-500/10 border border-blue-500/20 text-blue-500 px-3.5 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(59,130,246,0.1)]">
-                                                        {activePartners}
+                                    <AnimatePresence mode="wait">
+                                        {mode === 'profit' ? (
+                                            <m.div
+                                                key="profit"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="flex flex-col gap-6"
+                                            >
+                                                {/* Profit Projector Header */}
+                                                <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
+                                                    <Calculator className="w-3.5 h-3.5 text-blue-500" />
+                                                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-widest">{t('income.profit.projector')}</span>
+                                                </div>
+
+                                                {/* Slider Inputs Wrapper */}
+                                                <div className="bg-slate-100/30 dark:bg-white/3 border border-slate-200/40 dark:border-white/5 p-5 rounded-2xl flex flex-col gap-4">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.profit.active_partners')}</span>
+                                                        <span className="bg-blue-500/10 border border-blue-500/20 text-blue-500 px-3.5 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(59,130,246,0.1)]">
+                                                            {activePartners}
+                                                        </span>
+                                                    </div>
+                                                    <div className="relative h-6 flex items-center">
+                                                        <input
+                                                            type="range"
+                                                            min="5"
+                                                            max="960"
+                                                            value={activePartners}
+                                                            onChange={(e) => setActivePartners(parseInt(e.target.value))}
+                                                            className="range-input-premium"
+                                                            style={{ '--range-pct': `${activePartnersPct}%` } as React.CSSProperties}
+                                                        />
+                                                    </div>
+                                                    {/* tactile limits indicator tags */}
+                                                    <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 dark:text-slate-500 px-1 -mt-2">
+                                                        <span>5 Partners</span>
+                                                        <span>960 Partners</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Estimated Monthly Income Readout */}
+                                                <div className="relative overflow-hidden rounded-2xl oled-grid-bg border border-emerald-500/35 p-6 flex flex-col items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.06),inset_0_0_15px_rgba(16,185,129,0.08)] group">
+                                                    <div className="absolute inset-0 bg-radial from-emerald-500/5 to-transparent pointer-events-none" />
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-400/95 dark:text-emerald-300/90 mb-2.5 relative z-10 flex items-center gap-1.5">
+                                                        <Zap className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                                                        {t('income.profit.monthly_income')}
                                                     </span>
+                                                    <span className="text-4xl sm:text-5xl font-black text-emerald-400 dark:text-emerald-300 tracking-tight drop-shadow-[0_0_12px_rgba(52,211,153,0.85)] font-mono relative z-10 select-all">${estimatedMonthly}</span>
                                                 </div>
-                                                <div className="relative h-6 flex items-center">
-                                                    <input
-                                                        type="range"
-                                                        min="5"
-                                                        max="960"
-                                                        value={activePartners}
-                                                        onChange={(e) => setActivePartners(parseInt(e.target.value))}
-                                                        className="range-input-premium"
-                                                        style={{ '--range-pct': `${activePartnersPct}%` } as React.CSSProperties}
-                                                    />
+                                            </m.div>
+                                        ) : (
+                                            <m.div
+                                                key="inaction"
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="flex flex-col gap-6"
+                                            >
+                                                {/* Inaction Projector Header */}
+                                                <div className="flex items-center gap-2 bg-rose-500/5 border border-rose-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
+                                                    <Clock className="w-3.5 h-3.5 text-rose-500" />
+                                                    <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">{t('income.inaction.projector')}</span>
                                                 </div>
-                                            </div>
 
-                                            {/* Estimated Monthly Income Readout */}
-                                            <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-radial from-emerald-500/10 to-transparent dark:from-emerald-500/5 dark:to-transparent bg-slate-950/80 dark:bg-black/60 border border-emerald-500/30 shadow-[0_8px_32px_rgba(16,185,129,0.08),inset_0_2px_15px_rgba(16,185,129,0.05)]">
-                                                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-emerald-500/80 dark:text-emerald-400/80 mb-2">{t('income.profit.monthly_income')}</span>
-                                                <span className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-emerald-400 via-teal-300 to-emerald-400 dark:from-emerald-400 dark:via-cyan-300 dark:to-emerald-400 tracking-tight drop-shadow-[0_0_20px_rgba(52,211,153,0.55)] font-mono animate-pulse-subtle">${estimatedMonthly}</span>
-                                            </div>
-                                        </m.div>
-                                    ) : (
-                                        <m.div
-                                            key="inaction"
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: -10 }}
-                                            className="flex flex-col gap-6"
-                                        >
-                                            {/* Inaction Projector Header */}
-                                            <div className="flex items-center gap-2 bg-rose-500/5 border border-rose-500/10 rounded-full px-3 py-1.5 w-fit shadow-xs">
-                                                <Clock className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
-                                                <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">{t('income.inaction.projector')}</span>
-                                            </div>
+                                                {/* Dropdown and Slider Inputs */}
+                                                <div className="space-y-4">
+                                                    <div className="bg-slate-100/30 dark:bg-white/3 border border-slate-200/40 dark:border-white/5 p-4 rounded-2xl flex flex-col gap-2">
+                                                        <label className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.inaction.status')}</label>
+                                                        <div className="relative">
+                                                            <select
+                                                                value={selectedLevel.id}
+                                                                onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
+                                                                className="w-full appearance-none bg-slate-100/60 dark:bg-slate-900/40 border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50 cursor-pointer shadow-xs"
+                                                            >
+                                                                {JOB_LEVELS.map((level) => (
+                                                                    <option key={level.id} value={level.id} className="bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-white">
+                                                                        {level.label} (${level.rate}/hr)
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                                <ArrowRight className="w-3.5 h-3.5 rotate-90 opacity-50 text-slate-500 dark:text-white/40" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                                            {/* Dropdown and Slider Inputs */}
-                                            <div className="space-y-5">
-                                                <div className="space-y-2 flex flex-col">
-                                                    <label className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide mb-1">{t('income.inaction.status')}</label>
-                                                    <div className="relative">
-                                                        <select
-                                                            value={selectedLevel.id}
-                                                            onChange={(e) => setSelectedLevel(JOB_LEVELS.find(l => l.id === e.target.value) || JOB_LEVELS[2])}
-                                                            className="w-full appearance-none bg-slate-100/60 dark:bg-slate-900/40 border border-slate-200/50 dark:border-white/10 text-slate-900 dark:text-white text-caption font-bold rounded-xl px-4 py-3 focus:outline-hidden focus:ring-2 focus:ring-rose-500/50 cursor-pointer shadow-xs"
-                                                        >
-                                                            {JOB_LEVELS.map((level) => (
-                                                                <option key={level.id} value={level.id} className="bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white">
-                                                                    {level.label} (${level.rate}/hr)
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                                            <ArrowRight className="w-3.5 h-3.5 rotate-90 opacity-50 text-slate-500 dark:text-white/40" />
+                                                    <div className="bg-slate-100/30 dark:bg-white/3 border border-slate-200/40 dark:border-white/5 p-4 rounded-2xl flex flex-col gap-2">
+                                                        <div className="flex justify-between items-center">
+                                                            <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.inaction.hours')}</span>
+                                                            <span className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-3 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(244,63,94,0.1)]">
+                                                                {hoursWorked} Hours
+                                                            </span>
+                                                        </div>
+                                                        <input
+                                                            type="range"
+                                                            min="1"
+                                                            max="16"
+                                                            value={hoursWorked}
+                                                            onChange={(e) => setHoursWorked(parseInt(e.target.value))}
+                                                            className="range-input-premium range-rose"
+                                                            style={{ '--range-pct': `${inactionPct}%` } as React.CSSProperties}
+                                                        />
+                                                        {/* tactile limits indicator tags */}
+                                                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 dark:text-slate-500 px-1">
+                                                            <span>1 Hour</span>
+                                                            <span>16 Hours</span>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="space-y-2">
-                                                    <div className="flex justify-between items-center">
-                                                        <span className="text-caption font-black text-slate-500 dark:text-slate-400 tracking-wide">{t('income.inaction.hours')}</span>
-                                                        <span className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-3 py-0.5 rounded-full text-xs font-black tracking-wide font-mono shadow-[inset_0_1px_8px_rgba(244,63,94,0.1)]">
-                                                            {hoursWorked} Hours
-                                                        </span>
+                                                {/* Inaction Readouts (Value/Min + Daily Loss) */}
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="relative overflow-hidden rounded-2xl oled-grid-bg border border-slate-800/40 dark:border-white/5 p-4 flex flex-col items-center justify-center shadow-inner">
+                                                        <div className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400 dark:text-slate-500 mb-1.5 leading-none relative z-10">
+                                                            {t('income.inaction.value_per_min')}
+                                                        </div>
+                                                        <div className={`text-lg sm:text-xl font-black transition-colors duration-300 font-mono relative z-10 ${currentValPerMin >= 1
+                                                            ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.7)]'
+                                                            : 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.7)]'
+                                                            }`}>
+                                                            ${currentValPerMin.toFixed(4)}
+                                                        </div>
                                                     </div>
-                                                    <input
-                                                        type="range"
-                                                        min="1"
-                                                        max="16"
-                                                        value={hoursWorked}
-                                                        onChange={(e) => setHoursWorked(parseInt(e.target.value))}
-                                                        className="range-input-premium range-rose"
-                                                        style={{ '--range-pct': `${inactionPct}%` } as React.CSSProperties}
-                                                    />
-                                                </div>
-                                            </div>
 
-                                            {/* Inaction Readouts (Value/Min + Daily Loss) */}
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-slate-950/80 dark:bg-black/60 border border-slate-800/40 dark:border-white/5 shadow-inner">
-                                                    <div className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 mb-1.5 leading-none">
-                                                        {t('income.inaction.value_per_min')}
-                                                    </div>
-                                                    <div className={`text-lg sm:text-xl font-black transition-colors duration-300 font-mono ${currentValPerMin >= 1
-                                                        ? 'text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]'
-                                                        : 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]'
-                                                        }`}>
-                                                        ${currentValPerMin.toFixed(4)}
+                                                    <div className="relative overflow-hidden rounded-2xl oled-grid-bg-rose border border-rose-500/35 p-4 flex flex-col items-center justify-center shadow-[0_0_15px_rgba(244,63,94,0.06),inset_0_0_10px_rgba(244,63,94,0.08)]">
+                                                        <div className="absolute inset-0 bg-radial from-rose-500/5 to-transparent pointer-events-none" />
+                                                        <div className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-400/95 mb-1.5 leading-none relative z-10">
+                                                            {t('income.inaction.daily_loss')}
+                                                        </div>
+                                                        <div className="text-lg sm:text-xl font-black text-rose-400 dark:text-rose-300 drop-shadow-[0_0_10px_rgba(244,63,94,0.85)] font-mono relative z-10">
+                                                            ${displayLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </div>
                                                     </div>
                                                 </div>
-
-                                                <div className="flex flex-col items-center text-center p-4 rounded-2xl bg-radial from-rose-500/10 to-transparent dark:from-rose-500/5 dark:to-transparent bg-slate-950/80 dark:bg-black/60 border border-rose-500/30 shadow-[0_8px_20px_rgba(244,63,94,0.08),inset_0_2px_15px_rgba(244,63,94,0.05)]">
-                                                    <div className="text-[10px] font-black uppercase tracking-[0.25em] text-rose-400/80 mb-1.5 leading-none">
-                                                        {t('income.inaction.daily_loss')}
-                                                    </div>
-                                                    <div className="text-lg sm:text-xl font-black text-rose-400 drop-shadow-[0_0_12px_rgba(244,63,94,0.55)] font-mono animate-pulse-subtle">
-                                                        ${displayLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </m.div>
-                                    )}
-                                </AnimatePresence>
+                                            </m.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
 
                             {/* Right Column: Stats, Warnings, and Unified CTA */}
-                            <div className="lg:col-span-5 flex flex-col gap-6 lg:border-l lg:border-slate-200/50 lg:dark:border-white/5 lg:pl-8 justify-between">
+                            <div className="lg:col-span-5 bg-white/30 dark:bg-slate-900/20 border border-slate-200/50 dark:border-white/5 p-6 rounded-3xl backdrop-blur-2xl flex flex-col justify-between gap-6 shadow-sm h-full">
                                 {/* Stats Block */}
-                                <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
-                                    <div className="bg-white/40 dark:bg-slate-900/30 border border-slate-200/50 dark:border-white/5 backdrop-blur-xl p-4 rounded-[22px] flex flex-col gap-3 group transition-all duration-300 hover:-translate-y-1 hover:border-blue-500/20 dark:hover:border-blue-500/30 hover:shadow-[0_12px_24px_rgba(59,130,246,0.12)] relative overflow-hidden">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="bg-white/10 dark:bg-slate-950/40 border border-slate-200/50 dark:border-white/5 p-4 rounded-2xl flex flex-col gap-3 group transition-all duration-300 hover:border-blue-500/20 dark:hover:border-blue-500/30 hover:shadow-[0_8px_16px_rgba(59,130,246,0.08)] relative overflow-hidden">
                                         <div className="flex justify-between items-start">
-                                            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md shadow-blue-500/10">
-                                                <Users className="w-4 h-4 text-white shrink-0" />
+                                            <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shadow-md">
+                                                <Users className="w-4 h-4 text-blue-500 shrink-0" />
                                             </div>
                                             <button onClick={() => setActiveModal('market')} className="text-slate-400 dark:text-white/20 hover:text-blue-400 cursor-pointer">
-                                                <AlertCircle className="w-4 h-4" />
+                                                <AlertCircle className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
                                         <div className="space-y-0.5 min-w-0">
-                                            <div className="text-xl sm:text-2xl font-black tabular-nums tracking-tight text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300 drop-shadow-[0_0_10px_rgba(59,130,246,0.15)]">{t('marketing:income.stats.global_target_val', '1.2B')}</div>
-                                            <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.global_target')}</div>
+                                            <div className="text-lg sm:text-xl font-black tracking-tight text-blue-600 dark:text-blue-400 drop-shadow-[0_0_8px_rgba(59,130,246,0.15)] font-mono">{t('marketing:income.stats.global_target_val', '1.2B')}</div>
+                                            <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.global_target')}</div>
                                         </div>
                                     </div>
 
-                                    <div className="bg-white/40 dark:bg-slate-900/30 border border-slate-200/50 dark:border-white/5 backdrop-blur-xl p-4 rounded-[22px] flex flex-col gap-3 group transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/20 dark:hover:border-emerald-500/30 hover:shadow-[0_12px_24px_rgba(16,185,129,0.12)] relative overflow-hidden">
+                                    <div className="bg-white/10 dark:bg-slate-950/40 border border-slate-200/50 dark:border-white/5 p-4 rounded-2xl flex flex-col gap-3 group transition-all duration-300 hover:border-emerald-500/20 dark:hover:border-emerald-500/30 hover:shadow-[0_8px_16px_rgba(16,185,129,0.08)] relative overflow-hidden">
                                         <div className="flex justify-between items-start">
-                                            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-md shadow-emerald-500/10">
-                                                <DollarSign className="w-4 h-4 text-white shrink-0" />
+                                            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shadow-md">
+                                                <DollarSign className="w-4 h-4 text-emerald-500 shrink-0" />
                                             </div>
                                             <button onClick={() => setActiveModal('revenue')} className="text-slate-400 dark:text-white/20 hover:text-emerald-400 cursor-pointer">
-                                                <AlertCircle className="w-4 h-4" />
+                                                <AlertCircle className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
                                         <div className="space-y-0.5 min-w-0">
-                                            <div className="text-xl sm:text-2xl font-black tabular-nums tracking-tight text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-400 dark:from-emerald-400 dark:to-teal-300 drop-shadow-[0_0_10px_rgba(16,185,129,0.15)]">24/7</div>
-                                            <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.revenue')}</div>
+                                            <div className="text-lg sm:text-xl font-black tracking-tight text-emerald-500 dark:text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.15)] font-mono">24/7</div>
+                                            <div className="text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest leading-none">{t('income.stats.revenue')}</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Warning / Cost of Waiting Box */}
-                                <div className="relative z-10 w-full p-5 rounded-[22px] bg-linear-to-br from-rose-500/8 via-transparent to-indigo-500/8 dark:from-rose-950/15 dark:via-slate-900/30 dark:to-indigo-950/15 border border-rose-500/25 dark:border-white/10 backdrop-blur-2xl overflow-hidden group shadow-md">
-                                    <div className="absolute inset-0 bg-linear-to-br from-rose-500/10 via-transparent to-indigo-500/10 opacity-30 pointer-events-none animate-liquid-fast" />
+                                <div className="relative z-10 w-full p-5 rounded-2xl bg-linear-to-br from-rose-500/6 via-transparent to-indigo-500/6 dark:from-rose-950/10 dark:via-slate-900/15 dark:to-indigo-950/10 border border-rose-500/20 dark:border-white/5 overflow-hidden group shadow-md flex gap-4">
+                                    <div className="w-1 rounded-full bg-gradient-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_10px_rgba(244,63,94,0.4)] self-stretch shrink-0 animate-pulse" />
                                     
-                                    <div className="flex gap-3 relative z-10">
-                                        <div className="shrink-0 pt-0.5">
-                                            <div className="w-1 h-10 rounded-full bg-linear-to-b from-rose-500 via-rose-600 to-indigo-600 shadow-[0_0_10px_rgba(244,63,94,0.4)] animate-vibing" />
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <h4 className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-900 dark:text-white flex items-center gap-1.5">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                                                {t('income.waiting.title')}
-                                            </h4>
-                                            <div className="text-[11px] leading-normal text-slate-600 dark:text-slate-200 font-medium">
-                                                <Trans t={t} i18nKey="income.waiting.desc">
-                                                    While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
-                                                    <span className="block my-1.5 bg-linear-to-r from-rose-400 via-fuchsia-400 to-rose-400 bg-clip-text text-transparent font-black tracking-wide bg-size-[200%_auto] animate-text-shimmer drop-shadow-[0_0_8px_rgba(244,63,94,0.3)]">
-                                                        Every minute you wait is a tax on your potential
-                                                    </span>
-                                                    <span className="block opacity-80 dark:text-slate-300">
-                                                        Unlock the strategy to stop calculating losses and start capturing profits.
-                                                    </span>
-                                                </Trans>
-                                            </div>
+                                    <div className="space-y-1.5 flex-1 min-w-0">
+                                        <h4 className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-900 dark:text-white flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />
+                                            {t('income.waiting.title')}
+                                        </h4>
+                                        <div className="text-[11px] leading-normal text-slate-600 dark:text-slate-300 font-medium">
+                                            <Trans t={t} i18nKey="income.waiting.desc">
+                                                While you trade hours for a fixed wage, the Digital Economy generates value 24/7.
+                                                <span className="block my-1.5 text-rose-500 dark:text-rose-400 font-black tracking-wide drop-shadow-[0_0_6px_rgba(244,63,94,0.2)]">
+                                                    Every minute you wait is a tax on your potential
+                                                </span>
+                                                <span className="block opacity-85 text-[10px]">
+                                                    Unlock the strategy to stop calculating losses and start capturing profits.
+                                                </span>
+                                            </Trans>
                                         </div>
                                     </div>
                                 </div>
@@ -420,7 +432,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                     {mode === 'profit' ? (
                                         <button
                                             onClick={() => handleUnlock()}
-                                            className="w-full group relative flex items-center justify-center gap-3 bg-linear-to-r from-emerald-500 via-teal-400 to-emerald-500 bg-size-[200%_auto] text-white h-12 rounded-2xl font-black text-xs tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.01] hover:bg-pos-right will-change-transform cursor-pointer border border-emerald-400/20"
+                                            className="w-full group relative flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 text-white h-12 rounded-2xl font-black text-xs tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.01] will-change-transform cursor-pointer border border-emerald-400/20"
                                         >
                                             <Lock className="w-4 h-4 text-white relative z-10 shrink-0" />
                                             <span className="text-white uppercase relative z-10 whitespace-nowrap">{t('income.profit.unlock_btn')}</span>
@@ -433,7 +445,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                                                 setTimeout(() => window.dispatchEvent(new Event('trigger-auto-purchase')), 100);
                                                 onNavigateToPartner?.();
                                             }}
-                                            className="group relative w-full flex items-center justify-center gap-2 bg-linear-to-r from-orange-500 via-amber-500 to-orange-500 bg-size-[200%_auto] text-white h-12 rounded-2xl font-black text-xs tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-orange-500/20 hover:scale-[1.01] hover:bg-pos-right cursor-pointer border border-orange-400/20"
+                                            className="group relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 text-white h-12 rounded-2xl font-black text-xs tracking-[0.2em] active:scale-[0.98] transition-all overflow-hidden shadow-lg shadow-orange-500/20 hover:scale-[1.01] cursor-pointer border border-orange-400/20"
                                         >
                                             <span className="relative z-10 flex items-center gap-2 uppercase tracking-[0.2em] text-white">
                                                 {t('income.math.cta_urgency')}
