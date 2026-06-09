@@ -484,7 +484,7 @@ export const Login = () => {
                                             <div className="text-center space-y-1.5 max-w-xs">
                                                 <p className="text-xs font-black text-text-primary">Scan QR Code</p>
                                                 <p className="text-[11px] text-text-secondary leading-relaxed font-medium">
-                                                    Scan to open Pintopay bot in Telegram on your phone. Go to Profile → Connect Desktop to sync.
+                                                    Scan to open Pintopay App (not a bot) in Telegram on your phone. Go to Menu → Connect Desktop to sync.
                                                 </p>
                                             </div>
 
@@ -507,7 +507,7 @@ export const Login = () => {
                                                     <div className="relative rounded-xl overflow-hidden bg-white dark:bg-[#030712]">
                                                         <img
                                                             src={qrCodeUrl}
-                                                            alt="Scan to open Pintopay bot"
+                                                            alt="Scan to open Pintopay App"
                                                             className="w-56 h-56 object-contain"
                                                             loading="lazy"
                                                         />
@@ -562,7 +562,7 @@ export const Login = () => {
                                             <div className="text-center lg:text-left space-y-1">
                                                 <h3 className="text-sm font-black text-text-primary">Paste Access Link</h3>
                                                 <p className="text-xs text-text-secondary leading-relaxed font-medium">
-                                                    Copy the <strong className="text-text-primary">Connect Desktop</strong> link from the Pintopay bot on your phone and paste it below.
+                                                    Copy the <strong className="text-text-primary">Connect Desktop</strong> link from the Pintopay App on your phone and paste it below.
                                                 </p>
                                             </div>
 
@@ -620,8 +620,8 @@ export const Login = () => {
                                             <div className="space-y-2.5 pt-2">
                                                 <p className="text-[10px] font-black uppercase tracking-wider text-text-secondary">Instructions:</p>
                                                 {[
-                                                    'Start the Pintopay bot in Telegram on your phone',
-                                                    'Tap "Profile" and select "Connect Desktop"',
+                                                    'Start Pintopay App (not a bot) in Telegram on your phone',
+                                                    'Tap "Menu" and select "Connect Desktop"',
                                                     'Tap the access link to copy it to clipboard',
                                                     'Paste it in the field above to sync instantly',
                                                 ].map((text, i) => (
