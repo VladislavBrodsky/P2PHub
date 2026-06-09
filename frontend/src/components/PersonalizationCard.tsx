@@ -105,7 +105,7 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             <motion.div
                                 whileHover={variant === 'compact' ? {} : { scale: 1.05, rotate: 2 }}
                                 className={`
-                                ${variant === 'compact' ? 'h-12 w-12 rounded-xl' : 'h-16 w-16 rounded-xl'} 
+                                ${variant === 'compact' ? 'h-12 w-12 rounded-full' : 'h-16 w-16 rounded-full'} 
                                 overflow-hidden border-2 shadow-premium transition-all duration-300 relative will-change-transform z-10
                                 ${isProPlus ? 'border-cyan-400/60 ring-2 ring-blue-500/30' : isPro ? 'border-amber-400/60 ring-1 ring-amber-500/20' : 'border-border-glass'}
                                 bg-bg-app 
@@ -178,31 +178,57 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                             })()}
                         </div>
 
-                        {/* XP Progress Bar - Horizontal Fit */}
-                        <div className="w-full space-y-1">
-                            <div className="flex flex-wrap justify-between items-baseline px-0.5 gap-x-2 gap-y-0.5">
-                                <div
-                                    className="flex items-baseline gap-1 whitespace-nowrap"
-                                >
-                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)} tracking-tight shrink-0`}>{t('total')}:</span>
-                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
+                        {/* XP Progress Bar - Responsive HUD layout */}
+                        {variant === 'compact' ? (
+                            <div className="w-full space-y-1.5 mt-0.5">
+                                {/* Level & Progress Row */}
+                                <div className="flex items-center justify-between w-full text-[10px] font-bold">
+                                    <span className="text-slate-400 dark:text-slate-400 uppercase tracking-wider">Lvl {stats.level || 1}</span>
+                                    <span className="text-slate-300 dark:text-slate-300 font-medium">
+                                        {formatXP(xpProgress.current)}<span className="text-slate-500 mx-0.5">/</span>{formatXP(xpProgress.total)} XP
+                                    </span>
                                 </div>
-                                <span className="text-[10px] font-bold text-text-primary whitespace-nowrap flex items-baseline gap-0.5 shrink-0">
-                                    <span>{formatXP(xpProgress.current)}</span>
-                                    <span className="text-text-secondary font-medium">/</span>
-                                    <span>{formatXP(xpProgress.total)}</span>
-                                    <span className="text-[9px] text-text-secondary ml-0.5 shrink-0">{t('next_lvl')}</span>
-                                </span>
+
+                                {/* Track Slot */}
+                                <div className="h-1.5 w-full bg-slate-950/40 dark:bg-black/60 rounded-full overflow-hidden p-[1px] border border-white/5 shadow-[inset_0_1px_3px_rgba(0,0,0,0.4)] relative">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${xpProgress.percent}%` }}
+                                        transition={{ duration: 1.5, ease: 'circOut' }}
+                                        className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(stats.level || 1)} shadow-[0_0_8px_rgba(59,130,246,0.35)]`}
+                                    />
+                                </div>
+
+                                {/* Total XP Row */}
+                                <div className="flex items-center justify-between w-full text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none pt-0.5">
+                                    <span>Total XP</span>
+                                    <span className="text-blue-500 dark:text-blue-400 font-extrabold">{formatXP(Math.floor(stats.xp))}</span>
+                                </div>
                             </div>
-                            <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${xpProgress.percent}%` }}
-                                    transition={{ duration: 1.5, ease: 'circOut' }}
-                                    className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(stats.level || 1)}`}
-                                />
+                        ) : (
+                            <div className="w-full space-y-1">
+                                <div className="flex flex-wrap justify-between items-baseline px-0.5 gap-x-2 gap-y-0.5">
+                                    <div className="flex items-baseline gap-1 whitespace-nowrap">
+                                        <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)} tracking-tight shrink-0`}>{t('total')}:</span>
+                                        <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
+                                    </div>
+                                    <span className="text-[10px] font-bold text-text-primary whitespace-nowrap flex items-baseline gap-0.5 shrink-0">
+                                        <span>{formatXP(xpProgress.current)}</span>
+                                        <span className="text-text-secondary font-medium">/</span>
+                                        <span>{formatXP(xpProgress.total)}</span>
+                                        <span className="text-[9px] text-text-secondary ml-0.5 shrink-0">{t('next_lvl')}</span>
+                                    </span>
+                                </div>
+                                <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${xpProgress.percent}%` }}
+                                        transition={{ duration: 1.5, ease: 'circOut' }}
+                                        className={`h-full rounded-full progress-bar-liquid bg-linear-to-r ${getRankGradient(stats.level || 1)}`}
+                                    />
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>

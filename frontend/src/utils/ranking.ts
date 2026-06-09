@@ -78,7 +78,7 @@ export function getXPProgress(level: number, totalXP: number) {
  * Used for dynamic UI elements like progress bars and badges.
  */
 export function getRankGradient(level: number): string {
-    if (level < 12) return 'from-slate-400 to-slate-500';       // Steel/Slate
+    if (level < 12) return 'from-slate-400 via-slate-300 to-slate-500';       // Polished Silver/Steel
     if (level < 24) return 'from-blue-400 to-blue-600';         // Blue/Pioneer
     if (level < 36) return 'from-emerald-400 to-emerald-600';   // Emerald/Ambassador
     if (level < 52) return 'from-amber-400 to-amber-600';       // Gold/Director
