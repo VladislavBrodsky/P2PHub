@@ -19,8 +19,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy requirements and install to a virtualenv
 COPY requirements.txt .
-RUN --mount=type=cache,target=/root/.cache/uv,id=uv-cache \
-    uv venv $VIRTUAL_ENV && \
+RUN uv venv $VIRTUAL_ENV && \
     uv pip install -r requirements.txt
 
 # --- Stage 2: Runtime ---

@@ -10,8 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # 2. Install dependencies
-RUN --mount=type=cache,target=/root/.npm,id=npm-cache \
-    npm install --no-audit --no-fund
+RUN npm install --no-audit --no-fund
 
 # 3. Copy source files (filtered by .dockerignore)
 COPY . .
