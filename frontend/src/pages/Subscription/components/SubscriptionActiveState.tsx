@@ -39,8 +39,7 @@ export const SubscriptionActiveState = ({
                     <span className="text-label font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/30">{t('pro:subscription.pro_active.title')}</span>
                 </div>
 
-                <div className={`absolute inset-0 w-full h-full pointer-events-none z-0 bg-bg-app`} />
-                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isProPlus ? 'bg-linear-to-b from-bg-app via-indigo-500/10 to-bg-deep' : 'bg-linear-to-b from-bg-app via-amber-500/8 to-bg-deep'}`} />
+                <div className={`fixed inset-0 w-full h-full pointer-events-none z-0 ${isProPlus ? 'bg-linear-to-b from-transparent via-indigo-500/10 to-transparent' : 'bg-linear-to-b from-transparent via-amber-500/8 to-transparent'}`} />
 
                 <div className="relative z-10 w-full max-w-[300px] mx-auto flex flex-col items-center">
                     <motion.div initial={{ scale: 0, rotate: -180 }} animate={{ scale: 1, rotate: 0 }} className="relative mb-5 pt-1">

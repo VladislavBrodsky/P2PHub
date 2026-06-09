@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Zap, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNotificationStore } from '../../../../store/useNotificationStore';
+import { useTMALock } from '../../../../hooks/useTMALock';
 
 interface HeadlineFixerModalProps {
     showHeadlineModal: boolean;
@@ -22,8 +24,17 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
     const { t } = useTranslation('pro');
     const { showNotification } = useNotificationStore();
 
+    useTMALock(showHeadlineModal);
+
     const [headlineInput, setHeadlineInput] = useState('');
     const [headlineResult, setHeadlineResult] = useState('');
+
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const onFixHeadline = async () => {
         if (!handleFixHeadline || !headlineInput) return;
@@ -40,7 +51,9 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
         setHeadlineResult('');
     }, [headlineInput]);
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {showHeadlineModal && (
                 <motion.div
@@ -51,9 +64,10 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                     onClick={() => setShowHeadlineModal(false)}
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 30 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-lg rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[85vh] relative"
                     >
@@ -158,6 +172,7 @@ export const HeadlineFixerModal: React.FC<HeadlineFixerModalProps> = ({
                     </motion.div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Star, Sparkles, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -15,10 +17,19 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
     const { t } = useTranslation('social');
     useTMALock(isOpen);
 
-    return (
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-6 sm:p-12 overflow-hidden">
+                <div className="fixed inset-0 z-9999 flex items-center justify-center p-6 sm:p-12 overflow-hidden">
                     <Confetti />
 
                     {/* Immersive Backdrop */}
@@ -32,9 +43,9 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
 
                     {/* Content Container */}
                     <motion.div
-                        initial={{ scale: 0.5, opacity: 0, y: 50 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.8, opacity: 0, y: 100 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { scale: 0.5, opacity: 0, y: 50 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 1, y: 0 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { scale: 0.8, opacity: 0, y: 100 }}
                         transition={{ type: 'spring', damping: 20, stiffness: 300 }}
                         className="relative w-full max-w-sm bg-white dark:bg-[#020617] rounded-[3rem] p-8 text-center shadow-[0_32px_128px_-16px_rgba(0,0,0,0.5)] border border-slate-200 dark:border-white/10 overscroll-none"
                         style={{ overscrollBehavior: 'none' }}
@@ -112,6 +123,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

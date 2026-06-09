@@ -1,3 +1,5 @@
+import { createPortal } from 'react-dom';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Crown, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -15,22 +17,34 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
     const { t } = useTranslation(['cards', 'common']);
     useTMALock(isOpen);
 
-    return (
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-6">
+                <div className="fixed inset-0 z-9999 flex items-center justify-center p-6">
                     {/* Overlay */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
+                        className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm animate-fade-in"
                     />
 
                     {/* Modal Content */}
                     <motion.div
-                        transition={{ opacity: { duration: 0.2 } }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         className="relative w-full max-w-sm rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/10 p-8 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] overflow-hidden overscroll-none"
                         style={{ overscrollBehavior: 'none' }}
                     >
@@ -92,6 +106,7 @@ export function PremiumModal({ isOpen, onClose, onUpgrade }: PremiumModalProps) 
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

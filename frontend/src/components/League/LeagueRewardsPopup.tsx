@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, Shield, Star, Flame, Clock, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,14 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     currentLeague,
 }) => {
     const { t } = useTranslation(['social']);
+
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const { setFooterVisible } = useUI();
     const [timeLeft, setTimeLeft] = useState<{ days: number, hours: number } | null>(null);
 
@@ -117,10 +126,12 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
     const config = leagueData[currentLeague];
     const Icon = config.icon;
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-200 flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
+                <div className="fixed inset-0 z-9999 flex items-end sm:items-center justify-center pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] p-4 sm:p-6">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -132,9 +143,9 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
 
                     {/* Modal Container */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
                         transition={{ type: 'spring', duration: 0.5, bounce: 0.3 }}
                         className="relative w-full max-w-[380px] max-h-[85vh] flex flex-col overflow-hidden rounded-[32px] bg-zinc-950 border border-white/10 shadow-2xl"
                     >
@@ -223,6 +234,7 @@ export const LeagueRewardsPopup: React.FC<LeagueRewardsPopupProps> = ({
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

@@ -433,7 +433,7 @@ export default function SubscriptionPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center min-h-dvh w-full bg-bg-app"
+                    className="flex flex-col items-center justify-center min-h-dvh w-full bg-transparent"
                 >
                     <div className="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />
                 </motion.div>

@@ -1,8 +1,9 @@
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShieldCheck, Target, BookOpen, AlertTriangle, Zap, CheckCircle2 } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useUI } from '../../context/UIContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTMALock } from '../../hooks/useTMALock';
 import { renderInline } from '../../utils/renderMarkdown';
 
@@ -29,10 +30,19 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
         };
     }, [isOpen, setFooterVisible, setHeaderVisible]);
 
-    return (
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-1001 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+0px)] lg:pb-4">
+                <div className="fixed inset-0 z-9999 flex items-center justify-center p-0 sm:p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+0px)] lg:pb-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -41,10 +51,10 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         className="absolute inset-0 bg-black/80 backdrop-blur-xl"
                     />
                     <motion.div
-                        initial={{ y: 100, opacity: 0, scale: 0.95 }}
-                        animate={{ y: 0, opacity: 1, scale: 1 }}
-                        exit={{ y: 100, opacity: 0, scale: 0.95 }}
-                        transition={{ type: 'spring', damping: 30, stiffness: 350 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 350 }}
                         className="w-full max-w-md bg-white dark:bg-slate-900 border-x border-t border-slate-200 dark:border-white/10 sm:rounded-2xl relative shadow-2xl overflow-hidden h-full sm:h-auto sm:max-h-[85vh] flex flex-col z-100 overscroll-none"
                         style={{ overscrollBehavior: 'none' }}
                     >
@@ -166,6 +176,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

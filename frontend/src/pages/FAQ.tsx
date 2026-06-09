@@ -203,7 +203,7 @@ export default function FAQPage() {
     });
 
     return (
-        <div className="flex flex-col min-h-screen pb-32 bg-bg-app animate-in fade-in duration-500 overflow-x-hidden lg:max-w-4xl xl:max-w-5xl lg:mx-auto w-full">
+        <div className="flex flex-col min-h-screen pb-32 bg-transparent animate-in fade-in duration-500 overflow-x-hidden lg:max-w-4xl xl:max-w-5xl lg:mx-auto w-full">
             {/* Premium Header */}
             <div className="relative pt-(--spacing-safe-top,0px) mt-(--back-button-top-offset,48px) pb-16 px-6">
                 {/* Removed background glow */}

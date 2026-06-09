@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Network, Zap, Sparkles, Lock, Send, Trash2, Loader2, CheckCircle2, Blocks } from 'lucide-react';
 import { useTranslation, Trans } from 'react-i18next';
@@ -7,6 +8,7 @@ import { useNotificationStore } from '../../../../store/useNotificationStore';
 import { useNavigation } from '../../../../hooks/useNavigation';
 import { ROUTES } from '../../../../utils/routes';
 import { socialLogos } from '../../utils/socialLogos';
+import { useTMALock } from '../../../../hooks/useTMALock';
 
 
 interface SetupModalProps {
@@ -25,6 +27,15 @@ export const SetupModal: React.FC<SetupModalProps> = ({
     const { t } = useTranslation('pro');
     const { navigateTo } = useNavigation();
     const { showNotification } = useNotificationStore();
+
+    useTMALock(showSetup);
+
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Setup Local State
     const [setupTab, setSetupTab] = useState<'pro' | 'pro_plus'>(status?.is_pro_plus ? 'pro_plus' : 'pro');
@@ -154,7 +165,9 @@ export const SetupModal: React.FC<SetupModalProps> = ({
         }
     };
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {showSetup && (
                 <motion.div
@@ -165,9 +178,10 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     onClick={() => setShowSetup(false)}
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 30 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 30 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-md rounded-3xl border border-slate-200 dark:border-white/10 overflow-hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-3xl shadow-3xl flex flex-col max-h-[82vh] mt-8 mb-4 relative"
                     >
@@ -726,6 +740,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     </motion.div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

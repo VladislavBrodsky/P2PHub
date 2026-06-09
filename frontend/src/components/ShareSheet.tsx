@@ -1,4 +1,5 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Check, Send, Sparkles, Loader2 } from 'lucide-react';
 import { useHaptic } from '../hooks/useHaptic';
@@ -18,6 +19,18 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
     const { selection, notification } = useHaptic();
     const [copied, setCopied] = React.useState(false);
     const [isSharing, setIsSharing] = React.useState(false);
+    const [isClient, setIsClient] = React.useState(false);
+    const [isDesktop, setIsDesktop] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsClient(true);
+        const checkBreakpoint = () => {
+            setIsDesktop(window.innerWidth >= 1024);
+        };
+        checkBreakpoint();
+        window.addEventListener('resize', checkBreakpoint);
+        return () => window.removeEventListener('resize', checkBreakpoint);
+    }, []);
 
     useTMALock(isOpen);
 
@@ -80,25 +93,33 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
         }
     };
 
-    return (
+    if (!isClient) return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <React.Fragment key="share-sheet-portal">
+                <div className="fixed inset-0 z-9999 flex items-end lg:items-center justify-center lg:p-4">
                     <motion.div
                         key="share-sheet-backdrop"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                     />
                     <motion.div
                         key="share-sheet-content"
-                        initial={{ y: '100%' }}
-                        animate={{ y: 0 }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 rounded-t-3xl z-50 p-6 pb-12 shadow-2xl border-t border-white/10 overscroll-none"
-                        style={{ overscrollBehavior: 'none' }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        transition={isDesktop ? { duration: 0.2, ease: 'easeOut' } : { type: 'spring', damping: 25, stiffness: 300 }}
+                        onClick={(e) => e.stopPropagation()}
+                        className={
+                            isDesktop
+                                ? "relative w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl z-9999 p-6 shadow-2xl border border-white/10"
+                                : "relative w-full bg-white dark:bg-slate-900 rounded-t-3xl z-9999 p-6 pb-12 shadow-2xl border-t border-white/10 overscroll-none"
+                        }
+                        style={isDesktop ? undefined : { overscrollBehavior: 'none' }}
                     >
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="text-lg font-bold text-slate-900 dark:text-white">Invite Friends</h3>
@@ -176,8 +197,9 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         </div>
 
                     </motion.div>
-                </React.Fragment>
+                </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Server, User, Key, Info, Globe } from 'lucide-react';
 import { getApiUrl } from '../../utils/api';
@@ -16,6 +17,13 @@ export function DebugOverlay({ isOpen, onClose }: DebugOverlayProps) {
     const apiUrl = getApiUrl();
     const [tokenHashPrefix, setTokenHashPrefix] = React.useState<string>('');
 
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     React.useEffect(() => {
         if (lp.initDataRaw) {
             const hash = lp.initDataRaw.split('hash=')[1]?.split('&')[0];
@@ -24,19 +32,20 @@ export function DebugOverlay({ isOpen, onClose }: DebugOverlayProps) {
     }, [lp.initDataRaw]);
 
     if (!isOpen) return null;
+    if (typeof document === 'undefined') return null;
 
-    return (
+    return createPortal(
         <AnimatePresence>
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[500] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-6"
+                className="fixed inset-0 z-9999 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-6"
             >
                 <motion.div
-                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                    animate={{ scale: 1, opacity: 1, y: 0 }}
-                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                    animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                    exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
                     className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl"
                 >
                     <div className="flex items-center justify-between p-4 border-b border-slate-800 bg-slate-900/50">
@@ -110,6 +119,7 @@ export function DebugOverlay({ isOpen, onClose }: DebugOverlayProps) {
                     </div>
                 </motion.div>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 }

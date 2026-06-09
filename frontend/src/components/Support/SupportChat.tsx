@@ -47,6 +47,13 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
     const [sessionClosed, setSessionClosed] = React.useState(false);
     const [typingLabel, setTypingLabel] = React.useState('Analyzing inquiry...');
 
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth >= 640);
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 640);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     // Prevent body scroll and TMA swipes when support is open
     useTMALock(isOpen);
 
@@ -442,10 +449,10 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
 
                     {/* Chat Window */}
                     <motion.div
-                        initial={{ y: '100%', opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: '100%', opacity: 0 }}
-                        transition={{ type: 'spring', damping: 30, stiffness: 250 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         className="relative flex h-full sm:h-[85dvh] w-full max-w-[440px] flex-col overflow-hidden bg-white dark:bg-slate-950 sm:rounded-[32px] shadow-[0_32px_80px_-20px_rgba(0,0,0,0.5)] pt-[calc(var(--spacing-safe-top,20px))] border-x border-t sm:border border-slate-200 dark:border-white/5 overscroll-none"
                         style={{
                             height: 'var(--modal-view-height, 100dvh)',

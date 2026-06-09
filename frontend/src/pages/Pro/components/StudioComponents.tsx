@@ -219,7 +219,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                                         <h4 className="text-label font-bold text-slate-900 dark:text-white leading-none">
                                             {t('studio.add_personal_link')}
                                         </h4>
-                                        <p className="text-[10px] font-medium text-slate-400 leading-none mt-1 uppercase tracking-wider">
+                                        <p className="text-[10px] sm:text-label text-slate-500 dark:text-slate-400 mt-1 leading-snug italic opacity-70">
                                             {t('studio.personal_link_subtitle')}
                                         </p>
                                     </div>
@@ -333,32 +333,32 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                             <Bot size={18} className="animate-pulse" />
                         </div>
                         <div>
-                            <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-tight">AI Synthesis Status</h4>
-                            <span className="text-[10px] font-medium text-slate-400 uppercase tracking-widest leading-none">Active Engine: PintoPay v2.6</span>
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white tracking-tight">AI Synthesis Status</h4>
+                            <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-none mt-1">Active Engine: PintoPay v2.6</span>
                         </div>
                     </div>
 
                     <div className="space-y-4 relative z-10">
                         <div className="p-3.5 bg-slate-50/50 dark:bg-black/35 rounded-xl border border-slate-100 dark:border-white/5 space-y-2">
                             <div className="flex justify-between text-label">
-                                <span className="text-slate-400 font-bold uppercase tracking-wider">Strategy Selected</span>
-                                <span className={postType ? "text-blue-500 font-black uppercase text-right" : "text-slate-500 font-bold"}>
+                                <span className="text-slate-400 font-bold">Strategy Selected</span>
+                                <span className={postType ? "text-blue-500 font-bold text-right" : "text-slate-500 font-bold"}>
                                     {postType ? t(`studio.post_types.${postType}`) : "None"}
                                 </span>
                             </div>
                             <div className="flex justify-between text-label">
-                                <span className="text-slate-400 font-bold uppercase tracking-wider">Target Audience</span>
-                                <span className={audience ? "text-blue-500 font-black uppercase text-right" : "text-slate-500 font-bold"}>
+                                <span className="text-slate-400 font-bold">Target Audience</span>
+                                <span className={audience ? "text-blue-500 font-bold text-right" : "text-slate-500 font-bold"}>
                                     {audience ? t(`studio.audiences.${audience}`) : "None"}
                                 </span>
                             </div>
                             <div className="flex justify-between text-label">
-                                <span className="text-slate-400 font-bold uppercase tracking-wider">Tone of Voice</span>
-                                <span className="text-blue-500 font-black uppercase text-right">{t(`studio.tones.${tone}`)}</span>
+                                <span className="text-slate-400 font-bold">Tone of Voice</span>
+                                <span className="text-blue-500 font-bold text-right">{t(`studio.tones.${tone}`)}</span>
                             </div>
                             <div className="flex justify-between text-label">
-                                <span className="text-slate-400 font-bold uppercase tracking-wider">Language Output</span>
-                                <span className="text-blue-500 font-black uppercase text-right">{language}</span>
+                                <span className="text-slate-400 font-bold">Language Output</span>
+                                <span className="text-blue-500 font-bold text-right">{language}</span>
                             </div>
                         </div>
 
@@ -366,21 +366,21 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                         <div className="flex justify-between items-center text-label bg-slate-50/50 dark:bg-black/35 p-2.5 rounded-xl border border-slate-100 dark:border-white/5">
                             <div className="flex items-center gap-1.5">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-slate-400 font-bold uppercase tracking-wider">Nodes Sync</span>
+                                <span className="text-slate-400 font-bold">Nodes Sync</span>
                             </div>
-                            <span className="text-emerald-500 font-black">100% ONLINE</span>
+                            <span className="text-emerald-500 font-black">100% Online</span>
                         </div>
 
                         {/* State indicator */}
                         {!isReady ? (
                             <div className="p-3 bg-amber-500/5 border border-amber-500/20 rounded-xl text-center">
-                                <p className="text-label font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-snug">
+                                <p className="text-label font-bold text-amber-600 dark:text-amber-400 leading-snug">
                                     Configure parameters to begin
                                 </p>
                             </div>
                         ) : (
                             <div className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl text-center shadow-[0_0_15px_rgba(16,185,129,0.1)]">
-                                <p className="text-label font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest leading-snug animate-pulse">
+                                <p className="text-label font-bold text-emerald-600 dark:text-emerald-400 leading-snug animate-pulse">
                                     Ready for viral generation
                                 </p>
                             </div>
@@ -391,7 +391,7 @@ export const StudioMatrixStepper = memo((props: StudioMatrixStepperProps) => {
                 {/* Synthesis Guidelines */}
                 <div className="pro-card-extreme bg-white dark:bg-slate-950 rounded-2xl p-5 border border-slate-200 dark:border-white/10 shadow-3xl relative overflow-hidden noise-overlay">
                     <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent pointer-events-none" />
-                    <h4 className="text-label font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3 relative z-10">Synthesis Rules</h4>
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white mb-3 relative z-10">Synthesis Rules</h4>
                     <ul className="text-label font-medium text-slate-500 dark:text-slate-400 space-y-2.5 list-disc list-inside relative z-10">
                         <li>Each generation utilizes <span className="text-blue-500 font-bold">1 Token</span></li>
                         <li>Results include highly optimized copy and a custom AI-generated image</li>

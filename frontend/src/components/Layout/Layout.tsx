@@ -170,6 +170,11 @@ function SidebarNav({
                 <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg group-hover:scale-105 transition-transform" />
             </button>
 
+            {/* Desktop Personalization Card */}
+            <div className="hidden xl:block w-full mb-6">
+                <PersonalizationCard variant="compact" className="!pt-0" />
+            </div>
+
             {/* Nav Menu Items */}
             <div className="flex flex-col gap-1">
                 {navItems.map(({ id, icon: Icon, label }) => {
@@ -195,7 +200,7 @@ function SidebarNav({
                                     }`}
                             >
                                 <Icon className="w-[18px] h-[18px] shrink-0" />
-                                <span className="hidden xl:block text-[11px] font-extrabold uppercase tracking-widest whitespace-nowrap">{label}</span>
+                                <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap">{label}</span>
                             </button>
                         </div>
                     );
@@ -204,24 +209,6 @@ function SidebarNav({
 
             {/* Profile Button at Bottom */}
             <div className="relative mt-auto pt-4 border-t border-divider flex flex-col">
-                {/* User Level & XP Badge (Always visible on expanded desktop sidebar) */}
-                <div className="hidden xl:flex items-center justify-between gap-2 rounded-xl border border-divider bg-black/5 dark:bg-white/5 px-3 py-1.5 shadow-sm mb-3">
-                    <div className="flex items-center gap-1">
-                        <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">{t('lvl')}</span>
-                        <span className="text-xs font-bold text-text-primary">{user?.level ?? 1}</span>
-                        {user?.is_pro && (
-                            <Crown className="size-3 text-amber-500 fill-amber-500/20" />
-                        )}
-                    </div>
-                    <div className="h-3 w-px bg-divider" />
-                    <div className="flex items-center gap-1">
-                        <span className="text-xs font-bold text-text-primary">
-                            {Math.floor(user?.xp ?? 0).toLocaleString()}
-                        </span>
-                        <span className="text-[9px] font-black uppercase tracking-wider text-emerald-400">{t('xp')}</span>
-                    </div>
-                </div>
-
                 <button
                     ref={profileRef}
                     onClick={() => setIsDropdownOpen(prev => !prev)}

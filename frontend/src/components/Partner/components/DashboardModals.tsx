@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PartnerBriefingModal } from '../PartnerBriefingModal';
 import { ProWelcomeCard } from '../ProWelcomeCard';
@@ -40,6 +41,15 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
 }) => {
     const { t } = useTranslation(['social', 'common']);
 
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isClient = typeof document !== 'undefined';
+
     return (
         <>
             <PartnerBriefingModal isOpen={isBriefingOpen} onClose={() => setIsBriefingOpen(false)} />
@@ -53,8 +63,8 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
 
             {/* Network Explorer Overlay */}
             <AnimatePresence>
-                {isExplorerOpen && (
-                    <div className="fixed inset-0 z-1000 flex items-stretch lg:items-center justify-center">
+                {(isExplorerOpen && isClient) && createPortal(
+                    <div className="fixed inset-0 z-9999 flex items-stretch lg:items-center justify-center">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -63,22 +73,23 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                             onClick={() => setIsExplorerOpen(false)}
                         />
                         <motion.div
-                            initial={{ y: '100%' }}
-                            animate={{ y: 0 }}
-                            exit={{ y: '100%' }}
+                            initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                            animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                            exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
                             transition={{ type: 'spring', damping: 30, stiffness: 250 }}
                             className="w-full max-w-lg mx-auto relative z-10 flex flex-col lg:max-h-[85vh] lg:rounded-3xl lg:overflow-hidden lg:my-8"
                         >
                             <NetworkExplorer onClose={() => setIsExplorerOpen(false)} initialTotalCount={totalNetworkSize} />
                         </motion.div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </AnimatePresence>
 
             {/* QR Code Modal */}
             <AnimatePresence>
-                {isQrOpen && (
-                    <div key="qr-modal-root" className="fixed inset-0 z-1001 flex items-center justify-center p-4">
+                {(isQrOpen && isClient) && createPortal(
+                    <div key="qr-modal-root" className="fixed inset-0 z-9999 flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -87,9 +98,9 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                             className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
                         />
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            initial={isDesktop ? { scale: 0.95, opacity: 0 } : { opacity: 0, scale: 0.9, y: 20 }}
+                            animate={isDesktop ? { scale: 1, opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+                            exit={isDesktop ? { scale: 0.95, opacity: 0 } : { opacity: 0, scale: 0.9, y: 20 }}
                             className="relative z-10 w-full max-w-xs bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-2xl border border-white/10 overflow-hidden"
                             style={{ 
                                 transform: 'translateZ(0)',
@@ -130,7 +141,8 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                                 </Button>
                             </div>
                         </motion.div>
-                    </div>
+                    </div>,
+                    document.body
                 )}
             </AnimatePresence>
         </>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Sparkles, X, Rocket, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -19,10 +20,19 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
         }
     }, [isOpen, notification]);
 
-    return (
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -34,9 +44,9 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                     <Confetti />
 
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { scale: 1, opacity: 1, y: 0 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { scale: 0.9, opacity: 0, y: 20 }}
                         transition={{ type: "spring", damping: 20, stiffness: 300 }}
                         className="relative w-full max-w-sm bg-linear-to-b from-slate-900 via-slate-900 to-blue-900 rounded-[2.5rem] border border-blue-500/30 p-6 shadow-[0_0_50px_rgba(59,130,246,0.2)] overflow-hidden"
                     >
@@ -128,7 +138,8 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };
 

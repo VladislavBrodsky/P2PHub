@@ -134,7 +134,7 @@ export const BentoGrid = () => {
                             >
                                 {/* FRONT SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border-2 border-slate-200 dark:border-white/20 bg-white dark:bg-[#1e293b] shadow-2xl ${step.featured ? 'border-blue-500/50' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-border-glass bg-bg-glass backdrop-blur-xl shadow-premium-lg ${step.featured ? 'border-blue-500/50' : ''}`}
                                     style={{
                                         transform: flippedCards[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
                                         transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'
@@ -185,7 +185,7 @@ export const BentoGrid = () => {
 
                                 {/* BACK SIDE */}
                                 <div
-                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border-2 border-slate-200 dark:border-white/20 bg-white dark:bg-[#1e293b] shadow-2xl ${step.featured ? 'border-blue-500/50' : ''}`}
+                                    className={`absolute inset-0 backface-hidden overflow-hidden rounded-2xl border border-border-glass bg-bg-glass backdrop-blur-xl shadow-premium-lg ${step.featured ? 'border-blue-500/50' : ''}`}
                                     style={{
                                         transform: flippedCards[index] ? 'rotateY(0deg)' : 'rotateY(-180deg)',
                                         transition: 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)'

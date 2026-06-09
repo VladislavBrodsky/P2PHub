@@ -25,6 +25,13 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
     const [selectedMonthIdx, setSelectedMonthIdx] = React.useState(0);
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
 
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const fetchStats = async () => {
         try {
             if (!stats) setLoading(true);
@@ -61,10 +68,10 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
 
                     {/* Bottom Sheet — safe padding on all sides */}
                     <motion.div
-                        initial={{ y: '100%' }}
-                        animate={{ y: 0 }}
-                        exit={{ y: '100%' }}
-                        transition={{ type: 'spring', damping: 32, stiffness: 300 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 32, stiffness: 300 }}
                         className="relative z-10 w-full max-w-lg mx-auto flex flex-col px-3 lg:px-0 lg:my-8"
                         style={{
                             paddingBottom: (typeof window !== 'undefined' && window.innerWidth >= 1024) ? '0px' : 'calc(env(safe-area-inset-bottom, 12px) + 12px)',

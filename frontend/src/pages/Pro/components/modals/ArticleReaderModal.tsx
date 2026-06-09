@@ -1,8 +1,10 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../../utils/renderMarkdown';
+import { useTMALock } from '../../../../hooks/useTMALock';
 
 
 interface ArticleReaderModalProps {
@@ -18,7 +20,18 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
 }) => {
     const { t } = useTranslation('pro');
 
-    return (
+    useTMALock(!!selectedArticle);
+
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {selectedArticle && (
                 <motion.div
@@ -29,9 +42,10 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                     onClick={() => setSelectedArticle(null)}
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-lg glass-panel-premium rounded-[2.5rem] border border-slate-200 dark:border-white/10 overflow-hidden bg-white dark:bg-slate-900 shadow-2xl noise-overlay"
                     >
@@ -66,6 +80,7 @@ export const ArticleReaderModal: React.FC<ArticleReaderModalProps> = ({
                     </motion.div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trophy, Crown, X, Star, Flame, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -88,6 +89,13 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
     const { setFooterVisible } = useUI();
     const rankPrizes = getRankPrizes(t);
 
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useTMALock(visible);
 
     useEffect(() => {
@@ -140,8 +148,9 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
     })();
 
     if (!visible && !loading) return null;
+    if (typeof document === 'undefined') return null;
 
-    return (
+    return createPortal(
         <AnimatePresence>
             {visible && (
                 <>
@@ -161,12 +170,14 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                     {/* Sheet */}
                     <motion.div
                         key="sheet"
-                        initial={{ opacity: 0, y: 60, scale: 0.97 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 40, scale: 0.97 }}
-                        transition={{ type: 'spring', stiffness: 380, damping: 32, delay: 0.05 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { opacity: 0, y: 60, scale: 0.97 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { opacity: 0, y: 40, scale: 0.97 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', stiffness: 380, damping: 32, delay: 0.05 }}
                         className={[
-                            'fixed inset-x-3 bottom-4 z-9999 max-h-[85vh] overflow-hidden',
+                            isDesktop
+                                ? 'fixed inset-0 m-auto z-9999 max-h-[85vh] max-w-lg overflow-hidden'
+                                : 'fixed inset-x-3 bottom-4 z-9999 max-h-[85vh] overflow-hidden',
                             'rounded-[32px] border',
                             /* Light */
                             'bg-white/95 backdrop-blur-xl border-slate-200/80 shadow-[0_32px_128px_-16px_rgba(0,0,0,0.3)]',
@@ -382,6 +393,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                     </motion.div>
                 </>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

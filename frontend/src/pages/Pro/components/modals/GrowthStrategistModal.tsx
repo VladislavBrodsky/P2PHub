@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Brain, Zap, Loader2, Sparkles, Target, TrendingUp } from 'lucide-react';
 import { apiClient } from '../../../../api/client';
 import { useTranslation } from 'react-i18next';
 import { renderMarkdown } from '../../utils/renderMarkdown';
+import { useTMALock } from '../../../../hooks/useTMALock';
 
 interface GrowthStrategistModalProps {
     isOpen: boolean;
@@ -12,8 +14,18 @@ interface GrowthStrategistModalProps {
 
 export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModalProps) => {
     const { t, i18n } = useTranslation('pro');
+    
+    useTMALock(isOpen);
+
     const [isGenerating, setIsGenerating] = useState(false);
     const [advice, setAdvice] = useState<string | null>(null);
+
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleGenerate = async () => {
         setIsGenerating(true);
@@ -30,10 +42,12 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
         }
     };
 
-    return (
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-500 flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-9999 flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -43,9 +57,10 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                     />
 
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         className="relative w-full max-w-xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10"
                     >
                         <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-blue-500 via-blue-500 to-pink-500" />
@@ -156,6 +171,7 @@ export const GrowthStrategistModal = ({ isOpen, onClose }: GrowthStrategistModal
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

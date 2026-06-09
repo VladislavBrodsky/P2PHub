@@ -184,14 +184,14 @@ export function PersonalizationCard({ className, variant = 'default' }: Personal
                                 <div
                                     className="flex items-baseline gap-1 whitespace-nowrap"
                                 >
-                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)} tracking-tight uppercase shrink-0`}>{t('total')}:</span>
+                                    <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)} tracking-tight shrink-0`}>{t('total')}:</span>
                                     <span className={`text-[10px] font-bold ${getRankTextColor(stats.level || 1)}`}>{formatXP(Math.floor(stats.xp))} {t('xp')}</span>
                                 </div>
                                 <span className="text-[10px] font-bold text-text-primary whitespace-nowrap flex items-baseline gap-0.5 shrink-0">
                                     <span>{formatXP(xpProgress.current)}</span>
                                     <span className="text-text-secondary font-medium">/</span>
                                     <span>{formatXP(xpProgress.total)}</span>
-                                    <span className="text-[9px] text-text-secondary uppercase ml-0.5 shrink-0">{t('next_lvl')}</span>
+                                    <span className="text-[9px] text-text-secondary ml-0.5 shrink-0">{t('next_lvl')}</span>
                                 </span>
                             </div>
                             <div className="h-3 w-full bg-slate-900/10 dark:bg-white/5 rounded-full overflow-hidden p-0.5 border border-black/5 dark:border-white/5 shadow-inner relative">

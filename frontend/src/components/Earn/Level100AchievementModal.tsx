@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 // #comment: Removed unused Star and ChevronRight icons from lucide-react to clean up the import list
 import { Trophy, Sparkles, X, ShieldCheck, Zap, Gem, CreditCard, Share2 } from 'lucide-react';
@@ -8,7 +9,7 @@ import { useUI } from '../../context/UIContext';
 import { useHaptic } from '../../hooks/useHaptic';
 import { useTMALock } from '../../hooks/useTMALock';
 import { shareUniversal } from '../../utils/shareUtils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Level100AchievementModalProps {
     isOpen: boolean;
@@ -80,10 +81,19 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
         });
     };
 
-    return (
+    const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-100 flex items-end sm:items-center justify-center overflow-hidden">
+                <div className="fixed inset-0 z-9999 flex items-end sm:items-center justify-center overflow-hidden">
                     {/* Immersive Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -95,10 +105,10 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
 
                     {/* Content Container (Premium UI) */}
                     <motion.div
-                        initial={{ y: '100%' }}
-                        animate={{ y: 0 }}
-                        exit={{ y: '100%' }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%' }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 25, stiffness: 200 }}
                         className="relative w-full max-w-lg sm:max-w-md bg-white dark:bg-[#020617] rounded-t-[2.5rem] sm:rounded-[3rem] text-center shadow-[0_-20px_40px_rgba(0,0,0,0.3)] border-t border-slate-200 dark:border-white/10 sm:border max-h-[90vh] flex flex-col"
                     >
                         {/* iPhone 16 Pro Style Indicator */}
@@ -189,6 +199,7 @@ export const Level100AchievementModal = ({ isOpen, onClose }: Level100Achievemen
                     </motion.div>
                 </div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };

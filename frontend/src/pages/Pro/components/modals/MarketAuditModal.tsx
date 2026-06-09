@@ -1,7 +1,9 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, TrendingUp, Zap, Loader2, Quote, Flame } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTMALock } from '../../../../hooks/useTMALock';
 
 interface MarketAuditModalProps {
     showAuditModal: boolean;
@@ -24,7 +26,18 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
 }) => {
     const { t } = useTranslation('pro');
 
-    return (
+    useTMALock(showAuditModal);
+
+    const [isDesktop, setIsDesktop] = React.useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
+    React.useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (typeof document === 'undefined') return null;
+
+    return createPortal(
         <AnimatePresence>
             {showAuditModal && marketAudit && (
                 <motion.div
@@ -35,9 +48,10 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                     onClick={() => setShowAuditModal(false)}
                 >
                     <motion.div
-                        initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                        initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        animate={isDesktop ? { scale: 1, opacity: 1 } : { y: 0, opacity: 1 }}
+                        exit={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}
+                        transition={isDesktop ? { duration: 0.2, ease: "easeOut" } : { type: 'spring', damping: 30, stiffness: 250 }}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-2xl rounded-[2.5rem] border border-slate-200 dark:border-white/10 bg-white/95 dark:bg-slate-900/98 backdrop-blur-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.5)] flex flex-col max-h-[92vh] relative overflow-hidden"
                     >
@@ -222,6 +236,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                     </motion.div>
                 </motion.div>
             )}
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     );
 };
