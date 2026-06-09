@@ -45,7 +45,7 @@ async def master_audit():
             user = res.fetchone()
             if user:
                 print(f"✅ DB: User found - ID: {user[0]}, Username: {user[1]}")
-                print(f"✅ DB: PRO Status: {user[2]}, Plan: {user[3]}, XP: {user[4]}")
+                print(f"✅ DB: PRO Status: {user[2]}, Plan: {user[3]}, XP: {user[4]:.2f}")
                 if user[3] == "PRO_PLUS_LIFETIME" and user[2]:
                     print("💎 DB: @uslincoln PRO+ Lifetime Status VERIFIED.")
                 else:
