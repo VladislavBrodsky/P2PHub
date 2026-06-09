@@ -80,6 +80,7 @@
   --color-bg-glass: var(--sys-bg-glass);
   --color-border-glass: var(--sys-border-glass);
   --color-glass-highlight: var(--sys-glass-highlight);
+  --color-divider: var(--divider);
 
   --color-text-primary: var(--sys-text-primary);
   --color-text-secondary: var(--sys-text-secondary);
@@ -399,6 +400,13 @@
     radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+
+  /* 2026 Background Grid & Spotlights - Light Theme */
+  --bg-grid-color: rgba(37, 99, 235, 0.035);
+  --bg-grid-size: 28px;
+  --glow-color-1: rgba(59, 130, 246, 0.05);
+  --glow-color-2: rgba(99, 102, 241, 0.04);
+  --glow-color-3: rgba(6, 182, 212, 0.03);
 }
 
 /* Dark Mode Overrides - Subtle & High Fidelity */
@@ -455,6 +463,13 @@
     radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+
+  /* 2026 Background Grid & Spotlights - Dark Theme */
+  --bg-grid-color: rgba(99, 102, 241, 0.06);
+  --bg-grid-size: 28px;
+  --glow-color-1: rgba(59, 130, 246, 0.12);
+  --glow-color-2: rgba(99, 102, 241, 0.08);
+  --glow-color-3: rgba(6, 182, 212, 0.06);
 }
 
 /* Responsive Modal Heights for Desktop viewports */

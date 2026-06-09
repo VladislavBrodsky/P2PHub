@@ -955,20 +955,40 @@
 /* === PREMIUM DESKTOP GRID LAYOUT === */
 @media (min-width: 640px) {
   .premium-desktop-layout {
-    background-color: #030712 !important; /* Base app bg */
-    background-image:
-      /* Fine 24px grid lines */
-      linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-      /* Major 120px grid lines for depth */
-      linear-gradient(rgba(255, 255, 255, 0.025) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 2px, transparent 2px),
-      /* Elegant Ambient Glow Spotlights */
-      radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-      radial-gradient(circle at 30% 70%, rgba(6, 182, 212, 0.06) 0%, transparent 45%),
-      radial-gradient(circle at 75% 60%, rgba(20, 184, 166, 0.06) 0%, transparent 40%) !important;
-    background-size: 24px 24px, 24px 24px, 120px 120px, 120px 120px, 100% 100%, 100% 100%, 100% 100% !important;
+    position: fixed !important;
+    background-color: var(--sys-bg-app) !important; /* Base app bg (theme-adaptive) */
+    background-image: radial-gradient(circle at 1px 1px, var(--bg-grid-color) 1px, transparent 0) !important; /* 2026 Dotted Grid */
+    background-size: var(--bg-grid-size) var(--bg-grid-size) !important;
     background-attachment: fixed !important;
+  }
+
+  .premium-desktop-layout::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(circle at 50% 25%, var(--glow-color-1) 0%, transparent 60%),
+      radial-gradient(circle at 20% 70%, var(--glow-color-2) 0%, transparent 50%),
+      radial-gradient(circle at 80% 60%, var(--glow-color-3) 0%, transparent 45%) !important;
+    animation: premium-bg-glow 20s ease-in-out infinite alternate;
+    pointer-events: none;
+    will-change: transform;
+  }
+}
+
+@keyframes premium-bg-glow {
+  0% {
+    transform: scale(1) translate(0px, 0px);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.05) translate(-1%, 2%);
+    opacity: 1.1;
+  }
+  100% {
+    transform: scale(0.98) translate(1%, -1%);
+    opacity: 0.95;
   }
 }
 

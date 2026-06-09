@@ -134,7 +134,7 @@ function SidebarNav({
     };
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-white/5 bg-[#030712]/80 backdrop-blur-xl pt-24 pb-6 px-3">
+        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-bg-app/90 dark:bg-slate-950/90 backdrop-blur-2xl pt-24 pb-6 px-3">
             {/* Logo mark at top */}
             <div className="hidden xl:flex items-center gap-3 px-2 mb-6">
                 <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg shrink-0" />
@@ -165,7 +165,7 @@ function SidebarNav({
                                 className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-200 cursor-pointer w-full
                                     ${isActive
                                         ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
-                                        : 'text-slate-400 hover:text-white hover:bg-white/5'
+                                        : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
                                     }`}
                             >
                                 <Icon className="w-[18px] h-[18px] shrink-0" />
@@ -177,9 +177,9 @@ function SidebarNav({
             </div>
 
             {/* Profile Button at Bottom */}
-            <div className="relative mt-auto pt-4 border-t border-white/5 flex flex-col">
+            <div className="relative mt-auto pt-4 border-t border-divider flex flex-col">
                 {/* User Level & XP Badge (Always visible on expanded desktop sidebar) */}
-                <div className="hidden xl:flex items-center justify-between gap-2 rounded-xl border border-white/5 bg-white/5 px-3 py-1.5 shadow-sm mb-3">
+                <div className="hidden xl:flex items-center justify-between gap-2 rounded-xl border border-divider bg-black/5 dark:bg-white/5 px-3 py-1.5 shadow-sm mb-3">
                     <div className="flex items-center gap-1">
                         <span className="text-[9px] font-black uppercase tracking-wider text-blue-400">{t('lvl')}</span>
                         <span className="text-xs font-bold text-text-primary">{user?.level ?? 1}</span>
@@ -187,7 +187,7 @@ function SidebarNav({
                             <Crown className="size-3 text-amber-500 fill-amber-500/20" />
                         )}
                     </div>
-                    <div className="h-3 w-px bg-white/10" />
+                    <div className="h-3 w-px bg-divider" />
                     <div className="flex items-center gap-1">
                         <span className="text-xs font-bold text-text-primary">
                             {Math.floor(user?.xp ?? 0).toLocaleString()}
@@ -199,7 +199,7 @@ function SidebarNav({
                 <button
                     ref={profileRef}
                     onClick={() => setIsDropdownOpen(prev => !prev)}
-                    className="flex items-center xl:justify-start justify-center gap-3 w-full xl:p-2 p-0 h-12 rounded-xl text-left hover:bg-white/5 transition-all duration-200 cursor-pointer outline-none focus:outline-none"
+                    className="flex items-center xl:justify-start justify-center gap-3 w-full xl:p-2 p-0 h-12 rounded-xl text-left hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-200 cursor-pointer outline-none focus:outline-none"
                 >
                     {/* Avatar Container */}
                     <div className="relative shrink-0 mx-auto xl:mx-0">
@@ -247,7 +247,7 @@ function SidebarNav({
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, scale: 0.95, x: -10 }}
                             transition={{ duration: 0.15 }}
-                            className="absolute bottom-0 left-[76px] xl:left-[232px] w-80 rounded-3xl border border-white/10 dark:border-white/10 bg-[#070b19]/95 dark:bg-[#070b19]/95 backdrop-blur-2xl shadow-premium-xl shadow-blue-500/5 p-5 flex flex-col gap-4 text-text-primary z-120 focus:outline-none"
+                            className="absolute bottom-0 left-[76px] xl:left-[232px] w-80 rounded-3xl border border-divider bg-bg-app/95 dark:bg-slate-900/95 backdrop-blur-2xl shadow-premium-xl shadow-blue-500/5 p-5 flex flex-col gap-4 text-text-primary z-120 focus:outline-none"
                             style={{ pointerEvents: 'auto' }}
                         >
                             {/* User Profile Card (Imported from Mobile Menu) */}
@@ -273,7 +273,7 @@ function SidebarNav({
                                         <div className="flex gap-1">
                                             <button
                                                 onClick={() => handleCopy(friendlyAddress)}
-                                                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors"
+                                                className="p-1.5 rounded-lg bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 text-text-secondary hover:text-text-primary transition-colors"
                                                 title="Copy Address"
                                             >
                                                 {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
@@ -290,7 +290,7 @@ function SidebarNav({
                                                 className={`p-1.5 rounded-lg text-xs font-bold uppercase transition-all duration-200
                                                     ${disconnectConfirm
                                                         ? 'bg-red-500 text-white hover:bg-red-600 px-2'
-                                                        : 'bg-white/5 hover:bg-red-500/10 hover:text-red-400 text-slate-300'}`}
+                                                        : 'bg-black/5 dark:bg-white/5 hover:bg-red-500/10 hover:text-red-400 text-text-secondary hover:text-text-primary'}`}
                                             >
                                                 {disconnectConfirm ? 'Confirm' : 'Disconnect'}
                                             </button>
@@ -310,7 +310,7 @@ function SidebarNav({
                             {/* Preferences Selector */}
                             <div className="grid grid-cols-2 gap-2">
                                 {/* Language Selector */}
-                                <div className="flex items-center justify-between p-1 rounded-xl bg-slate-950/20 border border-white/5">
+                                <div className="flex items-center justify-between p-1 rounded-xl bg-black/5 dark:bg-slate-950/50 border border-divider">
                                     {[
                                         { id: 'en', flag: '🇺🇸' },
                                         { id: 'ru', flag: '🇷🇺' }
@@ -321,7 +321,7 @@ function SidebarNav({
                                                 key={option.id}
                                                 onClick={() => handleLanguageChange(option.id)}
                                                 className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all
-                                                    ${isActive ? 'bg-white/10 text-text-primary shadow-sm' : 'text-slate-400 hover:text-text-primary'}`}
+                                                    ${isActive ? 'bg-black/5 dark:bg-white/10 text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
                                             >
                                                 <span className="text-sm mr-1">{option.flag}</span>
                                                 <span className="uppercase text-[9px] tracking-wider">{option.id}</span>
@@ -331,7 +331,7 @@ function SidebarNav({
                                 </div>
 
                                 {/* Theme Selector */}
-                                <div className="flex items-center justify-between p-1 rounded-xl bg-slate-950/20 border border-white/5">
+                                <div className="flex items-center justify-between p-1 rounded-xl bg-black/5 dark:bg-slate-950/50 border border-divider">
                                     {[
                                         { id: 'light' as const, icon: Sun },
                                         { id: 'dark' as const, icon: Moon }
@@ -343,7 +343,7 @@ function SidebarNav({
                                                 key={option.id}
                                                 onClick={() => setTheme(option.id)}
                                                 className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all
-                                                    ${isActive ? 'bg-white/10 text-text-primary shadow-sm' : 'text-slate-400 hover:text-text-primary'}`}
+                                                    ${isActive ? 'bg-black/5 dark:bg-white/10 text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
                                             >
                                                 <Icon className="w-3.5 h-3.5" />
                                             </button>
@@ -353,15 +353,15 @@ function SidebarNav({
                             </div>
 
                             {/* Action Menu List */}
-                            <div className="flex flex-col gap-1.5 border-t border-white/5 pt-3">
+                            <div className="flex flex-col gap-1.5 border-t border-divider pt-3">
                                 {/* Admin Portal */}
                                 {(user?.is_admin || (user?.username && ['uslincoln', 'uslincon'].includes(user.username.toLowerCase()))) && (
                                     <button
                                         onClick={() => { navigateTo(ROUTES.ADMIN); setIsDropdownOpen(false); }}
-                                        className="flex items-center justify-between p-2 rounded-xl border border-white/5 bg-slate-950/20 hover:bg-white/5 text-slate-300 font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
+                                        className="flex items-center justify-between p-2 rounded-xl border border-divider bg-black/5 dark:bg-slate-950/20 hover:bg-black/5 dark:hover:bg-white/5 text-text-secondary hover:text-text-primary font-bold text-[11px] uppercase tracking-wider transition-all cursor-pointer group"
                                     >
                                         <div className="flex items-center gap-2.5">
-                                            <div className="p-1 rounded-lg bg-white/5 border border-white/5 text-slate-400 group-hover:text-text-primary transition-colors">
+                                            <div className="p-1 rounded-lg bg-black/5 dark:bg-white/5 border border-divider text-text-secondary group-hover:text-text-primary transition-colors">
                                                 <Shield className="w-3.5 h-3.5" />
                                             </div>
                                             <span>{t('navigation.admin_panel')}</span>
