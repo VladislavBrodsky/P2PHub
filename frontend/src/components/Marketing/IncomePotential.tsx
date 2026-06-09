@@ -145,7 +145,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 initial={{ opacity: 0, scale: 0.98 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                className="relative overflow-hidden rounded-3xl text-slate-900 dark:text-white p-6 md:p-8 lg:p-10 flex flex-col gap-6 lg:gap-8 shadow-2xl border border-slate-200/50 dark:border-white/5 backdrop-blur-3xl lg:max-w-5xl xl:max-w-6xl w-full lg:mx-auto bg-white/40 dark:bg-slate-950/45 transition-all duration-300"
+                className="relative text-slate-900 dark:text-white flex flex-col gap-6 lg:gap-8 lg:max-w-5xl xl:max-w-6xl w-full lg:mx-auto transition-all duration-300 bg-transparent"
             >
                 {/* Background Glow */}
                 <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
