@@ -51,6 +51,16 @@ function SidebarNav({
     const { setSupportOpen } = useUI();
     const { navigateTo } = useNavigation();
 
+    const handleRedirectToCalculator = useCallback(() => {
+        setActiveTab('home');
+        setTimeout(() => {
+            const element = document.getElementById('profit-calculator');
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 150);
+    }, [setActiveTab]);
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const profileRef = useRef<HTMLButtonElement>(null);
@@ -136,13 +146,29 @@ function SidebarNav({
     return (
         <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-bg-app/90 dark:bg-slate-950/90 backdrop-blur-2xl pt-24 pb-6 px-3">
             {/* Logo mark at top */}
-            <div className="hidden xl:flex items-center gap-3 px-2 mb-6">
-                <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg shrink-0" />
-                <span className="text-xs font-black uppercase tracking-widest vibing-crystal-text">Pintopay</span>
-            </div>
-            <div className="flex xl:hidden items-center justify-center mb-6">
-                <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg" />
-            </div>
+            <button
+                onClick={handleRedirectToCalculator}
+                className="hidden xl:flex flex-col items-start gap-1 px-3 py-3 mb-6 w-full rounded-2xl border border-transparent hover:border-divider hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300 group cursor-pointer text-left outline-none focus:outline-none"
+            >
+                <div className="flex items-center gap-3">
+                    <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg shrink-0 group-hover:scale-105 transition-transform" />
+                    <div className="flex flex-col">
+                        <span className="text-xs font-black uppercase tracking-widest vibing-crystal-text group-hover:text-blue-500 transition-colors">Pintopay</span>
+                        <span className="text-[9px] font-black uppercase tracking-wider text-text-secondary">Partner Center</span>
+                    </div>
+                </div>
+                <div className="mt-2.5 w-full flex items-center justify-between px-2.5 py-1 bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 rounded-lg">
+                    <span className="text-[8px] font-black uppercase tracking-[0.1em] text-blue-500 dark:text-blue-400 animate-pulse">$1/Min Club</span>
+                    <ChevronRight className="w-3 h-3 text-blue-500 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
+                </div>
+            </button>
+            <button
+                onClick={handleRedirectToCalculator}
+                className="flex xl:hidden items-center justify-center p-2 mb-6 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 border border-transparent hover:border-divider transition-all duration-300 group cursor-pointer outline-none focus:outline-none"
+                title="Go to Profit Calculator"
+            >
+                <img src="/logo.png?v=2" alt="Pintopay" className="w-8 h-8 object-contain rounded-lg group-hover:scale-105 transition-transform" />
+            </button>
 
             {/* Nav Menu Items */}
             <div className="flex flex-col gap-1">

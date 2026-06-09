@@ -140,7 +140,7 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
     }, [hoursWorked]);
 
     return (
-        <section className="px-0 py-2 min-h-[1100px] lg:min-h-0">
+        <section id="profit-calculator" className="px-0 py-2 min-h-[1100px] lg:min-h-0 scroll-mt-24">
             <m.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
