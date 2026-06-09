@@ -4,6 +4,9 @@ html,
 body,
 #root {
   min-height: 100dvh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
   margin: 0;
   padding: 0;
   background-color: var(--sys-bg-app);
@@ -11,6 +14,8 @@ body,
   -ms-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Ensure inputs and textareas remain interactive */
@@ -30,11 +35,11 @@ body {
     sans-serif;
   background-color: var(--sys-bg-app);
   background-size: cover;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
 }
 
-body::-webkit-scrollbar {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar {
   display: none;
 }
 
