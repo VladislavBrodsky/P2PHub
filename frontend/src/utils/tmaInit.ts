@@ -21,7 +21,17 @@ export async function initTMA(onComplete: (progress: number, message: string) =>
         // 1. Mount components (Safety first)
         if (miniApp.mount.isAvailable() && !miniApp.isMounted()) miniApp.mount();
         if (miniApp.ready.isAvailable()) miniApp.ready();
-        if (backButton.mount.isAvailable() && !backButton.isMounted()) backButton.mount();
+
+        // Set colors via SDK if available to match the app's premium dark design system
+        try {
+            if (miniApp.setHeaderColor.isAvailable()) miniApp.setHeaderColor('#030712');
+            if (miniApp.setBackgroundColor.isAvailable()) miniApp.setBackgroundColor('#030712');
+            if ((miniApp as any).setBottomBarColor?.isAvailable?.()) {
+                (miniApp as any).setBottomBarColor('#030712');
+            }
+        } catch (e) {
+            console.warn('[TMA SDK] Failed to set colors:', e);
+        }
 
         // 2. Expansion & Fullscreen (Immersive Mode) - Non-blocking mount to prevent slow iframe loads from hanging startup
         if (viewport.mount.isAvailable()) {
@@ -71,6 +81,19 @@ export async function initTMA(onComplete: (progress: number, message: string) =>
         // 4. Fallback for older environments / direct JS
         if (window.Telegram?.WebApp) {
             window.Telegram.WebApp.ready();
+            window.Telegram.WebApp.expand?.();
+
+            // Set native colors to match the app's premium dark design system
+            try {
+                window.Telegram.WebApp.setHeaderColor?.('#030712');
+                window.Telegram.WebApp.setBackgroundColor?.('#030712');
+                if ((window.Telegram.WebApp as any).setBottomBarColor) {
+                    (window.Telegram.WebApp as any).setBottomBarColor('#030712');
+                }
+            } catch (e) {
+                console.warn('[TMA] Failed to set native colors:', e);
+            }
+
             if ((window.Telegram.WebApp as any).requestFullscreen) {
                 (window.Telegram.WebApp as any).requestFullscreen();
             }

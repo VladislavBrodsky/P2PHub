@@ -180,29 +180,48 @@ function SidebarNav({
                 {navItems.map(({ id, icon: Icon, label }) => {
                     const isActive = activeTab === id;
                     return (
-                        <div key={id} className="w-full">
-                            {id === 'blog' && (
-                                <div className="my-3 h-px bg-linear-to-r from-transparent via-divider to-transparent w-full opacity-60" />
+                        <>
+                            <div className="w-full">
+                                {id === 'blog' && (
+                                    <div className="my-3 h-px bg-linear-to-r from-transparent via-divider to-transparent w-full opacity-60" />
+                                )}
+                                <button
+                                    onClick={() => {
+                                        if (id === 'support') {
+                                            setSupportOpen(true);
+                                        } else {
+                                            setActiveTab(id);
+                                        }
+                                    }}
+                                    onMouseEnter={() => prefetch(id)}
+                                    className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer w-full
+                                        ${isActive
+                                            ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
+                                            : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
+                                        }`}
+                                >
+                                    <Icon className="w-[18px] h-[18px] shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
+                                    <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap group-hover:translate-x-0.5 transition-transform duration-300">{label}</span>
+                                </button>
+                            </div>
+                            {/* PRO PANEL shortcut — appears directly below Home, only for Pro users */}
+                            {id === 'home' && isPro && (
+                                <button
+                                    onClick={() => navigateTo(ROUTES.PRO)}
+                                    className="group relative flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl w-full cursor-pointer overflow-hidden transition-all duration-300 bg-linear-to-r from-amber-500 via-yellow-400 to-orange-500 shadow-md shadow-amber-500/25 hover:brightness-110 active:scale-95"
+                                >
+                                    {/* Animated glow pulse */}
+                                    <div className="absolute inset-0 bg-linear-to-r from-amber-400/0 via-white/10 to-amber-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                    <Zap className="w-[18px] h-[18px] shrink-0 text-black/80 fill-black/20 group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300 animate-pulse" />
+                                    <span className="hidden xl:block text-xs font-black uppercase tracking-widest text-black/80 group-hover:translate-x-0.5 transition-transform duration-300">{t('navigation.pro_panel')}</span>
+                                    {/* Live dot */}
+                                    <div className="hidden xl:flex absolute right-3 top-1/2 -translate-y-1/2 items-center gap-1.5">
+                                        <div className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)] animate-pulse" />
+                                        <ChevronRight className="w-3 h-3 text-black/60" />
+                                    </div>
+                                </button>
                             )}
-                            <button
-                                onClick={() => {
-                                    if (id === 'support') {
-                                        setSupportOpen(true);
-                                    } else {
-                                        setActiveTab(id);
-                                    }
-                                }}
-                                onMouseEnter={() => prefetch(id)}
-                                className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer w-full
-                                    ${isActive
-                                        ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
-                                        : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
-                                    }`}
-                            >
-                                <Icon className="w-[18px] h-[18px] shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
-                                <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap group-hover:translate-x-0.5 transition-transform duration-300">{label}</span>
-                            </button>
-                        </div>
+                        </>
                     );
                 })}
             </div>
