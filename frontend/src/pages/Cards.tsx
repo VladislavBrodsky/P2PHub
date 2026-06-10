@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { CardTabSwitcher } from '../components/Cards/CardTabSwitcher';
 import { PremiumModal } from '../components/Cards/PremiumModal';
 import { useTMALock } from '../hooks/useTMALock';
+import { SectionHeader } from '../components/ui/SectionHeader';
 
 interface CardsPageProps {
     setActiveTab?: (tab: string) => void;
@@ -69,8 +70,11 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
     return (
         <div className="flex flex-col relative min-h-dvh">
             {/* Header */}
-            <div className="px-6 pb-4 pt-4 text-center">
-                <h2 className="text-slate-900 dark:text-white text-lg font-bold tracking-tight whitespace-nowrap">{t('cards.title')}</h2>
+            <div className="pt-8 pb-2">
+                <SectionHeader
+                    badge={t('common:navigation.cards')}
+                    title={t('cards.title')}
+                />
             </div>
 
             {/* Switcher Component */}
@@ -83,9 +87,16 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             />
 
             {/* Card Display Area */}
-            <div className="flex-1 px-6 pb-60 flex flex-col lg:grid lg:grid-cols-2 lg:gap-12 lg:max-w-4xl lg:mx-auto lg:items-start lg:pb-12 w-full">
-                {/* 3D Card Visual */}
-                <div className="mb-14 lg:mb-0 w-full max-w-[340px] lg:max-w-none flex justify-center relative min-h-[220px] lg:min-h-[260px] lg:h-[260px]">
+            <div className="flex-1 px-6 pb-60 flex flex-col lg:grid lg:grid-cols-2 lg:gap-16 lg:max-w-5xl lg:mx-auto lg:items-center lg:pb-12 w-full lg:pt-8">
+                {/* 3D Card Visual with Dynamic Glowing Aura */}
+                <div className="mb-14 lg:mb-0 w-full max-w-[340px] lg:max-w-none flex justify-center relative min-h-[220px] lg:min-h-[280px] lg:h-[280px] group/card-wrapper">
+                    {/* Glowing blur overlay matching the card variant */}
+                    <div className={`absolute inset-0 m-auto w-[240px] h-[150px] rounded-full blur-[80px] opacity-25 dark:opacity-40 transition-all duration-700 pointer-events-none
+                        ${selectedTab === 'virtual' ? 'bg-blue-500 shadow-[0_0_120px_rgba(59,130,246,0.8)]' :
+                          selectedTab === 'physical' ? 'bg-slate-500 shadow-[0_0_120px_rgba(100,116,139,0.8)]' :
+                          'bg-amber-500 shadow-[0_0_120px_rgba(245,158,11,0.8)]'}
+                    `} />
+
                     <AnimatePresence initial={true} mode="wait">
                         <motion.div
                             key={selectedTab}
@@ -106,13 +117,13 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1, duration: 0.3 }}
-                    className="w-full max-w-sm lg:max-w-none space-y-10 text-center lg:text-left"
+                    className="w-full max-w-sm lg:max-w-none space-y-8 text-center lg:text-left"
                 >
-                    <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-slate-900 dark:text-white leading-tight text-center lg:text-left">
+                    <div className="space-y-3">
+                        <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight text-center lg:text-left">
                             {currentCard.title}
                         </h3>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium text-sm px-4 lg:px-0 leading-relaxed text-center lg:text-left">
+                        <p className="text-text-secondary font-medium text-sm lg:text-base px-4 lg:px-0 leading-relaxed text-center lg:text-left opacity-90">
                             {currentCard.description}
                         </p>
 
@@ -123,10 +134,10 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                     setIsTermsOpen(!isTermsOpen);
                                     selection();
                                 }}
-                                className="w-full py-3 px-4 flex items-center justify-between bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-premium-sm group cursor-pointer hover:border-emerald-500/30 transition-all duration-300"
+                                className="w-full py-3.5 px-5 flex items-center justify-between bg-white/60 dark:bg-slate-900/30 hover:bg-white/80 dark:hover:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-white/10 shadow-premium-sm group cursor-pointer hover:border-emerald-500/35 transition-all duration-300 backdrop-blur-md"
                             >
                                 <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                                     <span className="text-sm font-bold text-slate-900 dark:text-white tracking-wider">
                                         {t('cards.terms')}
                                     </span>
@@ -149,7 +160,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                         className="overflow-hidden"
                                     >
                                         <div className="pt-4 pb-2 space-y-4 text-left">
-                                            <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 space-y-3.5 border border-slate-100 dark:border-white/5">
+                                            <div className="bg-slate-50/50 dark:bg-slate-950/40 rounded-2xl p-5 space-y-3.5 border border-slate-100 dark:border-white/5 backdrop-blur-md">
                                                 {[
                                                     { label: `${currentCard.price} ${t('cards.fees.issue')}` },
                                                     { label: `2.5% ${t('cards.fees.topup')}` },
@@ -157,7 +168,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                                 ].map((term, i) => (
                                                     <div key={i} className="flex items-center gap-3">
                                                         <CheckCircle2 size={18} className="text-emerald-500 shrink-0" />
-                                                        <span className="text-body font-bold text-slate-900 dark:text-white">
+                                                        <span className="text-sm font-bold text-slate-900 dark:text-white">
                                                             {term.label}
                                                         </span>
                                                     </div>
@@ -171,30 +182,27 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                     </div>
 
                     {/* Promo/Bonus Pill */}
-                    {/* (Moved Terms Accordion from here to below description) */}
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 pl-3 pr-4 flex items-center justify-between shadow-premium border border-slate-200 dark:border-white/10">
-                        <div className="flex items-center gap-2 overflow-hidden">
+                    <div className="bg-white/60 dark:bg-slate-900/30 rounded-2xl p-3.5 pl-4 pr-5 flex items-center justify-between shadow-premium border border-slate-200/80 dark:border-white/10 backdrop-blur-md hover:border-blue-500/10 transition-colors duration-300">
+                        <div className="flex items-center gap-3 overflow-hidden">
                             <div className="relative group overflow-hidden bg-slate-900 dark:bg-white rounded-[0.75rem] px-2.5 py-1.5 flex items-center gap-1.5 shadow-md shrink-0">
-                                <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0" />
-                                <span className="text-label font-bold text-white dark:text-slate-900 whitespace-nowrap tracking-wider">
+                                <div className="w-1.5 h-1.5 rounded-full bg-white dark:bg-slate-900 opacity-90 shrink-0 animate-pulse" />
+                                <span className="text-[10px] font-extrabold text-white dark:text-slate-900 whitespace-nowrap tracking-wider uppercase">
                                     {currentCard.bonus}
                                 </span>
                             </div>
 
                             <div className="text-left min-w-0">
-                                <p className="text-label font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] wrap-break-word">
+                                <p className="text-xs font-bold text-slate-900 dark:text-white leading-[1.2] max-w-[180px] wrap-break-word">
                                     {currentCard.bonus} {currentCard.bonusText}
                                 </p>
                             </div>
                         </div>
 
-                        <div className="bg-white dark:bg-slate-900 px-3.5 py-2 rounded-[1rem] border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 active:bg-slate-50 dark:active:bg-slate-950 transition-colors">
+                        <div className="bg-white dark:bg-slate-900 px-3.5 py-2 rounded-[1rem] border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-2 active:bg-slate-50 dark:active:bg-slate-950 transition-colors cursor-pointer">
                             <Apple size={16} strokeWidth={0} className="fill-slate-900 dark:fill-white" />
                             <span className="text-caption font-bold text-slate-900 dark:text-white">Pay</span>
                         </div>
                     </div>
-
-
 
                     {/* Action Button */}
                     <div className="pt-2 w-full">
@@ -202,9 +210,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className={`w-full h-12 rounded-xl font-bold text-sm shadow-[0_20px_40px_-12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-2 transition-transform relative overflow-hidden ${selectedTab === 'platinum'
-                                ? 'bg-linear-to-br from-slate-100 via-white to-slate-300 text-slate-900 border border-white/50'
-                                : 'bg-slate-900 text-white'
+                            className={`w-full h-12.5 rounded-xl font-extrabold text-xs uppercase tracking-[0.2em] shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)] flex items-center justify-center gap-2 transition-all duration-300 relative overflow-hidden active:scale-95 ${selectedTab === 'platinum'
+                                ? 'bg-linear-to-br from-amber-400 via-yellow-300 to-amber-500 text-black border border-yellow-400/50 shadow-yellow-500/10 hover:brightness-110'
+                                : 'bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white shadow-blue-500/20'
                                 }`}
                         >
                             {selectedTab === 'platinum' ? (
@@ -214,14 +222,14 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                                         transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                                         className="absolute inset-0 bg-linear-to-r from-transparent via-white/80 to-transparent -skew-x-12"
                                     />
-                                    <Crown size={18} className="text-amber-500 fill-amber-100 relative z-10" />
-                                    <span className="relative z-10">{t('cards.premium_only')}</span>
+                                    <Crown size={16} className="text-black fill-black/20 relative z-10" />
+                                    <span className="relative z-10 text-black font-extrabold">{t('cards.premium_only')}</span>
                                 </>
                             ) : (
                                 <>
                                     <span>{t('cards.action')}</span>
-                                    <div className="w-1 h-1 rounded-full bg-white/20" />
-                                    <span className="text-white/80">{currentCard.price}</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                                    <span className="text-white/90 font-extrabold">{currentCard.price}</span>
                                 </>
                             )}
                         </motion.button>
