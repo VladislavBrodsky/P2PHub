@@ -11,8 +11,8 @@ export const ProfitMath = ({ t }: ProfitMathProps) => {
         <div className="mb-8 px-1">
             <div className="relative overflow-hidden rounded-3xl bg-white/40 dark:bg-white/5 backdrop-blur-md border border-slate-200/50 dark:border-emerald-500/20 p-6 space-y-6 shadow-xl group">
                 {/* High-Fidelity Ambient Glows */}
-                <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-[80px] pointer-events-none group-hover:scale-125 transition-transform duration-1000" />
-                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[60px] pointer-events-none" />
+                <div className="absolute -top-10 right-0 w-40 h-40 bg-emerald-500/20 blur-[80px] pointer-events-none group-hover:scale-125 transition-transform duration-1000" />
+                <div className="absolute -bottom-10 left-0 w-32 h-32 bg-blue-500/10 blur-[60px] pointer-events-none" />
 
                 <div className="relative flex items-center justify-between border-b border-slate-100/50 dark:border-white/5 pb-5">
                     <div className="flex flex-col text-left">

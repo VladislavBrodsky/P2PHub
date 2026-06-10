@@ -148,8 +148,8 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
                 className="relative text-slate-900 dark:text-white flex flex-col gap-6 lg:gap-8 lg:max-w-5xl xl:max-w-6xl w-full lg:mx-auto transition-all duration-300 bg-transparent"
             >
                 {/* Background Glow */}
-                <div className="absolute -top-32 -right-32 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
-                <div className="absolute -bottom-32 -left-32 w-80 h-80 bg-purple-600/10 blur-[120px] pointer-events-none" />
+                <div className="absolute -top-32 right-0 w-80 h-80 bg-blue-600/20 blur-[120px] pointer-events-none animate-pulse" />
+                <div className="absolute -bottom-32 left-0 w-80 h-80 bg-purple-600/10 blur-[120px] pointer-events-none" />
 
                 <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
                     <m.div
