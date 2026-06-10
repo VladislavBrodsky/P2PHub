@@ -69,7 +69,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                             onClick={() => setIsExplorerOpen(false)}
                         />
                         <motion.div
@@ -95,7 +95,7 @@ export const DashboardModals: React.FC<DashboardModalsProps> = React.memo(({
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsQrOpen(false)}
-                            className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-950/40 dark:bg-slate-950/40 backdrop-blur-md"
                         />
                         <motion.div
                             initial={isDesktop ? { scale: 0.95, opacity: 0 } : { opacity: 0, scale: 0.9, y: 20 }}

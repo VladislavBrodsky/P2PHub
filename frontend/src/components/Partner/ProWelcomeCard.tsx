@@ -37,7 +37,7 @@ export const ProWelcomeCard = ({ isOpen, onClose }: ProWelcomeCardProps) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                        className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                         onClick={onClose}
                     />
 

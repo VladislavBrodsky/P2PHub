@@ -38,7 +38,7 @@ export const LevelUpModal = ({ isOpen, level, onClose }: LevelUpModalProps) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                        className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                     />
 
                     {/* Content Container */}

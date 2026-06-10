@@ -9,7 +9,7 @@ interface ProfitMathProps {
 export const ProfitMath = ({ t }: ProfitMathProps) => {
     return (
         <div className="mb-8 px-1">
-            <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-white/80 to-white/40 dark:from-[#030712]/80 dark:to-[#030712]/40 backdrop-blur-xl border border-slate-200/50 dark:border-emerald-500/20 p-6 space-y-6 shadow-2xl shadow-slate-200/40 dark:shadow-[0_20px_50px_-10px_rgba(16,185,129,0.2)] group">
+            <div className="relative overflow-hidden rounded-3xl bg-white/40 dark:bg-white/5 backdrop-blur-md border border-slate-200/50 dark:border-emerald-500/20 p-6 space-y-6 shadow-xl group">
                 {/* High-Fidelity Ambient Glows */}
                 <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 blur-[80px] pointer-events-none group-hover:scale-125 transition-transform duration-1000" />
                 <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 blur-[60px] pointer-events-none" />

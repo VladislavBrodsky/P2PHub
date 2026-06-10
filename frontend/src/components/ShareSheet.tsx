@@ -105,7 +105,7 @@ export const ShareSheet = ({ isOpen, onClose, referralCode }: ShareSheetProps) =
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                        className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                     />
                     <motion.div
                         key="share-sheet-content"

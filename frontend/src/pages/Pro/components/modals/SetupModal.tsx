@@ -174,7 +174,7 @@ export const SetupModal: React.FC<SetupModalProps> = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/90 backdrop-blur-md"
+                    className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/40 backdrop-blur-md"
                     onClick={() => setShowSetup(false)}
                 >
                     <motion.div

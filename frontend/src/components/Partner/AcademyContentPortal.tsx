@@ -117,7 +117,7 @@ export const AcademyContentPortal: React.FC<AcademyContentPortalProps> = ({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-black/90 backdrop-blur-3xl touch-none"
+                className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md touch-none"
             />
 
             {/* Modal Content - Allowed to receive touch events */}

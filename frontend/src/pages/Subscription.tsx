@@ -598,7 +598,7 @@ export default function SubscriptionPage() {
                                     </div>
                                 </div>
 
-                                {/* Right Column: Math calculator, Payment section, Stats, FAQ & Restore button */}
+                                {/* Right Column: Math calculator, Payment section */}
                                 <div className="space-y-6 lg:mt-0 mt-8">
                                     <ProfitMath t={t} />
 
@@ -626,50 +626,53 @@ export default function SubscriptionPage() {
                                         t={t}
                                         adminUsdt={adminUsdt}
                                     />
+                                </div>
+                            </div>
 
-                                    <SocialProofStats t={t} />
+                            {/* Below Grid: Social Proof, FAQ & Restore button (spanning full width & centered) */}
+                            <div className="mt-12 space-y-12 relative z-10 w-full max-w-xl lg:max-w-3xl xl:max-w-4xl mx-auto">
+                                <SocialProofStats t={t} />
 
-                                    <div className="space-y-4">
-                                        <SectionHeader
-                                            badge={t('pro:subscription.faq.badge', 'SUPPORT')}
-                                            title={t('pro:subscription.faq.title')}
-                                            description={t('pro:subscription.faq.desc')}
-                                            className="mb-4 text-center"
-                                        />
+                                <div className="space-y-4">
+                                    <SectionHeader
+                                        badge={t('pro:subscription.faq.badge', 'SUPPORT')}
+                                        title={t('pro:subscription.faq.title')}
+                                        description={t('pro:subscription.faq.desc')}
+                                        className="mb-4 text-center"
+                                    />
 
-                                        {/* ── FAQ SECTION ── */}
-                                        <SubscriptionFAQ
-                                            expandedFaq={expandedFaq}
-                                            setExpandedFaq={setExpandedFaq}
-                                            faqs={faqs}
-                                            selection={selection}
-                                            t={t}
-                                        />
-                                    </div>
+                                    {/* ── FAQ SECTION ── */}
+                                    <SubscriptionFAQ
+                                        expandedFaq={expandedFaq}
+                                        setExpandedFaq={setExpandedFaq}
+                                        faqs={faqs}
+                                        selection={selection}
+                                        t={t}
+                                    />
+                                </div>
 
-                                    <div className="flex flex-col items-center justify-center pt-4">
-                                        <motion.button
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ delay: 0.5 }}
-                                            onClick={async () => {
-                                                selection();
-                                                const prevStatus = isPro;
-                                                await refreshUser();
-                                                if (user?.is_pro && !prevStatus) {
-                                                    notification('success');
-                                                } else {
-                                                    impact('rigid');
-                                                }
-                                            }}
-                                            className="flex items-center gap-2 px-4 py-2 text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors active:scale-95"
-                                        >
-                                            <RefreshCw size={14} />
-                                            <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
-                                        </motion.button>
+                                <div className="flex flex-col items-center justify-center pt-4">
+                                    <motion.button
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ delay: 0.5 }}
+                                        onClick={async () => {
+                                            selection();
+                                            const prevStatus = isPro;
+                                            await refreshUser();
+                                            if (user?.is_pro && !prevStatus) {
+                                                notification('success');
+                                            } else {
+                                                impact('rigid');
+                                            }
+                                        }}
+                                        className="flex items-center gap-2 px-4 py-2 text-slate-400 dark:text-white/30 hover:text-slate-600 dark:hover:text-white/60 transition-colors active:scale-95"
+                                    >
+                                        <RefreshCw size={14} />
+                                        <span className="text-xs uppercase font-bold tracking-widest">{t('common:restore_purchases', 'Restore Purchases')}</span>
+                                    </motion.button>
 
-                                        <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.03.18 | v1.8.16-ELITE</div>
-                                    </div>
+                                    <div className="text-center opacity-10 text-label font-mono tracking-[0.5em] mt-4">BUILD: 2026.03.18 | v1.8.16-ELITE</div>
                                 </div>
                             </div>
                         </div>

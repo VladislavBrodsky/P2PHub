@@ -99,7 +99,7 @@ export default function ProfileDrawer({ isOpen, onClose, activeTab }: ProfileDra
                         exit={{ opacity: 0, pointerEvents: 'none' }}
                         transition={{ duration: 0.2, ease: 'easeOut' }}
                         onClick={onClose}
-                        className="fixed inset-0 bg-black/40 backdrop-blur-[4px] cursor-pointer pointer-events-auto"
+                        className="fixed inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md cursor-pointer pointer-events-auto"
                     />
 
                     {/* Drawer Content Wrapper */}

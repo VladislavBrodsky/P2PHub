@@ -110,7 +110,7 @@ export const SubscriptionBenefits = React.memo(({
                 </div>
 
                 {/* Quick checklist - Premium Box */}
-                <div className="bg-slate-50 dark:bg-black/40 border-2 border-slate-100 dark:border-white/5 rounded-xl p-5 space-y-3 shadow-xl">
+                <div className="bg-slate-50/50 dark:bg-white/5 border border-slate-100/50 dark:border-white/5 rounded-xl p-5 space-y-3 shadow-xl">
                     <div className="flex items-center gap-2 mb-1">
                         <Check size={14} className="text-emerald-500" strokeWidth={3} />
                         <span className="text-label font-black tracking-widest text-slate-400 dark:text-white/30">

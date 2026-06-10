@@ -161,7 +161,7 @@ export const MonthlyWinnersPopup: React.FC<MonthlyWinnersPopupProps> = ({ forceS
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 z-9998 bg-black/80 backdrop-blur-md"
+                        className="fixed inset-0 z-9998 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                         onClick={handleClose}
                     />
 

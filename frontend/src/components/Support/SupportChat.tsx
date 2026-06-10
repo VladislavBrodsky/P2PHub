@@ -444,7 +444,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm sm:backdrop-blur-md"
+                        className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                     />
 
                     {/* Chat Window */}

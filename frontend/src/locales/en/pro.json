@@ -654,6 +654,18 @@
       "partners": "Active Partners",
       "growth": "Grow x100 Faster",
       "ai_active": "24/7 AI Engine"
+    },
+    "status": {
+      "verifying": "Verifying Payment",
+      "verifying_p": "Checking on-chain data. This usually takes 30-60 seconds.",
+      "welcome_pro": "Welcome to PRO!",
+      "welcome_pro_p": "Your account has been successfully upgraded.",
+      "welcome_pro_plus": "Welcome to PRO+!",
+      "welcome_pro_plus_p": "Your account has been successfully upgraded to PRO+.",
+      "get_started": "Get Started",
+      "submitted": "Submitted",
+      "submitted_p": "Our team is verifying your payment. You'll be notified once approved.",
+      "got_it": "Got it"
     }
   }
 }

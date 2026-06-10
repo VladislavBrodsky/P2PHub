@@ -90,7 +90,7 @@ export const SubscriptionPayment = React.memo(({
             {/* Background Glows to match Home Style */}
             {/* Removed background glow */}
 
-            <div className="relative z-10 bg-white dark:bg-bg-app border border-slate-200 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium overflow-hidden group">
+            <div className="relative z-10 bg-white/40 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-[2.5rem] p-8 shadow-premium backdrop-blur-md overflow-hidden group">
                 {/* Inner liquid background layer */}
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-yellow-500/5 opacity-40 pointer-events-none" />
 

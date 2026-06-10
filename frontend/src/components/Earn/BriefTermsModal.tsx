@@ -48,7 +48,7 @@ export function BriefTermsModal({ isOpen, onClose }: BriefTermsModalProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+                        className="absolute inset-0 bg-black/40 dark:bg-slate-950/45 backdrop-blur-md"
                     />
                     <motion.div
                         initial={isDesktop ? { scale: 0.95, opacity: 0 } : { y: '100%', opacity: 0 }}

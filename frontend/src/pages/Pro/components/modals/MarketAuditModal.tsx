@@ -44,7 +44,7 @@ export const MarketAuditModal: React.FC<MarketAuditModalProps> = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/60 dark:bg-slate-950/95 backdrop-blur-xl"
+                    className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-slate-950/40 dark:bg-slate-950/40 backdrop-blur-md"
                     onClick={() => setShowAuditModal(false)}
                 >
                     <motion.div

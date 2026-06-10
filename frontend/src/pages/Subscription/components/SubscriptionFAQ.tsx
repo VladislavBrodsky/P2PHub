@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { SectionHeader } from '../../../components/ui/SectionHeader';
 
 interface FAQItem {
     icon: any;
@@ -26,15 +25,10 @@ export const SubscriptionFAQ = React.memo(({
     t
 }: SubscriptionFAQProps) => {
     return (
-        <section className="mb-10 pt-32">
-            <SectionHeader
-                badge={t('pro:subscription.faq.teaser_badge')}
-                title={<>{t('pro:subscription.faq.header_pre')} <span className="text-blue-600 dark:text-blue-400">{t('pro:subscription.faq.header_highlight')}</span></>}
-                className="mb-8"
-            />
+        <section className="mb-10">
             <div className="space-y-3">
                 {faqs.map((faq, idx) => (
-                    <div key={idx} className="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-white/10 rounded-xl overflow-hidden shadow-sm transition-all hover:bg-slate-100/50 dark:hover:bg-slate-800/50">
+                    <div key={idx} className="bg-slate-50/20 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 rounded-xl overflow-hidden shadow-sm transition-all hover:bg-slate-100/30 dark:hover:bg-white/10">
                         <button
                             onClick={() => { selection(); setExpandedFaq(expandedFaq === idx ? null : idx); }}
                             className="w-full p-4 flex items-center justify-between group text-left"
