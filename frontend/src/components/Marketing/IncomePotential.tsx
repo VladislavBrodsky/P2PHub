@@ -153,30 +153,40 @@ export const IncomePotential = ({ onNavigateToPartner }: IncomePotentialProps) =
 
                 <div className="space-y-6 relative z-10 flex flex-col items-center text-center">
                     <m.div
-                        className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 backdrop-blur-sm px-3 py-1.5 will-change-transform"
+                        className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 dark:bg-blue-950/20 backdrop-blur-md px-4 py-2 will-change-transform group cursor-pointer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.98 }}
                         animate={{
-                            boxShadow: ["0 0 0px rgba(59, 130, 246, 0)", "0 0 15px rgba(59, 130, 246, 0.4)", "0 0 0px rgba(59, 130, 246, 0)"],
-                            borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.8)", "rgba(59, 130, 246, 0.3)"]
+                            boxShadow: [
+                                "0 0 10px rgba(59, 130, 246, 0.15), inset 0 0 8px rgba(59, 130, 246, 0.1)",
+                                "0 0 25px rgba(59, 130, 246, 0.4), inset 0 0 16px rgba(59, 130, 246, 0.2)",
+                                "0 0 10px rgba(59, 130, 246, 0.15), inset 0 0 8px rgba(59, 130, 246, 0.1)"
+                            ],
+                            borderColor: ["rgba(59, 130, 246, 0.3)", "rgba(59, 130, 246, 0.75)", "rgba(59, 130, 246, 0.3)"]
                         }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                            boxShadow: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                            borderColor: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+                            scale: { duration: 0.2, ease: "easeOut" }
+                        }}
                     >
-                        <TrendingUp className="w-3.5 h-3.5 text-blue-500" />
-                        <span className="text-label font-bold uppercase tracking-[0.2em] text-blue-500">
+                        <TrendingUp className="w-4 h-4 text-blue-500 dark:text-blue-400 group-hover:translate-y-[-1px] group-hover:translate-x-[1px] transition-transform duration-300" />
+                        <span className="text-label font-extrabold uppercase tracking-[0.25em] text-blue-500 dark:text-blue-400">
                             {t('income.badge')}
                         </span>
                     </m.div>
 
-                    <h3 className="text-[clamp(1.75rem,6vw,2.5rem)] font-black tracking-tight leading-none uppercase text-balance">
+                    <h3 className="text-[clamp(2rem,6vw,3.25rem)] font-extrabold tracking-tight leading-[1.15] text-balance text-slate-900 dark:text-white">
                         {t('income.title')}
-                        <span className="block mt-1 text-transparent bg-clip-text bg-linear-to-r from-emerald-500 via-teal-400 to-blue-500 dark:from-emerald-400 dark:via-cyan-300 dark:to-blue-400 bg-size-[200%_auto] animate-text-shimmer drop-shadow-[0_2px_15px_rgba(52,211,153,0.3)]">
+                        <span className="block mt-2 text-transparent bg-clip-text bg-linear-to-r from-emerald-500 via-teal-400 to-blue-500 dark:from-emerald-400 dark:via-cyan-300 dark:to-blue-400 bg-size-[200%_auto] animate-text-shimmer drop-shadow-[0_4px_20px_rgba(52,211,153,0.4)]">
                             {t('income.title_highlight')}
                         </span>
                     </h3>
                     <div className="relative">
-                        <p className="text-[clamp(0.8rem,2vw,0.875rem)] text-slate-600 dark:text-slate-300 font-medium leading-relaxed max-w-[360px] mx-auto">
+                        <p className="text-[clamp(0.875rem,2.2vw,0.95rem)] text-slate-600 dark:text-slate-200/90 font-medium leading-[1.6] max-w-[420px] mx-auto">
                             <Trans t={t} i18nKey="income.desc">
-                                Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-bold">walled garden</span>.
-                                As a <span className="text-pintopay-blue dark:text-blue-400 font-bold">Partner</span>, you are the bridge.
+                                Traditional finance is a <span className="text-blue-600 dark:text-blue-400 font-semibold">walled garden</span>.
+                                As a <span className="text-pintopay-blue dark:text-blue-400 font-semibold">Partner</span>, you are the bridge.
                                 Every global transaction becomes your dividends.
                             </Trans>
                         </p>
