@@ -85,8 +85,8 @@ export async function initTMA(onComplete: (progress: number, message: string) =>
 
             // Set native colors to match the app's premium dark design system
             try {
-                window.Telegram.WebApp.setHeaderColor?.('#030712');
-                window.Telegram.WebApp.setBackgroundColor?.('#030712');
+                (window.Telegram.WebApp as any).setHeaderColor?.('#030712');
+                (window.Telegram.WebApp as any).setBackgroundColor?.('#030712');
                 if ((window.Telegram.WebApp as any).setBottomBarColor) {
                     (window.Telegram.WebApp as any).setBottomBarColor('#030712');
                 }

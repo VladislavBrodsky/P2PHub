@@ -89,9 +89,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
             {/* Card Display Area */}
             <div className="flex-1 px-6 pb-60 flex flex-col lg:grid lg:grid-cols-2 lg:gap-16 lg:max-w-5xl lg:mx-auto lg:items-center lg:pb-12 w-full lg:pt-8">
                 {/* 3D Card Visual with Dynamic Glowing Aura */}
-                <div className="mb-14 lg:mb-0 w-full max-w-[340px] lg:max-w-none flex justify-center relative min-h-[220px] lg:min-h-[280px] lg:h-[280px] group/card-wrapper">
+                <div className="mb-14 lg:mb-0 w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] mx-auto aspect-[1.586/1] relative group/card-wrapper">
                     {/* Glowing blur overlay matching the card variant */}
-                    <div className={`absolute inset-0 m-auto w-[240px] h-[150px] rounded-full blur-[80px] opacity-25 dark:opacity-40 transition-all duration-700 pointer-events-none
+                    <div className={`absolute inset-0 m-auto w-[70%] h-[60%] rounded-full blur-[60px] sm:blur-[80px] opacity-25 dark:opacity-40 transition-all duration-700 pointer-events-none
                         ${selectedTab === 'virtual' ? 'bg-blue-500 shadow-[0_0_120px_rgba(59,130,246,0.8)]' :
                           selectedTab === 'physical' ? 'bg-slate-500 shadow-[0_0_120px_rgba(100,116,139,0.8)]' :
                           'bg-amber-500 shadow-[0_0_120px_rgba(245,158,11,0.8)]'}
@@ -104,7 +104,7 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             exit={{ opacity: 0, scale: 0.95, x: -20 }}
                             transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="w-full flex justify-center absolute inset-0"
+                            className="w-full h-full absolute inset-0"
                         >
                             <PintopayCard variant={selectedTab} />
                         </motion.div>
@@ -210,9 +210,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleGetCard}
-                            className={`w-full h-12.5 rounded-xl font-extrabold text-xs uppercase tracking-[0.2em] shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)] flex items-center justify-center gap-2 transition-all duration-300 relative overflow-hidden active:scale-95 ${selectedTab === 'platinum'
+                            className={`w-full h-12.5 rounded-full font-extrabold text-xs uppercase tracking-[0.2em] shadow-[0_12px_25px_-5px_rgba(0,102,255,0.25)] flex items-center justify-center gap-2 transition-all duration-300 relative overflow-hidden active:scale-95 ${selectedTab === 'platinum'
                                 ? 'bg-linear-to-br from-amber-400 via-yellow-300 to-amber-500 text-black border border-yellow-400/50 shadow-yellow-500/10 hover:brightness-110'
-                                : 'bg-linear-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white shadow-blue-500/20'
+                                : 'vibing-blue-animated shadow-blue-500/30 hover:brightness-110 text-white'
                                 }`}
                         >
                             {selectedTab === 'platinum' ? (
