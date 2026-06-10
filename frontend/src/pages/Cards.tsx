@@ -68,9 +68,9 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
     const currentCard = cardData[selectedTab];
 
     return (
-        <div className="flex flex-col relative min-h-dvh">
+        <div className="flex flex-col relative">
             {/* Header */}
-            <div className="pt-8 pb-2">
+            <div className="pt-6 pb-2">
                 <SectionHeader
                     badge={t('common:navigation.cards')}
                     title={t('cards.title')}
@@ -86,8 +86,8 @@ export default function CardsPage({ setActiveTab }: CardsPageProps) {
                 }}
             />
 
-            {/* Card Display Area */}
-            <div className="flex-1 px-6 pb-60 flex flex-col lg:grid lg:grid-cols-2 lg:gap-16 lg:max-w-5xl lg:mx-auto lg:items-center lg:pb-12 w-full lg:pt-8">
+            {/* Card Display Area (Unified Frosted Glass Console Panel on Tablet/Desktop) */}
+            <div className="mt-2 mb-16 w-full max-w-sm sm:max-w-2xl lg:max-w-5xl mx-auto px-6 sm:px-8 lg:px-12 py-8 lg:py-12 bg-transparent sm:bg-white/5 sm:dark:bg-slate-900/35 sm:backdrop-blur-xl sm:border sm:border-slate-200/5 sm:dark:border-white/5 sm:rounded-3xl sm:shadow-[0_20px_50px_rgba(0,0,0,0.3)] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
                 {/* 3D Card Visual with Dynamic Glowing Aura */}
                 <div className="mb-14 lg:mb-0 w-full max-w-[340px] sm:max-w-[380px] lg:max-w-[420px] mx-auto aspect-[1.586/1] relative group/card-wrapper">
                     {/* Glowing blur overlay matching the card variant */}
