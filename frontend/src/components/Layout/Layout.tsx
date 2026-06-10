@@ -479,14 +479,14 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
     const handleCloseMenu = useCallback(() => setIsMenuOpen(false), []);
 
     return (
-        <div className="fixed inset-0 flex flex-col items-center justify-start bg-transparent premium-desktop-layout selection:bg-blue-500/10 overflow-hidden">
+        <div className="fixed inset-0 flex flex-col items-center sm:items-stretch justify-start bg-transparent premium-desktop-layout selection:bg-blue-500/10 overflow-hidden">
             {/* ── Desktop sidebar (hidden on mobile) ── */}
             <SidebarNav activeTab={activeTab} setActiveTab={setActiveTab} prefetchPages={prefetchPages} />
 
             {/* ── Main Content Hub ── */}
             {/* Mobile: centered max-w-lg phone column | Desktop: full-width shifted right of sidebar */}
             <div className={`relative flex flex-col h-full w-full overflow-hidden transition-all
-                max-w-lg
+                max-w-lg sm:max-w-none
                 lg:max-w-none lg:pl-[72px] xl:pl-56
             `}>
                 {/* Staging Ribbon */}
@@ -510,7 +510,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                         paddingTop: !isHeaderVisible ? '0px' : 'var(--main-content-pt, var(--dynamic-header-offset, var(--header-total-offset, 8.625rem)))'
                     }}
                 >
-                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg lg:max-w-none lg:px-8 xl:px-12 px-4'}`}>
+                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg sm:max-w-none lg:px-8 xl:px-12 px-4'}`}>
                         <div className="mx-auto w-full">
                             {children}
                         </div>

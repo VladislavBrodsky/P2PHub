@@ -956,6 +956,10 @@
 @media (min-width: 640px) {
   .premium-desktop-layout {
     position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
     background-color: var(--sys-bg-app) !important; /* Base app bg (theme-adaptive) */
     background-image: radial-gradient(circle at 1px 1px, var(--bg-grid-color) 1px, transparent 0) !important; /* 2026 Dotted Grid */
     background-size: var(--bg-grid-size) var(--bg-grid-size) !important;
