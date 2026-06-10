@@ -113,9 +113,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             >
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
-                                <p className={`text-[11px] font-black uppercase tracking-[0.2em] relative z-10 ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
+                                <span className={`text-[10px] font-extrabold uppercase tracking-[0.15em] relative z-10 ${isProPlus ? 'text-[#0a1000] drop-shadow-sm' : 'text-white'}`}>
                                     {t('dashboard:open_pro_dashboard')}
-                                </p>
+                                </span>
                             </m.button>
                         ) : (
                             <m.button
@@ -125,9 +125,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                             >
                                 <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer-slide" />
-                                <p className="text-xs font-black uppercase tracking-[0.25em] text-white relative z-10">
+                                <span className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-white relative z-10">
                                     {t('dashboard:hero_badge')}
-                                </p>
+                                </span>
                             </m.button>
                         )}
 
@@ -144,12 +144,12 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                         )}
                     </div>
 
-                    <div className="flex flex-col gap-3 sm:gap-5 mt-2 w-full">
-                        <h1 className="text-[36px] sm:text-[46px] lg:text-[32px] xl:text-[38px] font-black tracking-tighter text-text-primary leading-[1.05] text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none mx-auto lg:mx-0 drop-shadow-sm lg:whitespace-nowrap">
+                    <div className="flex flex-col gap-3 sm:gap-4 mt-2 w-full">
+                        <h1 className="text-[34px] sm:text-[44px] lg:text-[32px] xl:text-[38px] font-extrabold tracking-tight text-text-primary leading-[1.15] text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none mx-auto lg:mx-0 drop-shadow-sm lg:whitespace-nowrap">
                             {heroTitle1}
                         </h1>
                         <m.div
-                            className="text-[36px] sm:text-[46px] lg:text-[32px] xl:text-[38px] font-black tracking-tighter leading-tight text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none vibing-crystal-text mx-auto lg:mx-0 drop-shadow-md lg:whitespace-nowrap"
+                            className="text-[34px] sm:text-[44px] lg:text-[32px] xl:text-[38px] font-extrabold tracking-tight leading-[1.15] text-center lg:text-left max-w-[360px] sm:max-w-[420px] lg:max-w-none vibing-crystal-text mx-auto lg:mx-0 drop-shadow-md lg:whitespace-nowrap"
                             animate={{
                                 scale: [1, 1.03, 1],
                                 rotate: [-0.3, 0.3, -0.3],
@@ -166,9 +166,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
                     {/* Desktop-only description */}
                     <div className="hidden lg:block mt-8 w-full">
-                        <p className="text-text-secondary text-left text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
+                        <p className="text-text-secondary text-left text-sm xl:text-base font-medium leading-relaxed opacity-90 max-w-xl">
                             <Trans t={t} i18nKey="dashboard:hero_desc">
-                                Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
+                                Traditional finance is slow, closed, and failing. <span className="text-blue-500 dark:text-blue-400 font-semibold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
                             </Trans>
                         </p>
                     </div>
@@ -223,9 +223,9 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
             {/* #comment: Semantic description. */}
             <m.div variants={item} className="px-8 pt-4 pb-12 lg:hidden">
-                <p className="text-text-secondary text-center text-label font-bold leading-relaxed opacity-60 uppercase tracking-widest">
+                <p className="text-text-secondary text-center text-sm font-medium leading-relaxed opacity-90">
                     <Trans t={t} i18nKey="dashboard:hero_desc">
-                        Traditional finance is slow, closed, and failing. <span className="text-blue-500 font-bold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
+                        Traditional finance is slow, closed, and failing. <span className="text-blue-500 dark:text-blue-400 font-semibold">Partner Center</span> is the bridge to a borderless era where you earn from the flow of world money.
                     </Trans>
                 </p>
             </m.div>
