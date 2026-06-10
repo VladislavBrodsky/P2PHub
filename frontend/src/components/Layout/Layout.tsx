@@ -144,7 +144,7 @@ function SidebarNav({
     };
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-bg-app/80 dark:bg-slate-950/60 backdrop-blur-3xl pt-8 pb-6 px-3">
+        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 border-r border-divider bg-white/[0.01] dark:bg-slate-950/15 backdrop-blur-2xl pt-8 pb-6 px-3">
             {/* Logo mark at top */}
             <button
                 onClick={handleRedirectToCalculator}
