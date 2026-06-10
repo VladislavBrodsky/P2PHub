@@ -463,7 +463,7 @@ export default function SubscriptionPage() {
                         <ChevronLeft size={16} />
                     </button>
                     <div className="flex flex-col px-3 pb-24 pt-[80px] max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto overflow-x-hidden w-full">
-                        <div className="relative overflow-hidden rounded-xl bg-transparent dark:bg-bg-app border-none dark:border dark:border-white/10 shadow-none dark:shadow-premium-sm mb-5">
+                        <div className="relative overflow-hidden bg-transparent border-none mb-5">
                             {/* --- HEADER (Badge, Title, Subheading) --- */}
                             <div className="relative z-10 w-full p-4 text-center mb-2">
                                 <div className="px-4">
