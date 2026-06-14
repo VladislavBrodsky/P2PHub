@@ -144,7 +144,7 @@ function SidebarNav({
     };
 
     return (
-        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 bg-transparent pt-8 pb-6 px-3">
+        <nav className="hidden lg:flex flex-col fixed left-0 top-0 bottom-0 w-[72px] xl:w-56 z-50 bg-white/40 dark:bg-slate-950/40 backdrop-blur-3xl border-r border-slate-200/5 dark:border-white/10 shadow-premium-sm pt-8 pb-6 px-3 transition-all duration-300">
             {/* Logo mark at top */}
             <button
                 onClick={handleRedirectToCalculator}
@@ -194,14 +194,17 @@ function SidebarNav({
                                         }
                                     }}
                                     onMouseEnter={() => prefetch(id)}
-                                    className={`group flex items-center xl:justify-start justify-center gap-3 xl:px-3 px-0 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer w-full
+                                    className={`group relative flex items-center xl:justify-start justify-center gap-3 xl:pl-4 xl:pr-3 px-0 py-2.5 rounded-xl text-left transition-all duration-300 cursor-pointer w-full
                                         ${isActive
                                             ? 'vibing-blue-animated text-white shadow-md shadow-blue-500/20'
                                             : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'
                                         }`}
                                 >
                                     <Icon className="w-[18px] h-[18px] shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" />
-                                    <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap group-hover:translate-x-0.5 transition-transform duration-300">{label}</span>
+                                    <span className="hidden xl:block text-xs font-semibold tracking-wide whitespace-nowrap group-hover:translate-x-1 transition-transform duration-300">{label}</span>
+                                    {isActive && (
+                                        <span className="hidden xl:block absolute left-1.5 top-1/2 -translate-y-1/2 w-1 h-4 rounded-full bg-white animate-pulse" />
+                                    )}
                                 </button>
                             </div>
                             {/* PRO PANEL shortcut — appears directly below Home, only for Pro users */}
@@ -342,7 +345,7 @@ function SidebarNav({
                             {/* Preferences Selector */}
                             <div className="grid grid-cols-2 gap-2">
                                 {/* Language Selector */}
-                                <div className="flex items-center justify-between p-1 rounded-xl bg-black/5 dark:bg-slate-950/50 border border-divider">
+                                <div className="flex items-center justify-between p-1 rounded-xl bg-white/10 dark:bg-slate-900/30 backdrop-blur-md border border-slate-200/5 dark:border-white/5">
                                     {[
                                         { id: 'en', flag: '🇺🇸' },
                                         { id: 'ru', flag: '🇷🇺' }
@@ -352,8 +355,8 @@ function SidebarNav({
                                             <button
                                                 key={option.id}
                                                 onClick={() => handleLanguageChange(option.id)}
-                                                className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all
-                                                    ${isActive ? 'bg-black/5 dark:bg-white/10 text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+                                                className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all border border-transparent
+                                                    ${isActive ? 'bg-white/90 dark:bg-white/10 text-text-primary border-slate-200/10 dark:border-white/10 shadow-sm' : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'}`}
                                             >
                                                 <span className="text-sm mr-1">{option.flag}</span>
                                                 <span className="uppercase text-[9px] tracking-wider">{option.id}</span>
@@ -363,7 +366,7 @@ function SidebarNav({
                                 </div>
 
                                 {/* Theme Selector */}
-                                <div className="flex items-center justify-between p-1 rounded-xl bg-black/5 dark:bg-slate-950/50 border border-divider">
+                                <div className="flex items-center justify-between p-1 rounded-xl bg-white/10 dark:bg-slate-900/30 backdrop-blur-md border border-slate-200/5 dark:border-white/5">
                                     {[
                                         { id: 'light' as const, icon: Sun },
                                         { id: 'dark' as const, icon: Moon }
@@ -374,8 +377,8 @@ function SidebarNav({
                                             <button
                                                 key={option.id}
                                                 onClick={() => setTheme(option.id)}
-                                                className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all
-                                                    ${isActive ? 'bg-black/5 dark:bg-white/10 text-text-primary shadow-sm' : 'text-text-secondary hover:text-text-primary'}`}
+                                                className={`flex-1 flex items-center justify-center py-1 rounded-lg text-xs font-bold transition-all border border-transparent
+                                                    ${isActive ? 'bg-white/90 dark:bg-white/10 text-text-primary border-slate-200/10 dark:border-white/10 shadow-sm' : 'text-text-secondary hover:text-text-primary hover:bg-black/5 dark:hover:bg-white/5'}`}
                                             >
                                                 <Icon className="w-3.5 h-3.5" />
                                             </button>
@@ -510,7 +513,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                         paddingTop: !isHeaderVisible ? '0px' : 'var(--main-content-pt, var(--dynamic-header-offset, var(--header-total-offset, 8.625rem)))'
                     }}
                 >
-                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg sm:max-w-none lg:px-8 xl:px-12 px-4'}`}>
+                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg sm:max-w-none lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl lg:px-8 xl:px-12 px-4'}`}>
                         <div className="mx-auto w-full">
                             {children}
                         </div>
