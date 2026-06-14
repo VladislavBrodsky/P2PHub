@@ -44,7 +44,7 @@ export const Footer = () => {
     };
 
     return (
-        <footer className="px-6 pb-12 pt-8 border-t border-slate-200 dark:border-white/10 bg-transparent relative z-50">
+        <footer className="px-6 pb-12 pt-8 border-t border-slate-200 dark:border-white/10 bg-transparent relative z-50 lg:hidden">
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">

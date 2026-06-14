@@ -112,19 +112,19 @@ export const BentoGrid = () => {
     };
 
     return (
-        <section className="px-0 py-4 flex flex-col relative z-50 min-h-[440px]">
+        <section className="px-0 py-4 flex flex-col relative z-50 min-h-[440px] lg:min-h-0">
             {/* Carousel / Grid Container */}
-            <div className="relative w-full h-[410px] lg:h-auto">
+            <div className="relative w-full h-[410px] lg:h-auto lg:min-h-[320px]">
                 <div
                     ref={scrollRef}
                     onScroll={handleScroll}
-                    className="flex lg:grid lg:grid-cols-[repeat(auto-fit,minmax(230px,1fr))] lg:gap-4 lg:px-0 lg:overflow-x-visible lg:h-auto justify-start items-stretch gap-4 overflow-x-auto px-6 h-full scroll-smooth no-scrollbar"
+                    className="flex lg:grid lg:grid-cols-5 lg:gap-3 xl:gap-4 lg:px-0 lg:overflow-x-visible lg:h-auto justify-start items-stretch gap-4 overflow-x-auto px-6 h-full scroll-smooth no-scrollbar"
                     style={{ alignItems: 'stretch' }}
                 >
                     {shiftSteps.map((step, index) => (
                         <div
                             key={index}
-                            className="group relative shrink-0 w-[280px] sm:w-[320px] lg:w-auto lg:shrink-0 lg:flex-1 h-[360px] snap-center cursor-pointer"
+                            className="group relative shrink-0 w-[280px] sm:w-[320px] lg:w-auto lg:shrink lg:flex-1 h-[360px] lg:h-[320px] xl:h-[340px] snap-center cursor-pointer"
                             style={{ perspective: '1000px' }}
                             onClick={() => toggleFlip(index)}
                         >

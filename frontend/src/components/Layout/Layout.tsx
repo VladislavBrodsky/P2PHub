@@ -513,7 +513,7 @@ export const Layout = ({ children, activeTab, setActiveTab, prefetchPages }: Lay
                         paddingTop: !isHeaderVisible ? '0px' : 'var(--main-content-pt, var(--dynamic-header-offset, var(--header-total-offset, 8.625rem)))'
                     }}
                 >
-                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg sm:max-w-none lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl lg:px-8 xl:px-12 px-4'}`}>
+                    <div className={`relative mx-auto w-full ${activeTab === 'pro' ? 'max-w-none px-0' : 'max-w-lg sm:max-w-none lg:max-w-none lg:px-8 xl:px-12 px-4'}`}>
                         <div className="mx-auto w-full">
                             {children}
                         </div>
