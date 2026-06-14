@@ -646,7 +646,7 @@ export function SupportChat({ isOpen, onClose }: SupportChatProps) {
                         </div>
 
                         {/* Input Area */}
-                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 pt-4 pb-[calc(var(--spacing-safe-bottom,20px)+24px)] backdrop-blur-3xl shrink-0">
+                        <div className="relative border-t border-slate-200 dark:border-white/10 bg-white/80 dark:bg-slate-900/80 p-4 pt-4 pb-[calc(var(--spacing-safe-bottom,20px)+24px)] sm:pb-5 backdrop-blur-3xl shrink-0">
                             {/* Glass background overlay */}
                             <div className="absolute inset-0 mesh-gradient-dark opacity-5 pointer-events-none" />
 

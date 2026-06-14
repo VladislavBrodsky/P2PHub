@@ -56,7 +56,7 @@ export const FinanceStatsModal = ({ isOpen, onClose }: FinanceStatsProps) => {
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div key="finance-stats-root" className="fixed inset-0 z-1001 flex items-end lg:items-center justify-center">
+                <div key="finance-stats-root" className="fixed inset-0 z-9999 flex items-end lg:items-center justify-center">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}

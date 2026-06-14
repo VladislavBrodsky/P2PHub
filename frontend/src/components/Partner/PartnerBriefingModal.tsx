@@ -94,7 +94,7 @@ export const PartnerBriefingModal = ({ isOpen, onClose }: PartnerBriefingModalPr
     return createPortal(
         <AnimatePresence>
             {isOpen && (
-                <div key="briefing-root" className="fixed inset-0 z-1001 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+20px)] lg:pb-4">
+                <div key="briefing-root" className="fixed inset-0 z-9999 flex items-center justify-center p-4 pt-[calc(var(--spacing-safe-top,0px)+128px)] lg:pt-4 pb-[calc(var(--spacing-safe-bottom)+20px)] lg:pb-4">
                     {/* Backdrop with enhanced blur */}
                     <motion.div
                         initial={{ opacity: 0 }}

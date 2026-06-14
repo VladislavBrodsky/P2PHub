@@ -350,6 +350,7 @@ function App() {
 
                 <div className={!isComplete ? 'hidden' : 'block h-full relative'}>
                     <NotificationOverlay />
+                    <PulseBanner />
                     <SessionExpiredOverlay isOpen={isSessionExpired} />
 
                     <LazyMotion features={domMax}>

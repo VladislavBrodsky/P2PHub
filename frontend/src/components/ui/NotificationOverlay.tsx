@@ -38,7 +38,7 @@ export const NotificationOverlay = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 100, scale: 0.9 }}
                     transition={{ type: "spring", stiffness: 350, damping: 25 }}
-                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+120px)] left-0 right-0 z-10000 flex justify-center pointer-events-none px-4 subpixel-antialiased"
+                    className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+120px)] left-0 lg:left-[72px] xl:left-56 right-0 z-10000 flex justify-center pointer-events-none px-4 subpixel-antialiased"
                 >
                     <div className={`
                             glass-panel-premium rounded-full px-4 py-3 shadow-2xl flex items-center gap-3 max-w-sm w-full pointer-events-auto 

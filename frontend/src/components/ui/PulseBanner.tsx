@@ -62,7 +62,7 @@ export const PulseBanner = () => {
 
 
     return (
-        <div className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+104px)] left-0 right-0 z-40 flex justify-center pointer-events-none">
+        <div className="fixed bottom-[calc(var(--spacing-safe-bottom,20px)+104px)] left-0 lg:left-[72px] xl:left-56 right-0 z-40 flex justify-center pointer-events-none">
             <div className="w-full max-w-lg h-8 bg-slate-900/50 dark:bg-black/40 backdrop-blur-xl border-t border-b border-white/5 overflow-hidden flex items-center justify-center relative">
                 <AnimatePresence mode="wait">
                     <motion.div
