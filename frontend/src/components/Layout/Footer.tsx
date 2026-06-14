@@ -44,7 +44,7 @@ export const Footer = () => {
     };
 
     return (
-        <footer className="px-6 pb-12 pt-8 border-t border-slate-200 dark:border-white/10 bg-transparent relative z-50 lg:hidden">
+        <footer className="px-6 pb-12 pt-8 border-t border-slate-200 dark:border-white/10 lg:border-transparent lg:dark:border-transparent bg-transparent relative z-50">
             <div className="max-w-md mx-auto space-y-6">
                 {/* Disclaimer Section */}
                 <div className="space-y-3">
@@ -60,7 +60,7 @@ export const Footer = () => {
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-slate-200 dark:border-white/10">
+                <div className="flex flex-wrap gap-4 justify-center items-center pt-4 border-t border-slate-200 dark:border-white/10 lg:border-transparent lg:dark:border-transparent">
                     <button
                         onClick={() => setActiveDoc('terms')}
                         className="text-label font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-wider flex items-center gap-1.5"

@@ -85,7 +85,7 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
 
     return (
         <m.div
-            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-10 pb-24 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl lg:mx-auto"
+            className="flex w-full flex-col px-0 min-h-dvh transition-colors duration-500 relative gap-10 pb-24"
             variants={container}
             initial="hidden"
             animate="show"
@@ -97,8 +97,8 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
                 </div>
             )}
 
-            {/* #comment: 1. Hero Section - Refactored for Premium Side-by-Side Desktop Layout */}
-            <m.div variants={item} className="flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between lg:max-w-4xl lg:mx-auto xl:max-w-5xl w-full pt-8 sm:pt-16 gap-8 lg:gap-12">
+            {/* #comment: 1. Hero Section */}
+            <m.div variants={item} className="flex flex-col lg:flex-row-reverse lg:items-center lg:justify-between w-full pt-8 sm:pt-16 gap-8 lg:gap-12 lg:max-w-5xl xl:max-w-6xl 2xl:max-w-7xl lg:mx-auto lg:px-8 xl:px-12">
                 <div className="relative overflow-visible mx-auto lg:mx-0 min-h-[320px] sm:min-h-[400px] flex items-center justify-center shrink-0 w-full lg:w-[40%] xl:w-[38%]">
                     <CommunityOrbit />
                 </div>
@@ -176,40 +176,41 @@ export default function Dashboard({ setActiveTab }: DashboardProps) {
             </m.div>
 
             {/* #comment: 2. Viral Proof - Partner Stats. */}
-            <m.div variants={item} className="mt-4 w-full">
+            <m.div variants={item} className="mt-4 w-full lg:max-w-5xl xl:max-w-6xl lg:mx-auto lg:px-8 xl:px-12">
                 <PartnerStats onNavigateToEarn={() => setActiveTab?.('earn')} />
             </m.div>
 
-            {/* #comment: 3. The Evolution - Bento Grid. */}
+            {/* #comment: 3. The Evolution - Bento Grid — FULL BLEED on desktop, no side gutters */}
             <div className="flex flex-col gap-4 w-full relative z-10">
-                <div className="w-full">
+                <div className="w-full lg:max-w-5xl xl:max-w-6xl lg:mx-auto lg:px-8 xl:px-12">
                     <SectionHeader
                         badge={t('dashboard:evolution.badge')}
                         title={t('dashboard:evolution.title')}
                         description={t('dashboard:evolution.desc')}
                     />
                 </div>
+                {/* BentoGrid fills edge-to-edge — no centering wrapper here */}
                 <Suspense fallback={<BentoSkeleton />}>
                     <BentoGrid />
                 </Suspense>
             </div>
 
             {/* #comment: 4. The Opportunity - Income Potential. */}
-            <m.div variants={item} className="w-full">
+            <m.div variants={item} className="w-full lg:max-w-5xl xl:max-w-6xl lg:mx-auto lg:px-8 xl:px-12">
                 <Suspense fallback={<IncomeSkeleton />}>
                     <IncomePotential onNavigateToPartner={() => setActiveTab?.('subscription')} />
                 </Suspense>
             </m.div>
 
             {/* #comment: 5. Intelligence Hub - Blog Carousel. */}
-            <m.div variants={item} className="w-full">
+            <m.div variants={item} className="w-full lg:max-w-5xl xl:max-w-6xl lg:mx-auto lg:px-8 xl:px-12">
                 <Suspense fallback={<BlogSkeleton />}>
                     <BlogCarousel />
                 </Suspense>
             </m.div>
 
-            {/* #comment: 6. Final CTA - Clear conversion point. */}
-            <m.div variants={item} className="w-full flex flex-col items-center text-center py-12 gap-8">
+            {/* #comment: 6. Final CTA */}
+            <m.div variants={item} className="w-full lg:max-w-5xl xl:max-w-6xl lg:mx-auto lg:px-8 xl:px-12 flex flex-col items-center text-center py-12 gap-8">
                 <div className="p-2 px-6 rounded-full bg-blue-500/10 text-blue-500 text-label font-bold uppercase tracking-[0.3em] w-fit border border-blue-500/20 shadow-lg">
                     {t('dashboard:movement_active')}
                 </div>
