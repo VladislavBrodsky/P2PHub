@@ -232,127 +232,137 @@ export default function FAQPage() {
                 </p>
             </div>
 
-            {/* Search Bar */}
-            <div className="px-6 -mt-10 mb-8 relative z-20">
-                <div className="relative group">
-                    <div className="absolute inset-0 bg-blue-500/20 blur-2xl group-focus-within:opacity-100 opacity-0 transition-opacity duration-500" />
-                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500/50 group-focus-within:text-blue-500 transition-colors z-10">
-                        <Search size={18} />
+            {/* ── Desktop Side-by-Side Layout | Mobile Stacked ── */}
+            <div className="flex flex-col lg:flex-row lg:gap-8 items-start w-full">
+                
+                {/* Left Column: Search & Categories */}
+                <div className="w-full lg:w-[280px] lg:shrink-0 flex flex-col gap-6 px-6 lg:px-0">
+                    {/* Search Bar */}
+                    <div className="relative z-20 w-full">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-blue-500/20 blur-2xl group-focus-within:opacity-100 opacity-0 transition-opacity duration-500" />
+                            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-blue-500/50 group-focus-within:text-blue-500 transition-colors z-10">
+                                <Search size={18} />
+                            </div>
+                            <input
+                                type="text"
+                                placeholder={t('faq.search_placeholder', 'Search for answers...')}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full h-15 pl-12 pr-4 bg-card-bg border-2 border-card-border focus:border-blue-500/30 rounded-2xl text-xs font-bold shadow-lg backdrop-blur-xl transition-all placeholder:text-text-secondary/40 relative z-0"
+                            />
+                        </div>
                     </div>
-                    <input
-                        type="text"
-                        placeholder={t('faq.search_placeholder', 'Search for answers...')}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full h-16 pl-12 pr-4 bg-card-bg border-2 border-card-border focus:border-blue-500/30 rounded-2xl text-sm font-bold shadow-2xl backdrop-blur-xl transition-all placeholder:text-text-secondary/40 relative z-0"
-                    />
-                </div>
-            </div>
 
-            {/* Category Chips */}
-            <div className="flex gap-2 overflow-x-auto px-6 pb-2 no-scrollbar mb-8">
-                {categories.map((cat) => (
-                    <button
-                        key={cat.id}
-                        onClick={() => { selection(); setSelectedCategory(cat.id); }}
-                        className={`flex items-center gap-2 px-4 h-10 rounded-full whitespace-nowrap text-label font-bold uppercase tracking-widest transition-all ${selectedCategory === cat.id
-                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20 px-6'
-                            : 'bg-card-bg border border-card-border text-text-secondary'
-                            }`}
-                    >
-                        {cat.icon}
-                        {cat.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* FAQ List as Cards (Articles) */}
-            <div className="px-6 space-y-4">
-                {filteredFaqs.length > 0 ? (
-                    filteredFaqs.map((faq, idx) => {
-                        const originalIndex = faqItems.indexOf(faq);
-                        return (
-                            <motion.div
-                                key={originalIndex}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: idx * 0.05 }}
-                                className="group"
+                    {/* Category List: Horizontal on Mobile, Vertical Sidebar on Desktop */}
+                    <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0 no-scrollbar w-full">
+                        {categories.map((cat) => (
+                            <button
+                                key={cat.id}
+                                onClick={() => { selection(); setSelectedCategory(cat.id); }}
+                                className={`flex items-center gap-3 px-4 h-11 rounded-xl whitespace-nowrap text-label font-bold uppercase tracking-widest transition-all text-left w-full
+                                    ${selectedCategory === cat.id
+                                        ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20 px-5'
+                                        : 'bg-card-bg border border-card-border text-text-secondary hover:text-text-primary hover:border-slate-300 dark:hover:border-white/10'
+                                    }`}
                             >
-                                <button
-                                    onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
-                                    className={`w-full text-left p-5 rounded-2xl bg-card-bg border border-card-border transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-blue-500/30 border-blue-500/20 shadow-xl' : 'hover:border-blue-500/30'
-                                        }`}
-                                >
-                                    <div className="flex items-start gap-4 h-full">
-                                        <div className="w-12 h-12 rounded-xl bg-bg-secondary flex items-center justify-center shrink-0 shadow-inner">
-                                            {faq.icon}
-                                        </div>
-                                        <div className="flex-1 pt-1">
-                                            <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-bold uppercase tracking-widest text-blue-500/60">
-                                                <Clock size={10} />
-                                                {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
-                                            </div>
-                                            <h3 className="text-sm font-bold text-text-primary leading-snug group-hover:text-blue-500 transition-colors">
-                                                {faq.q}
-                                            </h3>
-                                        </div>
-                                        <div className="pt-4">
-                                            <motion.div
-                                                animate={{ rotate: selectedFaq === originalIndex ? 90 : 0 }}
-                                                className="text-text-secondary"
-                                            >
-                                                <ChevronRight size={18} />
-                                            </motion.div>
-                                        </div>
-                                    </div>
+                                <span className={`shrink-0 ${selectedCategory === cat.id ? 'text-white' : 'text-blue-500'}`}>
+                                    {cat.icon}
+                                </span>
+                                <span>{cat.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
-                                    <AnimatePresence>
-                                        {selectedFaq === originalIndex && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: 'auto', opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                className="overflow-hidden"
-                                            >
-                                                <div className="mt-5 pt-5 border-t border-card-border">
-                                                    <p className="text-xs font-medium text-text-secondary leading-relaxed">
-                                                        {renderFormattedText(faq.a)}
-                                                    </p>
-                                                    <div className="mt-4 flex gap-2">
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); notification('success'); }}
-                                                            className="text-[9px] font-bold uppercase tracking-widest text-blue-500 flex items-center gap-1 p-2 bg-blue-500/5 rounded-lg border border-blue-500/10 active:scale-95 transition-all"
-                                                        >
-                                                            {t('faq.helpful')}
-                                                        </button>
-                                                    </div>
+                {/* Right Column: FAQ List */}
+                <div className="flex-1 w-full space-y-4 px-6 lg:px-0 mt-8 lg:mt-0">
+                    {filteredFaqs.length > 0 ? (
+                        filteredFaqs.map((faq, idx) => {
+                            const originalIndex = faqItems.indexOf(faq);
+                            return (
+                                <motion.div
+                                    key={originalIndex}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: idx * 0.05 }}
+                                    className="group"
+                                >
+                                    <button
+                                        onClick={() => { selection(); setSelectedFaq(selectedFaq === originalIndex ? null : originalIndex); }}
+                                        className={`w-full text-left p-5 rounded-2xl bg-card-bg border border-card-border transition-all duration-300 relative overflow-hidden active:scale-[0.98] ${selectedFaq === originalIndex ? 'ring-2 ring-blue-500/30 border-blue-500/20 shadow-xl' : 'hover:border-blue-500/30'
+                                            }`}
+                                    >
+                                        <div className="flex items-start gap-4 h-full">
+                                            <div className="w-12 h-12 rounded-xl bg-bg-secondary flex items-center justify-center shrink-0 shadow-inner">
+                                                {faq.icon}
+                                            </div>
+                                            <div className="flex-1 pt-1">
+                                                <div className="flex items-center gap-2 mb-2 font-mono text-[8px] font-bold uppercase tracking-widest text-blue-500/60">
+                                                    <Clock size={10} />
+                                                    {faq.readTime} • {categories.find(c => c.id === faq.category)?.label || faq.category}
                                                 </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </button>
-                            </motion.div>
-                        );
-                    })
-                ) : (
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-                        className="text-center py-20"
-                    >
+                                                <h3 className="text-sm font-bold text-text-primary leading-snug group-hover:text-blue-500 transition-colors">
+                                                    {faq.q}
+                                                </h3>
+                                            </div>
+                                            <div className="pt-4">
+                                                <motion.div
+                                                    animate={{ rotate: selectedFaq === originalIndex ? 90 : 0 }}
+                                                    className="text-text-secondary"
+                                                >
+                                                    <ChevronRight size={18} />
+                                                </motion.div>
+                                            </div>
+                                        </div>
+
+                                        <AnimatePresence>
+                                            {selectedFaq === originalIndex && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <div className="mt-5 pt-5 border-t border-card-border">
+                                                        <p className="text-xs font-medium text-text-secondary leading-relaxed">
+                                                            {renderFormattedText(faq.a)}
+                                                        </p>
+                                                        <div className="mt-4 flex gap-2">
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); notification('success'); }}
+                                                                className="text-[9px] font-bold uppercase tracking-widest text-blue-500 flex items-center gap-1 p-2 bg-blue-500/5 rounded-lg border border-blue-500/10 active:scale-95 transition-all"
+                                                            >
+                                                                {t('faq.helpful')}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </button>
+                                </motion.div>
+                            );
+                        })
+                    ) : (
                         <motion.div
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                            className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-4"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                            className="text-center py-20"
                         >
-                            <Search size={24} className="text-slate-400" />
+                            <motion.div
+                                animate={{ y: [0, -6, 0] }}
+                                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto mb-4"
+                            >
+                                <Search size={24} className="text-slate-400" />
+                            </motion.div>
+                            <h3 className="text-sm font-bold text-text-primary uppercase mb-1">{t('faq.no_results')}</h3>
+                            <p className="text-xs text-text-secondary">{t('faq.no_results_desc')}</p>
                         </motion.div>
-                        <h3 className="text-sm font-bold text-text-primary uppercase mb-1">{t('faq.no_results')}</h3>
-                        <p className="text-xs text-text-secondary">{t('faq.no_results_desc')}</p>
-                    </motion.div>
-                )}
+                    )}
+                </div>
             </div>
 
             {/* Need More Help Footer */}
