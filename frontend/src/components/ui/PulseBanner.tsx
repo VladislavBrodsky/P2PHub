@@ -60,6 +60,8 @@ export const PulseBanner = () => {
         };
     }, [pulse.length]);
 
+    // TEMPORARILY DISABLED — banner has visual bugs, hidden until redesigned
+    return null;
     // Only show on mobile when footer is visible and keyboard is closed
     if (pulse.length === 0 || !isFooterVisible || isKeyboardOpen) return null;
 
